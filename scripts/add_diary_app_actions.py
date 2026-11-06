@@ -59,20 +59,20 @@ kt.write_text(s,encoding="utf-8")
 
 g=base/"build.gradle.kts"
 t=g.read_text(encoding="utf-8")
-t=re.sub(r"versionCode\\s*=\\s*\\d+","versionCode = 90",t,count=1)
-t=re.sub(r'versionName\\s*=\\s*"[^"]+"','versionName = "1.0.90"',t,count=1)
+t=re.sub(r"versionCode\s*=\s*\d+","versionCode = 90",t,count=1)
+t=re.sub(r'versionName\s*=\s*"[^"]+"','versionName = "1.0.90"',t,count=1)
 if "versionCode = 90" not in t: raise SystemExit("Version code patch failed")
 g.write_text(t,encoding="utf-8")
 
 m=base/"src/main/assets/index.html"
 h=m.read_text(encoding="utf-8")
-marker="</main>\\n<div id=\\"diaryHomeEntryHost\\""
+marker="</main>\n<div id=\\"diaryHomeEntryHost\\""
 if "diary-app-actions" in h: raise SystemExit("Already inserted")
 if marker not in h: raise SystemExit("Diary home marker missing")
 ui='''<div class="diary-app-actions"><button id="diaryShareApp">📤 Share App</button><button id="diaryCheckUpdates">🔄 Check for Updates</button></div>
 <style>.diary-app-actions{position:fixed;z-index:2147483000;top:env(safe-area-inset-top,0px);left:0;right:0;display:flex;gap:8px;justify-content:center;padding:7px 10px;background:#faf7ff;border-bottom:1px solid #d4af37}.diary-app-actions button{flex:1;max-width:230px;min-height:40px;border:1px solid #b99bdf;border-radius:10px;background:linear-gradient(145deg,#fff,#eee5ff);color:#45256f;font-weight:800;font-size:13px}</style>
 <script>(function(){var s=document.getElementById('diaryShareApp'),u=document.getElementById('diaryCheckUpdates'),l=document.getElementById('diaryLanguageSelect');var names={roman:['📤 App Share Karein','🔄 Update Check Karein'],english:['📤 Share App','🔄 Check for Updates'],hindi:['📤 ऐप शेयर करें','🔄 अपडेट जाँचें']};function labels(){var a=names[l&&names[l.value]?l.value:'roman'];s.textContent=a[0];u.textContent=a[1]}s.onclick=function(){if(window.DiaryAppActions)DiaryAppActions.shareApp()};u.onclick=function(){if(window.DiaryAppActions)DiaryAppActions.checkForUpdates()};if(l)l.addEventListener('change',labels);labels()})();</script>
 '''
-h=h.replace(marker,"</main>\\n"+ui+"<div id=\\"diaryHomeEntryHost\\"",1)
+h=h.replace(marker,"</main>\n"+ui+"<div id=\\"diaryHomeEntryHost\\"",1)
 m.write_text(h,encoding="utf-8")
 print("PASS: Native Share App and update-check controls added; version set to 1.0.90")
