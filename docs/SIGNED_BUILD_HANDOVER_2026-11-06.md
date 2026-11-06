@@ -48,6 +48,8 @@ This record keeps the previously verified signed Diary APK build easy to locate 
 - GitHub Actions completed all steps successfully, including the release signing step and the upload of the signed APK. The workflow's signing step explicitly compares the APK certificate SHA-256 with the trusted fingerprint `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A`; a successful step means that check passed.
 - Artifact expiry: 2026-12-06 05:14 UTC.
 - The build uses the standalone Diary package identity `com.personal.diaryapp` and launcher label `My Diary` as set by the identity script.
+- APK manifest was inspected from the downloaded artifact: package `com.personal.diaryapp`, versionCode `90`, versionName `1.0.90`.
+- The retained prior publication APK from `my-diary-update-publication-v89.zip` was independently inspected: package `com.personal.diaryapp`, versionCode `89`, versionName `1.0.89`, and the same signing certificate SHA-256. Therefore this new APK is a valid higher-version signing/package match for that v89 APK. This still cannot prove which exact version is currently installed on the user's phone.
 
 ### Still not verified / next actions
 
