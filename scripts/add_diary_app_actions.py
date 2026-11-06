@@ -74,6 +74,16 @@ if i<0: raise SystemExit("Class end missing")
 s=s[:i]+native+s[i:]
 kt.write_text(s,encoding="utf-8")
 
+manifest=base/"src/main/AndroidManifest.xml"
+ms=manifest.read_text(encoding="utf-8")
+permission='    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />'
+if "android.permission.REQUEST_INSTALL_PACKAGES" not in ms:
+    ms=ms.replace("<manifest", "<manifest", 1)
+    p=ms.find(">", ms.find("<manifest"))
+    if p<0: raise SystemExit("Manifest root tag missing")
+    ms=ms[:p+1]+"\\n"+permission+ms[p+1:]
+    manifest.write_text(ms,encoding="utf-8")
+
 g=base/"build.gradle.kts"
 t=g.read_text(encoding="utf-8")
 t=re.sub(r"versionCode\s*=\s*\d+","versionCode = 90",t,count=1)
