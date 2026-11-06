@@ -62,3 +62,29 @@ At the last inspection, `latest.json` pointed to `My-Diary.apk.apk` for version 
 ## Rule for future assistants
 
 The user wants a clear map of where existing Diary files and settings are, and wants **MUAZZIN kept separate from My Diary**. Start by reading this register and inspecting the existing Diary repository. Reuse what is already present. Do not ask the user to re-upload or recreate something that already exists. Do not claim an action was completed unless repository/workflow/device evidence confirms it.
+
+## Reusable instruction for every new Diary task
+
+The user does not need to repeat the project rules. For every new My Diary request, follow these instructions automatically:
+
+- Work only in `amuazzinxyz-ops/My-Diary-Updates` and its Diary project files/workflows. Never use the MUAZZIN website or `amuazzinxyz-ops/Muazzin-New` for Diary work.
+- First read this register, inspect the current repository files and relevant workflow, and identify the current working version before editing.
+- Preserve all existing Diary features, screens, design, colors, buttons, data, app identity, signing setup, and update behavior unless the user explicitly asks to change a particular item.
+- Make only the requested new feature or correction. Do not rewrite, remove, rename, or change unrelated code or files.
+- Check whether the requested feature or fix already exists before adding another copy. Reuse existing code and project structure where appropriate.
+- After editing, run the available relevant checks/builds. Report exactly what changed, which files changed, what checks passed/failed, and anything not tested. Never claim a build or phone test succeeded unless verified.
+- Keep the existing Android package and trusted signing certificate unchanged for updates. Never generate a new signing key or change signing credentials without explicit permission.
+- Keep the project register and relevant handover notes updated when project structure, versions, or important decisions change.
+- If an essential detail is missing, ask only the one necessary question before making a risky or ambiguous change. Do not make assumptions that could alter existing behavior.
+
+### Short message the user can send
+
+For a new feature:
+“MY DIARY — Naya kaam: [yahan feature ka naam aur kya karna hai likhein]. Register ke sab rules follow karo. Pehle current Diary project check karo, sirf ye feature add karo, purana kuch mat bigaadna. Test karke batao kya complete hua aur kya baaki hai.”
+
+For a correction:
+“MY DIARY — Sudhar: [yahan problem aur expected result likhein]. Register ke sab rules follow karo. Pehle problem ka asli reason check karo, sirf isi ko fix karo, baaki design/features/code ko mat chhedna. Test karke result batao.”
+
+For a general continuation:
+“MY DIARY — Register padhkar My-Diary-Updates repository mein Diary ka kaam aage badhao. MUAZZIN website/repository ko bilkul mat chhedna.”
+
