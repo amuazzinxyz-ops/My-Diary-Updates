@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -76,6 +76,7 @@ jobs:
           Path("/tmp/diary-module.js").write_text(module, encoding="utf-8")
           PY
           node --check /tmp/diary-module.js
+          python3 scripts/add_diary_app_actions.py
           echo "---- Android app identity (before branding adjustment) ----"
           grep -RInE 'applicationId|namespace|android:label|app_name' diary-project/app/build.gradle.kts diary-project/app/src/main/AndroidManifest.xml diary-project/app/src/main/res/values* 2>/dev/null || true
 
@@ -226,6 +227,34 @@ jobs:
           fi
           echo "Release APK certificate matches the previously supplied SHA-256 fingerprint."
           rm -f app/diary-release.jks
+
+      - name: Publish verified Diary 1.0.90 update
+        if: env.DIARY_RELEASE_READY == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          APK="diary-project/app/build/outputs/apk/release/app-release.apk"
+          test -s "$APK"
+          SHA256="$(sha256sum "$APK" | awk '{print $1}')"
+          cp "$APK" My-Diary.apk
+          cat > latest.json <<EOF
+          {
+            "appName": "My Diary",
+            "packageName": "com.personal.diaryapp",
+            "versionCode": 90,
+            "versionName": "1.0.90",
+            "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
+            "sha256": "$SHA256",
+            "releaseNotes": "My Diary update with Share App and Check for Updates options. Existing diary data remains stored locally.",
+            "minimumSupportedVersionCode": 1
+          }
+          EOF
+          python3 -m json.tool latest.json >/dev/null
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add My-Diary.apk latest.json
+          git commit -m "Publish My Diary 1.0.90 with app sharing and updates"
+          git push origin HEAD:main
 
       - name: Upload signed Release APK
         if: env.DIARY_RELEASE_READY == 'true'
