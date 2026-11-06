@@ -37,6 +37,15 @@ Before publishing an update, verify all of the following against the actual Diar
 
 Never invent an application ID, signing identity, version, checksum, or release file. Do not publish an APK until the original Diary app project and signing setup are available and verified.
 
-## Current status
+## Current verified release
 
-This repository currently contains release instructions only. No APK, update metadata, or app release has been published yet.
+- Version: **1.0.89** (Android versionCode **89**)
+- Android application ID: `com.personal.diaryapp`
+- Public APK: `My-Diary.apk`
+- Update metadata: `latest.json`
+- APK SHA-256: `c900a97da2cc5cad275d9f176f61a8ebde81b44643a7ca8c72d655c84249d415`
+- Signed build workflow: successful; signing certificate check passed.
+- Native updater: included in v1.0.89. It checks for a newer release when the app opens, verifies the downloaded APK checksum, and hands installation to Android.
+- Device installation/update test: **not yet performed**.
+
+The first installation of v1.0.89 must be done manually because older installed versions do not contain the updater. Later releases can be detected from inside the app. Android still requires its own user confirmation to install.
