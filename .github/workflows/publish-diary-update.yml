@@ -1,0 +1,61 @@
+name: Publish verified My Diary update
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "source-artifact-url.txt"
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout update channel
+        uses: actions/checkout@v4
+
+      - name: Download and verify signed build package
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="$(tr -d '\r\n' < source-artifact-url.txt)"
+          case "$URL" in
+            https://sdmntprcentralindia.oaiusercontent.com/files/*) ;;
+            *) echo "Unexpected artifact download host"; exit 1 ;;
+          esac
+          curl --fail --location --retry 3 --retry-delay 2 "$URL" -o /tmp/my-diary-update.zip
+          mkdir -p /tmp/my-diary-publication
+          unzip -q /tmp/my-diary-update.zip -d /tmp/my-diary-publication
+          test -s /tmp/my-diary-publication/My-Diary.apk
+          test -s /tmp/my-diary-publication/latest.json
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          root = Path("/tmp/my-diary-publication")
+          manifest = json.loads((root / "latest.json").read_text(encoding="utf-8"))
+          apk = root / "My-Diary.apk"
+          digest = hashlib.sha256(apk.read_bytes()).hexdigest()
+          assert manifest.get("appName") == "My Diary"
+          assert manifest.get("packageName") == "com.personal.diaryapp"
+          assert int(manifest.get("versionCode", 0)) > 1
+          assert manifest.get("apkUrl") == "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk"
+          assert manifest.get("sha256") == digest
+          print("Verified My Diary version", manifest["versionName"], "SHA-256", digest)
+          PY
+          cp /tmp/my-diary-publication/My-Diary.apk ./My-Diary.apk
+          cp /tmp/my-diary-publication/latest.json ./latest.json
+          rm -f source-artifact-url.txt
+
+      - name: Publish APK and manifest to the public Diary-only update channel
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add My-Diary.apk latest.json source-artifact-url.txt
+          git commit -m "Publish verified My Diary update"
+          git push origin HEAD:main
