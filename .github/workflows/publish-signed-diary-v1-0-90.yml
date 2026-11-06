@@ -1,0 +1,59 @@
+name: Publish signed My Diary 1.0.90
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/publish-signed-diary-v1-0-90.yml
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out My-Diary-Updates
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Download signed APK artifact from isolated Diary build
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/amuazzinxyz-ops/Muazzin-New/actions/artifacts/13479477068/zip" \
+            -o /tmp/diary-release-artifact.zip
+          unzip -l /tmp/diary-release-artifact.zip
+          unzip -p /tmp/diary-release-artifact.zip app-release.apk > My-Diary.apk
+          test -s My-Diary.apk
+          echo "3850b28ceb48794f6712f8a003b7be5ae7c1d257b08c703f22bc684a0c2546d5  My-Diary.apk" | sha256sum --check
+
+      - name: Publish APK and update feed atomically
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          apk = Path("My-Diary.apk").read_bytes()
+          data = {
+            "appName": "My Diary",
+            "packageName": "com.personal.diaryapp",
+            "versionCode": 90,
+            "versionName": "1.0.90",
+            "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
+            "sha256": hashlib.sha256(apk).hexdigest(),
+            "releaseNotes": "My Diary 1.0.90: Share App and Check for Updates are available in the Me menu. Signed update; existing diary data is preserved.",
+            "minimumSupportedVersionCode": 1
+          }
+          Path("latest.json").write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add My-Diary.apk latest.json
+          git commit -m "Publish signed My Diary 1.0.90 and update feed"
+          git push origin HEAD:main
