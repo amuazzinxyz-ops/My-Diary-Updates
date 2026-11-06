@@ -57,3 +57,5 @@ This record keeps the previously verified signed Diary APK build easy to locate 
 - The installed app's package ID and signing certificate have not yet been independently checked against this APK on-device; do not promise in-place update until that comparison is done.
 - The APK binary is still a temporary Actions artifact in the isolated Diary build branch of `Muazzin-New`; it has not yet been permanently copied into `My-Diary-Updates`. The dedicated repository's Actions secrets are not configured, and the artifact cannot be promoted there with the available repository-file actions alone. Do not describe the consolidation as complete.
 - The artifact is a signed release APK, not a debug APK. The debug artifact is not the one to install.
+
+- **Updater feed is not live yet:** the currently committed `latest.json` still points to version 1.0.89 and its old APK checksum/URL. Do not use “Check for Updates” in 1.0.90 until the 1.0.90 APK has been permanently hosted at the exact URL in `latest.json` and the JSON version/checksum have been updated together. This build contains the updater code, but the new release has not been published to its feed.
