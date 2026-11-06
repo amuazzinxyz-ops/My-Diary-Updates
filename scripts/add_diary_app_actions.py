@@ -5,7 +5,7 @@ base=Path("diary-project/app")
 kt=base/"src/main/java/com/muazzin/diary/MainActivity.kt"
 s=kt.read_text(encoding="utf-8")
 if "class DiaryNativeActions" in s: raise SystemExit("Already patched")
-s=s.replace("import android.content.Intent\n","import android.content.Intent\nimport android.webkit.JavascriptInterface\nimport android.widget.Toast\nimport java.net.HttpURLConnection\nimport java.net.URL\n",1)
+s=s.replace("import android.content.Intent\n","import android.content.Intent\nimport android.app.AlertDialog\nimport android.webkit.JavascriptInterface\nimport android.widget.Toast\nimport java.net.HttpURLConnection\nimport java.net.URL\n",1)
 s=s.replace("        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {","        webView.addJavascriptInterface(DiaryNativeActions(), \"DiaryAppActions\")\n\n        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {",1)
 native = r"""
     private inner class DiaryNativeActions {
@@ -34,7 +34,7 @@ native = r"""
                     if(j.optString("appName")!="My Diary" || j.optString("packageName")!=packageName) throw Exception("Wrong app")
                     val latest=j.optInt("versionCode",0)
                     if(latest<=currentVersion()) runOnUiThread { Toast.makeText(this@MainActivity,"My Diary pehle se latest hai.",Toast.LENGTH_LONG).show() }
-                    else runOnUiThread { Toast.makeText(this@MainActivity,"Naya update " + j.optString("versionName") + " available hai. Download & Install dabayein.",Toast.LENGTH_LONG).show() }
+                    else runOnUiThread { AlertDialog.Builder(this@MainActivity).setTitle("My Diary update available").setMessage("Naya version " + j.optString("versionName") + " available hai. Kya aap APK download karke install karna chahte hain?").setPositiveButton("Download & Install") { _, _ -> downloadAndInstall() }.setNegativeButton("Baad mein", null).show() }
                 } catch (_:Exception) {
                     runOnUiThread { Toast.makeText(this@MainActivity,"Update check nahi ho saka. Internet check karein.",Toast.LENGTH_LONG).show() }
                 }
