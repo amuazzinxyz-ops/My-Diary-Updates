@@ -7,7 +7,9 @@ Last reviewed: 2026-11-06
 - This repository is the home for **My Diary** project files, release automation, update metadata, and Diary documentation.
 - Repository: `amuazzinxyz-ops/My-Diary-Updates`
 - Branch: `main`
-- Keep MUAZZIN website/app files, workflows, credentials, and deployments separate.
+- **All future My Diary work must be done only in the My-Diary-Updates repository / Diary section.** This includes every Diary code change, Android build, APK release, update workflow, documentation, assets, credentials, and troubleshooting.
+- Never do Diary work in the MUAZZIN website, the MUAZZIN repository (`amuazzinxyz-ops/Muazzin-New`), or any MUAZZIN workflow/deployment. Do not add Diary files, code, workflows, or settings there.
+- Keep MUAZZIN website/app files, workflows, credentials, and deployments completely separate.
 - Do not create a second copy of an existing Diary workflow, project archive, signing key, or release setup without first checking this register and the actual repository.
 - Before every future Diary task: read this register, then inspect the current files/workflows and latest commits. Update this register when anything changes.
 
