@@ -24,6 +24,18 @@ jobs:
       - name: Checkout standalone Diary repository
         uses: actions/checkout@v4
 
+      - name: Check Diary signing readiness (never print secret values)
+        env:
+          HAS_KEYSTORE: ${{ secrets.DIARY_KEYSTORE_BASE64 != '' }}
+          HAS_ALIAS: ${{ secrets.DIARY_KEY_ALIAS != '' }}
+          HAS_KEY_PASSWORD: ${{ secrets.DIARY_KEY_PASSWORD != '' }}
+          HAS_STORE_PASSWORD: ${{ secrets.DIARY_STORE_PASSWORD != '' }}
+        run: |
+          echo "DIARY_KEYSTORE_BASE64 present: $HAS_KEYSTORE"
+          echo "DIARY_KEY_ALIAS present: $HAS_ALIAS"
+          echo "DIARY_KEY_PASSWORD present: $HAS_KEY_PASSWORD"
+          echo "DIARY_STORE_PASSWORD present: $HAS_STORE_PASSWORD"
+
       - name: Extract Diary Android project
         run: |
           test -f 'Diary-Android-Project-v13 (6).zip'
