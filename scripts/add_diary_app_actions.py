@@ -19,6 +19,14 @@ native = r"""
             @Suppress("DEPRECATION")
             return if(android.os.Build.VERSION.SDK_INT>=28) info.longVersionCode.toInt() else info.versionCode
         }
+        @JavascriptInterface fun shareApp() {
+            val share = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_SUBJECT, "My Diary")
+                putExtra(Intent.EXTRA_TEXT, "📒 My Diary app\nDownload: https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk")
+            }
+            startActivity(Intent.createChooser(share, "Share My Diary"))
+        }
         @JavascriptInterface fun checkForUpdates() {
             Thread {
                 try {
@@ -93,13 +101,30 @@ g.write_text(t,encoding="utf-8")
 
 m=base/"src/main/assets/index.html"
 h=m.read_text(encoding="utf-8")
-marker="</main>\n<div id=\"diaryHomeEntryHost\""
-if "diary-app-actions" in h: raise SystemExit("Already inserted")
-if marker not in h: raise SystemExit("Diary home marker missing")
-ui='''<div class="diary-app-actions"><button id="diaryCheckUpdates">🔄 Check for Updates</button><button id="diaryDownloadInstall">⬇️ Download &amp; Install</button></div>
-<style>.diary-app-actions{position:fixed;z-index:2147483000;top:env(safe-area-inset-top,0px);left:0;right:0;display:flex;gap:8px;justify-content:center;padding:7px 10px;background:#faf7ff;border-bottom:1px solid #d4af37}.diary-app-actions button{flex:1;max-width:230px;min-height:40px;border:1px solid #b99bdf;border-radius:10px;background:linear-gradient(145deg,#fff,#eee5ff);color:#45256f;font-weight:800;font-size:13px}</style>
-<script>(function(){var u=document.getElementById('diaryCheckUpdates'),d=document.getElementById('diaryDownloadInstall'),l=document.getElementById('diaryLanguageSelect');var names={roman:['🔄 Update Check Karein','⬇️ Download aur Install'],english:['🔄 Check for Updates','⬇️ Download & Install'],hindi:['🔄 अपडेट जाँचें','⬇️ डाउनलोड और इंस्टॉल']};function labels(){var a=names[l&&names[l.value]?l.value:'roman'];u.textContent=a[0];d.textContent=a[1]}u.onclick=function(){if(window.DiaryAppActions)DiaryAppActions.checkForUpdates()};d.onclick=function(){if(window.DiaryAppActions)DiaryAppActions.downloadAndInstall()};if(l)l.addEventListener('change',labels);labels()})();</script>
-'''
-h=h.replace(marker,"</main>\n"+ui+"<div id=\"diaryHomeEntryHost\"",1)
+anchor="mePanel.appendChild(diaryPinBtn);mePanel.appendChild(lockDiaryBtn);mePanel.appendChild(unlockDiaryBtn);"
+if "diaryShareAppBtn" in h or "diaryCheckUpdatesBtn" in h:
+    raise SystemExit("Diary Me actions already exist; refusing duplicate insertion")
+if anchor not in h:
+    raise SystemExit("Diary Me menu insertion point missing")
+actions = """
+  var shareAppBtn=el('button',{id:'diaryShareAppBtn',type:'button'},'📤 Share App');
+  var checkUpdatesBtn=el('button',{id:'diaryCheckUpdatesBtn',type:'button'},'🔄 Check for Updates');
+  mePanel.appendChild(shareAppBtn);
+  mePanel.appendChild(checkUpdatesBtn);
+  shareAppBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(window.DiaryAppActions&&DiaryAppActions.shareApp){DiaryAppActions.shareApp();}});
+  checkUpdatesBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(window.DiaryAppActions&&DiaryAppActions.checkForUpdates){DiaryAppActions.checkForUpdates();}});
+"""
+h=h.replace(anchor,anchor+actions,1)
+style = """
+<style id="diary-me-app-actions-style">
+#diaryShareAppBtn,#diaryCheckUpdatesBtn{display:block!important;width:100%!important;min-height:34px!important;height:34px!important;margin:7px 0 0!important;padding:0 10px!important;box-sizing:border-box!important;border:1px solid #b9d0bd!important;border-radius:9px!important;background:linear-gradient(145deg,#fff,#e5eee8)!important;color:#123d2a!important;font-size:10px!important;font-weight:1000!important;line-height:1.15!important;text-align:left!important;white-space:nowrap!important;box-shadow:0 2px 0 #c7d9c8!important;cursor:pointer!important}
+#diaryShareAppBtn:active,#diaryCheckUpdatesBtn:active{transform:translateY(2px)!important;box-shadow:0 0 0 transparent!important}
+</style>
+"""
+if "</head>" not in h:
+    raise SystemExit("HTML head closing tag missing")
+h=h.replace("</head>",style+"\\n</head>",1)
+if "diary-app-actions" in h or "diaryDownloadInstall" in h:
+    raise SystemExit("External/floating app action controls detected; refusing build")
 m.write_text(h,encoding="utf-8")
-print("PASS: Update checker and SHA-256 verified APK download/install controls added; version set to 1.0.90")
+print("PASS: Share App and Check for Updates are inside Diary > Me; no external action bar.")
