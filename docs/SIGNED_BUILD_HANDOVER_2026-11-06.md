@@ -34,3 +34,24 @@ This record keeps the previously verified signed Diary APK build easy to locate 
 - Debug APK artifact ID: `13470440224` (not suitable as a production update unless signing compatibility is confirmed).
 - Interface text audit artifact ID: `13469559136`.
 - Both are temporary GitHub Actions artifacts from the same build run; do not treat them as permanent release files.
+
+
+## Latest updated-menu signed build — 2026-11-06
+
+- Workflow run: [42166826100](https://github.com/amuazzinxyz-ops/Muazzin-New/actions/runs/42166826100) (run #93; successful)
+- Isolated build branch: `diary-release-build-20261106`
+- Build commit: `f0516b48d3dbe0b849b1ee0ab8611df610991588`
+- Includes the current `scripts/add_diary_app_actions.py` step in the Diary build workflow, so the Share App / Check for Updates menu changes are included in this build.
+- Signed release artifact: [My-Diary-signed-Release-APK](https://github.com/amuazzinxyz-ops/Muazzin-New/actions/runs/42166826100/artifacts/13479477068)
+- Artifact ID: `13479477068`; ZIP size: 1,885,140 bytes; ZIP SHA-256: `b1054e18b73cf3bea63566f2871a3bcd6628e1f40f65535cfee8179c1d110014`
+- Extracted APK: `app-release.apk`; size: 1,941,678 bytes; SHA-256: `3850b28ceb48794f6712f8a003b7be5ae7c1d257b08c703f22bc684a0c2546d5`
+- GitHub Actions completed all steps successfully, including the release signing step and the upload of the signed APK. The workflow's signing step explicitly compares the APK certificate SHA-256 with the trusted fingerprint `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A`; a successful step means that check passed.
+- Artifact expiry: 2026-12-06 05:14 UTC.
+- The build uses the standalone Diary package identity `com.personal.diaryapp` and launcher label `My Diary` as set by the identity script.
+
+### Still not verified / next actions
+
+- The APK has not been installed on the user's phone. Do not uninstall the existing app.
+- The installed app's package ID and signing certificate have not yet been independently checked against this APK on-device; do not promise in-place update until that comparison is done.
+- The APK binary is still a temporary Actions artifact in the isolated Diary build branch of `Muazzin-New`; it has not yet been permanently copied into `My-Diary-Updates`. The dedicated repository's Actions secrets are not configured, and the artifact cannot be promoted there with the available repository-file actions alone. Do not describe the consolidation as complete.
+- The artifact is a signed release APK, not a debug APK. The debug artifact is not the one to install.
