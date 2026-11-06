@@ -18,6 +18,7 @@ This repository, `My-Diary-Updates`, is reserved only for distributing official 
 - Signed My Diary New APK release files
 - Version and update-check metadata for My Diary New
 - Release notes for My Diary New
+- Diary-only build verification and handover records
 
 ## What does not belong here
 
@@ -49,3 +50,7 @@ Never invent an application ID, signing identity, version, checksum, or release 
 - Device installation/update test: **not yet performed**.
 
 The first installation of v1.0.89 must be done manually because older installed versions do not contain the updater. Later releases can be detected from inside the app. Android still requires its own user confirmation to install.
+
+## Build archive / handover
+
+The latest separately verified signed-build artifact and its APK checksum, certificate fingerprint, artifact IDs, expiry, and testing cautions are recorded in [docs/SIGNED_BUILD_HANDOVER_2026-11-06.md](docs/SIGNED_BUILD_HANDOVER_2026-11-06.md). This handover is an archive pointer, not a claim that the newer APK has already been published or phone-tested.
