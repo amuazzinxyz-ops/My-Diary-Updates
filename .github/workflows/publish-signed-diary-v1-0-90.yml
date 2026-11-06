@@ -50,7 +50,7 @@ jobs:
             "releaseNotes": "My Diary 1.0.90: Share App and Check for Updates are available in the Me menu. Signed update; existing diary data is preserved.",
             "minimumSupportedVersionCode": 1
           }
-          Path("latest.json").write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+          Path("latest.json").write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
