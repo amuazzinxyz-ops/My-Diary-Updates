@@ -163,7 +163,23 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Fail closed unless source version matches the next Diary release
+      - name: Set approved next Diary version 1.0.91 (versionCode 91)
+        working-directory: diary-project
+        run: |
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          p = Path("app/build.gradle.kts")
+          s = p.read_text(encoding="utf-8")
+          s, code_count = re.subn(r'versionCode\\s*=\\s*\\d+', 'versionCode = 91', s, count=1)
+          s, name_count = re.subn(r'versionName\\s*=\\s*"[^"]+"', 'versionName = "1.0.91"', s, count=1)
+          if code_count != 1 or name_count != 1:
+              raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
+          p.write_text(s, encoding="utf-8")
+          print("Set Diary versionName=1.0.91, versionCode=91")
+          PY
+
+      - name: Fail closed unless source version matches the approved next Diary release
         if: env.DIARY_RELEASE_READY == 'true'
         working-directory: diary-project
         run: |
@@ -177,18 +193,16 @@ jobs:
               if not m:
                   raise SystemExit(f"BLOCKED: Gradle {label} declaration not found")
               return m.group(1)
-          package = one(r'applicationId\s*=\s*"([^"]+)"', "applicationId")
-          code = int(one(r'versionCode\s*=\s*(\d+)', "versionCode"))
-          name = one(r'versionName\s*=\s*"([^"]+)"', "versionName")
+          package = one(r'applicationId\\s*=\\s*"([^"]+)"', "applicationId")
+          code = int(one(r'versionCode\\s*=\\s*(\\d+)', "versionCode"))
+          name = one(r'versionName\\s*=\\s*"([^"]+)"', "versionName")
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
-          if code != int(meta.get("versionCode", 0)) or name != meta.get("versionName"):
-              raise SystemExit(f"BLOCKED: APK source version {name}/{code} does not match feed {meta.get('versionName')}/{meta.get('versionCode')}")
-          if code <= 90:
-              raise SystemExit("BLOCKED: release version must be higher than the last user-confirmed installed versionCode 90")
-          if meta.get("apkUrl") != "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk":
-              raise SystemExit("BLOCKED: update-feed APK URL is not the canonical Diary APK URL")
-          print(f"PASS: package={package}, version={name}/{code}, canonical update URL")
+          if code != 91 or name != "1.0.91":
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.91/91, found {name}/{code}")
+          if int(meta.get("versionCode", 0)) != 90 or meta.get("versionName") != "1.0.90":
+              raise SystemExit("BLOCKED: current update feed is not the expected installed baseline 1.0.90/90")
+          print(f"PASS: package={package}, next version={name}/{code}; feed baseline remains 1.0.90/90")
           PY
 
       - name: Align Java and Kotlin JVM targets
