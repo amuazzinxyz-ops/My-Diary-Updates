@@ -123,3 +123,10 @@ For a general continuation:
 - Verified Diary-only GitHub Actions run **42368008599** completed successfully on 2026-11-07. The workflow set Gradle versionName `1.0.91` / versionCode `91`; the debug APK was downloaded and its binary AndroidManifest independently parsed and verified as package `com.personal.diaryapp`, versionName `1.0.91`, versionCode `91`.
 - Debug artifact ID: `13572680931`; APK SHA-256: `ec5e4f08ca4c8d5a4bc0f123b6574630fcab71c3fb8d0f638620a0f22309e438`; artifact APK size: 2,601,803 bytes.
 - Signed Release build and publication steps were skipped because Diary repository signing secrets were not available. The debug APK is not a production update and must not be installed over the signed 1.0.90 app. `latest.json` and published APKs remain unchanged. Phone testing remains pending.
+
+
+## GitHub Releases page check — 2026-11-07
+
+- Checked the repository GitHub Releases API on 2026-11-07: it returned an empty list. Therefore the repository currently has **no published GitHub Release entries**; the GitHub Releases page may appear empty.
+- This is separate from the repository's APK files and the app's in-app update feed in `latest.json`. The feed still points to version 1.0.90 / code 90 and `My-Diary.apk.apk`; it has not been changed.
+- Do not create a GitHub Release or attach the 1.0.91 debug APK as a production release. A verified 1.0.91 APK signed with the existing trusted certificate is required first.
