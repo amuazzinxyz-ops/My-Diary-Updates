@@ -147,3 +147,50 @@ For a general continuation:
 - Extracted unsigned APK size: 1,930,283 bytes; SHA-256: `9b882743691c690b3556c5a014fd18113a413e53bb055a670391021eabdc798f`.
 - This APK is **UNSIGNED**. It is not installable as an update over the signed app, is not a production release, and must not be published or used to replace the installed app. The workflow skipped signed Release and publish because the Diary repository does not have the existing trusted signing material.
 - The separately built 1.0.91 debug APK remains test-only and is also not an in-place update. No phone installation or device test was performed. `latest.json`, published APK files, signing secrets, installed app, and MUAZZIN repository remain unchanged.
+
+
+## Signed-build handover correction and next-session procedure — 2026-11-07
+
+### What actually succeeded on 2026-11-06 (historical evidence)
+
+- A signed Diary Release APK was successfully built in the **MUAZZIN repository**, not in the standalone Diary repository:
+  - Repository: `amuazzinxyz-ops/Muazzin-New`
+  - Branch: `diary-release-build-20261106`
+  - Workflow: `Build Diary APK from uploaded project ZIP`
+  - Run #93 / ID: `42166826100`
+  - Run URL: https://github.com/amuazzinxyz-ops/Muazzin-New/actions/runs/42166826100
+  - Job ID: `127725125420`
+  - The run reported `DIARY_RELEASE_READY: true`; Release assembly succeeded and the APK certificate fingerprint matched the trusted fingerprint recorded above.
+  - Historical artifact ID: `13479477068`.
+- This confirms the user's recollection that a signed build was made using the existing signing material. Earlier status reports that considered only the standalone Diary debug run were incomplete; use this corrected record.
+- **Important boundary:** this is historical evidence only. The user separately directed that all future Diary files, builds, workflows, credentials, and releases stay exclusively in `My-Diary-Updates`. Do not rerun, edit, download from, or otherwise use `Muazzin-New` for future Diary work. Do not copy Diary code/artifacts into MUAZZIN.
+
+### Current standalone Diary build path
+
+- Use only `amuazzinxyz-ops/My-Diary-Updates`, branch `main`.
+- Workflow file: `.github/workflows/build-diary-from-zip.yml`.
+- It already supports manual `workflow_dispatch` and push-to-main triggers.
+- It builds the approved Diary target version `1.0.91` / versionCode `91`, applies the PIN autofill and close-glyph fixes through `scripts/add_diary_app_actions.py`, and has a fail-closed signature check against trusted certificate fingerprint `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A`.
+- The standalone Diary repository's 2026-11-07 runs produced a debug APK and an unsigned Release APK only. Neither is a production update. Do not publish or install either over the signed installed app.
+
+### Exact next-time steps — do these in order
+
+1. Start by reading this register and inspecting the latest Diary commit, source ZIP, scripts, workflow, and `latest.json`. Do not assume yesterday's branch or artifact is the current source.
+2. Keep all work inside `My-Diary-Updates`. Never touch `Muazzin-New` for Diary work.
+3. The four signing secret values are not readable by the GitHub integration. The user has approved duplicating the existing values into the standalone Diary repository while retaining the originals. The repository owner must manually copy the same four values from their existing secure GitHub secret store into **My-Diary-Updates → Settings → Secrets and variables → Actions → Repository secrets**, using these exact names:
+   - `DIARY_KEYSTORE_BASE64`
+   - `DIARY_KEY_ALIAS`
+   - `DIARY_KEY_PASSWORD`
+   - `DIARY_STORE_PASSWORD`
+   Never ask the user to paste any secret value into chat. Never delete or change the originals in the other repository. Do not claim the duplicate setup is complete until the Diary workflow's secret-presence check confirms all four are present.
+4. Once the four secrets are present in the Diary repository, run the existing workflow from **My-Diary-Updates → Actions → Build Diary APK from uploaded project ZIP → Run workflow** on branch `main`. The connected GitHub actions currently expose job rerun but no workflow-dispatch action, so if that remains true, the owner must press the GitHub UI's Run workflow control; do not pretend a run was triggered.
+5. Inspect the new run logs. Confirm all four secret-presence flags are true without printing secret values; confirm Gradle package `com.personal.diaryapp`, version `1.0.91` / code `91`, and baseline feed `1.0.90` / code `90`.
+6. Before accepting a release, independently verify the APK signature with the trusted SHA-256 fingerprint above, inspect package/version, compute the APK SHA-256, and check that `latest.json` points to the exact canonical APK URL and matching checksum. The existing workflow only publishes when all signed-release checks pass.
+7. Confirm the run completed the publish step and read back the resulting `latest.json` and APK file metadata from the Diary repository. If any check fails, stop; do not publish a debug/unsigned APK and do not change the installed app.
+8. Phone-side installation/update test is a separate pending check. Never uninstall the current app as a routine step; preserve local diary data.
+
+### Current blocker/status
+
+- As last verified on 2026-11-07, the four secret names exist in the historical MUAZZIN repository record, but their values have not been duplicated into the standalone Diary repository. The assistant cannot read or transfer GitHub secret values.
+- No signed 1.0.91 APK has been built or published in `My-Diary-Updates`. The update feed and installed app must remain unchanged until the full verification sequence above passes.
+- Do not delete this register or any handover record. Append dated entries so the next session can resume without repeating discovery or confusing the two repositories.
