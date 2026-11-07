@@ -118,3 +118,8 @@ For a general continuation:
 - The signed-release guard now requires the extracted package to be `com.personal.diaryapp`, version 1.0.91 / code 91, and the current update feed to remain at the confirmed baseline 1.0.90 / code 90. On a verified signed build, the existing publish step will update `latest.json` and publish the new APK with its computed SHA-256.
 - The existing feed and APK files have **not** been changed by this approval. No release is published unless the existing Diary-only workflow has the trusted signing material available and passes the signing fingerprint check. A debug APK, if built, is for testing only and must not be installed over the signed app.
 - Original ZIP integrity, app package, trusted signing certificate, local diary data, and MUAZZIN project remain protected. Phone installation and update behavior still require device testing.
+
+
+- Verified Diary-only GitHub Actions run **42368008599** completed successfully on 2026-11-07. The workflow set Gradle versionName `1.0.91` / versionCode `91`; the debug APK was downloaded and its binary AndroidManifest independently parsed and verified as package `com.personal.diaryapp`, versionName `1.0.91`, versionCode `91`.
+- Debug artifact ID: `13572680931`; APK SHA-256: `ec5e4f08ca4c8d5a4bc0f123b6574630fcab71c3fb8d0f638620a0f22309e438`; artifact APK size: 2,601,803 bytes.
+- Signed Release build and publication steps were skipped because Diary repository signing secrets were not available. The debug APK is not a production update and must not be installed over the signed 1.0.90 app. `latest.json` and published APKs remain unchanged. Phone testing remains pending.
