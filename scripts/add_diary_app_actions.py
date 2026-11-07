@@ -163,7 +163,7 @@ imports = [
 ]
 for item in imports:
     if item not in kotlin:
-        kotlin = kotlin.replace("import android.app.Activity", item + "\\nimport android.app.Activity", 1)
+        kotlin = kotlin.replace("import android.app.Activity", item + chr(10) + "import android.app.Activity", 1)
 anchor = "        webView.webChromeClient = object : WebChromeClient() {"
 native_pin_prompt = r"""
             override fun onJsPrompt(view: WebView?, url: String?, message: String?, defaultValue: String?, result: JsPromptResult?): Boolean {
