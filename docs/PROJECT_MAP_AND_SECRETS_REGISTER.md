@@ -107,3 +107,5 @@ For a general continuation:
 - This is a safety guard, not a version bump or release. It does not change the original ZIP, `latest.json`, either APK, signing secrets, or the installed phone app.
 - Current source still declares versionCode 1 / versionName 1.0 while the feed declares 90 / 1.0.90, so if signing secrets become available the guard will intentionally block the Release build until the version mismatch and next release target are resolved. Debug builds remain separate.
 - The workflow change has been read back from GitHub. A new Actions run has not yet been triggered; no signed APK was built or published by this change.
+
+- Static validation of the new guard was run against the saved original-source artifact: it correctly detects source `com.muazzin.diary` / `1.0` / code `1` versus feed `com.personal.diaryapp` / `1.0.90` / code `90`, and the mismatch test passed (expected block). This is a local static check only; no GitHub Actions workflow run, signed build, or device test was triggered.
