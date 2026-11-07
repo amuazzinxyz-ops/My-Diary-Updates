@@ -170,7 +170,7 @@ if "diary-close-glyph-centering" in html:
     raise SystemExit("Close glyph centering patch already present; refusing duplicate")
 if "</head>" not in html:
     raise SystemExit("Diary HTML head closing tag missing")
-html = html.replace("</head>", close_alignment_style + "\\n</head>", 1)
+html = html.replace("</head>", close_alignment_style + "\n</head>", 1)
 html_path.write_text(html, encoding="utf-8")
 
 kotlin_path = Path("diary-project/app/src/main/java/com/muazzin/diary/MainActivity.kt")
