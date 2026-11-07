@@ -243,7 +243,7 @@ native_confirm_prompt = r"""
                 return true
             }
 """
-if ("override fun onJsConfirm(" !in kotlin) {
+if "override fun onJsConfirm(" not in kotlin:
     if (kotlin.count(anchor) != 1) {
         raise SystemExit("Cannot safely locate the single WebChromeClient confirmation insertion point")
     }
