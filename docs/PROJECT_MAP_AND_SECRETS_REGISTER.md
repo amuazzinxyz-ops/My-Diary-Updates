@@ -138,3 +138,12 @@ For a general continuation:
 - No artifacts were attached to the failed publish runs **42170711278** or **42170675830**. Recent Diary-only build runs provide debug APK artifacts only; no signed Release artifact was found in the inspected runs.
 - The current Diary-only workflow must remain self-contained in `My-Diary-Updates`. Do not restore the historical cross-repository download or access MUAZZIN artifacts/secrets. The existing trusted signing material remains unavailable to the Diary-only workflow under the current project boundary.
 - Current GitHub Releases API check returned an empty array (no published GitHub Release entries). The in-app update feed remains at 1.0.90 / code 90 and has not been modified.
+
+
+## Diary 1.0.91 unsigned Release build — 2026-11-07
+
+- Diary-only workflow commit `dacc654ba74eb900dd01ace7e56c2f09c7e0b25a` triggered Actions run **42369183551**: https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/42369183551
+- The workflow successfully built `app-release-unsigned.apk` for the approved 1.0.91 / code 91 target. Artifact **My-Diary-unsigned-Release-APK**, ID **13572244102**, size 1,873,417 bytes; downloaded archive SHA-256: `72364cb2cb9b51b02b29641ce85fb1178136bf32eccec2dac1ecd0cd0873c0cc`.
+- Extracted unsigned APK size: 1,930,283 bytes; SHA-256: `9b882743691c690b3556c5a014fd18113a413e53bb055a670391021eabdc798f`.
+- This APK is **UNSIGNED**. It is not installable as an update over the signed app, is not a production release, and must not be published or used to replace the installed app. The workflow skipped signed Release and publish because the Diary repository does not have the existing trusted signing material.
+- The separately built 1.0.91 debug APK remains test-only and is also not an in-place update. No phone installation or device test was performed. `latest.json`, published APK files, signing secrets, installed app, and MUAZZIN repository remain unchanged.
