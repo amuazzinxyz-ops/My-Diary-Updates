@@ -128,3 +128,81 @@ if "diary-app-actions" in h or "diaryDownloadInstall" in h:
     raise SystemExit("External/floating app action controls detected; refusing build")
 m.write_text(h,encoding="utf-8")
 print("PASS: Share App and Check for Updates are inside Diary > Me; no external action bar.")
+
+
+# Keep Android autofill/password managers from inserting a saved street or postal
+# address into Diary PIN fields. Also render JS PIN prompts as numeric native dialogs.
+html_path = Path("diary-project/app/src/main/assets/index.html")
+html = html_path.read_text(encoding="utf-8")
+pin_replacements = [
+    (
+        "var pinInput=el('input',{type:'password',inputmode:'numeric',maxlength:'4',autocomplete:'off','aria-label':t('pinPrompt')});",
+        "var pinInput=el('input',{type:'password',name:'diary-note-pin',inputmode:'numeric',pattern:'[0-9]*',maxlength:'4',autocomplete:'new-password',autocapitalize:'off',autocorrect:'off',spellcheck:'false','aria-autocomplete':'none','data-lpignore':'true','data-1p-ignore':'true','aria-label':t('pinPrompt')});"
+    ),
+    (
+        "var input=el('input',{type:'password',inputmode:'numeric',maxlength:'4',autocomplete:'off'});input.placeholder=t('pinPrompt');",
+        "var input=el('input',{type:'password',name:'diary-master-pin',inputmode:'numeric',pattern:'[0-9]*',maxlength:'4',autocomplete:'new-password',autocapitalize:'off',autocorrect:'off',spellcheck:'false','aria-autocomplete':'none','data-lpignore':'true','data-1p-ignore':'true'});input.placeholder=t('pinPrompt');"
+    ),
+]
+for old, new in pin_replacements:
+    count = html.count(old)
+    if count != 1:
+        raise SystemExit(f"Expected exactly one Diary PIN input anchor, found {count}: {old[:90]}")
+    html = html.replace(old, new, 1)
+html_path.write_text(html, encoding="utf-8")
+
+kotlin_path = Path("diary-project/app/src/main/java/com/muazzin/diary/MainActivity.kt")
+kotlin = kotlin_path.read_text(encoding="utf-8")
+imports = [
+    "import android.app.AlertDialog",
+    "import android.text.InputFilter",
+    "import android.text.InputType",
+    "import android.text.method.DigitsKeyListener",
+    "import android.view.WindowManager",
+    "import android.widget.EditText",
+]
+for item in imports:
+    if item not in kotlin:
+        kotlin = kotlin.replace("import android.app.Activity", item + "\\nimport android.app.Activity", 1)
+anchor = "        webView.webChromeClient = object : WebChromeClient() {"
+native_pin_prompt = r"""
+            override fun onJsPrompt(view: WebView?, url: String?, message: String?, defaultValue: String?, result: JsPromptResult?): Boolean {
+                val prompt = message.orEmpty()
+                val isPinPrompt = Regex("(?i)\\bPIN\\b|पिन|پن").containsMatchIn(prompt)
+                if (!isPinPrompt) return super.onJsPrompt(view, url, message, defaultValue, result)
+
+                val pinInput = EditText(this@MainActivity).apply {
+                    inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
+                    keyListener = DigitsKeyListener.getInstance("0123456789")
+                    filters = arrayOf(InputFilter.LengthFilter(4))
+                    isSingleLine = true
+                    hint = "4-digit PIN"
+                    if (android.os.Build.VERSION.SDK_INT >= 26) {
+                        importantForAutofill = View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS
+                    }
+                }
+                val dialog = AlertDialog.Builder(this@MainActivity)
+                    .setTitle(prompt)
+                    .setView(pinInput)
+                    .setPositiveButton("OK") { _, _ -> result?.confirm(pinInput.text.toString()) }
+                    .setNegativeButton("Cancel") { _, _ -> result?.cancel() }
+                    .create()
+                dialog.setOnCancelListener { result?.cancel() }
+                dialog.setOnShowListener {
+                    dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+                    pinInput.requestFocus()
+                    pinInput.post {
+                        val manager = getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
+                        manager.showSoftInput(pinInput, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT)
+                    }
+                }
+                dialog.show()
+                return true
+            }
+"""
+if "override fun onJsPrompt(" not in kotlin:
+    if kotlin.count(anchor) != 1:
+        raise SystemExit("Cannot safely locate the single WebChromeClient PIN prompt insertion point")
+    kotlin = kotlin.replace(anchor, anchor + native_pin_prompt, 1)
+kotlin_path.write_text(kotlin, encoding="utf-8")
+print("PASS: Diary PIN fields disable address autofill and native PIN prompts use numeric password input.")
