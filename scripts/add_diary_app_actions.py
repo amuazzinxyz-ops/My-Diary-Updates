@@ -244,16 +244,12 @@ native_confirm_prompt = r"""
             }
 """
 if "override fun onJsConfirm(" not in kotlin:
-    if (kotlin.count(anchor) != 1) {
+    if kotlin.count(anchor) != 1:
         raise SystemExit("Cannot safely locate the single WebChromeClient confirmation insertion point")
-    }
     kotlin = kotlin.replace(anchor, anchor + native_confirm_prompt, 1)
-}
-if ("override fun onJsPrompt(" !in kotlin) {
-    if (kotlin.count(anchor) != 1) {
+if "override fun onJsPrompt(" not in kotlin:
+    if kotlin.count(anchor) != 1:
         raise SystemExit("Cannot safely locate the single WebChromeClient PIN prompt insertion point")
-    }
     kotlin = kotlin.replace(anchor, anchor + native_pin_prompt, 1)
-}
 kotlin_path.write_text(kotlin, encoding="utf-8")
 print("PASS: Diary PIN fields disable address autofill and native PIN prompts use numeric password input.")
