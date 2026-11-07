@@ -230,9 +230,30 @@ native_pin_prompt = r"""
                 return true
             }
 """
-if "override fun onJsPrompt(" not in kotlin:
-    if kotlin.count(anchor) != 1:
+native_confirm_prompt = r"""
+            override fun onJsConfirm(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
+                val dialog = AlertDialog.Builder(this@MainActivity)
+                    .setTitle("My Diary")
+                    .setMessage(message.orEmpty())
+                    .setPositiveButton("Yes") { _, _ -> result?.confirm() }
+                    .setNegativeButton("No") { _, _ -> result?.cancel() }
+                    .create()
+                dialog.setOnCancelListener { result?.cancel() }
+                dialog.show()
+                return true
+            }
+"""
+if ("override fun onJsConfirm(" !in kotlin) {
+    if (kotlin.count(anchor) != 1) {
+        raise SystemExit("Cannot safely locate the single WebChromeClient confirmation insertion point")
+    }
+    kotlin = kotlin.replace(anchor, anchor + native_confirm_prompt, 1)
+}
+if ("override fun onJsPrompt(" !in kotlin) {
+    if (kotlin.count(anchor) != 1) {
         raise SystemExit("Cannot safely locate the single WebChromeClient PIN prompt insertion point")
+    }
     kotlin = kotlin.replace(anchor, anchor + native_pin_prompt, 1)
+}
 kotlin_path.write_text(kotlin, encoding="utf-8")
 print("PASS: Diary PIN fields disable address autofill and native PIN prompts use numeric password input.")
