@@ -222,13 +222,8 @@ native_pin_prompt = r"""
                         val manager = getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
                         manager.hideSoftInputFromWindow(pinInput.windowToken, 0)
                         pinInput.clearFocus()
-                        val dialogDecor = dialog.window?.decorView
                         dialog.dismiss()
-                        if (dialogDecor != null) {
-                            dialogDecor.postDelayed({ result?.confirm(pinValue) }, 300)
-                        } else {
-                            result?.confirm(pinValue)
-                        }
+                        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({ result?.confirm(pinValue) }, 300)
                     }
                 }
                 dialog.show()
