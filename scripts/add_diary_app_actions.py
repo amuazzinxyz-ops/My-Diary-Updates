@@ -206,7 +206,7 @@ native_pin_prompt = r"""
                 val dialog = AlertDialog.Builder(this@MainActivity)
                     .setTitle(prompt)
                     .setView(pinInput)
-                    .setPositiveButton("OK") { _, _ -> result?.confirm(pinInput.text.toString()) }
+                    .setPositiveButton("OK", null)
                     .setNegativeButton("Cancel") { _, _ -> result?.cancel() }
                     .create()
                 dialog.setOnCancelListener { result?.cancel() }
@@ -216,6 +216,19 @@ native_pin_prompt = r"""
                     pinInput.post {
                         val manager = getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
                         manager.showSoftInput(pinInput, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT)
+                    }
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                        val pinValue = pinInput.text.toString()
+                        val manager = getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
+                        manager.hideSoftInputFromWindow(pinInput.windowToken, 0)
+                        pinInput.clearFocus()
+                        val dialogDecor = dialog.window?.decorView
+                        dialog.dismiss()
+                        if (dialogDecor != null) {
+                            dialogDecor.postDelayed({ result?.confirm(pinValue) }, 300)
+                        } else {
+                            result?.confirm(pinValue)
+                        }
                     }
                 }
                 dialog.show()
