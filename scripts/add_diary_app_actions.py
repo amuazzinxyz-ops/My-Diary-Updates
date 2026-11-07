@@ -149,6 +149,24 @@ for old, new in pin_replacements:
     if count != 1:
         raise SystemExit(f"Expected exactly one Diary PIN input anchor, found {count}: {old[:90]}")
     html = html.replace(old, new, 1)
+close_alignment_style = """
+<style id="diary-close-glyph-centering">
+/* Center only the × glyph; keep the Close button's existing box and placement unchanged. */
+#muazzinMyNotesClose {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    padding: 0 0 2px !important;
+    line-height: 1 !important;
+}
+</style>
+"""
+if "diary-close-glyph-centering" in html:
+    raise SystemExit("Close glyph centering patch already present; refusing duplicate")
+if "</head>" not in html:
+    raise SystemExit("Diary HTML head closing tag missing")
+html = html.replace("</head>", close_alignment_style + "\\n</head>", 1)
 html_path.write_text(html, encoding="utf-8")
 
 kotlin_path = Path("diary-project/app/src/main/java/com/muazzin/diary/MainActivity.kt")
