@@ -57,7 +57,7 @@ Trusted existing Diary signing certificate fingerprint:
 
 ## Known release metadata caution
 
-At the last inspection, `latest.json` pointed to `My-Diary.apk.apk` for version 1.0.90, while the repository also contained `My-Diary.apk` (older v1.0.89 file). The double extension and the metadata/file alignment need a deliberate cleanup. Do not delete either APK or change latest.json casually; first verify which exact APK is published and update the metadata consistently.
+At the 2026-11-07 inspection, `latest.json` declared version 1.0.90 / versionCode 90, pointed to `My-Diary.apk.apk`, and declared SHA-256 `3850b28ceb48794f6712f8a003b7be5ae7c1d257b08c703f22bc684a0c2546d5`. The existing `.github/workflows/publish-diary-update.yml` validates the canonical URL ending in `My-Diary.apk`, so the current metadata URL and workflow rule do not agree. The APK binary at the current double-extension URL has not been independently downloaded and re-hashed in this check. The older `My-Diary.apk` was recorded as v1.0.89. Do not delete either APK or change `latest.json` until the exact repository APK, checksum, canonical URL, package/version, and trusted signing certificate are reconciled. README and signed-build handover were corrected on 2026-11-07 to distinguish the last independently verified published release (v1.0.89) from the v1.0.90 signed build candidate and its unresolved feed state.
 
 ## Latest focused corrections — 2026-11-07
 
