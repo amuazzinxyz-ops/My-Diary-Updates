@@ -97,3 +97,13 @@ For a correction:
 For a general continuation:
 “MY DIARY — Register padhkar My-Diary-Updates repository mein Diary ka kaam aage badhao. MUAZZIN website/repository ko bilkul mat chhedna.”
 
+
+
+## Release workflow safety guard — 2026-11-07
+
+- Commit `c9fb687f9366b420b57b6f46bb3f470b51bbde80` adds a signed-release-only fail-closed check to `.github/workflows/build-diary-from-zip.yml`.
+- Before a signed Release build, it requires the extracted Gradle applicationId/versionCode/versionName to match `latest.json`, requires the canonical update URL ending in `My-Diary.apk`, and requires versionCode greater than the last user-confirmed installed versionCode 90.
+- The publish step now derives versionCode/versionName from the same checked Gradle source instead of hardcoding 90, and refreshes the canonical APK URL and SHA-256.
+- This is a safety guard, not a version bump or release. It does not change the original ZIP, `latest.json`, either APK, signing secrets, or the installed phone app.
+- Current source still declares versionCode 1 / versionName 1.0 while the feed declares 90 / 1.0.90, so if signing secrets become available the guard will intentionally block the Release build until the version mismatch and next release target are resolved. Debug builds remain separate.
+- The workflow change has been read back from GitHub. A new Actions run has not yet been triggered; no signed APK was built or published by this change.
