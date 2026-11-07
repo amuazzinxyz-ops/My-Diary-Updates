@@ -156,7 +156,7 @@ for old, new in pin_replacements:
 close_alignment_style = """
 <style id="diary-close-glyph-centering">
 /* Center only the × glyph; keep the Close button's existing box and placement unchanged. */
-#muazzinMyNotesClose {
+#diaryMyNotesClose {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
