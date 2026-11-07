@@ -123,7 +123,7 @@ style = """
 """
 if "</head>" not in h:
     raise SystemExit("HTML head closing tag missing")
-h=h.replace("</head>",style+"\\n</head>",1)
+h=h.replace("</head>",style+"\n</head>",1)
 if "diary-app-actions" in h or "diaryDownloadInstall" in h:
     raise SystemExit("External/floating app action controls detected; refusing build")
 m.write_text(h,encoding="utf-8")
