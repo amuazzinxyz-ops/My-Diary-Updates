@@ -109,3 +109,12 @@ For a general continuation:
 - The workflow change has been read back from GitHub. A new Actions run has not yet been triggered; no signed APK was built or published by this change.
 
 - Static validation of the new guard was run against the saved original-source artifact: it correctly detects source `com.muazzin.diary` / `1.0` / code `1` versus feed `com.personal.diaryapp` / `1.0.90` / code `90`, and the mismatch test passed (expected block). This is a local static check only; no GitHub Actions workflow run, signed build, or device test was triggered.
+
+
+## Approved next version — 2026-11-07
+
+- User explicitly approved the next My Diary version as **1.0.91 / versionCode 91**.
+- Commit `7060280ea4131a59eb9f465875588d02ba9e2b27` updates only the Diary ZIP build workflow to set the extracted Android project's Gradle version to 1.0.91 / code 91 after applying the independent Diary identity. The original project ZIP is not modified.
+- The signed-release guard now requires the extracted package to be `com.personal.diaryapp`, version 1.0.91 / code 91, and the current update feed to remain at the confirmed baseline 1.0.90 / code 90. On a verified signed build, the existing publish step will update `latest.json` and publish the new APK with its computed SHA-256.
+- The existing feed and APK files have **not** been changed by this approval. No release is published unless the existing Diary-only workflow has the trusted signing material available and passes the signing fingerprint check. A debug APK, if built, is for testing only and must not be installed over the signed app.
+- Original ZIP integrity, app package, trusted signing certificate, local diary data, and MUAZZIN project remain protected. Phone installation and update behavior still require device testing.
