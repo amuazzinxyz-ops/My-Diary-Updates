@@ -163,6 +163,34 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
+      - name: Fail closed unless source version matches the next Diary release
+        if: env.DIARY_RELEASE_READY == 'true'
+        working-directory: diary-project
+        run: |
+          python3 - <<'PY'
+          import json, re
+          from pathlib import Path
+          gradle = Path("app/build.gradle.kts").read_text(encoding="utf-8")
+          meta = json.loads(Path("../latest.json").read_text(encoding="utf-8"))
+          def one(pattern, label):
+              m = re.search(pattern, gradle)
+              if not m:
+                  raise SystemExit(f"BLOCKED: Gradle {label} declaration not found")
+              return m.group(1)
+          package = one(r'applicationId\\s*=\\s*"([^"]+)"', "applicationId")
+          code = int(one(r'versionCode\\s*=\\s*(\\d+)', "versionCode"))
+          name = one(r'versionName\\s*=\\s*"([^"]+)"', "versionName")
+          if package != "com.personal.diaryapp" or meta.get("packageName") != package:
+              raise SystemExit("BLOCKED: APK package and update metadata do not match")
+          if code != int(meta.get("versionCode", 0)) or name != meta.get("versionName"):
+              raise SystemExit(f"BLOCKED: APK source version {name}/{code} does not match feed {meta.get('versionName')}/{meta.get('versionCode')}")
+          if code <= 90:
+              raise SystemExit("BLOCKED: release version must be higher than the last user-confirmed installed versionCode 90")
+          if meta.get("apkUrl") != "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk":
+              raise SystemExit("BLOCKED: update-feed APK URL is not the canonical Diary APK URL")
+          print(f"PASS: package={package}, version={name}/{code}, canonical update URL")
+          PY
+
       - name: Align Java and Kotlin JVM targets
         working-directory: diary-project
         run: |
@@ -249,18 +277,24 @@ jobs:
           test -s "$APK"
           SHA256="$(sha256sum "$APK" | awk '{print $1}')"
           cp "$APK" My-Diary.apk
-          cat > latest.json <<EOF
-          {
-            "appName": "My Diary",
-            "packageName": "com.personal.diaryapp",
-            "versionCode": 90,
-            "versionName": "1.0.90",
-            "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
-            "sha256": "$SHA256",
-            "releaseNotes": "My Diary update with Share App and Check for Updates options. Existing diary data remains stored locally.",
-            "minimumSupportedVersionCode": 1
-          }
-          EOF
+          python3 - "$SHA256" <<'PY'
+          import json, re, sys
+          from pathlib import Path
+          gradle = Path("diary-project/app/build.gradle.kts").read_text(encoding="utf-8")
+          meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
+          code = re.search(r'versionCode\\s*=\\s*(\\d+)', gradle)
+          name = re.search(r'versionName\\s*=\\s*"([^"]+)"', gradle)
+          if not code or not name:
+              raise SystemExit("Cannot read verified Android version from Gradle")
+          meta["appName"] = "My Diary"
+          meta["packageName"] = "com.personal.diaryapp"
+          meta["versionCode"] = int(code.group(1))
+          meta["versionName"] = name.group(1)
+          meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk"
+          meta["sha256"] = sys.argv[1]
+          meta["releaseNotes"] = "My Diary verified update. Existing diary data remains stored locally."
+          Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+          PY
           python3 -m json.tool latest.json >/dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
