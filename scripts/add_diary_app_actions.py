@@ -230,6 +230,7 @@ native_pin_prompt = r"""
                 return true
             }
 """
+# Lock Off confirmation must use a native dialog; do not show the WebView page URL.
 native_confirm_prompt = r"""
             override fun onJsConfirm(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
                 val dialog = AlertDialog.Builder(this@MainActivity)
