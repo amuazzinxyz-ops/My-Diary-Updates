@@ -38,23 +38,34 @@ Before publishing an update, verify all of the following against the actual Diar
 
 Never invent an application ID, signing identity, version, checksum, or release file. Do not publish an APK until the original Diary app project and signing setup are available and verified.
 
-## Current verified release
+## Last independently verified published release
 
 - Version: **1.0.89** (Android versionCode **89**)
 - Android application ID: `com.personal.diaryapp`
-- Public APK: `My-Diary.apk`
-- Update metadata: `latest.json`
+- APK filename: `My-Diary.apk`
 - APK SHA-256: `c900a97da2cc5cad275d9f176f61a8ebde81b44643a7ca8c72d655c84249d415`
-- Signed build workflow: successful; signing certificate check passed.
-- Native updater: included in v1.0.89. It checks for a newer release when the app opens, verifies the downloaded APK checksum, and hands installation to Android.
+- The retained v1.0.89 build record reports a successful signing-certificate check.
 - Device installation/update test: **not yet performed**.
 
-The first installation of v1.0.89 must be done manually because older installed versions do not contain the updater. Later releases can be detected from inside the app. Android still requires its own user confirmation to install.
+This is the last release whose published APK identity is independently recorded in the repository's earlier audit. Do not assume that it is the current installed phone version.
+
+## Current update-feed metadata — not yet cleared for release
+
+The current committed `latest.json` declares:
+
+- Version: **1.0.90** (versionCode **90**)
+- Package: `com.personal.diaryapp`
+- APK URL: `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk.apk`
+- Declared SHA-256: `3850b28ceb48794f6712f8a003b7be5ae7c1d257b08c703f22bc684a0c2546d5`
+
+The 1.0.90 signed candidate build and its certificate fingerprint are recorded in [docs/SIGNED_BUILD_HANDOVER_2026-11-06.md](docs/SIGNED_BUILD_HANDOVER_2026-11-06.md). However, the feed is **not cleared for release**: the metadata URL uses the accidental double-extension filename `My-Diary.apk.apk`, while the existing publication workflow validates the canonical URL ending in `My-Diary.apk`. The APK binary at the current metadata URL has not been independently downloaded and re-hashed in this repository, and device install/update behavior has not been tested.
+
+**Do not use “Check for Updates” as a release test, do not install a candidate over the current app, and do not change or delete either APK until the APK file, metadata URL/hash, signing identity, and update path have all been reconciled and verified.** Do not publish a debug APK.
 
 ## Share and update options audit
 
-The current evidence and remaining source/device-test requirements for **Share App** and **Check for Updates** are recorded in [docs/SHARE_AND_UPDATE_OPTIONS_AUDIT_2026-11-06.md](docs/SHARE_AND_UPDATE_OPTIONS_AUDIT_2026-11-06.md). Do not treat the temporary candidate APK as proof of the updater until the repository's published APK is independently checked.
+The current evidence and remaining source/device-test requirements for **Share App** and **Check for Updates** are recorded in [docs/SHARE_AND_UPDATE_OPTIONS_AUDIT_2026-11-06.md](docs/SHARE_AND_UPDATE_OPTIONS_AUDIT_2026-11-06.md). The audit is not proof of a successful live Android share-sheet or updater test.
 
 ## Build archive / handover
 
-The latest separately verified signed-build artifact and its APK checksum, certificate fingerprint, artifact IDs, expiry, and testing cautions are recorded in [docs/SIGNED_BUILD_HANDOVER_2026-11-06.md](docs/SIGNED_BUILD_HANDOVER_2026-11-06.md). This handover is an archive pointer, not a claim that the newer APK has already been published or phone-tested.
+The separately verified signed-build artifact, APK checksum, certificate fingerprint, artifact IDs, expiry, and testing cautions are recorded in [docs/SIGNED_BUILD_HANDOVER_2026-11-06.md](docs/SIGNED_BUILD_HANDOVER_2026-11-06.md). This is a build-evidence record, not proof that the 1.0.90 candidate has been safely published or phone-tested.
