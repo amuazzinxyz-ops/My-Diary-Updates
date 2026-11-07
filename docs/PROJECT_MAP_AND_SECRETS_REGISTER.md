@@ -130,3 +130,11 @@ For a general continuation:
 - Checked the repository GitHub Releases API on 2026-11-07: it returned an empty list. Therefore the repository currently has **no published GitHub Release entries**; the GitHub Releases page may appear empty.
 - This is separate from the repository's APK files and the app's in-app update feed in `latest.json`. The feed still points to version 1.0.90 / code 90 and `My-Diary.apk.apk`; it has not been changed.
 - Do not create a GitHub Release or attach the 1.0.91 debug APK as a production release. A verified 1.0.91 APK signed with the existing trusted certificate is required first.
+
+
+## Historical 1.0.90 publish workflow investigation — 2026-11-07
+
+- Inspected failed GitHub Actions publish run **42170711278** (job **127737624241**) in this Diary repository. Its log shows it attempted to download artifact ID `13479477068` from the separate `amuazzinxyz-ops/Muazzin-New` repository and received HTTP **401 Unauthorized** before checksum validation. This historical cross-repository artifact dependency is not a valid or permitted path for future Diary publishing.
+- No artifacts were attached to the failed publish runs **42170711278** or **42170675830**. Recent Diary-only build runs provide debug APK artifacts only; no signed Release artifact was found in the inspected runs.
+- The current Diary-only workflow must remain self-contained in `My-Diary-Updates`. Do not restore the historical cross-repository download or access MUAZZIN artifacts/secrets. The existing trusted signing material remains unavailable to the Diary-only workflow under the current project boundary.
+- Current GitHub Releases API check returned an empty array (no published GitHub Release entries). The in-app update feed remains at 1.0.90 / code 90 and has not been modified.
