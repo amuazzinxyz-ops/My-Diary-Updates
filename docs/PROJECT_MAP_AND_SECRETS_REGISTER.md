@@ -1,6 +1,6 @@
 # My Diary Project Register (Permanent Handover)
 
-Last reviewed: 2026-11-06
+Last reviewed: 2026-11-07
 
 ## Project boundary — IMPORTANT
 
@@ -59,7 +59,16 @@ Trusted existing Diary signing certificate fingerprint:
 
 At the last inspection, `latest.json` pointed to `My-Diary.apk.apk` for version 1.0.90, while the repository also contained `My-Diary.apk` (older v1.0.89 file). The double extension and the metadata/file alignment need a deliberate cleanup. Do not delete either APK or change latest.json casually; first verify which exact APK is published and update the metadata consistently.
 
-## Latest focused correction — 2026-11-07\n\n- Diary PIN address-autofill correction is documented in `docs/PIN_ADDRESS_AUTOFILL_FIX_2026-11-07.md`.\n- PIN autofill suppression and native numeric PIN prompt changes are applied by `scripts/add_diary_app_actions.py` during the existing ZIP-based build.\n- Debug APK build succeeded in Actions run `42362033620`; the signed Release/publish steps were skipped because the dedicated repository did not expose the existing Diary keystore secret. Do not publish the debug APK or change `latest.json` until a trusted signed build is available.\n- The source archive and existing app data/security logic remain unchanged.\n\n## Rule for future assistants
+## Latest focused corrections — 2026-11-07
+
+- Diary PIN address-autofill correction is documented in `docs/PIN_ADDRESS_AUTOFILL_FIX_2026-11-07.md`.
+- Close-button × glyph alignment correction is documented in `docs/CLOSE_BUTTON_GLYPH_FIX_2026-11-07.md`.
+- Both corrections are applied by the existing `scripts/add_diary_app_actions.py` during the ZIP-based build; the original project ZIP remains unchanged.
+- Latest combined debug build succeeded in Actions run `42362746781` (commit `1136583f0a689a29aedf938c1ff34d89ca8c1c58`). Its APK was downloaded and inspected: packaged HTML contains the close-glyph rule and both PIN autofill protections. APK SHA-256: `7ad638283ce7f9a4f0d24ac01bd0f5fa74dc46ebf4cb1ff26c7798202d7bbaf2`.
+- The run did not produce a signed Release APK because the dedicated Diary repository workflow did not receive the four existing signing secrets. Do not publish the debug APK or change `latest.json` until a trusted signed build is available.
+- Android phone visual testing and PIN autofill behavior testing remain pending.
+
+## Rule for future assistants
 
 The user wants a clear map of where existing Diary files and settings are, and wants **MUAZZIN kept separate from My Diary**. Start by reading this register and inspecting the existing Diary repository. Reuse what is already present. Do not ask the user to re-upload or recreate something that already exists. Do not claim an action was completed unless repository/workflow/device evidence confirms it.
 
