@@ -136,6 +136,10 @@ html_path = Path("diary-project/app/src/main/assets/index.html")
 html = html_path.read_text(encoding="utf-8")
 pin_replacements = [
     (
+        "var entered=window.prompt(t('recoveryCodePrompt'));if(entered===null)return;",
+        "var entered=window.prompt(t('pinPrompt'));if(entered===null)return;"
+    ),
+    (
         "var pinInput=el('input',{type:'password',inputmode:'numeric',maxlength:'4',autocomplete:'off','aria-label':t('pinPrompt')});",
         "var pinInput=el('input',{type:'password',name:'diary-note-pin',inputmode:'numeric',pattern:'[0-9]*',maxlength:'4',autocomplete:'new-password',autocapitalize:'off',autocorrect:'off',spellcheck:'false','aria-autocomplete':'none','data-lpignore':'true','data-1p-ignore':'true','aria-label':t('pinPrompt')});"
     ),
