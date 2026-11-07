@@ -55,3 +55,8 @@ The existing `.github/workflows/publish-diary-update.yml` expects the canonical 
 - Earlier debug APK artifact ID: `13470440224` (not suitable as a production update unless signing compatibility is independently confirmed).
 - Earlier interface text audit artifact ID: `13469559136`.
 - GitHub Actions artifacts are temporary and expire; this record preserves evidence and identifiers, not a permanent APK binary.
+
+
+## Release workflow guard added — 2026-11-07
+
+The Diary ZIP build workflow now has a signed-release-only fail-closed version check. It compares the extracted Gradle package/versionCode/versionName with `latest.json`, requires the canonical `My-Diary.apk` URL, and requires versionCode greater than the last user-confirmed installed versionCode 90. The publish step derives its version fields from the checked Gradle source rather than hardcoding 1.0.90. Current source is still version 1.0 / code 1 while feed is 1.0.90 / code 90, so a signed release will be blocked until the source version and intended next release are deliberately reconciled. This change does not bump versions, modify release files or metadata, access signing secrets, trigger a build, or publish an APK. Commit: `c9fb687f9366b420b57b6f46bb3f470b51bbde80`.
