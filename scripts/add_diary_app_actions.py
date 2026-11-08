@@ -214,8 +214,8 @@ print("PASS: FileProvider has a cache-path covering the downloaded update APK.")
 
 g=base/"build.gradle.kts"
 t=g.read_text(encoding="utf-8")
-t=re.sub(r"versionCode\s*=\s*\d+","versionCode = 96",t,count=1)
-t=re.sub(r'versionName\s*=\s*"[^"]+"','versionName = "1.0.96"',t,count=1)
+t=re.sub(r"versionCode\s*=\s*\d+","versionCode = 97",t,count=1)
+t=re.sub(r'versionName\s*=\s*"[^"]+"','versionName = "1.0.97"',t,count=1)
 if "versionCode = 97" not in t: raise SystemExit("Version code patch failed")
 g.write_text(t,encoding="utf-8")
 
