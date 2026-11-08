@@ -328,11 +328,11 @@ jobs:
           import json, re, sys
           from pathlib import Path
           gradle = Path("diary-project/app/build.gradle.kts").read_text(encoding="utf-8")
-          code = re.search(r'versionCode\\s*=\\s*(\\d+)', gradle)
-          name = re.search(r'versionName\\s*=\\s*"([^"]+)"', gradle)
+          code = re.search(r'versionCode\s*=\s*(\d+)', gradle)
+          name = re.search(r'versionName\s*=\s*"([^"]+)"', gradle)
           if not code or not name or int(code.group(1)) != 94 or name.group(1) != "1.0.94":
               raise SystemExit("BLOCKED: verified APK is not the approved Diary version 1.0.94/94")
-          Path("/tmp/diary-release-version.txt").write_text(name.group(1) + "\\n" + code.group(1) + "\\n" + sys.argv[1], encoding="utf-8")
+          Path("/tmp/diary-release-version.txt").write_text(name.group(1) + "\n" + code.group(1) + "\n" + sys.argv[1], encoding="utf-8")
           PY
           git fetch origin main
           git checkout -B diary-publish-main origin/main
@@ -350,7 +350,7 @@ jobs:
           meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk"
           meta["sha256"] = lines[2]
           meta["releaseNotes"] = "My Diary verified update. Existing diary data remains stored locally."
-          Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+          Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           cp /tmp/My-Diary-verified.apk My-Diary.apk
           python3 -m json.tool latest.json >/dev/null
