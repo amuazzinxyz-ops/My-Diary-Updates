@@ -1,6 +1,6 @@
 # MY DIARY — MASTER PROJECT REGISTER
 
-**Single source of truth. Last updated: 2026-11-09 (My Diary 1.0.94 release verified; updater cache-bypass fix in progress).**
+**Single source of truth. Last updated: 2026-11-09 (My Diary 1.0.95 release verified; updater cache-busting and visible failure diagnostics included; affected-device test pending).**
 
 This file replaces the old project register. Read it first at the start of every My Diary task, then inspect the live repository and current source before editing. Older dated audit and handover files in `docs/` are historical evidence only; when they conflict with this register or current GitHub state, do not treat them as current instructions.
 
@@ -10,7 +10,7 @@ This file replaces the old project register. Read it first at the start of every
 - Repository: `amuazzinxyz-ops/My-Diary-Updates`
 - Branch: `main`
 - Android package: `com.personal.diaryapp`
-- Latest published feed: **1.0.94**, versionCode **94**. The owner's phone had previously updated successfully from an older build; the other affected user's device-side update remains untested.
+- Latest published feed: **1.0.95**, versionCode **95**. The owner's phone had previously updated successfully from an older build; the other affected user's device-side update remains untested.
 - Latest update feed: `latest.json`.
 - Current source archive: `Diary-Android-Project-v13 (6).zip`.
 - Build workflow: `.github/workflows/build-diary-from-zip.yml`.
@@ -21,14 +21,14 @@ This file replaces the old project register. Read it first at the start of every
 
 ## 2. Current published release — confirmed by live feed and successful release workflow
 
-- Version: **1.0.94** / versionCode **94**.
+- Version: **1.0.95** / versionCode **95**.
 - Package: `com.personal.diaryapp`.
 - Published APK: `My-Diary.apk`.
 - Update URL: `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk`.
-- SHA-256 in live `latest.json`: `61e5d915ff2ec6d62833e4cff8427a11be60592a1bad998a91ccdb33d5b133e9`.
-- Release workflow run: [42510516768](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/42510516768), completed successfully. The workflow calculated the SHA-256 from the signed Release APK, wrote that value into `latest.json`, and committed the APK and feed together in commit `426d7d16528ae609ffd483dbf6f6cfe8569cb37b`.
+- SHA-256 in live `latest.json`: `63292747e58bd8e8ebda0d9b4ca93b3ff74727d16f74288ad610429b33c85c1f`.
+- Release workflow run: [42514613635](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/42514613635), completed successfully. The workflow calculated the SHA-256 from the signed Release APK, wrote that value into `latest.json`, and committed the APK and feed together in commit `7437abcf93ee70117496655289ec091e4b81d596`.
 - Signing certificate SHA-256 fingerprint verified against the previously trusted identity: `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A`.
-- A duplicate queued run [42510711957](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/42510711957) failed closed because 1.0.94 had already been published; its guard correctly refused to overwrite the live 1.0.94 feed. This does not invalidate the successful 1.0.94 release run.
+- The release workflow built the signed 1.0.95 APK, verified its package/version and trusted signing certificate, calculated the APK SHA-256, and published the APK and matching feed together. The build and publish job completed successfully.
 - The separate affected user's actual phone installation remains untested; no device-side success is claimed.
 
 ## 3. Updater reliability — included in published 1.0.94
@@ -36,9 +36,9 @@ This file replaces the old project register. Read it first at the start of every
 - Reversible backup branch created: `backup/pre-updater-reliability-1.0.93`.
 - Updater source: `scripts/add_diary_app_actions.py`.
 - New downloader retries up to three times, uses a temporary partial file, checks content length when supplied, verifies SHA-256, validates APK package and version against the feed, and opens Android's unknown-app install permission settings when needed.
-- 2026-11-09 user reported that older installed clients still show 1.0.93 and fail with a generic download/verification message. Live repository feed is 1.0.94/94. The next 1.0.95 build adds cache-busting query parameters and no-cache headers to both metadata and APK requests, plus a visible failure reason.
+- 2026-11-09 user reported that older installed clients still show 1.0.93 and fail with a generic download/verification message. Live repository feed is 1.0.94/94. Published 1.0.95 adds cache-busting query parameters and no-cache headers to metadata and APK requests, keeps three download attempts, and displays the actual failure reason instead of a generic message. The affected user's phone must still be tested on 1.0.95; a successful CI build does not prove device-side download/install success.
 - Uses the existing raw.githubusercontent.com APK URL so older 1.0.92 clients' URL allow-list is not changed.
-- The 1.0.94 release was built against the approved transition from feed baseline 1.0.93/93 and published only after package/version and trusted signing checks passed.
+- The 1.0.95 release was built against the approved transition from feed baseline 1.0.94/94 and published only after package/version and trusted signing checks passed.
 - Relevant updater/workflow commits: `60d19813d1b9e2ab4361238c829dda17acf401bf` (updater compatibility), `460ddfd6fe7035c893e1b71790288c408fc57650` (1.0.94 version gate), `1b7c87a51bf97232081e34f80731b6e15b77be0f` and `9f6a4d5e4120bc6b8aa9ff1175a225d52f2f91a1` (serialized, safe publishing), and `fd25e3dd44ca16f594a14076a9a7904a6dcd4694` (removed a redundant publish-stage version parser).
 - The successful release workflow run `42510516768` published the verified APK and feed together. A later queued duplicate run was correctly blocked by the guard because the feed had already advanced to 1.0.94.
 
