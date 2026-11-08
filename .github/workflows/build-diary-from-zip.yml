@@ -224,10 +224,10 @@ jobs:
           name = one(r'versionName\s*=\s*"([^"]+)"', "versionName")
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
-          if code != 95 or name != "1.0.96":
+          if code != 96 or name != "1.0.96":
               raise SystemExit(f"BLOCKED: expected approved APK version 1.0.96/95, found {name}/{code}")
-          if int(meta.get("versionCode", 0)) != 94 or meta.get("versionName") != "1.0.95":
-              raise SystemExit("BLOCKED: current update feed is not the expected installed baseline 1.0.95/94")
+          if int(meta.get("versionCode", 0)) != 95 or meta.get("versionName") != "1.0.95":
+              raise SystemExit("BLOCKED: current update feed is not the expected installed baseline 1.0.95/95")
           print(f"PASS: package={package}, next version={name}/{code}; feed baseline remains 1.0.95/94")
           PY
 
@@ -324,14 +324,14 @@ jobs:
           test -s "$APK"
           SHA256="$(sha256sum "$APK" | awk '{print $1}')"
           cp "$APK" /tmp/My-Diary-verified.apk
-          printf '1.0.96\n95\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.96\n96\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -B diary-publish-main origin/main
           python3 - <<'PY'
           import json
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
-          if meta.get("packageName") != "com.personal.diaryapp" or int(meta.get("versionCode", 0)) != 94 or meta.get("versionName") != "1.0.95":
+          if meta.get("packageName") != "com.personal.diaryapp" or int(meta.get("versionCode", 0)) != 95 or meta.get("versionName") != "1.0.95":
               raise SystemExit("BLOCKED: live main feed is no longer the expected 1.0.95/94 baseline; refusing to overwrite it")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
