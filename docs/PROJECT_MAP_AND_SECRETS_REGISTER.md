@@ -128,3 +128,5 @@ When the user says **“new kaam”**, **“sudhar”**, **“aage”**, or give
 
 The user can simply say what they want in Roman Hindi. No special template, file upload, or explanation is required when the existing project contains what is needed.
 
+
+- Follow-up publish validation finding: run `42510479638` built the debug APK successfully and the signed Release APK passed the previously registered certificate fingerprint check, but publish stopped at a redundant Gradle-version regex check. The earlier fail-closed source/feed gate had already validated version 1.0.94/94; the second check was brittle and blocked publication. Workflow commit `fd25e3dd44ca16f594a14076a9a7904a6dcd4694` removes that duplicate parsing and carries the already-approved fixed release metadata into the publish step. New run `42510711957` is pending. Live feed remains 1.0.93/93; no 1.0.94 release is claimed yet.
