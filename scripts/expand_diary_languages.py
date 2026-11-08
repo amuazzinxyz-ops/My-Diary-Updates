@@ -5,7 +5,7 @@ import json, re, sys
 html_path = Path(sys.argv[1])
 source = html_path.read_text(encoding="utf-8")
 translations = json.loads((Path(__file__).with_name("diary-full-translations.json")).read_text(encoding="utf-8"))
-languages = ("urdu", "kannada", "bengali", "gujarati", "marathi", "tamil", "telugu")
+languages = ("urdu", "arabic", "bengali", "gujarati", "marathi", "tamil", "telugu")
 required = set(translations["urdu"])
 for lang in languages:
     if set(translations[lang]) != required:
@@ -19,8 +19,8 @@ for lang in languages:
     values = json.dumps(translations[lang], ensure_ascii=False, separators=(",", ":"))
     insert.append(f" words[{json.dumps(lang)}]=Object.assign({{}},words.english,{values});")
 insert.append(""" function applyDiaryTextDirection(){
-  var l=language(),rtl=(l==='urdu');
-  var codes={roman:'en',english:'en',hindi:'hi',urdu:'ur',kannada:'kn',bengali:'bn',gujarati:'gu',marathi:'mr',tamil:'ta',telugu:'te'};
+  var l=language(),rtl=(l==='urdu'||l==='arabic');
+  var codes={roman:'en',english:'en',hindi:'hi',urdu:'ur',arabic:'ar',bengali:'bn',gujarati:'gu',marathi:'mr',tamil:'ta',telugu:'te'};
   document.documentElement.dir=rtl?'rtl':'ltr';
   document.documentElement.lang=codes[l]||'en';
   document.body.dir=rtl?'rtl':'ltr';
@@ -35,7 +35,7 @@ if 'words["urdu"]' not in source:
 option = '   <option value="hindi">हिन्दी</option>'
 options = option + '''
    <option value="urdu">اردو</option>
-   <option value="kannada">ಕನ್ನಡ</option>
+   <option value="arabic">العربية</option>
    <option value="bengali">বাংলা</option>
    <option value="gujarati">ગુજરાતી</option>
    <option value="marathi">मराठी</option>
