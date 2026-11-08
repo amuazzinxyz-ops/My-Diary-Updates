@@ -37,6 +37,7 @@ This file replaces the old project register. Read it first at the start of every
 - Uses the existing raw.githubusercontent.com APK URL so older 1.0.92 clients' URL allow-list is not changed.
 - Workflow next-version gate is 1.0.94 / code 94 and feed baseline is 1.0.93 / code 93.
 - Latest source/workflow commits: `60d19813d1b9e2ab4361238c829dda17acf401bf` (updater compatibility) and `460ddfd6fe7035c893e1b71790288c408fc57650` (workflow version gate). The 1.0.94 release has **not yet been confirmed published**; do not claim it is available until live feed, build, signing fingerprint, and APK SHA are verified.
+- Publishing conflict fix: workflow now serializes release runs, fetches current `origin/main` immediately before publishing, refuses to overwrite unless the live feed is still exactly 1.0.93/93, then commits only the verified APK and feed using a normal fast-forward push. Workflow commits: `1b7c87a51bf97232081e34f80731b6e15b77be0f` and syntax-escape correction `9f6a4d5e4120bc6b8aa9ff1175a225d52f2f91a1`. Latest build run `42510516768` is pending at last check; run `42510479638` is also in progress. Live feed remains 1.0.93 until verified publication.
 
 Before a later release:
 1. Read live `latest.json` and current Gradle/workflow version gates.
