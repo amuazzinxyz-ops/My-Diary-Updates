@@ -51,10 +51,16 @@ native = r"""
                     if(!link.startsWith("https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/") || !expected.matches(Regex("[0-9a-f]{64}"))) throw Exception("Untrusted update")
                     runOnUiThread { Toast.makeText(this@MainActivity,"APK download aur SHA-256 verification shuru...",Toast.LENGTH_LONG).show() }
                     val c=URL(link).openConnection() as HttpURLConnection
-                    c.connectTimeout=20000;c.readTimeout=30000;c.instanceFollowRedirects=false
+                    c.connectTimeout=45000;c.readTimeout=60000;c.instanceFollowRedirects=true
+                    c.setRequestProperty("User-Agent","MyDiaryUpdater/1.0")
+                    c.setRequestProperty("Accept","application/vnd.android.package-archive, application/octet-stream")
                     val apk=File(cacheDir,"my-diary-update.apk")
                     val digest=java.security.MessageDigest.getInstance("SHA-256")
                     try {
+                        val response=c.responseCode
+                        if(response !in 200..299) throw Exception("Download server returned HTTP $response")
+                        val finalUrl=c.url
+                        if(finalUrl.protocol!="https" || !(finalUrl.host=="raw.githubusercontent.com" || finalUrl.host.endsWith(".githubusercontent.com"))) throw Exception("Untrusted download redirect")
                         c.inputStream.use { input -> apk.outputStream().use { output ->
                             val buffer=ByteArray(8192)
                             while(true){val n=input.read(buffer);if(n<0)break;digest.update(buffer,0,n);output.write(buffer,0,n)}
@@ -70,8 +76,9 @@ native = r"""
                         }
                         startActivity(install)
                     }
-                } catch (_:Exception) {
-                    runOnUiThread { Toast.makeText(this@MainActivity,"Download/verification nahi hua. Update abhi install nahi kiya gaya.",Toast.LENGTH_LONG).show() }
+                } catch (e:Exception) {
+                    val reason=e.message?.take(100) ?: "Unknown error"
+                    runOnUiThread { Toast.makeText(this@MainActivity,"Download fail: $reason. Update install nahi hua.",Toast.LENGTH_LONG).show() }
                 }
             }.start()
         }
@@ -94,8 +101,8 @@ if "android.permission.REQUEST_INSTALL_PACKAGES" not in ms:
 
 g=base/"build.gradle.kts"
 t=g.read_text(encoding="utf-8")
-t=re.sub(r"versionCode\s*=\s*\d+","versionCode = 90",t,count=1)
-t=re.sub(r'versionName\s*=\s*"[^"]+"','versionName = "1.0.90"',t,count=1)
+t=re.sub(r"versionCode\s*=\s*\d+","versionCode = 93",t,count=1)
+t=re.sub(r'versionName\s*=\s*"[^"]+"','versionName = "1.0.93"',t,count=1)
 if "versionCode = 90" not in t: raise SystemExit("Version code patch failed")
 g.write_text(t,encoding="utf-8")
 
