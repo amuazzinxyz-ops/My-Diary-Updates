@@ -2,9 +2,9 @@
   "appName": "My Diary",
   "packageName": "com.personal.diaryapp",
   "versionCode": 96,
-  "versionName": "1.0.96",
+  "versionName": "1.0.97",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
-  "sha256": "c46726693caed6ca75622d9beccba0b82f0c6acd9edb628fdc567dfa1a05074b",
+  "sha256": "bcf36a1ec637fa8e51dfbed17d1ffc0f464bb2656328c71d876491ed2b69cbe5",
   "releaseNotes": "My Diary verified update. Existing diary data remains stored locally.",
   "minimumSupportedVersionCode": 1
 }
