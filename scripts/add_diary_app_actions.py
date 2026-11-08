@@ -1,5 +1,6 @@
 from pathlib import Path
 import re
+import xml.etree.ElementTree as ET
 
 base=Path("diary-project/app")
 kt=base/"src/main/java/com/muazzin/diary/MainActivity.kt"
@@ -155,6 +156,59 @@ if "android.permission.REQUEST_INSTALL_PACKAGES" not in ms:
     if p<0: raise SystemExit("Manifest root tag missing")
     ms=ms[:p+1]+"\\n"+permission+ms[p+1:]
     manifest.write_text(ms,encoding="utf-8")
+
+# Ensure FileProvider can expose the updater APK stored in cacheDir.
+# Android throws "Failed to find configured root that contains..." when
+# the provider XML has no matching <cache-path>.
+android_ns = "http://schemas.android.com/apk/res/android"
+ET.register_namespace("android", android_ns)
+tree = ET.parse(manifest)
+root = tree.getroot()
+app = root.find("application")
+if app is None:
+    raise SystemExit("AndroidManifest application element missing")
+authority = "${applicationId}.fileprovider"
+provider = None
+for node in app.findall("provider"):
+    authorities = node.get("{" + android_ns + "}authorities", "")
+    if authority in authorities or "com.personal.diaryapp.fileprovider" in authorities:
+        provider = node
+        break
+if provider is None:
+    provider = ET.SubElement(app, "provider")
+    provider.set("{" + android_ns + "}name", "androidx.core.content.FileProvider")
+    provider.set("{" + android_ns + "}authorities", authority)
+    provider.set("{" + android_ns + "}exported", "false")
+    provider.set("{" + android_ns + "}grantUriPermissions", "true")
+metadata = None
+for node in provider.findall("meta-data"):
+    if node.get("{" + android_ns + "}name") == "android.support.FILE_PROVIDER_PATHS":
+        metadata = node
+        break
+if metadata is None:
+    metadata = ET.SubElement(provider, "meta-data")
+    metadata.set("{" + android_ns + "}name", "android.support.FILE_PROVIDER_PATHS")
+    metadata.set("{" + android_ns + "}resource", "@xml/diary_update_file_paths")
+resource = metadata.get("{" + android_ns + "}resource", "@xml/diary_update_file_paths")
+if not resource.startswith("@xml/"):
+    raise SystemExit("FileProvider paths metadata is not an @xml resource")
+paths_name = resource.split("/", 1)[1]
+xml_dir = base / "src/main/res/xml"
+xml_dir.mkdir(parents=True, exist_ok=True)
+paths_file = xml_dir / (paths_name + ".xml")
+if paths_file.exists():
+    paths_tree = ET.parse(paths_file)
+    paths_root = paths_tree.getroot()
+else:
+    paths_root = ET.Element("paths")
+    paths_tree = ET.ElementTree(paths_root)
+if not any(x.tag == "cache-path" and x.get("name") == "diary_update_cache" for x in list(paths_root)):
+    ET.SubElement(paths_root, "cache-path", {"name": "diary_update_cache", "path": "."})
+ET.indent(paths_tree, space="    ")
+paths_tree.write(paths_file, encoding="utf-8", xml_declaration=True)
+ET.indent(tree, space="    ")
+tree.write(manifest, encoding="utf-8", xml_declaration=True)
+print("PASS: FileProvider has a cache-path covering the downloaded update APK.")
 
 g=base/"build.gradle.kts"
 t=g.read_text(encoding="utf-8")
