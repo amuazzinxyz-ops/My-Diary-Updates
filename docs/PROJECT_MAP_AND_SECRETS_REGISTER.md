@@ -31,16 +31,16 @@ This file replaces the old project register. Read it first at the start of every
 - The release workflow built the signed 1.0.95 APK, verified its package/version and trusted signing certificate, calculated the APK SHA-256, and published the APK and matching feed together. The build and publish job completed successfully.
 - The separate affected user's actual phone installation remains untested; no device-side success is claimed.
 
-## 3. Updater reliability — included in published 1.0.94
+## 3. Updater reliability — included in published 1.0.95
 
 - Reversible backup branch created: `backup/pre-updater-reliability-1.0.93`.
 - Updater source: `scripts/add_diary_app_actions.py`.
 - New downloader retries up to three times, uses a temporary partial file, checks content length when supplied, verifies SHA-256, validates APK package and version against the feed, and opens Android's unknown-app install permission settings when needed.
-- 2026-11-09 user reported that older installed clients still show 1.0.93 and fail with a generic download/verification message. Live repository feed is 1.0.94/94. Published 1.0.95 adds cache-busting query parameters and no-cache headers to metadata and APK requests, keeps three download attempts, and displays the actual failure reason instead of a generic message. The affected user's phone must still be tested on 1.0.95; a successful CI build does not prove device-side download/install success.
+- 2026-11-09 user reported that older installed clients still show 1.0.93 and fail with a generic download/verification message. Live repository feed is 1.0.95/95. Published 1.0.95 adds cache-busting query parameters and no-cache headers to metadata and APK requests, keeps three download attempts, and displays the actual failure reason instead of a generic message. The affected user's phone must still be tested on 1.0.95; a successful CI build does not prove device-side download/install success.
 - Uses the existing raw.githubusercontent.com APK URL so older 1.0.92 clients' URL allow-list is not changed.
 - The 1.0.95 release was built against the approved transition from feed baseline 1.0.94/94 and published only after package/version and trusted signing checks passed.
 - Relevant updater/workflow commits: `60d19813d1b9e2ab4361238c829dda17acf401bf` (updater compatibility), `460ddfd6fe7035c893e1b71790288c408fc57650` (1.0.94 version gate), `1b7c87a51bf97232081e34f80731b6e15b77be0f` and `9f6a4d5e4120bc6b8aa9ff1175a225d52f2f91a1` (serialized, safe publishing), and `fd25e3dd44ca16f594a14076a9a7904a6dcd4694` (removed a redundant publish-stage version parser).
-- The successful release workflow run `42510516768` published the verified APK and feed together. A later queued duplicate run was correctly blocked by the guard because the feed had already advanced to 1.0.94.
+- The successful release workflow run `42514613635` published the verified 1.0.95 APK and feed together after signing, package, version, and SHA-256 checks passed.
 
 Before a later release:
 1. Read live `latest.json` and current Gradle/workflow version gates.
@@ -132,4 +132,4 @@ When the user says **“new kaam”**, **“sudhar”**, **“aage”**, or give
 The user can simply say what they want in Roman Hindi. No special template, file upload, or explanation is required when the existing project contains what is needed.
 
 
-- Historical publish validation note: the earlier redundant version-parser failure was corrected before the verified 1.0.94 release. The live feed and successful release evidence above are authoritative.
+- Historical publish validation note: the earlier redundant version-parser failure was corrected before the verified 1.0.94 release. That 1.0.94 parser failure is historical; the current live feed and 1.0.95 release evidence above are authoritative.
