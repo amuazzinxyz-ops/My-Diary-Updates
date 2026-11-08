@@ -70,7 +70,7 @@ native = r"""
                                 if(response !in 200..299) throw java.io.IOException("HTTP $response")
                                 val finalUrl=c.url
                                 if(finalUrl.protocol!="https" || !(finalUrl.host=="raw.githubusercontent.com" || finalUrl.host=="githubusercontent.com" || finalUrl.host.endsWith(".githubusercontent.com"))) throw Exception("Untrusted download redirect")
-                                val expectedLength=c.contentLengthLong
+                                val expectedLength=c.getHeaderField("Content-Length")?.toLongOrNull() ?: -1L
                                 var received=0L
                                 c.inputStream.use { input -> part.outputStream().use { output ->
                                     val buffer=ByteArray(16384)
