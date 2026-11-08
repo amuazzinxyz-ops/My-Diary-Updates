@@ -1,6 +1,6 @@
 # MY DIARY — MASTER PROJECT REGISTER
 
-**Single source of truth. Last updated: 2026-11-08 (updater reliability work).**
+**Single source of truth. Last updated: 2026-11-09 (My Diary 1.0.94 release verified).**
 
 This file replaces the old project register. Read it first at the start of every My Diary task, then inspect the live repository and current source before editing. Older dated audit and handover files in `docs/` are historical evidence only; when they conflict with this register or current GitHub state, do not treat them as current instructions.
 
@@ -10,7 +10,7 @@ This file replaces the old project register. Read it first at the start of every
 - Repository: `amuazzinxyz-ops/My-Diary-Updates`
 - Branch: `main`
 - Android package: `com.personal.diaryapp`
-- Latest published feed: **1.0.93**, versionCode **93**. The owner's phone has updated successfully from an older build; the other affected user's installed version is not yet confirmed.
+- Latest published feed: **1.0.94**, versionCode **94**. The owner's phone had previously updated successfully from an older build; the other affected user's device-side update remains untested.
 - Latest update feed: `latest.json`.
 - Current source archive: `Diary-Android-Project-v13 (6).zip`.
 - Build workflow: `.github/workflows/build-diary-from-zip.yml`.
@@ -19,17 +19,19 @@ This file replaces the old project register. Read it first at the start of every
 
 **Hard boundary:** all future My Diary source, app, build, release, update, and documentation work belongs only in this repository. Do not use or modify the MUAZZIN website/repository/workflows for Diary work. Do not merge the two apps or create a second project/workflow/archive when the existing one can be reused.
 
-## 2. Current published release — confirmed by live feed
+## 2. Current published release — confirmed by live feed and successful release workflow
 
-- Version: **1.0.93** / versionCode **93**.
+- Version: **1.0.94** / versionCode **94**.
 - Package: `com.personal.diaryapp`.
 - Published APK: `My-Diary.apk`.
 - Update URL: `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk`.
-- SHA-256 in live `latest.json`: `a30509c1f0e9005ee90131124684900f8fdb7d3b1b2c3e07cb77cd461ada78f7`.
-- 1.0.93 release workflow run: [42502452547](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/42502452547), previously verified successful.
-- The owner reported that their own phone updated successfully from an older build. A separate user's phone showed a download/verification failure; that device's installed version and exact network failure remain unconfirmed.
+- SHA-256 in live `latest.json`: `61e5d915ff2ec6d62833e4cff8427a11be60592a1bad998a91ccdb33d5b133e9`.
+- Release workflow run: [42510516768](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/42510516768), completed successfully. The workflow calculated the SHA-256 from the signed Release APK, wrote that value into `latest.json`, and committed the APK and feed together in commit `426d7d16528ae609ffd483dbf6f6cfe8569cb37b`.
+- Signing certificate SHA-256 fingerprint verified against the previously trusted identity: `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A`.
+- A duplicate queued run [42510711957](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/42510711957) failed closed because 1.0.94 had already been published; its guard correctly refused to overwrite the live 1.0.94 feed. This does not invalidate the successful 1.0.94 release run.
+- The separate affected user's actual phone installation remains untested; no device-side success is claimed.
 
-## 3. Current updater-reliability work — 1.0.94 in progress
+## 3. Updater reliability — included in published 1.0.94
 
 - Reversible backup branch created: `backup/pre-updater-reliability-1.0.93`.
 - Updater source: `scripts/add_diary_app_actions.py`.
