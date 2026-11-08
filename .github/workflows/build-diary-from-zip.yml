@@ -36,6 +36,28 @@ jobs:
           echo "DIARY_KEY_PASSWORD present: $HAS_KEY_PASSWORD"
           echo "DIARY_STORE_PASSWORD present: $HAS_STORE_PASSWORD"
 
+      - name: Validate supplied Diary signing keystore and alias
+        if: env.DIARY_RELEASE_READY == 'true'
+        env:
+          DIARY_KEYSTORE_BASE64: ${{ secrets.DIARY_KEYSTORE_BASE64 }}
+          DIARY_KEY_ALIAS: ${{ secrets.DIARY_KEY_ALIAS }}
+          DIARY_STORE_PASSWORD: ${{ secrets.DIARY_STORE_PASSWORD }}
+        run: |
+          python3 - <<'PY'
+          import base64, os
+          from pathlib import Path
+          try:
+              data = base64.b64decode(os.environ["DIARY_KEYSTORE_BASE64"], validate=True)
+          except Exception:
+              raise SystemExit("Signing check failed: keystore secret is not valid base64")
+          if not data:
+              raise SystemExit("Signing check failed: decoded keystore is empty")
+          Path("/tmp/diary-signing-check.jks").write_bytes(data)
+          PY
+          keytool -list -keystore /tmp/diary-signing-check.jks -storepass "$DIARY_STORE_PASSWORD" -alias "$DIARY_KEY_ALIAS" >/dev/null
+          rm -f /tmp/diary-signing-check.jks
+          echo "Signing keystore and key alias are readable."
+
       - name: Extract Diary Android project
         run: |
           test -f 'Diary-Android-Project-v13 (6).zip'
