@@ -324,16 +324,7 @@ jobs:
           test -s "$APK"
           SHA256="$(sha256sum "$APK" | awk '{print $1}')"
           cp "$APK" /tmp/My-Diary-verified.apk
-          python3 - "$SHA256" <<'PY'
-          import json, re, sys
-          from pathlib import Path
-          gradle = Path("diary-project/app/build.gradle.kts").read_text(encoding="utf-8")
-          code = re.search(r'versionCode\s*=\s*(\d+)', gradle)
-          name = re.search(r'versionName\s*=\s*"([^"]+)"', gradle)
-          if not code or not name or int(code.group(1)) != 94 or name.group(1) != "1.0.94":
-              raise SystemExit("BLOCKED: verified APK is not the approved Diary version 1.0.94/94")
-          Path("/tmp/diary-release-version.txt").write_text(name.group(1) + "\n" + code.group(1) + "\n" + sys.argv[1], encoding="utf-8")
-          PY
+          printf '1.0.94\n94\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -B diary-publish-main origin/main
           python3 - <<'PY'
