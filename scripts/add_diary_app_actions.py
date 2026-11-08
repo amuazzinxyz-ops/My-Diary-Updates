@@ -10,9 +10,16 @@ s=s.replace("        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_ME
 native = r"""
     private inner class DiaryNativeActions {
         private fun metadata(): JSONObject {
-            val c=URL("https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/latest.json").openConnection() as HttpURLConnection
-            c.connectTimeout=15000;c.readTimeout=15000
-            return try { JSONObject(c.inputStream.bufferedReader().use{it.readText()}) } finally { c.disconnect() }
+            val metadataUrl=URL("https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/latest.json?cacheBust="+System.currentTimeMillis())
+            val c=metadataUrl.openConnection() as HttpURLConnection
+            c.connectTimeout=20000;c.readTimeout=20000;c.useCaches=false
+            c.setRequestProperty("Cache-Control","no-cache, no-store, max-age=0")
+            c.setRequestProperty("Pragma","no-cache")
+            return try {
+                val response=c.responseCode
+                if(response !in 200..299) throw java.io.IOException("Update feed HTTP $response")
+                JSONObject(c.inputStream.bufferedReader().use{it.readText()})
+            } finally { c.disconnect() }
         }
         private fun currentVersion(): Int {
             val info=packageManager.getPackageInfo(packageName,0)
@@ -58,10 +65,14 @@ native = r"""
                     for(attempt in 1..3) {
                         part.delete()
                         try {
-                            val c=URL(link).openConnection() as HttpURLConnection
+                            val cacheBustedLink=link+(if(link.contains("?")) "&" else "?")+"cacheBust="+System.currentTimeMillis()+"-"+attempt
+                            val c=URL(cacheBustedLink).openConnection() as HttpURLConnection
                             c.connectTimeout=30000
-                            c.readTimeout=45000
+                            c.readTimeout=60000
+                            c.useCaches=false
                             c.instanceFollowRedirects=true
+                            c.setRequestProperty("Cache-Control","no-cache, no-store, max-age=0")
+                            c.setRequestProperty("Pragma","no-cache")
                             c.setRequestProperty("User-Agent","MyDiaryUpdater/1.1")
                             c.setRequestProperty("Accept","application/vnd.android.package-archive, application/octet-stream")
                             val digest=java.security.MessageDigest.getInstance("SHA-256")
@@ -117,8 +128,14 @@ native = r"""
                         }
                     }
                 } catch(e:Exception) {
-                    val reason=e.message?.take(120) ?: "Unknown error"
-                    runOnUiThread { Toast.makeText(this@MainActivity,"Update fail: $reason. Purana data safe hai.",Toast.LENGTH_LONG).show() }
+                    val reason=e.message?.take(180) ?: e.javaClass.simpleName
+                    runOnUiThread {
+                        AlertDialog.Builder(this@MainActivity)
+                            .setTitle("My Diary update nahi ho saka")
+                            .setMessage("Download/verification fail hua. Wajah: $reason\n\nAapka purana Diary data safe hai. Internet check karke dobara koshish karein.")
+                            .setPositiveButton("Theek hai", null)
+                            .show()
+                    }
                 }
             }.start()
         }
@@ -141,8 +158,8 @@ if "android.permission.REQUEST_INSTALL_PACKAGES" not in ms:
 
 g=base/"build.gradle.kts"
 t=g.read_text(encoding="utf-8")
-t=re.sub(r"versionCode\s*=\s*\d+","versionCode = 94",t,count=1)
-t=re.sub(r'versionName\s*=\s*"[^"]+"','versionName = "1.0.94"',t,count=1)
+t=re.sub(r"versionCode\s*=\s*\d+","versionCode = 95",t,count=1)
+t=re.sub(r'versionName\s*=\s*"[^"]+"','versionName = "1.0.95"',t,count=1)
 if "versionCode = 94" not in t: raise SystemExit("Version code patch failed")
 g.write_text(t,encoding="utf-8")
 
