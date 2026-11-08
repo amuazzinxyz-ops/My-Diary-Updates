@@ -1,6 +1,6 @@
 # MY DIARY — MASTER PROJECT REGISTER
 
-**Single source of truth. Last updated: 2026-11-08.**
+**Single source of truth. Last updated: 2026-11-08 (updater reliability work).**
 
 This file replaces the old project register. Read it first at the start of every My Diary task, then inspect the live repository and current source before editing. Older dated audit and handover files in `docs/` are historical evidence only; when they conflict with this register or current GitHub state, do not treat them as current instructions.
 
@@ -10,7 +10,7 @@ This file replaces the old project register. Read it first at the start of every
 - Repository: `amuazzinxyz-ops/My-Diary-Updates`
 - Branch: `main`
 - Android package: `com.personal.diaryapp`
-- Current user-confirmed installed version: **1.0.92**, versionCode **92**.
+- Latest published feed: **1.0.93**, versionCode **93**. The owner's phone has updated successfully from an older build; the other affected user's installed version is not yet confirmed.
 - Latest update feed: `latest.json`.
 - Current source archive: `Diary-Android-Project-v13 (6).zip`.
 - Build workflow: `.github/workflows/build-diary-from-zip.yml`.
@@ -19,32 +19,30 @@ This file replaces the old project register. Read it first at the start of every
 
 **Hard boundary:** all future My Diary source, app, build, release, update, and documentation work belongs only in this repository. Do not use or modify the MUAZZIN website/repository/workflows for Diary work. Do not merge the two apps or create a second project/workflow/archive when the existing one can be reused.
 
-## 2. Current release — confirmed by repository and user
+## 2. Current published release — confirmed by live feed
 
-- Version: **1.0.92** / versionCode **92**.
+- Version: **1.0.93** / versionCode **93**.
 - Package: `com.personal.diaryapp`.
-- Latest published APK: `My-Diary.apk`.
-- Update URL in `latest.json`: `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk`.
-- SHA-256 in current `latest.json`: `5968e73e44d70fa605bf324fb0779caf13a1a526799f750d4a77afbabb827a51`.
-- Publish workflow run: [42490695129](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/42490695129), completed successfully on 2026-11-08.
-- Source change commit for this release: `13488a82cfd633d54c3af1bacb1bc1b52149465a`.
-- Publish commit: `78287f22b31aa2eefcf3e512ccad8cd9cdfd5239`.
-- **User tested the 1.0.92 update over the previous installed app:** installation succeeded; Arabic option appeared; user confirmed existing app functions and data were working correctly.
+- Published APK: `My-Diary.apk`.
+- Update URL: `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk`.
+- SHA-256 in live `latest.json`: `a30509c1f0e9005ee90131124684900f8fdb7d3b1b2c3e07cb77cd461ada78f7`.
+- 1.0.93 release workflow run: [42502452547](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/42502452547), previously verified successful.
+- The owner reported that their own phone updated successfully from an older build. A separate user's phone showed a download/verification failure; that device's installed version and exact network failure remain unconfirmed.
 
-For future releases, read `latest.json` and the current Gradle/workflow version gates again. Do not assume the next version from memory alone. The likely next target after the confirmed 1.0.92 baseline is 1.0.93 / code 93, but only use it after checking the live feed and source.
+## 3. Current updater-reliability work — 1.0.94 in progress
 
-## 3. Important current workflow check before the next build
+- Reversible backup branch created: `backup/pre-updater-reliability-1.0.93`.
+- Updater source: `scripts/add_diary_app_actions.py`.
+- New downloader now retries up to three times, uses a temporary partial file, checks content length when supplied, verifies SHA-256, validates APK package and version against the feed, and opens Android's unknown-app install permission settings when needed.
+- Uses the existing raw.githubusercontent.com APK URL so older 1.0.92 clients' URL allow-list is not changed.
+- Workflow next-version gate is 1.0.94 / code 94 and feed baseline is 1.0.93 / code 93.
+- Latest source/workflow commits: `60d19813d1b9e2ab4361238c829dda17acf401bf` (updater compatibility) and `460ddfd6fe7035c893e1b71790288c408fc57650` (workflow version gate). The 1.0.94 release has **not yet been confirmed published**; do not claim it is available until live feed, build, signing fingerprint, and APK SHA are verified.
 
-The live `.github/workflows/build-diary-from-zip.yml` must be reviewed before the next release. The current file contains inconsistent human-readable labels/echo text mentioning versionCode 91 while its version-setting command writes versionCode 92. Its release guard also refers to the 1.0.91 / code 91 baseline, which was appropriate for the 1.0.92 build but is now stale after 1.0.92 was published.
-
-Before the next release build:
-1. Read the live `latest.json` and Gradle source-version handling.
-2. Update the workflow's expected baseline to the actual current feed (1.0.92 / code 92).
-3. Set the next version consistently (after confirmation from the live feed: 1.0.93 / code 93).
-4. Correct step names, echo messages, validation checks, and publish metadata together.
-5. Keep fail-closed checks: if package, baseline, next version, signing, or metadata disagree, stop; do not publish.
-
-Do not trigger a release merely to test a workflow edit. Do not publish a debug or unsigned APK as an app update.
+Before a later release:
+1. Read live `latest.json` and current Gradle/workflow version gates.
+2. Advance the next version from the actual feed, not from memory.
+3. Keep fail-closed package, baseline, next-version, signing, and metadata checks.
+4. Never publish a debug or unsigned APK as an app update.
 
 ## 4. Language status and next language work
 
