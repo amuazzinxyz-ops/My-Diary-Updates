@@ -103,7 +103,7 @@ g=base/"build.gradle.kts"
 t=g.read_text(encoding="utf-8")
 t=re.sub(r"versionCode\s*=\s*\d+","versionCode = 93",t,count=1)
 t=re.sub(r'versionName\s*=\s*"[^"]+"','versionName = "1.0.93"',t,count=1)
-if "versionCode = 90" not in t: raise SystemExit("Version code patch failed")
+if "versionCode = 93" not in t: raise SystemExit("Version code patch failed")
 g.write_text(t,encoding="utf-8")
 
 m=base/"src/main/assets/index.html"
