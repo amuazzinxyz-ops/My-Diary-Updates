@@ -189,7 +189,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved next Diary version 1.0.95 (versionCode 94)
+      - name: Set approved next Diary version 1.0.95 (versionCode 95)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
@@ -224,11 +224,11 @@ jobs:
           name = one(r'versionName\s*=\s*"([^"]+)"', "versionName")
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
-          if code != 94 or name != "1.0.95":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.95/94, found {name}/{code}")
+          if code != 95 or name != "1.0.95":
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.95/95, found {name}/{code}")
           if int(meta.get("versionCode", 0)) != 94 or meta.get("versionName") != "1.0.94":
-              raise SystemExit("BLOCKED: current update feed is not the expected installed baseline 1.0.94/93")
-          print(f"PASS: package={package}, next version={name}/{code}; feed baseline remains 1.0.94/93")
+              raise SystemExit("BLOCKED: current update feed is not the expected installed baseline 1.0.94/94")
+          print(f"PASS: package={package}, next version={name}/{code}; feed baseline remains 1.0.94/94")
           PY
 
       - name: Align Java and Kotlin JVM targets
@@ -332,7 +332,7 @@ jobs:
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
           if meta.get("packageName") != "com.personal.diaryapp" or int(meta.get("versionCode", 0)) != 94 or meta.get("versionName") != "1.0.94":
-              raise SystemExit("BLOCKED: live main feed is no longer the expected 1.0.94/93 baseline; refusing to overwrite it")
+              raise SystemExit("BLOCKED: live main feed is no longer the expected 1.0.94/94 baseline; refusing to overwrite it")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
           meta["packageName"] = "com.personal.diaryapp"
