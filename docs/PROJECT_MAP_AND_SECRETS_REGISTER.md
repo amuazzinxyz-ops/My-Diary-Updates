@@ -1,6 +1,6 @@
 # MY DIARY — MASTER PROJECT REGISTER
 
-**Single source of truth. Last updated: 2026-11-09 (My Diary 1.0.94 release verified).**
+**Single source of truth. Last updated: 2026-11-09 (My Diary 1.0.94 release verified; updater cache-bypass fix in progress).**
 
 This file replaces the old project register. Read it first at the start of every My Diary task, then inspect the live repository and current source before editing. Older dated audit and handover files in `docs/` are historical evidence only; when they conflict with this register or current GitHub state, do not treat them as current instructions.
 
@@ -35,7 +35,8 @@ This file replaces the old project register. Read it first at the start of every
 
 - Reversible backup branch created: `backup/pre-updater-reliability-1.0.93`.
 - Updater source: `scripts/add_diary_app_actions.py`.
-- New downloader now retries up to three times, uses a temporary partial file, checks content length when supplied, verifies SHA-256, validates APK package and version against the feed, and opens Android's unknown-app install permission settings when needed.
+- New downloader retries up to three times, uses a temporary partial file, checks content length when supplied, verifies SHA-256, validates APK package and version against the feed, and opens Android's unknown-app install permission settings when needed.
+- 2026-11-09 user reported that older installed clients still show 1.0.93 and fail with a generic download/verification message. Live repository feed is 1.0.94/94. The next 1.0.95 build adds cache-busting query parameters and no-cache headers to both metadata and APK requests, plus a visible failure reason.
 - Uses the existing raw.githubusercontent.com APK URL so older 1.0.92 clients' URL allow-list is not changed.
 - The 1.0.94 release was built against the approved transition from feed baseline 1.0.93/93 and published only after package/version and trusted signing checks passed.
 - Relevant updater/workflow commits: `60d19813d1b9e2ab4361238c829dda17acf401bf` (updater compatibility), `460ddfd6fe7035c893e1b71790288c408fc57650` (1.0.94 version gate), `1b7c87a51bf97232081e34f80731b6e15b77be0f` and `9f6a4d5e4120bc6b8aa9ff1175a225d52f2f91a1` (serialized, safe publishing), and `fd25e3dd44ca16f594a14076a9a7904a6dcd4694` (removed a redundant publish-stage version parser).
@@ -131,4 +132,4 @@ When the user says **“new kaam”**, **“sudhar”**, **“aage”**, or give
 The user can simply say what they want in Roman Hindi. No special template, file upload, or explanation is required when the existing project contains what is needed.
 
 
-- Follow-up publish validation finding: run `42510479638` built the debug APK successfully and the signed Release APK passed the previously registered certificate fingerprint check, but publish stopped at a redundant Gradle-version regex check. The earlier fail-closed source/feed gate had already validated version 1.0.94/94; the second check was brittle and blocked publication. Workflow commit `fd25e3dd44ca16f594a14076a9a7904a6dcd4694` removes that duplicate parsing and carries the already-approved fixed release metadata into the publish step. New run `42510711957` is pending. Live feed remains 1.0.93/93; no 1.0.94 release is claimed yet.
+- Historical publish validation note: the earlier redundant version-parser failure was corrected before the verified 1.0.94 release. The live feed and successful release evidence above are authoritative.
