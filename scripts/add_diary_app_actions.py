@@ -45,40 +45,80 @@ native = r"""
                 try {
                     val j=metadata()
                     if(j.optString("appName")!="My Diary" || j.optString("packageName")!=packageName) throw Exception("Wrong app")
-                    if(j.optInt("versionCode",0)<=currentVersion()) throw Exception("Already latest")
+                    val targetVersion=j.optInt("versionCode",0)
+                    if(targetVersion<=currentVersion()) throw Exception("Already latest")
                     val link=j.optString("apkUrl")
                     val expected=j.optString("sha256").lowercase()
                     if(!link.startsWith("https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/") || !expected.matches(Regex("[0-9a-f]{64}"))) throw Exception("Untrusted update")
                     runOnUiThread { Toast.makeText(this@MainActivity,"APK download aur SHA-256 verification shuru...",Toast.LENGTH_LONG).show() }
-                    val c=URL(link).openConnection() as HttpURLConnection
-                    c.connectTimeout=45000;c.readTimeout=60000;c.instanceFollowRedirects=true
-                    c.setRequestProperty("User-Agent","MyDiaryUpdater/1.0")
-                    c.setRequestProperty("Accept","application/vnd.android.package-archive, application/octet-stream")
                     val apk=File(cacheDir,"my-diary-update.apk")
-                    val digest=java.security.MessageDigest.getInstance("SHA-256")
-                    try {
-                        val response=c.responseCode
-                        if(response !in 200..299) throw Exception("Download server returned HTTP $response")
-                        val finalUrl=c.url
-                        if(finalUrl.protocol!="https" || !(finalUrl.host=="raw.githubusercontent.com" || finalUrl.host.endsWith(".githubusercontent.com"))) throw Exception("Untrusted download redirect")
-                        c.inputStream.use { input -> apk.outputStream().use { output ->
-                            val buffer=ByteArray(8192)
-                            while(true){val n=input.read(buffer);if(n<0)break;digest.update(buffer,0,n);output.write(buffer,0,n)}
-                        }}
-                    } finally { c.disconnect() }
-                    val actual=digest.digest().joinToString("") { "%02x".format(it) }
-                    if(actual!=expected){apk.delete();throw Exception("SHA-256 mismatch")}
+                    val part=File(cacheDir,"my-diary-update.apk.part")
+                    var downloaded=false
+                    var lastFailure:Exception?=null
+                    for(attempt in 1..3) {
+                        part.delete()
+                        try {
+                            val c=URL(link).openConnection() as HttpURLConnection
+                            c.connectTimeout=30000
+                            c.readTimeout=45000
+                            c.instanceFollowRedirects=true
+                            c.setRequestProperty("User-Agent","MyDiaryUpdater/1.1")
+                            c.setRequestProperty("Accept","application/vnd.android.package-archive, application/octet-stream")
+                            val digest=java.security.MessageDigest.getInstance("SHA-256")
+                            try {
+                                val response=c.responseCode
+                                if(response !in 200..299) throw java.io.IOException("HTTP $response")
+                                val finalUrl=c.url
+                                if(finalUrl.protocol!="https" || !(finalUrl.host=="raw.githubusercontent.com" || finalUrl.host=="githubusercontent.com" || finalUrl.host.endsWith(".githubusercontent.com"))) throw Exception("Untrusted download redirect")
+                                val expectedLength=c.contentLengthLong
+                                var received=0L
+                                c.inputStream.use { input -> part.outputStream().use { output ->
+                                    val buffer=ByteArray(16384)
+                                    while(true) {
+                                        val n=input.read(buffer)
+                                        if(n<0) break
+                                        digest.update(buffer,0,n)
+                                        output.write(buffer,0,n)
+                                        received+=n
+                                    }
+                                    output.flush()
+                                }}
+                                if(received<=0L || (expectedLength>0L && received!=expectedLength)) throw java.io.IOException("Incomplete download")
+                            } finally { c.disconnect() }
+                            val actual=digest.digest().joinToString("") { "%02x".format(it) }
+                            if(actual!=expected) throw Exception("SHA-256 mismatch")
+                            if(apk.exists() && !apk.delete()) throw Exception("Cannot replace old APK")
+                            if(!part.renameTo(apk)) throw Exception("Cannot finalize downloaded APK")
+                            val archive=packageManager.getPackageArchiveInfo(apk.absolutePath,0) ?: throw Exception("Downloaded file is not a valid APK")
+                            if(archive.packageName!=packageName) throw Exception("APK package mismatch")
+                            @Suppress("DEPRECATION")
+                            val archiveVersion=if(android.os.Build.VERSION.SDK_INT>=28) archive.longVersionCode.toInt() else archive.versionCode
+                            if(archiveVersion!=targetVersion || archiveVersion<=currentVersion()) throw Exception("APK version mismatch")
+                            downloaded=true
+                            break
+                        } catch(e:Exception) {
+                            lastFailure=e
+                            part.delete()
+                            if(attempt<3) Thread.sleep(1200L*attempt)
+                        }
+                    }
+                    if(!downloaded) throw Exception("3 download attempts failed: " + (lastFailure?.message ?: "unknown error"))
                     val uri=FileProvider.getUriForFile(this@MainActivity,"$packageName.fileprovider",apk)
                     runOnUiThread {
-                        val install=Intent(Intent.ACTION_VIEW).apply {
-                            setDataAndType(uri,"application/vnd.android.package-archive")
-                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
+                        if(android.os.Build.VERSION.SDK_INT>=26 && !packageManager.canRequestPackageInstalls()) {
+                            Toast.makeText(this@MainActivity,"APK verify ho gaya. Install permission allow karke Update dobara dabayein.",Toast.LENGTH_LONG).show()
+                            startActivity(Intent(android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,android.net.Uri.parse("package:$packageName")))
+                        } else {
+                            val install=Intent(Intent.ACTION_VIEW).apply {
+                                setDataAndType(uri,"application/vnd.android.package-archive")
+                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
+                            }
+                            startActivity(install)
                         }
-                        startActivity(install)
                     }
-                } catch (e:Exception) {
-                    val reason=e.message?.take(100) ?: "Unknown error"
-                    runOnUiThread { Toast.makeText(this@MainActivity,"Download fail: $reason. Update install nahi hua.",Toast.LENGTH_LONG).show() }
+                } catch(e:Exception) {
+                    val reason=e.message?.take(120) ?: "Unknown error"
+                    runOnUiThread { Toast.makeText(this@MainActivity,"Update fail: $reason. Purana data safe hai.",Toast.LENGTH_LONG).show() }
                 }
             }.start()
         }
@@ -101,9 +141,9 @@ if "android.permission.REQUEST_INSTALL_PACKAGES" not in ms:
 
 g=base/"build.gradle.kts"
 t=g.read_text(encoding="utf-8")
-t=re.sub(r"versionCode\s*=\s*\d+","versionCode = 93",t,count=1)
-t=re.sub(r'versionName\s*=\s*"[^"]+"','versionName = "1.0.93"',t,count=1)
-if "versionCode = 93" not in t: raise SystemExit("Version code patch failed")
+t=re.sub(r"versionCode\s*=\s*\d+","versionCode = 94",t,count=1)
+t=re.sub(r'versionName\s*=\s*"[^"]+"','versionName = "1.0.94"',t,count=1)
+if "versionCode = 94" not in t: raise SystemExit("Version code patch failed")
 g.write_text(t,encoding="utf-8")
 
 m=base/"src/main/assets/index.html"
