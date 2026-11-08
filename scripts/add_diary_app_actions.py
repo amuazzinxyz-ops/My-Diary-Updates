@@ -59,8 +59,10 @@ native = r"""
                     val expected=j.optString("sha256").lowercase()
                     if(!link.startsWith("https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/") || !expected.matches(Regex("[0-9a-f]{64}"))) throw Exception("Untrusted update")
                     runOnUiThread { Toast.makeText(this@MainActivity,"APK download aur SHA-256 verification shuru...",Toast.LENGTH_LONG).show() }
-                    val apk=File(cacheDir,"my-diary-update.apk")
-                    val part=File(cacheDir,"my-diary-update.apk.part")
+                    val updateDir=File(cacheDir,"diary-share")
+                    if(!updateDir.exists() && !updateDir.mkdirs()) throw Exception("Cannot create update folder")
+                    val apk=File(updateDir,"my-diary-update.apk")
+                    val part=File(updateDir,"my-diary-update.apk.part")
                     var downloaded=false
                     var lastFailure:Exception?=null
                     for(attempt in 1..3) {
@@ -214,7 +216,7 @@ g=base/"build.gradle.kts"
 t=g.read_text(encoding="utf-8")
 t=re.sub(r"versionCode\s*=\s*\d+","versionCode = 96",t,count=1)
 t=re.sub(r'versionName\s*=\s*"[^"]+"','versionName = "1.0.96"',t,count=1)
-if "versionCode = 96" not in t: raise SystemExit("Version code patch failed")
+if "versionCode = 97" not in t: raise SystemExit("Version code patch failed")
 g.write_text(t,encoding="utf-8")
 
 m=base/"src/main/assets/index.html"
