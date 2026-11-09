@@ -328,7 +328,7 @@ jobs:
           cp "$APK" /tmp/My-Diary-verified.apk
           test -s diary-project/app/src/main/assets/index.html
           cp diary-project/app/src/main/assets/index.html /tmp/My-Diary-web-index.html
-          printf '1.0.107\n106\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.107\n107\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -B diary-publish-main origin/main
           mkdir -p web-source diary-web
@@ -351,7 +351,7 @@ jobs:
           meta["webVersion"] = int(meta.get("webVersion", 0)) + 1
           meta["webUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html"
           meta["webSha256"] = hashlib.sha256(web_file.read_bytes()).hexdigest()
-          meta["releaseNotes"] = "Matched the Me-menu Refresh button size to the other Me-menu buttons. Existing Diary data remains on this device."
+          meta["releaseNotes"] = "Restored the Me-menu Check for Updates button and matched the Refresh button size to the other Me-menu buttons. Existing Diary data remains on this device."
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           cp /tmp/My-Diary-verified.apk My-Diary.apk
