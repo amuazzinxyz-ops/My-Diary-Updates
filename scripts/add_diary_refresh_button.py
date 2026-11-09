@@ -6,7 +6,7 @@ import re
 path = Path("diary-project/app/src/main/assets/index.html")
 html = path.read_text(encoding="utf-8")
 
-start = html.find('<script id="diary-my-notes-js">')
+start = html.find('<script id="diary-my-diary-js">')
 if start < 0:
     # The extracted script keeps its original element id in some source revisions.
     start = html.find("<script")
