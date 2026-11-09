@@ -159,9 +159,10 @@ if "android.permission.REQUEST_INSTALL_PACKAGES" not in ms:
     ms=ms[:p+1]+"\\n"+permission+ms[p+1:]
     manifest.write_text(ms,encoding="utf-8")
 
-# Ensure FileProvider can expose the updater APK stored in cacheDir.
-# Android throws "Failed to find configured root that contains..." when
-# the provider XML has no matching <cache-path>.
+# Keep the app's ORIGINAL FileProvider resource. Diary sharing already writes to
+# cacheDir/diary-share; the APK updater writes to that same directory. Reusing
+# the existing XML avoids a second authority/resource mapping that can fail
+# at runtime with "Failed to find configured root that contains...".
 android_ns = "http://schemas.android.com/apk/res/android"
 ET.register_namespace("android", android_ns)
 tree = ET.parse(manifest)
@@ -173,33 +174,34 @@ authority = "${applicationId}.fileprovider"
 providers = app.findall("provider")
 provider = next((node for node in providers if node.get("{" + android_ns + "}name") == "androidx.core.content.FileProvider"), None)
 if provider is None:
-    provider = ET.SubElement(app, "provider")
-provider.set("{" + android_ns + "}name", "androidx.core.content.FileProvider")
+    raise SystemExit("Original FileProvider missing; refusing to replace app sharing configuration")
 provider.set("{" + android_ns + "}authorities", authority)
 provider.set("{" + android_ns + "}exported", "false")
 provider.set("{" + android_ns + "}grantUriPermissions", "true")
-
-# Use a dedicated, unambiguous paths resource for both APK updates and Diary sharing.
-for node in list(provider.findall("meta-data")):
-    if node.get("{" + android_ns + "}name") == "android.support.FILE_PROVIDER_PATHS":
-        provider.remove(node)
-metadata = ET.SubElement(provider, "meta-data")
-metadata.set("{" + android_ns + "}name", "android.support.FILE_PROVIDER_PATHS")
-metadata.set("{" + android_ns + "}resource", "@xml/diary_update_file_paths")
-
+metadata = [node for node in provider.findall("meta-data")
+            if node.get("{" + android_ns + "}name") == "android.support.FILE_PROVIDER_PATHS"]
+if len(metadata) != 1:
+    raise SystemExit("Expected the original single FileProvider paths metadata")
+if metadata[0].get("{" + android_ns + "}resource") != "@xml/file_paths":
+    raise SystemExit("Original FileProvider paths resource changed unexpectedly")
 xml_dir = base / "src/main/res/xml"
-xml_dir.mkdir(parents=True, exist_ok=True)
-paths_file = xml_dir / "diary_update_file_paths.xml"
-paths_root = ET.Element("paths")
-ET.SubElement(paths_root, "cache-path", {"{" + android_ns + "}name": "diary_update_cache", "{" + android_ns + "}path": "."})
-paths_tree = ET.ElementTree(paths_root)
+paths_file = xml_dir / "file_paths.xml"
+if not paths_file.is_file():
+    raise SystemExit("Original FileProvider file_paths.xml is missing")
+paths_tree = ET.parse(paths_file)
+paths_root = paths_tree.getroot()
+cache_path = next((node for node in list(paths_root)
+                   if node.tag == "cache-path"
+                   and node.get("{" + android_ns + "}name") == "diary_shared_files"), None)
+if cache_path is None:
+    cache_path = ET.SubElement(paths_root, "cache-path")
+    cache_path.set("{" + android_ns + "}name", "diary_shared_files")
+cache_path.set("{" + android_ns + "}path", "diary-share/")
 ET.indent(paths_tree, space="    ")
 paths_tree.write(paths_file, encoding="utf-8", xml_declaration=True)
-
 ET.indent(tree, space="    ")
 tree.write(manifest, encoding="utf-8", xml_declaration=True)
-
-# Fail the build if the manifest and resource do not agree exactly.
+# Validate the exact original resource and directory used by both share and updater.
 check_tree = ET.parse(manifest)
 check_app = check_tree.getroot().find("application")
 matching = [node for node in check_app.findall("provider")
@@ -209,12 +211,14 @@ if len(matching) != 1:
     raise SystemExit("FAIL: expected exactly one Diary FileProvider with the app authority")
 check_meta = [node for node in matching[0].findall("meta-data")
               if node.get("{" + android_ns + "}name") == "android.support.FILE_PROVIDER_PATHS"]
-if len(check_meta) != 1 or check_meta[0].get("{" + android_ns + "}resource") != "@xml/diary_update_file_paths":
-    raise SystemExit("FAIL: FileProvider paths metadata is not configured correctly")
+if len(check_meta) != 1 or check_meta[0].get("{" + android_ns + "}resource") != "@xml/file_paths":
+    raise SystemExit("FAIL: original FileProvider paths metadata was not preserved")
 check_paths = ET.parse(paths_file).getroot()
-if not any(node.tag == "cache-path" and node.get("{" + android_ns + "}path") == "." for node in list(check_paths)):
-    raise SystemExit("FAIL: FileProvider cache root does not cover cacheDir")
-print("PASS: FileProvider authority, manifest metadata, and cacheDir root verified.")
+if not any(node.tag == "cache-path"
+           and node.get("{" + android_ns + "}name") == "diary_shared_files"
+           and node.get("{" + android_ns + "}path") == "diary-share/" for node in list(check_paths)):
+    raise SystemExit("FAIL: original FileProvider cache path does not match cacheDir/diary-share")
+print("PASS: original FileProvider resource, authority, and shared updater cache directory verified.")
 
 g=base/"build.gradle.kts"
 t=g.read_text(encoding="utf-8")
