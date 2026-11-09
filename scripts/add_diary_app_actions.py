@@ -236,17 +236,14 @@ if anchor not in h:
     raise SystemExit("Diary Me menu insertion point missing")
 actions = """
   var shareAppBtn=el('button',{id:'diaryShareAppBtn',type:'button'},'📤 Share App');
-  var checkUpdatesBtn=el('button',{id:'diaryCheckUpdatesBtn',type:'button'},'🔄 Check for Updates');
   mePanel.appendChild(shareAppBtn);
-  mePanel.appendChild(checkUpdatesBtn);
   shareAppBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(window.DiaryAppActions&&DiaryAppActions.shareApp){DiaryAppActions.shareApp();}});
-  checkUpdatesBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(window.DiaryAppActions&&DiaryAppActions.checkForUpdates){DiaryAppActions.checkForUpdates();}});
 """
 h=h.replace(anchor,anchor+actions,1)
 style = """
 <style id="diary-me-app-actions-style">
-#diaryShareAppBtn,#diaryCheckUpdatesBtn{display:block!important;width:100%!important;min-height:34px!important;height:34px!important;margin:7px 0 0!important;padding:0 10px!important;box-sizing:border-box!important;border:1px solid #b9d0bd!important;border-radius:9px!important;background:linear-gradient(145deg,#fff,#e5eee8)!important;color:#123d2a!important;font-size:10px!important;font-weight:1000!important;line-height:1.15!important;text-align:left!important;white-space:nowrap!important;box-shadow:0 2px 0 #c7d9c8!important;cursor:pointer!important}
-#diaryShareAppBtn:active,#diaryCheckUpdatesBtn:active{transform:translateY(2px)!important;box-shadow:0 0 0 transparent!important}
+#diaryShareAppBtn{display:block!important;width:100%!important;min-height:34px!important;height:34px!important;margin:7px 0 0!important;padding:0 10px!important;box-sizing:border-box!important;border:1px solid #b9d0bd!important;border-radius:9px!important;background:linear-gradient(145deg,#fff,#e5eee8)!important;color:#123d2a!important;font-size:10px!important;font-weight:1000!important;line-height:1.15!important;text-align:left!important;white-space:nowrap!important;box-shadow:0 2px 0 #c7d9c8!important;cursor:pointer!important}
+#diaryShareAppBtn:active{transform:translateY(2px)!important;box-shadow:0 0 0 transparent!important}
 </style>
 """
 if "</head>" not in h:
