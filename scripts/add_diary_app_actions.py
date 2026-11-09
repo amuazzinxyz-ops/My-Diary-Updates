@@ -192,11 +192,11 @@ paths_tree = ET.parse(paths_file)
 paths_root = paths_tree.getroot()
 cache_path = next((node for node in list(paths_root)
                    if node.tag == "cache-path"
-                   and node.get("{" + android_ns + "}name") == "diary_shared_files"), None)
+                   and node.get("name") == "diary_shared_files"), None)
 if cache_path is None:
     cache_path = ET.SubElement(paths_root, "cache-path")
-    cache_path.set("{" + android_ns + "}name", "diary_shared_files")
-cache_path.set("{" + android_ns + "}path", "diary-share/")
+    cache_path.set("name", "diary_shared_files")
+cache_path.set("path", "diary-share/")
 ET.indent(paths_tree, space="    ")
 paths_tree.write(paths_file, encoding="utf-8", xml_declaration=True)
 ET.indent(tree, space="    ")
@@ -215,8 +215,8 @@ if len(check_meta) != 1 or check_meta[0].get("{" + android_ns + "}resource") != 
     raise SystemExit("FAIL: original FileProvider paths metadata was not preserved")
 check_paths = ET.parse(paths_file).getroot()
 if not any(node.tag == "cache-path"
-           and node.get("{" + android_ns + "}name") == "diary_shared_files"
-           and node.get("{" + android_ns + "}path") == "diary-share/" for node in list(check_paths)):
+           and node.get("name") == "diary_shared_files"
+           and node.get("path") == "diary-share/" for node in list(check_paths)):
     raise SystemExit("FAIL: original FileProvider cache path does not match cacheDir/diary-share")
 print("PASS: original FileProvider resource, authority, and shared updater cache directory verified.")
 
