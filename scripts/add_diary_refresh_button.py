@@ -121,3 +121,4 @@ path.write_text(html, encoding="utf-8")
 print("PASS: Me menu now contains one Refresh button")
 print("PASS: Refresh re-reads current Diary notes and trash from local storage via existing renderer")
 print("PASS: Existing editor, PIN, notes and data storage logic remain unchanged")
+# Track this script for a clean retry of the approved Diary build.
