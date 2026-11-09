@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 10,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "21d5d7da4fde443b4df905eaf46ebfbec7db71b2b5c94535f5ffbadf6df29f59",
+  "webSha256": "f32747d5fb7712d74306786d3d3a42d66fad21e4a5e5ecf79812b4ace3da39a7",
   "webReleaseNotes": "Adds a browser-download fallback for older Android updater versions. Existing diary data is kept."
 }
