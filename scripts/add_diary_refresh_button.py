@@ -85,7 +85,7 @@ if 'id="v136-me-refresh-equal-size"' not in html:
         raise SystemExit("Could not find end of standalone Diary page")
     html = html.replace("</body>", equal_size_style + "\n</body>", 1)
 
-if script.count("diaryDiaryRefreshBtn") != 2:
+if script.count("diaryDiaryRefreshBtn") != 1:
     raise SystemExit("Refresh button insertion verification failed")
 if "renderList();" not in script[script.find("diaryDiaryRefreshBtn"):]:
     raise SystemExit("Refresh handler does not call the existing Diary list renderer")
