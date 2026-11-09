@@ -1,14 +1,14 @@
 {
   "appName": "My Diary",
   "packageName": "com.personal.diaryapp",
-  "versionCode": 104,
-  "versionName": "1.0.104",
-  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
-  "sha256": "f14e75d502d9263e29ab81250f781925f034afe63296a7444abd4cc8c65c7544",
-  "releaseNotes": "Restored the previously published signed My Diary 1.0.104 release. Existing Diary data remains on this device.",
+  "versionCode": 105,
+  "versionName": "1.0.105",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.105.apk",
+  "sha256": "32a8d90f991cab12b1e3ad462e8a4b82135b11d3bc783be54e7f5280749864a2",
+  "releaseNotes": "Removed the unrequested update button from the Diary menu. Existing Diary data remains on this device.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 8,
-  "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/89219d4e9e553f606b5323a85723705e9ca3ed44/web-source/index.html",
-  "webSha256": "17a04a1b2ff8dae73c590134f63ea131c4dfd29a33a5bee2d365f89893a2bed5",
+  "webVersion": 9,
+  "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
+  "webSha256": "8e21688cd1cd9eb6faba1d1b8a27659f221bef32ba2b84a8bee29be9866e8d1b",
   "webReleaseNotes": "Restored the 1.0.104 web bundle. Diary notes and photos remain on this device."
 }
