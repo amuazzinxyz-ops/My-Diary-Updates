@@ -204,7 +204,7 @@ jobs:
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary versionName=1.0.102, versionCode=102")
+          print("Set Diary versionName=1.0.103, versionCode=103")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -230,7 +230,7 @@ jobs:
               raise SystemExit(f"BLOCKED: expected approved APK version 1.0.103/103, found {name}/{code}")
           if int(meta.get("versionCode", 0)) != 102 or meta.get("versionName") != "1.0.102":
               raise SystemExit("BLOCKED: current update feed is not the expected installed baseline 1.0.102/102")
-          print(f"PASS: package={package}, next version={name}/{code}; feed baseline remains 1.0.101/101")
+          print(f"PASS: package={package}, next version={name}/{code}; feed baseline remains 1.0.102/102")
           PY
 
       - name: Align Java and Kotlin JVM targets
