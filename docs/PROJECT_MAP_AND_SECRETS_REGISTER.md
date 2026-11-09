@@ -1,6 +1,6 @@
 # MY DIARY — MASTER PROJECT REGISTER
 
-**Single source of truth. Last updated: 2026-11-09 (1.0.105 remains the signed APK; temporary web-bundle bootstrap is active for older updater clients; affected-user device test pending).**
+**Single source of truth. Last updated: 2026-11-09 (1.0.105 remains published; 1.0.106 updater fix is being prepared; affected-user device test pending).**
 
 This file replaces the old project register. Read it first at the start of every My Diary task, then inspect the live repository and current source before editing. Older dated audit and handover files in `docs/` are historical evidence only; when they conflict with this register or current GitHub state, do not treat them as current instructions.
 
@@ -10,7 +10,7 @@ This file replaces the old project register. Read it first at the start of every
 - Repository: `amuazzinxyz-ops/My-Diary-Updates`
 - Branch: `main`
 - Android package: `com.personal.diaryapp`
-- Latest signed APK: **1.0.105**, versionCode **105**. Published in commit `31d2249c6129c850e9dd16818ceb3a4a059842c6`. The live `latest.json` versionCode is temporarily set to **1** (versionName remains 1.0.105) solely to trigger the existing web-bundle updater in older installed apps; restore versionCode 105 after the affected user confirms the browser-fallback button has appeared.
+- Latest signed APK: **1.0.105**, versionCode **105**. Published in commit `31d2249c6129c850e9dd16818ceb3a4a059842c6`. The live `latest.json` remains correctly set to **105** / 1.0.105. The next release is being prepared as 1.0.106 / versionCode 106.
 - Latest update feed: `latest.json`.
 - Current source archive: `Diary-Android-Project-v13 (6).zip`.
 - Build workflow: `.github/workflows/build-diary-from-zip.yml`.
@@ -30,15 +30,15 @@ This file replaces the old project register. Read it first at the start of every
 - Build run `42656590333` completed successfully. The workflow validated the existing signing certificate fingerprint `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A` before publishing.
 - Downloaded signed-release artifact and independently calculated the APK SHA-256; it exactly matches the live feed value above. The versioned APK exists in the main-branch publish commit.
 - The 1.0.103 APK contains an allow-list for the repository's raw GitHub URL prefix (not an exact `My-Diary.apk` filename), so the new version-specific APK path remains within that approved prefix. This supports compatibility for older updater clients.
-- The affected user's actual web-bundle bootstrap, browser download, and APK installation on a different user's phone remain **not device-verified**. Successful build/publication and matching checksum do not prove that the user's device has completed installation.
-- The 1.0.105 updater sends `Accept-Encoding: identity` to avoid compressed-transfer Content-Length discrepancies with strict download-length checks. Older installed clients retain their previous native downloader. To bridge them, `web-source/index.html` and `diary-web/index.html` were updated to webVersion 10 with a browser-download fallback button. The live feed temporarily advertises versionCode 1 so 1.0.103 and older clients that already contain the web-bundle updater can fetch this HTML without entering the failing APK downloader. This is a bootstrap workaround, not yet device-verified; it requires the affected user to tap Check for Updates once, then use the new Browser download button to download/install the signed 1.0.105 APK. Restore feed versionCode 105 only after that bootstrap step is confirmed.
+- The affected user's actual in-app download, verification, and installation on another phone remain **not device-verified**. Successful build/publication and matching checksum do not prove that the user's device has completed installation.
+- The 1.0.105 updater sends `Accept-Encoding: identity`, but older installed clients cannot benefit from that change until they install a newer APK. The 1.0.106 source fix removes the strict Content-Length equality requirement: the downloader reads the complete response and relies on SHA-256, APK package, and version verification to reject incomplete or incorrect files. The live feed remains at 1.0.105 until the signed 1.0.106 build passes workflow checks and is published. The affected phone's download and installation remain unverified.
 
 ## 3. Updater reliability — included in published 1.0.95
 
 - Reversible backup branch created: `backup/pre-updater-reliability-1.0.93`.
 - Updater source: `scripts/add_diary_app_actions.py`.
 - New downloader retries up to three times, uses a temporary partial file, checks content length when supplied, verifies SHA-256, validates APK package and version against the feed, and opens Android's unknown-app install permission settings when needed.
-- 2026-11-09 user reported that tapping Download & Install shows the APK download/SHA-256 start message and then immediately reports download/verification failure. The signed APK remains 1.0.105; live latest.json is temporarily in legacy web-bundle bootstrap mode (versionCode 1, webVersion 10). The current updater requests uncached metadata and APK URLs, retries three times, checks HTTP response/content length/SHA-256/package/version, follows HTTPS GitHub CDN redirects only to approved GitHub content hosts, and displays the actual failure reason. The user's quoted older generic message does not reveal which check failed; the affected phone must still be tested with the published 1.0.104 build. A successful publication does not prove device-side download/install success.
+- 2026-11-09 user reported that tapping Download & Install shows the APK download/SHA-256 start message and then immediately reports download/verification failure. The signed APK and live latest.json remain 1.0.105 / versionCode 105 while the next release is prepared. The current updater requests uncached metadata and APK URLs, retries three times, checks HTTP response/content length/SHA-256/package/version, follows HTTPS GitHub CDN redirects only to approved GitHub content hosts, and displays the actual failure reason. The user's earlier generic message did not reveal which check failed; the proposed 1.0.106 change addresses the strict Content-Length failure path, but the affected phone must still be tested. A successful publication does not prove device-side download/install success.
 - Uses the existing raw.githubusercontent.com APK URL so older 1.0.92 clients' URL allow-list is not changed.
 - The 1.0.103 release was built against the approved transition from feed baseline 1.0.102/102 and published only after package/version and trusted signing checks passed.
 - Relevant updater/workflow commits: `60d19813d1b9e2ab4361238c829dda17acf401bf` (updater compatibility), `460ddfd6fe7035c893e1b71790288c408fc57650` (1.0.94 version gate), `1b7c87a51bf97232081e34f80731b6e15b77be0f` and `9f6a4d5e4120bc6b8aa9ff1175a225d52f2f91a1` (serialized, safe publishing), and `fd25e3dd44ca16f594a14076a9a7904a6dcd4694` (removed a redundant publish-stage version parser).
