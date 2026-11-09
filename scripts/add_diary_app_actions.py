@@ -85,7 +85,6 @@ native = r"""
                                 if(response !in 200..299) throw java.io.IOException("HTTP $response")
                                 val finalUrl=c.url
                                 if(finalUrl.protocol!="https" || !(finalUrl.host=="raw.githubusercontent.com" || finalUrl.host=="githubusercontent.com" || finalUrl.host.endsWith(".githubusercontent.com"))) throw Exception("Untrusted download redirect")
-                                val expectedLength=c.getHeaderField("Content-Length")?.toLongOrNull() ?: -1L
                                 var received=0L
                                 c.inputStream.use { input -> part.outputStream().use { output ->
                                     val buffer=ByteArray(16384)
@@ -98,7 +97,7 @@ native = r"""
                                     }
                                     output.flush()
                                 }}
-                                if(received<=0L || (expectedLength>0L && received!=expectedLength)) throw java.io.IOException("Incomplete download")
+                                if(received<=0L) throw java.io.IOException("Empty download")
                             } finally { c.disconnect() }
                             val actual=digest.digest().joinToString("") { "%02x".format(it) }
                             if(actual!=expected) throw Exception("SHA-256 mismatch")
