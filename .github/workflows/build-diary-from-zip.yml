@@ -190,7 +190,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved next Diary version 1.0.98 (versionCode 98)
+      - name: Set approved next Diary version 1.0.99 (versionCode 99)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
@@ -198,12 +198,12 @@ jobs:
           from pathlib import Path
           p = Path("app/build.gradle.kts")
           s = p.read_text(encoding="utf-8")
-          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 98', s, count=1)
-          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.98"', s, count=1)
+          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 99', s, count=1)
+          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.99"', s, count=1)
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary versionName=1.0.98, versionCode=98")
+          print("Set Diary versionName=1.0.99, versionCode=99")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -225,11 +225,11 @@ jobs:
           name = one(r'versionName\s*=\s*"([^"]+)"', "versionName")
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
-          if code != 98 or name != "1.0.98":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.98/98, found {name}/{code}")
-          if int(meta.get("versionCode", 0)) != 97 or meta.get("versionName") != "1.0.97":
-              raise SystemExit("BLOCKED: current update feed is not the expected installed baseline 1.0.97/97")
-          print(f"PASS: package={package}, next version={name}/{code}; feed baseline remains 1.0.97/97")
+          if code != 99 or name != "1.0.99":
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.99/99, found {name}/{code}")
+          if int(meta.get("versionCode", 0)) != 98 or meta.get("versionName") != "1.0.98":
+              raise SystemExit("BLOCKED: current update feed is not the expected installed baseline 1.0.98/98")
+          print(f"PASS: package={package}, next version={name}/{code}; feed baseline remains 1.0.98/98")
           PY
 
       - name: Align Java and Kotlin JVM targets
@@ -327,7 +327,7 @@ jobs:
           cp "$APK" /tmp/My-Diary-verified.apk
           test -s diary-project/app/src/main/assets/index.html
           cp diary-project/app/src/main/assets/index.html /tmp/My-Diary-web-index.html
-          printf '1.0.98\n98\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.99\n99\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -B diary-publish-main origin/main
           mkdir -p web-source diary-web
