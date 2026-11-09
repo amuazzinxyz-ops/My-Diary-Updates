@@ -196,6 +196,9 @@ paths_tree = ET.ElementTree(paths_root)
 ET.indent(paths_tree, space="    ")
 paths_tree.write(paths_file, encoding="utf-8", xml_declaration=True)
 
+ET.indent(tree, space="    ")
+tree.write(manifest, encoding="utf-8", xml_declaration=True)
+
 # Fail the build if the manifest and resource do not agree exactly.
 check_tree = ET.parse(manifest)
 check_app = check_tree.getroot().find("application")
@@ -211,8 +214,6 @@ if len(check_meta) != 1 or check_meta[0].get("{" + android_ns + "}resource") != 
 check_paths = ET.parse(paths_file).getroot()
 if not any(node.tag == "cache-path" and node.get("path") == "." for node in list(check_paths)):
     raise SystemExit("FAIL: FileProvider cache root does not cover cacheDir")
-ET.indent(tree, space="    ")
-tree.write(manifest, encoding="utf-8", xml_declaration=True)
 print("PASS: FileProvider authority, manifest metadata, and cacheDir root verified.")
 
 g=base/"build.gradle.kts"
