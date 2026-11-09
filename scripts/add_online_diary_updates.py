@@ -57,7 +57,7 @@ web_method = r"""
                         val response = connection.responseCode
                         if (response !in 200..299) throw java.io.IOException("HTTP $response")
                         val finalUrl = connection.url
-                        if (finalUrl.protocol != "https" || finalUrl.host != "raw.githubusercontent.com") throw Exception("Untrusted update server")
+                        if (finalUrl.protocol != "https" || !(finalUrl.host == "raw.githubusercontent.com" || finalUrl.host == "githubusercontent.com" || finalUrl.host.endsWith(".githubusercontent.com"))) throw Exception("Untrusted update redirect")
                         connection.inputStream.use { input ->
                             part.outputStream().use { output ->
                                 val buffer = ByteArray(16384)
