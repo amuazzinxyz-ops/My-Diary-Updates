@@ -229,7 +229,7 @@ jobs:
           if code != 105 or name != "1.0.105":
               raise SystemExit(f"BLOCKED: expected approved APK version 1.0.105/105, found {name}/{code}")
           if int(meta.get("versionCode", 0)) != 104 or meta.get("versionName") != "1.0.104":
-              raise SystemExit("BLOCKED: current update feed is not the expected installed baseline 1.0.103/103")
+              raise SystemExit("BLOCKED: current update feed is not the expected installed baseline 1.0.104/104")
           print(f"PASS: package={package}, next version={name}/{code}; feed baseline remains 1.0.104/104")
           PY
 
