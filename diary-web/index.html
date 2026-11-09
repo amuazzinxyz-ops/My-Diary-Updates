@@ -760,6 +760,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var fontSlider=el('input',{id:'diaryDiaryFontSlider',type:'range',min:'12',max:'24',step:'1',value:String(getDiaryFont()),'aria-label':t('fontSize')});
   var fontValue=null;
   fontSliderBox.appendChild(fontSlider);fontGroup.appendChild(fontLabel);fontGroup.appendChild(fontSliderBox);settingsRow.appendChild(fontGroup);mePanel.appendChild(settingsRow);
+  var checkUpdatesBtn=el('button',{id:'diaryCheckUpdatesBtn',type:'button'},'⬇️ Check for Updates');
+  mePanel.appendChild(checkUpdatesBtn);
   var refreshDiaryBtn=el('button',{id:'diaryDiaryRefreshBtn',type:'button'},'🔄 Refresh');
   mePanel.appendChild(refreshDiaryBtn);
   var diaryPinBtn=el('button',{id:'diaryDiaryMasterPinBtn',type:'button'},t('diaryPin'));
@@ -770,6 +772,14 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   mePanel.appendChild(shareAppBtn);
   shareAppBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(window.DiaryAppActions&&DiaryAppActions.shareApp){DiaryAppActions.shareApp();}});
 
+  checkUpdatesBtn.addEventListener('click',function(e){
+   e.preventDefault();e.stopPropagation();
+   if(window.DiaryAppActions&&typeof DiaryAppActions.checkForUpdates==='function'){
+    DiaryAppActions.checkForUpdates();
+   }else{
+    alert('Check for Updates sirf installed My Diary app mein available hai.');
+   }
+  });
   refreshDiaryBtn.addEventListener('click',function(e){
    e.preventDefault();e.stopPropagation();
    function refreshDiaryNow(){
@@ -1473,6 +1483,18 @@ window.addEventListener('load',function(){
             inset 0 -2px 0 rgba(126,83,0,.20),
             0 1px 0 #9b7415,0 2px 4px rgba(70,48,0,.20)!important;
  font-weight:1000!important;
+}
+</style>
+
+
+<style id="diary-me-check-updates-style">
+#diaryDiaryMePanel #diaryCheckUpdatesBtn{
+ display:flex!important;align-items:center!important;justify-content:flex-start!important;
+ align-self:stretch!important;width:100%!important;min-width:100%!important;max-width:100%!important;
+ height:34px!important;min-height:34px!important;max-height:34px!important;
+ margin:0 0 7px!important;padding:0 10px!important;box-sizing:border-box!important;
+ font-size:10px!important;line-height:1.15!important;text-align:left!important;
+ white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;
 }
 </style>
 
