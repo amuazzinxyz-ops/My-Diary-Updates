@@ -1,14 +1,14 @@
 {
   "appName": "My Diary",
   "packageName": "com.personal.diaryapp",
-  "versionCode": 105,
-  "versionName": "1.0.105",
-  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.105.apk",
-  "sha256": "c94b0d682bd86cd0a2c0f344cc0158bcd9346453ede4b0f4eb447b67681ea7cf",
-  "releaseNotes": "My Diary 1.0.106. In-app updater reliability fix. Existing Diary data is preserved.",
+  "versionCode": 106,
+  "versionName": "1.0.106",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.106.apk",
+  "sha256": "85e37fd7b371faee457ca4950231968cd24cf306b71d181139d59019ac2e3123",
+  "releaseNotes": "Fixed update download cache conflict using a version-specific APK URL. Existing Diary data remains on this device.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 11,
+  "webVersion": 12,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "9c8c7330127d6f9e83d0c22c86c9f9c53ac09602142d618dcebf46c02285f133",
+  "webSha256": "17a04a1b2ff8dae73c590134f63ea131c4dfd29a33a5bee2d365f89893a2bed5",
   "webReleaseNotes": "Removes the unwanted browser-download option from the Diary interface."
 }
