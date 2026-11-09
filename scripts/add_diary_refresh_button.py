@@ -92,7 +92,7 @@ check_update_style = """
 if 'id="diary-me-check-updates-style"' not in html:
     if "</body>" not in html:
         raise SystemExit("Could not find end of standalone Diary page")
-    html = html.replace("</body>", check_update_style + "\\n</body>", 1)
+    html = html.replace("</body>", check_update_style + "\n</body>", 1)
 
 equal_size_style = """
 <style id="v136-me-refresh-equal-size">
