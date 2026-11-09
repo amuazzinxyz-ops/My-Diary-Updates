@@ -1,13 +1,13 @@
 {
   "appName": "My Diary",
   "packageName": "com.personal.diaryapp",
-  "versionCode": 103,
-  "versionName": "1.0.103",
+  "versionCode": 104,
+  "versionName": "1.0.104",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
-  "sha256": "3120d33abd4539520c45bce6e4f556bd063f24941f74e65a3ebb78fb826aa101",
-  "releaseNotes": "Corrected APK update version and Android FileProvider installer path. Added Refresh button inside Me. Existing Diary notes and photos remain on this device.",
+  "sha256": "f14e75d502d9263e29ab81250f781925f034afe63296a7444abd4cc8c65c7544",
+  "releaseNotes": "Improved Android APK and Diary web update download handling. Existing Diary data remains on this device.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 7,
+  "webVersion": 8,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "17a04a1b2ff8dae73c590134f63ea131c4dfd29a33a5bee2d365f89893a2bed5",
   "webReleaseNotes": "Me menu Refresh button is now available. Diary notes and photos remain on this device."
