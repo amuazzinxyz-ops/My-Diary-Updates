@@ -227,10 +227,10 @@ jobs:
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
           if code != 112 or name != "1.0.112":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.112/111, found {name}/{code}")
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.112/112, found {name}/{code}")
           if int(meta.get("versionCode", 0)) != 111 or meta.get("versionName") != "1.0.111":
               raise SystemExit("BLOCKED: current update feed is not the expected installed baseline 1.0.111/111")
-          print(f"PASS: package={package}, next version={name}/{code}; feed baseline remains 1.0.110/110")
+          print(f"PASS: package={package}, next version={name}/{code}; feed baseline remains 1.0.111/111")
           PY
 
       - name: Align Java and Kotlin JVM targets
@@ -338,8 +338,8 @@ jobs:
           import hashlib, json
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
-          if meta.get("packageName") != "com.personal.diaryapp" or int(meta.get("versionCode", 0)) != 110 or meta.get("versionName") != "1.0.110":
-              raise SystemExit("BLOCKED: live main feed is no longer the expected 1.0.110/110 baseline; refusing to overwrite it")
+          if meta.get("packageName") != "com.personal.diaryapp" or int(meta.get("versionCode", 0)) != 111 or meta.get("versionName") != "1.0.111":
+              raise SystemExit("BLOCKED: live main feed is no longer the expected 1.0.111/111 baseline; refusing to overwrite it")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
           meta["packageName"] = "com.personal.diaryapp"
