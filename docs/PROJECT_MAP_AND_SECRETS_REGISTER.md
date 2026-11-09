@@ -1,6 +1,6 @@
 # MY DIARY — MASTER PROJECT REGISTER
 
-**Single source of truth. Last updated: 2026-11-09 (browser APK download option removed from the web bundle; affected-device verification pending).**
+**Single source of truth. Last updated: 2026-11-09 (user-requested rollback to My Diary 1.0.104; device-side verification pending).**
 
 This file replaces the old project register. Read it first at the start of every My Diary task, then inspect the live repository and current source before editing. Older dated audit and handover files in `docs/` are historical evidence only; when they conflict with this register or current GitHub state, do not treat them as current instructions.
 
@@ -10,7 +10,7 @@ This file replaces the old project register. Read it first at the start of every
 - Repository: `amuazzinxyz-ops/My-Diary-Updates`
 - Branch: `main`
 - Android package: `com.personal.diaryapp`
-- Latest signed APK: **1.0.105**, versionCode **105**. Published in commit `31d2249c6129c850e9dd16818ceb3a4a059842c6`. The live `latest.json` remains correctly set to **105** / 1.0.105. The next release is being prepared as 1.0.106 / versionCode 106.
+- Latest APK currently served by the update feed: **1.0.104**, versionCode **104** (user-requested rollback). The 1.0.104 APK and web bundle are served from immutable historical commit `89219d4e9e553f606b5323a85723705e9ca3ed44`. The previously published 1.0.105 APK and later 1.0.106/1.0.107 candidates have been removed from the main branch; their old commits remain in Git history.
 - Latest update feed: `latest.json`.
 - Current source archive: `Diary-Android-Project-v13 (6).zip`.
 - Build workflow: `.github/workflows/build-diary-from-zip.yml`.
@@ -19,7 +19,7 @@ This file replaces the old project register. Read it first at the start of every
 
 **Hard boundary:** all future My Diary source, app, build, release, update, and documentation work belongs only in this repository. Do not use or modify the MUAZZIN website/repository/workflows for Diary work. Do not merge the two apps or create a second project/workflow/archive when the existing one can be reused.
 
-## 2. Current published release — confirmed by live feed, build, and APK artifact
+## 2. Previously published 1.0.105 release — historical evidence (superseded by the 1.0.104 rollback below)
 
 - Version: **1.0.105** / versionCode **105**.
 - Package: `com.personal.diaryapp`.
@@ -143,3 +143,13 @@ The user can simply say what they want in Roman Hindi. No special template, file
 
 
 - Historical publish validation note: the earlier redundant version-parser failure was corrected before the verified 1.0.94 release. That 1.0.94 parser failure is historical; the current live feed and 1.0.95 release evidence above are authoritative.
+
+## 11. User-requested version rollback — 2026-11-09
+
+- User explicitly confirmed restoring **My Diary 1.0.104 / versionCode 104** and removing the later 1.0.105, 1.0.106, and 1.0.107 release files from the active main-branch distribution.
+- Live `latest.json` now serves versionCode 104 / versionName 1.0.104 with the original recorded SHA-256 `f14e75d502d9263e29ab81250f781925f034afe63296a7444abd4cc8c65c7544`.
+- APK URL is pinned to immutable historical commit `89219d4e9e553f606b5323a85723705e9ca3ed44`, path `My-Diary.apk`; the historical APK path and matching old metadata were confirmed present.
+- Web bundle metadata is also restored to the 1.0.104-era webVersion 8 and pinned to the same immutable commit.
+- Removed from the main branch: `My-Diary-1.0.105.apk`, `My-Diary-1.0.106.apk`, `My-Diary-1.0.107.apk`, and the main-branch `My-Diary.apk` alias that pointed to 1.0.107. Their historical Git objects/commits remain recoverable; this was not a destructive history rewrite.
+- The separate legacy file `My-Diary.apk.apk` was not touched because it is not one of the 1.0.105–1.0.107 files targeted by the user's instruction.
+- This restores the distribution feed and release assets only. It does not install or downgrade the app on any phone. The affected-device in-app update still needs a real phone-side test; do not claim it is fixed until confirmed.
