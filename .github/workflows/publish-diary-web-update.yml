@@ -1,0 +1,59 @@
+name: Publish My Diary web-only update
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "web-source/index.html"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: my-diary-web-publish-main
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout Diary update channel
+        uses: actions/checkout@v4
+
+      - name: Verify and publish HTML bundle without rebuilding APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s web-source/index.html
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          source = Path("web-source/index.html")
+          data = source.read_bytes()
+          if len(data) < 1000 or len(data) > 35 * 1024 * 1024:
+              raise SystemExit("Diary web bundle size is outside the safe limit")
+          text = data.decode("utf-8")
+          if "<html" not in text.lower() and "<!doctype" not in text.lower():
+              raise SystemExit("Diary web bundle is not an HTML document")
+          meta_path = Path("latest.json")
+          meta = json.loads(meta_path.read_text(encoding="utf-8"))
+          if meta.get("appName") != "My Diary" or meta.get("packageName") != "com.personal.diaryapp":
+              raise SystemExit("Wrong app identity in update feed")
+          version = int(meta.get("webVersion", 0)) + 1
+          Path("diary-web").mkdir(exist_ok=True)
+          Path("diary-web/index.html").write_bytes(data)
+          meta["webVersion"] = version
+          meta["webUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html"
+          meta["webSha256"] = hashlib.sha256(data).hexdigest()
+          meta["webReleaseNotes"] = "Diary features and design updated online. Local notes and photos remain on this device."
+          meta_path.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          print("Prepared web-only update", version, "SHA-256", meta["webSha256"])
+          PY
+          python3 -m json.tool latest.json >/dev/null
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diary-web/index.html latest.json
+          git commit -m "Publish My Diary web bundle update"
+          git push origin HEAD:main
