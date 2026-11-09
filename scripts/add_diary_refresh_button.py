@@ -82,9 +82,9 @@ check_update_style = """
 #diaryDiaryMePanel #diaryCheckUpdatesBtn{
  display:flex!important;align-items:center!important;justify-content:flex-start!important;
  align-self:stretch!important;width:100%!important;min-width:100%!important;max-width:100%!important;
- height:34px!important;min-height:34px!important;max-height:34px!important;
+ height:44px!important;min-height:44px!important;max-height:44px!important;
  margin:0 0 7px!important;padding:0 10px!important;box-sizing:border-box!important;
- font-size:14px!important;font-weight:900!important;line-height:1.15!important;text-align:left!important;
+ font-size:18px!important;font-weight:900!important;line-height:1.15!important;text-align:left!important;
  white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;
 }
 </style>
@@ -100,9 +100,9 @@ equal_size_style = """
 #diaryDiaryMePanel #diaryDiaryRefreshBtn{
  display:flex!important;align-items:center!important;justify-content:flex-start!important;
  align-self:stretch!important;width:100%!important;min-width:100%!important;max-width:100%!important;
- height:34px!important;min-height:34px!important;max-height:34px!important;
+ height:44px!important;min-height:44px!important;max-height:44px!important;
  margin:0!important;padding:0 10px!important;box-sizing:border-box!important;
- font-size:14px!important;font-weight:900!important;line-height:1.15!important;text-align:left!important;
+ font-size:18px!important;font-weight:900!important;line-height:1.15!important;text-align:left!important;
  white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;
 }
 </style>
