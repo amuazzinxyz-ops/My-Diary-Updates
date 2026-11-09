@@ -9,8 +9,8 @@ Standalone Android diary app and its update repository. This project is separate
 ## Current confirmed app state
 
 - App package: `com.personal.diaryapp`
-- Current published version: **1.0.104** (versionCode 104)
-- Current APK: [My Diary 1.0.104 (signed APK)](https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk)
+- Current published version: **1.0.105** (versionCode 105)
+- Current APK: [My Diary 1.0.104 (signed APK)](https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.105.apk)
 - Update metadata: [latest.json](latest.json)
 - Version 1.0.103 is the live signed update. Its updater includes cache-busting requests, retry handling, SHA-256/package/version checks, and a visible failure reason. The published 1.0.104 feed includes GitHub CDN redirect validation; the affected user's device-side download, verification, and in-place installation still require confirmation.
 
@@ -22,7 +22,7 @@ Standalone Android diary app and its update repository. This project is separate
 - `assets/` — Diary assets.
 - `docs/` — master register and dated historical audits/handover records.
 - `latest.json` — current update-feed metadata.
-- The signed 1.0.104 APK is restored at the updater-compatible `/main/My-Diary.apk` URL; superseded 1.0.105–1.0.107 APK files remain removed from the main branch.
+- The signed 1.0.105 APK is published at the updater-compatible version-specific `/main/My-Diary-1.0.105.apk` URL. The release fixes APK download verification by relying on the complete response and SHA-256 rather than rejecting Content-Length differences.
 
 ## Non-negotiable safety rules
 
