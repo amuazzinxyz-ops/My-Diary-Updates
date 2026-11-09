@@ -230,25 +230,27 @@ g.write_text(t,encoding="utf-8")
 m=base/"src/main/assets/index.html"
 h=m.read_text(encoding="utf-8")
 anchor="mePanel.appendChild(diaryPinBtn);mePanel.appendChild(lockDiaryBtn);mePanel.appendChild(unlockDiaryBtn);"
-if "diaryShareAppBtn" in h or "diaryCheckUpdatesBtn" in h:
-    raise SystemExit("Diary Me actions already exist; refusing duplicate insertion")
-if anchor not in h:
+if anchor not in h and "diaryShareAppBtn" not in h:
     raise SystemExit("Diary Me menu insertion point missing")
-actions = """
+if "diaryShareAppBtn" not in h:
+    actions = """
   var shareAppBtn=el('button',{id:'diaryShareAppBtn',type:'button'},'📤 Share App');
   mePanel.appendChild(shareAppBtn);
   shareAppBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(window.DiaryAppActions&&DiaryAppActions.shareApp){DiaryAppActions.shareApp();}});
 """
-h=h.replace(anchor,anchor+actions,1)
-style = """
+    h=h.replace(anchor,anchor+actions,1)
+if "diary-me-app-actions-style" not in h:
+    style = """
 <style id="diary-me-app-actions-style">
 #diaryShareAppBtn{display:block!important;width:100%!important;min-height:34px!important;height:34px!important;margin:7px 0 0!important;padding:0 10px!important;box-sizing:border-box!important;border:1px solid #b9d0bd!important;border-radius:9px!important;background:linear-gradient(145deg,#fff,#e5eee8)!important;color:#123d2a!important;font-size:10px!important;font-weight:1000!important;line-height:1.15!important;text-align:left!important;white-space:nowrap!important;box-shadow:0 2px 0 #c7d9c8!important;cursor:pointer!important}
 #diaryShareAppBtn:active{transform:translateY(2px)!important;box-shadow:0 0 0 transparent!important}
 </style>
 """
-if "</head>" not in h:
-    raise SystemExit("HTML head closing tag missing")
-h=h.replace("</head>",style+"\n</head>",1)
+    if "</head>" not in h:
+        raise SystemExit("HTML head closing tag missing")
+    h=h.replace("</head>",style+"\n</head>",1)
+if "diaryCheckUpdatesBtn" in h:
+    raise SystemExit("Unexpected duplicate Check for Updates button; inspect before build")
 if "diary-app-actions" in h or "diaryDownloadInstall" in h:
     raise SystemExit("External/floating app action controls detected; refusing build")
 m.write_text(h,encoding="utf-8")
