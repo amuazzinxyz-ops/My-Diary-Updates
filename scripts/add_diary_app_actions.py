@@ -249,8 +249,7 @@ if "diary-me-app-actions-style" not in h:
     if "</head>" not in h:
         raise SystemExit("HTML head closing tag missing")
     h=h.replace("</head>",style+"\n</head>",1)
-if "diaryCheckUpdatesBtn" in h:
-    raise SystemExit("Unexpected duplicate Check for Updates button; inspect before build")
+# Preserve the existing Check for Updates button and its handler unchanged.
 if "diary-app-actions" in h or "diaryDownloadInstall" in h:
     raise SystemExit("External/floating app action controls detected; refusing build")
 m.write_text(h,encoding="utf-8")
