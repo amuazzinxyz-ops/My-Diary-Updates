@@ -190,7 +190,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved next Diary version 1.0.101 (versionCode 100)
+      - name: Set approved next Diary version 1.0.101 (versionCode 101)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
@@ -228,8 +228,8 @@ jobs:
           if code != 101 or name != "1.0.101":
               raise SystemExit(f"BLOCKED: expected approved APK version 1.0.101/100, found {name}/{code}")
           if int(meta.get("versionCode", 0)) != 100 or meta.get("versionName") != "1.0.100":
-              raise SystemExit("BLOCKED: current update feed is not the expected installed baseline 1.0.100/99")
-          print(f"PASS: package={package}, next version={name}/{code}; feed baseline remains 1.0.100/99")
+              raise SystemExit("BLOCKED: current update feed is not the expected installed baseline 1.0.100/100")
+          print(f"PASS: package={package}, next version={name}/{code}; feed baseline remains 1.0.100/100")
           PY
 
       - name: Align Java and Kotlin JVM targets
@@ -337,8 +337,8 @@ jobs:
           import hashlib, json
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
-          if meta.get("packageName") != "com.personal.diaryapp" or int(meta.get("versionCode", 0)) != 99 or meta.get("versionName") != "1.0.100":
-              raise SystemExit("BLOCKED: live main feed is no longer the expected 1.0.100/99 baseline; refusing to overwrite it")
+          if meta.get("packageName") != "com.personal.diaryapp" or int(meta.get("versionCode", 0)) != 100 or meta.get("versionName") != "1.0.100":
+              raise SystemExit("BLOCKED: live main feed is no longer the expected 1.0.100/100 baseline; refusing to overwrite it")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
           meta["packageName"] = "com.personal.diaryapp"
