@@ -173,3 +173,15 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Signed release workflow run `42668393009` passed source validation, debug build, signed release build, signing checks, publish, and artifact upload. Published feed points to `My-Diary-1.0.105.apk` and records SHA-256 `32a8d90f991cab12b1e3ad462e8a4b82135b11d3bc783be54e7f5280749864a2`.
 - Live `latest.json` release notes were corrected to describe the updater fix. The phone-side in-place installation and update behavior still require confirmation on a device; do not claim device verification until the user confirms it.
 - No app data, notes, photos, or PIN storage was cleared or migrated by this release task.
+## 14. My Diary 1.0.112 — confirmed update workflow and current handover (2026-11-10)
+
+- Current published release: **1.0.112**, versionCode **111**, package `com.personal.diaryapp`.
+- Current APK: `My-Diary-1.0.112.apk`; feed URL: `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.112.apk`.
+- Current APK SHA-256 from live `latest.json`: `040740f50feb19447ce9dc0aaeb69c2190539d3ff02737ec15247e51ee43bba2`.
+- Successful signed build/publish workflow run: `42688075014` — **success**.
+- This release sets all three Diary action buttons to **40px height**: **Check for Updates**, **Refresh**, and **Share App**.
+- **User-confirmed device result (2026-11-10):** the user reports that updates now work correctly on their own mobile and on the other user's mobile using **Check for Updates**. Treat this as the current successful real-device confirmation, replacing the older “device-side update pending” status in historical sections above. Do not continue describing the current update flow as unverified.
+- Current stopping point: the update/download/verification/install flow is working as confirmed by the user. No further updater changes are needed unless a new reproducible problem is reported.
+- For the next task, first read this register and inspect the live `main` branch, `latest.json`, current source archive, relevant script, and workflow. Continue in the same narrow, backup-first, test-before-release manner.
+- Preserve package `com.personal.diaryapp`, the existing trusted signing identity/secrets, all diary notes/photos, PIN Lock and recovery, and every unrelated feature. Never uninstall the working app or clear its data as a routine step. Do not modify MUAZZIN.
+- For future releases, derive the next version from the live feed (currently versionCode **111**); do not reuse or guess a version. Verify build, signing, APK SHA-256, feed URL, and release publication. Report phone-side behavior only as confirmed by the user or actual device evidence.
