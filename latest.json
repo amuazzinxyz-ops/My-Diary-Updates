@@ -1,14 +1,14 @@
 {
   "appName": "My Diary",
   "packageName": "com.personal.diaryapp",
-  "versionCode": 105,
+  "versionCode": 1,
   "versionName": "1.0.105",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.105.apk",
   "sha256": "c94b0d682bd86cd0a2c0f344cc0158bcd9346453ede4b0f4eb447b67681ea7cf",
-  "releaseNotes": "Fixed update download cache conflict using a version-specific APK URL. Existing Diary data remains on this device.",
+  "releaseNotes": "Temporary compatibility bootstrap for older My Diary updater versions.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 9,
+  "webVersion": 10,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "17a04a1b2ff8dae73c590134f63ea131c4dfd29a33a5bee2d365f89893a2bed5",
-  "webReleaseNotes": "Me menu Refresh button is now available. Diary notes and photos remain on this device."
+  "webSha256": "21d5d7da4fde443b4df905eaf46ebfbec7db71b2b5c94535f5ffbadf6df29f59",
+  "webReleaseNotes": "Adds a browser-download fallback for older Android updater versions. Existing diary data is kept."
 }
