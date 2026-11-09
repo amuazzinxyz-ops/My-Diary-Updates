@@ -1,6 +1,6 @@
 # MY DIARY — MASTER PROJECT REGISTER
 
-**Single source of truth. Last updated: 2026-11-09 (user-requested rollback to My Diary 1.0.104; device-side verification pending).**
+**Single source of truth. Last updated: 2026-11-09 (restored updater-compatible main APK URL for signed My Diary 1.0.104; device-side installation still pending).**
 
 This file replaces the old project register. Read it first at the start of every My Diary task, then inspect the live repository and current source before editing. Older dated audit and handover files in `docs/` are historical evidence only; when they conflict with this register or current GitHub state, do not treat them as current instructions.
 
@@ -10,7 +10,7 @@ This file replaces the old project register. Read it first at the start of every
 - Repository: `amuazzinxyz-ops/My-Diary-Updates`
 - Branch: `main`
 - Android package: `com.personal.diaryapp`
-- Latest APK currently served by the update feed: **1.0.104**, versionCode **104** (user-requested rollback). The 1.0.104 APK and web bundle are served from immutable historical commit `89219d4e9e553f606b5323a85723705e9ca3ed44`. The previously published 1.0.105 APK and later 1.0.106/1.0.107 candidates have been removed from the main branch; their old commits remain in Git history.
+- Latest APK currently served by the update feed: **1.0.104**, versionCode **104** (user-requested rollback). The signed 1.0.104 APK is restored at `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk`, the exact `/main/` URL path accepted by the installed updater. The web bundle remains pinned to immutable commit `89219d4e9e553f606b5323a85723705e9ca3ed44`. Superseded 1.0.105/1.0.106/1.0.107 APK files remain removed; their old commits remain in Git history.
 - Latest update feed: `latest.json`.
 - Current source archive: `Diary-Android-Project-v13 (6).zip`.
 - Build workflow: `.github/workflows/build-diary-from-zip.yml`.
@@ -153,3 +153,13 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Removed from the main branch: `My-Diary-1.0.105.apk`, `My-Diary-1.0.106.apk`, `My-Diary-1.0.107.apk`, and the main-branch `My-Diary.apk` alias that pointed to 1.0.107. Their historical Git objects/commits remain recoverable; this was not a destructive history rewrite.
 - The separate legacy file `My-Diary.apk.apk` was not touched because it is not one of the 1.0.105–1.0.107 files targeted by the user's instruction.
 - This restores the distribution feed and release assets only. It does not install or downgrade the app on any phone. The affected-device in-app update still needs a real phone-side test; do not claim it is fixed until confirmed.
+
+
+## 12. Updater-compatible APK URL repair — 2026-11-09
+
+- Root cause: `latest.json` had been changed to an immutable commit URL. The installed updater only accepts APK URLs under `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/`; therefore it rejected the commit-pinned APK as an untrusted URL before installation.
+- Restored the exact original signed 1.0.104 APK blob (`ff244e050b348a8e92e3871375db838521a5b259`, 1,950,182 bytes) at `main/My-Diary.apk` without rebuilding or resigning it.
+- Restored `latest.json.apkUrl` to the updater-compatible `/main/My-Diary.apk` path. Version remains 1.0.104 / versionCode 104; APK SHA-256 remains `f14e75d502d9263e29ab81250f781925f034afe63296a7444abd4cc8c65c7544`.
+- Verified the 1.0.104 signed release artifact independently: SHA-256 matches the feed; successful workflow run `42648457972` confirms the trusted signing certificate fingerprint `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A`.
+- New repair commit: `58652250ae0d390c28bbe7ebe522b5aaf8ec1b5b`.
+- The phone-side in-app download/install is not yet device-verified. Do not claim completion until an affected 1.0.103-or-older device confirms installation.
