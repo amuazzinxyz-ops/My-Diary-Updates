@@ -1,11 +1,11 @@
 {
   "appName": "My Diary",
   "packageName": "com.personal.diaryapp",
-  "versionCode": 1,
+  "versionCode": 105,
   "versionName": "1.0.105",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.105.apk",
   "sha256": "c94b0d682bd86cd0a2c0f344cc0158bcd9346453ede4b0f4eb447b67681ea7cf",
-  "releaseNotes": "Temporary compatibility bootstrap for older My Diary updater versions.",
+  "releaseNotes": "My Diary 1.0.105. Update downloader hardening.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 10,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
