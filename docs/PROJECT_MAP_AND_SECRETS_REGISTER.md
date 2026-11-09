@@ -1,6 +1,6 @@
 # MY DIARY — MASTER PROJECT REGISTER
 
-**Single source of truth. Last updated: 2026-11-09 (My Diary 1.0.95 release verified; updater cache-busting and visible failure diagnostics included; affected-device test pending).**
+**Single source of truth. Last updated: 2026-11-09 (My Diary 1.0.103 signed release verified; updater cache-busting/retries and visible failure diagnostics included; affected-device test pending).**
 
 This file replaces the old project register. Read it first at the start of every My Diary task, then inspect the live repository and current source before editing. Older dated audit and handover files in `docs/` are historical evidence only; when they conflict with this register or current GitHub state, do not treat them as current instructions.
 
@@ -10,7 +10,7 @@ This file replaces the old project register. Read it first at the start of every
 - Repository: `amuazzinxyz-ops/My-Diary-Updates`
 - Branch: `main`
 - Android package: `com.personal.diaryapp`
-- Latest published feed: **1.0.95**, versionCode **95**. The owner's phone had previously updated successfully from an older build; the other affected user's device-side update remains untested.
+- Latest published feed: **1.0.103**, versionCode **103**. Signed release workflow completed successfully; the affected device-side update remains untested.
 - Latest update feed: `latest.json`.
 - Current source archive: `Diary-Android-Project-v13 (6).zip`.
 - Build workflow: `.github/workflows/build-diary-from-zip.yml`.
@@ -21,26 +21,26 @@ This file replaces the old project register. Read it first at the start of every
 
 ## 2. Current published release — confirmed by live feed and successful release workflow
 
-- Version: **1.0.95** / versionCode **95**.
+- Version: **1.0.103** / versionCode **103**.
 - Package: `com.personal.diaryapp`.
 - Published APK: `My-Diary.apk`.
 - Update URL: `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk`.
-- SHA-256 in live `latest.json`: `63292747e58bd8e8ebda0d9b4ca93b3ff74727d16f74288ad610429b33c85c1f`.
-- Release workflow run: [42514613635](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/42514613635), completed successfully. The workflow calculated the SHA-256 from the signed Release APK, wrote that value into `latest.json`, and committed the APK and feed together in commit `7437abcf93ee70117496655289ec091e4b81d596`.
+- SHA-256 in live `latest.json`: `3120d33abd4539520c45bce6e4f556bd063f24941f74e65a3ebb78fb826aa101`.
+- Release workflow run: [42634599963](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/42634599963), completed successfully on 2026-11-09. The signed Release build, trusted certificate check, APK publication, and update-feed publication all passed.
 - Signing certificate SHA-256 fingerprint verified against the previously trusted identity: `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A`.
-- The release workflow built the signed 1.0.95 APK, verified its package/version and trusted signing certificate, calculated the APK SHA-256, and published the APK and matching feed together. The build and publish job completed successfully.
-- The separate affected user's actual phone installation remains untested; no device-side success is claimed.
+- The live feed was subsequently corrected to identify the verified 1.0.103 APK in commit `a6f0d0f73feccf87e5cddb86cd42c84dbbffad44`.
+- The APK update feed and repository now point to the canonical `My-Diary.apk` URL. The affected user's actual phone download, hash verification, and in-place installation are still **not device-verified**.
 
 ## 3. Updater reliability — included in published 1.0.95
 
 - Reversible backup branch created: `backup/pre-updater-reliability-1.0.93`.
 - Updater source: `scripts/add_diary_app_actions.py`.
 - New downloader retries up to three times, uses a temporary partial file, checks content length when supplied, verifies SHA-256, validates APK package and version against the feed, and opens Android's unknown-app install permission settings when needed.
-- 2026-11-09 user reported that older installed clients still show 1.0.93 and fail with a generic download/verification message. Live repository feed is 1.0.95/95. Published 1.0.95 adds cache-busting query parameters and no-cache headers to metadata and APK requests, keeps three download attempts, and displays the actual failure reason instead of a generic message. The affected user's phone must still be tested on 1.0.95; a successful CI build does not prove device-side download/install success.
+- 2026-11-09 user reported that tapping Download & Install shows the APK download/SHA-256 start message and then immediately reports download/verification failure. Current live feed is 1.0.103/103. The current updater requests uncached metadata and APK URLs, retries three times, checks HTTP response/content length/SHA-256/package/version, and displays the actual failure reason. The user's quoted older generic message does not reveal which of these checks failed; the affected phone must still be tested with the signed 1.0.103 build. A successful CI build does not prove device-side download/install success.
 - Uses the existing raw.githubusercontent.com APK URL so older 1.0.92 clients' URL allow-list is not changed.
-- The 1.0.95 release was built against the approved transition from feed baseline 1.0.94/94 and published only after package/version and trusted signing checks passed.
+- The 1.0.103 release was built against the approved transition from feed baseline 1.0.102/102 and published only after package/version and trusted signing checks passed.
 - Relevant updater/workflow commits: `60d19813d1b9e2ab4361238c829dda17acf401bf` (updater compatibility), `460ddfd6fe7035c893e1b71790288c408fc57650` (1.0.94 version gate), `1b7c87a51bf97232081e34f80731b6e15b77be0f` and `9f6a4d5e4120bc6b8aa9ff1175a225d52f2f91a1` (serialized, safe publishing), and `fd25e3dd44ca16f594a14076a9a7904a6dcd4694` (removed a redundant publish-stage version parser).
-- The successful release workflow run `42514613635` published the verified 1.0.95 APK and feed together after signing, package, version, and SHA-256 checks passed.
+- The successful release workflow run `42634599963` published the verified signed 1.0.103 APK and feed after signing, package, version, and SHA-256 checks passed.
 
 Before a later release:
 1. Read live `latest.json` and current Gradle/workflow version gates.
@@ -121,13 +121,20 @@ When the user says **“new kaam”**, **“sudhar”**, **“aage”**, or give
 10. Report what changed, exact files/commit, tests passed/failed, and what remains untested. Never claim a device test unless the user confirms it or there is actual device evidence.
 11. Update this register after each important source, feature, language, version, workflow, or release change. Keep dated audit files as historical evidence, not competing master registers.
 
-## 8. User's current known next goal
+## 8. Current update failure status (2026-11-09)
+
+- The repository's signed 1.0.103 APK is built and published. The signed build workflow passed all steps, including trusted-certificate verification.
+- The user-facing failure message alone cannot identify whether the phone failed at HTTP download, incomplete transfer, SHA-256, APK package/version validation, or a later installer handoff.
+- Do not create a new signing key, publish a debug APK, uninstall the existing app, clear app data, or claim the phone-side issue is fixed until an actual device test confirms it.
+- The next safe verification is to use the current signed 1.0.103 APK and record the exact failure reason shown by its updater. Preserve local Diary entries, photos, PIN locks, and signing identity.
+
+## 9. User's current known next goal
 
 - Continue completing the remaining 10 languages to reach 20 total.
 - Only after all 20 languages are complete and checked, work on automatic language detection.
 - For any new feature or correction the user specifies before that, prioritize the exact request and preserve the rest of the app.
 
-## 9. Short request format (optional)
+## 10. Short request format (optional)
 
 The user can simply say what they want in Roman Hindi. No special template, file upload, or explanation is required when the existing project contains what is needed.
 
