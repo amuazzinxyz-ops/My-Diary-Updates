@@ -23,7 +23,9 @@ if script.count(anchor) != 1:
 if "diaryDiaryRefreshBtn" in script:
     raise SystemExit("Refresh button already exists; refusing duplicate insertion")
 
-insert = """  var refreshDiaryBtn=el('button',{id:'diaryDiaryRefreshBtn',type:'button'},'🔄 Refresh');
+insert = """  var checkUpdatesBtn=el('button',{id:'diaryCheckUpdatesBtn',type:'button'},'⬇️ Check for Updates');
+  mePanel.appendChild(checkUpdatesBtn);
+  var refreshDiaryBtn=el('button',{id:'diaryDiaryRefreshBtn',type:'button'},'🔄 Refresh');
   mePanel.appendChild(refreshDiaryBtn);
 """
 script = script.replace(anchor, insert + anchor, 1)
@@ -31,7 +33,15 @@ script = script.replace(anchor, insert + anchor, 1)
 listener_anchor = "  diaryPinBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();configureDiaryPin();});"
 if script.count(listener_anchor) != 1:
     raise SystemExit("Could not uniquely locate the Diary Me-menu event handlers")
-listener = """  refreshDiaryBtn.addEventListener('click',function(e){
+listener = """  checkUpdatesBtn.addEventListener('click',function(e){
+   e.preventDefault();e.stopPropagation();
+   if(window.DiaryAppActions&&typeof DiaryAppActions.checkForUpdates==='function'){
+    DiaryAppActions.checkForUpdates();
+   }else{
+    alert('Check for Updates sirf installed My Diary app mein available hai.');
+   }
+  });
+  refreshDiaryBtn.addEventListener('click',function(e){
    e.preventDefault();e.stopPropagation();
    function refreshDiaryNow(){
     try{
@@ -66,6 +76,23 @@ if 'id="diary-me-refresh-gold-3d"' not in html:
     if "</body>" not in html:
         raise SystemExit("Could not find end of standalone Diary page")
     html = html.replace("</body>", style + "\n</body>", 1)
+
+check_update_style = """
+<style id="diary-me-check-updates-style">
+#diaryDiaryMePanel #diaryCheckUpdatesBtn{
+ display:flex!important;align-items:center!important;justify-content:flex-start!important;
+ align-self:stretch!important;width:100%!important;min-width:100%!important;max-width:100%!important;
+ height:34px!important;min-height:34px!important;max-height:34px!important;
+ margin:0 0 7px!important;padding:0 10px!important;box-sizing:border-box!important;
+ font-size:10px!important;line-height:1.15!important;text-align:left!important;
+ white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;
+}
+</style>
+"""
+if 'id="diary-me-check-updates-style"' not in html:
+    if "</body>" not in html:
+        raise SystemExit("Could not find end of standalone Diary page")
+    html = html.replace("</body>", check_update_style + "\\n</body>", 1)
 
 equal_size_style = """
 <style id="v136-me-refresh-equal-size">
