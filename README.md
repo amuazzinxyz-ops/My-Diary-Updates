@@ -9,10 +9,10 @@ Standalone Android diary app and its update repository. This project is separate
 ## Current confirmed app state
 
 - App package: `com.personal.diaryapp`
-- Current published version: **1.0.95** (versionCode 95)
+- Current published version: **1.0.103** (versionCode 103)
 - Current APK: [My-Diary.apk](My-Diary.apk)
 - Update metadata: [latest.json](latest.json)
-- Version 1.0.95 is the live signed update. Its updater includes cache-busting requests, retry handling, SHA-256/package/version checks, and a visible failure reason. The affected user's device-side update still requires confirmation.
+- Version 1.0.103 is the live signed update. Its updater includes cache-busting requests, retry handling, SHA-256/package/version checks, and a visible failure reason. The affected user's device-side download, verification, and in-place installation still require confirmation.
 
 ## Repository layout
 
