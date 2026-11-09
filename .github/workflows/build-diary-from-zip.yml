@@ -338,7 +338,7 @@ jobs:
           import hashlib, json
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
-          if meta.get("packageName") != "com.personal.diaryapp" or int(meta.get("versionCode", 0)) != 106 or meta.get("versionName") != "1.0.106":
+          if meta.get("packageName") != "com.personal.diaryapp" or int(meta.get("versionCode", 0)) != 107 or meta.get("versionName") != "1.0.107":
               raise SystemExit("BLOCKED: live main feed is no longer the expected 1.0.107/107 baseline; refusing to overwrite it")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
@@ -355,11 +355,11 @@ jobs:
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           cp /tmp/My-Diary-verified.apk My-Diary.apk
-          cp /tmp/My-Diary-verified.apk My-Diary-1.0.107.apk
+          cp /tmp/My-Diary-verified.apk My-Diary-1.0.108.apk
           python3 -m json.tool latest.json >/dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add My-Diary.apk My-Diary-1.0.107.apk latest.json web-source/index.html diary-web/index.html
+          git add My-Diary.apk My-Diary-1.0.108.apk latest.json web-source/index.html diary-web/index.html
           git commit -m "Publish verified My Diary update 1.0.108"
           git push origin HEAD:main
       - name: Upload unsigned Release APK for private owner-side signing
