@@ -1,14 +1,14 @@
 {
   "appName": "My Diary",
   "packageName": "com.personal.diaryapp",
-  "versionCode": 110,
-  "versionName": "1.0.110",
-  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.110.apk",
-  "sha256": "ba4f6b8cfa5169cb74f3759b5d9670802201532a8f9ffc2da0c7fd76bdf435df",
-  "releaseNotes": "Increased the Check for Updates and Refresh labels slightly and made them bold. Existing Diary data remains on this device.",
+  "versionCode": 111,
+  "versionName": "1.0.111",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.111.apk",
+  "sha256": "e4c89b3d13c9bbdd5a9bc0085ff7262c70a28c4ab6d803fddacd728312204719",
+  "releaseNotes": "Set Check for Updates and Refresh button heights to 30px and made Share App label 18px bold. Existing Diary data remains on this device.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 14,
+  "webVersion": 15,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "dca947ecbade2b2f16500f18ca34f43bae47992c95a2c228fda355ad32fa104c",
+  "webSha256": "c859eff27a91e04b9bdce4085a79df1d3be6f7687ec8ecfbe87a0d6cbd09a35b",
   "webReleaseNotes": "Updated the Diary app bundle alongside the APK updater reliability fix. Existing Diary notes and photos remain on this device."
 }
