@@ -1,6 +1,6 @@
 # MY DIARY — MASTER PROJECT REGISTER
 
-**Single source of truth. Last updated: 2026-11-09 (1.0.105 remains published; 1.0.106 updater fix is being prepared; affected-user device test pending).**
+**Single source of truth. Last updated: 2026-11-09 (browser APK download option removed from the web bundle; affected-device verification pending).**
 
 This file replaces the old project register. Read it first at the start of every My Diary task, then inspect the live repository and current source before editing. Older dated audit and handover files in `docs/` are historical evidence only; when they conflict with this register or current GitHub state, do not treat them as current instructions.
 
