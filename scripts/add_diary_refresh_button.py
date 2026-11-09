@@ -67,6 +67,24 @@ if 'id="diary-me-refresh-gold-3d"' not in html:
         raise SystemExit("Could not find end of standalone Diary page")
     html = html.replace("</body>", style + "\n</body>", 1)
 
+equal_size_style = """
+<style id="v136-me-refresh-equal-size">
+/* Match Refresh button dimensions to the existing Font Size and Trash buttons. */
+#diaryDiaryMePanel #diaryDiaryRefreshBtn{
+ display:flex!important;align-items:center!important;justify-content:flex-start!important;
+ align-self:stretch!important;width:100%!important;min-width:100%!important;max-width:100%!important;
+ height:34px!important;min-height:34px!important;max-height:34px!important;
+ margin:0!important;padding:0 10px!important;box-sizing:border-box!important;
+ font-size:10px!important;line-height:1.15!important;text-align:left!important;
+ white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;
+}
+</style>
+"""
+if 'id="v136-me-refresh-equal-size"' not in html:
+    if "</body>" not in html:
+        raise SystemExit("Could not find end of standalone Diary page")
+    html = html.replace("</body>", equal_size_style + "\n</body>", 1)
+
 if html.count("diaryDiaryRefreshBtn") != 2:
     raise SystemExit("Refresh button insertion verification failed")
 if "renderList();" not in script[script.find("diaryDiaryRefreshBtn"):]:
