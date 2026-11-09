@@ -1,0 +1,128 @@
+from pathlib import Path
+import re
+
+kt = Path("diary-project/app/src/main/java/com/muazzin/diary/MainActivity.kt")
+s = kt.read_text(encoding="utf-8")
+if "DiaryBundlePathHandler" in s:
+    raise SystemExit("Online Diary bundle updater already patched")
+if "class DiaryNativeActions" not in s:
+    raise SystemExit("DiaryNativeActions missing; run add_diary_app_actions.py first")
+
+old = '.addPathHandler("/assets/", WebViewAssetLoader.AssetsPathHandler(this))'
+new = '.addPathHandler("/assets/", DiaryBundlePathHandler())'
+if s.count(old) != 1:
+    raise SystemExit("Expected exactly one WebView assets path handler")
+s = s.replace(old, new, 1)
+
+old_toast = 'if(latest<=currentVersion()) runOnUiThread { Toast.makeText(this@MainActivity,"My Diary pehle se latest hai.",Toast.LENGTH_LONG).show() }'
+new_toast = 'if(latest<=currentVersion()) downloadWebBundleIfAvailable(j)'
+if s.count(old_toast) != 1:
+    raise SystemExit("Could not safely locate existing APK latest-check branch")
+s = s.replace(old_toast, new_toast, 1)
+
+method_anchor = '        @JavascriptInterface fun downloadAndInstall() {'
+web_method = r"""
+        private fun downloadWebBundleIfAvailable(j: JSONObject) {
+            val target = j.optInt("webVersion", 0)
+            val prefs = getSharedPreferences("diary_web_updates", MODE_PRIVATE)
+            val installed = prefs.getInt("webVersion", 0)
+            if (target <= installed) {
+                runOnUiThread { Toast.makeText(this@MainActivity, "My Diary pehle se latest hai.", Toast.LENGTH_LONG).show() }
+                return
+            }
+            Thread {
+                try {
+                    val link = j.optString("webUrl")
+                    val expected = j.optString("webSha256").lowercase()
+                    val trustedPrefix = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html"
+                    if (!link.startsWith(trustedPrefix) || !expected.matches(Regex("[0-9a-f]{64}")) || target < 1) {
+                        throw Exception("Untrusted Diary web update")
+                    }
+                    runOnUiThread { Toast.makeText(this@MainActivity, "Diary ka naya update download ho raha hai...", Toast.LENGTH_LONG).show() }
+                    val dir = File(filesDir, "diary-web")
+                    if (!dir.exists() && !dir.mkdirs()) throw Exception("Update folder nahi bana")
+                    val part = File(dir, "index.html.part")
+                    val current = File(dir, "index.html")
+                    val backup = File(dir, "index.html.previous")
+                    val connection = URL(link + (if (link.contains("?")) "&" else "?") + "v=" + System.currentTimeMillis()).openConnection() as HttpURLConnection
+                    connection.connectTimeout = 25000
+                    connection.readTimeout = 90000
+                    connection.useCaches = false
+                    connection.instanceFollowRedirects = true
+                    connection.setRequestProperty("Cache-Control", "no-cache, no-store")
+                    connection.setRequestProperty("User-Agent", "MyDiaryWebUpdater/1.0")
+                    val digest = java.security.MessageDigest.getInstance("SHA-256")
+                    var total = 0L
+                    try {
+                        val response = connection.responseCode
+                        if (response !in 200..299) throw java.io.IOException("HTTP $response")
+                        val finalUrl = connection.url
+                        if (finalUrl.protocol != "https" || finalUrl.host != "raw.githubusercontent.com") throw Exception("Untrusted update server")
+                        connection.inputStream.use { input ->
+                            part.outputStream().use { output ->
+                                val buffer = ByteArray(16384)
+                                while (true) {
+                                    val count = input.read(buffer)
+                                    if (count < 0) break
+                                    total += count
+                                    if (total > 35L * 1024L * 1024L) throw Exception("Diary update file bahut bada hai")
+                                    digest.update(buffer, 0, count)
+                                    output.write(buffer, 0, count)
+                                }
+                                output.flush()
+                            }
+                        }
+                    } finally { connection.disconnect() }
+                    if (total < 1000L) throw Exception("Diary update file adhura hai")
+                    val actual = digest.digest().joinToString("") { "%02x".format(it) }
+                    if (actual != expected) throw Exception("Diary update SHA-256 match nahi hua")
+                    val head = part.inputStream().bufferedReader(Charsets.UTF_8).use { it.readText().take(5000) }
+                    if (!head.contains("<html", true) && !head.contains("<!doctype", true)) throw Exception("Downloaded Diary file valid HTML nahi hai")
+                    if (backup.exists()) backup.delete()
+                    if (current.exists() && !current.renameTo(backup)) throw Exception("Purana Diary version safe nahi ho saka")
+                    if (!part.renameTo(current)) {
+                        if (backup.exists()) backup.renameTo(current)
+                        throw Exception("Naya Diary update apply nahi hua")
+                    }
+                    prefs.edit().putInt("webVersion", target).apply()
+                    runOnUiThread {
+                        Toast.makeText(this@MainActivity, "My Diary update lag gaya. App refresh ho rahi hai...", Toast.LENGTH_LONG).show()
+                        webView.postDelayed({ webView.loadUrl("https://appassets.androidplatform.net/assets/index.html") }, 700)
+                    }
+                } catch (e: Exception) {
+                    File(filesDir, "diary-web/index.html.part").delete()
+                    val reason = e.message?.take(160) ?: "Unknown error"
+                    runOnUiThread {
+                        AlertDialog.Builder(this@MainActivity)
+                            .setTitle("Diary update nahi ho saka")
+                            .setMessage("Wajah: $reason\nAapke notes, photos aur PIN data ko touch nahi kiya gaya.")
+                            .setPositiveButton("Theek hai", null).show()
+                    }
+                }
+            }.start()
+        }
+"""
+if s.count(method_anchor) != 1:
+    raise SystemExit("Could not safely locate native updater method insertion point")
+s = s.replace(method_anchor, web_method + "\n" + method_anchor, 1)
+
+handler = r"""
+    private inner class DiaryBundlePathHandler : WebViewAssetLoader.PathHandler {
+        override fun handle(path: String): WebResourceResponse? {
+            if (path != "index.html") return null
+            return try {
+                val updated = File(filesDir, "diary-web/index.html")
+                val stream = if (updated.isFile) updated.inputStream() else assets.open("index.html")
+                WebResourceResponse("text/html", "UTF-8", stream)
+            } catch (_: Exception) {
+                null
+            }
+        }
+    }
+"""
+idx = s.rfind("\n}")
+if idx < 0:
+    raise SystemExit("MainActivity closing brace missing")
+s = s[:idx] + "\n" + handler + s[idx:]
+kt.write_text(s, encoding="utf-8")
+print("PASS: secure hash-verified online HTML bundle updater added; same WebView origin and bundled fallback retained.")
