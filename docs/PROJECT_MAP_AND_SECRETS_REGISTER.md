@@ -1,6 +1,6 @@
 # MY DIARY — MASTER PROJECT REGISTER
 
-**Single source of truth. Last updated: 2026-11-09 (My Diary 1.0.104 published; updater cache-busting/retries, GitHub CDN redirect validation, and visible failure diagnostics included; affected-device test pending).**
+**Single source of truth. Last updated: 2026-11-09 (My Diary 1.0.105 published; version-specific APK URL and identity-encoding download hardening; affected-user device test pending).**
 
 This file replaces the old project register. Read it first at the start of every My Diary task, then inspect the live repository and current source before editing. Older dated audit and handover files in `docs/` are historical evidence only; when they conflict with this register or current GitHub state, do not treat them as current instructions.
 
@@ -10,7 +10,7 @@ This file replaces the old project register. Read it first at the start of every
 - Repository: `amuazzinxyz-ops/My-Diary-Updates`
 - Branch: `main`
 - Android package: `com.personal.diaryapp`
-- Latest published feed: **1.0.104**, versionCode **104**. Published in commit `0d49a37b56560e064a41303f2a6984552de7e443`; the affected device-side update remains untested.
+- Latest published feed: **1.0.105**, versionCode **105**. Published in commit `31d2249c6129c850e9dd16818ceb3a4a059842c6`; affected-user device-side update remains untested.
 - Latest update feed: `latest.json`.
 - Current source archive: `Diary-Android-Project-v13 (6).zip`.
 - Build workflow: `.github/workflows/build-diary-from-zip.yml`.
@@ -19,17 +19,19 @@ This file replaces the old project register. Read it first at the start of every
 
 **Hard boundary:** all future My Diary source, app, build, release, update, and documentation work belongs only in this repository. Do not use or modify the MUAZZIN website/repository/workflows for Diary work. Do not merge the two apps or create a second project/workflow/archive when the existing one can be reused.
 
-## 2. Current published release — confirmed by live feed and publication commit
+## 2. Current published release — confirmed by live feed, build, and APK artifact
 
-- Version: **1.0.104** / versionCode **104**.
+- Version: **1.0.105** / versionCode **105**.
 - Package: `com.personal.diaryapp`.
-- Published APK: `My-Diary.apk`.
-- Update URL: `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk`.
-- SHA-256 in live `latest.json`: `f14e75d502d9263e29ab81250f781925f034afe63296a7444abd4cc8c65c7544`.
-- Published release commit: [0d49a37](https://github.com/amuazzinxyz-ops/My-Diary-Updates/commit/0d49a37b56560e064a41303f2a6984552de7e443). The release workflow is configured to require the existing trusted signing certificate fingerprint before publishing; the current APK and feed were published together. The actual phone-side download/install remains untested.
-- Signing certificate SHA-256 fingerprint verified against the previously trusted identity: `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A`.
-- The live feed identifies the 1.0.104 APK and web version 8. APK SHA-256 is `f14e75d502d9263e29ab81250f781925f034afe63296a7444abd4cc8c65c7544`.
-- The APK update feed and repository point to the canonical `My-Diary.apk` URL. The affected user's actual phone download, hash verification, and in-place installation are still **not device-verified**.
+- Published APK: `My-Diary-1.0.105.apk` (also copied to legacy `My-Diary.apk`).
+- Update URL in live `latest.json`: `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.105.apk`.
+- SHA-256 in live feed: `c94b0d682bd86cd0a2c0f344cc0158bcd9346453ede4b0f4eb447b67681ea7cf`.
+- Published release commit: [31d2249](https://github.com/amuazzinxyz-ops/My-Diary-Updates/commit/31d2249c6129c850e9dd16818ceb3a4a059842c6).
+- Build run `42656590333` completed successfully. The workflow validated the existing signing certificate fingerprint `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A` before publishing.
+- Downloaded signed-release artifact and independently calculated the APK SHA-256; it exactly matches the live feed value above. The versioned APK exists in the main-branch publish commit.
+- The 1.0.103 APK contains an allow-list for the repository's raw GitHub URL prefix (not an exact `My-Diary.apk` filename), so the new version-specific APK path remains within that approved prefix. This supports compatibility for older updater clients.
+- The affected user's actual in-app download, verification, and installation on a different user's phone remain **not device-verified**. Successful build/publication and matching checksum do not prove that the user's device has completed installation.
+- The 1.0.105 updater also sends `Accept-Encoding: identity` to avoid compressed-transfer Content-Length discrepancies with strict download-length checks. This header change applies to the new updater; older installed clients retain their previous downloader behavior.
 
 ## 3. Updater reliability — included in published 1.0.95
 
@@ -123,10 +125,11 @@ When the user says **“new kaam”**, **“sudhar”**, **“aage”**, or give
 
 ## 8. Current update failure status (2026-11-09)
 
-- The repository's 1.0.104 APK is published and the live feed declares its SHA-256. The build workflow contains the existing trusted-certificate check before its signed-release publish step. The user's phone-side download, hash verification, and installation remain unconfirmed.
-- The user-facing failure message alone cannot identify whether the phone failed at HTTP download, incomplete transfer, SHA-256, APK package/version validation, or a later installer handoff.
-- Do not create a new signing key, publish a debug APK, uninstall the existing app, clear app data, or claim the phone-side issue is fixed until an actual device test confirms it.
-- The next safe verification is to use the published 1.0.104 APK and record the exact failure reason shown by its updater. Preserve local Diary entries, photos, PIN locks, and signing identity.
+- User clarified that their own phone updates successfully; the failure affects other users who are on 1.0.103 or older and see: “Download/verification nahi hua. Update abhi install nahi kiya gaya”.
+- 1.0.105 is now published with a unique version-specific APK URL to avoid stale CDN content associated with overwriting the same APK filename. The signed APK artifact's independently calculated SHA-256 matches the live feed exactly; build, trusted signing-certificate check, and publish all succeeded.
+- The older 1.0.103 client's approved raw-GitHub URL prefix accepts the new versioned APK path. The 1.0.105 updater adds `Accept-Encoding: identity` for strict Content-Length checks, but this cannot retroactively change downloader code on already-installed older clients.
+- The actual affected user's in-app download, verification, and installation are still **not device-verified**. Do not say the issue is fully fixed until an affected user confirms a successful in-app update.
+- Do not create a new signing key, publish a debug APK, uninstall the existing app, clear app data, or alter local notes/photos/PIN data. Preserve the existing signing identity.
 
 ## 9. User's current known next goal
 
