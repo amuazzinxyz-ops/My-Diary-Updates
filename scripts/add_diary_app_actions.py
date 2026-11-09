@@ -77,6 +77,7 @@ native = r"""
                             c.setRequestProperty("Cache-Control","no-cache, no-store, max-age=0")
                             c.setRequestProperty("Pragma","no-cache")
                             c.setRequestProperty("User-Agent","MyDiaryUpdater/1.1")
+                            c.setRequestProperty("Accept-Encoding","identity")
                             c.setRequestProperty("Accept","application/vnd.android.package-archive, application/octet-stream")
                             val digest=java.security.MessageDigest.getInstance("SHA-256")
                             try {
