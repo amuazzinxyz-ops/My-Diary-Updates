@@ -76,7 +76,7 @@ web_method = r"""
                     if (total < 1000L) throw Exception("Diary update file adhura hai")
                     val actual = digest.digest().joinToString("") { "%02x".format(it) }
                     if (actual != expected) throw Exception("Diary update SHA-256 match nahi hua")
-                    val head = part.inputStream().bufferedReader(Charsets.UTF_8).use { it.readText().take(5000) }
+                    val head = part.inputStream().use { input -> ByteArray(4096).also { input.read(it) }.toString(Charsets.UTF_8) }
                     if (!head.contains("<html", true) && !head.contains("<!doctype", true)) throw Exception("Downloaded Diary file valid HTML nahi hai")
                     if (backup.exists()) backup.delete()
                     if (current.exists() && !current.renameTo(backup)) throw Exception("Purana Diary version safe nahi ho saka")
@@ -109,11 +109,11 @@ s = s.replace(method_anchor, web_method + "\n" + method_anchor, 1)
 handler = r"""
     private inner class DiaryBundlePathHandler : WebViewAssetLoader.PathHandler {
         override fun handle(path: String): WebResourceResponse? {
-            if (path != "index.html") return null
             return try {
                 val updated = File(filesDir, "diary-web/index.html")
-                val stream = if (updated.isFile) updated.inputStream() else assets.open("index.html")
-                WebResourceResponse("text/html", "UTF-8", stream)
+                val stream = if (path == "index.html" && updated.isFile) updated.inputStream() else assets.open(path)
+                val mime = if (path.endsWith(".html", true)) "text/html" else android.webkit.MimeTypeMap.getSingleton().getMimeTypeFromExtension(path.substringAfterLast('.', "")) ?: "application/octet-stream"
+                WebResourceResponse(mime, "UTF-8", stream)
             } catch (_: Exception) {
                 null
             }
