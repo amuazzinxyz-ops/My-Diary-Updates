@@ -170,47 +170,50 @@ app = root.find("application")
 if app is None:
     raise SystemExit("AndroidManifest application element missing")
 authority = "${applicationId}.fileprovider"
-provider = None
-for node in app.findall("provider"):
-    authorities = node.get("{" + android_ns + "}authorities", "")
-    if authority in authorities or "com.personal.diaryapp.fileprovider" in authorities:
-        provider = node
-        break
+providers = app.findall("provider")
+provider = next((node for node in providers if node.get("{" + android_ns + "}name") == "androidx.core.content.FileProvider"), None)
 if provider is None:
     provider = ET.SubElement(app, "provider")
-    provider.set("{" + android_ns + "}name", "androidx.core.content.FileProvider")
-    provider.set("{" + android_ns + "}authorities", authority)
-    provider.set("{" + android_ns + "}exported", "false")
-    provider.set("{" + android_ns + "}grantUriPermissions", "true")
-metadata = None
-for node in provider.findall("meta-data"):
+provider.set("{" + android_ns + "}name", "androidx.core.content.FileProvider")
+provider.set("{" + android_ns + "}authorities", authority)
+provider.set("{" + android_ns + "}exported", "false")
+provider.set("{" + android_ns + "}grantUriPermissions", "true")
+
+# Use a dedicated, unambiguous paths resource for both APK updates and Diary sharing.
+for node in list(provider.findall("meta-data")):
     if node.get("{" + android_ns + "}name") == "android.support.FILE_PROVIDER_PATHS":
-        metadata = node
-        break
-if metadata is None:
-    metadata = ET.SubElement(provider, "meta-data")
-    metadata.set("{" + android_ns + "}name", "android.support.FILE_PROVIDER_PATHS")
-    metadata.set("{" + android_ns + "}resource", "@xml/diary_update_file_paths")
-resource = metadata.get("{" + android_ns + "}resource", "@xml/diary_update_file_paths")
-if not resource.startswith("@xml/"):
-    raise SystemExit("FileProvider paths metadata is not an @xml resource")
-paths_name = resource.split("/", 1)[1]
+        provider.remove(node)
+metadata = ET.SubElement(provider, "meta-data")
+metadata.set("{" + android_ns + "}name", "android.support.FILE_PROVIDER_PATHS")
+metadata.set("{" + android_ns + "}resource", "@xml/diary_update_file_paths")
+
 xml_dir = base / "src/main/res/xml"
 xml_dir.mkdir(parents=True, exist_ok=True)
-paths_file = xml_dir / (paths_name + ".xml")
-if paths_file.exists():
-    paths_tree = ET.parse(paths_file)
-    paths_root = paths_tree.getroot()
-else:
-    paths_root = ET.Element("paths")
-    paths_tree = ET.ElementTree(paths_root)
-if not any(x.tag == "cache-path" and x.get("name") == "diary_update_cache" for x in list(paths_root)):
-    ET.SubElement(paths_root, "cache-path", {"name": "diary_update_cache", "path": "."})
+paths_file = xml_dir / "diary_update_file_paths.xml"
+paths_root = ET.Element("paths")
+ET.SubElement(paths_root, "cache-path", {"name": "diary_update_cache", "path": "."})
+paths_tree = ET.ElementTree(paths_root)
 ET.indent(paths_tree, space="    ")
 paths_tree.write(paths_file, encoding="utf-8", xml_declaration=True)
+
+# Fail the build if the manifest and resource do not agree exactly.
+check_tree = ET.parse(manifest)
+check_app = check_tree.getroot().find("application")
+matching = [node for node in check_app.findall("provider")
+            if node.get("{" + android_ns + "}authorities") == authority
+            and node.get("{" + android_ns + "}name") == "androidx.core.content.FileProvider"]
+if len(matching) != 1:
+    raise SystemExit("FAIL: expected exactly one Diary FileProvider with the app authority")
+check_meta = [node for node in matching[0].findall("meta-data")
+              if node.get("{" + android_ns + "}name") == "android.support.FILE_PROVIDER_PATHS"]
+if len(check_meta) != 1 or check_meta[0].get("{" + android_ns + "}resource") != "@xml/diary_update_file_paths":
+    raise SystemExit("FAIL: FileProvider paths metadata is not configured correctly")
+check_paths = ET.parse(paths_file).getroot()
+if not any(node.tag == "cache-path" and node.get("path") == "." for node in list(check_paths)):
+    raise SystemExit("FAIL: FileProvider cache root does not cover cacheDir")
 ET.indent(tree, space="    ")
 tree.write(manifest, encoding="utf-8", xml_declaration=True)
-print("PASS: FileProvider has a cache-path covering the downloaded update APK.")
+print("PASS: FileProvider authority, manifest metadata, and cacheDir root verified.")
 
 g=base/"build.gradle.kts"
 t=g.read_text(encoding="utf-8")
