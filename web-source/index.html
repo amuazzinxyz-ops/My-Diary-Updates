@@ -770,8 +770,11 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var checkUpdatesBtn=el('button',{id:'diaryCheckUpdatesBtn',type:'button'},'🔄 Check for Updates');
   mePanel.appendChild(shareAppBtn);
   mePanel.appendChild(checkUpdatesBtn);
+  var browserUpdateBtn=el('button',{id:'diaryBrowserUpdateBtn',type:'button'},language()==='hindi'?'⬇️ ऐप अपडेट ब्राउज़र से डाउनलोड करें':(language()==='english'?'⬇️ Download App Update (Browser)':'⬇️ App Update Browser Se Download Karein'));
+  mePanel.appendChild(browserUpdateBtn);
   shareAppBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(window.DiaryAppActions&&DiaryAppActions.shareApp){DiaryAppActions.shareApp();}});
   checkUpdatesBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(window.DiaryAppActions&&DiaryAppActions.checkForUpdates){DiaryAppActions.checkForUpdates();}});
+  browserUpdateBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();window.location.href='https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.105.apk?download=1&v='+Date.now();});
 
   refreshDiaryBtn.addEventListener('click',function(e){
    e.preventDefault();e.stopPropagation();
