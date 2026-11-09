@@ -191,7 +191,7 @@ xml_dir = base / "src/main/res/xml"
 xml_dir.mkdir(parents=True, exist_ok=True)
 paths_file = xml_dir / "diary_update_file_paths.xml"
 paths_root = ET.Element("paths")
-ET.SubElement(paths_root, "cache-path", {"name": "diary_update_cache", "path": "."})
+ET.SubElement(paths_root, "cache-path", {"{" + android_ns + "}name": "diary_update_cache", "{" + android_ns + "}path": "."})
 paths_tree = ET.ElementTree(paths_root)
 ET.indent(paths_tree, space="    ")
 paths_tree.write(paths_file, encoding="utf-8", xml_declaration=True)
@@ -212,7 +212,7 @@ check_meta = [node for node in matching[0].findall("meta-data")
 if len(check_meta) != 1 or check_meta[0].get("{" + android_ns + "}resource") != "@xml/diary_update_file_paths":
     raise SystemExit("FAIL: FileProvider paths metadata is not configured correctly")
 check_paths = ET.parse(paths_file).getroot()
-if not any(node.tag == "cache-path" and node.get("path") == "." for node in list(check_paths)):
+if not any(node.tag == "cache-path" and node.get("{" + android_ns + "}path") == "." for node in list(check_paths)):
     raise SystemExit("FAIL: FileProvider cache root does not cover cacheDir")
 print("PASS: FileProvider authority, manifest metadata, and cacheDir root verified.")
 
