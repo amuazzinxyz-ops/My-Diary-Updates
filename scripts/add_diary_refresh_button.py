@@ -82,7 +82,7 @@ check_update_style = """
 #diaryDiaryMePanel #diaryCheckUpdatesBtn{
  display:flex!important;align-items:center!important;justify-content:flex-start!important;
  align-self:stretch!important;width:100%!important;min-width:100%!important;max-width:100%!important;
- height:30px!important;min-height:30px!important;max-height:30px!important;
+ height:40px!important;min-height:40px!important;max-height:40px!important;
  margin:0 0 7px!important;padding:0 10px!important;box-sizing:border-box!important;
  font-size:18px!important;font-weight:900!important;line-height:1.15!important;text-align:left!important;
  white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;
@@ -100,7 +100,7 @@ equal_size_style = """
 #diaryDiaryMePanel #diaryDiaryRefreshBtn{
  display:flex!important;align-items:center!important;justify-content:flex-start!important;
  align-self:stretch!important;width:100%!important;min-width:100%!important;max-width:100%!important;
- height:30px!important;min-height:30px!important;max-height:30px!important;
+ height:40px!important;min-height:40px!important;max-height:40px!important;
  margin:0!important;padding:0 10px!important;box-sizing:border-box!important;
  font-size:18px!important;font-weight:900!important;line-height:1.15!important;text-align:left!important;
  white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;
