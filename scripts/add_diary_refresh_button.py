@@ -49,7 +49,7 @@ listener = """  refreshDiaryBtn.addEventListener('click',function(e){
   });
 """
 script = script.replace(listener_anchor, listener + listener_anchor, 1)
-html = html[:start] + script + html[end + len("</script>"):]
+html = html[:start] + script + "</script>" + html[end + len("</script>"):]
 
 style = """
 <style id="diary-me-refresh-gold-3d">
