@@ -7,8 +7,8 @@
   "sha256": "c94b0d682bd86cd0a2c0f344cc0158bcd9346453ede4b0f4eb447b67681ea7cf",
   "releaseNotes": "My Diary 1.0.105. Update downloader hardening.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 10,
+  "webVersion": 11,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "f32747d5fb7712d74306786d3d3a42d66fad21e4a5e5ecf79812b4ace3da39a7",
+  "webSha256": "9c8c7330127d6f9e83d0c22c86c9f9c53ac09602142d618dcebf46c02285f133",
   "webReleaseNotes": "Adds a browser-download fallback for older Android updater versions. Existing diary data is kept."
 }
