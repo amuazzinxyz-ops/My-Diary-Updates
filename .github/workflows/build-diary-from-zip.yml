@@ -190,7 +190,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved next Diary version 1.0.100 (versionCode 99)
+      - name: Set approved next Diary version 1.0.100 (versionCode 100)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
@@ -203,7 +203,7 @@ jobs:
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary versionName=1.0.100, versionCode=99")
+          print("Set Diary versionName=1.0.100, versionCode=100")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -229,7 +229,7 @@ jobs:
               raise SystemExit(f"BLOCKED: expected approved APK version 1.0.100/100, found {name}/{code}")
           if int(meta.get("versionCode", 0)) != 99 or meta.get("versionName") != "1.0.99":
               raise SystemExit("BLOCKED: current update feed is not the expected installed baseline 1.0.99/99")
-          print(f"PASS: package={package}, next version={name}/{code}; feed baseline remains 1.0.99/98")
+          print(f"PASS: package={package}, next version={name}/{code}; feed baseline remains 1.0.99/99")
           PY
 
       - name: Align Java and Kotlin JVM targets
