@@ -3,7 +3,7 @@
   "packageName": "com.personal.diaryapp",
   "versionCode": 104,
   "versionName": "1.0.104",
-  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/89219d4e9e553f606b5323a85723705e9ca3ed44/My-Diary.apk",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
   "sha256": "f14e75d502d9263e29ab81250f781925f034afe63296a7444abd4cc8c65c7544",
   "releaseNotes": "Restored the previously published signed My Diary 1.0.104 release. Existing Diary data remains on this device.",
   "minimumSupportedVersionCode": 1,
