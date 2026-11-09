@@ -228,7 +228,7 @@ jobs:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
           if code != 111 or name != "1.0.111":
               raise SystemExit(f"BLOCKED: expected approved APK version 1.0.111/111, found {name}/{code}")
-          if int(meta.get("versionCode", 0)) != 109 or meta.get("versionName") != "1.0.110":
+          if int(meta.get("versionCode", 0)) != 110 or meta.get("versionName") != "1.0.110":
               raise SystemExit("BLOCKED: current update feed is not the expected installed baseline 1.0.110/110")
           print(f"PASS: package={package}, next version={name}/{code}; feed baseline remains 1.0.110/110")
           PY
@@ -338,7 +338,7 @@ jobs:
           import hashlib, json
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
-          if meta.get("packageName") != "com.personal.diaryapp" or int(meta.get("versionCode", 0)) != 109 or meta.get("versionName") != "1.0.110":
+          if meta.get("packageName") != "com.personal.diaryapp" or int(meta.get("versionCode", 0)) != 110 or meta.get("versionName") != "1.0.110":
               raise SystemExit("BLOCKED: live main feed is no longer the expected 1.0.110/110 baseline; refusing to overwrite it")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
