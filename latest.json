@@ -1,13 +1,13 @@
 {
   "appName": "My Diary",
   "packageName": "com.personal.diaryapp",
-  "versionCode": 101,
-  "versionName": "1.0.101",
+  "versionCode": 102,
+  "versionName": "1.0.102",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
-  "sha256": "5f3ab3164065c5c26b6d0c7a8373cd0f785da62432b8cdf712067a1c91051707",
-  "releaseNotes": "My Diary verified update. Existing diary data remains stored locally.",
+  "sha256": "cf1904d2a34ec08cc12a58aea7afedda27ede34945becba5410fdac37eee2ece",
+  "releaseNotes": "Added Refresh button inside Me. Existing diary data remains stored locally.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 4,
+  "webVersion": 5,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "3fa701c4ee89f9aa03ac1f67d7d9de4e7a34308a6a57acf62339357e3b556f7a"
+  "webSha256": "17a04a1b2ff8dae73c590134f63ea131c4dfd29a33a5bee2d365f89893a2bed5"
 }
