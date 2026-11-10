@@ -7,8 +7,8 @@
   "sha256": "0b4d5b60bdf8e77688a434ae1ce4c09cbd699fcee4877d362690b1fb3354488f",
   "releaseNotes": "PDF export now uses Android native PrintManager and Save as PDF; Android Back keeps the Diary editor open. Existing notes, photos, PIN settings, and signing identity are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 43,
+  "webVersion": 44,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "eeac50f1b19f2a1c2903cbbeae4d9f284dbfb9437ca565642e0d2dbf7a32c381",
+  "webSha256": "0ff53e994573f1815ce00f8db54df09e9e94dd4bcbbb4c23d472e008c6df6c1a",
   "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
 }
