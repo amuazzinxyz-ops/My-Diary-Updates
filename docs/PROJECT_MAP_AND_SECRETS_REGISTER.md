@@ -1,8 +1,18 @@
 # MY DIARY — MASTER PROJECT REGISTER
 
-**Single source of truth. Last updated: 2026-11-10 (published signed My Diary 1.0.113 with Interface Colours in the Me menu; build and signing verified; new-version device installation not yet confirmed).**
+**Single source of truth. Last updated: 2026-11-10 (signed APK 1.0.118 / versionCode 117 published; Web Update 49 published and checksum-verified; secondary-phone installation remains unverified).**
 
 This file replaces the old project register. Read it first at the start of every My Diary task, then inspect the live repository and current source before editing. Older dated audit and handover files in `docs/` are historical evidence only; when they conflict with this register or current GitHub state, do not treat them as current instructions.
+
+## 0. Current verified release and web-update state — 2026-11-10
+
+- Signed APK 1.0.118 / versionCode 117 was built and published by workflow run 42849930367; the signed Release build, APK upload, and publish steps completed successfully. Feed points to My-Diary-1.0.118.apk with SHA-256 cff23e38518a8881adc3bb52d1320372aedce167082556f32bbd6d680ed65652.
+- The APK build contains the native web-bundle updater from scripts/add_online_diary_updates.py. It compares feed webVersion to the locally installed web version, downloads the HTML bundle, verifies its SHA-256, stores it under app-private files, and serves it through the WebView asset path. APK version and web bundle version are independent.
+- Regression found: the APK build extracted the older Diary-Android-Project-v13 (6).zip HTML and copied it over both web-source/index.html and diary-web/index.html during publishing. This replaced the newer saved web UI with older HTML. The saved pre-Back-fix web source was retained at backups/web-source-index-before-restore-android-back-2026-11-10.html.
+- Recovery: restored that saved web UI, changed Android Back handling so popstate closes the Diary overlay, preserved PDF Save removal and direct Save Note, synced both web HTML mirrors, and published webVersion 49 in latest.json. Feed web SHA-256 is 8a796649382b343791d85fd29f76118bc32ce9e3bcd761f15cd8fbfc57397f9d.
+- The 1.0.118 APK remains the latest APK; Web Update 49 is a web-only update. Phones with a compatible web-bundle updater and a locally stored webVersion below 49 should receive it through Me → Check for Updates without reinstalling the APK. If a phone already stores webVersion 49, it will report that the Diary is current.
+- Verified repository state: web-source/index.html and diary-web/index.html match; feed webVersion and SHA match the restored web bundle; direct Save Note exists; PDF Save functions are absent; Android Back popstate handler calls closeOverlay(true).
+- Do not claim all other phones are updated until their actual Check for Updates/download result is confirmed. Keep local notes, photos, PIN/recovery data, package identity, and signing identity untouched.
 
 ## 1. Project identity and boundary
 
@@ -10,7 +20,7 @@ This file replaces the old project register. Read it first at the start of every
 - Repository: `amuazzinxyz-ops/My-Diary-Updates`
 - Branch: `main`
 - Android package: `com.personal.diaryapp`
-- Latest APK currently served by the update feed: **1.0.113**, versionCode **112**. The signed APK is served at https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.113.apk, a version-specific URL under the installed updater's accepted /main/ path. The current web bundle is served from the repository's web-source/index.html and recorded in latest.json as webVersion **19**.
+- Latest APK currently served by the update feed: **1.0.118**, versionCode **117**. The signed APK is served at https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.118.apk. The current web bundle is served from web-source/index.html and recorded in latest.json as webVersion **49**. Feed SHA-256 for the web bundle: 8a796649382b343791d85fd29f76118bc32ce9e3bcd761f15cd8fbfc57397f9d.
 - Latest update feed: `latest.json`.
 - Current source archive: `Diary-Android-Project-v13 (6).zip`.
 - Build workflow: `.github/workflows/build-diary-from-zip.yml`.
