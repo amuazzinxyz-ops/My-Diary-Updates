@@ -346,11 +346,11 @@ jobs:
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
           PY
           cp /tmp/My-Diary-verified.apk My-Diary.apk
-          cp /tmp/My-Diary-verified.apk My-Diary-1.0.118.apk
+          cp /tmp/My-Diary-verified.apk My-Diary-1.0.119.apk
           python3 -m json.tool latest.json >/dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add My-Diary.apk My-Diary-1.0.118.apk latest.json web-source/index.html diary-web/index.html
+          git add My-Diary.apk My-Diary-1.0.119.apk latest.json
           git commit -m "Publish verified My Diary update 1.0.119"
           git push origin HEAD:main
       - name: Upload unsigned Release APK for private owner-side signing
