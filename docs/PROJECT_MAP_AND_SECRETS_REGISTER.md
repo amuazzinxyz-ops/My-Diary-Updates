@@ -1,6 +1,6 @@
 # MY DIARY — MASTER PROJECT REGISTER
 
-**Single source of truth. Last updated: 2026-11-10 (signed APK 1.0.119 / versionCode 118 published; Web Update 49 retained and checksum-verified; secondary-phone installation remains unverified).**
+**Single source of truth. Last updated: 2026-11-10 (signed APK 1.0.119 / versionCode 118 published; Web Update 49 retained and checksum-verified; web SHA-256 mismatch corrected and independently re-verified; secondary-phone retry remains unverified).**
 
 This file replaces the old project register. Read it first at the start of every My Diary task, then inspect the live repository and current source before editing. Older dated audit and handover files in `docs/` are historical evidence only; when they conflict with this register or current GitHub state, do not treat them as current instructions.
 
@@ -12,6 +12,7 @@ This file replaces the old project register. Read it first at the start of every
 - APK publishing no longer overwrites `web-source/index.html` or `diary-web/index.html` from the older ZIP-generated HTML. The published web UI is preserved when future APK releases are built.
 - Current web bundle remains **Web Update 49**, SHA-256 `8a796649382b343791d85fd29f76118bc32ce9e3bcd761f15cd8fbfc57397f9d`. Both web HTML mirrors match; Android Back closes the Diary overlay; direct Save Note remains; PDF Save remains removed.
 - The Content-Length false rejection was removed from the APK downloader; complete APK downloads are validated by SHA-256, package name, and version.
+- Follow-up incident 2026-11-11: users on 1.0.119 saw `Diary update SHA-256 match nahi hua`. Root cause was the published `latest.json.webSha256` value, not the downloaded HTML: it contained an incorrect checksum. Recomputed SHA-256 from the actual raw.githubusercontent.com response bytes (234,165 bytes), corrected `latest.json` to `224bb72fce7055f07ea97334c7958a72d4f344987bef603784d56c01e6f081d3`, and independently re-fetched/re-hashed the raw HTML; exact match confirmed. Original feed preserved at `backups/latest-json-before-web-sha256-repair-2026-11-11.json`. No APK rebuild required; version remains 1.0.119 / code 118 and webVersion 49.
 - Backup files for the updater/workflow repair are `backups/add_online_diary_updates-before-hash-repair-2026-11-10.py` and `backups/build-diary-workflow-before-preserve-web-source-2026-11-10.yml`. The web source backup remains `backups/web-source-index-before-restore-android-back-2026-11-10.html`.
 - **Other phones have not been physically tested.** They must install the 1.0.119 APK for the hash-based repair to take effect; then Me → Check for Updates should compare and update the web bundle. Do not claim secondary-phone success until confirmed.
 - Do not change local notes, photos, PIN/recovery data, package identity, signing identity, or unrelated features.
@@ -22,7 +23,7 @@ This file replaces the old project register. Read it first at the start of every
 - Repository: `amuazzinxyz-ops/My-Diary-Updates`
 - Branch: `main`
 - Android package: `com.personal.diaryapp`
-- Latest APK currently served by the update feed: **1.0.119**, versionCode **118**. The signed APK is served at https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.119.apk. The current web bundle is served from web-source/index.html and recorded in latest.json as webVersion **49**. Feed SHA-256 for the web bundle: 8a796649382b343791d85fd29f76118bc32ce9e3bcd761f15cd8fbfc57397f9d.
+- Latest APK currently served by the update feed: **1.0.119**, versionCode **118**. The signed APK is served at https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.119.apk. The current web bundle is served from web-source/index.html and recorded in latest.json as webVersion **49**. Feed SHA-256 for the web bundle: 224bb72fce7055f07ea97334c7958a72d4f344987bef603784d56c01e6f081d3.
 - Latest update feed: `latest.json`.
 - Current source archive: `Diary-Android-Project-v13 (6).zip`.
 - Build workflow: `.github/workflows/build-diary-from-zip.yml`.
