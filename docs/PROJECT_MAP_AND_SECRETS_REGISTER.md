@@ -242,3 +242,21 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Verified live `latest.json` reports **webVersion 29** and SHA-256 `84ec629260635c86badc2081c0e63232f8a1009ae1d1c0f1f765af1c67c1beab`; published `diary-web/index.html` contains the updated 16px label rule and overflow-visible rule.
 - APK remains **1.0.115 / versionCode 114**; no APK rebuild, signing change, or local Diary data change was made.
 - Phone-side application of webVersion 29 and the final visual appearance still require user confirmation. Ask the user to tap **Me → Check for Updates** again; if the installed app already has webVersion 29, it will correctly report latest.
+
+## 19. My Diary 1.0.116 — native PDF Save and Android Back handling (2026-11-10)
+
+- Current published APK: **1.0.116**, versionCode **115**, package **com.personal.diaryapp**.
+- Signed APK URL: https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.116.apk.
+- APK SHA-256: `0b4d5b60bdf8e77688a434ae1ce4c09cbd699fcee4877d362690b1fb3354488f`. The signed Release APK workflow artifact was downloaded and independently hashed; it exactly matches the published `latest.json` checksum.
+- Current online web bundle: **webVersion 43**; web bundle SHA-256: `eeac50f1b19f2a1c2903cbbeae4d9f284dbfb9437ca565642e0d2dbf7a32c381`.
+- Successful signed build and publish workflow run: **42842056052**. Diary generation, translation audit, JavaScript syntax check, Android debug build, signed Release build, publish, and artifact upload passed. The release certificate SHA-256 matched the previously trusted fingerprint `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A`.
+- PDF Save now uses a dedicated `DiaryPdfActions.printDiaryPdf` Android JavaScript bridge and native Android `PrintManager` / `WebView.createPrintDocumentAdapter`. The note is saved first; Android's print sheet then offers **Save as PDF**. The ordinary browser popup/print path remains as a fallback outside the native app.
+- Android Back now asks the WebView whether the Diary overlay is open. If it is open, Back is consumed and the Diary remains visible; the user closes it using the existing visible × button. When the overlay is not open, normal WebView history / Activity back behavior continues.
+- The current online web bundle was used as the APK's embedded Diary HTML so the 1.0.116 APK retains the latest web-only features instead of reverting to the older generated base.
+- Backups created before this change:
+  - `backups/add_diary_app_actions-before-native-pdf-back-2026-11-10.py`
+  - `backups/build-diary-from-zip-before-native-pdf-back-2026-11-10.yml`
+  - `backups/web-source-index-before-native-pdf-back-2026-11-10.html`
+- Existing notes, photos, local storage, PIN Lock/recovery, package identity, signing identity, updater, and unrelated Diary features were not intentionally changed. No keystore or signing secret was regenerated or altered.
+- Static/build verification is complete, but **physical-device behavior has not yet been confirmed**. Ask the user to install **1.0.116** using **Me → Check for Updates**, then test PDF Save (choose Save as PDF in Android's print sheet) and Android Back while the Diary editor is open. Do not claim either behavior is device-verified until the user confirms it.
+- This section supersedes the older version baseline and webVersion notes in sections 17–18. Current next-release baseline: **versionCode 115 / versionName 1.0.116 / webVersion 43**. Derive the next version from the live feed.
