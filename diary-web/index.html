@@ -1283,7 +1283,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   if(activeDetailPhotoData)html+='<img src="'+activeDetailPhotoData+'">';
   if(activeDetailText)html+='<div class="extra">'+esc(activeDetailText)+'</div>';
   html+='</body></html>';
-  var triggerPdfPrint=function(){setTimeout(function(){try{popup.focus();popup.print()}catch(e){}},900)};
+  var pdfPrintStarted=false;
+  var triggerPdfPrint=function(){if(pdfPrintStarted)return;pdfPrintStarted=true;setTimeout(function(){try{popup.focus();popup.print()}catch(e){}},900)};
   popup.onload=triggerPdfPrint;
   popup.document.open();popup.document.write(html);popup.document.close();
   setTimeout(triggerPdfPrint,1400);
