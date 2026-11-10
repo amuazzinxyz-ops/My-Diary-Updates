@@ -10,5 +10,5 @@
   "webVersion": 50,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "a5e8350fe48595f114f6b8a9344d2144e79788e7f2f22ad2128bbd3d8fa5e3c8",
-  "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
+  "webReleaseNotes": "Added Calendar View to browse notes by saved date and per-note background colours. Existing notes, photos and PIN data remain on this device."
 }

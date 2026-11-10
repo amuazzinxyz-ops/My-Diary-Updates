@@ -1,16 +1,16 @@
 # MY DIARY — MASTER PROJECT REGISTER
 
-**Single source of truth. Last updated: 2026-11-10 (signed APK 1.0.119 / versionCode 118 published; Web Update 49 retained and checksum-verified; web SHA-256 mismatch corrected and independently re-verified; secondary-phone retry remains unverified).**
+**Single source of truth. Last updated: 2026-11-11 (signed APK 1.0.119 / versionCode 118; Web Update 50 published with Calendar View and per-note colours; web checksum verified).**
 
 This file replaces the old project register. Read it first at the start of every My Diary task, then inspect the live repository and current source before editing. Older dated audit and handover files in `docs/` are historical evidence only; when they conflict with this register or current GitHub state, do not treat them as current instructions.
 
-## 0. Current verified release and web-update state — 2026-11-10
+## 0. Current verified release and web-update state — 2026-11-11
 
 - Signed APK **1.0.119 / versionCode 118** was built and published by workflow run **42860862628**. Source validation, debug build, signed Release build, publish, signed APK upload, and artifact upload all completed successfully.
 - Live `latest.json` points to `My-Diary-1.0.119.apk`, package `com.personal.diaryapp`, versionCode 118, versionName 1.0.119, and APK SHA-256 `b98e8902f9896971e1dccf634a4d4d0349066f1885a9dee0125a303bf4d57a63`. The main-branch Git tree confirms the versioned APK exists (1,955,249 bytes).
 - The 1.0.119 updater repairs false “already latest” reports for the web UI: it compares the installed `filesDir/diary-web/index.html` SHA-256 with feed `webSha256`; only an exact match is treated as current. If not, it downloads the trusted published HTML, verifies SHA-256, then replaces the app-private bundle.
 - APK publishing no longer overwrites `web-source/index.html` or `diary-web/index.html` from the older ZIP-generated HTML. The published web UI is preserved when future APK releases are built.
-- Current web bundle remains **Web Update 49**, SHA-256 `8a796649382b343791d85fd29f76118bc32ce9e3bcd761f15cd8fbfc57397f9d`. Both web HTML mirrors match; Android Back closes the Diary overlay; direct Save Note remains; PDF Save remains removed.
+- Current web bundle is **Web Update 50**, SHA-256 `a5e8350fe48595f114f6b8a9344d2144e79788e7f2f22ad2128bbd3d8fa5e3c8`. The web publish workflow generated `diary-web/index.html` from `web-source/index.html`; both mirrors have the same Git blob SHA. Added Calendar View and per-note background colours; Android Back, direct Save Note, and the existing removal of PDF Save remain unchanged.
 - The Content-Length false rejection was removed from the APK downloader; complete APK downloads are validated by SHA-256, package name, and version.
 - Follow-up incident 2026-11-11: users on 1.0.119 saw `Diary update SHA-256 match nahi hua`. Root cause was the published `latest.json.webSha256` value, not the downloaded HTML: it contained an incorrect checksum. Recomputed SHA-256 from the actual raw.githubusercontent.com response bytes (234,165 bytes), corrected `latest.json` to `224bb72fce7055f07ea97334c7958a72d4f344987bef603784d56c01e6f081d3`, and independently re-fetched/re-hashed the raw HTML; exact match confirmed. Original feed preserved at `backups/latest-json-before-web-sha256-repair-2026-11-11.json`. No APK rebuild required; version remains 1.0.119 / code 118 and webVersion 49.
 - Backup files for the updater/workflow repair are `backups/add_online_diary_updates-before-hash-repair-2026-11-10.py` and `backups/build-diary-workflow-before-preserve-web-source-2026-11-10.yml`. The web source backup remains `backups/web-source-index-before-restore-android-back-2026-11-10.html`.
@@ -23,7 +23,7 @@ This file replaces the old project register. Read it first at the start of every
 - Repository: `amuazzinxyz-ops/My-Diary-Updates`
 - Branch: `main`
 - Android package: `com.personal.diaryapp`
-- Latest APK currently served by the update feed: **1.0.119**, versionCode **118**. The signed APK is served at https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.119.apk. The current web bundle is served from web-source/index.html and recorded in latest.json as webVersion **49**. Feed SHA-256 for the web bundle: 224bb72fce7055f07ea97334c7958a72d4f344987bef603784d56c01e6f081d3.
+- Latest APK currently served by the update feed: **1.0.119**, versionCode **118**. The signed APK is served at https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.119.apk. The current web bundle is served from web-source/index.html and recorded in latest.json as webVersion **50**. Feed SHA-256 for the web bundle: `a5e8350fe48595f114f6b8a9344d2144e79788e7f2f22ad2128bbd3d8fa5e3c8`.
 - Latest update feed: `latest.json`.
 - Current source archive: `Diary-Android-Project-v13 (6).zip`.
 - Build workflow: `.github/workflows/build-diary-from-zip.yml`.
@@ -291,3 +291,15 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Existing notes, photos, local storage, PIN Lock/recovery, package identity, signing identity, updater, and unrelated Diary features were not intentionally changed. No keystore or signing secret was regenerated or altered.
 - Static/build verification is complete, but **physical-device behavior has not yet been confirmed**. Ask the user to install **1.0.116** using **Me → Check for Updates**, then test PDF Save (choose Save as PDF in Android's print sheet) and Android Back while the Diary editor is open. Do not claim either behavior is device-verified until the user confirms it.
 - This section supersedes the older version baseline and webVersion notes in sections 17–18. Current next-release baseline: **versionCode 115 / versionName 1.0.116 / webVersion 43**. Derive the next version from the live feed.
+
+
+## 20. My Diary web-only update 50 — Calendar View and per-note colours (2026-11-11)
+
+- User requested two additions to the existing My Diary project: **Calendar View** (select a saved date and see notes from that day) and **Note Colours** (choose a background colour for each note).
+- Added a month calendar with previous/next month navigation, note counts on dates, and date selection to filter the note list by the note's original `created` date. The All Notes control clears the selected date filter.
+- Added a per-note colour selector with Original/default plus Yellow, Green, Blue, Pink, Purple, and Peach. The selected `noteColor` is stored within that note's existing JSON record, restored when editing, applied to its note card, and retained by JSON backup/export/import. Existing notes without this property remain unchanged and use the original background.
+- Added Roman English, English, Hindi, Urdu, Arabic, Bengali, Gujarati, Marathi, Tamil, and Telugu labels for both features and colour choices.
+- Created pre-edit source backup: `backups/web-source-index-before-calendar-and-note-colours-2026-11-11.html`.
+- Source commit: `ee74f5df8b9deac8cc570acc49a040e7e8a43110`. The existing web-only publishing workflow completed its publish action: live `latest.json` now reports **webVersion 50** and SHA-256 `a5e8350fe48595f114f6b8a9344d2144e79788e7f2f22ad2128bbd3d8fa5e3c8`. Re-fetched source and published mirror both contain the features and have the same Git blob SHA `c050f46b75cae959a70eeb6ad18c5a1c45261fdd`.
+- Static validation: both inline JavaScript blocks in the modified HTML parsed successfully; the publish workflow accepted the HTML and updated the feed/mirror. No APK rebuild was required; APK remains **1.0.119 / versionCode 118**. No app data, notes, photos, PIN/recovery, package identity, or signing settings were intentionally modified.
+- Physical phone appearance and use of the new Calendar View/colour selector have **not yet been confirmed**. Ask the user to use **Me → Check for Updates** to receive Web Update 50, then verify both features on the phone. Do not claim device-side testing until the user confirms it.
