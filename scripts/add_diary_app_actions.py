@@ -469,7 +469,7 @@ html = html.replace(old_pdf_start, new_pdf_start, 1)
 old_pdf_end = """  /* Android Chrome/PWA may block automatic printing on page load. Keep printing
      behind the user's explicit tap on the PDF page's Save as PDF / Print button. */
   popup.document.open();popup.document.write(html);popup.document.close();
-  document.getElementById('diaryMyNotesStatus').textContent='PDF page khul gayi hai. Wahan “Save as PDF / Print” button dabayein; phir print menu mein “Save as PDF” chunein.';"""
+  document.getElementById('diaryMyNotesStatus').textContent='PDF page khul gayi hai. Wahan “Save as PDF / Print” button dabayein, phir print menu mein “Save as PDF” chunein.';"""
 new_pdf_end = """  if(nativePrint){
    try{
     window.DiaryAppActions.printDiaryPdf(html,String(title||'My Diary'));
@@ -481,7 +481,7 @@ new_pdf_end = """  if(nativePrint){
   }
   /* Browser fallback: open the print page only after the user's PDF button tap. */
   popup.document.open();popup.document.write(html);popup.document.close();
-  document.getElementById('diaryMyNotesStatus').textContent='PDF page khul gayi hai. Wahan “Save as PDF / Print” button dabayein; phir print menu mein “Save as PDF” chunein.';"""
+  document.getElementById('diaryMyNotesStatus').textContent='PDF page khul gayi hai. Wahan “Save as PDF / Print” button dabayein, phir print menu mein “Save as PDF” chunein.';"""
 if html.count(old_pdf_end) != 1:
     raise SystemExit("FAIL: exact PDF print dispatch point not found once")
 html = html.replace(old_pdf_end, new_pdf_end, 1)
