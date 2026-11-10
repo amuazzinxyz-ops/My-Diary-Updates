@@ -18,6 +18,24 @@ insert = []
 for lang in languages:
     values = json.dumps(translations[lang], ensure_ascii=False, separators=(",", ":"))
     insert.append(f" words[{json.dumps(lang)}]=Object.assign({{}},words.english,{values});")
+
+# Add localized labels for the new Me-menu Interface Colours palette.
+extra_translations = {
+ "roman": {"interfaceColours":"🎨 Interface Colours","themeDefault":"Original Rang","themeBlue":"Neela","themeGreen":"Hara","themeRose":"Gulabi"},
+ "english": {"interfaceColours":"🎨 Interface Colours","themeDefault":"Original","themeBlue":"Blue","themeGreen":"Green","themeRose":"Rose"},
+ "hindi": {"interfaceColours":"🎨 इंटरफ़ेस रंग","themeDefault":"मूल रंग","themeBlue":"नीला","themeGreen":"हरा","themeRose":"गुलाबी"},
+ "urdu": {"interfaceColours":"🎨 انٹرفیس کے رنگ","themeDefault":"اصل رنگ","themeBlue":"نیلا","themeGreen":"سبز","themeRose":"گلابی"},
+ "arabic": {"interfaceColours":"🎨 ألوان الواجهة","themeDefault":"الألوان الأصلية","themeBlue":"أزرق","themeGreen":"أخضر","themeRose":"وردي"},
+ "bengali": {"interfaceColours":"🎨 ইন্টারফেসের রং","themeDefault":"আসল রং","themeBlue":"নীল","themeGreen":"সবুজ","themeRose":"গোলাপি"},
+ "gujarati": {"interfaceColours":"🎨 ઇન્ટરફેસના રંગો","themeDefault":"મૂળ રંગ","themeBlue":"વાદળી","themeGreen":"લીલો","themeRose":"ગુલાબી"},
+ "marathi": {"interfaceColours":"🎨 इंटरफेसचे रंग","themeDefault":"मूळ रंग","themeBlue":"निळा","themeGreen":"हिरवा","themeRose":"गुलाबी"},
+ "tamil": {"interfaceColours":"🎨 இடைமுக நிறங்கள்","themeDefault":"அசல் நிறம்","themeBlue":"நீலம்","themeGreen":"பச்சை","themeRose":"இளஞ்சிவப்பு"},
+ "telugu": {"interfaceColours":"🎨 ఇంటర్‌ఫేస్ రంగులు","themeDefault":"అసలు రంగు","themeBlue":"నీలం","themeGreen":"ఆకుపచ్చ","themeRose":"గులాబీ"}
+}
+for lang, values in extra_translations.items():
+    for key, value in values.items():
+        insert.append(f" words[{json.dumps(lang)}][{json.dumps(key)}]={json.dumps(value, ensure_ascii=False)};")
+
 insert.append(""" function applyDiaryTextDirection(){
   var l=language(),rtl=(l==='urdu'||l==='arabic');
   var codes={roman:'en',english:'en',hindi:'hi',urdu:'ur',arabic:'ar',bengali:'bn',gujarati:'gu',marathi:'mr',tamil:'ta',telugu:'te'};

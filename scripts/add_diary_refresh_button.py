@@ -27,6 +27,38 @@ insert = """  var checkUpdatesBtn=el('button',{id:'diaryCheckUpdatesBtn',type:'b
   mePanel.appendChild(checkUpdatesBtn);
   var refreshDiaryBtn=el('button',{id:'diaryDiaryRefreshBtn',type:'button'},'🔄 Refresh');
   mePanel.appendChild(refreshDiaryBtn);
+  var interfaceColoursBtn=el('button',{id:'diaryInterfaceColoursBtn',type:'button','aria-expanded':'false','aria-controls':'diaryInterfaceColoursPanel'},'🎨 '+t('interfaceColours'));
+  var interfaceColoursPanel=el('div',{id:'diaryInterfaceColoursPanel',hidden:'hidden'});
+  var interfaceThemeOptions=[
+   {value:'default',label:t('themeDefault'),icon:'🟣'},
+   {value:'blue',label:t('themeBlue'),icon:'🔵'},
+   {value:'green',label:t('themeGreen'),icon:'🟢'},
+   {value:'rose',label:t('themeRose'),icon:'🌸'}
+  ];
+  interfaceThemeOptions.forEach(function(item){
+   var option=el('button',{type:'button',class:'diary-interface-theme-option','data-theme':item.value,'aria-pressed':'false'},item.icon+' '+item.label);
+   option.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();applyDiaryInterfaceTheme(item.value);});
+   interfaceColoursPanel.appendChild(option);
+  });
+  mePanel.appendChild(interfaceColoursBtn);
+  mePanel.appendChild(interfaceColoursPanel);
+  function applyDiaryInterfaceTheme(theme){
+   theme=['default','blue','green','rose'].indexOf(theme)>=0?theme:'default';
+   try{localStorage.setItem('diary_interface_theme_v1',theme);}catch(e){}
+   if(theme==='default')document.body.removeAttribute('data-diary-interface-theme');
+   else document.body.setAttribute('data-diary-interface-theme',theme);
+   var options=interfaceColoursPanel.querySelectorAll('button[data-theme]');
+   for(var i=0;i<options.length;i++)options[i].setAttribute('aria-pressed',options[i].getAttribute('data-theme')===theme?'true':'false');
+  }
+  interfaceColoursBtn.addEventListener('click',function(e){
+   e.preventDefault();e.stopPropagation();
+   var opening=interfaceColoursPanel.hidden;
+   interfaceColoursPanel.hidden=!opening;
+   interfaceColoursBtn.setAttribute('aria-expanded',opening?'true':'false');
+  });
+  var savedInterfaceTheme='default';
+  try{savedInterfaceTheme=localStorage.getItem('diary_interface_theme_v1')||'default';}catch(e){}
+  applyDiaryInterfaceTheme(savedInterfaceTheme);
 """
 script = script.replace(anchor, insert + anchor, 1)
 
@@ -117,6 +149,58 @@ if script.count("id:'diaryDiaryRefreshBtn'") != 1:
 if "renderList();" not in script[script.find("diaryDiaryRefreshBtn"):]:
     raise SystemExit("Refresh handler does not call the existing Diary list renderer")
 
+
+interface_theme_style = """
+<style id="diary-interface-colours-themes">
+#diaryInterfaceColoursPanel{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:6px 0;margin:0 0 7px;width:100%;box-sizing:border-box}
+#diaryInterfaceColoursPanel[hidden]{display:none!important}
+#diaryInterfaceColoursPanel .diary-interface-theme-option{height:40px!important;min-height:40px!important;max-height:40px!important;margin:0!important;padding:0 7px!important;border:1px solid #b9d0bd!important;border-radius:9px!important;background:linear-gradient(145deg,#fff,#e5eee8)!important;color:#123d2a!important;font-size:12px!important;font-weight:900!important;white-space:nowrap!important;box-shadow:0 2px 0 #c7d9c8!important}
+#diaryInterfaceColoursPanel .diary-interface-theme-option[aria-pressed="true"]{outline:2px solid #d4af37!important;outline-offset:1px!important}
+body[data-diary-interface-theme="blue"]{background:#eaf4ff!important}
+body[data-diary-interface-theme="blue"] #diaryMyNotesPanel{background:#f2f8ff!important;border-color:#6d9acb!important}
+body[data-diary-interface-theme="blue"] #diaryMyNotesHead{background:linear-gradient(145deg,#d9eaff,#bcd8f5)!important;color:#173f67!important}
+body[data-diary-interface-theme="blue"] #diaryMyNotesHead h2{color:#173f67!important}
+body[data-diary-interface-theme="blue"] #diaryMyNotesBody{background:#e9f3ff!important}
+body[data-diary-interface-theme="blue"] #diaryMyNotesEditor,body[data-diary-interface-theme="blue"] #diaryMyNotesList .diary-my-note{background:linear-gradient(145deg,#fff,#edf6ff)!important;border-color:#9bbce0!important}
+body[data-diary-interface-theme="blue"] #diaryMyNotesSearch,body[data-diary-interface-theme="blue"] #diaryMyNotesCategory,body[data-diary-interface-theme="blue"] #diaryMyNotesCategoryFilter,body[data-diary-interface-theme="blue"] #diaryMyNotesTitle,body[data-diary-interface-theme="blue"] #diaryMyNotesText{background:#fff!important;border-color:#7fa8d2!important;color:#173f67!important}
+body[data-diary-interface-theme="blue"] #diaryMyNotesActions button,body[data-diary-interface-theme="blue"] #diaryMyNotesBackup button,body[data-diary-interface-theme="blue"] #diaryMyNotesPin,body[data-diary-interface-theme="blue"] #diaryDiaryMePanel button{background:linear-gradient(145deg,#fff,#dcecff)!important;border-color:#7fa8d2!important;color:#173f67!important}
+body[data-diary-interface-theme="green"]{background:#eaf6ef!important}
+body[data-diary-interface-theme="green"] #diaryMyNotesPanel{background:#f1f8f2!important;border-color:#75a98a!important}
+body[data-diary-interface-theme="green"] #diaryMyNotesHead{background:linear-gradient(145deg,#d7ecdd,#b9dec5)!important;color:#17452d!important}
+body[data-diary-interface-theme="green"] #diaryMyNotesHead h2{color:#17452d!important}
+body[data-diary-interface-theme="green"] #diaryMyNotesBody{background:#e8f4eb!important}
+body[data-diary-interface-theme="green"] #diaryMyNotesEditor,body[data-diary-interface-theme="green"] #diaryMyNotesList .diary-my-note{background:linear-gradient(145deg,#fff,#edf7ef)!important;border-color:#8fba9b!important}
+body[data-diary-interface-theme="green"] #diaryMyNotesSearch,body[data-diary-interface-theme="green"] #diaryMyNotesCategory,body[data-diary-interface-theme="green"] #diaryMyNotesCategoryFilter,body[data-diary-interface-theme="green"] #diaryMyNotesTitle,body[data-diary-interface-theme="green"] #diaryMyNotesText{background:#fff!important;border-color:#75a98a!important;color:#17452d!important}
+body[data-diary-interface-theme="green"] #diaryMyNotesActions button,body[data-diary-interface-theme="green"] #diaryMyNotesBackup button,body[data-diary-interface-theme="green"] #diaryMyNotesPin,body[data-diary-interface-theme="green"] #diaryDiaryMePanel button{background:linear-gradient(145deg,#fff,#dcefe1)!important;border-color:#75a98a!important;color:#17452d!important}
+body[data-diary-interface-theme="rose"]{background:#fff0f4!important}
+body[data-diary-interface-theme="rose"] #diaryMyNotesPanel{background:#fff7f8!important;border-color:#d58aa6!important}
+body[data-diary-interface-theme="rose"] #diaryMyNotesHead{background:linear-gradient(145deg,#f9dce6,#f1c3d3)!important;color:#6b2842!important}
+body[data-diary-interface-theme="rose"] #diaryMyNotesHead h2{color:#6b2842!important}
+body[data-diary-interface-theme="rose"] #diaryMyNotesBody{background:#fff0f4!important}
+body[data-diary-interface-theme="rose"] #diaryMyNotesEditor,body[data-diary-interface-theme="rose"] #diaryMyNotesList .diary-my-note{background:linear-gradient(145deg,#fff,#fff1f5)!important;border-color:#dfa1b7!important}
+body[data-diary-interface-theme="rose"] #diaryMyNotesSearch,body[data-diary-interface-theme="rose"] #diaryMyNotesCategory,body[data-diary-interface-theme="rose"] #diaryMyNotesCategoryFilter,body[data-diary-interface-theme="rose"] #diaryMyNotesTitle,body[data-diary-interface-theme="rose"] #diaryMyNotesText{background:#fff!important;border-color:#d58aa6!important;color:#6b2842!important}
+body[data-diary-interface-theme="rose"] #diaryMyNotesActions button,body[data-diary-interface-theme="rose"] #diaryMyNotesBackup button,body[data-diary-interface-theme="rose"] #diaryMyNotesPin,body[data-diary-interface-theme="rose"] #diaryDiaryMePanel button{background:linear-gradient(145deg,#fff,#f9e0e9)!important;border-color:#d58aa6!important;color:#6b2842!important}
+</style>
+"""
+if 'id="diary-interface-colours-themes"' not in html:
+    if "</body>" not in html:
+        raise SystemExit("Could not find end of standalone Diary page")
+    html = html.replace("</body>", interface_theme_style + chr(10) + "</body>", 1)
+
+all_me_buttons_style = """
+<style id="diary-me-all-buttons-40px">
+/* Keep every control added inside the Me menu at the user's confirmed 40px height. */
+#diaryDiaryMePanel button,#diaryDiaryMePanel [role="button"],#diaryDiaryMePanel input[type="button"],#diaryDiaryMePanel input[type="submit"],#diaryDiaryMePanel input[type="reset"]{height:40px!important;min-height:40px!important;max-height:40px!important;box-sizing:border-box!important}
+</style>
+"""
+if 'id="diary-me-all-buttons-40px"' not in html:
+    if "</body>" not in html:
+        raise SystemExit("Could not find end of standalone Diary page")
+    html = html.replace("</body>", all_me_buttons_style + chr(10) + "</body>", 1)
+
+
+if "diaryInterfaceColoursBtn" not in script or "diary_interface_theme_v1" not in script:
+    raise SystemExit("Interface Colours button or saved theme handler is missing")
 path.write_text(html, encoding="utf-8")
 print("PASS: Me menu now contains one Refresh button")
 print("PASS: Refresh re-reads current Diary notes and trash from local storage via existing renderer")
