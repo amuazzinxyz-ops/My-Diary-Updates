@@ -231,3 +231,14 @@ The user can simply say what they want in Roman Hindi. No special template, file
   - `backups/build-diary-from-zip-before-download-progress-2026-11-10.yml`
 - Verification: source generation and JS syntax audit passed; Android debug build passed; signed Release build passed; APK signature fingerprint passed; live metadata SHA-256 matched the signed APK bytes. No physical-device installation or real network download test has yet been performed, so do not claim the original 10–20-second symptom is fully resolved until the user confirms the 1.0.114 update behavior. The new persistent progress/error display will show the actual stage and failure reason if it recurs.
 - Preserved Diary notes, photos, PIN settings, package identity, signing identity, existing Check for Updates entry point, Refresh, and unrelated app features. Do not change the download mechanism again without a reproducible reason.
+
+## 18. My Diary web-only update 29 — Interface Colours label fit (2026-11-10)
+
+- User reported that the final “s” in “Interface Colours” was clipped and the in-app Check for Updates message said Diary was latest.
+- Confirmed the existing Android updater source already compares the independent `webVersion` field after confirming the APK is current. The Android build workflow runs `scripts/add_online_diary_updates.py`; that code downloads the trusted web bundle, validates SHA-256 and HTML, stores it separately under app files, and reloads the WebView without replacing the APK or touching Diary data.
+- Created backup: `backups/web-source-index-before-interface-colours-label-fit-2026-11-10.html`.
+- Corrected the Interface Colours button label fit while keeping its height exactly 40px: font size 16px, reduced horizontal padding, and no clipping overflow. Removed the duplicate 🎨 prefix from the button label in the preceding web-only commit.
+- Web-only publish workflow run **42795407894** (run 11) completed successfully.
+- Verified live `latest.json` reports **webVersion 29** and SHA-256 `84ec629260635c86badc2081c0e63232f8a1009ae1d1c0f1f765af1c67c1beab`; published `diary-web/index.html` contains the updated 16px label rule and overflow-visible rule.
+- APK remains **1.0.115 / versionCode 114**; no APK rebuild, signing change, or local Diary data change was made.
+- Phone-side application of webVersion 29 and the final visual appearance still require user confirmation. Ask the user to tap **Me → Check for Updates** again; if the installed app already has webVersion 29, it will correctly report latest.
