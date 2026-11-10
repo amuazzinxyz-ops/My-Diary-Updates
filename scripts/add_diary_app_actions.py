@@ -41,8 +41,8 @@ native = r"""
                     val j=metadata()
                     if(j.optString("appName")!="My Diary" || j.optString("packageName")!=packageName) throw Exception("Wrong app")
                     val latest=j.optInt("versionCode",0)
-                    if(latest<=currentVersion()) runOnUiThread { Toast.makeText(this@MainActivity,"My Diary pehle se latest hai.",Toast.LENGTH_LONG).show() }
-                    else runOnUiThread { AlertDialog.Builder(this@MainActivity).setTitle("My Diary update available").setMessage("Naya version " + j.optString("versionName") + " available hai. Kya aap APK download karke install karna chahte hain?").setPositiveButton("Download & Install") { _, _ -> downloadAndInstall() }.setNegativeButton("Baad mein", null).show() }
+                    if(latest>currentVersion()) runOnUiThread { downloadAndInstall() }
+                    else runOnUiThread { downloadWebBundleIfAvailable(j) }
                 } catch (_:Exception) {
                     runOnUiThread { Toast.makeText(this@MainActivity,"Update check nahi ho saka. Internet check karein.",Toast.LENGTH_LONG).show() }
                 }
