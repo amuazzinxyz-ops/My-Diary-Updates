@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 45,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "224bb72fce7055f07ea97334c7958a72d4f344987bef603784d56c01e6f081d3",
-  "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
+  "webSha256": "625704261443a74a36845c5bece1d0004df7cf424609507f737c165d555360a1",
+  "webReleaseNotes": "Android Back now closes the Diary editor and returns to the previous screen. PDF Save remains removed; Save Note saves directly."
 }
