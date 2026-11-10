@@ -39,6 +39,18 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 </style>
 
 
+
+<style id="diary-recently-deleted-mobile-scroll-fix">
+/* Keep the Recently Deleted list and its Restore/Delete Forever controls inside a scrollable Me menu on short mobile screens. */
+#diaryDiaryMePanel:not([hidden]){
+  max-height:min(68dvh,520px)!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  overscroll-behavior:contain!important;
+  -webkit-overflow-scrolling:touch!important;
+  scrollbar-width:thin;
+}
+</style>
 </head>
 <body>
 <main class="diary-home">
@@ -1031,7 +1043,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   backup.appendChild(exportBtn);backup.appendChild(importBtn);backup.appendChild(importFile);
   var allNotesBtn=el('button',{id:'diaryMyNotesAllNotes',type:'button','aria-expanded':'false','aria-controls':'diaryMyNotesList'},t('allNotes'));
   var trashBtn=el('button',{id:'diaryMyNotesTrash',type:'button',class:'secondary','aria-expanded':'false'},t('recentlyDeleted'));
-  trashBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();showingTrash=!showingTrash;allNotesBtn.style.display=showingTrash?'none':'';trashBtn.setAttribute('aria-expanded',showingTrash?'true':'false');list.style.display=showingTrash?'':'none';if(showingTrash){mePanel.appendChild(list);var diaryOverlay=document.getElementById('diaryMyNotesOverlay');if(diaryOverlay){diaryOverlay.classList.add('open');diaryOverlay.setAttribute('aria-hidden','false');}mePanel.hidden=false;meBtn.setAttribute('aria-expanded','true');renderList();}else{body.appendChild(list);renderList();}});
+  trashBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();showingTrash=!showingTrash;allNotesBtn.style.display=showingTrash?'none':'';trashBtn.setAttribute('aria-expanded',showingTrash?'true':'false');list.style.display=showingTrash?'':'none';if(showingTrash){mePanel.appendChild(list);mePanel.scrollTop=0;var diaryOverlay=document.getElementById('diaryMyNotesOverlay');if(diaryOverlay){diaryOverlay.classList.add('open');diaryOverlay.setAttribute('aria-hidden','false');}mePanel.hidden=false;meBtn.setAttribute('aria-expanded','true');renderList();}else{body.appendChild(list);renderList();}});
   /* Recently Deleted list opens directly below its button inside the Me menu. */
   mePanel.appendChild(trashBtn);
   list.style.display='none';
