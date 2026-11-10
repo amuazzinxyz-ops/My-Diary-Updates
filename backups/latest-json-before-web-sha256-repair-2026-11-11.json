@@ -1,0 +1,14 @@
+{
+  "appName": "My Diary",
+  "packageName": "com.personal.diaryapp",
+  "versionCode": 118,
+  "versionName": "1.0.119",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.119.apk",
+  "sha256": "b98e8902f9896971e1dccf634a4d4d0349066f1885a9dee0125a303bf4d57a63",
+  "releaseNotes": "Check for Updates now repairs the Diary web interface by comparing installed HTML SHA-256 with the current published web update. APK builds preserve the published Diary interface. Notes, photos and PIN data remain on this device.",
+  "minimumSupportedVersionCode": 1,
+  "webVersion": 49,
+  "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
+  "webSha256": "8a796649382b343791d85fd29f76118bc32ce9e3bcd761f15cd8fbfc57397f9d",
+  "webReleaseNotes": "Restored the latest saved Diary interface and fixed Android Back navigation. PDF Save remains removed; Save Note saves directly."
+}
