@@ -1,6 +1,6 @@
 # MY DIARY — MASTER PROJECT REGISTER
 
-**Single source of truth. Last updated: 2026-11-09 (published signed My Diary 1.0.105 with APK download verification fix; device-side installation still pending).**
+**Single source of truth. Last updated: 2026-11-10 (published signed My Diary 1.0.113 with Interface Colours in the Me menu; build and signing verified; new-version device installation not yet confirmed).**
 
 This file replaces the old project register. Read it first at the start of every My Diary task, then inspect the live repository and current source before editing. Older dated audit and handover files in `docs/` are historical evidence only; when they conflict with this register or current GitHub state, do not treat them as current instructions.
 
@@ -10,7 +10,7 @@ This file replaces the old project register. Read it first at the start of every
 - Repository: `amuazzinxyz-ops/My-Diary-Updates`
 - Branch: `main`
 - Android package: `com.personal.diaryapp`
-- Latest APK currently served by the update feed: **1.0.105**, versionCode **105**. The signed 1.0.105 APK is served at `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.105.apk`, a version-specific URL under the installed updater's accepted `/main/` path. The web bundle remains pinned to immutable commit `89219d4e9e553f606b5323a85723705e9ca3ed44`. Superseded 1.0.105/1.0.106/1.0.107 APK files remain removed; their old commits remain in Git history.
+- Latest APK currently served by the update feed: **1.0.113**, versionCode **112**. The signed APK is served at https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.113.apk, a version-specific URL under the installed updater's accepted /main/ path. The current web bundle is served from the repository's web-source/index.html and recorded in latest.json as webVersion **19**.
 - Latest update feed: `latest.json`.
 - Current source archive: `Diary-Android-Project-v13 (6).zip`.
 - Build workflow: `.github/workflows/build-diary-from-zip.yml`.
@@ -184,7 +184,7 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Current stopping point: the update/download/verification/install flow is working as confirmed by the user. No further updater changes are needed unless a new reproducible problem is reported.
 - For the next task, first read this register and inspect the live `main` branch, `latest.json`, current source archive, relevant script, and workflow. Continue in the same narrow, backup-first, test-before-release manner.
 - Preserve package `com.personal.diaryapp`, the existing trusted signing identity/secrets, all diary notes/photos, PIN Lock and recovery, and every unrelated feature. Never uninstall the working app or clear its data as a routine step. Do not modify MUAZZIN.
-- For future releases, derive the next version from the live feed (currently versionCode **111**); do not reuse or guess a version. Verify build, signing, APK SHA-256, feed URL, and release publication. Report phone-side behavior only as confirmed by the user or actual device evidence.
+- For future releases, derive the next version from the live feed (currently versionCode **112**); do not reuse or guess a version. Verify build, signing, APK SHA-256, feed URL, and release publication. Report phone-side behavior only as confirmed by the user or actual device evidence.
 
 
 ## 15. Me menu button height update — 2026-11-10
@@ -194,3 +194,24 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Preserved the pre-edit HTML at `backups/web-source-index-before-me-buttons-40px-2026-11-10.html`.
 - Updated `latest.json` web bundle metadata to webVersion 18 and SHA-256 `1fef5d5719bb402408db38d3454127eb68dc0382ed68d6677c133a22ce17aeb2`.
 - Static verification: the new scoped CSS rule is present in the live source; the backup file is present. No Android APK rebuild or physical-device visual test was performed for this CSS-only web bundle change.
+
+## 16. My Diary 1.0.113 — Interface Colours in Me menu (2026-11-10)
+
+- Current published release: **1.0.113**, versionCode **112**, package com.personal.diaryapp.
+- Signed APK: My-Diary-1.0.113.apk; feed URL: https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.113.apk.
+- APK SHA-256 from live latest.json: 4db6f8e7bf5fea511a133a8750e56060f165d8d0653739a5cddbfba62a5c48cc.
+- Successful signed build/publish workflow run: 42774333846. Debug build and signed Release build succeeded; the release certificate SHA-256 matched the previously trusted signing fingerprint 23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A.
+- Added 🎨 Interface Colours inside the existing Me menu. It offers Original, Blue, Green, and Rose themes. The selected theme is saved locally using the separate key diary_interface_theme_v1 and restored when the Diary opens.
+- Added translations for the new button and palette labels in all 10 existing language options.
+- Updated only the Diary generation/language scripts and the Diary-only APK workflow version gate. The workflow publishes the generated Diary web bundle and signed APK; no MUAZZIN repository or workflow was used.
+- Backups created before editing:
+  - backups/add_diary_refresh_button-before-interface-colours-2026-11-10.py
+  - backups/expand_diary_languages-before-interface-colours-2026-11-10.py
+  - backups/build-diary-from-zip-before-interface-colours-2026-11-10.yml
+  - backups/web-source-index-before-interface-colours-2026-11-10.html
+  - backups/README-before-interface-colours-release-2026-11-10.md
+  - backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-interface-colours-release-2026-11-10.md
+  - backups/latest-before-interface-colours-release-2026-11-10.json
+- Static verification: Diary project validation passed; generated HTML/JavaScript syntax check passed; translation audit passed; debug build passed; signed Release build passed; signing certificate and publish checks passed. The published web source contains the Interface Colours button, theme persistence, palette CSS, and all 10 localized labels.
+- Not yet verified on a physical phone: visual appearance and in-place installation of 1.0.113. Do not claim a device test until the user confirms it. Existing notes, photos, PIN Lock/recovery, package identity, and signing identity were preserved.
+- Current version baseline for the next release: versionCode **112** / versionName **1.0.113**. Derive the next version from the live feed and keep all existing data and features intact.

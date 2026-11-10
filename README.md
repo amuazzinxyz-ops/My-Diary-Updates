@@ -9,12 +9,12 @@ Standalone Android diary app and its update repository. This project is separate
 ## Current confirmed app state
 
 - App package: `com.personal.diaryapp`
-- Current published version: **1.0.112** (versionCode 111)
-- Current APK: [My Diary 1.0.112 (signed APK)](https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.112.apk)
+- Current published version: **1.0.113** (versionCode 112)
+- Current APK: [My Diary 1.0.113 (signed APK)](https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.113.apk)
 - Update metadata: [latest.json](latest.json)
 - The updater downloads the complete APK response and validates it using SHA-256, package name, and versionCode; it does not reject a valid download solely because the HTTP Content-Length differs.
 - The user confirmed on 10 Nov 2026 that Check for Updates now updates successfully on both their own phone and another user's phone.
-- Version 1.0.112 sets Check for Updates, Refresh, and Share App button heights to 40px. Successful signed build/publish run: [42688075014](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/42688075014).
+- Version 1.0.112 set Check for Updates, Refresh, and Share App button heights to 40px. Version 1.0.113 adds the Interface Colours palette to the Me menu (Original, Blue, Green, Rose), saves the selected theme on the device, and preserves existing Diary data. Successful signed build/publish run: [42774333846](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/42774333846). The release APK SHA-256 is 4db6f8e7bf5fea511a133a8750e56060f165d8d0653739a5cddbfba62a5c48cc.
 ## Repository layout
 
 - `Diary-Android-Project-v13 (6).zip` — existing Android source archive.
@@ -23,7 +23,7 @@ Standalone Android diary app and its update repository. This project is separate
 - `assets/` — Diary assets.
 - `docs/` — master register and dated historical audits/handover records.
 - `latest.json` — current update-feed metadata.
-- The signed 1.0.105 APK is published at the updater-compatible version-specific `/main/My-Diary-1.0.105.apk` URL. The release fixes APK download verification by relying on the complete response and SHA-256 rather than rejecting Content-Length differences.
+- The signed 1.0.113 APK is published at the updater-compatible version-specific `/main/My-Diary-1.0.113.apk` URL. The updater verifies the complete download using SHA-256, package name, and versionCode.
 
 ## Non-negotiable safety rules
 

@@ -10,5 +10,5 @@
   "webVersion": 19,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "73119f588fe3c5a413215d2af49e96ffa1585386568d9aec9f8158e3e35ed23f",
-  "webReleaseNotes": "Set all buttons inside the Me menu to 40px height. Other screens and existing Diary data remain unchanged."
+  "webReleaseNotes": "Added Interface Colours palette to the Me menu with Original, Blue, Green, and Rose themes. The selected theme is saved locally; existing Diary notes, photos, and PIN settings remain unchanged."
 }
