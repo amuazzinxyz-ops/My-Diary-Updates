@@ -343,7 +343,7 @@ jobs:
           meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.119.apk"
           meta["sha256"] = lines[2]
           meta["releaseNotes"] = "Check for Updates now repairs the Diary web interface by comparing installed HTML SHA-256 with the current published web update. APK builds preserve the published Diary interface. Notes, photos and PIN data remain on this device."
-          Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+          Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           cp /tmp/My-Diary-verified.apk My-Diary.apk
           cp /tmp/My-Diary-verified.apk My-Diary-1.0.119.apk
