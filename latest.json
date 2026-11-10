@@ -1,13 +1,13 @@
 {
   "appName": "My Diary",
   "packageName": "com.personal.diaryapp",
-  "versionCode": 113,
-  "versionName": "1.0.114",
-  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.114.apk",
-  "sha256": "223a0a8397764e289c1a95fae6aa674ff3272c55b1db2d6b340bf96ec98802c0",
+  "versionCode": 114,
+  "versionName": "1.0.115",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.115.apk",
+  "sha256": "710b110c0fc6b7f4d60098eb05372ea18e7f30b4e9f9ae873b93d56a68f555f0",
   "releaseNotes": "Improved Check for Updates with visible download progress, retry status, and SHA-256 verification status. Existing Diary notes, photos, and PIN settings remain on this device.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 21,
+  "webVersion": 22,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "73119f588fe3c5a413215d2af49e96ffa1585386568d9aec9f8158e3e35ed23f",
   "webReleaseNotes": "Added Interface Colours palette to the Me menu with Original, Blue, Green, and Rose themes. The selected theme is saved locally; existing Diary notes, photos, and PIN settings remain unchanged."
