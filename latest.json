@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 44,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "fffa44f95d1dc4fc6cf7aada5b4aeedf3ed90ff74866d3b04a8b8a9f176d8172",
+  "webSha256": "7d817a35130442f221780a919d03f8c551190a301996cffe66b65f4095869301",
   "webReleaseNotes": "Removed the PDF save option. Save Note again saves the note directly as before. Existing notes and photos remain on this device."
 }
