@@ -136,6 +136,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 #diaryMyNotesSearch,
 #diaryMyNotesCategory,
 #diaryMyNotesCategoryFilter,
+#diaryMyNotesSort,
 #diaryMyNotesTitle,
 #diaryMyNotesText{
   border-width:1.5px !important;
@@ -816,6 +817,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   return words[v]?v:'roman';
  }
  function t(k){return words[language()][k]||words.roman[k]||k;}
+ function diarySortText(k){var lang=language(),m={roman:{sortLabel:'Notes ko sort karein',recent:'Naye pehle',oldest:'Purane pehle',az:'Title A–Z'},english:{sortLabel:'Sort notes',recent:'Recently updated',oldest:'Oldest first',az:'Title A–Z'},hindi:{sortLabel:'नोट क्रमबद्ध करें',recent:'नए पहले',oldest:'पुराने पहले',az:'शीर्षक A–Z'},urdu:{sortLabel:'نوٹس ترتیب دیں',recent:'نئے پہلے',oldest:'پرانے پہلے',az:'عنوان A–Z'},arabic:{sortLabel:'ترتيب الملاحظات',recent:'الأحدث أولاً',oldest:'الأقدم أولاً',az:'العنوان A–Z'},bengali:{sortLabel:'নোট সাজান',recent:'নতুন আগে',oldest:'পুরোনো আগে',az:'শিরোনাম A–Z'},gujarati:{sortLabel:'નોંધ ગોઠવો',recent:'નવી પહેલાં',oldest:'જૂની પહેલાં',az:'શીર્ષક A–Z'},marathi:{sortLabel:'नोंदी क्रमवारी लावा',recent:'नवीन आधी',oldest:'जुन्या आधी',az:'शीर्षक A–Z'},tamil:{sortLabel:'குறிப்புகளை வரிசைப்படுத்து',recent:'புதியவை முதலில்',oldest:'பழையவை முதலில்',az:'தலைப்பு A–Z'},telugu:{sortLabel:'నోట్లను క్రమబద్ధీకరించు',recent:'కొత్తవి ముందు',oldest:'పాతవి ముందు',az:'శీర్షిక A–Z'}};return (m[lang]&&m[lang][k])||m.english[k]||k;}
  function diaryFeatureText(k){var lang=language(),m={roman:{calendar:'📅 Calendar View',noteColour:'Note ka colour',defaultColour:'Original',yellowColour:'Yellow',greenColour:'Green',blueColour:'Blue',pinkColour:'Pink',purpleColour:'Purple',peachColour:'Peach',previousMonth:'Pichla mahina',nextMonth:'Agla mahina',showingDate:'Chuni hui date',clearDate:'Date hataayein'},english:{calendar:'📅 Calendar View',noteColour:'Note colour',defaultColour:'Original',yellowColour:'Yellow',greenColour:'Green',blueColour:'Blue',pinkColour:'Pink',purpleColour:'Purple',peachColour:'Peach',previousMonth:'Previous month',nextMonth:'Next month',showingDate:'Selected date',clearDate:'Clear date'},hindi:{calendar:'📅 कैलेंडर देखें',noteColour:'नोट का रंग',defaultColour:'मूल रंग',yellowColour:'पीला',greenColour:'हरा',blueColour:'नीला',pinkColour:'गुलाबी',purpleColour:'बैंगनी',peachColour:'आड़ू',previousMonth:'पिछला महीना',nextMonth:'अगला महीना',showingDate:'चुनी तारीख',clearDate:'तारीख हटाएँ'},urdu:{calendar:'📅 کیلنڈر دیکھیں',noteColour:'نوٹ کا رنگ',defaultColour:'اصل رنگ',yellowColour:'پیلا',greenColour:'سبز',blueColour:'نیلا',pinkColour:'گلابی',purpleColour:'جامنی',peachColour:'آڑو',previousMonth:'پچھلا مہینہ',nextMonth:'اگلا مہینہ',showingDate:'منتخب تاریخ',clearDate:'تاریخ ہٹائیں'},arabic:{calendar:'📅 عرض التقويم',noteColour:'لون الملاحظة',defaultColour:'اللون الأصلي',yellowColour:'أصفر',greenColour:'أخضر',blueColour:'أزرق',pinkColour:'وردي',purpleColour:'بنفسجي',peachColour:'خوخي',previousMonth:'الشهر السابق',nextMonth:'الشهر التالي',showingDate:'التاريخ المحدد',clearDate:'مسح التاريخ'},bengali:{calendar:'📅 ক্যালেন্ডার দেখুন',noteColour:'নোটের রং',defaultColour:'মূল রং',yellowColour:'হলুদ',greenColour:'সবুজ',blueColour:'নীল',pinkColour:'গোলাপি',purpleColour:'বেগুনি',peachColour:'পিচ',previousMonth:'আগের মাস',nextMonth:'পরের মাস',showingDate:'নির্বাচিত তারিখ',clearDate:'তারিখ মুছুন'},gujarati:{calendar:'📅 કેલેન્ડર જુઓ',noteColour:'નોંધનો રંગ',defaultColour:'મૂળ રંગ',yellowColour:'પીળો',greenColour:'લીલો',blueColour:'વાદળી',pinkColour:'ગુલાબી',purpleColour:'જાંબલી',peachColour:'પીચ',previousMonth:'પહેલો મહિનો',nextMonth:'આગળનો મહિનો',showingDate:'પસંદ કરેલી તારીખ',clearDate:'તારીખ દૂર કરો'},marathi:{calendar:'📅 दिनदर्शिका पाहा',noteColour:'नोंदीचा रंग',defaultColour:'मूळ रंग',yellowColour:'पिवळा',greenColour:'हिरवा',blueColour:'निळा',pinkColour:'गुलाबी',purpleColour:'जांभळा',peachColour:'पीच',previousMonth:'मागील महिना',nextMonth:'पुढील महिना',showingDate:'निवडलेली तारीख',clearDate:'तारीख काढा'},tamil:{calendar:'📅 நாட்காட்டி',noteColour:'குறிப்பு நிறம்',defaultColour:'அசல் நிறம்',yellowColour:'மஞ்சள்',greenColour:'பச்சை',blueColour:'நீலம்',pinkColour:'இளஞ்சிவப்பு',purpleColour:'ஊதா',peachColour:'பீச்',previousMonth:'முந்தைய மாதம்',nextMonth:'அடுத்த மாதம்',showingDate:'தேர்ந்த தேதி',clearDate:'தேதியை நீக்கு'},telugu:{calendar:'📅 క్యాలెండర్ చూడండి',noteColour:'నోట్ రంగు',defaultColour:'అసలు రంగు',yellowColour:'పసుపు',greenColour:'ఆకుపచ్చ',blueColour:'నీలం',pinkColour:'గులాబీ',purpleColour:'ఊదా',peachColour:'పీచ్',previousMonth:'గత నెల',nextMonth:'తదుపరి నెల',showingDate:'ఎంచుకున్న తేదీ',clearDate:'తేదీ తొలగించు'}};return (m[lang]&&m[lang][k])||m.english[k]||k;}
  function read(){
   try{var a=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(a)?a.filter(function(n){return n&&typeof n==='object'&&typeof n.id==='string'}):[]}
@@ -1055,6 +1057,11 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   [['general','catGeneral'],['personal','catPersonal'],['deeni','catDeeni'],['work','catWork'],['important','catImportant']].forEach(function(x){var o=el('option',{value:x[0],'data-i18n':x[1]},t(x[1]));categoryFilter.appendChild(o)});
   categoryFilter.addEventListener('change',renderList);
   tools.appendChild(categoryFilter);
+  var sortFilter=el('select',{id:'diaryMyNotesSort','aria-label':diarySortText('sortLabel')});
+  [['recent','recent'],['oldest','oldest'],['az','az']].forEach(function(x){sortFilter.appendChild(el('option',{value:x[0]},diarySortText(x[1])));});
+  try{sortFilter.value=localStorage.getItem('diary_notes_sort_v1')||'recent';}catch(e){}
+  sortFilter.addEventListener('change',function(){try{localStorage.setItem('diary_notes_sort_v1',sortFilter.value);}catch(e){}renderList();});
+  tools.appendChild(sortFilter);
   var category=el('select',{id:'diaryMyNotesCategory','aria-label':t('categoryLabel')});
   [['general','catGeneral'],['personal','catPersonal'],['deeni','catDeeni'],['work','catWork'],['important','catImportant']].forEach(function(x){var o=el('option',{value:x[0],'data-i18n':x[1]},t(x[1]));category.appendChild(o)});
   category.style.display='none';
@@ -1098,6 +1105,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var categorySelect=ov.querySelector('#diaryMyNotesCategory');if(categorySelect){categorySelect.setAttribute('aria-label',t('categoryLabel'));Array.prototype.forEach.call(categorySelect.options,function(o){var k=o.getAttribute('data-i18n');if(k)o.textContent=t(k);});}
   var categoryLabel=ov.querySelector('label[for="diaryMyNotesCategory"]');if(categoryLabel)categoryLabel.textContent=t('categoryLabel');
   var categoryFilter=ov.querySelector('#diaryMyNotesCategoryFilter');if(categoryFilter){categoryFilter.setAttribute('aria-label',t('categoryLabel'));Array.prototype.forEach.call(categoryFilter.options,function(o){var k=o.getAttribute('data-i18n');if(k)o.textContent=t(k);});}
+  var sortFilter=ov.querySelector('#diaryMyNotesSort');if(sortFilter){sortFilter.setAttribute('aria-label',diarySortText('sortLabel'));Array.prototype.forEach.call(sortFilter.options,function(o){o.textContent=diarySortText(o.value);});}
   ov.querySelector('#diaryMyNotesClose').setAttribute('aria-label',t('closeLabel'));
   var categorySelect=ov.querySelector('#diaryMyNotesCategory');if(categorySelect){categorySelect.setAttribute('aria-label',t('categoryLabel'));Array.prototype.forEach.call(categorySelect.options,function(o){var k=o.getAttribute('data-i18n');if(k)o.textContent=t(k);});}
   ov.querySelector('#diaryMyNotesSearch').placeholder=t('search');
@@ -1528,10 +1536,13 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var filterEl=document.getElementById('diaryMyNotesCategoryFilter'),selectedCategory=filterEl?filterEl.value:'all';
   if(selectedCategory!=='all')all=all.filter(function(n){return String(n.category||'general')===selectedCategory;});
   if(selectedDiaryDate)all=all.filter(function(n){return diaryDateKey(n.created||n.updated)===selectedDiaryDate;});
+  var sortMode=(document.getElementById('diaryMyNotesSort')||{}).value||'recent';
   all.sort(function(a,b){
    var ap=!!(a.pinnedNote||a.favourite||a.pinned),bp=!!(b.pinnedNote||b.favourite||b.pinned);if(ap!==bp)return Number(bp)-Number(ap);
    if(q){var am=(String(a.title||'')+' '+String(a.body||'')).toLocaleLowerCase().includes(q),bm=(String(b.title||'')+' '+String(b.body||'')).toLocaleLowerCase().includes(q);if(am!==bm)return Number(bm)-Number(am)}
-   return (b.updated||0)-(a.updated||0);
+   if(sortMode==='az')return String(a.title||'').localeCompare(String(b.title||''),undefined,{sensitivity:'base'});
+   if(sortMode==='oldest')return (a.updated||a.created||0)-(b.updated||b.created||0);
+   return (b.updated||b.created||0)-(a.updated||a.created||0);
   });
   var matches=q?all.filter(function(n){return (String(n.title||'')+' '+String(n.body||'')).toLocaleLowerCase().includes(q)}):all;
   if(!matches.length){list.appendChild(el('p',{class:'diary-my-note'},q?t('noMatch'):t('empty')));return}
