@@ -1,3 +1,4 @@
+# Release baseline guard: installed 1.0.121 / versionCode 120; next APK 1.0.122 / versionCode 121.
 name: Build Diary APK from uploaded project ZIP
 
 on:
