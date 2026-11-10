@@ -7,8 +7,9 @@
 - User requires the installed app's **Me → Check for Updates** control itself to carry out the update; do not substitute a manually supplied APK link.
 - Root cause in the generated native updater: when a newer APK was found, the button opened an extra confirmation dialog with a separate **Download & Install** button. This interrupted the requested one-button update flow.
 - Narrow repair in `scripts/add_diary_app_actions.py`: when the feed reports a newer APK, the existing button now immediately calls the existing `downloadAndInstall()` routine. That routine retains the progress display, retries, SHA-256 verification, package/version validation, and Android's system installer handoff. Android's own final install confirmation cannot be bypassed.
+- Kept the second generator, `scripts/add_online_diary_updates.py`, compatible with the new branch. It now validates/preserves the direct APK-download branch while retaining the existing web-bundle update path when the installed APK is already current.
 - When the installed APK is already current, the existing web-bundle hash-check/update path remains in place. Notes, photos, PIN/recovery data, package identity, signing identity, UI, and other features are unchanged.
-- Pre-edit backups: `backups/add_diary_app_actions-before-one-tap-check-update-2026-11-11.py`, `backups/build-diary-from-zip-before-one-tap-check-update-2026-11-11.yml`, and `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-one-tap-check-update-2026-11-11.md`.
+- Pre-edit backups: `backups/add_diary_app_actions-before-one-tap-check-update-2026-11-11.py`, `backups/build-diary-from-zip-before-one-tap-check-update-2026-11-11.yml`, and `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-one-tap-check-update-2026-11-11.md`, and `backups/add_online_diary_updates-before-one-tap-check-update-2026-11-11.py`.
 - Preparing signed APK **1.0.122 / versionCode 121** from live feed baseline **1.0.121 / versionCode 120**. Do not report this repair as complete until the signed build, signature fingerprint, APK checksum, and live feed are verified. Device-side download/install remains pending user confirmation.
 
 
