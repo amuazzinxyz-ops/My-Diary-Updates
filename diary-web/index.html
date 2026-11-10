@@ -824,7 +824,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   mePanel.appendChild(checkUpdatesBtn);
   var refreshDiaryBtn=el('button',{id:'diaryDiaryRefreshBtn',type:'button'},'🔄 Refresh');
   mePanel.appendChild(refreshDiaryBtn);
-  var interfaceColoursBtn=el('button',{id:'diaryInterfaceColoursBtn',type:'button','aria-expanded':'false','aria-controls':'diaryInterfaceColoursPanel'},'🎨 '+t('interfaceColours'));
+  var interfaceColoursBtn=el('button',{id:'diaryInterfaceColoursBtn',type:'button','aria-expanded':'false','aria-controls':'diaryInterfaceColoursPanel'},t('interfaceColours'));
   var interfaceColoursPanel=el('div',{id:'diaryInterfaceColoursPanel',hidden:'hidden'});
   var originalDiaryColourBtn=el('button',{id:'diaryRestoreOriginalColourBtn',type:'button',class:'diary-interface-original-reset','aria-pressed':'false'},'↩ '+t('themeDefault'));
   originalDiaryColourBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();applyDiaryInterfaceTheme('default');});
