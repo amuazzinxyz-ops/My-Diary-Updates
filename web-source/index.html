@@ -1591,7 +1591,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    var forever=el('button',{type:'button',class:'diary-note-edit diary-note-delete'},t('deleteForever'));
    forever.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(!window.confirm(t('confirmDeleteForever')))return;var trash=readTrash();if(writeTrash(trash.filter(function(x){return x.id!==n.id})))renderList();});
    actions.appendChild(restore);actions.appendChild(forever);details.appendChild(actions);
-   toggle.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var opening=details.hidden;details.hidden=!opening;toggle.setAttribute('aria-expanded',opening?'true':'false');});
+   toggle.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var opening=details.hidden;details.hidden=!opening;card.classList.toggle('expanded',opening);toggle.setAttribute('aria-expanded',opening?'true':'false');});
    card.appendChild(toggle);card.appendChild(details);list.appendChild(card);
   });
  }
