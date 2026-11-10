@@ -452,3 +452,134 @@ if "override fun onJsPrompt(" not in kotlin:
     kotlin = kotlin.replace(anchor, anchor + native_pin_prompt, 1)
 kotlin_path.write_text(kotlin, encoding="utf-8")
 print("PASS: Diary PIN fields disable address autofill and native PIN prompts use numeric password input.")
+
+
+# Native Android PDF printing and reliable Android Back handling.
+# Applied only to the extracted build copy; the original project ZIP is unchanged.
+html = html_path.read_text(encoding="utf-8")
+old_pdf_start = """ function printDiaryPDF(title,body,popup){
+  if(!popup){document.getElementById('diaryMyNotesStatus').textContent='PDF page open nahi hui. Browser mein pop-ups allow karein.';return;}"""
+new_pdf_start = """ function printDiaryPDF(title,body,popup){
+  var nativePrint=!!(window.DiaryAppActions&&typeof window.DiaryAppActions.printDiaryPdf==='function');
+  if(!nativePrint&&!popup){popup=window.open('about:blank','_blank');}
+  if(!nativePrint&&!popup){document.getElementById('diaryMyNotesStatus').textContent='PDF page open nahi hui. Browser mein pop-ups allow karein.';return;}"""
+if html.count(old_pdf_start) != 1:
+    raise SystemExit("FAIL: exact PDF function entry point not found once")
+html = html.replace(old_pdf_start, new_pdf_start, 1)
+old_pdf_end = """  /* Android Chrome/PWA may block automatic printing on page load. Keep printing
+     behind the user's explicit tap on the PDF page's Save as PDF / Print button. */
+  popup.document.open();popup.document.write(html);popup.document.close();
+  document.getElementById('diaryMyNotesStatus').textContent='PDF page khul gayi hai. Wahan “Save as PDF / Print” dabayein, phir print menu mein “Save as PDF” chunein.';"""
+new_pdf_end = """  if(nativePrint){
+   try{
+    window.DiaryAppActions.printDiaryPdf(html,String(title||'My Diary'));
+    document.getElementById('diaryMyNotesStatus').textContent='PDF print screen khul rahi hai. Wahan “Save as PDF” chunein.';
+   }catch(error){
+    document.getElementById('diaryMyNotesStatus').textContent='PDF print nahi ho saka. Dobara koshish karein.';
+   }
+   return;
+  }
+  /* Browser fallback: open the print page only after the user's PDF button tap. */
+  popup.document.open();popup.document.write(html);popup.document.close();
+  document.getElementById('diaryMyNotesStatus').textContent='PDF page khul gayi hai. Wahan “Save as PDF / Print” dabayein, phir print menu mein “Save as PDF” chunein.';"""
+if html.count(old_pdf_end) != 1:
+    raise SystemExit("FAIL: exact PDF print dispatch point not found once")
+html = html.replace(old_pdf_end, new_pdf_end, 1)
+old_pdf_click = """  pdf.addEventListener('click',function(){var win=window.open('about:blank','_blank');close();if(saveNote())printDiaryPDF(title,body,win);else if(win)win.close();});"""
+new_pdf_click = """  pdf.addEventListener('click',function(){close();if(saveNote())printDiaryPDF(title,body,null);});"""
+if html.count(old_pdf_click) != 1:
+    raise SystemExit("FAIL: exact PDF save button handler not found once")
+html = html.replace(old_pdf_click, new_pdf_click, 1)
+html_path.write_text(html, encoding="utf-8")
+print("PASS: PDF Save uses Android native PrintManager; browser popup fallback remains available.")
+
+kotlin = kotlin_path.read_text(encoding="utf-8")
+required_imports = [
+    "import android.os.Handler",
+    "import android.os.Looper",
+    "import android.print.PrintAttributes",
+    "import android.print.PrintManager",
+]
+for item in required_imports:
+    if item not in kotlin:
+        kotlin = kotlin.replace("import android.app.Activity", item + "\nimport android.app.Activity", 1)
+
+old_back = """    @Deprecated("Deprecated in Android")
+    override fun onBackPressed() {
+        if (::webView.isInitialized && webView.canGoBack()) webView.goBack() else super.onBackPressed()
+    }"""
+new_back = """    @Deprecated("Deprecated in Android")
+    override fun onBackPressed() {
+        if (!::webView.isInitialized) {
+            super.onBackPressed()
+            return
+        }
+        webView.evaluateJavascript(
+            "(function(){var o=document.getElementById('diaryMyNotesOverlay');return !!(o&&o.classList.contains('open'));})()"
+        ) { overlayOpen ->
+            if (isFinishing || isDestroyed) return@evaluateJavascript
+            // Keep the Diary editor open; the visible × button is the explicit close action.
+            if (overlayOpen == "true") return@evaluateJavascript
+            if (webView.canGoBack()) webView.goBack() else super.onBackPressed()
+        }
+    }"""
+if kotlin.count(old_back) != 1:
+    raise SystemExit("FAIL: expected exactly one original Android Back handler")
+kotlin = kotlin.replace(old_back, new_back, 1)
+
+if "fun printDiaryPdf(" in kotlin:
+    raise SystemExit("FAIL: native PDF bridge already exists; refusing duplicate insertion")
+print_method = r'''
+        @JavascriptInterface fun printDiaryPdf(html: String, title: String) {
+            if (html.length > 30 * 1024 * 1024) {
+                runOnUiThread { Toast.makeText(this@MainActivity, "PDF bahut bada hai. Photo size kam karke dobara koshish karein.", Toast.LENGTH_LONG).show() }
+                return
+            }
+            runOnUiThread {
+                val parent = webView.parent as? FrameLayout
+                if (parent == null) {
+                    Toast.makeText(this@MainActivity, "PDF print service abhi available nahi hai.", Toast.LENGTH_LONG).show()
+                    return@runOnUiThread
+                }
+                val safeTitle = title.replace(Regex("[\\\\/:*?\\\"<>|]"), "_").take(80).ifBlank { "My Diary" }
+                val printView = WebView(this@MainActivity)
+                printView.settings.javaScriptEnabled = false
+                printView.settings.domStorageEnabled = false
+                printView.setBackgroundColor(android.graphics.Color.WHITE)
+                printView.visibility = View.INVISIBLE
+                parent.addView(printView, FrameLayout.LayoutParams(-1, -1))
+                var printStarted = false
+                printView.webViewClient = object : WebViewClient() {
+                    override fun onPageFinished(view: WebView, url: String?) {
+                        if (printStarted) return
+                        printStarted = true
+                        try {
+                            val manager = getSystemService(android.content.Context.PRINT_SERVICE) as PrintManager
+                            val attributes = PrintAttributes.Builder()
+                                .setMediaSize(PrintAttributes.MediaSize.ISO_A4)
+                                .setResolution(PrintAttributes.Resolution("my_diary_pdf", "My Diary PDF", 300, 300))
+                                .setMinMargins(PrintAttributes.Margins.NO_MARGINS)
+                                .build()
+                            manager.print(safeTitle, printView.createPrintDocumentAdapter(safeTitle), attributes)
+                            Toast.makeText(this@MainActivity, "Print screen mein Save as PDF chunein.", Toast.LENGTH_LONG).show()
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                (printView.parent as? FrameLayout)?.removeView(printView)
+                                printView.destroy()
+                            }, 180000L)
+                        } catch (error: Exception) {
+                            Toast.makeText(this@MainActivity, "PDF print nahi ho saka. Dobara koshish karein.", Toast.LENGTH_LONG).show()
+                            parent.removeView(printView)
+                            printView.destroy()
+                        }
+                    }
+                }
+                printView.loadDataWithBaseURL("https://appassets.androidplatform.net/", html, "text/html", "UTF-8", null)
+            }
+        }
+'''
+const marker="\n    }\n}";
+const at=kotlin.lastIndexOf(marker);
+if(at<0)raise SystemExit("FAIL: DiaryNativeActions class end not found")
+kotlin=kotlin.slice(0,at)+print_method+kotlin.slice(at)
+kotlin_path.write_text(kotlin,encoding="utf-8")
+print("PASS: Android Back interception and native PrintManager bridge added.")
