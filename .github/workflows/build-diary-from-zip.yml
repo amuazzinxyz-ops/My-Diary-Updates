@@ -204,7 +204,7 @@ jobs:
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary versionName=1.0.118, versionCode=116")
+          print("Set Diary versionName=1.0.118, versionCode=117")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -227,8 +227,8 @@ jobs:
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
           if code != 117 or name != "1.0.118":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.118/116, found {name}/{code}")
-          if int(meta.get("versionCode", 0)) != 116 or meta.get("versionName") != "1.0.116":
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.118/117, found {name}/{code}")
+          if int(meta.get("versionCode", 0)) != 116 or meta.get("versionName") != "1.0.117":
               raise SystemExit("BLOCKED: current update feed is not the expected installed baseline 1.0.117/116")
           print(f"PASS: package={package}, next version={name}/{code}; feed baseline remains 1.0.117/116")
           PY
@@ -328,7 +328,7 @@ jobs:
           cp "$APK" /tmp/My-Diary-verified.apk
           test -s diary-project/app/src/main/assets/index.html
           cp diary-project/app/src/main/assets/index.html /tmp/My-Diary-web-index.html
-          printf '1.0.118\n116\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.118\n117\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -B diary-publish-main origin/main
           mkdir -p web-source diary-web
@@ -338,7 +338,7 @@ jobs:
           import hashlib, json
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
-          if meta.get("packageName") != "com.personal.diaryapp" or int(meta.get("versionCode", 0)) != 116 or meta.get("versionName") != "1.0.116":
+          if meta.get("packageName") != "com.personal.diaryapp" or int(meta.get("versionCode", 0)) != 116 or meta.get("versionName") != "1.0.117":
               raise SystemExit("BLOCKED: live main feed is no longer the expected 1.0.117/116 baseline; refusing to overwrite it")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
