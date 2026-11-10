@@ -1,14 +1,14 @@
 {
   "appName": "My Diary",
   "packageName": "com.personal.diaryapp",
-  "versionCode": 114,
-  "versionName": "1.0.115",
-  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.115.apk",
-  "sha256": "710b110c0fc6b7f4d60098eb05372ea18e7f30b4e9f9ae873b93d56a68f555f0",
-  "releaseNotes": "Improved Check for Updates with visible download progress, retry status, and SHA-256 verification status. Existing Diary notes, photos, and PIN settings remain on this device.",
+  "versionCode": 115,
+  "versionName": "1.0.116",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.116.apk",
+  "sha256": "0b4d5b60bdf8e77688a434ae1ce4c09cbd699fcee4877d362690b1fb3354488f",
+  "releaseNotes": "PDF export now uses Android native PrintManager and Save as PDF; Android Back keeps the Diary editor open. Existing notes, photos, PIN settings, and signing identity are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 42,
+  "webVersion": 43,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "8bc80d3f270f27213d575ea60367a67eaeacbeccfacf0455fb37f4f7386df3d2",
+  "webSha256": "eeac50f1b19f2a1c2903cbbeae4d9f284dbfb9437ca565642e0d2dbf7a32c381",
   "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
 }
