@@ -1645,8 +1645,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   }
  }
  window.addEventListener('popstate',function(){
-  /* Keep the Diary open when Android Back is pressed; use the visible × to close it. */
-  if(diaryOverlayHistoryOpen){try{history.pushState({diaryOverlay:true},'',location.pathname+location.search+'#diary');}catch(e){}}
+  /* Android Back closes the Diary overlay and returns to the previous screen. */
+  if(diaryOverlayHistoryOpen){closeOverlay(true);}
  });
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
