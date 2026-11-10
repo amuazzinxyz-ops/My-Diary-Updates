@@ -1,6 +1,14 @@
 # MY DIARY — MASTER PROJECT REGISTER
 
-**Single source of truth. Last updated: 2026-11-11 (signed APK 1.0.119 / versionCode 118; Web Update 54 includes the mobile Recently Deleted scroll fix).
+**Single source of truth. Last updated: 2026-11-11 (signed APK 1.0.119 / versionCode 118; Web Update 55 fixes Recently Deleted action-button label fit).
+## Latest change — Recently Deleted action-button fit (2026-11-11)
+
+- User reported that the **Hamesha ke liye mitaayein** label appeared below/outside the **Mitaayein** button instead of fitting within the complete button.
+- Added a dedicated class to the existing Recently Deleted action row and scoped CSS so **Wapas Laayein** and **Hamesha ke liye mitaayein** use equal full-width stacked buttons. Labels can wrap inside the button; height grows naturally when a translated label needs another line. Existing click handlers, confirmation prompts, restore/delete behavior, and trash data are unchanged.
+- Backups created before editing: `backups/web-source-index-before-trash-delete-button-fit-2026-11-11.html`, `backups/diary-web-index-before-trash-delete-button-fit-2026-11-11.html`, `backups/latest-before-trash-delete-button-fit-2026-11-11.json`, and `backups/docs-PROJECT_MAP_AND_SECRETS_REGISTER-before-trash-delete-button-fit-2026-11-11.md`.
+- Source and mirror are synchronized at blob SHA `a3bec7494f034f558b0c144c28675b05c4f73ac7`. Published feed is Web Update **55**, source length 203,260 characters, SHA-256 `9d3c5d035d5cc94c998cd7392451a7729a6d70c2fea1a9d36c6ae805d2600575`.
+- APK remains **1.0.119 / versionCode 118**. This is a web-only layout correction; no APK rebuild, signing change, note/photo data change, PIN change, or MUAZZIN change was made. Static publication checks completed; physical phone appearance still needs user confirmation.
+
 
 This file replaces the old project register. Read it first at the start of every My Diary task, then inspect the live repository and current source before editing. Older dated audit and handover files in `docs/` are historical evidence only; when they conflict with this register or current GitHub state, do not treat them as current instructions.
 
