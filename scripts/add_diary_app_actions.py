@@ -145,7 +145,7 @@ native = r"""
                                     output.flush()
                                 }}
                                 if(received<=0L) throw java.io.IOException("Empty download")
-                                if(totalBytes>0L && received!=totalBytes) throw java.io.IOException("Download incomplete: $received/$totalBytes bytes")
+                                // Content-Length is only a progress hint; GitHub/CDN may report a different size.\n                                // The complete body is accepted only after SHA-256, APK package, and version checks.
                             } finally { c.disconnect() }
                             runOnUiThread {
                                 if(progress.isShowing) {
