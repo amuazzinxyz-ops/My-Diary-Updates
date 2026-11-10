@@ -7,8 +7,8 @@
   "sha256": "b98e8902f9896971e1dccf634a4d4d0349066f1885a9dee0125a303bf4d57a63",
   "releaseNotes": "Check for Updates now repairs the Diary web interface by comparing installed HTML SHA-256 with the current published web update. APK builds preserve the published Diary interface. Notes, photos and PIN data remain on this device.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 55,
+  "webVersion": 56,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "9d3c5d035d5cc94c998cd7392451a7729a6d70c2fea1a9d36c6ae805d2600575",
-  "webReleaseNotes": "Recently Deleted Restore and permanent-delete buttons now use the full available width, with labels kept inside the buttons on mobile. Notes and photos stay on this device."
+  "webSha256": "44886700f7382f1f1d5c4c2ec35d602429ce19bf0ac92cea472365e8230872eb",
+  "webReleaseNotes": "Recently Deleted action labels now stay on one line inside full-width buttons; button text size and spacing adjust to fit mobile screens."
 }
