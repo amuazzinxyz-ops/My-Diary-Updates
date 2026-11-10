@@ -1,14 +1,14 @@
 {
   "appName": "My Diary",
   "packageName": "com.personal.diaryapp",
-  "versionCode": 111,
-  "versionName": "1.0.112",
-  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.112.apk",
-  "sha256": "040740f50feb19447ce9dc0aaeb69c2190539d3ff02737ec15247e51ee43bba2",
-  "releaseNotes": "Set Check for Updates, Refresh, and Share App button heights to 40px. Existing Diary data remains on this device.",
+  "versionCode": 112,
+  "versionName": "1.0.113",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.113.apk",
+  "sha256": "4db6f8e7bf5fea511a133a8750e56060f165d8d0653739a5cddbfba62a5c48cc",
+  "releaseNotes": "Added Interface Colours options to the Me menu. Existing Diary notes, photos, and PIN settings remain on this device.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 18,
+  "webVersion": 19,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "1fef5d5719bb402408db38d3454127eb68dc0382ed68d6677c133a22ce17aeb2",
+  "webSha256": "73119f588fe3c5a413215d2af49e96ffa1585386568d9aec9f8158e3e35ed23f",
   "webReleaseNotes": "Set all buttons inside the Me menu to 40px height. Other screens and existing Diary data remain unchanged."
 }
