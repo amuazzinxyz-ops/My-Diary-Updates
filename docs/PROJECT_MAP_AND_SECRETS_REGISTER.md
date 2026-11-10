@@ -185,3 +185,12 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - For the next task, first read this register and inspect the live `main` branch, `latest.json`, current source archive, relevant script, and workflow. Continue in the same narrow, backup-first, test-before-release manner.
 - Preserve package `com.personal.diaryapp`, the existing trusted signing identity/secrets, all diary notes/photos, PIN Lock and recovery, and every unrelated feature. Never uninstall the working app or clear its data as a routine step. Do not modify MUAZZIN.
 - For future releases, derive the next version from the live feed (currently versionCode **111**); do not reuse or guess a version. Verify build, signing, APK SHA-256, feed URL, and release publication. Report phone-side behavior only as confirmed by the user or actual device evidence.
+
+
+## 15. Me menu button height update — 2026-11-10
+
+- User requested that every button inside the My Diary **Me** menu be exactly **40px** high.
+- Added a narrowly scoped CSS rule to `web-source/index.html` targeting buttons and button-role/input button controls inside `#diaryDiaryMePanel` only. It sets `height`, `min-height`, and `max-height` to 40px with `!important`; controls and buttons outside the Me menu are not targeted.
+- Preserved the pre-edit HTML at `backups/web-source-index-before-me-buttons-40px-2026-11-10.html`.
+- Updated `latest.json` web bundle metadata to webVersion 18 and SHA-256 `1fef5d5719bb402408db38d3454127eb68dc0382ed68d6677c133a22ce17aeb2`.
+- Static verification: the new scoped CSS rule is present in the live source; the backup file is present. No Android APK rebuild or physical-device visual test was performed for this CSS-only web bundle change.
