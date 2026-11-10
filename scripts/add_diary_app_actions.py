@@ -6,7 +6,7 @@ base=Path("diary-project/app")
 kt=base/"src/main/java/com/muazzin/diary/MainActivity.kt"
 s=kt.read_text(encoding="utf-8")
 if "class DiaryNativeActions" in s: raise SystemExit("Already patched")
-s=s.replace("import android.content.Intent\n","import android.content.Intent\nimport android.app.AlertDialog\nimport android.webkit.JavascriptInterface\nimport android.widget.Toast\nimport java.net.HttpURLConnection\nimport java.net.URL\n",1)
+s=s.replace("import android.content.Intent\n","import android.content.Intent\nimport android.app.AlertDialog\nimport android.app.ProgressDialog\nimport android.webkit.JavascriptInterface\nimport android.widget.Toast\nimport java.net.HttpURLConnection\nimport java.net.URL\n",1)
 s=s.replace("        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {","        webView.addJavascriptInterface(DiaryNativeActions(), \"DiaryAppActions\")\n\n        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {",1)
 native = r"""
     private inner class DiaryNativeActions {
@@ -49,6 +49,16 @@ native = r"""
             }.start()
         }
         @JavascriptInterface fun downloadAndInstall() {
+            val progress = ProgressDialog(this@MainActivity).apply {
+                setTitle("My Diary update")
+                setMessage("APK download shuru ho raha hai...")
+                setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
+                max = 100
+                setProgress(0)
+                setCancelable(false)
+                setCanceledOnTouchOutside(false)
+            }
+            progress.show()
             Thread {
                 try {
                     val j=metadata()
@@ -58,7 +68,7 @@ native = r"""
                     val link=j.optString("apkUrl")
                     val expected=j.optString("sha256").lowercase()
                     if(!link.startsWith("https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/") || !expected.matches(Regex("[0-9a-f]{64}"))) throw Exception("Untrusted update")
-                    runOnUiThread { Toast.makeText(this@MainActivity,"APK download aur SHA-256 verification shuru...",Toast.LENGTH_LONG).show() }
+                    runOnUiThread { if(progress.isShowing) progress.setMessage("APK download ho raha hai...") }
                     val updateDir=File(cacheDir,"diary-share")
                     if(!updateDir.exists() && !updateDir.mkdirs()) throw Exception("Cannot create update folder")
                     val apk=File(updateDir,"my-diary-update.apk")
@@ -83,6 +93,8 @@ native = r"""
                             try {
                                 val response=c.responseCode
                                 if(response !in 200..299) throw java.io.IOException("HTTP $response")
+                                val totalBytes=c.contentLength.toLong()
+                                var lastUiUpdate=0L
                                 val finalUrl=c.url
                                 if(finalUrl.protocol!="https" || !(finalUrl.host=="raw.githubusercontent.com" || finalUrl.host=="githubusercontent.com" || finalUrl.host.endsWith(".githubusercontent.com"))) throw Exception("Untrusted download redirect")
                                 var received=0L
@@ -94,11 +106,32 @@ native = r"""
                                         digest.update(buffer,0,n)
                                         output.write(buffer,0,n)
                                         received+=n
+                                        if(received-lastUiUpdate>=65536L || (totalBytes>0L && received>=totalBytes)) {
+                                            val percent=if(totalBytes>0L) ((received*100L)/totalBytes).toInt().coerceIn(0,100) else 0
+                                            runOnUiThread {
+                                                if(progress.isShowing) {
+                                                    progress.isIndeterminate=totalBytes<=0L
+                                                    if(totalBytes>0L) {
+                                                        progress.progress=percent
+                                                        progress.setMessage("APK download ho raha hai: $percent%")
+                                                    } else {
+                                                        progress.setMessage("APK download ho raha hai...")
+                                                    }
+                                                }
+                                            }
+                                            lastUiUpdate=received
+                                        }
                                     }
                                     output.flush()
                                 }}
                                 if(received<=0L) throw java.io.IOException("Empty download")
                             } finally { c.disconnect() }
+                            runOnUiThread {
+                                if(progress.isShowing) {
+                                    progress.isIndeterminate=true
+                                    progress.setMessage("Download poora. SHA-256 verification ho raha hai...")
+                                }
+                            }
                             val actual=digest.digest().joinToString("") { "%02x".format(it) }
                             if(actual!=expected) throw Exception("SHA-256 mismatch")
                             if(apk.exists() && !apk.delete()) throw Exception("Cannot replace old APK")
@@ -109,16 +142,32 @@ native = r"""
                             val archiveVersion=if(android.os.Build.VERSION.SDK_INT>=28) archive.longVersionCode.toInt() else archive.versionCode
                             if(archiveVersion!=targetVersion || archiveVersion<=currentVersion()) throw Exception("APK version mismatch")
                             downloaded=true
+                            runOnUiThread {
+                                if(progress.isShowing) {
+                                    progress.isIndeterminate=true
+                                    progress.setMessage("APK verify ho gaya. Installer khul raha hai...")
+                                }
+                            }
                             break
                         } catch(e:Exception) {
                             lastFailure=e
                             part.delete()
-                            if(attempt<3) Thread.sleep(1200L*attempt)
+                            if(attempt<3) {
+                                runOnUiThread {
+                                    if(progress.isShowing) {
+                                        progress.progress=0
+                                        progress.isIndeterminate=true
+                                        progress.setMessage("Download dobara koshish ho raha hai ($attempt/3)...")
+                                    }
+                                }
+                                Thread.sleep(1200L*attempt)
+                            }
                         }
                     }
                     if(!downloaded) throw Exception("3 download attempts failed: " + (lastFailure?.message ?: "unknown error"))
                     val uri=FileProvider.getUriForFile(this@MainActivity,"$packageName.fileprovider",apk)
                     runOnUiThread {
+                        if(progress.isShowing) progress.dismiss()
                         if(android.os.Build.VERSION.SDK_INT>=26 && !packageManager.canRequestPackageInstalls()) {
                             Toast.makeText(this@MainActivity,"APK verify ho gaya. Install permission allow karke Update dobara dabayein.",Toast.LENGTH_LONG).show()
                             startActivity(Intent(android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,android.net.Uri.parse("package:$packageName")))
@@ -133,6 +182,7 @@ native = r"""
                 } catch(e:Exception) {
                     val reason=e.message?.take(180) ?: e.javaClass.simpleName
                     runOnUiThread {
+                        if(progress.isShowing) progress.dismiss()
                         AlertDialog.Builder(this@MainActivity)
                             .setTitle("My Diary update nahi ho saka")
                             .setMessage("Download/verification fail hua. Wajah: $reason\n\nAapka purana Diary data safe hai. Internet check karke dobara koshish karein.")
