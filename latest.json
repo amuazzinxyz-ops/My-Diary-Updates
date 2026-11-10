@@ -1,14 +1,14 @@
 {
   "appName": "My Diary",
   "packageName": "com.personal.diaryapp",
-  "versionCode": 115,
-  "versionName": "1.0.116",
-  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.116.apk",
-  "sha256": "0b4d5b60bdf8e77688a434ae1ce4c09cbd699fcee4877d362690b1fb3354488f",
-  "releaseNotes": "Android Back keeps the Diary editor open. Existing notes, photos, and PIN settings remain on this device.",
+  "versionCode": 116,
+  "versionName": "1.0.117",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.117.apk",
+  "sha256": "d69153a548a2358cd9720412139d277ba153494e7f5f86e9b511996df41cb7f9",
+  "releaseNotes": "Check for Updates now verifies complete APK downloads by SHA-256, package name, and version instead of rejecting a valid download based on Content-Length. Existing Diary notes, photos, and PIN settings remain on this device.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 45,
+  "webVersion": 46,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "625704261443a74a36845c5bece1d0004df7cf424609507f737c165d555360a1",
+  "webSha256": "73119f588fe3c5a413215d2af49e96ffa1585386568d9aec9f8158e3e35ed23f",
   "webReleaseNotes": "Android Back now closes the Diary editor and returns to the previous screen. PDF Save remains removed; Save Note saves directly."
 }
