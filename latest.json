@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 49,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "8a796649382b343791d85fd29f76118bc32ce9e3bcd761f15cd8fbfc57397f9d",
+  "webSha256": "224bb72fce7055f07ea97334c7958a72d4f344987bef603784d56c01e6f081d3",
   "webReleaseNotes": "Restored the latest saved Diary interface and fixed Android Back navigation. PDF Save remains removed; Save Note saves directly."
 }
