@@ -7,8 +7,8 @@
   "sha256": "710b110c0fc6b7f4d60098eb05372ea18e7f30b4e9f9ae873b93d56a68f555f0",
   "releaseNotes": "Improved Check for Updates with visible download progress, retry status, and SHA-256 verification status. Existing Diary notes, photos, and PIN settings remain on this device.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 26,
+  "webVersion": 27,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "8704337b7e024635f924bbb3b1535c0375b614f4a73cffc10033f532cdacdb6b",
+  "webSha256": "2d10e39b4c96527001a7fea5eecabea9ce56a88fe6ed00cf5f35e24bbdf2e9c0",
   "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
 }
