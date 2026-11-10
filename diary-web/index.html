@@ -627,6 +627,40 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   justify-content:flex-start!important;
 }
 </style>
+<style id="diary-match-note-text-position">
+/* Keep text geometry identical between note editor and saved note preview. */
+#diaryMyNotesEditor #diaryMyNotesTitle,
+#diaryMyNotesEditor #diaryMyNotesText,
+#diaryMyNotesPanel .diary-my-note strong,
+#diaryMyNotesPanel .diary-note-full{
+  box-sizing:border-box!important;
+  text-align:left!important;
+  text-indent:0!important;
+  letter-spacing:normal!important;
+  word-spacing:normal!important;
+  line-height:1.55!important;
+  white-space:pre-wrap!important;
+  overflow-wrap:anywhere!important;
+  tab-size:4!important;
+}
+#diaryMyNotesPanel .diary-my-note strong,
+#diaryMyNotesPanel .diary-note-full{
+  padding:13px 12px!important;
+  border:1.5px solid transparent!important;
+  display:block!important;
+}
+#diaryMyNotesPanel .diary-diary-card-field-image{
+  background-size:100% 100%!important;
+  background-position:left top!important;
+  background-origin:border-box!important;
+  background-clip:padding-box!important;
+}
+#diaryMyNotesPanel strong.diary-diary-card-field-image{
+  min-height:76px!important;
+  align-items:initial!important;
+  justify-content:initial!important;
+}
+</style>
 <script id="diary-my-diary-js">
 (function(){
  'use strict';
