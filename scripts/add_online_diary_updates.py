@@ -14,8 +14,8 @@ if s.count(old) != 1:
     raise SystemExit("Expected exactly one WebView assets path handler")
 s = s.replace(old, new, 1)
 
-old_toast = 'if(latest<=currentVersion()) runOnUiThread { Toast.makeText(this@MainActivity,"My Diary pehle se latest hai.",Toast.LENGTH_LONG).show() }'
-new_toast = 'if(latest<=currentVersion()) downloadWebBundleIfAvailable(j)'
+old_toast = 'if(latest>currentVersion()) runOnUiThread { downloadAndInstall() }\n                    else runOnUiThread { downloadWebBundleIfAvailable(j) }'
+new_toast = 'if(latest>currentVersion()) runOnUiThread { downloadAndInstall() }\n                    else runOnUiThread { downloadWebBundleIfAvailable(j) }'
 if s.count(old_toast) != 1:
     raise SystemExit("Could not safely locate existing APK latest-check branch")
 s = s.replace(old_toast, new_toast, 1)
