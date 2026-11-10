@@ -7,8 +7,8 @@
   "sha256": "b98e8902f9896971e1dccf634a4d4d0349066f1885a9dee0125a303bf4d57a63",
   "releaseNotes": "Check for Updates now repairs the Diary web interface by comparing installed HTML SHA-256 with the current published web update. APK builds preserve the published Diary interface. Notes, photos and PIN data remain on this device.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 49,
+  "webVersion": 50,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "224bb72fce7055f07ea97334c7958a72d4f344987bef603784d56c01e6f081d3",
-  "webReleaseNotes": "Restored the latest saved Diary interface and fixed Android Back navigation. PDF Save remains removed; Save Note saves directly."
+  "webSha256": "a5e8350fe48595f114f6b8a9344d2144e79788e7f2f22ad2128bbd3d8fa5e3c8",
+  "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
 }
