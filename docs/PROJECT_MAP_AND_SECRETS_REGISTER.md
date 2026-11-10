@@ -215,3 +215,19 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Static verification: Diary project validation passed; generated HTML/JavaScript syntax check passed; translation audit passed; debug build passed; signed Release build passed; signing certificate and publish checks passed. The published web source contains the Interface Colours button, theme persistence, palette CSS, and all 10 localized labels.
 - Not yet verified on a physical phone: visual appearance and in-place installation of 1.0.113. Do not claim a device test until the user confirms it. Existing notes, photos, PIN Lock/recovery, package identity, and signing identity were preserved.
 - Current version baseline for the next release: versionCode **112** / versionName **1.0.113**. Derive the next version from the live feed and keep all existing data and features intact.
+
+
+## 17. My Diary 1.0.114 — updater download progress and verification visibility (2026-11-10)
+
+- Current published release: **1.0.114**, versionCode **113**, package **com.personal.diaryapp**.
+- Signed APK URL: https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.114.apk.
+- APK SHA-256: `223a0a8397764e289c1a95fae6aa674ff3272c55b1db2d6b340bf96ec98802c0`. The downloaded signed workflow artifact APK was independently hashed locally and matched the live `latest.json` checksum exactly.
+- Successful signed build/publish workflow run: **42786868649**. Debug build, signed Release build, publication, and artifact upload succeeded. The signing certificate was verified against the previously trusted SHA-256 fingerprint `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A`.
+- User-reported symptom prompting this change: APK download appears to stop after about 10–20 seconds. Static inspection showed the updater only displayed a short Toast and had no persistent progress UI; that made it impossible to tell whether bytes were still downloading, a retry was happening, or the transfer had failed.
+- Kept the existing HTTPS download, three-attempt retry, SHA-256 verification, package/version validation, and Android installer flow. Added a persistent native progress dialog with percentage when the server provides a content length, indeterminate progress otherwise, visible retry status, verification status, and dismissal before installer launch or failure details. This is a narrow updater-only change.
+- Updated the build workflow to versionCode 113 / versionName 1.0.114 and the matching APK filename/path. The workflow's baseline guard required the live 1.0.113 / 112 feed before publishing.
+- Backups created before editing:
+  - `backups/add_diary_app_actions-before-download-progress-2026-11-10.py`
+  - `backups/build-diary-from-zip-before-download-progress-2026-11-10.yml`
+- Verification: source generation and JS syntax audit passed; Android debug build passed; signed Release build passed; APK signature fingerprint passed; live metadata SHA-256 matched the signed APK bytes. No physical-device installation or real network download test has yet been performed, so do not claim the original 10–20-second symptom is fully resolved until the user confirms the 1.0.114 update behavior. The new persistent progress/error display will show the actual stage and failure reason if it recurs.
+- Preserved Diary notes, photos, PIN settings, package identity, signing identity, existing Check for Updates entry point, Refresh, and unrelated app features. Do not change the download mechanism again without a reproducible reason.
