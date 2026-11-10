@@ -1,8 +1,17 @@
 # MY DIARY — MASTER PROJECT REGISTER
 
-**Single source of truth. Last updated: 2026-11-11 (signed APK 1.0.119 / versionCode 118; Web Update 52 restores the previous interface without Calendar View and Note Colours).
+**Single source of truth. Last updated: 2026-11-11 (signed APK 1.0.119 / versionCode 118; Web Update 54 includes the mobile Recently Deleted scroll fix).
 
 This file replaces the old project register. Read it first at the start of every My Diary task, then inspect the live repository and current source before editing. Older dated audit and handover files in `docs/` are historical evidence only; when they conflict with this register or current GitHub state, do not treat them as current instructions.
+
+## Latest change — Recently Deleted mobile visibility (2026-11-11)
+
+- User reported that opening Me → Haal hi mein delete kiye gaye placed the deleted-note list too far down, hiding its actions on mobile.
+- Root cause: the list is moved into the absolutely positioned Me menu, but the menu had no height limit or internal scrolling. Added a mobile-safe maximum height and vertical scrolling to the visible Me menu, with touch scrolling enabled; opening the trash list resets its scroll position to the top.
+- The existing deleted-note cards, Restore and Delete Forever actions, trash storage, note data, PINs, and APK/signing identity were not changed.
+- Published web source and mirror are synchronized (same blob SHA 9a30a3edec4eafd64ed42ec63ab91f4d08f951ac). Web Update 54 is recorded in latest.json; UTF-8 source length 234,669 bytes and SHA-256 fb177a134365b9cd3b57e792babf3567d913f49dcbf070c84d78cd31d2dd0ab8.
+- Backups: backups/web-source-index-before-trash-menu-mobile-scroll-fix-2026-11-11.html, backups/diary-web-index-before-trash-menu-mobile-scroll-fix-2026-11-11.html, backups/latest-before-trash-menu-mobile-scroll-fix-2026-11-11.json, and backups/docs-PROJECT_MAP_AND_SECRETS_REGISTER-before-trash-menu-mobile-scroll-fix-2026-11-11.md.
+- APK remains 1.0.119 / versionCode 118; no APK rebuild or signing change was made. Static source/feed checks completed; physical mobile scrolling still needs user confirmation after Me → Check for Updates.
 
 ## 0. Current verified release and web-update state — 2026-11-11
 
