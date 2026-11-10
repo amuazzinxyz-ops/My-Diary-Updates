@@ -118,8 +118,7 @@ native = r"""
                                 val finalUrl=c.url
                                 if(finalUrl.protocol!="https" || !(finalUrl.host=="raw.githubusercontent.com" || finalUrl.host=="githubusercontent.com" || finalUrl.host.endsWith(".githubusercontent.com"))) throw Exception("Untrusted download redirect")
                                 var received=existingBytes
-                                c.inputStream.use { input -> part.outputStream().use { output ->
-                                    if(append) output.channel.position(output.channel.size())
+                                c.inputStream.use { input -> java.io.FileOutputStream(part,append).use { output ->
                                     val buffer=ByteArray(65536)
                                     while(true) {
                                         val n=input.read(buffer)
