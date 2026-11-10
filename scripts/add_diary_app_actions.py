@@ -75,31 +75,52 @@ native = r"""
                     val part=File(updateDir,"my-diary-update.apk.part")
                     var downloaded=false
                     var lastFailure:Exception?=null
-                    for(attempt in 1..3) {
-                        part.delete()
+                    for(attempt in 1..5) {
                         try {
+                            // Resume a partial APK instead of discarding it after a dropped connection.
+                            var existingBytes=if(part.isFile) part.length() else 0L
                             val cacheBustedLink=link+(if(link.contains("?")) "&" else "?")+"cacheBust="+System.currentTimeMillis()+"-"+attempt
                             val c=URL(cacheBustedLink).openConnection() as HttpURLConnection
-                            c.connectTimeout=30000
-                            c.readTimeout=60000
+                            c.connectTimeout=60000
+                            c.readTimeout=180000
                             c.useCaches=false
                             c.instanceFollowRedirects=true
                             c.setRequestProperty("Cache-Control","no-cache, no-store, max-age=0")
                             c.setRequestProperty("Pragma","no-cache")
-                            c.setRequestProperty("User-Agent","MyDiaryUpdater/1.1")
+                            c.setRequestProperty("User-Agent","MyDiaryUpdater/1.2")
                             c.setRequestProperty("Accept-Encoding","identity")
                             c.setRequestProperty("Accept","application/vnd.android.package-archive, application/octet-stream")
+                            if(existingBytes>0L) c.setRequestProperty("Range","bytes=$existingBytes-")
                             val digest=java.security.MessageDigest.getInstance("SHA-256")
                             try {
                                 val response=c.responseCode
-                                if(response !in 200..299) throw java.io.IOException("HTTP $response")
-                                val totalBytes=c.contentLength.toLong()
-                                var lastUiUpdate=0L
+                                if(response!=200 && response!=206) throw java.io.IOException("HTTP $response")
+                                val append=response==206 && existingBytes>0L
+                                if(append) {
+                                    val contentRange=c.getHeaderField("Content-Range") ?: throw java.io.IOException("Missing Content-Range")
+                                    if(!contentRange.startsWith("bytes $existingBytes-")) throw java.io.IOException("Invalid Content-Range")
+                                } else {
+                                    existingBytes=0L
+                                    if(part.exists() && !part.delete()) throw java.io.IOException("Cannot reset partial download")
+                                }
+                                if(append) part.inputStream().use { oldInput ->
+                                    val oldBuffer=ByteArray(65536)
+                                    while(true) {
+                                        val oldN=oldInput.read(oldBuffer)
+                                        if(oldN<0) break
+                                        digest.update(oldBuffer,0,oldN)
+                                    }
+                                }
+                                val responseBytes=c.contentLength.toLong()
+                                val rangeTotal=if(append) c.getHeaderField("Content-Range")?.substringAfterLast("/")?.toLongOrNull() ?: -1L else -1L
+                                val totalBytes=if(rangeTotal>0L) rangeTotal else if(responseBytes>0L) existingBytes+responseBytes else -1L
+                                var lastUiUpdate=existingBytes
                                 val finalUrl=c.url
                                 if(finalUrl.protocol!="https" || !(finalUrl.host=="raw.githubusercontent.com" || finalUrl.host=="githubusercontent.com" || finalUrl.host.endsWith(".githubusercontent.com"))) throw Exception("Untrusted download redirect")
-                                var received=0L
+                                var received=existingBytes
                                 c.inputStream.use { input -> part.outputStream().use { output ->
-                                    val buffer=ByteArray(16384)
+                                    if(append) output.channel.position(output.channel.size())
+                                    val buffer=ByteArray(65536)
                                     while(true) {
                                         val n=input.read(buffer)
                                         if(n<0) break
@@ -125,6 +146,7 @@ native = r"""
                                     output.flush()
                                 }}
                                 if(received<=0L) throw java.io.IOException("Empty download")
+                                if(totalBytes>0L && received!=totalBytes) throw java.io.IOException("Download incomplete: $received/$totalBytes bytes")
                             } finally { c.disconnect() }
                             runOnUiThread {
                                 if(progress.isShowing) {
@@ -152,7 +174,8 @@ native = r"""
                         } catch(e:Exception) {
                             lastFailure=e
                             part.delete()
-                            if(attempt<3) {
+                            if(e.message?.contains("SHA-256 mismatch")==true || e.message?.contains("HTTP 416")==true) part.delete()
+                            if(attempt<5) {
                                 runOnUiThread {
                                     if(progress.isShowing) {
                                         progress.progress=0
@@ -160,11 +183,11 @@ native = r"""
                                         progress.setMessage("Download dobara koshish ho raha hai ($attempt/3)...")
                                     }
                                 }
-                                Thread.sleep(1200L*attempt)
+                                Thread.sleep(1500L*attempt)
                             }
                         }
                     }
-                    if(!downloaded) throw Exception("3 download attempts failed: " + (lastFailure?.message ?: "unknown error"))
+                    if(!downloaded) throw Exception("5 download attempts failed: " + (lastFailure?.message ?: "unknown error"))
                     val uri=FileProvider.getUriForFile(this@MainActivity,"$packageName.fileprovider",apk)
                     runOnUiThread {
                         if(progress.isShowing) progress.dismiss()
