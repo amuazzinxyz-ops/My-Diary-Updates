@@ -123,7 +123,7 @@ jobs:
           html = Path("diary-project/app/src/main/assets/index.html").read_text(encoding="utf-8")
           scripts = re.findall(r"<script[^>]*>(.*?)</script>", html, re.I | re.S)
           module = next((s for s in scripts if "function printDiaryPDF" in s), None)
-          if module is None or "DiaryAppActions.printDiaryPdf" not in module:
+          if module is None or "DiaryPdfActions.printDiaryPdf" not in module:
               raise SystemExit("FAIL: native PDF export call is missing from the generated Diary module")
           Path("/tmp/diary-module-after-actions.js").write_text(module, encoding="utf-8")
           kotlin = Path("diary-project/app/src/main/java/com/muazzin/diary/MainActivity.kt").read_text(encoding="utf-8")
