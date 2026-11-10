@@ -25,19 +25,35 @@ web_method = r"""
         private fun downloadWebBundleIfAvailable(j: JSONObject) {
             val target = j.optInt("webVersion", 0)
             val prefs = getSharedPreferences("diary_web_updates", MODE_PRIVATE)
-            val installed = prefs.getInt("webVersion", 0)
-            if (target <= installed) {
+            val expected = j.optString("webSha256").lowercase()
+            val link = j.optString("webUrl")
+            val trustedPrefix = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html"
+            if (target < 1 || !expected.matches(Regex("[0-9a-f]{64}")) || !link.startsWith(trustedPrefix)) {
+                runOnUiThread { Toast.makeText(this@MainActivity, "Diary update details sahi nahi hain.", Toast.LENGTH_LONG).show() }
+                return
+            }
+            val installedFile = File(filesDir, "diary-web/index.html")
+            val installedHash = if (installedFile.isFile) {
+                try {
+                    val md = java.security.MessageDigest.getInstance("SHA-256")
+                    installedFile.inputStream().use { input ->
+                        val buffer = ByteArray(16384)
+                        while (true) {
+                            val count = input.read(buffer)
+                            if (count < 0) break
+                            md.update(buffer, 0, count)
+                        }
+                    }
+                    md.digest().joinToString("") { "%02x".format(it) }
+                } catch (_: Exception) { "" }
+            } else ""
+            if (installedHash == expected) {
+                prefs.edit().putInt("webVersion", target).apply()
                 runOnUiThread { Toast.makeText(this@MainActivity, "My Diary pehle se latest hai.", Toast.LENGTH_LONG).show() }
                 return
             }
             Thread {
                 try {
-                    val link = j.optString("webUrl")
-                    val expected = j.optString("webSha256").lowercase()
-                    val trustedPrefix = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html"
-                    if (!link.startsWith(trustedPrefix) || !expected.matches(Regex("[0-9a-f]{64}")) || target < 1) {
-                        throw Exception("Untrusted Diary web update")
-                    }
                     runOnUiThread { Toast.makeText(this@MainActivity, "Diary ka naya update download ho raha hai...", Toast.LENGTH_LONG).show() }
                     val dir = File(filesDir, "diary-web")
                     if (!dir.exists() && !dir.mkdirs()) throw Exception("Update folder nahi bana")
