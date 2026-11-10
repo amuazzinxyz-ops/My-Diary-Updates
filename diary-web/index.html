@@ -676,6 +676,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  var DIARY_MASTER_PIN_KEY='diary_diary_master_pin_v1';
  var TRASH_KEY='diary_personal_notes_trash_v1';
  var TRASH_AGE=30*24*60*60*1000;
+ var diaryOverlayHistoryOpen=false;
  /* Diary protection: localStorage remains the fast primary store; IndexedDB keeps a second local copy. */
  var DIARY_DB_NAME='diary_diary_safety_v1',DIARY_DB_STORE='snapshots';
  var diaryDbPromise=null,diaryWriteQueue=Promise.resolve(),diaryStorageReady=false,diaryPreparePromise=null;
@@ -1283,12 +1284,10 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   if(activeDetailPhotoData)html+='<img src="'+activeDetailPhotoData+'">';
   if(activeDetailText)html+='<div class="extra">'+esc(activeDetailText)+'</div>';
   html+='</body></html>';
-  var pdfPrintStarted=false;
-  var triggerPdfPrint=function(){if(pdfPrintStarted)return;pdfPrintStarted=true;setTimeout(function(){try{popup.focus();popup.print()}catch(e){}},900)};
-  popup.onload=triggerPdfPrint;
+  /* Android Chrome/PWA may block automatic printing on page load. Keep printing
+     behind the user's explicit tap on the PDF page's Save as PDF / Print button. */
   popup.document.open();popup.document.write(html);popup.document.close();
-  setTimeout(triggerPdfPrint,1400);
-  document.getElementById('diaryMyNotesStatus').textContent=t('saved')+' — PDF page par “Save as PDF / Print” dabayein; phir print menu mein “Save as PDF” chunein.';
+  document.getElementById('diaryMyNotesStatus').textContent='PDF page khul gayi hai. Wahan “Save as PDF / Print” button dabayein, phir print menu mein “Save as PDF” chunein.';
  }
  function showSaveFormatChoice(){
   var title=document.getElementById('diaryMyNotesTitle').value;
@@ -1657,13 +1656,15 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  function openDiaryPanel(){
   makeOverlay();var ov=document.getElementById('diaryMyNotesOverlay');
   ov.classList.add('open');ov.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';
+  if(!diaryOverlayHistoryOpen){try{history.pushState({diaryOverlay:true},'',location.pathname+location.search+'#diary');diaryOverlayHistoryOpen=true;}catch(e){}}
   showingTrash=false;var allBtn=document.getElementById('diaryMyNotesAllNotes');if(allBtn)allBtn.style.display='';var trashBtn=document.getElementById('diaryMyNotesTrash');if(trashBtn)trashBtn.setAttribute('aria-expanded','false');refreshLabels();newNote();renderList();
   document.getElementById('diaryMyNotesSearch').focus();
  }
- function closeOverlay(){
+ function closeOverlay(fromPop){
   Object.keys(unlockTimers).forEach(clearUnlockTimer);unlockedNotes={};expandedNoteId=null;
   var ov=document.getElementById('diaryMyNotesOverlay');if(ov){ov.classList.remove('open');ov.setAttribute('aria-hidden','true')}
   document.body.style.overflow='';
+  if(diaryOverlayHistoryOpen){diaryOverlayHistoryOpen=false;if(!fromPop){try{history.back()}catch(e){}}}
  }
  function installEntry(){
   var view=document.getElementById('diaryHomeEntryHost');if(!view)return;
@@ -1696,12 +1697,18 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 })();
 </script>
 <script>
-window.addEventListener('load',function(){
- setTimeout(function(){
-  var button=document.getElementById('diaryMyNotesEntry');
-  if(button)button.click();
- },350);
-});
+/* Android Back closes the Diary panel first; it must not exit the installed app. */
+(function(){
+ var closeDiaryOnBack=function(){
+  var overlay=document.getElementById('diaryMyNotesOverlay');
+  if(overlay&&overlay.classList.contains('open')){
+   try{history.pushState({diaryBackGuard:true},'',location.pathname+location.search+'#diary');}catch(e){}
+   overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');
+   document.body.style.overflow='';
+  }
+ };
+ window.addEventListener('popstate',closeDiaryOnBack);
+})();
 </script>
 
 <style id="diary-me-refresh-gold-3d">
