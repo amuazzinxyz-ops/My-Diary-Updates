@@ -99,11 +99,27 @@ jobs:
         working-directory: diary-project
         run: python3 scripts/verify_project.py
 
-      - name: Generate standalone Diary-only app content
+      - name: Use the exact latest published Diary HTML in Android APK
         run: |
-          python3 scripts/build_standalone_diary.py diary-project/app/src/main/assets/index.html
-          python3 scripts/add_diary_refresh_button.py
-          python3 scripts/expand_diary_languages.py diary-project/app/src/main/assets/index.html
+          set -euo pipefail
+          test -s web-source/index.html
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          meta=json.loads(Path("latest.json").read_text(encoding="utf-8"))
+          source=Path("web-source/index.html")
+          expected=meta.get("webSha256","").lower()
+          actual=hashlib.sha256(source.read_bytes()).hexdigest()
+          if len(expected)!=64 or actual!=expected:
+              raise SystemExit(f"BLOCKED: published Diary HTML hash mismatch: {actual}")
+          html=source.read_text(encoding="utf-8")
+          required=("diaryMyNotesOverlay","diaryMyNotesPanel","diary_personal_notes_v1","diaryCheckUpdatesBtn","diaryDiaryRefreshBtn","diaryInterfaceColoursBtn","diaryShareAppBtn")
+          missing=[x for x in required if x not in html]
+          if missing: raise SystemExit("BLOCKED: published Diary HTML missing required features: "+", ".join(missing))
+          target=Path("diary-project/app/src/main/assets/index.html")
+          target.write_text(html,encoding="utf-8")
+          print(f"PASS: Android APK source is the exact published Diary HTML ({len(html)} chars; SHA-256 {actual})")
+          PY
           python3 - <<'PY'
           from pathlib import Path
           import re
@@ -111,7 +127,7 @@ jobs:
           scripts = re.findall(r"<script[^>]*>(.*?)</script>", html, re.I | re.S)
           module = next((s for s in scripts if "function openDiaryPanel" in s), None)
           if module is None:
-              raise SystemExit("Diary module missing from generated app")
+              raise SystemExit("Diary module missing from published app source")
           Path("/tmp/diary-module.js").write_text(module, encoding="utf-8")
           PY
           node --check /tmp/diary-module.js
