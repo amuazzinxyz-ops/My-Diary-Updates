@@ -1694,10 +1694,20 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   }
  }
  window.addEventListener('popstate',function(){
-  if(diaryOverlayHistoryOpen){diaryOverlayHistoryOpen=false;closeOverlay(true);}
+  /* Keep the Diary open when Android Back is pressed; use the visible × to close it. */
+  if(diaryOverlayHistoryOpen){try{history.pushState({diaryOverlay:true},'',location.pathname+location.search+'#diary');}catch(e){}}
  });
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
+</script>
+<script>
+/* Preserve the existing launch behaviour: open My Diary automatically on app start. */
+window.addEventListener('load',function(){
+ setTimeout(function(){
+  var button=document.getElementById('diaryMyNotesEntry');
+  if(button)button.click();
+ },350);
+});
 </script>
 
 
