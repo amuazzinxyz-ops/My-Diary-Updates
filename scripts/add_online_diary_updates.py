@@ -49,7 +49,15 @@ web_method = r"""
             } else ""
             if (installedHash == expected) {
                 prefs.edit().putInt("webVersion", target).apply()
-                runOnUiThread { Toast.makeText(this@MainActivity, "My Diary pehle se latest hai.", Toast.LENGTH_LONG).show() }
+                // The file is current, but the WebView may still be displaying an older page
+                // kept alive in memory. Reload the same app-assets URL so the path handler
+                // serves the verified on-disk HTML immediately.
+                runOnUiThread {
+                    webView.post {
+                        webView.loadUrl("https://appassets.androidplatform.net/assets/index.html")
+                        Toast.makeText(this@MainActivity, "Diary pehle se update hai. Screen refresh kar di gayi hai.", Toast.LENGTH_LONG).show()
+                    }
+                }
                 return
             }
             Thread {

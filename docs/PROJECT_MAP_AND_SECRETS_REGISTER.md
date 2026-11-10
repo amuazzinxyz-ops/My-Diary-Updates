@@ -2,6 +2,15 @@
 
 **Single source of truth. Last updated: 2026-11-11 (signed APK 1.0.119 / versionCode 118; Web Update 56 keeps Recently Deleted action labels on one line).
 
+## Latest correction — Check for Updates refreshes the verified current web page (2026-11-11)
+
+- User reported that **Me → Check for Updates** said Diary was already updated while the screen still showed the old interface.
+- Root cause in the native updater: when the installed HTML SHA-256 already matched the published web bundle, it returned “already latest” without reloading the WebView. The on-disk HTML could be current while the currently displayed page remained alive in WebView memory.
+- Narrow repair in `scripts/add_online_diary_updates.py`: when the installed hash matches, reload the existing `https://appassets.androidplatform.net/assets/index.html` URL through the existing verified local-file path handler, then show a refresh-confirmation message. No data, notes, photos, PINs, or package identity are changed.
+- A new signed APK **1.0.120 / versionCode 119** is being prepared from the existing 1.0.119 / versionCode 118 baseline. Published web bundle remains **Web Update 56**; no web-source redesign or new web content is required.
+- Pre-edit backups: `backups/add_online_diary_updates-before-force-webview-reload-2026-11-11.py`, `backups/build-diary-from-zip-before-force-webview-reload-2026-11-11.yml`, and `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-force-webview-reload-2026-11-11.md`.
+- Device-side confirmation is pending. Do not claim the fix works on a phone until the user installs 1.0.120 and tests **Me → Check for Updates**.
+
 ## Latest correction — Recently Deleted buttons stay one line (2026-11-11)
 
 - User clarified that **Hamesha ke liye mitaayein** must remain on one line, not wrap to two lines.
