@@ -460,7 +460,7 @@ html = Path("web-source/index.html").read_text(encoding="utf-8")
 old_pdf_start = """ function printDiaryPDF(title,body,popup){
   if(!popup){document.getElementById('diaryMyNotesStatus').textContent='PDF page open nahi hui. Browser mein pop-ups allow karein.';return;}"""
 new_pdf_start = """ function printDiaryPDF(title,body,popup){
-  var nativePrint=!!(window.DiaryAppActions&&typeof window.DiaryAppActions.printDiaryPdf==='function');
+  var nativePrint=!!(window.DiaryPdfActions&&typeof window.DiaryPdfActions.printDiaryPdf==='function');
   if(!nativePrint&&!popup){popup=window.open('about:blank','_blank');}
   if(!nativePrint&&!popup){document.getElementById('diaryMyNotesStatus').textContent='PDF page open nahi hui. Browser mein pop-ups allow karein.';return;}"""
 if html.count(old_pdf_start) != 1:
@@ -472,7 +472,7 @@ old_pdf_end = """  /* Android Chrome/PWA may block automatic printing on page lo
   document.getElementById('diaryMyNotesStatus').textContent='PDF page khul gayi hai. Wahan “Save as PDF / Print” button dabayein, phir print menu mein “Save as PDF” chunein.';"""
 new_pdf_end = """  if(nativePrint){
    try{
-    window.DiaryAppActions.printDiaryPdf(html,String(title||'My Diary'));
+    window.DiaryPdfActions.printDiaryPdf(html,String(title||'My Diary'));
     document.getElementById('diaryMyNotesStatus').textContent='PDF print screen khul rahi hai. Wahan “Save as PDF” chunein.';
    }catch(error){
     document.getElementById('diaryMyNotesStatus').textContent='PDF print nahi ho saka. Dobara koshish karein.';
@@ -529,58 +529,63 @@ kotlin = kotlin.replace(old_back, new_back, 1)
 
 if "fun printDiaryPdf(" in kotlin:
     raise SystemExit("FAIL: native PDF bridge already exists; refusing duplicate insertion")
+# Expose the PDF-only bridge separately from existing Share App and updater methods.
+share_bridge = 'webView.addJavascriptInterface(DiaryNativeActions(), "DiaryAppActions")'
+if kotlin.count(share_bridge) != 1:
+    raise SystemExit("FAIL: existing Diary app-action bridge not found exactly once")
+kotlin = kotlin.replace(share_bridge, share_bridge + '\n        webView.addJavascriptInterface(this, "DiaryPdfActions")', 1)
 print_method = r'''
-        @JavascriptInterface fun printDiaryPdf(html: String, title: String) {
-            if (html.length > 30 * 1024 * 1024) {
-                runOnUiThread { Toast.makeText(this@MainActivity, "PDF bahut bada hai. Photo size kam karke dobara koshish karein.", Toast.LENGTH_LONG).show() }
-                return
+    @JavascriptInterface fun printDiaryPdf(html: String, title: String) {
+        if (html.length > 30 * 1024 * 1024) {
+            runOnUiThread { Toast.makeText(this@MainActivity, "PDF bahut bada hai. Photo size kam karke dobara koshish karein.", Toast.LENGTH_LONG).show() }
+            return
+        }
+        runOnUiThread {
+            val parent = webView.parent as? FrameLayout
+            if (parent == null) {
+                Toast.makeText(this@MainActivity, "PDF print service abhi available nahi hai.", Toast.LENGTH_LONG).show()
+                return@runOnUiThread
             }
-            runOnUiThread {
-                val parent = webView.parent as? FrameLayout
-                if (parent == null) {
-                    Toast.makeText(this@MainActivity, "PDF print service abhi available nahi hai.", Toast.LENGTH_LONG).show()
-                    return@runOnUiThread
-                }
-                val safeTitle = title.replace(Regex("[\\\\/:*?\\\"<>|]"), "_").take(80).ifBlank { "My Diary" }
-                val printView = WebView(this@MainActivity)
-                printView.settings.javaScriptEnabled = false
-                printView.settings.domStorageEnabled = false
-                printView.setBackgroundColor(android.graphics.Color.WHITE)
-                printView.visibility = View.INVISIBLE
-                parent.addView(printView, FrameLayout.LayoutParams(-1, -1))
-                var printStarted = false
-                printView.webViewClient = object : WebViewClient() {
-                    override fun onPageFinished(view: WebView, url: String?) {
-                        if (printStarted) return
-                        printStarted = true
-                        try {
-                            val manager = getSystemService(android.content.Context.PRINT_SERVICE) as PrintManager
-                            val attributes = PrintAttributes.Builder()
-                                .setMediaSize(PrintAttributes.MediaSize.ISO_A4)
-                                .setResolution(PrintAttributes.Resolution("my_diary_pdf", "My Diary PDF", 300, 300))
-                                .setMinMargins(PrintAttributes.Margins.NO_MARGINS)
-                                .build()
-                            manager.print(safeTitle, printView.createPrintDocumentAdapter(safeTitle), attributes)
-                            Toast.makeText(this@MainActivity, "Print screen mein Save as PDF chunein.", Toast.LENGTH_LONG).show()
-                            Handler(Looper.getMainLooper()).postDelayed({
-                                (printView.parent as? FrameLayout)?.removeView(printView)
-                                printView.destroy()
-                            }, 180000L)
-                        } catch (error: Exception) {
-                            Toast.makeText(this@MainActivity, "PDF print nahi ho saka. Dobara koshish karein.", Toast.LENGTH_LONG).show()
-                            parent.removeView(printView)
+            val safeTitle = title.replace(Regex("[\\\\/:*?\\\"<>|]"), "_").take(80).ifBlank { "My Diary" }
+            val printView = WebView(this@MainActivity)
+            printView.settings.javaScriptEnabled = false
+            printView.settings.domStorageEnabled = false
+            printView.setBackgroundColor(android.graphics.Color.WHITE)
+            printView.visibility = View.INVISIBLE
+            parent.addView(printView, FrameLayout.LayoutParams(-1, -1))
+            var printStarted = false
+            printView.webViewClient = object : WebViewClient() {
+                override fun onPageFinished(view: WebView, url: String?) {
+                    if (printStarted) return
+                    printStarted = true
+                    try {
+                        val manager = getSystemService(android.content.Context.PRINT_SERVICE) as PrintManager
+                        val attributes = PrintAttributes.Builder()
+                            .setMediaSize(PrintAttributes.MediaSize.ISO_A4)
+                            .setResolution(PrintAttributes.Resolution("my_diary_pdf", "My Diary PDF", 300, 300))
+                            .setMinMargins(PrintAttributes.Margins.NO_MARGINS)
+                            .build()
+                        manager.print(safeTitle, printView.createPrintDocumentAdapter(safeTitle), attributes)
+                        Toast.makeText(this@MainActivity, "Print screen mein Save as PDF chunein.", Toast.LENGTH_LONG).show()
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            (printView.parent as? FrameLayout)?.removeView(printView)
                             printView.destroy()
-                        }
+                        }, 180000L)
+                    } catch (error: Exception) {
+                        Toast.makeText(this@MainActivity, "PDF print nahi ho saka. Dobara koshish karein.", Toast.LENGTH_LONG).show()
+                        parent.removeView(printView)
+                        printView.destroy()
                     }
                 }
-                printView.loadDataWithBaseURL("https://appassets.androidplatform.net/", html, "text/html", "UTF-8", null)
             }
+            printView.loadDataWithBaseURL("https://appassets.androidplatform.net/", html, "text/html", "UTF-8", null)
         }
+    }
 '''
-marker = "\n    }\n}"
-at = kotlin.rfind(marker)
-if at < 0:
-    raise SystemExit("FAIL: DiaryNativeActions class end not found")
-kotlin = kotlin[:at] + print_method + kotlin[at:]
+idx = kotlin.rfind("\n}")
+if idx < 0:
+    raise SystemExit("FAIL: Android Activity closing brace not found")
+kotlin = kotlin[:idx] + "\n" + print_method + kotlin[idx:]
 kotlin_path.write_text(kotlin, encoding="utf-8")
+print("PASS: Android Back interception and native PrintManager bridge added.")
 print("PASS: Android Back interception and native PrintManager bridge added.")
