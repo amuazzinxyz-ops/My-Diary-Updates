@@ -456,7 +456,7 @@ print("PASS: Diary PIN fields disable address autofill and native PIN prompts us
 
 # Native Android PDF printing and reliable Android Back handling.
 # Applied only to the extracted build copy; the original project ZIP is unchanged.
-html = html_path.read_text(encoding="utf-8")
+html = Path("web-source/index.html").read_text(encoding="utf-8")
 old_pdf_start = """ function printDiaryPDF(title,body,popup){
   if(!popup){document.getElementById('diaryMyNotesStatus').textContent='PDF page open nahi hui. Browser mein pop-ups allow karein.';return;}"""
 new_pdf_start = """ function printDiaryPDF(title,body,popup){
@@ -466,10 +466,18 @@ new_pdf_start = """ function printDiaryPDF(title,body,popup){
 if html.count(old_pdf_start) != 1:
     raise SystemExit("FAIL: exact PDF function entry point not found once")
 html = html.replace(old_pdf_start, new_pdf_start, 1)
-old_pdf_end = """  /* Android Chrome/PWA may block automatic printing on page load. Keep printing
-     behind the user's explicit tap on the PDF page's Save as PDF / Print button. */
+old_pdf_end = """  if(nativePrint){
+   try{
+    window.DiaryAppActions.printDiaryPdf(html,String(title||'My Diary'));
+    document.getElementById('diaryMyNotesStatus').textContent='PDF print screen khul rahi hai. Wahan “Save as PDF” chunein.';
+   }catch(error){
+    document.getElementById('diaryMyNotesStatus').textContent='PDF print nahi ho saka. Dobara koshish karein.';
+   }
+   return;
+  }
+  /* Browser fallback: open the print page only after the user's PDF button tap. */
   popup.document.open();popup.document.write(html);popup.document.close();
-  document.getElementById('diaryMyNotesStatus').textContent='PDF page khul gayi hai. Wahan “Save as PDF / Print” dabayein, phir print menu mein “Save as PDF” chunein.';"""
+  document.getElementById('diaryMyNotesStatus').textContent='PDF page khul gayi hai. Wahan “Save as PDF / Print” button dabayein; phir print menu mein “Save as PDF” chunein.';"""
 new_pdf_end = """  if(nativePrint){
    try{
     window.DiaryAppActions.printDiaryPdf(html,String(title||'My Diary'));
