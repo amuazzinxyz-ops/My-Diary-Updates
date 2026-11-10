@@ -1597,7 +1597,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    else if(body){var preview=body.length>220?body.slice(0,217)+'…':body;details.appendChild(el('div',{class:'diary-note-full'},preview));}
    var deletedAt=Number(n.deletedAt)||Date.now();var left=Math.max(0,Math.ceil((TRASH_AGE-(Date.now()-deletedAt))/86400000));
    details.appendChild(el('small',null,t('expiresIn')+' '+left+' '+(language()==='hindi'?'दिन':language()==='english'?'days':'din')));
-   var actions=el('div');actions.style.cssText='display:flex;gap:8px;flex-wrap:wrap;margin-top:7px;';
+   var actions=el('div',{class:'diary-trash-actions'});actions.style.cssText='display:flex;gap:8px;flex-wrap:wrap;margin-top:7px;';
    var restore=el('button',{type:'button',class:'diary-note-edit'},t('restoreItem'));
    restore.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(!window.confirm(t('confirmRestore')))return;var trash=readTrash(),saved=read();if(saved.some(function(x){return x.id===n.id})){window.alert(t('storageUnavailable'));return;}saved.unshift(Object.assign({},n));delete saved[0].deletedAt;if(!write(saved))return;writeTrash(trash.filter(function(x){return x.id!==n.id}));renderList();});
    var forever=el('button',{type:'button',class:'diary-note-edit diary-note-delete'},t('deleteForever'));
@@ -1789,6 +1789,12 @@ body[data-diary-interface-theme]:not([data-diary-interface-theme="blue"]):not([d
  font-size:16px!important;font-weight:900!important;line-height:1.15!important;text-align:left!important;
  letter-spacing:-.25px!important;white-space:nowrap!important;overflow:visible!important;text-overflow:clip!important;
 }
+</style>
+
+<style id="diary-trash-action-buttons-fit">
+/* Keep Restore and permanent-delete labels inside equal full-width buttons on mobile. */
+.diary-trash-actions{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:8px!important;width:100%!important;box-sizing:border-box!important}
+.diary-trash-actions .diary-note-edit{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;min-width:0!important;max-width:100%!important;min-height:40px!important;height:auto!important;max-height:none!important;margin:0!important;padding:9px 12px!important;box-sizing:border-box!important;text-align:center!important;white-space:normal!important;overflow-wrap:anywhere!important;line-height:1.25!important}
 </style>
 </body>
 </html>
