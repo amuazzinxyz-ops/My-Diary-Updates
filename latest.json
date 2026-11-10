@@ -5,10 +5,10 @@
   "versionName": "1.0.116",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.116.apk",
   "sha256": "0b4d5b60bdf8e77688a434ae1ce4c09cbd699fcee4877d362690b1fb3354488f",
-  "releaseNotes": "PDF export now uses Android native PrintManager and Save as PDF; Android Back keeps the Diary editor open. Existing notes, photos, PIN settings, and signing identity are preserved.",
+  "releaseNotes": "Android Back keeps the Diary editor open. Existing notes, photos, and PIN settings remain on this device.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 44,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "0ff53e994573f1815ce00f8db54df09e9e94dd4bcbbb4c23d472e008c6df6c1a",
-  "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
+  "webSha256": "fffa44f95d1dc4fc6cf7aada5b4aeedf3ed90ff74866d3b04a8b8a9f176d8172",
+  "webReleaseNotes": "Removed the PDF save option. Save Note again saves the note directly as before. Existing notes and photos remain on this device."
 }
