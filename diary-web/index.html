@@ -1693,23 +1693,13 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    mo.observe(document.body,{childList:true,subtree:true});
   }
  }
+ window.addEventListener('popstate',function(){
+  if(diaryOverlayHistoryOpen){diaryOverlayHistoryOpen=false;closeOverlay(true);}
+ });
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
 </script>
-<script>
-/* Android Back closes the Diary panel first; it must not exit the installed app. */
-(function(){
- var closeDiaryOnBack=function(){
-  var overlay=document.getElementById('diaryMyNotesOverlay');
-  if(overlay&&overlay.classList.contains('open')){
-   try{history.pushState({diaryBackGuard:true},'',location.pathname+location.search+'#diary');}catch(e){}
-   overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');
-   document.body.style.overflow='';
-  }
- };
- window.addEventListener('popstate',closeDiaryOnBack);
-})();
-</script>
+
 
 <style id="diary-me-refresh-gold-3d">
 #diaryDiaryMePanel #diaryDiaryRefreshBtn{
