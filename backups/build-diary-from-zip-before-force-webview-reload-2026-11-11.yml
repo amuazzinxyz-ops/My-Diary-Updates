@@ -1,0 +1,388 @@
+name: Build Diary APK from uploaded project ZIP
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "Diary-Android-Project-v13 (6).zip"
+      - ".github/workflows/build-diary-from-zip.yml"
+      - "scripts/**"
+      - "assets/my-diary-icon.jpg"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: my-diary-release-main
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      DIARY_RELEASE_READY: ${{ secrets.DIARY_KEYSTORE_BASE64 != '' && secrets.DIARY_KEY_ALIAS != '' && secrets.DIARY_KEY_PASSWORD != '' && secrets.DIARY_STORE_PASSWORD != '' }}
+    timeout-minutes: 20
+    steps:
+      - name: Checkout standalone Diary repository
+        uses: actions/checkout@v4
+
+      - name: Check Diary signing readiness (never print secret values)
+        env:
+          HAS_KEYSTORE: ${{ secrets.DIARY_KEYSTORE_BASE64 != '' }}
+          HAS_ALIAS: ${{ secrets.DIARY_KEY_ALIAS != '' }}
+          HAS_KEY_PASSWORD: ${{ secrets.DIARY_KEY_PASSWORD != '' }}
+          HAS_STORE_PASSWORD: ${{ secrets.DIARY_STORE_PASSWORD != '' }}
+        run: |
+          echo "DIARY_KEYSTORE_BASE64 present: $HAS_KEYSTORE"
+          echo "DIARY_KEY_ALIAS present: $HAS_ALIAS"
+          echo "DIARY_KEY_PASSWORD present: $HAS_KEY_PASSWORD"
+          echo "DIARY_STORE_PASSWORD present: $HAS_STORE_PASSWORD"
+
+      - name: Validate supplied Diary signing keystore and alias
+        if: env.DIARY_RELEASE_READY == 'true'
+        env:
+          DIARY_KEYSTORE_BASE64: ${{ secrets.DIARY_KEYSTORE_BASE64 }}
+          DIARY_KEY_ALIAS: ${{ secrets.DIARY_KEY_ALIAS }}
+          DIARY_STORE_PASSWORD: ${{ secrets.DIARY_STORE_PASSWORD }}
+        run: |
+          python3 - <<'PY'
+          import base64, os
+          from pathlib import Path
+          try:
+              data = base64.b64decode(os.environ["DIARY_KEYSTORE_BASE64"], validate=True)
+          except Exception:
+              raise SystemExit("Signing check failed: keystore secret is not valid base64")
+          if not data:
+              raise SystemExit("Signing check failed: decoded keystore is empty")
+          Path("/tmp/diary-signing-check.jks").write_bytes(data)
+          PY
+          keytool -list -keystore /tmp/diary-signing-check.jks -storepass "$DIARY_STORE_PASSWORD" -alias "$DIARY_KEY_ALIAS" >/dev/null
+          rm -f /tmp/diary-signing-check.jks
+          echo "Signing keystore and key alias are readable."
+
+      - name: Extract Diary Android project
+        run: |
+          test -f 'Diary-Android-Project-v13 (6).zip'
+          mkdir -p diary-project
+          unzip -q 'Diary-Android-Project-v13 (6).zip' -d diary-project
+          test -f diary-project/app/build.gradle.kts
+          test -f diary-project/app/src/main/assets/index.html
+
+      - name: Preserve extracted original Android source for safe inspection
+        uses: actions/upload-artifact@v4
+        with:
+          name: Diary-original-Android-source
+          path: diary-project/
+          if-no-files-found: error
+          retention-days: 3
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install Android SDK packages
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+
+      - name: Verify project
+        working-directory: diary-project
+        run: python3 scripts/verify_project.py
+
+      - name: Generate standalone Diary-only app content
+        run: |
+          python3 scripts/build_standalone_diary.py diary-project/app/src/main/assets/index.html
+          python3 scripts/add_diary_refresh_button.py
+          python3 scripts/expand_diary_languages.py diary-project/app/src/main/assets/index.html
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          html = Path("diary-project/app/src/main/assets/index.html").read_text(encoding="utf-8")
+          scripts = re.findall(r"<script[^>]*>(.*?)</script>", html, re.I | re.S)
+          module = next((s for s in scripts if "function openDiaryPanel" in s), None)
+          if module is None:
+              raise SystemExit("Diary module missing from generated app")
+          Path("/tmp/diary-module.js").write_text(module, encoding="utf-8")
+          PY
+          node --check /tmp/diary-module.js
+          python3 scripts/add_diary_app_actions.py
+          python3 scripts/add_online_diary_updates.py
+          echo "---- Android app identity (before branding adjustment) ----"
+          grep -RInE 'applicationId|namespace|android:label|app_name' diary-project/app/build.gradle.kts diary-project/app/src/main/AndroidManifest.xml diary-project/app/src/main/res/values* 2>/dev/null || true
+
+      - name: Audit generated Diary interface text for translation coverage
+        run: |
+          python3 - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          import re
+          src = Path("diary-project/app/src/main/assets/index.html").read_text(encoding="utf-8")
+          class Audit(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.skip = 0
+                  self.items = set()
+              def handle_starttag(self, tag, attrs):
+                  attrs = dict(attrs)
+                  if tag in ("script", "style"):
+                      self.skip += 1
+                  for key in ("placeholder", "aria-label", "title", "alt", "value"):
+                      value = attrs.get(key, "").strip()
+                      if value and not re.fullmatch(r"[{}$\w.-]+", value):
+                          self.items.add(f"[{key}] {value}")
+              def handle_endtag(self, tag):
+                  if tag in ("script", "style") and self.skip:
+                      self.skip -= 1
+              def handle_data(self, data):
+                  if not self.skip:
+                      value = " ".join(data.split())
+                      if value and re.search(r"[A-Za-z\u0900-\u0D7F\u0600-\u06FF]", value):
+                          self.items.add(value)
+          parser = Audit()
+          parser.feed(src)
+          out = sorted(parser.items, key=str.casefold)
+          # Also inspect JS translation dictionaries, which the HTML parser skips.
+          scripts = "\n".join(re.findall(r"<script[^>]*>(.*?)</script>", src, re.I | re.S))
+          dicts = {}
+          for lang in ("roman", "english", "hindi", "urdu", "arabic", "bengali", "gujarati", "marathi", "tamil", "telugu"):
+              pattern = r"words\s*(?:\.\s*" + lang + r"|\[\s*\"" + lang + r"\"\s*\])\s*=\s*(?:Object\.assign\(\{\},\s*words\.english,\s*)?\{(.*?)\}\)?\s*;"
+              m = re.search(pattern, scripts, re.S)
+              if m:
+                  dicts[lang] = set(re.findall(r"([A-Za-z_$][\w$]*)\s*:", m.group(1)))
+          english = dicts.get("english", set())
+          lines = [
+              "Generated Diary interface static text candidates: " + str(len(out)),
+              "JavaScript language dictionaries detected: " + ", ".join(sorted(dicts)),
+              "English dictionary keys detected: " + str(len(english)),
+              "",
+              "Dictionary key coverage (matched keys / English keys):"
+          ]
+          for lang in ("roman", "english", "hindi", "urdu", "arabic", "bengali", "gujarati", "marathi", "tamil", "telugu"):
+              if lang in dicts:
+                  covered = len(english & dicts[lang])
+                  missing = sorted(english - dicts[lang])
+                  lines.append(f"{lang}: {covered}/{len(english)}; missing: " + ", ".join(missing[:80]))
+              else:
+                  lines.append(f"{lang}: dictionary not detected")
+          lines += ["", "Static candidates:", *out]
+          Path("diary-interface-text-audit.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
+          print("\n".join(lines[:16]))
+          PY
+      - name: Inspect original Diary image assets
+        run: |
+          echo "---- Image files in original uploaded project ----"
+          find diary-project -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' -o -iname '*.bmp' -o -iname '*.gif' \) | head -100
+          echo "---- Image references in original Diary HTML ----"
+          grep -Eoi 'src="[^"]+\.(png|jpg|jpeg|webp|bmp|gif)[^"]*"' diary-project/app/src/main/assets/index.html | head -100 || true
+
+      - name: Validate Diary identity script
+        run: python3 -m py_compile scripts/apply_diary_identity.py
+
+      - name: Apply independent Diary Android identity
+        run: python3 scripts/apply_diary_identity.py
+
+      - name: Set approved next Diary version 1.0.119 (versionCode 118)
+        working-directory: diary-project
+        run: |
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          p = Path("app/build.gradle.kts")
+          s = p.read_text(encoding="utf-8")
+          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 118', s, count=1)
+          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.119"', s, count=1)
+          if code_count != 1 or name_count != 1:
+              raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
+          p.write_text(s, encoding="utf-8")
+          print("Set Diary versionName=1.0.119, versionCode=118")
+          PY
+
+      - name: Fail closed unless source version matches the approved next Diary release
+        if: env.DIARY_RELEASE_READY == 'true'
+        working-directory: diary-project
+        run: |
+          python3 - <<'PY'
+          import json, re
+          from pathlib import Path
+          gradle = Path("app/build.gradle.kts").read_text(encoding="utf-8")
+          meta = json.loads(Path("../latest.json").read_text(encoding="utf-8"))
+          def one(pattern, label):
+              m = re.search(pattern, gradle)
+              if not m:
+                  raise SystemExit(f"BLOCKED: Gradle {label} declaration not found")
+              return m.group(1)
+          package = one(r'applicationId\s*=\s*"([^"]+)"', "applicationId")
+          code = int(one(r'versionCode\s*=\s*(\d+)', "versionCode"))
+          name = one(r'versionName\s*=\s*"([^"]+)"', "versionName")
+          if package != "com.personal.diaryapp" or meta.get("packageName") != package:
+              raise SystemExit("BLOCKED: APK package and update metadata do not match")
+          if code != 118 or name != "1.0.119":
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.119/118, found {name}/{code}")
+          if int(meta.get("versionCode", 0)) != 117 or meta.get("versionName") != "1.0.118":
+              raise SystemExit("BLOCKED: current update feed is not the expected installed baseline 1.0.118/117")
+          print(f"PASS: package={package}, next version={name}/{code}; feed baseline remains 1.0.118/117")
+          PY
+
+      - name: Align Java and Kotlin JVM targets
+        working-directory: diary-project
+        run: |
+          cat >> app/build.gradle.kts <<'GRADLE'
+
+          android {
+              compileOptions {
+                  sourceCompatibility = JavaVersion.VERSION_17
+                  targetCompatibility = JavaVersion.VERSION_17
+              }
+          }
+          tasks.withType<JavaCompile>().configureEach {
+              sourceCompatibility = JavaVersion.VERSION_17.toString()
+              targetCompatibility = JavaVersion.VERSION_17.toString()
+          }
+          tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+              kotlinOptions.jvmTarget = "17"
+          }
+          GRADLE
+
+      - name: Build debug APK
+        working-directory: diary-project
+        run: gradle --no-daemon :app:assembleDebug
+
+      - name: Build unsigned Release APK for private owner-side signing
+        if: env.DIARY_RELEASE_READY != 'true'
+        working-directory: diary-project
+        run: |
+          gradle --no-daemon :app:assembleRelease
+          test -s app/build/outputs/apk/release/app-release-unsigned.apk
+
+      - name: Configure signed Release build
+        if: env.DIARY_RELEASE_READY == 'true'
+        working-directory: diary-project
+        env:
+          DIARY_KEYSTORE_BASE64: ${{ secrets.DIARY_KEYSTORE_BASE64 }}
+          DIARY_KEY_ALIAS: ${{ secrets.DIARY_KEY_ALIAS }}
+          DIARY_KEY_PASSWORD: ${{ secrets.DIARY_KEY_PASSWORD }}
+          DIARY_STORE_PASSWORD: ${{ secrets.DIARY_STORE_PASSWORD }}
+        run: |
+          python3 - <<'PY'
+          import base64, os
+          from pathlib import Path
+          raw = base64.b64decode(os.environ["DIARY_KEYSTORE_BASE64"])
+          Path("app/diary-release.jks").write_bytes(raw)
+          if not raw:
+              raise SystemExit("Release keystore is empty")
+          p = Path("app/build.gradle.kts")
+          s = p.read_text(encoding="utf-8")
+          s += """
+          
+          android {
+              signingConfigs {
+                  create("diaryRelease") {
+                      storeFile = file("diary-release.jks")
+                      storePassword = System.getenv("DIARY_STORE_PASSWORD")
+                      keyAlias = System.getenv("DIARY_KEY_ALIAS")
+                      keyPassword = System.getenv("DIARY_KEY_PASSWORD")
+                  }
+              }
+              buildTypes {
+                  getByName("release") {
+                      signingConfig = signingConfigs.getByName("diaryRelease")
+                  }
+              }
+          }
+          """
+          p.write_text(s, encoding="utf-8")
+          PY
+          gradle --no-daemon :app:assembleRelease
+          jarsigner -verify -verbose -certs app/build/outputs/apk/release/app-release.apk
+          APK_SIGNER="$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -1)"
+          test -n "$APK_SIGNER"
+          SIGNER_OUTPUT="$("$APK_SIGNER" verify --verbose --print-certs app/build/outputs/apk/release/app-release.apk)"
+          echo "$SIGNER_OUTPUT"
+          ACTUAL_FINGERPRINT="$(echo "$SIGNER_OUTPUT" | sed -nE 's/.*certificate SHA-256 digest: ([0-9a-fA-F]{64}).*/\1/p' | head -n1 | tr '[:lower:]' '[:upper:]')"
+          EXPECTED_FINGERPRINT="23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A"
+          if [ "$ACTUAL_FINGERPRINT" != "$EXPECTED_FINGERPRINT" ]; then
+            echo "Signing certificate mismatch. Expected $EXPECTED_FINGERPRINT, got $ACTUAL_FINGERPRINT"
+            exit 1
+          fi
+          echo "Release APK certificate matches the previously supplied SHA-256 fingerprint."
+          rm -f app/diary-release.jks
+
+      - name: Publish verified Diary update
+        if: env.DIARY_RELEASE_READY == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          APK="diary-project/app/build/outputs/apk/release/app-release.apk"
+          test -s "$APK"
+          SHA256="$(sha256sum "$APK" | awk '{print $1}')"
+          cp "$APK" /tmp/My-Diary-verified.apk
+          printf '1.0.119\n118\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          git fetch origin main
+          git checkout -B diary-publish-main origin/main
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
+          if meta.get("packageName") != "com.personal.diaryapp" or int(meta.get("versionCode", 0)) != 117 or meta.get("versionName") != "1.0.118":
+              raise SystemExit("BLOCKED: live main feed is no longer the expected 1.0.118/117 baseline")
+          lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
+          meta["appName"] = "My Diary"
+          meta["packageName"] = "com.personal.diaryapp"
+          meta["versionName"] = lines[0]
+          meta["versionCode"] = int(lines[1])
+          meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.119.apk"
+          meta["sha256"] = lines[2]
+          meta["releaseNotes"] = "Check for Updates now repairs the Diary web interface by comparing installed HTML SHA-256 with the current published web update. APK builds preserve the published Diary interface. Notes, photos and PIN data remain on this device."
+          Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          PY
+          cp /tmp/My-Diary-verified.apk My-Diary.apk
+          cp /tmp/My-Diary-verified.apk My-Diary-1.0.119.apk
+          python3 -m json.tool latest.json >/dev/null
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add My-Diary.apk My-Diary-1.0.119.apk latest.json
+          git commit -m "Publish verified My Diary update 1.0.119"
+          git push origin HEAD:main
+      - name: Upload unsigned Release APK for private owner-side signing
+        if: env.DIARY_RELEASE_READY != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: My-Diary-unsigned-Release-APK
+          path: diary-project/app/build/outputs/apk/release/app-release-unsigned.apk
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload signed Release APK
+        if: env.DIARY_RELEASE_READY == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: My-Diary-signed-Release-APK
+          path: diary-project/app/build/outputs/apk/release/app-release.apk
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload translation audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: Diary-interface-text-audit
+          path: diary-interface-text-audit.txt
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: My-Diary-debug-APK
+          path: diary-project/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
