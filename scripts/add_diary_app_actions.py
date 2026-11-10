@@ -577,9 +577,10 @@ print_method = r'''
             }
         }
 '''
-const marker="\n    }\n}";
-const at=kotlin.lastIndexOf(marker);
-if(at<0)raise SystemExit("FAIL: DiaryNativeActions class end not found")
-kotlin=kotlin.slice(0,at)+print_method+kotlin.slice(at)
-kotlin_path.write_text(kotlin,encoding="utf-8")
+marker = "\n    }\n}"
+at = kotlin.rfind(marker)
+if at < 0:
+    raise SystemExit("FAIL: DiaryNativeActions class end not found")
+kotlin = kotlin[:at] + print_method + kotlin[at:]
+kotlin_path.write_text(kotlin, encoding="utf-8")
 print("PASS: Android Back interception and native PrintManager bridge added.")
