@@ -243,9 +243,9 @@ jobs:
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
           if code != 115 or name != "1.0.116":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.115/114, found {name}/{code}")
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.116/115, found {name}/{code}")
           if int(meta.get("versionCode", 0)) != 114 or meta.get("versionName") != "1.0.115":
-              raise SystemExit("BLOCKED: current update feed is not the expected installed baseline 1.0.113/112")
+              raise SystemExit("BLOCKED: current update feed is not the expected installed baseline 1.0.115/114")
           print(f"PASS: package={package}, next version={name}/{code}; feed baseline remains 1.0.115/114")
           PY
 
@@ -344,7 +344,7 @@ jobs:
           cp "$APK" /tmp/My-Diary-verified.apk
           test -s diary-project/app/src/main/assets/index.html
           cp diary-project/app/src/main/assets/index.html /tmp/My-Diary-web-index.html
-          printf '1.0.115\n114\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.116\n115\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -B diary-publish-main origin/main
           mkdir -p web-source diary-web
@@ -354,8 +354,8 @@ jobs:
           import hashlib, json
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
-          if meta.get("packageName") != "com.personal.diaryapp" or int(meta.get("versionCode", 0)) != 113 or meta.get("versionName") != "1.0.114":
-              raise SystemExit("BLOCKED: live main feed is no longer the expected 1.0.114/113 baseline; refusing to overwrite it")
+          if meta.get("packageName") != "com.personal.diaryapp" or int(meta.get("versionCode", 0)) != 114 or meta.get("versionName") != "1.0.115":
+              raise SystemExit("BLOCKED: live main feed is no longer the expected 1.0.115/114 baseline; refusing to overwrite it")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
           meta["packageName"] = "com.personal.diaryapp"
