@@ -1274,18 +1274,17 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   document.getElementById('diaryMyNotesStatus').textContent=t('saved')+' '+t('saveAsText');
  }
  function printDiaryPDF(title,body,popup){
-  if(!popup){document.getElementById('diaryMyNotesStatus').textContent='PDF print window block ho gayi. Browser mein pop-ups allow karein.';return;}
+  if(!popup){document.getElementById('diaryMyNotesStatus').textContent='PDF page open nahi hui. Browser mein pop-ups allow karein.';return;}
   var esc=function(v){return String(v||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
-  var html='<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(title||'My Diary')+'</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#172033;line-height:1.6}h1{font-size:22px;border-bottom:1px solid #bbb;padding-bottom:10px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit}img{display:block;max-width:100%;max-height:70vh;object-fit:contain;margin:12px auto} .extra{margin-top:18px;white-space:pre-wrap}@media print{body{padding:0}}</style></head><body><h1>'+esc(title||'My Diary')+'</h1><pre>'+esc(body)+'</pre>';
+  var html='<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(title||'My Diary')+'</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#172033;line-height:1.6}h1{font-size:22px;border-bottom:1px solid #bbb;padding-bottom:10px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit}img{display:block;max-width:100%;max-height:70vh;object-fit:contain;margin:12px auto}.extra{margin-top:18px;white-space:pre-wrap}.pdf-action{display:block;width:100%;max-width:320px;margin:0 auto 22px;padding:14px;border:0;border-radius:10px;background:#176b43;color:white;font-size:17px;font-weight:bold}@media print{body{padding:0}.pdf-action{display:none}}</style></head><body><button class="pdf-action" type="button" onclick="window.focus();window.print()">📄 Save as PDF / Print</button><h1>'+esc(title||'My Diary')+'</h1><pre>'+esc(body)+'</pre>';
   if(activePhotoData)html+='<img src="'+activePhotoData+'">';
   if(activeCoverPhotoData)html+='<img src="'+activeCoverPhotoData+'">';
   if(activeCoverText)html+='<div class="extra">'+esc(activeCoverText)+'</div>';
   if(activeDetailPhotoData)html+='<img src="'+activeDetailPhotoData+'">';
   if(activeDetailText)html+='<div class="extra">'+esc(activeDetailText)+'</div>';
-  html+='</body></html>';
+  html+='<script>window.addEventListener("load",function(){setTimeout(function(){try{window.focus();window.print()}catch(e){}},900)});<\\/script></body></html>';
   popup.document.open();popup.document.write(html);popup.document.close();
-  popup.onload=function(){setTimeout(function(){try{popup.focus();popup.print()}catch(e){}},350)};
-  document.getElementById('diaryMyNotesStatus').textContent=t('saved')+' — PDF print kholein, phir “Save as PDF” chunein.';
+  document.getElementById('diaryMyNotesStatus').textContent=t('saved')+' — PDF page par “Save as PDF / Print” dabayein; phir print menu mein “Save as PDF” chunein.';
  }
  function showSaveFormatChoice(){
   var title=document.getElementById('diaryMyNotesTitle').value;
