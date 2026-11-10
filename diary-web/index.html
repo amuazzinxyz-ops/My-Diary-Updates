@@ -1691,5 +1691,19 @@ body[data-diary-interface-theme]:not([data-diary-interface-theme="blue"]):not([d
 #diaryDiaryMePanel button,#diaryDiaryMePanel [role="button"],#diaryDiaryMePanel input[type="button"],#diaryDiaryMePanel input[type="submit"],#diaryDiaryMePanel input[type="reset"]{height:40px!important;min-height:40px!important;max-height:40px!important;box-sizing:border-box!important}
 </style>
 
+
+<style id="diary-custom-colour-label-visibility-fix">
+/* Make the custom colour picker label clearly readable in every selected theme. */
+#diaryInterfaceColoursPanel #diaryCustomColourLabel{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ grid-column:1/-1!important;width:100%!important;min-height:46px!important;
+ box-sizing:border-box!important;padding:9px 12px!important;margin:8px 0 5px!important;
+ background:linear-gradient(145deg,#fff8d9,#f2e7b9)!important;
+ border:2px solid #b68a22!important;border-radius:10px!important;
+ color:#26351f!important;font-size:16px!important;font-weight:900!important;
+ line-height:1.35!important;text-align:center!important;letter-spacing:.2px!important;
+ text-shadow:none!important;opacity:1!important;visibility:visible!important;
+}
+</style>
 </body>
 </html>
