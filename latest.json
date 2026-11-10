@@ -7,8 +7,8 @@
   "sha256": "040740f50feb19447ce9dc0aaeb69c2190539d3ff02737ec15247e51ee43bba2",
   "releaseNotes": "Set Check for Updates, Refresh, and Share App button heights to 40px. Existing Diary data remains on this device.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 17,
+  "webVersion": 18,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "1fef5d5719bb402408db38d3454127eb68dc0382ed68d6677c133a22ce17aeb2",
-  "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
+  "webReleaseNotes": "Set all buttons inside the Me menu to 40px height. Other screens and existing Diary data remain unchanged."
 }
