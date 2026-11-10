@@ -1,6 +1,14 @@
 # MY DIARY — MASTER PROJECT REGISTER
 
-**Single source of truth. Last updated: 2026-11-11 (signed APK 1.0.119 / versionCode 118; Web Update 55 fixes Recently Deleted action-button label fit).
+**Single source of truth. Last updated: 2026-11-11 (signed APK 1.0.119 / versionCode 118; Web Update 56 keeps Recently Deleted action labels on one line).
+
+## Latest correction — Recently Deleted buttons stay one line (2026-11-11)
+
+- User clarified that **Hamesha ke liye mitaayein** must remain on one line, not wrap to two lines.
+- Updated both Recently Deleted action buttons to fixed 40px height, one-line non-wrapping labels, centered text, and responsive smaller font/compact horizontal padding so the full phrase fits within the full-width button on mobile. Restore/delete handlers remain unchanged.
+- New pre-edit backups: `backups/web-source-index-before-trash-button-one-line-2026-11-11.html`, `backups/diary-web-index-before-trash-button-one-line-2026-11-11.html`, `backups/latest-before-trash-button-one-line-2026-11-11.json`, and `backups/docs-register-before-trash-button-one-line-2026-11-11.md`.
+- Web Update **56**; source and mirror synchronized, SHA-256 `44886700f7382f1f1d5c4c2ec35d602429ce19bf0ac92cea472365e8230872eb`. APK remains **1.0.119 / versionCode 118**. Web-only CSS correction; no note/photo data or PIN changes. Live static checks passed; visual confirmation on physical phone is pending.
+
 ## Latest change — Recently Deleted action-button fit (2026-11-11)
 
 - User reported that the **Hamesha ke liye mitaayein** label appeared below/outside the **Mitaayein** button instead of fitting within the complete button.
