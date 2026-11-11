@@ -1,14 +1,14 @@
 {
   "appName": "My Diary",
   "packageName": "com.personal.diaryapp",
-  "versionCode": 128,
-  "versionName": "1.0.129",
-  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.129.apk",
-  "sha256": "f97ed49a212f26de4a67e59659d33ba2b641797a13ca03fbf4e0c328ad68d974",
-  "releaseNotes": "The Diary unlock screen now opens automatically after the correct 4-digit PIN is entered; the separate unlock button was removed. Existing notes, photos, PIN data, and app identity are preserved.",
+  "versionCode": 129,
+  "versionName": "1.0.130",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.130.apk",
+  "sha256": "994605f7df5edde320f052f2ac99434a58d535e6bac36345809cad92ba47e990",
+  "releaseNotes": "The Diary unlock screen and Note PIN lock setup now proceed automatically after each correct 4-digit entry, without tapping OK. Existing notes, photos, PIN data, and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 82,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "2baeccc155303b6511a9fa4ce539dc0c0c98b70eecb1701df75442aff6ff3fd3",
-  "webReleaseNotes": "Diary PIN screen simplified: the unlock button is removed, and entering the correct 4-digit PIN opens the Diary automatically. Other Diary features remain unchanged."
+  "webSha256": "1e0b6180da816e9b8dbd52ffbb6e4cbd64ba6a579db83efe7067f081cbe9949b",
+  "webReleaseNotes": "Diary PIN actions now proceed automatically after each 4-digit entry; no OK tap is needed for Note lock setup or unlock. Other Diary features remain unchanged."
 }
