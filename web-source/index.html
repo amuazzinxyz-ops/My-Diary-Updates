@@ -52,6 +52,13 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 }
 </style>
 <!-- My Diary: Recently Deleted button label confirmed as Delete Ki Huwi Note. -->
+
+<style id="diary-calendar-clean-month-header">
+/* Keep note dates visually plain; center the month name between navigation arrows. */
+#diaryDiaryMePanel #diaryCalendarTop{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important}
+#diaryDiaryMePanel #diaryCalendarMonthLabel{display:block!important;flex:1 1 auto!important;min-width:0!important;text-align:center!important;font-size:16px!important;font-weight:900!important}
+#diaryDiaryMePanel #diaryCalendarPanel .diary-calendar-day.has-notes{border:1px solid #d8dfd6!important;background:#fff!important}
+</style>
 </head>
 <body>
 <main class="diary-home">
@@ -918,7 +925,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    for(var blank=0;blank<start;blank++)calendarDays.appendChild(el('span',{class:'diary-calendar-empty'}));
    for(var day=1;day<=count;day++){
     var date=new Date(year,month,day),key=calendarDateKey(date),has=!!byDay[key],isSelected=key===calendarDateKey(calendarSelected),isToday=key===calendarDateKey(new Date());
-    var dayBtn=el('button',{type:'button',class:'diary-calendar-day'+(has?' has-notes':'')+(isSelected?' selected':'')+(isToday?' today':'')},String(day));
+    var dayBtn=el('button',{type:'button',class:'diary-calendar-day'+(isSelected?' selected':'')+(isToday?' today':'')},String(day));
     dayBtn.setAttribute('aria-label',date.toLocaleDateString()+(has?', '+byDay[key].length+' notes':''));
     dayBtn.addEventListener('click',function(selectedDate,selectedKey){return function(e){e.preventDefault();e.stopPropagation();calendarSelected=selectedDate;calendarRender();};}(date,key));
     calendarDays.appendChild(dayBtn);
