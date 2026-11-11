@@ -990,7 +990,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   unlockDiaryBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();turnDiaryLockOff();});
   fontLabel.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var opening=fontSliderBox.hidden;fontSliderBox.hidden=!opening;fontLabel.setAttribute('aria-expanded',opening?'true':'false');});
   meWrap.appendChild(meBtn);meWrap.appendChild(mePanel);head.appendChild(meWrap);
-  meBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var opening=mePanel.hidden;mePanel.hidden=!opening;meBtn.setAttribute('aria-expanded',opening?'true':'false');});
+  meBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var opening=mePanel.hidden;mePanel.hidden=!opening;meBtn.setAttribute('aria-expanded',opening?'true':'false');panel.classList.toggle('diary-me-menu-open',opening);if(opening)mePanel.scrollTop=0;});
   function updateDiaryFontFromSlider(e){if(e)e.stopPropagation();var chosen=Math.max(12,Math.min(24,parseInt(fontSlider.value,10)||14));localStorage.setItem(DIARY_FONT_KEY,String(chosen));applyDiaryFont();}
   fontSlider.addEventListener('input',updateDiaryFontFromSlider);
   fontSlider.addEventListener('change',updateDiaryFontFromSlider);
@@ -1043,7 +1043,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   backup.appendChild(exportBtn);backup.appendChild(importBtn);backup.appendChild(importFile);
   var allNotesBtn=el('button',{id:'diaryMyNotesAllNotes',type:'button','aria-expanded':'false','aria-controls':'diaryMyNotesList'},t('allNotes'));
   var trashBtn=el('button',{id:'diaryMyNotesTrash',type:'button',class:'secondary','aria-expanded':'false'},t('recentlyDeleted'));
-  trashBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();showingTrash=!showingTrash;allNotesBtn.style.display=showingTrash?'none':'';trashBtn.setAttribute('aria-expanded',showingTrash?'true':'false');list.style.display=showingTrash?'':'none';if(showingTrash){mePanel.appendChild(list);mePanel.scrollTop=0;var diaryOverlay=document.getElementById('diaryMyNotesOverlay');if(diaryOverlay){diaryOverlay.classList.add('open');diaryOverlay.setAttribute('aria-hidden','false');}mePanel.hidden=false;meBtn.setAttribute('aria-expanded','true');renderList();}else{body.appendChild(list);renderList();}});
+  trashBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();showingTrash=!showingTrash;allNotesBtn.style.display=showingTrash?'none':'';trashBtn.setAttribute('aria-expanded',showingTrash?'true':'false');list.style.display=showingTrash?'':'none';if(showingTrash){mePanel.appendChild(list);mePanel.scrollTop=0;var diaryOverlay=document.getElementById('diaryMyNotesOverlay');if(diaryOverlay){diaryOverlay.classList.add('open');diaryOverlay.setAttribute('aria-hidden','false');}mePanel.hidden=false;meBtn.setAttribute('aria-expanded','true');panel.classList.add('diary-me-menu-open');renderList();}else{body.appendChild(list);renderList();}});
   /* Recently Deleted list opens directly below its button inside the Me menu. */
   mePanel.appendChild(trashBtn);
   list.style.display='none';
@@ -1052,7 +1052,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   panel.appendChild(head);panel.appendChild(body);ov.appendChild(panel);document.body.appendChild(ov);
   applyDiaryFont();
   close.addEventListener('click',closeOverlay);
-  ov.addEventListener('click',function(e){if(e.target===ov)closeOverlay();if(!meWrap.contains(e.target)&&!mePanel.hidden){mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');}});
+  ov.addEventListener('click',function(e){if(e.target===ov)closeOverlay();if(!meWrap.contains(e.target)&&!mePanel.hidden){mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');}});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&ov.classList.contains('open'))closeOverlay()});
   search.addEventListener('input',renderList);
   document.getElementById('diaryMyNotesSave').addEventListener('click',saveNote);
@@ -1626,6 +1626,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  function closeOverlay(fromPop){
   Object.keys(unlockTimers).forEach(clearUnlockTimer);unlockedNotes={};expandedNoteId=null;
   var ov=document.getElementById('diaryMyNotesOverlay');if(ov){ov.classList.remove('open');ov.setAttribute('aria-hidden','true')}
+  var diaryPanel=document.getElementById('diaryMyNotesPanel');if(diaryPanel)diaryPanel.classList.remove('diary-me-menu-open');var diaryMePanel=document.getElementById('diaryDiaryMePanel');if(diaryMePanel)diaryMePanel.hidden=true;var diaryMeButton=document.getElementById('diaryDiaryMeBtn');if(diaryMeButton)diaryMeButton.setAttribute('aria-expanded','false');
   document.body.style.overflow='';
   if(diaryOverlayHistoryOpen){diaryOverlayHistoryOpen=false;if(!fromPop){try{history.back()}catch(e){}}}
  }
@@ -1842,6 +1843,32 @@ body[data-diary-interface-theme]:not([data-diary-interface-theme="blue"]):not([d
 @media(prefers-reduced-motion:no-preference){
  .diary-trash-note{transition:background .16s ease,border-color .16s ease,box-shadow .16s ease}
  .diary-trash-note .diary-trash-name{transition:background .16s ease,border-color .16s ease}
+}
+</style>
+
+<style id="diary-me-menu-real-touch-scroll-fix">
+/* Let the Me dropdown escape the Diary frame and scroll naturally on touch screens. */
+#diaryMyNotesPanel.diary-me-menu-open{
+ overflow:visible!important;
+}
+#diaryMyNotesPanel.diary-me-menu-open #diaryMyNotesHead{
+ position:relative!important;
+ z-index:20!important;
+ overflow:visible!important;
+}
+#diaryMyNotesPanel.diary-me-menu-open #diaryDiaryMeWrap{
+ z-index:30!important;
+}
+#diaryMyNotesPanel #diaryDiaryMePanel:not([hidden]){
+ display:block!important;
+ height:auto!important;
+ max-height:min(68dvh,520px)!important;
+ overflow-y:auto!important;
+ overflow-x:hidden!important;
+ overscroll-behavior-y:contain!important;
+ -webkit-overflow-scrolling:touch!important;
+ touch-action:pan-y!important;
+ scrollbar-width:thin!important;
 }
 </style>
 </body>
