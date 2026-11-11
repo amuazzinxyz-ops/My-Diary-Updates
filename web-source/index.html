@@ -1461,31 +1461,31 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  }
  function turnLockOff(n){
   if(!n||!n.pinLock){return;}
-  /* Lock Off asks for the same PIN the user created for this note,
-     not the recovery code. */
-  var entered=window.prompt(t('pinPrompt'));if(entered===null)return;
-  entered=String(entered).trim();
-  var all=read(),target=all.find(function(x){return x.id===n.id;});
-  if(!target||!target.pinLock)return;
-  var lock=target.pinLock;
-  function finishOff(){
-   if(!window.confirm(t('lockOffConfirm')))return;
-   delete target.pinLock;
-   if(!write(all)){window.alert(t('storageUnavailable'));return;}
-   delete unlockedNotes[n.id];clearUnlockTimer(n.id);expandedNoteId=n.id;renderList();
-  }
-  if(typeof lock.pinValue==='string'){
-   if(entered!==lock.pinValue){window.alert(t('codeWrong'));return;}
-   finishOff();return;
-  }
-  if(lock.salt&&lock.hash){
-   pinDigest(entered,lock.salt).then(function(hash){
-    if(hash!==String(lock.hash).toLowerCase()){window.alert(t('codeWrong'));return;}
-    finishOff();
-   }).catch(function(){window.alert(t('codeVerifyError'));});
-   return;
-  }
-  window.alert(t('pinRecordMissing'));
+  /* Correct four-digit PIN turns the note lock off immediately.
+     No extra OK confirmation is required; a wrong PIN keeps the lock. */
+  askFourDigitPinAutomatically(t('pinPrompt')).then(function(entered){
+   if(entered===null)return;
+   var all=read(),target=all.find(function(x){return x.id===n.id;});
+   if(!target||!target.pinLock)return;
+   var lock=target.pinLock;
+   function finishOff(){
+    delete target.pinLock;
+    if(!write(all)){window.alert(t('storageUnavailable'));return;}
+    delete unlockedNotes[n.id];clearUnlockTimer(n.id);expandedNoteId=n.id;renderList();
+   }
+   if(typeof lock.pinValue==='string'){
+    if(entered!==lock.pinValue){window.alert(t('codeWrong'));return;}
+    finishOff();return;
+   }
+   if(lock.salt&&lock.hash){
+    pinDigest(entered,lock.salt).then(function(hash){
+     if(hash!==String(lock.hash).toLowerCase()){window.alert(t('codeWrong'));return;}
+     finishOff();
+    }).catch(function(){window.alert(t('codeVerifyError'));});
+    return;
+   }
+   window.alert(t('pinRecordMissing'));
+  }).catch(function(){window.alert(t('codeVerifyError'));});
  }
  function requestUnlock(n){
   var pin=window.prompt(t('pinPrompt'));if(pin===null)return;
