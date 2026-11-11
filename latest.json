@@ -7,8 +7,8 @@
   "sha256": "391f08f3cdd00cef316668b0cf2111a3fef6bebe0e82946fcb30ff92cb0a1ecb",
   "releaseNotes": "Android status bar is separated from the Diary screen so notification icons no longer overlay the Diary background. Existing app identity, local Notes, Photos and PIN data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 74,
+  "webVersion": 75,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "316c23a9eeedcba611718ffe1fd67e8710aab6a334be52927765be5073ee55a5",
+  "webSha256": "94148f465c93663599f47e712c23aeaea9b318a06077ca8e30a0de0b7c225f7f",
   "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
 }
