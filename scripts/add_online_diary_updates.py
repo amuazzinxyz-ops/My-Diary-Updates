@@ -54,7 +54,7 @@ web_method = r"""
                 // serves the verified on-disk HTML immediately.
                 runOnUiThread {
                     webView.post {
-                        webView.loadUrl("https://appassets.androidplatform.net/assets/index.html")
+                        webView.loadUrl("https://appassets.androidplatform.net/assets/index.html?diaryRefresh=" + System.currentTimeMillis() + "")
                         Toast.makeText(this@MainActivity, "Diary pehle se update hai. Screen refresh kar di gayi hai.", Toast.LENGTH_LONG).show()
                     }
                 }
@@ -111,7 +111,7 @@ web_method = r"""
                     prefs.edit().putInt("webVersion", target).apply()
                     runOnUiThread {
                         Toast.makeText(this@MainActivity, "My Diary update lag gaya. App refresh ho rahi hai...", Toast.LENGTH_LONG).show()
-                        webView.postDelayed({ webView.loadUrl("https://appassets.androidplatform.net/assets/index.html") }, 700)
+                        webView.postDelayed({ webView.loadUrl("https://appassets.androidplatform.net/assets/index.html?diaryRefresh=" + System.currentTimeMillis() + "") }, 700)
                     }
                 } catch (e: Exception) {
                     File(filesDir, "diary-web/index.html.part").delete()
@@ -137,7 +137,12 @@ handler = r"""
                 val updated = File(filesDir, "diary-web/index.html")
                 val stream = if (path == "index.html" && updated.isFile) updated.inputStream() else assets.open(path)
                 val mime = if (path.endsWith(".html", true)) "text/html" else android.webkit.MimeTypeMap.getSingleton().getMimeTypeFromExtension(path.substringAfterLast('.', "")) ?: "application/octet-stream"
-                WebResourceResponse(mime, "UTF-8", stream)
+                val noCacheHeaders = mapOf(
+                    "Cache-Control" to "no-store, no-cache, must-revalidate, max-age=0",
+                    "Pragma" to "no-cache",
+                    "Expires" to "0"
+                )
+                WebResourceResponse(mime, "UTF-8", 200, "OK", noCacheHeaders, stream)
             } catch (_: Exception) {
                 null
             }
