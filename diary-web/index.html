@@ -934,8 +934,11 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     calendarNotes.appendChild(item);
    });
   }
-  calendarPrev.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();calendarMonth.setMonth(calendarMonth.getMonth()-1);calendarRender();});
-  calendarNext.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();calendarMonth.setMonth(calendarMonth.getMonth()+1);calendarRender();});
+  function calendarMoveMonth(delta){var targetMonth=new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()+delta,1);var lastDay=new Date(targetMonth.getFullYear(),targetMonth.getMonth()+1,0).getDate();var selectedDay=Math.min(calendarSelected.getDate(),lastDay);calendarMonth=targetMonth;calendarSelected=new Date(targetMonth.getFullYear(),targetMonth.getMonth(),selectedDay);calendarSelected.setHours(0,0,0,0);calendarRender();}
+  calendarPrev.setAttribute('aria-label','Previous month');
+  calendarNext.setAttribute('aria-label','Next month');
+  calendarPrev.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();calendarMoveMonth(-1);});
+  calendarNext.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();calendarMoveMonth(1);});
   calendarBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var opening=calendarPanel.hidden;calendarPanel.hidden=!opening;calendarBtn.setAttribute('aria-expanded',opening?'true':'false');if(opening)calendarRender();});
   mePanel.appendChild(calendarBtn);mePanel.appendChild(calendarPanel);
   var interfaceColoursBtn=el('button',{id:'diaryInterfaceColoursBtn',type:'button','aria-expanded':'false','aria-controls':'diaryInterfaceColoursPanel'},t('interfaceColours'));
