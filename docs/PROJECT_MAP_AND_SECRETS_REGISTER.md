@@ -389,3 +389,17 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Published **Web Update 58**. Feed SHA-256: `a79d757830530671cc5715046dbd0bf49a259116a15152a95a059639c9232802`. Source and published mirror have identical blob SHA `f16f50d419d48efd852cb89c1682516ae75d77b3`.
 - APK remains **1.0.122 / versionCode 121**; no APK rebuild or signing operation was needed. No MUAZZIN project was changed.
 - Automated GitHub web publication checks passed. Physical-device touch scrolling still needs the user to confirm after **Me → Check for Updates** receives Web Update 58.
+
+## 24. Me dropdown overlay and Note Pin separation — 2026-11-11
+
+- User reported that after tapping **Me**, Note Pin (📌) and underlying Diary card content appeared mixed into the Me menu instead of the Me options opening as a distinct dropdown.
+- Code inspection confirmed that the Note Pin control is generated only as part of each saved note card, not as a Me-menu option. The Me dropdown CSS had a transparent background and no visible panel surface; after the scroll repair allowed it to extend beyond the Diary frame, the underlying note cards could show through the dropdown area. This made their Pin controls appear to be part of Me.
+- Narrow CSS-only repair: made the open Me dropdown an opaque, bounded, raised panel with its own stacking context; preserved the existing menu position, order, 40px controls, scrolling and click handlers. Added a defensive rule to hide any .diary-note-pin only if it is ever rendered inside the Me menu. Note Pin controls remain on their own note cards.
+- Backups created before the edit:
+  - backups/web-source-index-before-me-menu-overlay-fix-2026-11-11.html
+  - backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-me-menu-overlay-fix-2026-11-11.md
+- Source commit: 3a2a083738162736153e0f5c56adff123a402c04. Web-only publish workflow run **43012733041** completed successfully.
+- Published **Web Update 59**. Live feed SHA-256: 63e85562878fcc65e04e05fdca00718c41e99b948003294a94e925f3e0fbed0a. Source and published mirror have identical blob SHA 7f0ce0ac10c84f8e6786a770b1faab75d2b870f9.
+- APK remains **1.0.122 / versionCode 121**; no APK rebuild or signing operation was performed. Notes, photos, PIN Lock/recovery, package identity, and existing button handlers were not intentionally changed.
+- GitHub publication checks passed. Physical phone appearance has not yet been device-confirmed. On the phone, use **Me → Check for Updates** to receive Web Update 59, then open Me and confirm that only the Me menu options appear on an opaque panel, with Note Pin remaining on each note card.
+
