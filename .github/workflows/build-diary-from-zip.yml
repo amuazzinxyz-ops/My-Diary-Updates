@@ -1,4 +1,4 @@
-# Release baseline guard: live update feed 1.0.130 / versionCode 129; next APK 1.0.132 / versionCode 131.
+# Release baseline guard: live update feed 1.0.130 / versionCode 129; next APK 1.0.133 / versionCode 132.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -211,7 +211,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved next Diary version 1.0.132 (versionCode 131)
+      - name: Set approved next Diary version 1.0.133 (versionCode 132)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
@@ -219,12 +219,12 @@ jobs:
           from pathlib import Path
           p = Path("app/build.gradle.kts")
           s = p.read_text(encoding="utf-8")
-          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 131', s, count=1)
-          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.132"', s, count=1)
+          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 132', s, count=1)
+          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.133"', s, count=1)
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary versionName=1.0.132, versionCode=131")
+          print("Set Diary versionName=1.0.133, versionCode=132")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -246,8 +246,8 @@ jobs:
           name = one(r'versionName\s*=\s*"([^"]+)"', "versionName")
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
-          if code != 131 or name != "1.0.132":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.132/131, found {name}/{code}")
+          if code != 132 or name != "1.0.133":
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.133/132, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
           if feed_version not in {(129, "1.0.130"), (130, "1.0.131"), (131, "1.0.132")}:  
               raise SystemExit(f"BLOCKED: update feed is not the installed baseline or this exact repair release: {feed_version}")
@@ -347,7 +347,7 @@ jobs:
           test -s "$APK"
           SHA256="$(sha256sum "$APK" | awk '{print $1}')"
           cp "$APK" /tmp/My-Diary-verified.apk
-          printf '1.0.132\n131\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.133\n132\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -f -B diary-publish-main origin/main
           python3 - <<'PY'
@@ -362,7 +362,7 @@ jobs:
           meta["packageName"] = "com.personal.diaryapp"
           meta["versionName"] = lines[0]
           meta["versionCode"] = int(lines[1])
-          meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.132.apk"
+          meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.133.apk"
           meta["sha256"] = lines[2]
           meta["releaseNotes"] = "Note PIN lock setup and unlock proceed automatically after four digits. Turning Lock Off now removes the lock immediately after the correct PIN, without an extra OK confirmation. Existing notes, photos, PIN data, and app identity are preserved."
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -373,7 +373,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add My-Diary.apk My-Diary-1.0.132.apk latest.json
-          git commit -m "Publish verified My Diary update 1.0.132"
+          git commit -m "Publish verified My Diary update 1.0.133"
           git push origin HEAD:main
       - name: Upload unsigned Release APK for private owner-side signing
         if: env.DIARY_RELEASE_READY != 'true'
