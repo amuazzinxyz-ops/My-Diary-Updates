@@ -211,7 +211,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved next Diary version 1.0.131 (versionCode 130)
+      - name: Set approved next Diary version 1.0.132 (versionCode 131)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
@@ -247,7 +247,7 @@ jobs:
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
           if code != 131 or name != "1.0.132":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.131/130, found {name}/{code}")
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.132/131, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
           if feed_version not in {(130, "1.0.131"), (131, "1.0.132")}:  
               raise SystemExit(f"BLOCKED: update feed is not the installed baseline or this exact repair release: {feed_version}")
@@ -355,7 +355,7 @@ jobs:
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in {(129, "1.0.130"), (130, "1.0.131")}:
+          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in {(130, "1.0.131"), (131, "1.0.132")}:
               raise SystemExit(f"BLOCKED: live main feed is not the installed baseline or exact repair release: {feed_version}")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
@@ -372,7 +372,7 @@ jobs:
           python3 -m json.tool latest.json >/dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add My-Diary.apk My-Diary-1.0.130.apk latest.json
+          git add My-Diary.apk My-Diary-1.0.132.apk latest.json
           git commit -m "Publish verified My Diary update 1.0.132"
           git push origin HEAD:main
       - name: Upload unsigned Release APK for private owner-side signing
