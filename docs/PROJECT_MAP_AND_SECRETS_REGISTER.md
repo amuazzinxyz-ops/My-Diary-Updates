@@ -1,6 +1,6 @@
 # MY DIARY — MASTER PROJECT REGISTER
 
-**Single source of truth. Last updated: 2026-11-11 (repair in progress; published feed baseline 1.0.121 / versionCode 120; Web Update 56).**
+**Single source of truth. Last updated: 2026-11-11 (published APK 1.0.122 / versionCode 121; Web Update 57).**
 
 ## Latest correction — Check for Updates starts APK download directly (2026-11-11)
 
@@ -360,3 +360,17 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Source fix commit: 7447af3c120d91649983c0400118240812788f3e; published mirror sync commit: 905c0edeae6bf98c3a8f0a7148f498d81ccfc080.
 - Live update feed reports webVersion 53 and SHA-256 17d56cee11f46d5be90e4a274150cccab48d6f190099f64054d411fd05c337d3 for the 234,207-byte HTML bundle. The source and mirror must be confirmed identical before closing this repair. APK remains 1.0.119 / versionCode 118; this is a web-only correction, so no APK rebuild or signing change.
 - Static check: the trash title handler toggles the same .expanded class required by the existing CSS rule that reveals .diary-note-full. Actual display on the user's phone is not device-tested; receive Web Update 53 via Me → Check for Updates.
+
+
+## 22. Recently Deleted panel design refresh — 2026-11-11
+
+- User requested a modest design improvement inside the panel opened by **Me → 🗑️ Haal hi mein delete kiye gaye**. This change is limited to the appearance of the deleted-note cards and their expanded details.
+- Added scoped CSS only: softly rounded individual note cards, a subtle green accent and light background, clearer tap-to-expand title surface, a softly framed note-preview area, and a compact expiry label. The existing Restore and Delete Forever buttons retain their current layout, 40px height, one-line labels, and existing click handlers.
+- No HTML structure, JavaScript handlers, trash storage key/data, note content, photo data, PIN Lock/recovery, package identity, APK, or signing files were changed. No MUAZZIN files or repository were accessed for edits.
+- Pre-edit backups:
+  - `backups/web-source-index-before-trash-panel-design-2026-11-11.html`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-trash-panel-design-2026-11-11.md`
+- Source commit: `01d797e8681d182f26c3ca0c86a17e1d5219cf4a`. Web-only publish workflow run **42968535389** completed successfully.
+- Published **Web Update 57**. Live feed SHA-256: `84ae2034860516397ceaa6077c7033a30735da6b6560ad897ea2031791fbe590`. Source and published mirror have identical blob SHA `9c0bda40dcdaf11622fa393cbb5f13772435ab53`; both are 205,602 bytes.
+- APK remains **1.0.122 / versionCode 121** (SHA-256 `62a7f7687777b9f2caa548ee9c96c327b75eefa2630828b159e42052f0251aa9`). No APK rebuild was needed because this is a web-only styling change; no signing operation was performed.
+- GitHub Actions HTML/feed publication checks passed. The panel's visual appearance on a physical phone has not been device-confirmed; use **Me → Check for Updates** to receive Web Update 57, then open Recently Deleted to inspect it.
