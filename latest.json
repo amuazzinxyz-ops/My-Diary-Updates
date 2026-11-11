@@ -1,14 +1,14 @@
 {
   "appName": "My Diary",
   "packageName": "com.personal.diaryapp",
-  "versionCode": 127,
-  "versionName": "1.0.128",
-  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.128.apk",
-  "sha256": "75a24ebbddc0d2835974ede7793629b9dcdec9cc3fb85f2da37062c2527ee2bf",
-  "releaseNotes": "The status bar and camera safe area are transparent, showing the Diary page background while keeping the title below system icons. Existing notes, photos, PIN data, and app identity are preserved.",
+  "versionCode": 128,
+  "versionName": "1.0.129",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.129.apk",
+  "sha256": "f97ed49a212f26de4a67e59659d33ba2b641797a13ca03fbf4e0c328ad68d974",
+  "releaseNotes": "The Diary unlock screen now opens automatically after the correct 4-digit PIN is entered; the separate unlock button was removed. Existing notes, photos, PIN data, and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 82,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "2baeccc155303b6511a9fa4ce539dc0c0c98b70eecb1701df75442aff6ff3fd3",
-  "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
+  "webReleaseNotes": "Diary PIN screen simplified: the unlock button is removed, and entering the correct 4-digit PIN opens the Diary automatically. Other Diary features remain unchanged."
 }
