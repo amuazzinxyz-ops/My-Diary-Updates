@@ -7,8 +7,8 @@
   "sha256": "f6fea49aa42e28d1b6498cd96f2b6b244118e918e28d84d79a6b4b8ebc6943cf",
   "releaseNotes": "The status bar and camera safe area are transparent, showing the Diary page background while keeping the title below system icons. Existing notes, photos, PIN data, and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 80,
+  "webVersion": 81,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "31cba756948677c7423c3412957d9262be5e7aa8f183c27d06f02429bf4c5841",
+  "webSha256": "e9b724acf3c10cf43a7b0d9eb598b20d78d2b450c250c56da2f11ffd460e9cdc",
   "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
 }
