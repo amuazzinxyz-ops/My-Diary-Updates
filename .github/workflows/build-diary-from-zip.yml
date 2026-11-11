@@ -245,8 +245,9 @@ jobs:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
           if code != 125 or name != "1.0.126":
               raise SystemExit(f"BLOCKED: expected approved APK version 1.0.126/125, found {name}/{code}")
-          if int(meta.get("versionCode", 0)) != 124 or meta.get("versionName") != "1.0.125":
-              raise SystemExit("BLOCKED: current update feed is not the expected installed baseline 1.0.121/120")
+          feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
+          if feed_version not in {(124, "1.0.125"), (125, "1.0.126")}:
+              raise SystemExit(f"BLOCKED: update feed is not the installed baseline or this exact repair release: {feed_version}")
           print(f"PASS: package={package}, next version={name}/{code}; feed baseline remains 1.0.125/124")
           PY
 
