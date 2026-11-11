@@ -3,7 +3,7 @@
   "packageName": "com.personal.diaryapp",
   "versionCode": 129,
   "versionName": "1.0.130",
-  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.130.apk",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.129.apk",
   "sha256": "994605f7df5edde320f052f2ac99434a58d535e6bac36345809cad92ba47e990",
   "releaseNotes": "The Diary unlock screen and Note PIN lock setup now proceed automatically after each correct 4-digit entry, without tapping OK. Existing notes, photos, PIN data, and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
