@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 92,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "45fc6b72a621c1d9951398eaeb5c8c16b8a2dc4c7beb15c6c14206e5efb80a65",
-  "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
+  "webSha256": "ea96b57b3d422c7c087992f1e1520587c606182bdaa1568148528722ce0fda5e",
+  "webReleaseNotes": "Diary PIN recovery now lets you enter and confirm the replacement 4-digit PIN directly in the app. No browser OK buttons; each step advances automatically after four digits. Existing notes, photos and PIN data are preserved."
 }
