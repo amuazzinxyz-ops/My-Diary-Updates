@@ -1035,9 +1035,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   try{savedInterfaceTheme=localStorage.getItem('diary_interface_theme_v1')||'default';savedCustomColour=localStorage.getItem('diary_interface_custom_colour_v1')||'#8b5cf6';}catch(e){}
   customColourInput.value=savedCustomColour;applyDiaryInterfaceTheme(savedInterfaceTheme,savedCustomColour);
   var diaryPinBtn=el('button',{id:'diaryDiaryMasterPinBtn',type:'button'},t('diaryPin'));
-  var lockDiaryBtn=el('button',{id:'diaryDiaryLockNowBtn',type:'button'},t('lockDiaryNow'));
   var unlockDiaryBtn=el('button',{id:'diaryDiaryLockOffBtn',type:'button'},t('diaryLockOff'));
-  mePanel.appendChild(diaryPinBtn);mePanel.appendChild(lockDiaryBtn);mePanel.appendChild(unlockDiaryBtn);
+  mePanel.appendChild(diaryPinBtn);mePanel.appendChild(unlockDiaryBtn);
   var shareAppBtn=el('button',{id:'diaryShareAppBtn',type:'button'},'📤 Share App');
   mePanel.appendChild(shareAppBtn);
   shareAppBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(window.DiaryAppActions&&DiaryAppActions.shareApp){DiaryAppActions.shareApp();}});
@@ -1067,7 +1066,6 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    refreshDiaryNow();
   });
   diaryPinBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();configureDiaryPin();});
-  lockDiaryBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();closeOverlay();});
   unlockDiaryBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();turnDiaryLockOff();});
   fontLabel.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var opening=fontSliderBox.hidden;fontSliderBox.hidden=!opening;fontLabel.setAttribute('aria-expanded',opening?'true':'false');});
   meWrap.appendChild(meBtn);meWrap.appendChild(mePanel);head.appendChild(meWrap);
@@ -1160,7 +1158,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   ov.querySelector('#diaryMyNotesDelete').textContent=t('remove');
   ov.querySelector('#diaryMyNotesAllNotes').textContent=t('allNotes');
   var trashButton=ov.querySelector('#diaryMyNotesTrash');if(trashButton)trashButton.textContent=t('recentlyDeleted');
-  var fontLabel=document.getElementById('diaryDiaryFontLabel');if(fontLabel)fontLabel.textContent=t('fontSize');var photoButton=document.getElementById('diaryMyNotesPhotoBtn');if(photoButton)photoButton.textContent=t('addPhoto');var masterPinButton=document.getElementById('diaryDiaryMasterPinBtn');if(masterPinButton)masterPinButton.textContent=t('diaryPin');var lockNowButton=document.getElementById('diaryDiaryLockNowBtn');if(lockNowButton)lockNowButton.textContent=t('lockDiaryNow');var lockOffButton=document.getElementById('diaryDiaryLockOffBtn');if(lockOffButton)lockOffButton.textContent=t('diaryLockOff');
+  var fontLabel=document.getElementById('diaryDiaryFontLabel');if(fontLabel)fontLabel.textContent=t('fontSize');var photoButton=document.getElementById('diaryMyNotesPhotoBtn');if(photoButton)photoButton.textContent=t('addPhoto');var masterPinButton=document.getElementById('diaryDiaryMasterPinBtn');if(masterPinButton)masterPinButton.textContent=t('diaryPin');var lockOffButton=document.getElementById('diaryDiaryLockOffBtn');if(lockOffButton)lockOffButton.textContent=t('diaryLockOff');
   var fontSlider=document.getElementById('diaryDiaryFontSlider');if(fontSlider)fontSlider.setAttribute('aria-label',t('fontSize'));
   ov.querySelector('#diaryMyNotesDelete').style.display=activeId?'':'none';
   ov.querySelector('#diaryMyNotesExport').textContent=t('export');ov.querySelector('#diaryMyNotesImport').textContent=t('import');
