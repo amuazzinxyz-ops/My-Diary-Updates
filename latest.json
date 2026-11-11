@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 90,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "30477dc61a05ec50b5f35ca8eed8cadc0c53af3254f7f13169cf83986d62d5c7",
-  "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
+  "webSha256": "6210b22916792e8c5df09c3d7fd931a197d74e4e85e5e266304d325c4fddf0ea",
+  "webReleaseNotes": "Forgot PIN now shows the recovery PIN with Copy; no OK button is required. It continues automatically after copying or 15 seconds. Other Diary features remain unchanged."
 }
