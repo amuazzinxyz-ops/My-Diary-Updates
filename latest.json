@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 86,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "56ac8e5d8cac32f9bc5b2033088c7c8f5b4170be939b023205eec94cadac4d65",
+  "webSha256": "7682118bb1451fc48b07080b2cd150cf6b725e979f5276ae83567ad1c94cfdad",
   "webReleaseNotes": "Diary Lock Off now closes automatically after the correct 4-digit PIN; no OK or extra confirmation is needed. No other text, notes, photos, PIN records, or app identity changed."
 }
