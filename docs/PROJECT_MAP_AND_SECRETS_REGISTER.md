@@ -1,3 +1,9 @@
+## Backup Save As build correction 2 — 2026-11-11
+
+- Second APK workflow attempt 43049587648 passed source checks and the native patch script, then Kotlin compilation found a duplicate `android.app.Activity` import because the original Android project already imports Activity.
+- Removed only the redundant import insertion. The existing Activity import is retained and used by the Save As result handler. No app feature or data change.
+- A fresh APK build is triggered by this commit. Publish only after debug and signed Release builds, signing fingerprint, APK checksum and feed all pass.
+
 ## Backup Save As build correction — 2026-11-11
 
 - First APK workflow attempt 43049271326 stopped in the patch script before compilation. The exact failure was a generated Python string searching for a literal backslash-n instead of the MainActivity closing-line newline.

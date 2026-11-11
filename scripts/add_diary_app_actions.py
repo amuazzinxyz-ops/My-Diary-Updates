@@ -7,7 +7,7 @@ kt=base/"src/main/java/com/muazzin/diary/MainActivity.kt"
 s=kt.read_text(encoding="utf-8")
 if "class DiaryNativeActions" in s: raise SystemExit("Already patched")
 if "override fun onActivityResult(" in s: raise SystemExit("Existing onActivityResult found; safe merge required")
-s=s.replace("import android.content.Intent\n","import android.content.Intent\nimport android.app.Activity\nimport android.app.AlertDialog\nimport android.app.ProgressDialog\nimport android.webkit.JavascriptInterface\nimport android.widget.Toast\nimport java.net.HttpURLConnection\nimport java.net.URL\n",1)
+s=s.replace("import android.content.Intent\n","import android.content.Intent\nimport android.app.AlertDialog\nimport android.app.ProgressDialog\nimport android.webkit.JavascriptInterface\nimport android.widget.Toast\nimport java.net.HttpURLConnection\nimport java.net.URL\n",1)
 s=s.replace("        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {","        webView.addJavascriptInterface(DiaryNativeActions(), \"DiaryAppActions\")\n\n        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {",1)
 native = r"""
     private inner class DiaryNativeActions {
