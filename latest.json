@@ -7,8 +7,8 @@
   "sha256": "7cf79478307cdf61cb51a0a9175659ae226a78647399c02ede8fdc2b7be9a61d",
   "releaseNotes": "Check for Updates now starts the verified APK download directly when a newer app version is available; Android still shows its required install confirmation. Current Diary web interface and local Notes, Photos and PIN data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 63,
+  "webVersion": 64,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "9fcb93407dd1936bd9f5999a4bad10690d05114cdccbcb316c7a4e8604ab19ed",
+  "webSha256": "cbe66eb0061cfceb1f35adb8123645ffe0e77148f3efde8185d30018558c9fe1",
   "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
 }
