@@ -278,9 +278,9 @@ outer = r"""
         }
     }
 """
-class_end=s.rfind("\\n}")
+class_end=s.rfind("\n}")
 if class_end < 0: raise SystemExit("MainActivity closing brace missing")
-s=s[:class_end]+"\\n"+outer+s[class_end:]
+s=s[:class_end]+"\n"+outer+s[class_end:]
 kt.write_text(s,encoding="utf-8")
 
 manifest=base/"src/main/AndroidManifest.xml"

@@ -1,3 +1,9 @@
+## Backup Save As build correction — 2026-11-11
+
+- First APK workflow attempt 43049271326 stopped in the patch script before compilation. The exact failure was a generated Python string searching for a literal backslash-n instead of the MainActivity closing-line newline.
+- Corrected the generator's class-end search and insertion newline. The Activity-level Save As result handler remains outside the inner JavaScript bridge class, as required.
+- The next push triggers a fresh full build; do not publish or install until it passes all source, debug, signed Release, certificate, checksum and feed checks.
+
 # Latest correction — Android Backup opens Save As and confirms only after saving (2026-11-11)
 
 - Backup button root cause: export used a hidden download anchor and displayed success immediately without letting Android choose a folder or filename.
