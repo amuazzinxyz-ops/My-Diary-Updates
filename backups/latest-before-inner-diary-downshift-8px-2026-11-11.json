@@ -1,0 +1,14 @@
+{
+  "appName": "My Diary",
+  "packageName": "com.personal.diaryapp",
+  "versionCode": 124,
+  "versionName": "1.0.125",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.125.apk",
+  "sha256": "285020d6d2849838fada4938495a0b345ba659907de0b1468402eef270552813",
+  "releaseNotes": "Purple 3D border added around the upper My Diary header. Existing app identity, local Notes, Photos and PIN data are preserved.",
+  "minimumSupportedVersionCode": 1,
+  "webVersion": 77,
+  "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
+  "webSha256": "49904d23be30b44a0dbfb3714fe84fae907e361efb0b247bb26384e4da39cfba",
+  "webReleaseNotes": "Opened inner Diary panel moved down slightly by 6px. Existing purple header border, safe-area spacing, and Diary features unchanged."
+}
