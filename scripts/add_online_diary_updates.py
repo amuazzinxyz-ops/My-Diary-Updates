@@ -44,7 +44,7 @@ web_method = r"""
                             md.update(buffer, 0, count)
                         }
                     }
-                    md.digest().joinToString("") { "%02x".format(it) }
+                    md.digest().joinToString("") { "%02x".format(it.toInt() and 0xff) }
                 } catch (_: Exception) { "" }
             } else ""
             if (installedHash == expected) {
@@ -103,7 +103,7 @@ web_method = r"""
                         }
                     } finally { connection.disconnect() }
                     if (total < 1000L) throw Exception("Diary update file adhura hai")
-                    val actual = digest.digest().joinToString("") { "%02x".format(it) }
+                    val actual = digest.digest().joinToString("") { "%02x".format(it.toInt() and 0xff) }
                     if (actual != expected) throw Exception("Diary update SHA-256 match nahi hua")
                     val head = part.inputStream().use { input -> ByteArray(4096).also { input.read(it) }.toString(Charsets.UTF_8) }
                     if (!head.contains("<html", true) && !head.contains("<!doctype", true)) throw Exception("Downloaded Diary file valid HTML nahi hai")
