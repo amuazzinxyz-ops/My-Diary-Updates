@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 84,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "8b729edc4b9ae024df22c8e31ced0a8d2a8950ee87f2fd0d01cf02090d3a8d98",
+  "webSha256": "0070b028c45774071fadf7ebd9fec3ade85ab4d46cfc52adfa127f9ba3879e5e",
   "webReleaseNotes": "Restored the visible “4-digit PIN” hint in the PIN entry field. Automatic PIN entry and Lock Off behavior remain unchanged."
 }
