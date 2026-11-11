@@ -1,3 +1,12 @@
+# Latest correction — Opened inner Diary panel moved slightly lower (2026-11-11)
+
+- User asked for the Diary panel that opens inside the app to sit a little lower, matching the recent top-spacing adjustment.
+- Inspected the current main web source and published mirror; they were byte-identical before editing. The opened Diary panel is centered inside `#diaryMyNotesOverlay` and already has its own 3D perspective transform.
+- Narrow web-only CSS adjustment: added `position:relative; top:6px` to `#diaryMyNotesPanel`. This shifts only the opened inner Diary panel down by 6px while preserving its existing centering, perspective transform, purple outer border, camera safe-area spacing, and Diary behavior.
+- Backups created before editing: `backups/web-source-index-before-inner-diary-downshift-2026-11-11.html`, `backups/diary-web-index-before-inner-diary-downshift-2026-11-11.html`, `backups/latest-before-inner-diary-downshift-2026-11-11.json`, and `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-inner-diary-downshift-2026-11-11.md`.
+- Published Web Update 77; HTML SHA-256: `49904d23be30b44a0dbfb3714fe84fae907e361efb0b247bb26384e4da39cfba`. APK remains 1.0.125 / versionCode 124; no APK rebuild or app-data changes.
+- Static source, mirror, and feed verification completed after publishing. Physical-phone appearance remains pending user confirmation.
+
 # Latest correction — Diary header starts below the camera/status-bar safe area (2026-11-11)
 
 - User clarified that the existing purple 3D border should begin below the phone's front-camera / status-bar area, not behind or beside notification icons.
