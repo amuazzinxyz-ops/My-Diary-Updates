@@ -349,7 +349,7 @@ jobs:
           cp "$APK" /tmp/My-Diary-verified.apk
           printf '1.0.132\n131\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
-          git checkout -B diary-publish-main origin/main
+          git checkout -f -B diary-publish-main origin/main
           python3 - <<'PY'
           import json
           from pathlib import Path
