@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 88,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "60073dec668b08195def9761d8578aab2cc7c5057305a76b274bbf59c89921cd",
+  "webSha256": "a87171cabd7f070871229364fc6bfcc4b2c167c33eceb16a12a35ee3f5ccab53",
   "webReleaseNotes": "Diary PIN Lock now auto-advances after four digits on Android input, key, change, paste and keyboard-done events. Existing Diary Lock Off behavior and all other text/features are preserved."
 }
