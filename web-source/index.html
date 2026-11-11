@@ -889,6 +889,55 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   mePanel.appendChild(checkUpdatesBtn);
   var refreshDiaryBtn=el('button',{id:'diaryDiaryRefreshBtn',type:'button'},'🔄 Refresh');
   mePanel.appendChild(refreshDiaryBtn);
+  /* Calendar View: show saved notes by the day they were first written. */
+  var calendarBtn=el('button',{id:'diaryCalendarBtn',type:'button','aria-expanded':'false','aria-controls':'diaryCalendarPanel'},'Calendar 📆');
+  var calendarPanel=el('section',{id:'diaryCalendarPanel',hidden:'hidden','aria-label':'Calendar'});
+  var calendarMonth=new Date();calendarMonth.setDate(1);
+  var calendarSelected=new Date();calendarSelected.setHours(0,0,0,0);
+  var calendarGrid=el('div',{id:'diaryCalendarGrid'});
+  var calendarHeading=el('div',{id:'diaryCalendarHeading'});
+  var calendarDays=el('div',{id:'diaryCalendarDays'});
+  var calendarNotes=el('div',{id:'diaryCalendarNotes'});
+  var calendarPrev=el('button',{type:'button',class:'diary-calendar-nav'},'‹');
+  var calendarNext=el('button',{type:'button',class:'diary-calendar-nav'},'›');
+  var calendarMonthLabel=el('strong',{id:'diaryCalendarMonthLabel'});
+  var calendarTop=el('div',{id:'diaryCalendarTop'});
+  calendarTop.append(calendarPrev,calendarMonthLabel,calendarNext);
+  calendarGrid.append(calendarTop,calendarHeading,calendarDays,calendarNotes);
+  calendarPanel.appendChild(calendarGrid);
+  function calendarDateKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+  function calendarRender(){
+   var year=calendarMonth.getFullYear(),month=calendarMonth.getMonth();
+   calendarMonthLabel.textContent=calendarMonth.toLocaleDateString(undefined,{month:'long',year:'numeric'});
+   calendarHeading.replaceChildren();
+   ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(function(day){calendarHeading.appendChild(el('span',{},day));});
+   calendarDays.replaceChildren();
+   var first=new Date(year,month,1),start=first.getDay(),count=new Date(year,month+1,0).getDate();
+   var notes=read(),byDay=Object.create(null);
+   notes.forEach(function(n){var stamp=Number(n.created||n.updated||0);if(!stamp)return;var key=calendarDateKey(new Date(stamp));(byDay[key]||(byDay[key]=[])).push(n);});
+   for(var blank=0;blank<start;blank++)calendarDays.appendChild(el('span',{class:'diary-calendar-empty'}));
+   for(var day=1;day<=count;day++){
+    var date=new Date(year,month,day),key=calendarDateKey(date),has=!!byDay[key],isSelected=key===calendarDateKey(calendarSelected),isToday=key===calendarDateKey(new Date());
+    var dayBtn=el('button',{type:'button',class:'diary-calendar-day'+(has?' has-notes':'')+(isSelected?' selected':'')+(isToday?' today':'')},String(day));
+    dayBtn.setAttribute('aria-label',date.toLocaleDateString()+(has?', '+byDay[key].length+' notes':''));
+    dayBtn.addEventListener('click',function(selectedDate,selectedKey){return function(e){e.preventDefault();e.stopPropagation();calendarSelected=selectedDate;calendarRender();};}(date,key));
+    calendarDays.appendChild(dayBtn);
+   }
+   calendarNotes.replaceChildren();
+   var selectedKey=calendarDateKey(calendarSelected),selectedNotes=byDay[selectedKey]||[];
+   calendarNotes.appendChild(el('div',{class:'diary-calendar-date-title'},calendarSelected.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long',year:'numeric'})));
+   if(!selectedNotes.length){calendarNotes.appendChild(el('p',{class:'diary-calendar-no-notes'},'Is din koi note nahi likha gaya.'));return;}
+   selectedNotes.sort(function(a,b){return (b.created||b.updated||0)-(a.created||a.updated||0);});
+   selectedNotes.forEach(function(note){
+    var item=el('button',{type:'button',class:'diary-calendar-note'},(note.title||'Bina naam ka Note').trim()||'Bina naam ka Note');
+    item.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();calendarPanel.hidden=true;calendarBtn.setAttribute('aria-expanded','false');mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');openNote(note.id);});
+    calendarNotes.appendChild(item);
+   });
+  }
+  calendarPrev.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();calendarMonth.setMonth(calendarMonth.getMonth()-1);calendarRender();});
+  calendarNext.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();calendarMonth.setMonth(calendarMonth.getMonth()+1);calendarRender();});
+  calendarBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var opening=calendarPanel.hidden;calendarPanel.hidden=!opening;calendarBtn.setAttribute('aria-expanded',opening?'true':'false');if(opening)calendarRender();});
+  mePanel.appendChild(calendarBtn);mePanel.appendChild(calendarPanel);
   var interfaceColoursBtn=el('button',{id:'diaryInterfaceColoursBtn',type:'button','aria-expanded':'false','aria-controls':'diaryInterfaceColoursPanel'},t('interfaceColours'));
   var interfaceColoursPanel=el('div',{id:'diaryInterfaceColoursPanel',hidden:'hidden'});
   var originalDiaryColourBtn=el('button',{id:'diaryRestoreOriginalColourBtn',type:'button',class:'diary-interface-original-reset','aria-pressed':'false'},'↩ '+t('themeDefault'));
@@ -1902,5 +1951,25 @@ body[data-diary-interface-theme]:not([data-diary-interface-theme="blue"]):not([d
 #diaryDiaryMePanel #diaryDiaryFontLabel{font-size:18px!important;font-weight:900!important}
 #diaryDiaryMePanel #diaryMyNotesTrash{font-size:14px!important}
 </style>
+
+<style id="diary-calendar-view-style">
+#diaryDiaryMePanel #diaryCalendarBtn{display:flex!important;align-items:center!important;justify-content:flex-start!important;width:100%!important;height:40px!important;min-height:40px!important;max-height:40px!important;margin:0!important;padding:0 10px!important;box-sizing:border-box!important;font-size:18px!important;font-weight:900!important;text-align:left!important}
+#diaryDiaryMePanel #diaryCalendarPanel[hidden]{display:none!important}
+#diaryDiaryMePanel #diaryCalendarPanel{width:100%!important;box-sizing:border-box!important;padding:10px!important;border:1px solid #d4af37!important;border-radius:12px!important;background:linear-gradient(145deg,#fffdf4,#f4ecd2)!important;color:#382700!important}
+#diaryCalendarTop{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px}
+#diaryCalendarMonthLabel{flex:1;text-align:center;font-size:15px}
+#diaryDiaryMePanel #diaryCalendarPanel .diary-calendar-nav{width:40px!important;min-width:40px!important;height:40px!important;min-height:40px!important;padding:0!important;font-size:24px!important}
+#diaryCalendarHeading,#diaryCalendarDays{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;text-align:center}
+#diaryCalendarHeading{margin-bottom:5px;font-size:11px;font-weight:900}
+#diaryDiaryMePanel #diaryCalendarPanel .diary-calendar-day{width:100%!important;min-width:0!important;height:36px!important;min-height:36px!important;padding:0!important;border:1px solid #d8dfd6!important;border-radius:8px!important;background:#fff!important;color:#243d2c!important;font-size:13px!important;font-weight:700!important}
+#diaryDiaryMePanel #diaryCalendarPanel .diary-calendar-day.has-notes{border:2px solid #2c8050!important;background:#e3f2e6!important}
+#diaryDiaryMePanel #diaryCalendarPanel .diary-calendar-day.selected{outline:2px solid #c18b16!important;outline-offset:1px!important}
+#diaryDiaryMePanel #diaryCalendarPanel .diary-calendar-day.today{font-weight:1000!important;color:#7a4b00!important}
+.diary-calendar-empty{height:36px}
+.diary-calendar-date-title{margin:12px 0 7px;font-size:13px;font-weight:900}
+.diary-calendar-no-notes{margin:5px 0;font-size:12px}
+#diaryDiaryMePanel #diaryCalendarPanel .diary-calendar-note{display:block!important;width:100%!important;height:auto!important;min-height:40px!important;max-height:none!important;margin:5px 0!important;padding:8px!important;text-align:left!important;white-space:normal!important;font-size:13px!important;font-weight:800!important}
+</style>
+
 </body>
 </html>
