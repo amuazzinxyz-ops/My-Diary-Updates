@@ -7,7 +7,7 @@
   "sha256": "994605f7df5edde320f052f2ac99434a58d535e6bac36345809cad92ba47e990",
   "releaseNotes": "The Diary unlock screen and Note PIN lock setup now proceed automatically after each correct 4-digit entry, without tapping OK. Existing notes, photos, PIN data, and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 82,
+  "webVersion": 83,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "1e0b6180da816e9b8dbd52ffbb6e4cbd64ba6a579db83efe7067f081cbe9949b",
   "webReleaseNotes": "Diary PIN actions now proceed automatically after each 4-digit entry; no OK tap is needed for Note lock setup or unlock. Other Diary features remain unchanged."
