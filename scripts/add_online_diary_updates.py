@@ -54,7 +54,7 @@ web_method = r"""
                 // serves the verified on-disk HTML immediately.
                 runOnUiThread {
                     webView.post {
-                        webView.loadUrl("https://appassets.androidplatform.net/assets/index.html?diaryRefresh=" + System.currentTimeMillis() + "")
+                        webView.loadUrl("https://appassets.androidplatform.net/assets/index.html?diaryRefresh=" + System.currentTimeMillis())
                         Toast.makeText(this@MainActivity, "Diary pehle se update hai. Screen refresh kar di gayi hai.", Toast.LENGTH_LONG).show()
                     }
                 }
@@ -111,7 +111,7 @@ web_method = r"""
                     prefs.edit().putInt("webVersion", target).apply()
                     runOnUiThread {
                         Toast.makeText(this@MainActivity, "My Diary update lag gaya. App refresh ho rahi hai...", Toast.LENGTH_LONG).show()
-                        webView.postDelayed({ webView.loadUrl("https://appassets.androidplatform.net/assets/index.html?diaryRefresh=" + System.currentTimeMillis() + "") }, 700)
+                        webView.postDelayed({ webView.loadUrl("https://appassets.androidplatform.net/assets/index.html?diaryRefresh=" + System.currentTimeMillis()) }, 700)
                     }
                 } catch (e: Exception) {
                     File(filesDir, "diary-web/index.html.part").delete()
