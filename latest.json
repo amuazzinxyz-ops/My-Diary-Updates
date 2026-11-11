@@ -7,8 +7,8 @@
   "sha256": "285020d6d2849838fada4938495a0b345ba659907de0b1468402eef270552813",
   "releaseNotes": "Purple 3D border added around the upper My Diary header. Existing app identity, local Notes, Photos and PIN data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 78,
+  "webVersion": 79,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "98ce041e2b32c238072b23d73ba12a0f2652526e18031ccea3afa9e0dfdf7740",
-  "webReleaseNotes": "Opened inner Diary panel moved down a further 2px (8px total). Existing purple header border, safe-area spacing, and Diary features unchanged."
+  "webSha256": "31cba756948677c7423c3412957d9262be5e7aa8f183c27d06f02429bf4c5841",
+  "webReleaseNotes": "Backup opens Android Save As so the user can choose where to save and the filename. Success appears only after the backup file is written."
 }

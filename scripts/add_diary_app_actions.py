@@ -6,7 +6,8 @@ base=Path("diary-project/app")
 kt=base/"src/main/java/com/muazzin/diary/MainActivity.kt"
 s=kt.read_text(encoding="utf-8")
 if "class DiaryNativeActions" in s: raise SystemExit("Already patched")
-s=s.replace("import android.content.Intent\n","import android.content.Intent\nimport android.app.AlertDialog\nimport android.app.ProgressDialog\nimport android.webkit.JavascriptInterface\nimport android.widget.Toast\nimport java.net.HttpURLConnection\nimport java.net.URL\n",1)
+if "override fun onActivityResult(" in s: raise SystemExit("Existing onActivityResult found; safe merge required")
+s=s.replace("import android.content.Intent\n","import android.content.Intent\nimport android.app.Activity\nimport android.app.AlertDialog\nimport android.app.ProgressDialog\nimport android.webkit.JavascriptInterface\nimport android.widget.Toast\nimport java.net.HttpURLConnection\nimport java.net.URL\n",1)
 s=s.replace("        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {","        webView.addJavascriptInterface(DiaryNativeActions(), \"DiaryAppActions\")\n\n        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {",1)
 native = r"""
     private inner class DiaryNativeActions {
@@ -21,6 +22,10 @@ native = r"""
                 if(response !in 200..299) throw java.io.IOException("Update feed HTTP $response")
                 JSONObject(c.inputStream.bufferedReader().use{it.readText()})
             } finally { c.disconnect() }
+        }
+        @JavascriptInterface fun saveBackup(content: String, suggestedName: String) {
+            if (content.isEmpty()) return
+            this@MainActivity.startDiaryBackupSave(content, suggestedName)
         }
         private fun currentVersion(): Int {
             val info=packageManager.getPackageInfo(packageName,0)
@@ -219,6 +224,63 @@ native = r"""
 i=s.rfind("\n}")
 if i<0: raise SystemExit("Class end missing")
 s=s[:i]+native+s[i:]
+outer = r"""
+    private var pendingDiaryBackupContent: String? = null
+    private val DIARY_BACKUP_REQUEST_CODE = 7319
+
+    private fun startDiaryBackupSave(content: String, suggestedName: String) {
+        runOnUiThread {
+            if (pendingDiaryBackupContent != null) {
+                Toast.makeText(this@MainActivity, "Backup save window pehle se khula hai.", Toast.LENGTH_LONG).show()
+                return@runOnUiThread
+            }
+            pendingDiaryBackupContent = content
+            val safeName = suggestedName.substringAfterLast('/').take(120).ifBlank { "Diary-My-Notes-Backup.json" }
+            val createDocument = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                addCategory(Intent.CATEGORY_OPENABLE)
+                type = "application/json"
+                putExtra(Intent.EXTRA_TITLE, safeName)
+            }
+            try { startActivityForResult(createDocument, DIARY_BACKUP_REQUEST_CODE) }
+            catch (e: Exception) {
+                pendingDiaryBackupContent = null
+                notifyDiaryBackupResult(false)
+                Toast.makeText(this@MainActivity, "Backup save window nahi khul saka.", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun notifyDiaryBackupResult(saved: Boolean) {
+        runOnUiThread {
+            webView.evaluateJavascript("window.diaryBackupSaveResult && window.diaryBackupSaveResult($saved);", null)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode != DIARY_BACKUP_REQUEST_CODE) return
+        val content = pendingDiaryBackupContent
+        pendingDiaryBackupContent = null
+        val destination = data?.data
+        if (resultCode == Activity.RESULT_OK && destination != null && content != null) {
+            try {
+                val output = contentResolver.openOutputStream(destination) ?: throw java.io.IOException("Save location open nahi hui")
+                output.bufferedWriter(Charsets.UTF_8).use { it.write(content) }
+                notifyDiaryBackupResult(true)
+                Toast.makeText(this@MainActivity, "Backup save ho gaya.", Toast.LENGTH_LONG).show()
+            } catch (e: Exception) {
+                notifyDiaryBackupResult(false)
+                Toast.makeText(this@MainActivity, "Backup save nahi ho saka. Doosri location chunein.", Toast.LENGTH_LONG).show()
+            }
+        } else {
+            notifyDiaryBackupResult(false)
+            Toast.makeText(this@MainActivity, "Backup save cancel hua.", Toast.LENGTH_SHORT).show()
+        }
+    }
+"""
+class_end=s.rfind("\\n}")
+if class_end < 0: raise SystemExit("MainActivity closing brace missing")
+s=s[:class_end]+"\\n"+outer+s[class_end:]
 kt.write_text(s,encoding="utf-8")
 
 manifest=base/"src/main/AndroidManifest.xml"

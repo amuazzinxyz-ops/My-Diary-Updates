@@ -1,3 +1,13 @@
+# Latest correction — Android Backup opens Save As and confirms only after saving (2026-11-11)
+
+- Backup button root cause: export used a hidden download anchor and displayed success immediately without letting Android choose a folder or filename.
+- Web export now calls the Android native bridge in the installed app; regular browser download fallback remains.
+- Android bridge uses ACTION_CREATE_DOCUMENT with suggested filename `Diary-My-Notes-Backup.json`. User can choose folder and change filename. JSON is written to selected URI. Success is shown only after stream write completes; cancel/failure clears success status.
+- Existing backup JSON structure, restore, notes/photos/PIN data, local storage, styling and app identity are preserved.
+- Pre-edit backups stored at `backups/*-before-native-backup-save-dialog-2026-11-11.bak` for edited files.
+- Prepared next APK **1.0.126 / versionCode 125**, based on installed **1.0.125 / versionCode 124**. Web Update 79. Workflow builds from tracked Android project ZIP, applies updated native bridge script, and verifies signing identity before publishing.
+- Device-side Save As flow remains unverified until installed and tested on Android.
+
 # Latest correction — Inner Diary panel moved down a further 2px (2026-11-11)
 
 - User asked for a very small additional downward adjustment after Web Update 77.
