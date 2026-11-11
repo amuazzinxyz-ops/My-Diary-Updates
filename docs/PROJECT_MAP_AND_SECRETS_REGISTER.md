@@ -1,3 +1,11 @@
+# Latest correction — Android status bar no longer overlays the Diary page (2026-11-11)
+
+- User showed that Android notification icons (for example Vi and WhatsApp) appeared over the top of the My Diary welcome screen because the native Activity enabled `SYSTEM_UI_FLAG_LAYOUT_STABLE`, allowing the WebView content to draw behind the transparent status bar.
+- Updated `scripts/add_diary_app_actions.py` to remove that layout-behind-status-bar flag, set an opaque pale lavender status-bar background (`#FAF7FF`), and enable dark status-bar icons. The status bar now occupies its own area; time, network, battery, and notification icons remain visible, but no longer overlay the Diary content.
+- Pre-edit backups: `backups/add_diary_app_actions-before-statusbar-separation-2026-11-11.py`, `backups/build-diary-from-zip-before-statusbar-separation-2026-11-11.yml`, and `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-statusbar-separation-2026-11-11.md`.
+- Signed APK **1.0.124 / versionCode 123** built and published successfully by workflow run **43033906461**. Debug build, signed Release build, signing-certificate fingerprint verification, publish, and artifact upload all succeeded. Live `latest.json` now points to `My-Diary-1.0.124.apk` with SHA-256 `391f08f3cdd00cef316668b0cf2111a3fef6bebe0e82946fcb30ff92cb0a1ecb`. Web bundle remains Web Update **74**; its hash and content were not changed.
+- No Diary HTML redesign, local notes/photos, PIN/recovery data, package identity, signing identity, or unrelated app features were changed. Physical-device appearance is pending user confirmation after installing 1.0.124 via **Me → Check for Updates**.
+
 # MY DIARY — MASTER PROJECT REGISTER
 
 **Single source of truth. Last updated: 2026-11-11 (published APK 1.0.122 / versionCode 121; Web Update 58).**
