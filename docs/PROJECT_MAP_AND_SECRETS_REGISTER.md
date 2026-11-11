@@ -1,3 +1,22 @@
+# SHA-256 update-feed repair — 2026-11-12
+
+- User again reported the installed app's web-update error: `Diary update SHA-256 match nahi hua`.
+- Re-inspected the actual Android updater path. This message is raised only when the downloaded HTML bundle's bytes do not match `latest.json.webSha256`; the APK downloader uses a different error message.
+- Verified the signed APK build artifact from workflow run **43089651168** independently: SHA-256 `04a9863ff35f13ca2beccecceaffc49c2e41d6bb8e72bac1df4d4501238b04a2`, matching the APK hash already in `latest.json`. No APK rebuild or APK metadata change was needed.
+- Created pre-repair backups:
+  - `backups/web-source-index-before-sha-publish-repair-2026-11-12.html`
+  - `backups/diary-web-index-before-sha-publish-repair-2026-11-12.html`
+  - `backups/latest-before-sha-publish-repair-2026-11-12.json`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-sha-publish-repair-2026-11-12.md`
+- Re-published the exact same Diary HTML with only a non-visible HTML comment added to trigger a fresh release record. No interface, layout, button, feature, or app logic changed.
+- Synchronized `diary-web/index.html` byte-for-byte with `web-source/index.html`; both now have Git blob SHA `a211e05028c20bd029c7d00560c9a558576a084e`.
+- Independently computed UTF-8 SHA-256 for the exact current HTML and checked the implementation against the standard SHA-256 test vector `abc`. Current HTML SHA-256: `9085dade0a1a84ec2938488e434d89cf825b00d266f2da9542b9db5992775697`.
+- Updated `latest.json` to **Web Update 85** with that exact `webSha256`. Re-fetched all three files after commits and verified source/mirror blob SHAs match and feed checksum equals the independently calculated HTML checksum.
+- APK remains **1.0.131 / versionCode 130**; signed APK checksum, package name, and signing identity were not changed. Notes, photos, PIN/recovery data and app data were not touched.
+- GitHub Actions web-publisher run **43095216483** was triggered by the source change but remained queued during this repair; direct source/mirror/feed synchronization and hash verification were completed independently. Device-side download/install still requires the user's Check for Updates test.
+
+---
+
 # Latest correction — Camera/status-bar background made transparent (2026-11-11)
 
 - User asked to remove the separate background strip above the phone's front camera while keeping the Diary title and content below the camera/status icons.
