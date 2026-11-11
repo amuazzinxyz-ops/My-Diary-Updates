@@ -4,7 +4,7 @@
   "versionCode": 126,
   "versionName": "1.0.127",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.127.apk",
-  "sha256": "0b06a7f2d91079e667ba94d8062163df8dcda1a476d757466dadc76d5ce6f154",
+  "sha256": "f6fea49aa42e28d1b6498cd96f2b6b244118e918e28d84d79a6b4b8ebc6943cf",
   "releaseNotes": "The status bar and camera safe area are transparent, showing the Diary page background while keeping the title below system icons. Existing notes, photos, PIN data, and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 80,
