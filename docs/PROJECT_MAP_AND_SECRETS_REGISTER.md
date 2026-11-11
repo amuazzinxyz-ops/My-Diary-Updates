@@ -403,3 +403,18 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK remains **1.0.122 / versionCode 121**; no APK rebuild or signing operation was performed. Notes, photos, PIN Lock/recovery, package identity, and existing button handlers were not intentionally changed.
 - GitHub publication checks passed. Physical phone appearance has not yet been device-confirmed. On the phone, use **Me → Check for Updates** to receive Web Update 59, then open Me and confirm that only the Me menu options appear on an opaque panel, with Note Pin remaining on each note card.
 
+
+
+## 25. WebView stale-page cache repair — Diary 1.0.123 preparation (2026-11-11)
+
+- User reported that the **Diary ka Asal Rang** label still appeared as the previous Roman wording on the installed Android app, even though the live HTML source and web bundle already contained the requested new wording.
+- Inspection confirmed the current Roman dictionary entry is exactly `Diary ka Asal Rang`; the obsolete wording is absent from the current `web-source/index.html`. The live update feed is webVersion **60** and its SHA-256 matches the published bundle.
+- Root cause identified in the Android update path: the native `DiaryBundlePathHandler` returned the same `appassets.androidplatform.net/assets/index.html` URL without explicit no-cache response headers. A WebView could reuse an older cached response after the verified on-disk HTML bundle was replaced.
+- Narrow native updater repair in `scripts/add_online_diary_updates.py`: both post-update reload paths now append a unique `diaryRefresh` query value; the asset path handler sends `Cache-Control: no-store, no-cache, must-revalidate, max-age=0`, `Pragma: no-cache`, and `Expires: 0`. The hash-verified download, local bundle backup, bundled-asset fallback, app origin, notes/photos/PIN storage, and signing identity remain unchanged.
+- Backups before the repair:
+  - `backups/add_online_diary_updates-before-webview-no-cache-2026-11-11.py`
+  - `backups/build-diary-from-zip-before-webview-no-cache-2026-11-11.yml`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-webview-no-cache-2026-11-11.md`
+- Source commits: updater repair `65e3776e0c30f9533e004298ab6a64c8bfd0115e`; workflow version bump `256bf955ab711ee9a231e2dab17ecce273124375`; cleanup `99e0f38b079645ead7ca13d9e3d6d2b6995f6d2e`; final publish-guard alignment `ff28c27277423d888fd0da8bf85e251d2230581e`.
+- The existing release workflow is prepared to build **1.0.123 / versionCode 122** from the exact latest published HTML, using the existing package name and existing trusted signing key. Live APK remains **1.0.122 / versionCode 121** until the signed build and publish workflow succeeds.
+- This is a native WebView cache-delivery repair, so a new APK is required for installed apps to receive the stronger no-cache handling. No APK has been declared published until the workflow completes and the signed artifact/feed checks pass. Phone-side display must still be confirmed after installing the update.
