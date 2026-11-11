@@ -5,6 +5,16 @@ import xml.etree.ElementTree as ET
 base=Path("diary-project/app")
 kt=base/"src/main/java/com/muazzin/diary/MainActivity.kt"
 s=kt.read_text(encoding="utf-8")
+# Make the Android status bar/camera safe area transparent so the Diary page
+# background continues behind it. The HTML already reserves the safe inset
+# with env(safe-area-inset-top), keeping the title below camera/status icons.
+status_old = "        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE"
+status_new = """        window.statusBarColor = android.graphics.Color.TRANSPARENT
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR"""
+if status_old in s:
+    s = s.replace(status_old, status_new, 1)
+elif status_new not in s:
+    raise SystemExit("Expected original Diary status-bar setup was not found; refusing unsafe patch")
 if "class DiaryNativeActions" in s: raise SystemExit("Already patched")
 if "override fun onActivityResult(" in s: raise SystemExit("Existing onActivityResult found; safe merge required")
 s=s.replace("import android.content.Intent\n","import android.content.Intent\nimport android.app.AlertDialog\nimport android.app.ProgressDialog\nimport android.webkit.JavascriptInterface\nimport android.widget.Toast\nimport java.net.HttpURLConnection\nimport java.net.URL\n",1)
