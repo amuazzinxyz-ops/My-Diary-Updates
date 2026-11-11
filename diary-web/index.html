@@ -1871,5 +1871,30 @@ body[data-diary-interface-theme]:not([data-diary-interface-theme="blue"]):not([d
  scrollbar-width:thin!important;
 }
 </style>
+
+<style id="diary-me-menu-opaque-overlay-fix">
+/* Me is a real dropdown surface: never let Diary note cards show through it. */
+#diaryMyNotesPanel #diaryDiaryMePanel:not([hidden]){
+  display:flex!important;flex-direction:column!important;align-items:stretch!important;
+  gap:7px!important;box-sizing:border-box!important;padding:10px!important;
+  background:linear-gradient(145deg,#fffdf4 0%,#f4ecd2 100%)!important;
+  border:2px solid #d4af37!important;border-radius:14px!important;color:#382700!important;
+  text-align:left!important;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.9),0 4px 0 #9b7415,0 8px 16px rgba(35,25,5,.28)!important;
+  isolation:isolate!important;z-index:50!important;
+}
+#diaryMyNotesPanel #diaryDiaryMePanel .diary-note-pin{display:none!important}
+#diaryMyNotesPanel #diaryDiaryMePanel #diaryDiaryMeSettingsRow,
+#diaryMyNotesPanel #diaryDiaryMePanel #diaryDiaryFontGroup,
+#diaryMyNotesPanel #diaryDiaryMePanel #diaryInterfaceColoursPanel{
+  width:100%!important;min-width:0!important;box-sizing:border-box!important;
+}
+#diaryMyNotesPanel #diaryDiaryMePanel button,
+#diaryMyNotesPanel #diaryDiaryMePanel [role="button"]{max-width:100%!important;box-sizing:border-box!important}
+#diaryMyNotesPanel #diaryDiaryMePanel #diaryInterfaceColoursPanel:not([hidden]){
+  display:flex!important;flex-direction:column!important;gap:6px!important;
+}
+</style>
+
 </body>
 </html>
