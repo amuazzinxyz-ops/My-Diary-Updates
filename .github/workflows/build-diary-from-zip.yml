@@ -1,4 +1,4 @@
-# Release baseline guard: published 1.0.129 / versionCode 128; next APK 1.0.130 / versionCode 129.
+# Release baseline guard: published 1.0.130 / versionCode 129; next APK 1.0.131 / versionCode 130.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -111,7 +111,7 @@ jobs:
           source=Path("web-source/index.html")
           actual=hashlib.sha256(source.read_bytes()).hexdigest()
           meta["webSha256"]=actual
-          meta["webReleaseNotes"]="Diary PIN actions now proceed automatically after each 4-digit entry; no OK tap is needed for Note lock setup or unlock. Other Diary features remain unchanged."
+          meta["webReleaseNotes"]="Note Lock Off now turns off immediately after the correct 4-digit PIN; no extra OK confirmation. Other Diary features remain unchanged."
           Path("latest.json").write_text(json.dumps(meta,indent=2)+"\n",encoding="utf-8")
           expected=meta.get("webSha256","").lower()
           if len(expected)!=64 or actual!=expected:
@@ -211,7 +211,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved next Diary version 1.0.130 (versionCode 129)
+      - name: Set approved next Diary version 1.0.131 (versionCode 130)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
@@ -219,12 +219,12 @@ jobs:
           from pathlib import Path
           p = Path("app/build.gradle.kts")
           s = p.read_text(encoding="utf-8")
-          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 129', s, count=1)
-          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.130"', s, count=1)
+          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 130', s, count=1)
+          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.131"', s, count=1)
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary versionName=1.0.130, versionCode=129")
+          print("Set Diary versionName=1.0.131, versionCode=130")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -246,12 +246,12 @@ jobs:
           name = one(r'versionName\s*=\s*"([^"]+)"', "versionName")
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
-          if code != 129 or name != "1.0.130":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.130/129, found {name}/{code}")
+          if code != 130 or name != "1.0.131":
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.131/130, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if feed_version not in {(128, "1.0.129"), (129, "1.0.130")}: 
+          if feed_version not in {(129, "1.0.130"), (130, "1.0.131")}:  
               raise SystemExit(f"BLOCKED: update feed is not the installed baseline or this exact repair release: {feed_version}")
-          print(f"PASS: package={package}, next version={name}/{code}; feed baseline remains 1.0.129/128")
+          print(f"PASS: package={package}, next version={name}/{code}; feed baseline remains 1.0.130/129")
           PY
 
       - name: Align Java and Kotlin JVM targets
@@ -355,16 +355,16 @@ jobs:
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in {(127, "1.0.128"), (128, "1.0.129")}:
+          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in {(129, "1.0.130"), (130, "1.0.131")}:
               raise SystemExit(f"BLOCKED: live main feed is not the installed baseline or exact repair release: {feed_version}")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
           meta["packageName"] = "com.personal.diaryapp"
           meta["versionName"] = lines[0]
           meta["versionCode"] = int(lines[1])
-          meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.130.apk"
+          meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.131.apk"
           meta["sha256"] = lines[2]
-          meta["releaseNotes"] = "The Diary unlock screen and Note PIN lock setup now proceed automatically after each correct 4-digit entry, without tapping OK. Existing notes, photos, PIN data, and app identity are preserved."
+          meta["releaseNotes"] = "Note PIN lock setup and unlock proceed automatically after four digits. Turning Lock Off now removes the lock immediately after the correct PIN, without an extra OK confirmation. Existing notes, photos, PIN data, and app identity are preserved."
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           cp /tmp/My-Diary-verified.apk My-Diary.apk
@@ -373,7 +373,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add My-Diary.apk My-Diary-1.0.130.apk latest.json
-          git commit -m "Publish verified My Diary update 1.0.130"
+          git commit -m "Publish verified My Diary update 1.0.131"
           git push origin HEAD:main
       - name: Upload unsigned Release APK for private owner-side signing
         if: env.DIARY_RELEASE_READY != 'true'
