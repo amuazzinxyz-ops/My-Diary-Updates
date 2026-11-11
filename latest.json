@@ -7,8 +7,8 @@
   "sha256": "04a9863ff35f13ca2beccecceaffc49c2e41d6bb8e72bac1df4d4501238b04a2",
   "releaseNotes": "Note PIN lock setup and unlock proceed automatically after four digits. Turning Lock Off now removes the lock immediately after the correct PIN, without an extra OK confirmation. Existing notes, photos, PIN data, and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 83,
+  "webVersion": 84,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "c7ff69244346d305f22397df55ffcdd90ab5f3b55021187bd7e27f4ff0df172b",
-  "webReleaseNotes": "Note Lock Off now turns off immediately after the correct 4-digit PIN; no extra OK confirmation. Other Diary features remain unchanged."
+  "webSha256": "8b729edc4b9ae024df22c8e31ced0a8d2a8950ee87f2fd0d01cf02090d3a8d98",
+  "webReleaseNotes": "Restored the visible “4-digit PIN” hint in the PIN entry field. Automatic PIN entry and Lock Off behavior remain unchanged."
 }
