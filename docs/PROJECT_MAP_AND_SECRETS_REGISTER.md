@@ -1,3 +1,12 @@
+# Latest correction — Inner Diary panel moved down a further 2px (2026-11-11)
+
+- User asked for a very small additional downward adjustment after Web Update 77.
+- Inspected the current project register, main web source, published mirror, and update feed. Source and mirror matched before editing; Web Update 77 had the panel at 6px down.
+- Changed only the opened inner Diary panel offset from 6px to 8px total using a later, narrowly scoped CSS override. No other layout, controls, features, APK, or user data changed.
+- Backups created before editing: `backups/web-source-index-before-inner-diary-downshift-8px-2026-11-11.html`, `backups/diary-web-index-before-inner-diary-downshift-8px-2026-11-11.html`, `backups/latest-before-inner-diary-downshift-8px-2026-11-11.json`, `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-inner-diary-downshift-8px-2026-11-11.md`.
+- Published Web Update 78; HTML SHA-256: `98ce041e2b32c238072b23d73ba12a0f2652526e18031ccea3afa9e0dfdf7740`. APK remains 1.0.125 / versionCode 124; no APK rebuild.
+- Source/mirror/feed/register will be checked after write. Actual phone appearance awaits user confirmation.
+
 # Latest correction — Opened inner Diary panel moved slightly lower (2026-11-11)
 
 - User asked for the Diary panel that opens inside the app to sit a little lower, matching the recent top-spacing adjustment.
