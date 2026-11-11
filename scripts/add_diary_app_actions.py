@@ -1,4 +1,5 @@
 from pathlib import Path
+# Camera safe-area repair: transparent Android status bar is applied below.
 import re
 import xml.etree.ElementTree as ET
 
