@@ -7,8 +7,8 @@
   "sha256": "f22678077efc7ce9974a6bcbfb8b3ce119ed71905ad9eeb1a63bafb481b33fdd",
   "releaseNotes": "Note PIN lock setup and unlock proceed automatically after four digits. Turning Lock Off now removes the lock immediately after the correct PIN, without an extra OK confirmation. Existing notes, photos, PIN data, and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 91,
+  "webVersion": 92,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "aac679579ab0db7de31c0c3c4d31143adc64daae1cc6d363590901987d205e89",
-  "webReleaseNotes": "All new PIN popups now have no OK button. Copy closes the popup; otherwise it closes automatically after 15 seconds and continues recovery when applicable."
+  "webSha256": "45fc6b72a621c1d9951398eaeb5c8c16b8a2dc4c7beb15c6c14206e5efb80a65",
+  "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
 }
