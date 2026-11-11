@@ -4,7 +4,7 @@
   "versionCode": 125,
   "versionName": "1.0.126",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.126.apk",
-  "sha256": "e20ecc8453abcb7a8a6a9ae17b51e07b54ab38e36265e5aef3bb84da80f2e831",
+  "sha256": "ec9dd2de4311dcaec5c80ba970a96b3f856847cb46270da24817ac41edd91a88",
   "releaseNotes": "Backup now opens Android Save As so the user can choose a folder and filename. Success appears only after the backup file is written; existing notes, photos, PIN data, and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 80,
