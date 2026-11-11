@@ -1,3 +1,9 @@
+## APK publish guard alignment — 2026-11-11
+
+- Debug APK and signed Release APK build succeeded in run 43050047044; existing signing certificate fingerprint matched.
+- The final publish step correctly refused to publish because a second stale baseline check still expected 1.0.124/123, while the live feed is 1.0.125/124. Updated that final guard to the actual installed baseline. No APK or live feed was changed by the blocked publish.
+- This workflow-only correction triggers a fresh signed build. Publish only if all checks pass.
+
 ## Backup Save As build correction 2 — 2026-11-11
 
 - Second APK workflow attempt 43049587648 passed source checks and the native patch script, then Kotlin compilation found a duplicate `android.app.Activity` import because the original Android project already imports Activity.
