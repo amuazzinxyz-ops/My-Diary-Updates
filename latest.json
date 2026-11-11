@@ -4,7 +4,7 @@
   "versionCode": 131,
   "versionName": "1.0.132",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.132.apk",
-  "sha256": "f22678077efc7ce9974a6bcbfb8b3ce119ed71905ad9eeb1a63bafb481b33fdd",
+  "sha256": "68e8db8c3e7cd35aa50bca57756aac4cd3336929c028e67ade3e347d8d469e38",
   "releaseNotes": "Note PIN lock setup and unlock proceed automatically after four digits. Turning Lock Off now removes the lock immediately after the correct PIN, without an extra OK confirmation. Existing notes, photos, PIN data, and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 92,
