@@ -1250,7 +1250,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  function forgotDiaryPin(onDone){
   var current=localStorage.getItem(DIARY_MASTER_PIN_KEY)||'';
   if(!current){window.alert(t('diaryNoLock'));return;}
-  if(!window.confirm(t('diaryForgotConfirm')))return;
+
   var pin=String(Math.floor(Math.random()*10000)).padStart(4,'0');
   try{localStorage.setItem(DIARY_MASTER_PIN_KEY,pin);sessionStorage.setItem('diaryDiaryMustChooseNewPinAfterRecovery','1');showNewPinPopup(pin,function(){if(typeof onDone==='function')onDone();});}
   catch(e){window.alert(t('storageUnavailable'));}
