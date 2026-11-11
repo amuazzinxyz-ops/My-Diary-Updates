@@ -351,8 +351,9 @@ jobs:
           import json
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
-          if meta.get("packageName") != "com.personal.diaryapp" or int(meta.get("versionCode", 0)) != 124 or meta.get("versionName") != "1.0.125":
-              raise SystemExit("BLOCKED: live main feed is no longer the expected 1.0.125/124 baseline")
+          feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
+          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in {(124, "1.0.125"), (125, "1.0.126")}:
+              raise SystemExit(f"BLOCKED: live main feed is not the installed baseline or exact repair release: {feed_version}")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
           meta["packageName"] = "com.personal.diaryapp"
