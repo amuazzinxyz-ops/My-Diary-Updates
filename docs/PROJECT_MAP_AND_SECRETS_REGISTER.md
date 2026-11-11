@@ -1,6 +1,6 @@
 # MY DIARY — MASTER PROJECT REGISTER
 
-**Single source of truth. Last updated: 2026-11-11 (published APK 1.0.122 / versionCode 121; Web Update 57).**
+**Single source of truth. Last updated: 2026-11-11 (published APK 1.0.122 / versionCode 121; Web Update 58).**
 
 ## Latest correction — Check for Updates starts APK download directly (2026-11-11)
 
@@ -374,3 +374,18 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Published **Web Update 57**. Live feed SHA-256: `84ae2034860516397ceaa6077c7033a30735da6b6560ad897ea2031791fbe590`. Source and published mirror have identical blob SHA `9c0bda40dcdaf11622fa393cbb5f13772435ab53`; both are 205,602 bytes.
 - APK remains **1.0.122 / versionCode 121** (SHA-256 `62a7f7687777b9f2caa548ee9c96c327b75eefa2630828b159e42052f0251aa9`). No APK rebuild was needed because this is a web-only styling change; no signing operation was performed.
 - GitHub Actions HTML/feed publication checks passed. The panel's visual appearance on a physical phone has not been device-confirmed; use **Me → Check for Updates** to receive Web Update 57, then open Recently Deleted to inspect it.
+
+
+## 23. Me menu touch scrolling repair — 2026-11-11
+
+- User reported that the buttons inside the Diary **Me** menu appeared fixed and could not be scrolled to reach the lower options.
+- Root cause: the dropdown is absolutely positioned inside the Diary header, while the containing `#diaryMyNotesPanel` has `overflow:hidden`; the parent clipped the dropdown below its boundary even though the dropdown had an earlier max-height/overflow rule.
+- Narrow fix: when the Me menu opens, add `diary-me-menu-open` to the Diary panel so the panel/header allow the dropdown to extend beyond the frame; give the menu an explicit touch-friendly vertical scroll area (`overflow-y:auto`, `-webkit-overflow-scrolling:touch`, `touch-action:pan-y`, contained overscroll, and a viewport-safe max-height). Reset scroll to the top when opening. Remove the open class when the user taps outside or closes the Diary. The Recently Deleted entry path also activates the same menu-open state.
+- Existing menu button order, button sizes, click handlers, translations, note/trash data, photo data, PIN Lock/recovery, and all unrelated features are unchanged.
+- Backups:
+  - `backups/web-source-index-before-me-menu-scroll-fix-2026-11-11.html`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-me-menu-scroll-fix-2026-11-11.md`
+- Source commit: `2c66f2ab531adfbed4a026fe6516628afd95ff3f`. Web-only publish workflow run **43010831372** completed successfully.
+- Published **Web Update 58**. Feed SHA-256: `a79d757830530671cc5715046dbd0bf49a259116a15152a95a059639c9232802`. Source and published mirror have identical blob SHA `f16f50d419d48efd852cb89c1682516ae75d77b3`.
+- APK remains **1.0.122 / versionCode 121**; no APK rebuild or signing operation was needed. No MUAZZIN project was changed.
+- Automated GitHub web publication checks passed. Physical-device touch scrolling still needs the user to confirm after **Me → Check for Updates** receives Web Update 58.
