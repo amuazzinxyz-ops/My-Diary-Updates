@@ -3,12 +3,12 @@
   "packageName": "com.personal.diaryapp",
   "versionCode": 129,
   "versionName": "1.0.130",
-  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.129.apk",
-  "sha256": "994605f7df5edde320f052f2ac99434a58d535e6bac36345809cad92ba47e990",
-  "releaseNotes": "The Diary unlock screen and Note PIN lock setup now proceed automatically after each correct 4-digit entry, without tapping OK. Existing notes, photos, PIN data, and app identity are preserved.",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.131.apk",
+  "sha256": "04a9863ff35f13ca2beccecceaffc49c2e41d6bb8e72bac1df4d4501238b04a2",
+  "releaseNotes": "Note PIN lock setup and unlock proceed automatically after four digits. Turning Lock Off now removes the lock immediately after the correct PIN, without an extra OK confirmation. Existing notes, photos, PIN data, and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 83,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "1e0b6180da816e9b8dbd52ffbb6e4cbd64ba6a579db83efe7067f081cbe9949b",
-  "webReleaseNotes": "Diary PIN actions now proceed automatically after each 4-digit entry; no OK tap is needed for Note lock setup or unlock. Other Diary features remain unchanged."
+  "webSha256": "c7ff69244346d305f22397df55ffcdd90ab5f3b55021187bd7e27f4ff0df172b",
+  "webReleaseNotes": "Note Lock Off now turns off immediately after the correct 4-digit PIN; no extra OK confirmation. Other Diary features remain unchanged."
 }
