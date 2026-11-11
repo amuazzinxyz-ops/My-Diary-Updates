@@ -1,3 +1,12 @@
+# Latest correction — Diary header starts below the camera/status-bar safe area (2026-11-11)
+
+- User clarified that the existing purple 3D border should begin below the phone's front-camera / status-bar area, not behind or beside notification icons.
+- Inspected the current published HTML: it uses `viewport-fit=cover` but the page body had a fixed `14px` top padding and did not account for `env(safe-area-inset-top)`.
+- Narrow web-only correction: body top padding now uses `calc(14px + env(safe-area-inset-top, 0px))`. This moves the existing Diary content and purple header border below the reported safe area while preserving the existing horizontal/bottom spacing, border design, buttons, and all Diary behaviour.
+- Backups created before editing: `backups/web-source-index-before-camera-safe-area-spacing-2026-11-11.html`, `backups/diary-web-index-before-camera-safe-area-spacing-2026-11-11.html`, `backups/latest-before-camera-safe-area-spacing-2026-11-11.json`, and `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-camera-safe-area-spacing-2026-11-11.md`.
+- Published Web Update 76; feed records HTML SHA-256 `69daf44646cbaa878b1626a43549b1b073be92457ec6805123be0dcc4110357f`. Source and mirror are byte-identical (Git blob SHA `3bfd3ae6418f008e704e850e048fec4ae0b15271`). APK remains 1.0.125 / versionCode 124; no APK rebuild, signing change, notes/photos/PIN changes, or unrelated feature changes.
+- Static source/feed checks passed. Physical-phone appearance remains pending user confirmation after **Me → Check for Updates**.
+
 # Latest correction — Android status bar no longer overlays the Diary page (2026-11-11)
 
 - User showed that Android notification icons (for example Vi and WhatsApp) appeared over the top of the My Diary welcome screen because the native Activity enabled `SYSTEM_UI_FLAG_LAYOUT_STABLE`, allowing the WebView content to draw behind the transparent status bar.
