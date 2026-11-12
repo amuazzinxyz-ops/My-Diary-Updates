@@ -1130,8 +1130,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    for(var blank=0;blank<start;blank++)calendarDays.appendChild(el('span',{class:'diary-calendar-empty'}));
    for(var day=1;day<=count;day++){
     var date=new Date(year,month,day),key=calendarDateKey(date),has=!!byDay[key],isSelected=key===calendarDateKey(calendarSelected),isToday=key===calendarDateKey(new Date());
-    var dayBtn=el('button',{type:'button',class:'diary-calendar-day'+(isSelected?' selected':'')+(isToday?' today':'')},String(day));
-    dayBtn.setAttribute('aria-label',date.toLocaleDateString(activeLocale)+(has?t('calendarNotesCount').replace('{count}',String(byDay[key].length)):''));
+    var dayBtn=el('button',{type:'button',class:'diary-calendar-day'+(isSelected?' selected':'')+(isToday?' today':'')},new Intl.NumberFormat(activeLocale).format(day));
+    dayBtn.setAttribute('aria-label',date.toLocaleDateString(activeLocale)+(has?t('calendarNotesCount').replace('{count}',new Intl.NumberFormat(activeLocale).format(byDay[key].length)):''));
     dayBtn.addEventListener('click',function(selectedDate,selectedKey){return function(e){e.preventDefault();e.stopPropagation();calendarSelected=selectedDate;calendarRender();};}(date,key));
     calendarDays.appendChild(dayBtn);
    }
