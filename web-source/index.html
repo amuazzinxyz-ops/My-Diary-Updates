@@ -2176,27 +2176,36 @@ body[data-diary-interface-theme]:not([data-diary-interface-theme="blue"]):not([d
 </style>
 
 <style id="diary-entry-tap-indicator">
-/* Larger animated right-pointing hand directs attention to the Diary title. */
-#diaryMyNotesEntry #diaryMyNotesEntryTitle::before{
- content:"👉";
+/* Keep the Diary title centered directly beneath the icon; place the left-pointing tap cue after the title without shifting its center. */
+#diaryMyNotesEntry > #diaryMyNotesEntryTitle{
+ display:block!important;
+ flex:0 1 auto!important;
+ width:max-content!important;
+ max-width:calc(100% - 42px)!important;
+ position:relative!important;
+ margin:0 auto!important;
+ text-align:center!important;
+}
+#diaryMyNotesEntry #diaryMyNotesEntryTitle::before{content:none!important;display:none!important}
+#diaryMyNotesEntry #diaryMyNotesEntryTitle::after{
+ content:"👈";
+ position:absolute;
+ inset-inline-start:calc(100% + 8px);
+ top:50%;
  display:inline-block;
- margin-inline-end:9px;
- font-size:1.35em;
+ font-size:1.15em;
  line-height:1;
- vertical-align:-.08em;
- transform-origin:70% 50%;
+ transform:translateY(-50%);
+ transform-origin:50% 50%;
  animation:diary-entry-tap-cue 1.2s ease-in-out infinite;
 }
-#diaryMyNotesEntry #diaryMyNotesEntryTitle:dir(rtl)::before{
- content:"👈";
-}
 @keyframes diary-entry-tap-cue{
- 0%,100%{transform:translateX(0) scale(1)}
- 45%{transform:translateX(4px) scale(1.04)}
- 65%{transform:translateX(1px) scale(1)}
+ 0%,100%{translate:0 -50%}
+ 45%{translate:-4px -50%}
+ 65%{translate:-1px -50%}
 }
 @media(prefers-reduced-motion:reduce){
- #diaryMyNotesEntry #diaryMyNotesEntryTitle::before{animation:none}
+ #diaryMyNotesEntry #diaryMyNotesEntryTitle::after{animation:none}
 }
 </style>
 
