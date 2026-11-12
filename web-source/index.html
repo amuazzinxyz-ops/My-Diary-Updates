@@ -1508,7 +1508,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var finished=false;
   function finishPopup(){if(finished)return;finished=true;if(shade.parentNode)shade.parentNode.removeChild(shade);if(typeof onClose==='function')onClose();}
   function copyAndContinue(){
-   function copied(ok){if(ok){copy.textContent=t('copyPinDone');finishPopup();}else{window.alert(t('copyPinFailed'));}}
+   function copied(ok){if(ok){copy.textContent=t('copyPinDone');finishPopup();}else{showDiaryErrorMessage(t('copyPinFailed'));}}
    function fallbackCopy(){
     var temp=document.createElement('textarea');temp.value=String(pin);temp.setAttribute('readonly','');temp.style.position='fixed';temp.style.opacity='0';document.body.appendChild(temp);temp.select();
     var ok=false;try{ok=!!document.execCommand('copy');}catch(e){ok=false;}
@@ -1530,10 +1530,10 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  }
  function forgotPin(n){
   try{
-   if(!n||!n.pinLock){window.alert(t('noPinLock'));return;}
+   if(!n||!n.pinLock){showDiaryErrorMessage(t('noPinLock'));return;}
    var current=read().find(function(x){return x.id===n.id;});
-   if(!current||!current.pinLock){window.alert(t('noPinLock'));return;}
-   if(!window.crypto||!crypto.getRandomValues||!crypto.subtle){window.alert(t('pinUnavailable'));return;}
+   if(!current||!current.pinLock){showDiaryErrorMessage(t('noPinLock'));return;}
+   if(!window.crypto||!crypto.getRandomValues||!crypto.subtle){showDiaryErrorMessage(t('pinUnavailable'));return;}
    var pin=String(Math.floor(Math.random()*10000)).padStart(4,'0');
    showNewPinPopup(pin,function verifyTemporaryPin(){
     function askAgain(){
@@ -1547,17 +1547,17 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
       var salt=Array.from(saltBytes).map(function(b){return b.toString(16).padStart(2,'0')}).join('');
       pinDigest(pin,salt).then(function(hash){
        var latest=read(),saved=latest.find(function(x){return x.id===n.id;});
-       if(!saved||!saved.pinLock){window.alert(t('pinSaveError'));return;}
+       if(!saved||!saved.pinLock){showDiaryErrorMessage(t('pinSaveError'));return;}
        saved.pinLock={salt:salt,hash:hash,changePinOnNextLock:true};
-       if(!write(latest)){window.alert(t('pinSaveError'));return;}
+       if(!write(latest)){showDiaryErrorMessage(t('pinSaveError'));return;}
        unlockedNotes[n.id]=true;
        setNoteLock(n);
-      }).catch(function(){window.alert(t('pinUnavailable'));});
-     }).catch(function(){window.alert(t('pinUnavailable'));});
+      }).catch(function(){showDiaryErrorMessage(t('pinUnavailable'));});
+     }).catch(function(){showDiaryErrorMessage(t('pinUnavailable'));});
     }
     askAgain();
    });
-  }catch(err){window.alert(t('pinCreateError'));}
+  }catch(err){showDiaryErrorMessage(t('pinCreateError'));}
  } function turnLockOff(n){
   if(!n||!n.pinLock){return;}
   /* Correct four-digit PIN turns the note lock off immediately.
@@ -1626,12 +1626,12 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   if(target.pinLock&&unlockedNotes[n.id]&&!target.pinLock.changePinOnNextLock){
    delete unlockedNotes[n.id];clearUnlockTimer(n.id);expandedNoteId=null;renderList();return;
   }
-  if(!window.crypto||!crypto.getRandomValues||!crypto.subtle){window.alert(t('pinUnavailable'));return;}
+  if(!window.crypto||!crypto.getRandomValues||!crypto.subtle){showDiaryErrorMessage(t('pinUnavailable'));return;}
   askFourDigitPinAutomatically(t('pinSet')).then(function(pin){
    if(pin===null)return null;
    return askFourDigitPinAutomatically(t('pinConfirm')).then(function(again){
     if(again===null)return null;
-    if(pin!==again){window.alert(t('pinMismatch'));return null;}
+    if(pin!==again){showDiaryErrorMessage(t('pinMismatch'));return null;}
     return pin;
    });
   }).then(function(pin){
@@ -1641,10 +1641,10 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    return pinDigest(pin,salt).then(function(hash){
     var latest=read(),saved=latest.find(function(x){return x.id===n.id});if(!saved)return;
     saved.pinLock={salt:salt,hash:hash};
-    if(!write(latest)){window.alert(t('storageUnavailable'));return;}
+    if(!write(latest)){showDiaryErrorMessage(t('storageUnavailable'));return;}
     delete unlockedNotes[n.id];clearUnlockTimer(n.id);expandedNoteId=null;renderList();
    });
-  }).catch(function(){window.alert(t('pinUnavailable'));});
+  }).catch(function(){showDiaryErrorMessage(t('pinUnavailable'));});
  }
  function copyNote(n){
   var text=(n.title? n.title+'\n':'')+String(n.body||'');
