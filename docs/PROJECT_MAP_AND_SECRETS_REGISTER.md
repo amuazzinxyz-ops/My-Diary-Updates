@@ -754,3 +754,14 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Post-publish re-fetch: source and `diary-web/index.html` are byte-identical, Git blob SHA `2e24d7aeef5a3bb481686d24c6831a4f2fefdb3e`. Independently calculated UTF-8 SHA-256 `9625b8563152a1883ac934411f3e260c3b07a62ccbf5bf1e492112fbab169648` matches live `latest.json` `webSha256`; live webVersion is `121`.
 - APK remains `1.0.135` / versionCode `134`, package `com.personal.diaryapp`; no APK rebuild or signing changes. Physical phone visual confirmation remains pending. Use **Me → Check for Updates** and verify that the larger hand points toward the Diary title in both left-to-right and right-to-left language layouts.
 - Rollback: restore both HTML files from the two pre-edit HTML backups above and `latest.json` from `backups/latest-before-larger-right-pointing-cue-2026-11-12.json`; retain the Register backup as the pre-edit record.
+
+
+# Web Update 122 — Center Diary title directly beneath its icon (2026-11-12)
+
+- User asked to place the localized **Meri Diary** title properly directly under the 📒 icon.
+- Added one isolated CSS rule block, `diary-home-icon-title-alignment`, to center the icon and heading on the same vertical axis and reduce the gap between them. The heading remains directly below the icon for all supported languages. No wording, subtitle, language selection, entry button, tap indicator, click behaviour, notes/photos, storage, PIN/recovery, APK, package identity, or signing data changed.
+- Backups created before editing and re-fetched/readable: `backups/web-source-index-before-icon-title-alignment-2026-11-12.html`, `backups/diary-web-index-before-icon-title-alignment-2026-11-12.html`, `backups/latest-before-icon-title-alignment-2026-11-12.json`, and `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-icon-title-alignment-2026-11-12.md`.
+- Source commit: `34238ca9912be8da672aaac5b03bd09ec2737cd2`. Web-only publish workflow run `43251898462` completed with **success**; checkout, publish verification and final job steps passed.
+- Post-publish source and `diary-web/index.html` were re-fetched and verified byte-identical, Git blob SHA `0696ac1c98e44babe1097de5e1119dc85fbd1e10`. Independently computed UTF-8 SHA-256 `1e640d2394f472e18ba1b091b3fc70f0eb3d27f259d361917332ec56f374ebe1` passed the standard `abc` test vector and matches live `latest.json`. Live webVersion is `122`.
+- APK remains `1.0.135` / versionCode `134`, package `com.personal.diaryapp`; no APK rebuild or signing operation. Physical-device visual verification is pending: use **Me → Check for Updates** and confirm 📒 and Meri Diary are centered, with the title immediately below the icon.
+- Rollback: restore both HTML files from the two pre-edit HTML backups above and `latest.json` from `backups/latest-before-icon-title-alignment-2026-11-12.json`; retain the Register backup as the pre-edit record.
