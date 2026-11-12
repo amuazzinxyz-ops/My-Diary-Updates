@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 104,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "8dd59423048d6c5bee0b70310bcaa2ed07c491487ed7dd296f1526e4052ce81e",
+  "webSha256": "2fcb492b275369a30e33cd8d8671ba29ddaa99d979b2a8e698b918ce76ffe540",
   "webReleaseNotes": "Restored the original Note Lock Forgot PIN flow: display the temporary recovery PIN first, then allow setting and confirming a new PIN. No other app features changed."
 }
