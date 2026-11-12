@@ -776,3 +776,16 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Post-publish source and `diary-web/index.html` were re-fetched and verified byte-identical, Git blob SHA `6d73e0464b9e245237afa2cfd574b9be5938f89d`. Independently computed UTF-8 SHA-256 `64e6aac4bf792d777fcd33bba009bc7314a167aa8fc7a628b8b29ce4ab6bf12e` matches live `latest.json`. Live webVersion is `123`.
 - APK remains `1.0.135` / versionCode `134`, package `com.personal.diaryapp`; no APK rebuild or signing operation. Physical-device visual verification is still pending. Use **Me → Check for Updates** and confirm the visible button reads icon, title, subtitle vertically.
 - Rollback: restore both HTML files from the two pre-edit HTML backups above and `latest.json` from `backups/latest-before-entry-button-stack-fix-2026-11-12.json`; retain the Register backup as the pre-edit record.
+
+
+
+# Web Update 124 — Center Diary title beneath icon; move tap cue after title (2026-11-12)
+
+- User reported that the Diary title still did not sit directly below the 📒 icon and specified the intended arrangement: icon on its own top row, localized Diary title centered directly below it, left-pointing 👈 cue after the title on the same line, then the subtitle.
+- Inspection confirmed the entry is dynamically built with the icon, title span, and subtitle as direct children of `#diaryMyNotesEntry`. The prior cue was a `::before` inline element, which was included in the centered title line and could visually shift the title away from the icon's center.
+- Replaced only the tap-indicator CSS: title now uses its content width and is centered as a flex child directly beneath the centered icon; the old leading hand is suppressed; a left-pointing hand is positioned after the title without participating in title centering. The cue animation and reduced-motion support remain. Subtitle, button dimensions/design, click handler, language text, notes/photos, storage, PIN/recovery, APK, package identity, and signing data are unchanged.
+- Before-edit backups were created and verified readable: `backups/web-source-index-before-title-left-hand-after-2026-11-12.html`, `backups/diary-web-index-before-title-left-hand-after-2026-11-12.html`, `backups/latest-before-title-left-hand-after-2026-11-12.json`, and `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-title-left-hand-after-2026-11-12.md`.
+- Source commit: `ead8e5976478ecc57964b36280e721d62bb6050b`. Web-only publish workflow run `43254476583` (run 113) completed with **success**.
+- Post-publish source and `diary-web/index.html` were re-fetched and verified byte-identical, Git blob SHA `629e5689b7f699469062fe2a7b4d0f238d52bb96`. Live `latest.json` reports webVersion `124` and webSha256 `4ec6b2af000a8fda0377470b9c01d9cc5a9e376bb6bb152d37f58879cda7faee`.
+- APK remains `1.0.135` / versionCode `134`, package `com.personal.diaryapp`; no APK rebuild or signing changes. Physical-phone visual confirmation remains pending.
+- Rollback: restore both HTML files from the two pre-edit HTML backups above and `latest.json` from `backups/latest-before-title-left-hand-after-2026-11-12.json`; retain the Register backup as the pre-edit record.
