@@ -1,0 +1,14 @@
+{
+  "appName": "My Diary",
+  "packageName": "com.personal.diaryapp",
+  "versionCode": 134,
+  "versionName": "1.0.135",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.135.apk",
+  "sha256": "c3e312ec7cd8504bab68c12f9df996c8d10018670d0d1ccef9373408d4ddba4d",
+  "releaseNotes": "Note Lock Forgot PIN now displays a temporary recovery PIN, then opens the new 4-digit PIN and confirmation fields automatically. No extra OK button is needed. Note Lock Off also completes immediately after the correct PIN. Existing notes, photos, PIN data and app identity are preserved.",
+  "minimumSupportedVersionCode": 1,
+  "webVersion": 121,
+  "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
+  "webSha256": "9625b8563152a1883ac934411f3e260c3b07a62ccbf5bf1e492112fbab169648",
+  "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
+}
