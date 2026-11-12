@@ -249,7 +249,7 @@ jobs:
           if code != 133 or name != "1.0.134":
               raise SystemExit(f"BLOCKED: expected approved APK version 1.0.134/133, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if feed_version not in {(129, "1.0.130"), (130, "1.0.131"), (131, "1.0.132"), (133, "1.0.134")}:  
+          if feed_version not in {(129, "1.0.130"), (130, "1.0.131"), (131, "1.0.132"), (132, "1.0.133"), (133, "1.0.134")}:  
               raise SystemExit(f"BLOCKED: update feed is not the installed baseline or this exact repair release: {feed_version}")
           print(f"PASS: package={package}, next version={name}/{code}; feed baseline remains 1.0.131/130")
           PY
@@ -355,7 +355,7 @@ jobs:
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in {(129, "1.0.130"), (130, "1.0.131"), (131, "1.0.132"), (133, "1.0.134")}:
+          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in {(129, "1.0.130"), (130, "1.0.131"), (131, "1.0.132"), (132, "1.0.133"), (133, "1.0.134")}:
               raise SystemExit(f"BLOCKED: live main feed is not the installed baseline or exact repair release: {feed_version}")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
