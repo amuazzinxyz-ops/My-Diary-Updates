@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-12:** APK `1.0.135` / versionCode `134`; webVersion `114`; package `com.personal.diaryapp`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current.
+**Status checked against live `latest.json` on 2026-11-12:** APK `1.0.135` / versionCode `134`; webVersion `115`; package `com.personal.diaryapp`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -661,3 +661,18 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Independently computed UTF-8 SHA-256: `ca3f160566a10c62e571689678f84ec55096afa5564bfc9745acbe2300e4aa52`; the SHA implementation passed the standard `abc` test vector. `latest.json` advanced to webVersion `114` with this exact digest. APK remains `1.0.135` / versionCode `134`; no APK rebuild.
 - Backup reference / rollback: restore the two HTML files from the matching Web 113 backups and restore `latest.json` from its Web 114 pre-change backup; retain the Register backup as the pre-change record.
 - Automated static checks: source/mirror byte identity, exact text count, backup readability, and feed checksum value recorded. GitHub Actions run `43241660297` (run 103) was checked and **failed** at its push step because its checkout was behind the concurrent manual mirror/feed/Register commits (`non-fast-forward`, `fetch first`). The workflow had independently recomputed the same SHA-256 and prepared Web 114 before the push rejection. The final source, mirror, and `latest.json` were then re-fetched and verified consistent; the workflow itself is not marked successful. Physical-device **Me → Check for Updates** test remains pending; do not claim phone verification.
+
+
+---
+
+# Web Update 115 — Correct Diary subtitle in all supported languages (2026-11-12)
+
+- User corrected the intended wording and asked that the subtitle follow each language already supported by the Diary. The live language dictionary contains exactly three entries: `roman`, `english`, and `hindi`.
+- Updated only the `sub` string for those three entries:
+  - Roman: `Apne Notes Likhne Aur Search Karne Yaha Tap Kare`
+  - English: `Tap here to write and search your notes`
+  - Hindi: `अपने नोट्स लिखने और खोजने के लिए यहाँ टैप करें`
+- Backups created and re-fetched successfully: `backups/web114-before-diary-subtitle-all-languages-2026-11-12.html`, `backups/diary-web114-before-diary-subtitle-all-languages-2026-11-12.html`, `backups/latest-before-web115-diary-subtitle-all-languages-2026-11-12.json`, and `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-web115-diary-subtitle-all-languages-2026-11-12.md`.
+- Source commit: `3a429816e40ab89f0ab5b025829f553a585fae22`. GitHub Actions web-only publish run `43243273460` completed with **success**. Workflow generated/synchronized the mirror and update feed.
+- Final re-fetch verified source and `diary-web/index.html` are byte-identical. Verified the three exact language strings above. `latest.json` reports webVersion `115` and web SHA-256 `7ff566dcec4eb114dfbc323cc72aceebf6285d367203e1066866759d2a050cdb`. APK remains `1.0.135` / versionCode `134`; no APK rebuild.
+- Scope was limited to the three subtitle strings. No other Diary features, saved notes/photos, PIN/recovery, storage, APK identity, or signing data were changed. Phone-side **Me → Check for Updates** verification is still pending.
