@@ -734,10 +734,10 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   if(diaryPreparePromise)return diaryPreparePromise;
   diaryPreparePromise=Promise.resolve().then(function(){
    try{if(navigator.storage&&navigator.storage.persist){navigator.storage.persist().catch(function(){});}}catch(e){}
-   var raw=localStorage.getItem(KEY),valid=false;
-   if(raw!==null){try{var parsed=JSON.parse(raw);valid=Array.isArray(parsed);}catch(e){valid=false;}}
+   var raw=localStorage.getItem(KEY),valid=false,localCount=0;
+   if(raw!==null){try{var parsed=JSON.parse(raw);valid=Array.isArray(parsed);localCount=valid?parsed.length:0;}catch(e){valid=false;}}
    return readDiarySafetyCopy().then(function(copy){
-    if(copy&&!valid){try{var recovered=JSON.parse(copy.notes||'[]');if(Array.isArray(recovered)){localStorage.setItem(KEY,JSON.stringify(recovered));if(typeof copy.trash==='string')localStorage.setItem(TRASH_KEY,copy.trash);}}catch(e){}}
+    if(copy){try{var recovered=JSON.parse(copy.notes||'[]');if(Array.isArray(recovered)&&(!valid||(localCount===0&&recovered.length>0))){localStorage.setItem(KEY,JSON.stringify(recovered));if(typeof copy.trash==='string')localStorage.setItem(TRASH_KEY,copy.trash);valid=true;localCount=recovered.length;}}catch(e){}}
    }).catch(function(){}).then(function(){saveDiarySafetyCopy();diaryStorageReady=true;});
   }).catch(function(){diaryStorageReady=true;});
   return diaryPreparePromise;
