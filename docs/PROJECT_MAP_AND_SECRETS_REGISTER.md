@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-12:** APK `1.0.135` / versionCode `134`; webVersion `127`; package `com.personal.diaryapp`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current. (This line corrects the stale 126/126 figures recorded earlier.)
+**Status checked against live `latest.json` on 2026-11-12:** APK `1.0.135` / versionCode `134`; webVersion `131`; package `com.personal.diaryapp`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current. (This line corrects the stale 126/126 figures recorded earlier.)
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -837,3 +837,25 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Live feed remains APK 1.0.135 / versionCode 134, package com.personal.diaryapp; APK URL and APK SHA-256 unchanged. No APK rebuild, signing change, storage/data change, PIN/recovery logic change, or feature/UI redesign.
 - Physical-device verification remains pending. User should install Web Update 127 through Me → Check for Updates, then select each of the 10 languages and review the Diary home screen, note editor, search, buttons, PIN/recovery prompts and recently-deleted messages. Do not claim phone-side verification until the user confirms.
 - Rollback: restore both HTML files from the two pre-edit HTML backups above and latest.json from backups/latest-before-all-language-audit-fix-2026-11-12.json; retain the Register backup as the pre-edit record.
+
+
+# Web Update 131 — full My Diary UI language audit and localization pass (2026-11-12)
+
+- User requested a detailed check of the entire Diary so every visible section and message follows the selected language, and any remaining work be completed.
+- Starting live state: Web Update 127; APK 1.0.135 / versionCode 134; package com.personal.diaryapp. Scope was web-only localization. No APK, Android native source, package identity, signing, storage keys, note/photo data, PIN/recovery logic, or feature behaviour was changed.
+- Created and verified readable pre-edit backups:
+  - backups/web-source-before-full-language-audit-2026-11-12.html
+  - backups/diary-web-before-full-language-audit-2026-11-12.html
+  - backups/latest-before-full-language-audit-2026-11-12.json
+  - backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-full-language-audit-2026-11-12.md
+- Re-audited all 10 language dictionaries and all 129 shared base translation keys. The seven non-Latin-script dictionaries had no remaining exact English-value fallbacks in the audited base strings; PIN remains an intentional technical acronym and My Diary remains the app name.
+- The full-screen scan found additional UI strings outside the main dictionary that had remained in English/Roman text. Added 15 localized labels/messages to all 10 languages: Me menu, Check for Updates, Refresh, refresh success/failure, update-unavailable message, Share App, Calendar, Calendar accessibility label, previous/next month, empty-day message, note-count text, 4-digit PIN placeholder, and Open Diary accessibility label.
+- Matched the welcome-screen subtitle in every language to that language's actual Diary entry-button subtitle. Restored the user's requested Roman wording exactly: “Apne Notes Likhne Aur Search Karne Yaha Tap Kare”.
+- Calendar month, weekday names, selected date, note dates, calendar day numbers and note counts now use the selected app language/locale, including localized numerals where supported. The calendar's note-empty message and month navigation labels are localized.
+- Improved 17 Roman-English labels that were still English-only (including pin/unpin, share, cover/detail photo, edit/delete, backup/restore, copy, lock/unlock, forgot PIN and PIN copy). Also localized Roman font-size/category/recovery/storage wording. Corrected the English dictionary's Remove Note and Category labels so English no longer displays Roman wording.
+- Scanned remaining direct UI text assignments and common hardcoded labels. Remaining literal strings found by the scan are language-neutral formatting controls/symbols (B/I/U, px, ×), blank status resets, and the language names in the language selector; no further user-facing hardcoded English button, calendar, or error strings were found in the audited paths.
+- Source commits in this localization pass: 8ab020948f9fc343a70865d18668c4a643821be5, b477d41c0205ab3e846358490e9c2c94d4d532ad, 65279bbb2192781689f65d2563ab3519521d3d08, and final source commit 78f84a9f97bbe645c012eb78b156c6e5801047a6. Final web-only publish workflow run 43267249602 completed successfully; all job steps passed.
+- Post-publish verification: web-source/index.html and diary-web/index.html are byte-identical, Git blob SHA 02dc650f334c14197d2ec36c6418928f365722bb. Independently computed exact UTF-8 SHA-256 29139113be913ace26d740a77572617d52b48e9f35d96b1eae56eb52941173c matches live latest.json.webSha256. Live feed reports webVersion 131.
+- APK remains 1.0.135 / versionCode 134, package com.personal.diaryapp; APK URL and APK SHA-256 c3e312ec7cd8504bab68c12f9df996c8d10018670d0d1ccef9373408d4ddba4d are unchanged. No APK rebuild or signing operation occurred.
+- Automated/source audit and publishing are complete; physical-device visual and native-speaker wording review remain pending. User should apply Web Update 131 using Me → Check for Updates and inspect all 10 language selections, including Diary home, note editor, search, Me menu, Calendar, Recently Deleted, note lock, Diary PIN/recovery, backup/restore, and error messages. Do not claim phone-side testing until user confirms.
+- Rollback: restore web-source/index.html and diary-web/index.html from the two pre-edit HTML backups above and latest.json from backups/latest-before-full-language-audit-2026-11-12.json; retain the Register backup as the pre-edit record.
