@@ -2167,6 +2167,26 @@ body[data-diary-interface-theme]:not([data-diary-interface-theme="blue"]):not([d
 }
 </style>
 
+<style id="diary-entry-tap-indicator">
+/* Small animated finger cue: shows that the Diary entry can be tapped. */
+#diaryMyNotesEntry #diaryMyNotesEntryTitle::after{
+ content:" 👆";
+ display:inline-block;
+ margin-inline-start:6px;
+ font-size:.9em;
+ transform-origin:50% 75%;
+ animation:diary-entry-tap-cue 1.35s ease-in-out infinite;
+}
+@keyframes diary-entry-tap-cue{
+ 0%,100%{transform:translateY(0) scale(1)}
+ 45%{transform:translateY(3px) scale(.94)}
+ 65%{transform:translateY(-1px) scale(1.02)}
+}
+@media(prefers-reduced-motion:reduce){
+ #diaryMyNotesEntry #diaryMyNotesEntryTitle::after{animation:none}
+}
+</style>
+
 </body>
 </html>
 <!-- SHA-256 release verification refresh 2026-11-12 -->
