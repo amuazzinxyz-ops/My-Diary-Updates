@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-12:** APK `1.0.135` / versionCode `126`; webVersion `126`; package `com.personal.diaryapp`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current.
+**Status checked against live `latest.json` on 2026-11-12:** APK `1.0.135` / versionCode `134`; webVersion `127`; package `com.personal.diaryapp`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current. (This line corrects the stale 126/126 figures recorded earlier.)
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -819,3 +819,21 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Post-publish source and mirror re-fetched with identical Git blob SHA 74c047fec88eba94f0f1a241a94a3910f4fbe1a3. Live feed reports webVersion 126 and webSha256 5478676b8ed740838567af953c7a503183bf8b5edd74379a010001e9ed4bca7d. APK remains 1.0.135 / versionCode 134; no APK rebuild.
 - Only the RTL cue anchor was changed. No language text, LTR cue, click handler, notes/photos, storage, PIN/recovery, package identity, APK or signing data changed. Physical-device visual confirmation remains pending; apply via Me → Check for Updates.
 - Rollback: restore both HTML files from the two pre-edit HTML backups above and latest.json from backups/latest-before-rtl-cue-left-anchor-fix-2026-11-12.json; retain the Register backup as the pre-edit record.
+
+
+# Web Update 127 — complete translation coverage audit across all 10 Diary languages (2026-11-12)
+
+- User requested checking every language so all visible Diary wording matches its selected language, and completing any remaining translation work.
+- Read the live Register and latest.json. The Register header still showed stale 126/126 values; the live feed was authoritative and showed APK 1.0.135 / versionCode 134 and webVersion 127. Corrected the header above and recorded the discrepancy here.
+- Audited the translation dictionaries in web-source/index.html: Roman English, English, Hindi, Urdu, Arabic, Bengali, Gujarati, Marathi, Tamil and Telugu. The shared English dictionary contains 129 translation keys. All 10 language dictionaries now explicitly cover all 129 keys; no base translation keys are missing.
+- The only remaining inherited-English strings found in the seven non-Latin-script dictionaries were recoveryPinPrompt and recoveryVerify. Added localized wording for these two recovery prompts in Urdu, Arabic, Bengali, Gujarati, Marathi, Tamil and Telugu. PIN remains as the technical acronym where appropriate. Existing translated wording and the other 127 labels/messages were left unchanged.
+- Pre-edit backups were created and verified readable:
+  - backups/web-source-index-before-all-language-audit-fix-2026-11-12.html
+  - backups/diary-web-index-before-all-language-audit-fix-2026-11-12.html
+  - backups/latest-before-all-language-audit-fix-2026-11-12.json
+  - backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-all-language-audit-fix-2026-11-12.md
+- Translation source commit: c3965cf497bacc66a255570f3d6864f621fef363. Web publish workflow run 43262992695 completed successfully; all publish job steps passed. The workflow published webVersion 127 and did not rebuild the APK.
+- Post-publish source and diary-web/index.html were re-fetched and are byte-identical; both Git blob SHA: ffd03bfece972a5f51ea1b9a6179d9858076b541. Independently computed UTF-8 SHA-256: 7340af8197aca28e59dc20d3f75d4b0901fea18d518edea94a174cae2e1bd8e3, exactly matching live latest.json webSha256.
+- Live feed remains APK 1.0.135 / versionCode 134, package com.personal.diaryapp; APK URL and APK SHA-256 unchanged. No APK rebuild, signing change, storage/data change, PIN/recovery logic change, or feature/UI redesign.
+- Physical-device verification remains pending. User should install Web Update 127 through Me → Check for Updates, then select each of the 10 languages and review the Diary home screen, note editor, search, buttons, PIN/recovery prompts and recently-deleted messages. Do not claim phone-side verification until the user confirms.
+- Rollback: restore both HTML files from the two pre-edit HTML backups above and latest.json from backups/latest-before-all-language-audit-fix-2026-11-12.json; retain the Register backup as the pre-edit record.
