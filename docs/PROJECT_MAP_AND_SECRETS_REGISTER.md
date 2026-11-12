@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-12:** APK `1.0.135` / versionCode `134`; webVersion `119`; package `com.personal.diaryapp`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current.
+**Status checked against live `latest.json` on 2026-11-12:** APK `1.0.135` / versionCode `134`; webVersion `125`; package `com.personal.diaryapp`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -789,3 +789,18 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Post-publish source and `diary-web/index.html` were re-fetched and verified byte-identical, Git blob SHA `629e5689b7f699469062fe2a7b4d0f238d52bb96`. Live `latest.json` reports webVersion `124` and webSha256 `4ec6b2af000a8fda0377470b9c01d9cc5a9e376bb6bb152d37f58879cda7faee`.
 - APK remains `1.0.135` / versionCode `134`, package `com.personal.diaryapp`; no APK rebuild or signing changes. Physical-phone visual confirmation remains pending.
 - Rollback: restore both HTML files from the two pre-edit HTML backups above and `latest.json` from `backups/latest-before-title-left-hand-after-2026-11-12.json`; retain the Register backup as the pre-edit record.
+
+
+# Web Update 125 — Correct Urdu and Arabic Diary tap cue direction and position (2026-11-12)
+
+- User reported that the pointing-hand cue appeared in the wrong place for Urdu and Arabic. Inspection confirmed applyDiaryTextDirection() already sets the document root to dir="rtl" for both languages, but the existing cue always displayed 👈 and used only the LTR placement/animation.
+- Added one narrowly scoped RTL CSS override: when the document root is RTL, the cue changes to 👉, moves to the visual left of the title (the end of the RTL title line), and animates rightward toward the title. Roman English, English, Hindi and other LTR layouts retain the existing 👈 cue on the title's right side. The language-direction logic itself was not changed.
+- Pre-edit backups were created and re-fetched/readable:
+  - backups/web-source-index-before-rtl-tap-cue-fix-2026-11-12.html
+  - backups/diary-web-index-before-rtl-tap-cue-fix-2026-11-12.html
+  - backups/latest-before-rtl-tap-cue-fix-2026-11-12.json
+  - backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-rtl-tap-cue-fix-2026-11-12.md
+- Source commit: 795ee75670a96e6ae500fb791121d43f53c1febb. Web-only publish workflow run 43255529653 (run 114) completed with success; checkout, HTML/feed publish, and final job steps passed.
+- Post-publish re-fetch verified web-source/index.html and diary-web/index.html are byte-identical, Git blob SHA 6fd73ae538b8c96f7c95935e451a4bbb2d9fe007. Live latest.json reports webVersion 125 and web SHA-256 e138bcde5c96a1fbd4c12baa836999df87b6dec314abb391032a37606c7d3d16. APK remains 1.0.135 / versionCode 134; no APK rebuild.
+- No Diary wording, language dictionaries, button click behaviour, notes/photos, storage, PIN/recovery, APK, package identity, or signing data changed. Physical-device visual confirmation remains pending; apply via Me → Check for Updates, then check Urdu and Arabic separately.
+- Rollback: restore both HTML files from the two pre-edit HTML backups above and latest.json from backups/latest-before-rtl-tap-cue-fix-2026-11-12.json; retain the Register backup as the pre-edit record.
