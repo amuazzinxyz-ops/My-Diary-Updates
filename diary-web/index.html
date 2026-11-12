@@ -734,10 +734,10 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   if(diaryPreparePromise)return diaryPreparePromise;
   diaryPreparePromise=Promise.resolve().then(function(){
    try{if(navigator.storage&&navigator.storage.persist){navigator.storage.persist().catch(function(){});}}catch(e){}
-   var raw=localStorage.getItem(KEY),valid=false,localCount=0;
-   if(raw!==null){try{var parsed=JSON.parse(raw);valid=Array.isArray(parsed);localCount=valid?parsed.length:0;}catch(e){valid=false;}}
+   var raw=localStorage.getItem(KEY),valid=false;
+   if(raw!==null){try{var parsed=JSON.parse(raw);valid=Array.isArray(parsed);}catch(e){valid=false;}}
    return readDiarySafetyCopy().then(function(copy){
-    if(copy){try{var recovered=JSON.parse(copy.notes||'[]');if(Array.isArray(recovered)&&(!valid||(localCount===0&&recovered.length>0))){localStorage.setItem(KEY,JSON.stringify(recovered));if(typeof copy.trash==='string')localStorage.setItem(TRASH_KEY,copy.trash);valid=true;localCount=recovered.length;}}catch(e){}}
+    if(copy&&!valid){try{var recovered=JSON.parse(copy.notes||'[]');if(Array.isArray(recovered)){localStorage.setItem(KEY,JSON.stringify(recovered));if(typeof copy.trash==='string')localStorage.setItem(TRASH_KEY,copy.trash);}}catch(e){}}
    }).catch(function(){}).then(function(){saveDiarySafetyCopy();diaryStorageReady=true;});
   }).catch(function(){diaryStorageReady=true;});
   return diaryPreparePromise;
@@ -1494,20 +1494,16 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var box=document.createElement('div');box.style.cssText='width:min(320px,100%);background:#fff;color:#17251c;border-radius:16px;padding:20px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.4);';
   var heading=document.createElement('strong');heading.textContent=t('pinPopupHeading');heading.style.cssText='display:block;font-size:18px;margin-bottom:12px;';
   var value=document.createElement('div');value.textContent=pin;value.style.cssText='font-size:32px;font-weight:900;letter-spacing:7px;padding:12px;border:1px dashed #66836d;border-radius:10px;margin-bottom:14px;';
-  var copy=document.createElement('button');copy.type='button';copy.textContent=t('copyPinButton');copy.style.cssText='padding:11px 22px;border:0;border-radius:9px;background:#17633c;color:#fff;font-weight:800;margin:8px 4px 4px;min-width:150px;';
+  var prompt=document.createElement('div');prompt.textContent=t('recoveryPinPrompt');prompt.style.cssText='font-size:14px;font-weight:700;margin:8px 0;';
+  var entry=document.createElement('input');entry.type='password';entry.inputMode='numeric';entry.maxLength=4;entry.autocomplete='off';entry.placeholder='••••';entry.style.cssText='box-sizing:border-box;width:100%;padding:12px;border:1px solid #9aa99e;border-radius:9px;text-align:center;font-size:22px;letter-spacing:8px;margin-bottom:12px;';
+  var verify=document.createElement('button');verify.type='button';verify.textContent=t('recoveryVerify');verify.style.cssText='padding:11px 22px;border:0;border-radius:9px;background:#17633c;color:#fff;font-weight:800;margin:4px;';
   var finished=false;
   function finishPopup(){if(finished)return;finished=true;if(shade.parentNode)shade.parentNode.removeChild(shade);if(typeof onClose==='function')onClose();}
-  function copyAndContinue(){
-   function copied(ok){if(ok){copy.textContent=t('copyPinDone');finishPopup();}else{window.alert(t('copyPinFailed'));}}
-   function fallbackCopy(){
-    var temp=document.createElement('textarea');temp.value=String(pin);temp.setAttribute('readonly','');temp.style.position='fixed';temp.style.opacity='0';document.body.appendChild(temp);temp.select();
-    var ok=false;try{ok=!!document.execCommand('copy');}catch(e){ok=false;}
-    if(temp.parentNode)temp.parentNode.removeChild(temp);copied(ok);
-   }
-   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(String(pin)).then(function(){copied(true);}).catch(fallbackCopy);}else fallbackCopy();
-  }
-  copy.addEventListener('click',function(e){if(e){e.preventDefault();e.stopPropagation();}copyAndContinue();});
-  box.appendChild(heading);box.appendChild(value);box.appendChild(copy);shade.appendChild(box);document.body.appendChild(shade);
+  function verifyPin(){var entered=String(entry.value||'').trim();if(!/^\d{4}$/.test(entered)){window.alert(t('pinNeed'));entry.focus();return;}if(entered!==String(pin)){window.alert(t('recoveryWrong'));entry.value='';entry.focus();return;}finishPopup();}
+  verify.addEventListener('click',function(e){if(e){e.preventDefault();e.stopPropagation();}verifyPin();});
+  entry.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();verifyPin();}});
+  entry.addEventListener('input',function(){entry.value=entry.value.replace(/\D/g,'').slice(0,4);});
+  box.appendChild(heading);box.appendChild(value);box.appendChild(prompt);box.appendChild(entry);box.appendChild(verify);shade.appendChild(box);document.body.appendChild(shade);setTimeout(function(){entry.focus();},100);
  }
  function forgotPin(n){
   try{
@@ -2094,4 +2090,3 @@ body[data-diary-interface-theme]:not([data-diary-interface-theme="blue"]):not([d
 </body>
 </html>
 <!-- SHA-256 release verification refresh 2026-11-12 -->
-
