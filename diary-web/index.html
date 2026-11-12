@@ -816,6 +816,27 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  words["telugu"]["themeGreen"]="ఆకుపచ్చ";
  words["telugu"]["themeRose"]="గులాబీ";
  words["telugu"]["themePurple"]="ఊదా"; words["telugu"]["themeTeal"]="నీలి ఆకుపచ్చ"; words["telugu"]["themeOrange"]="నారింజ"; words["telugu"]["themeDark"]="ముదురు"; words["telugu"]["themeLavender"]="లావెండర్"; words["telugu"]["themeMint"]="మింట్"; words["telugu"]["themeSunset"]="సూర్యాస్తమయం"; words["telugu"]["themeCustom"]="సొంత రంగు"; words["telugu"]["customColourLabel"]="మీ రంగును ఎంచుకోండి";
+ function applyDiaryHomeLanguage(){
+  var l=language(),copy={
+   roman:{title:'Meri Diary',subtitle:'Zaati notes, yaadein aur apni baatein likhne ki jagah',language:'Zaban / Language'},
+   english:{title:'My Diary',subtitle:'Private notes, memories and personal writing',language:'Language'},
+   hindi:{title:'मेरी डायरी',subtitle:'निजी नोट्स, यादें और अपनी बातें लिखने की जगह',language:'भाषा चुनें'},
+   urdu:{title:'میری ڈائری',subtitle:'ذاتی نوٹس، یادیں اور اپنی باتیں لکھنے کی جگہ',language:'زبان منتخب کریں'},
+   arabic:{title:'مذكرتي',subtitle:'ملاحظات خاصة وذكريات وكتابات شخصية',language:'اختر اللغة'},
+   bengali:{title:'আমার ডায়েরি',subtitle:'ব্যক্তিগত নোট, স্মৃতি ও নিজের কথা লেখার জায়গা',language:'ভাষা বেছে নিন'},
+   gujarati:{title:'મારી ડાયરી',subtitle:'ખાનગી નોંધો, યાદો અને પોતાની વાતો લખવાની જગ્યા',language:'ભાષા પસંદ કરો'},
+   marathi:{title:'माझी डायरी',subtitle:'खाजगी नोंदी, आठवणी आणि मनातील गोष्टी लिहिण्याची जागा',language:'भाषा निवडा'},
+   tamil:{title:'என் நாட்குறிப்பு',subtitle:'தனிப்பட்ட குறிப்புகள், நினைவுகள் மற்றும் சொந்த எழுத்துகளுக்கான இடம்',language:'மொழியைத் தேர்ந்தெடுக்கவும்'},
+   telugu:{title:'నా డైరీ',subtitle:'వ్యక్తిగత నోట్స్, జ్ఞాపకాలు మరియు మనసులోని మాటలు రాసుకునే స్థలం',language:'భాషను ఎంచుకోండి'}
+  }[l]||null;
+  if(!copy)return;
+  var home=document.querySelector('.diary-home');
+  if(!home)return;
+  var heading=home.querySelector('h1'),subtitle=home.querySelector('p'),label=home.querySelector('label[for="diaryLanguageSelect"]');
+  if(heading)heading.textContent=copy.title;
+  if(subtitle)subtitle.textContent=copy.subtitle;
+  if(label)label.textContent=copy.language;
+ }
  function applyDiaryTextDirection(){
   var l=language(),rtl=(l==='urdu'||l==='arabic');
   var codes={roman:'en',english:'en',hindi:'hi',urdu:'ur',arabic:'ar',bengali:'bn',gujarati:'gu',marathi:'mr',tamil:'ta',telugu:'te'};
@@ -1849,12 +1870,13 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  }
  function boot(){
   applyDiaryTextDirection();
+  applyDiaryHomeLanguage();
   prepareDiaryStorage();
   installEntry();
   var sel=document.getElementById('diaryLanguageSelect');
-  if(sel)sel.addEventListener('change',function(){setTimeout(function(){applyDiaryTextDirection();installEntry();refreshLabels()},0)});
-  window.addEventListener('diary-language-change',function(){installEntry();refreshLabels()});
-  window.addEventListener('storage',function(e){if(!e||e.key==='diary_language_v204'){installEntry();refreshLabels()}});
+  if(sel)sel.addEventListener('change',function(){setTimeout(function(){applyDiaryTextDirection();applyDiaryHomeLanguage();installEntry();refreshLabels()},0)});
+  window.addEventListener('diary-language-change',function(){applyDiaryHomeLanguage();installEntry();refreshLabels()});
+  window.addEventListener('storage',function(e){if(!e||e.key==='diary_language_v204'){applyDiaryHomeLanguage();installEntry();refreshLabels()}});
   if(window.MutationObserver&&document.body){
    var queued=false;var mo=new MutationObserver(function(){if(queued)return;queued=true;setTimeout(function(){queued=false;installEntry()},80)});
    mo.observe(document.body,{childList:true,subtree:true});
