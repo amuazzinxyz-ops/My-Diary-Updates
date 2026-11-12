@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 105,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "73482f790ae658e21445600be4bfcab4665871de3ace6aa9da55920a5860012e",
-  "webReleaseNotes": "Restored the last-known-good My Diary web version from 12 November 2026, around 11:00 AM IST. Existing Note Lock recovery verification, Diary features, notes, photos and PIN data are preserved."
+  "webSha256": "4545038ad06640840613940e67645eb66b1dc2e655185a53665b8cf4e23843c7",
+  "webReleaseNotes": "Restored the last-known-good My Diary web version from 12 November 2026, around 11:00 AM IST. The exact UTF-8 SHA-256 has been independently recalculated and verified. Existing Note Lock recovery verification, Diary features, notes, photos and PIN data are preserved."
 }
