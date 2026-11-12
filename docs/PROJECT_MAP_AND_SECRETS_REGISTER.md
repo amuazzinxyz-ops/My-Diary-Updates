@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-12:** APK `1.0.135` / versionCode `134`; webVersion `113`; package `com.personal.diaryapp`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current.
+**Status checked against live `latest.json` on 2026-11-12:** APK `1.0.135` / versionCode `134`; webVersion `114`; package `com.personal.diaryapp`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -648,3 +648,16 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Source commits: updater repair `65e3776e0c30f9533e004298ab6a64c8bfd0115e`; workflow version bump `256bf955ab711ee9a231e2dab17ecce273124375`; cleanup `99e0f38b079645ead7ca13d9e3d6d2b6995f6d2e`; final publish-guard alignment `ff28c27277423d888fd0da8bf85e251d2230581e`.
 - The existing release workflow is prepared to build **1.0.123 / versionCode 122** from the exact latest published HTML, using the existing package name and existing trusted signing key. Live APK remains **1.0.122 / versionCode 121** until the signed build and publish workflow succeeds.
 - This is a native WebView cache-delivery repair, so a new APK is required for installed apps to receive the stronger no-cache handling. No APK has been declared published until the workflow completes and the signed artifact/feed checks pass. Phone-side display must still be confirmed after installing the update.
+
+
+---
+
+# Web Update 114 — Diary subtitle tap instruction wording (2026-11-12)
+
+- User-requested exact Roman-language subtitle change under **Meri Diary**: `Apne notes likhein aur search karein` → `Apne notes likhein aur search karne Yaha Tap Kare`.
+- Changed exactly one occurrence in `web-source/index.html`; synchronized `diary-web/index.html` to the same exact content. No other language strings, Diary features, buttons, search logic, storage, notes/photos, PIN/recovery flow, APK, package identity, or signing data were changed.
+- Backups: `backups/web113-before-diary-subtitle-tap-wording-2026-11-12.html`, `backups/diary-web113-before-diary-subtitle-tap-wording-2026-11-12.html`, `backups/latest-before-web114-diary-subtitle-tap-wording-2026-11-12.json`, and `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-web114-diary-subtitle-tap-wording-2026-11-12.md`; all four were re-fetched and verified readable before editing.
+- Source update commit: `6896c4bfc4160c897c744a2f3cd08c87d4073a18`; mirror update commit: `28b229f13464138d79abf3e9047a3fc9b5e5eee7`. Both files have identical Git blob SHA `9ebf5d526731bc57f6ce5b823c5d9d4b5f0aa07b` and 227,890 characters. Post-write re-fetch confirmed exact source/mirror equality and exactly one occurrence of the new phrase.
+- Independently computed UTF-8 SHA-256: `ca3f160566a10c62e571689678f84ec55096afa5564bfc9745acbe2300e4aa52`; the SHA implementation passed the standard `abc` test vector. `latest.json` advanced to webVersion `114` with this exact digest. APK remains `1.0.135` / versionCode `134`; no APK rebuild.
+- Backup reference / rollback: restore the two HTML files from the matching Web 113 backups and restore `latest.json` from its Web 114 pre-change backup; retain the Register backup as the pre-change record.
+- Automated static checks: source/mirror byte identity, exact text count, backup readability, and feed checksum value recorded. GitHub Actions deployment status and physical-device **Me → Check for Updates** test remain pending until independently checked; do not claim phone verification.
