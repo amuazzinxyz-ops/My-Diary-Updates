@@ -2199,6 +2199,18 @@ body[data-diary-interface-theme]:not([data-diary-interface-theme="blue"]):not([d
  transform-origin:50% 50%;
  animation:diary-entry-tap-cue 1.2s ease-in-out infinite;
 }
+/* In Urdu and Arabic, place the hand at the visual end (left) and point it back toward the RTL title. */
+:root[dir="rtl"] #diaryMyNotesEntry #diaryMyNotesEntryTitle::after{
+ content:"👉";
+ inset-inline-start:auto;
+ inset-inline-end:calc(100% + 8px);
+ animation-name:diary-entry-tap-cue-rtl;
+}
+@keyframes diary-entry-tap-cue-rtl{
+ 0%,100%{translate:0 -50%}
+ 45%{translate:4px -50%}
+ 65%{translate:1px -50%}
+}
 @keyframes diary-entry-tap-cue{
  0%,100%{translate:0 -50%}
  45%{translate:-4px -50%}
