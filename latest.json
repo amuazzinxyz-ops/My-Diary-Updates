@@ -7,8 +7,8 @@
   "sha256": "c3e312ec7cd8504bab68c12f9df996c8d10018670d0d1ccef9373408d4ddba4d",
   "releaseNotes": "Note Lock Forgot PIN now displays a temporary recovery PIN, then opens the new 4-digit PIN and confirmation fields automatically. No extra OK button is needed. Note Lock Off also completes immediately after the correct PIN. Existing notes, photos, PIN data and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 127,
+  "webVersion": 128,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "7340af8197aca28e59dc20d3f75d4b0901fea18d518edea94a174cae2e1bd8e3",
+  "webSha256": "f1c5362da168e56851deafd00943690ddfa2830dd512a51413d74d24561038b1",
   "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
 }
