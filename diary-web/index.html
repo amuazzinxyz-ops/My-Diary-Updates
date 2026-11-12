@@ -1521,14 +1521,18 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    if(!n||!n.pinLock){window.alert(t('noPinLock'));return;}
    var all=read(),target=all.find(function(x){return x.id===n.id;});
    if(!target||!target.pinLock){window.alert(t('noPinLock'));return;}
-   /* Open the new 4-digit PIN entry immediately after Forgot PIN.
-      Keep the existing lock until the user confirms the replacement PIN. */
-   target.pinLock.changePinOnNextLock=true;
-   if(!write(all)){window.alert(t('pinSaveError'));return;}
-   setNoteLock(n);
+   var pin=String(Math.floor(Math.random()*10000)).padStart(4,'0');
+   if(!window.crypto||!crypto.getRandomValues||!crypto.subtle){window.alert(t('pinUnavailable'));return;}
+   var saltBytes=new Uint8Array(16);crypto.getRandomValues(saltBytes);
+   var salt=Array.from(saltBytes).map(function(b){return b.toString(16).padStart(2,'0')}).join('');
+   pinDigest(pin,salt).then(function(hash){
+    var latest=read(),saved=latest.find(function(x){return x.id===n.id;});if(!saved||!saved.pinLock){window.alert(t('pinSaveError'));return;}
+    saved.pinLock={salt:salt,hash:hash,changePinOnNextLock:true};
+    if(!write(latest)){window.alert(t('pinSaveError'));return;}
+    showNewPinPopup(pin,function(){setNoteLock(n);});
+   }).catch(function(){window.alert(t('pinUnavailable'));});
   }catch(err){window.alert(t('pinCreateError'));}
- }
- function turnLockOff(n){
+ } function turnLockOff(n){
   if(!n||!n.pinLock){return;}
   /* Correct four-digit PIN turns the note lock off immediately.
      No extra OK confirmation is required; a wrong PIN keeps the lock. */
