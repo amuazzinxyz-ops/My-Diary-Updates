@@ -1531,7 +1531,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      askFourDigitPinAutomatically(t('recoveryPinPrompt')).then(function(entered){
       if(entered===null)return;
       if(String(entered)!==pin){
-       window.alert(t('recoveryWrong'));
+       window.alert(t('diaryPinWrong'));
        askAgain();
        return;
       }
