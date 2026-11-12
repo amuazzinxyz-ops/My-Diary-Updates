@@ -115,7 +115,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   </select>
  </div>
 </main>
-<div id="diaryHomeEntryHost" aria-label="Open Diary"></div>
+<div id="diaryHomeEntryHost" aria-label=""></div>
 <style id="v134-me-compact-buttons-left-text">
 /* Compact both Me-menu buttons; preserve their vertical order and menu position. */
 #diaryDiaryMePanel #diaryDiaryFontLabel,
@@ -1243,7 +1243,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      window.setTimeout(function(){refreshDiaryBtn.textContent=t('refresh');},1300);
     }catch(err){
      refreshDiaryBtn.textContent=t('refreshFailed');
-     window.setTimeout(function(){refreshDiaryBtn.textContent='🔄 Refresh';},1800);
+     window.setTimeout(function(){refreshDiaryBtn.textContent=t('refresh');},1800);
     }
    }
    if(!diaryStorageReady){prepareDiaryStorage().then(refreshDiaryNow);return;}
