@@ -693,3 +693,18 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Source commit: 7d545f38a66f4bb2b3d3def4ef29a94f3ec50164. Web-only workflow run 43244545952 completed with success; its publish job and all steps passed.
 - Final re-fetch: source and diary-web/index.html are byte-identical, Git blob SHA 00c5dda6f514bf92d39cf81cf0e2c51f47021513. Independently recalculated UTF-8 SHA-256 9899c9df540ca5f845344c151b2f2303c16204c68796752fcbd558eda47515fb; matched the live latest.json value. Live webVersion is 116.
 - APK remains 1.0.135 / versionCode 134; no APK rebuild. The 10-language string coverage and workflow/feed integrity were checked. Physical-device language switching is still pending: use Me → Check for Updates, then select each language and confirm the heading, subtitle, and language label change together.
+
+
+# Web Update 117 — Diary home subtitle wording and bold 3D finish (2026-11-12)
+
+- User requested replacing the Roman home subtitle with the exact wording `Notes, Yadein Aur Apni Baate Likhne Ki Diary`, translating the replacement according to the selected language, and making the subtitle bold with a raised 3D text effect.
+- Changed only the localized `subtitle` value in the existing `applyDiaryHomeLanguage()` home-screen copy for the 10 already-supported languages (Roman English, English, Hindi, Urdu, Arabic, Bengali, Gujarati, Marathi, Tamil, Telugu). Added one isolated `diary-home-subtitle-bold-3d` CSS rule targeting only `.diary-home p`; no layout dimensions, language selector, app dictionaries, Diary entry button, notes/photos, storage, PIN/recovery, APK, package identity, or signing files were changed.
+- Backups created before editing and re-fetched byte-for-byte/readable:
+  - `backups/web-source-index-before-home-subtitle-bold-3d-2026-11-12.html`
+  - `backups/diary-web-index-before-home-subtitle-bold-3d-2026-11-12.html`
+  - `backups/latest-before-home-subtitle-bold-3d-2026-11-12.json`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-home-subtitle-bold-3d-2026-11-12.md`
+- Source update commit: `15e157562e88e23f49a20b2e7106cc191c753017`. GitHub Actions web-only publish run `43247148040` (run 106) completed with success; the publish job and all listed steps passed. Publisher commit: `91a39248e9478e2765d7a98adab46831673e8c9d`.
+- Post-publish re-fetch: `web-source/index.html` and `diary-web/index.html` are byte-identical, Git blob SHA `35cd6fd9c4405bf8fefe2c7ee11490d0e036460e`, UTF-8 size 263,162 bytes. Independently calculated SHA-256 `e30a576cb937251039081d048179f3b6c3cc7a493feae2165463c0e318c495da` matches live `latest.json` `webSha256`; live webVersion is `117`.
+- APK remains `1.0.135` / versionCode `134`, package `com.personal.diaryapp`; no APK rebuild. Workflow's web-only HTML/feed verification and JSON validation passed. Static inspection confirmed all 10 subtitle dictionary entries were changed once and the isolated 3D CSS rule appears once. Physical-device visual/language verification is pending; use **Me → Check for Updates**, then check the welcome subtitle in the selected languages. Do not claim phone testing until user confirms.
+- Rollback: restore `web-source/index.html` and `diary-web/index.html` from the two Web 116 HTML backups above, and restore `latest.json` from `backups/latest-before-home-subtitle-bold-3d-2026-11-12.json`; retain this Register backup as the pre-entry record.
