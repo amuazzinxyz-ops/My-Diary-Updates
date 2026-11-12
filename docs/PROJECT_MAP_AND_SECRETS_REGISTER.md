@@ -1,3 +1,13 @@
+# Web Update 113 — Note Lock Forgot PIN uses Diary-style in-app dialogs (2026-11-12)
+
+- User reported that the Android WebView page address still appeared during Note Lock → Forgot PIN. Re-inspection found remaining native `window.alert()` calls in the Note Lock recovery path, including Copy PIN failure and PIN/storage/crypto error branches; Web Update 112 covered only the wrong temporary-PIN message.
+- Updated the Note Lock Forgot PIN path and its new-PIN creation/confirmation path to use the same custom in-app message popup as Diary Lock. The temporary PIN popup, custom four-digit input, wrong-PIN retry, PIN hashing/storage sequence, and new PIN creation flow remain intact.
+- Backups: `backups/web112-before-note-forgot-pin-inapp-dialogs-2026-11-12.html`, `backups/diary-web112-before-note-forgot-pin-inapp-dialogs-2026-11-12.html`, `backups/latest-before-web113-note-forgot-pin-inapp-dialogs-2026-11-12.json`, and `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-web113-note-forgot-pin-inapp-dialogs-2026-11-12.md`.
+- Web Update 113 SHA-256: `dcbcfce3eeb54d17ac6766dcb703d46e994cbbdc8acea36e6881f8931caea27d`. Source and mirror were written from the same exact HTML content. APK remains 1.0.135; no APK rebuild or app-data change.
+- Static verification: no native `window.alert()` / `window.prompt()` remains in the Note Lock Forgot PIN and new-PIN confirmation paths. Physical-device verification is pending; use Me → Check for Updates and test Copy PIN, wrong temporary PIN, and PIN mismatch.
+
+---
+
 # Web Update 112 — In-app Note Lock wrong PIN message (2026-11-12)
 
 - Replaced the native WebView `window.alert` for a wrong temporary PIN in Note Lock → Forgot PIN with a custom in-app message popup.
