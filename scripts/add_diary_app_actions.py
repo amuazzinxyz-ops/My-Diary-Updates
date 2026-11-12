@@ -483,24 +483,33 @@ native_pin_prompt = r"""
                 val dialog = AlertDialog.Builder(this@MainActivity)
                     .setTitle(prompt)
                     .setView(pinInput)
-                    .setPositiveButton("OK", null)
                     .setNegativeButton("Cancel") { _, _ -> result?.cancel() }
                     .create()
-                dialog.setOnCancelListener { result?.cancel() }
+                var submitted = false
+                fun submitPinAutomatically() {
+                    if (submitted || pinInput.text?.length != 4) return
+                    submitted = true
+                    val pinValue = pinInput.text.toString()
+                    val manager = getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
+                    manager.hideSoftInputFromWindow(pinInput.windowToken, 0)
+                    pinInput.clearFocus()
+                    dialog.dismiss()
+                    android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({ result?.confirm(pinValue) }, 300)
+                }
+                dialog.setOnCancelListener { if (!submitted) result?.cancel() }
                 dialog.setOnShowListener {
                     dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
                     pinInput.requestFocus()
+                    pinInput.addTextChangedListener(object : android.text.TextWatcher {
+                        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                            if (s?.length == 4) pinInput.post { submitPinAutomatically() }
+                        }
+                        override fun afterTextChanged(s: android.text.Editable?) {}
+                    })
                     pinInput.post {
                         val manager = getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
                         manager.showSoftInput(pinInput, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT)
-                    }
-                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                        val pinValue = pinInput.text.toString()
-                        val manager = getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
-                        manager.hideSoftInputFromWindow(pinInput.windowToken, 0)
-                        pinInput.clearFocus()
-                        dialog.dismiss()
-                        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({ result?.confirm(pinValue) }, 300)
                     }
                 }
                 dialog.show()
