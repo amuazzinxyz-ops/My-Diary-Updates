@@ -1,3 +1,15 @@
+# My Diary recovery — restore last-known-good 11:00 AM state (2026-11-12)
+
+- User reported that My Diary worked correctly until approximately 11:00 AM IST on 2026-11-12 and became unstable after later changes.
+- Read the Master Register and inspected the live repository history. The last coherent web state at the requested cutoff is **Web Update 98**, recorded at approximately 10:54 AM IST. Subsequent changes altered Note Lock Forgot PIN recovery (manual recovery-PIN verification was replaced by a Copy PIN flow, then repeatedly changed/restored), and later web updates 101–104 plus repeated checksum corrections.
+- Created a full pre-repair Git backup branch: `backup/pre-web98-restore-2026-11-12` from pre-repair main head `e90785349d0f9e906798cfd05dd329c1b4edc324`.
+- Restored `web-source/index.html` byte-for-byte from the Web Update 98 snapshot at commit `1ace3bd50656ac2e55640e8f198d3f3880e66814`; synchronized `diary-web/index.html` to the same content. Restored source and mirror Git blob SHA: `af8e3bc167b6f3410569663831f7aded9727319d` (225,579 characters each).
+- Published **Web Update 105** in `latest.json`, retaining APK identity/version **1.0.135 / versionCode 134**, package `com.personal.diaryapp`, APK URL and APK SHA-256 unchanged. The Web 98 checksum was restored from the matching Web 98 feed: `73482f790ae658e21445600be4bfcab4665871de3ace6aa9da55920a5860012e`.
+- This is a web-content rollback/recovery only. No user data, notes, photos, local storage, PIN/recovery records, package identity, keystore secrets, or signing identity were changed. No new APK was built because the existing 1.0.135 updater can deliver the restored web bundle through **Me → Check for Updates**; do not uninstall or clear data.
+- Device-side update and feature behavior still require the user's Check for Updates test. This register entry supersedes the older stale Web Update 85 / APK 1.0.131 note below.
+
+---
+
 # SHA-256 update-feed repair — 2026-11-12
 
 - User again reported the installed app's web-update error: `Diary update SHA-256 match nahi hua`.
