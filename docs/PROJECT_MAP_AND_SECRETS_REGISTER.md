@@ -1,3 +1,15 @@
+# Web Update 110 — exact UTF-8 SHA-256 correction (2026-11-12)
+
+- User reported that Check for Updates failed with “Diary update SHA-256 match nahi hua”.
+- Root cause confirmed: `latest.json` contained an incorrect `webSha256` value (`fa4d6f6a66b835542cd56bcc5246f954b5d41ae33a73a072c323db708512df7f`) for the current `web-source/index.html` bytes.
+- Backed up the live feed to `backups/latest-before-web110-sha256-correction-2026-11-12.json` and backed up this register before editing.
+- Recomputed SHA-256 over the exact UTF-8 HTML bytes using a SHA-256 implementation verified against the standard `abc` test vector. Correct digest: `163f14796d8a84867ad68e17833991e01bbf4f0d1baa5c1f4696c2362805bf78`.
+- Updated only `latest.json` metadata: `webVersion=110`, corrected `webSha256`, and checksum-repair release note. The HTML source, published mirror, APK URL/hash/version, package identity, signing identity, notes/photos/PIN storage, and all app features were not changed.
+- Re-fetched the source, mirror, and feed after publishing. Source and mirror are byte-identical and have matching Git blob SHA `3c53a0c8af11d0341d8a9839be3bd12ae5b54ca2`; the independently recalculated source SHA-256 exactly matches the live feed.
+- This is a metadata-only web update. Device-side Check for Updates success still requires the user's test; do not claim phone-side verification.
+
+---
+
 # My Diary recovery — restore last-known-good 11:00 AM state (2026-11-12)
 
 - User reported that My Diary worked correctly until approximately 11:00 AM IST on 2026-11-12 and became unstable after later changes.
