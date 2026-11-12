@@ -1,25 +1,3 @@
-
-
----
-
-# Web Update 132 — Keep the Diary Me button label as “Me” in every language (2026-11-12)
-
-- User request: restore the Me button to its previous literal label, “Me”, in every supported language; make no other changes.
-- Starting live state: Web Update 131; APK 1.0.135 / versionCode 134; package `com.personal.diaryapp`. Source commit before this task: `ccf1cdc0d8e56f001b71f67676bab6017a1fa310`.
-- Scope: web-only; changed only the nine non-English `words[language]["me"]` values (Roman English, Hindi, Urdu, Arabic, Bengali, Gujarati, Marathi, Tamil, Telugu) to the literal `Me`. English was already `Me`. All ten language dictionaries now return exactly `Me` for this button.
-- No other translation keys, button labels, layouts, menus, feature logic, notes, photos, storage, PIN/recovery flows, native Android source, APK, package identity, or signing data were changed.
-- Pre-edit backup branch: `backup/pre-me-button-label-all-languages-2026-11-12`. Readable verified backups on that branch:
-  - `backups/web-source-before-me-button-label-all-languages-2026-11-12.html`
-  - `backups/diary-web-before-me-button-label-all-languages-2026-11-12.html`
-  - `backups/latest-before-me-button-label-all-languages-2026-11-12.json`
-  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-me-button-label-all-languages-2026-11-12.md`
-- Exact source change commit: `0ca75c82322828981b509952baebf78d53ba7788`; publisher commit: `e638557b24da1a8f5ae0b4b44c45e4266662260c`. Web-only workflow run `43269118234` completed with **success**.
-- Post-publish verification: `web-source/index.html` and `diary-web/index.html` are byte-identical; both Git blob SHA `9f654af4acfd0e24e48268214cfd0fc9068b7774`. Independently computed UTF-8 SHA-256 `ef03b5fc97252aa133b46339ef6bff59add404283584f96091e2412d61ba6707` matches live `latest.json.webSha256`; live `webVersion=132`.
-- APK remains `1.0.135` / versionCode `134`; package `com.personal.diaryapp`; APK URL and SHA-256 remain unchanged (`c3e312ec7cd8504bab68c12f9df996c8d10018670d0d1ccef9373408d4ddba4d`). No APK rebuild or signing operation.
-- Source diff review: exactly one file changed in the source commit, with 9 additions and 9 deletions; each line is one requested Me-label value.
-- Automated language-value check: all ten language keys resolve to exactly `Me`. Workflow and source/mirror/feed checks passed. Physical-device verification remains **pending**; use the existing in-app **Me → Check for Updates** path and confirm the button says “Me” after update.
-- Rollback: use the verified backup branch and the exact pre-edit backup files above; preserve the existing last-known-good state.
-
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
 **Status checked against live `latest.json` on 2026-11-12:** APK `1.0.135` / versionCode `134`; webVersion `132`; package `com.personal.diaryapp`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current. (This line corrects the stale 126/126 figures recorded earlier.)
@@ -95,6 +73,29 @@ Keep historical entries as history. If an old entry contains stale version infor
 - [ ] Phone-test status clearly marked; no unsupported success claim
 
 **STOP RULE:** If any item required for the type of release cannot be verified, do not publish and do not describe the task as complete. Tell the user exactly what is blocked and preserve the last known-good version.
+
+
+---
+
+# Web Update 132 — Keep the Diary Me button label as “Me” in every language (2026-11-12)
+
+- User request: restore the Me button to its previous literal label, “Me”, in every supported language; make no other changes.
+- Starting live state: Web Update 131; APK 1.0.135 / versionCode 134; package `com.personal.diaryapp`. Source commit before this task: `ccf1cdc0d8e56f001b71f67676bab6017a1fa310`.
+- Scope: web-only; changed only the nine non-English `words[language]["me"]` values (Roman English, Hindi, Urdu, Arabic, Bengali, Gujarati, Marathi, Tamil, Telugu) to the literal `Me`. English was already `Me`. All ten language dictionaries now return exactly `Me` for this button.
+- No other translation keys, button labels, layouts, menus, feature logic, notes, photos, storage, PIN/recovery flows, native Android source, APK, package identity, or signing data were changed.
+- Pre-edit backup branch: `backup/pre-me-button-label-all-languages-2026-11-12`. Readable verified backups on that branch:
+  - `backups/web-source-before-me-button-label-all-languages-2026-11-12.html`
+  - `backups/diary-web-before-me-button-label-all-languages-2026-11-12.html`
+  - `backups/latest-before-me-button-label-all-languages-2026-11-12.json`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-me-button-label-all-languages-2026-11-12.md`
+- Exact source change commit: `0ca75c82322828981b509952baebf78d53ba7788`; publisher commit: `e638557b24da1a8f5ae0b4b44c45e4266662260c`. Web-only workflow run `43269118234` completed with **success**.
+- Post-publish verification: `web-source/index.html` and `diary-web/index.html` are byte-identical; both Git blob SHA `9f654af4acfd0e24e48268214cfd0fc9068b7774`. Independently computed UTF-8 SHA-256 `ef03b5fc97252aa133b46339ef6bff59add404283584f96091e2412d61ba6707` matches live `latest.json.webSha256`; live `webVersion=132`.
+- APK remains `1.0.135` / versionCode `134`; package `com.personal.diaryapp`; APK URL and SHA-256 remain unchanged (`c3e312ec7cd8504bab68c12f9df996c8d10018670d0d1ccef9373408d4ddba4d`). No APK rebuild or signing operation.
+- Source diff review: exactly one file changed in the source commit, with 9 additions and 9 deletions; each line is one requested Me-label value.
+- Automated language-value check: all ten language keys resolve to exactly `Me`. Workflow and source/mirror/feed checks passed. Physical-device verification remains **pending**; use the existing in-app **Me → Check for Updates** path and confirm the button says “Me” after update.
+- Rollback: use the verified backup branch and the exact pre-edit backup files above; preserve the existing last-known-good state.
+
+
 
 ---
 
