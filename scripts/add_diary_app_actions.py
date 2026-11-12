@@ -16,6 +16,35 @@ if status_old in s:
     s = s.replace(status_old, status_new, 1)
 elif status_new not in s:
     raise SystemExit("Expected original Diary status-bar setup was not found; refusing unsafe patch")
+back_old = """    @Deprecated("Deprecated in Android")
+    override fun onBackPressed() {
+        if (::webView.isInitialized && webView.canGoBack()) webView.goBack() else super.onBackPressed()
+    }"""
+back_new = """    private fun finishDiaryBackNavigation() {
+        if (::webView.isInitialized && webView.canGoBack()) webView.goBack()
+        else super.onBackPressed()
+    }
+
+    @Deprecated("Deprecated in Android")
+    override fun onBackPressed() {
+        if (!::webView.isInitialized) {
+            super.onBackPressed()
+            return
+        }
+        webView.evaluateJavascript(
+            "(function(){try{return !!(window.__diaryCloseOverlayFromAndroid && window.__diaryCloseOverlayFromAndroid());}catch(e){return false;}})()"
+        ) { result ->
+            if (result == "true") {
+                // The Diary is a single-page overlay. Clear its nested WebView history after closing it.
+                webView.clearHistory()
+            } else {
+                finishDiaryBackNavigation()
+            }
+        }
+    }"""
+if s.count(back_old) != 1:
+    raise SystemExit("Expected exactly one original Android Back handler; refusing unsafe patch")
+s = s.replace(back_old, back_new, 1)
 if "class DiaryNativeActions" in s: raise SystemExit("Already patched")
 if "override fun onActivityResult(" in s: raise SystemExit("Existing onActivityResult found; safe merge required")
 s=s.replace("import android.content.Intent\n","import android.content.Intent\nimport android.app.AlertDialog\nimport android.app.ProgressDialog\nimport android.webkit.JavascriptInterface\nimport android.widget.Toast\nimport java.net.HttpURLConnection\nimport java.net.URL\n",1)
