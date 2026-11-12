@@ -1529,7 +1529,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     var latest=read(),saved=latest.find(function(x){return x.id===n.id;});if(!saved||!saved.pinLock){window.alert(t('pinSaveError'));return;}
     saved.pinLock={salt:salt,hash:hash,changePinOnNextLock:true};
     if(!write(latest)){window.alert(t('pinSaveError'));return;}
-    showNewPinPopup(pin);
+    showNewPinPopup(pin,function(){setNoteLock(n);});
    }).catch(function(){window.alert(t('pinUnavailable'));});
   }catch(err){window.alert(t('pinCreateError'));}
  }
