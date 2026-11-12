@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 101,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "caa78b069aee744519e3c23a7ed28c4307506eae08b7ad4ccce68da4f2118fb7",
-  "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
+  "webSha256": "8dd59423048d6c5bee0b70310bcaa2ed07c491487ed7dd296f1526e4052ce81e",
+  "webReleaseNotes": "Notes recovery safeguard: if the main Notes list is empty, restore a non-empty on-device IndexedDB safety copy. Existing local notes, photos, PIN and app identity remain unchanged."
 }
