@@ -1467,11 +1467,21 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   });
  }
  function recoverNotePin(n){
-  if(!n.pinLock||!n.pinLock.recoverySalt||!n.pinLock.recoveryHash){window.alert(t('recoveryWrong'));return;}
+  if(!n||!n.pinLock||!n.pinLock.recoverySalt||!n.pinLock.recoveryHash){window.alert(t('recoveryWrong'));return;}
   var recovery=window.prompt(t('recoveryPrompt'));if(recovery===null)return;
   pinDigest(String(recovery).trim().toUpperCase(),n.pinLock.recoverySalt).then(function(hash){
    if(hash!==n.pinLock.recoveryHash){window.alert(t('recoveryWrong'));return;}
-   setNewPinAfterRecovery(n).catch(function(){window.alert(t('pinUnavailable'));});
+   var pin=String(Math.floor(Math.random()*10000)).padStart(4,'0');
+   if(!window.crypto||!crypto.getRandomValues||!crypto.subtle){window.alert(t('pinUnavailable'));return;}
+   var saltBytes=new Uint8Array(16);crypto.getRandomValues(saltBytes);
+   var salt=Array.from(saltBytes).map(function(b){return b.toString(16).padStart(2,'0')}).join('');
+   return pinDigest(pin,salt).then(function(pinHash){
+    var latest=read(),saved=latest.find(function(x){return x.id===n.id;});
+    if(!saved||!saved.pinLock){window.alert(t('pinSaveError'));return;}
+    saved.pinLock={salt:salt,hash:pinHash,changePinOnNextLock:true};
+    if(!write(latest)){window.alert(t('pinSaveError'));return;}
+    showNewPinPopup(pin,function(){setNoteLock(n);});
+   });
   }).catch(function(){window.alert(t('pinUnavailable'));});
  }
  function unlockWithEnteredPin(n,input){
@@ -1716,7 +1726,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      card.appendChild(pinInput);
      var actions=el('div');actions.style.cssText='display:flex;gap:8px;flex-wrap:nowrap;align-items:center;margin-top:7px;';
      var forgotBtn=el('button',{type:'button',class:'diary-note-edit'},t('forgotPin'));
-     forgotBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();forgotPin(n)});
+     forgotBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();recoverNotePin(n)});
      var offBtn=el('button',{type:'button',class:'diary-note-edit'},t('lockOff'));
      offBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();turnLockOff(n)});
      forgotBtn.style.cssText='flex:1 1 0;min-width:0;white-space:nowrap;margin-top:0;padding:8px 5px;font-size:12px;';offBtn.style.cssText='flex:1 1 0;min-width:0;white-space:nowrap;margin-top:0;padding:8px 5px;font-size:12px;';actions.appendChild(forgotBtn);actions.appendChild(offBtn);card.appendChild(actions);
