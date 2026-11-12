@@ -1227,7 +1227,9 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  }
  function turnDiaryLockOff(){
   var current=localStorage.getItem(DIARY_MASTER_PIN_KEY)||'';
-  if(!current){window.alert(t('diaryNoLock'));return;}
+  /* Only a valid four-digit Diary PIN means the master lock is set.
+     Invalid saved text (for example address autofill) must never open the PIN box. */
+  if(!/^\\d{4}$/.test(current)){window.alert(t('diaryNoLock'));return;}
   var previous=document.getElementById('diaryDiaryLockOffShade');if(previous&&previous.parentNode)previous.parentNode.removeChild(previous);
   var shade=el('div',{id:'diaryDiaryLockOffShade'});
   shade.style.cssText='position:fixed;inset:0;z-index:2147483647;background:rgba(20,10,35,.86);display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;';
