@@ -1716,7 +1716,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      card.appendChild(pinInput);
      var actions=el('div');actions.style.cssText='display:flex;gap:8px;flex-wrap:nowrap;align-items:center;margin-top:7px;';
      var forgotBtn=el('button',{type:'button',class:'diary-note-edit'},t('forgotPin'));
-     forgotBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();recoverNotePin(n)});
+     forgotBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();forgotPin(n)});
      var offBtn=el('button',{type:'button',class:'diary-note-edit'},t('lockOff'));
      offBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();turnLockOff(n)});
      forgotBtn.style.cssText='flex:1 1 0;min-width:0;white-space:nowrap;margin-top:0;padding:8px 5px;font-size:12px;';offBtn.style.cssText='flex:1 1 0;min-width:0;white-space:nowrap;margin-top:0;padding:8px 5px;font-size:12px;';actions.appendChild(forgotBtn);actions.appendChild(offBtn);card.appendChild(actions);
