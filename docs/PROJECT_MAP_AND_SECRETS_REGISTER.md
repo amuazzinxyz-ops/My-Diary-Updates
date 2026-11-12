@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-12:** APK `1.0.135` / versionCode `134`; webVersion `115`; package `com.personal.diaryapp`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current.
+**Status checked against live `latest.json` on 2026-11-12:** APK `1.0.135` / versionCode `134`; webVersion `116`; package `com.personal.diaryapp`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -676,3 +676,20 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Source commit: `3a429816e40ab89f0ab5b025829f553a585fae22`. GitHub Actions web-only publish run `43243273460` completed with **success**. Workflow generated/synchronized the mirror and update feed.
 - Final re-fetch verified source and `diary-web/index.html` are byte-identical. Verified the three exact language strings above. `latest.json` reports webVersion `115` and web SHA-256 `7ff566dcec4eb114dfbc323cc72aceebf6285d367203e1066866759d2a050cdb`. APK remains `1.0.135` / versionCode `134`; no APK rebuild.
 - Scope was limited to the three subtitle strings. No other Diary features, saved notes/photos, PIN/recovery, storage, APK identity, or signing data were changed. Phone-side **Me → Check for Updates** verification is still pending.
+
+
+---
+
+# Web Update 116 — Localize Diary home screen in all 10 supported languages (2026-11-12)
+
+- User requested that the Diary landing screen follow the selected app language. The screen previously hard-coded My Diary, Private notes, memories and personal writing, and Language / Zaban, even though the app offers 10 languages.
+- Added one isolated applyDiaryHomeLanguage() function in web-source/index.html. It translates those three landing-screen strings for Roman English, English, Hindi, Urdu, Arabic, Bengali, Gujarati, Marathi, Tamil, and Telugu. It runs at startup and whenever the language selector or existing language-change/storage events run. Existing language options, app dictionaries, Diary entry button, and direction handling remain intact.
+- No Diary feature, button, note/photo data, storage key, PIN/recovery logic, APK, package identity, or signing data was changed.
+- Backups created and re-fetched/readable before editing:
+  - backups/web115-before-diary-home-language-screen-2026-11-12.html
+  - backups/diary-web115-before-diary-home-language-screen-2026-11-12.html
+  - backups/latest-before-web116-diary-home-language-screen-2026-11-12.json
+  - backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-web116-diary-home-language-screen-2026-11-12.md
+- Source commit: 7d545f38a66f4bb2b3d3def4ef29a94f3ec50164. Web-only workflow run 43244545952 completed with success; its publish job and all steps passed.
+- Final re-fetch: source and diary-web/index.html are byte-identical, Git blob SHA 00c5dda6f514bf92d39cf81cf0e2c51f47021513. Independently recalculated UTF-8 SHA-256 9899c9df540ca5f845344c151b2f2303c16204c68796752fcbd558eda47515fb; matched the live latest.json value. Live webVersion is 116.
+- APK remains 1.0.135 / versionCode 134; no APK rebuild. The 10-language string coverage and workflow/feed integrity were checked. Physical-device language switching is still pending: use Me → Check for Updates, then select each language and confirm the heading, subtitle, and language label change together.
