@@ -2179,6 +2179,9 @@ body[data-diary-interface-theme]:not([data-diary-interface-theme="blue"]):not([d
  transform-origin:70% 50%;
  animation:diary-entry-tap-cue 1.2s ease-in-out infinite;
 }
+#diaryMyNotesEntry #diaryMyNotesEntryTitle:dir(rtl)::before{
+ content:"👈";
+}
 @keyframes diary-entry-tap-cue{
  0%,100%{transform:translateX(0) scale(1)}
  45%{transform:translateX(4px) scale(1.04)}
