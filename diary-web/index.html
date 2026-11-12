@@ -1519,6 +1519,15 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   copy.addEventListener('click',function(e){if(e){e.preventDefault();e.stopPropagation();}copyAndContinue();});
   box.appendChild(heading);box.appendChild(value);box.appendChild(copy);shade.appendChild(box);document.body.appendChild(shade);
  }
+ function showDiaryErrorMessage(message,onClose){
+  var shade=document.createElement('div');shade.style.cssText='position:fixed;inset:0;z-index:2147483647;background:rgba(0,0,0,.68);display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;';
+  var box=document.createElement('section');box.style.cssText='width:min(320px,100%);box-sizing:border-box;padding:20px 18px;border-radius:16px;text-align:center;background:linear-gradient(145deg,#fff,#f0e8ff);border:2px solid #8c62c5;box-shadow:0 12px 36px rgba(0,0,0,.35);color:#39235b;';
+  var messageText=document.createElement('strong');messageText.textContent=message;messageText.style.cssText='display:block;font-size:17px;font-weight:900;margin:0 0 16px;';
+  var close=document.createElement('button');close.type='button';close.textContent=t('closeLabel');close.style.cssText='min-width:110px;padding:10px 22px;border:0;border-radius:10px;background:#5a3288;color:#fff;font-weight:900;';
+  function finish(){if(shade.parentNode)shade.parentNode.removeChild(shade);if(typeof onClose==='function')onClose();}
+  close.addEventListener('click',finish);
+  box.appendChild(messageText);box.appendChild(close);shade.appendChild(box);document.body.appendChild(shade);
+ }
  function forgotPin(n){
   try{
    if(!n||!n.pinLock){window.alert(t('noPinLock'));return;}
@@ -1531,8 +1540,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      askFourDigitPinAutomatically(t('recoveryPinPrompt')).then(function(entered){
       if(entered===null)return;
       if(String(entered)!==pin){
-       window.alert(t('diaryPinWrong'));
-       askAgain();
+       showDiaryErrorMessage(t('diaryPinWrong'),askAgain);
        return;
       }
       var saltBytes=new Uint8Array(16);crypto.getRandomValues(saltBytes);
