@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-12:** APK `1.0.135` / versionCode `134`; webVersion `116`; package `com.personal.diaryapp`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current.
+**Status checked against live `latest.json` on 2026-11-12:** APK `1.0.135` / versionCode `134`; webVersion `119`; package `com.personal.diaryapp`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -724,3 +724,18 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Post-publish re-fetch verified source and `diary-web/index.html` are byte-identical; Git blob SHA `fb2075878ef553b80e4ea05c8e651a8e4d658167`. Live `latest.json` reports webVersion `118` and web SHA-256 `73c38c4b50c32dc6a0cb4a51395fdfe4362cd4345efe85dced274cffb4b20c00`; the successful publish workflow generated the mirror and feed hash after validating the HTML and JSON. APK remains `1.0.135` / versionCode `134`; no APK rebuild.
 - Physical phone visual check remains pending. User should open **Me → Check for Updates** and inspect the Diary entry button. Do not claim phone verification.
 - Rollback: restore `web-source/index.html` and `diary-web/index.html` from the two HTML backups above and `latest.json` from its backup; this Register backup is the pre-entry record.
+
+
+# Web Update 119 — Animated tap indicator for the Diary entry (2026-11-12)
+
+- User approved adding a clear tap sign beside the localized **Meri Diary** title. Added one isolated CSS pseudo-element after the title: a small pointing-hand emoji (👆) with a gentle tap/bounce motion. The cue automatically follows the existing localized title in all supported languages; reduced-motion accessibility preference disables the animation.
+- No title/subtitle wording, language dictionaries, icon, button size/layout, click handler, notes/photos, storage, PIN/recovery, APK, package identity, or signing data was changed.
+- Pre-edit backups created and re-fetched/readable:
+  - `backups/web-source-index-before-tap-indicator-2026-11-12.html`
+  - `backups/diary-web-index-before-tap-indicator-2026-11-12.html`
+  - `backups/latest-before-tap-indicator-2026-11-12.json`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-tap-indicator-2026-11-12.md`
+- Source commit: `fd4b22d01165d747d7545a473f3fd2113b12ad1c`. Web-only publish workflow run `43249661987` (run 108) completed with **success**; all publish job steps passed.
+- Post-publish re-fetch verified `web-source/index.html` and `diary-web/index.html` are byte-identical with Git blob SHA `6bedf161736ab417291a560ab683fa7c613b621e`. Independently calculated UTF-8 SHA-256 `01bc624e78f33f8fd8f3596e26f159651bcee9003ca6dea190fb4af3c5372f55` passed the standard `abc` test vector and matches live `latest.json`. Live webVersion is `119`.
+- APK remains `1.0.135` / versionCode `134`, package `com.personal.diaryapp`; no APK rebuild or signing operation. Phone-side visual confirmation is pending; use **Me → Check for Updates**, then check that the pointing-hand cue appears beside Meri Diary and gently moves.
+- Rollback: restore both HTML files from the two pre-edit HTML backups above and restore `latest.json` from `backups/latest-before-tap-indicator-2026-11-12.json`; retain the Register backup as the pre-change record.
