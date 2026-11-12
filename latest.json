@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 109,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "163f14796d8a84867ad68e17833991e01bbf4f0d1baa5c1f4696c2362805bf78",
-  "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
+  "webSha256": "fa4d6f6a66b835542cd56bcc5246f954b5d41ae33a73a072c323db708512df7f",
+  "webReleaseNotes": "Forgot PIN shows the temporary PIN and Copy PIN option first. The entered PIN is checked before the saved lock is changed; an incorrect entry can be retried, and only a correct entry proceeds to create and confirm a new PIN. Other app features and data are unchanged."
 }
