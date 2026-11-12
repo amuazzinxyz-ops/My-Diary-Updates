@@ -1,3 +1,81 @@
+# MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
+
+**Status checked against live `latest.json` on 2026-11-12:** APK `1.0.135` / versionCode `134`; webVersion `113`; package `com.personal.diaryapp`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current.
+
+**Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
+**This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
+**Scope:** My Diary only. Never edit or inspect the separate MUAZZIN project for a My Diary task.
+
+## A. Mandatory start gate — do not edit until complete
+
+1. Read this register from the live default branch, including the newest entries and relevant historical notes.
+2. Fetch the live `latest.json`; record APK version/versionCode, webVersion, APK URL and hashes. Do not rely on stale version numbers elsewhere in this document.
+3. Inspect the current repository tree, recent commits, workflow status and the exact files/functions involved. Identify the latest successful/known-good state for the requested feature. If the live files, register, feed, or history disagree, STOP and reconcile before editing.
+4. Confirm whether the request is web-only, native Android, build/workflow, or mixed. Do not change the wrong layer.
+5. Write a short scope list: files/functions allowed to change, related dependencies to inspect, and features/files explicitly out of scope.
+6. Create a timestamped backup of every file that will be edited, plus the live feed and this register when applicable. Verify the backup exists and is readable before editing. Never overwrite the only known-good backup.
+
+## B. Change rules — preserve existing behaviour
+
+1. Make only the user's explicitly requested change. Prefer the smallest isolated patch; do not refactor, redesign, rename, reorder, or clean up unrelated code.
+2. Do not delete, replace, disable, or materially alter an existing feature, button, menu, updater path, data format, storage key, permission, package identity, signing identity, or recovery flow without explicit user approval.
+3. Treat shared functions, global CSS, common event handlers, translations, storage and update code as high-impact dependencies. Inspect their callers and effects before changing them.
+4. Preserve backward compatibility with existing notes, photos, backups, PIN/recovery records and stored user data. Never clear app data, uninstall the app, or change storage keys as a troubleshooting shortcut.
+5. Do not bundle unrelated fixes into one release. If a new request reveals a separate issue, record it and ask/handle it as a separate task.
+6. If a test fails or an unexpected difference appears, stop. Do not stack another speculative fix on top. Compare with the backup, isolate the cause, and restore the last known-good state when needed.
+
+## C. Required verification before any publish
+
+1. Review the complete diff against the pre-edit backup. Every changed line must be explainable by the user's request.
+2. Run applicable checks: syntax/parse checks, HTML structure checks, targeted function checks, translation checks, data/storage compatibility checks, and automated tests/builds. Also inspect nearby features that share the changed code.
+3. For web releases, fetch the final source and published mirror again and prove they are byte-identical. Independently calculate SHA-256 from the exact UTF-8 source bytes and verify it equals `latest.json.webSha256`. Do not copy a guessed or previously used hash.
+4. For APK releases, verify debug and signed Release builds, package name, versionName/versionCode, APK SHA-256, live feed URL/hash, and the existing trusted signing-certificate fingerprint. Never regenerate, replace, expose, or modify signing secrets to make a build pass.
+5. Verify the update workflow completed successfully and the feed points to the exact artifact that was checked. A queued, failed, cancelled, or partially completed workflow is NOT a published release.
+6. Re-fetch every changed live file after writing. Confirm the expected commit/blob SHA, source/mirror/feed consistency, version metadata and backup paths.
+7. Do not publish if any required check is missing, contradictory, or failing. Fix the cause or roll back first.
+
+## D. Phone verification — report honestly
+
+1. Automated checks and GitHub success do not prove that the app works on the user's phone.
+2. Provide a short, relevant phone test list using the existing in-app route (normally **Me → Check for Updates**). Do not send the user to manual APK links when the in-app updater is the intended route.
+3. Clearly separate: **code checked**, **build/workflow checked**, **live release checked**, and **physical-device test pending/confirmed**.
+4. Never say “all fixed”, “100% working”, or “phone tested” unless the corresponding evidence exists. Record the user's actual phone-test result in the next register entry.
+
+## E. Rollback and recovery
+
+1. Keep the pre-change backup and last known-good commit/reference. Record exact paths and commit IDs.
+2. If the update breaks an existing feature, stop further changes and compare the live code with the pre-change snapshot. Restore only the affected files from the verified last-known-good state; do not roll back unrelated good work.
+3. After rollback, re-check source/mirror/feed/hash/version and test the recovery path. Do not claim recovery until verified.
+4. Never delete backups, historical register entries, or signing records as part of routine cleanup.
+
+## F. Register and release record
+
+For every task, append a dated entry containing: user request; starting commit/version; exact files changed; exact behaviour changed; files/features deliberately untouched; backup paths; tests and results; workflow/run and commit IDs; source/mirror blob identity; independently verified SHA-256; feed values; APK/signing checks if applicable; rollback reference; and phone-test status. Mark unknown or untested items as **pending**, never as passed.
+
+Keep historical entries as history. If an old entry contains stale version information, do not silently rewrite history; clearly identify the current live values near the top and state that `latest.json` is authoritative.
+
+## G. Reusable task checklist — complete every time
+
+- [ ] Correct project and repository confirmed (My Diary only)
+- [ ] Master Register and live latest.json read
+- [ ] Latest known-good commit/version identified
+- [ ] Scope and dependencies inspected
+- [ ] Pre-edit backups created and verified
+- [ ] Only requested minimal change made
+- [ ] Full diff reviewed; unrelated features preserved
+- [ ] Relevant regression/syntax/data/build checks passed
+- [ ] Source and mirror byte-identical (web change)
+- [ ] Exact SHA-256 matches live feed (web change)
+- [ ] APK version/hash/signing fingerprint verified (APK change)
+- [ ] Workflow completed successfully
+- [ ] Changed files re-fetched and live metadata verified
+- [ ] Register updated with evidence and backup paths
+- [ ] Phone-test status clearly marked; no unsupported success claim
+
+**STOP RULE:** If any item required for the type of release cannot be verified, do not publish and do not describe the task as complete. Tell the user exactly what is blocked and preserve the last known-good version.
+
+---
+
 # Web Update 113 — Note Lock Forgot PIN uses Diary-style in-app dialogs (2026-11-12)
 
 - User reported that the Android WebView page address still appeared during Note Lock → Forgot PIN. Re-inspection found remaining native `window.alert()` calls in the Note Lock recovery path, including Copy PIN failure and PIN/storage/crypto error branches; Web Update 112 covered only the wrong temporary-PIN message.
