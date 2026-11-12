@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 107,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "5fc8497b6f946f1c6415aa966f6db5357f8bbfe09f59de2a3187b9a977a8347e",
+  "webSha256": "c6766b88529a878227b9d956a5639b867e63c745908cd0f2c5f3559af0539507",
   "webReleaseNotes": "Note Lock Forgot PIN now verifies the entered recovery code before generating a new temporary PIN. After successful verification, the existing Copy PIN popup and new PIN setup continue. Other features and app data are unchanged."
 }
