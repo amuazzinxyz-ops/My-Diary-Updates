@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-12:** APK `1.0.135` / versionCode `134`; webVersion `125`; package `com.personal.diaryapp`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current.
+**Status checked against live `latest.json` on 2026-11-12:** APK `1.0.135` / versionCode `126`; webVersion `126`; package `com.personal.diaryapp`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -804,3 +804,18 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Post-publish re-fetch verified web-source/index.html and diary-web/index.html are byte-identical, Git blob SHA 6fd73ae538b8c96f7c95935e451a4bbb2d9fe007. Live latest.json reports webVersion 125 and web SHA-256 e138bcde5c96a1fbd4c12baa836999df87b6dec314abb391032a37606c7d3d16. APK remains 1.0.135 / versionCode 134; no APK rebuild.
 - No Diary wording, language dictionaries, button click behaviour, notes/photos, storage, PIN/recovery, APK, package identity, or signing data changed. Physical-device visual confirmation remains pending; apply via Me → Check for Updates, then check Urdu and Arabic separately.
 - Rollback: restore both HTML files from the two pre-edit HTML backups above and latest.json from backups/latest-before-rtl-tap-cue-fix-2026-11-12.json; retain the Register backup as the pre-edit record.
+
+
+# Web Update 126 — Anchor Urdu and Arabic hand directly to the title's physical left (2026-11-12)
+
+- User reported that the Urdu/Arabic pointing hand was still in the wrong position and clarified it should sit immediately to the left of the Diary title.
+- Inspected the prior RTL rule: using logical inset-inline-end with a positive 100% offset resolved to the wrong physical side in this absolutely positioned pseudo-element. Corrected only the RTL override to use an explicit physical right offset (right: calc(100% + 8px)), anchoring the 👉 hand directly outside the title's left edge. LTR placement remains unchanged.
+- Pre-edit source, mirror, feed and register backups were created and re-fetched/readable:
+  - backups/web-source-index-before-rtl-cue-left-anchor-fix-2026-11-12.html
+  - backups/diary-web-index-before-rtl-cue-left-anchor-fix-2026-11-12.html
+  - backups/latest-before-rtl-cue-left-anchor-fix-2026-11-12.json
+  - backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-rtl-cue-left-anchor-fix-2026-11-12.md
+- Source commit: c41950c79c918f608c0dfd8cbe7a9d9789aa587c. Web-only workflow run 43256323665 (run 115) completed successfully; publish/verification job succeeded.
+- Post-publish source and mirror re-fetched with identical Git blob SHA 74c047fec88eba94f0f1a241a94a3910f4fbe1a3. Live feed reports webVersion 126 and webSha256 5478676b8ed740838567af953c7a503183bf8b5edd74379a010001e9ed4bca7d. APK remains 1.0.135 / versionCode 134; no APK rebuild.
+- Only the RTL cue anchor was changed. No language text, LTR cue, click handler, notes/photos, storage, PIN/recovery, package identity, APK or signing data changed. Physical-device visual confirmation remains pending; apply via Me → Check for Updates.
+- Rollback: restore both HTML files from the two pre-edit HTML backups above and latest.json from backups/latest-before-rtl-cue-left-anchor-fix-2026-11-12.json; retain the Register backup as the pre-edit record.
