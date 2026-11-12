@@ -7,8 +7,8 @@
   "sha256": "c3e312ec7cd8504bab68c12f9df996c8d10018670d0d1ccef9373408d4ddba4d",
   "releaseNotes": "Note Lock Forgot PIN now displays a temporary recovery PIN, then opens the new 4-digit PIN and confirmation fields automatically. No extra OK button is needed. Note Lock Off also completes immediately after the correct PIN. Existing notes, photos, PIN data and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 105,
+  "webVersion": 106,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "4545038ad06640840613940e67645eb66b1dc2e655185a53665b8cf4e23843c7",
-  "webReleaseNotes": "Restored the last-known-good My Diary web version from 12 November 2026, around 11:00 AM IST. The exact UTF-8 SHA-256 has been independently recalculated and verified. Existing Note Lock recovery verification, Diary features, notes, photos and PIN data are preserved."
+  "webSha256": "a6a39ea8774925c6ddeb32db4955603c23b1f12505c0cc9c6a56560ed320fecd",
+  "webReleaseNotes": "Restored the 11:15 AM Note Lock Forgot PIN Copy PIN / Continue flow on the verified 11:00 AM version. The recovery PIN is shown with a Copy PIN button; after successful copying, the popup closes and new PIN setup continues. Other recovery logic and existing app data are preserved."
 }
