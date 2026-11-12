@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 98,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "67a04eb70c8ead8f0c5825202fae41e2154ed5208bf819fcae46f7167b806415",
-  "webReleaseNotes": "Forgot PIN now requires manually entering and verifying the displayed 4-digit recovery PIN before the new PIN and confirmation fields open. Existing notes and photos are preserved."
+  "webSha256": "73482f790ae658e21445600be4bfcab4665871de3ace6aa9da55920a5860012e",
+  "webReleaseNotes": "Forgot PIN now requires manually entering and verifying the displayed 4-digit recovery PIN before the new PIN and confirmation fields open. Verification prompt is localized in Roman Hindi, English and Hindi. Existing notes and photos are preserved."
 }
