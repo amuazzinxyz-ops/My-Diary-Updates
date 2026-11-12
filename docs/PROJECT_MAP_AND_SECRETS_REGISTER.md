@@ -1,3 +1,17 @@
+# Web Update 111 — Note Lock wrong temporary PIN message (2026-11-12)
+
+- User-requested wording only: when the temporary PIN entered during Note Lock → Forgot PIN is wrong, the message now uses the existing Diary Lock wording: **“Diary PIN galat hai.”**
+- Implemented only in the temporary-PIN verification branch by calling the existing `diaryPinWrong` message. The separate legacy recovery-code error text remains unchanged.
+- The retry flow, temporary PIN generation, PIN verification, stored lock data, new PIN creation/confirmation, notes, photos, Diary Lock, APK and unrelated features were not changed.
+- Backup before change: `backups/web110-before-note-forgot-pin-error-wording-2026-11-12.html`
+- Update-feed backup: `backups/latest-before-web111-note-pin-error-2026-11-12.json`
+- Master Register backup: `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-web111-note-pin-error-2026-11-12.md`
+- Source and mirror were verified byte-identical; SHA-256: `bbb84e19d76f69333ad7e95b8fa6cf5bbd279264f6fba0e47349bd19910fa317`.
+- Web Update 111 published in `latest.json`; APK version and APK URL remain unchanged.
+- Device-side verification is still pending; user should use **Me → Check for Updates** and test a deliberately wrong temporary PIN.
+
+---
+
 # Web Update 110 — exact UTF-8 SHA-256 correction (2026-11-12)
 
 - User reported that Check for Updates failed with “Diary update SHA-256 match nahi hua”.
