@@ -1522,18 +1522,33 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  function forgotPin(n){
   try{
    if(!n||!n.pinLock){window.alert(t('noPinLock'));return;}
-   var all=read(),target=all.find(function(x){return x.id===n.id;});
-   if(!target||!target.pinLock){window.alert(t('noPinLock'));return;}
-   var pin=String(Math.floor(Math.random()*10000)).padStart(4,'0');
+   var current=read().find(function(x){return x.id===n.id;});
+   if(!current||!current.pinLock){window.alert(t('noPinLock'));return;}
    if(!window.crypto||!crypto.getRandomValues||!crypto.subtle){window.alert(t('pinUnavailable'));return;}
-   var saltBytes=new Uint8Array(16);crypto.getRandomValues(saltBytes);
-   var salt=Array.from(saltBytes).map(function(b){return b.toString(16).padStart(2,'0')}).join('');
-   pinDigest(pin,salt).then(function(hash){
-    var latest=read(),saved=latest.find(function(x){return x.id===n.id;});if(!saved||!saved.pinLock){window.alert(t('pinSaveError'));return;}
-    saved.pinLock={salt:salt,hash:hash,changePinOnNextLock:true};
-    if(!write(latest)){window.alert(t('pinSaveError'));return;}
-    showNewPinPopup(pin,function(){askFourDigitPinAutomatically(t('recoveryPinPrompt')).then(function(entered){if(entered===null)return;if(String(entered)!==pin){window.alert(t('recoveryWrong'));return;}setNoteLock(n);});});
-   }).catch(function(){window.alert(t('pinUnavailable'));});
+   var pin=String(Math.floor(Math.random()*10000)).padStart(4,'0');
+   showNewPinPopup(pin,function verifyTemporaryPin(){
+    function askAgain(){
+     askFourDigitPinAutomatically(t('recoveryPinPrompt')).then(function(entered){
+      if(entered===null)return;
+      if(String(entered)!==pin){
+       window.alert(t('recoveryWrong'));
+       askAgain();
+       return;
+      }
+      var saltBytes=new Uint8Array(16);crypto.getRandomValues(saltBytes);
+      var salt=Array.from(saltBytes).map(function(b){return b.toString(16).padStart(2,'0')}).join('');
+      pinDigest(pin,salt).then(function(hash){
+       var latest=read(),saved=latest.find(function(x){return x.id===n.id;});
+       if(!saved||!saved.pinLock){window.alert(t('pinSaveError'));return;}
+       saved.pinLock={salt:salt,hash:hash,changePinOnNextLock:true};
+       if(!write(latest)){window.alert(t('pinSaveError'));return;}
+       unlockedNotes[n.id]=true;
+       setNoteLock(n);
+      }).catch(function(){window.alert(t('pinUnavailable'));});
+     }).catch(function(){window.alert(t('pinUnavailable'));});
+    }
+    askAgain();
+   });
   }catch(err){window.alert(t('pinCreateError'));}
  } function turnLockOff(n){
   if(!n||!n.pinLock){return;}
