@@ -708,3 +708,19 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Post-publish re-fetch: `web-source/index.html` and `diary-web/index.html` are byte-identical, Git blob SHA `35cd6fd9c4405bf8fefe2c7ee11490d0e036460e`, UTF-8 size 263,162 bytes. Independently calculated SHA-256 `e30a576cb937251039081d048179f3b6c3cc7a493feae2165463c0e318c495da` matches live `latest.json` `webSha256`; live webVersion is `117`.
 - APK remains `1.0.135` / versionCode `134`, package `com.personal.diaryapp`; no APK rebuild. Workflow's web-only HTML/feed verification and JSON validation passed. Static inspection confirmed all 10 subtitle dictionary entries were changed once and the isolated 3D CSS rule appears once. Physical-device visual/language verification is pending; use **Me → Check for Updates**, then check the welcome subtitle in the selected languages. Do not claim phone testing until user confirms.
 - Rollback: restore `web-source/index.html` and `diary-web/index.html` from the two Web 116 HTML backups above, and restore `latest.json` from `backups/latest-before-home-subtitle-bold-3d-2026-11-12.json`; retain this Register backup as the pre-entry record.
+
+
+
+# Web Update 118 — Bold 3D styling for the Diary entry button (2026-11-12)
+
+- User asked to make the three visible elements of the Diary entry button bold with a 3D effect: 📒 icon, localized “Meri Diary” title, and localized “Apne Notes Likhne Aur Search Karne Yaha Tap Kare” subtitle.
+- Before editing, re-fetched and read the Master Register, latest.json, source, and mirror. Source and mirror were identical at Web 117. Created and re-fetched byte-identical backups:
+  - `backups/web-source-index-before-diary-entry-bold-3d-2026-11-12.html`
+  - `backups/diary-web-index-before-diary-entry-bold-3d-2026-11-12.html`
+  - `backups/latest-before-diary-entry-bold-3d-2026-11-12.json`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-diary-entry-bold-3d-2026-11-12.md`
+- Added one isolated CSS block `diary-entry-button-bold-3d` scoped only to `#diaryMyNotesEntry` title, subtitle, and icon. The same selectors apply to all localized text as the existing `installEntry()` replaces title/subtitle according to the selected language. No wording, language dictionary, button dimensions, click handler, note/photo data, storage, PIN/recovery, APK, package identity, or signing files were changed.
+- Source commit: `4501656ae40a62cb14c32b06e810f36a4557c352`. GitHub Actions web-only publish run `43248392917` (run 107) completed with **success**; publish job and all steps passed.
+- Post-publish re-fetch verified source and `diary-web/index.html` are byte-identical; Git blob SHA `fb2075878ef553b80e4ea05c8e651a8e4d658167`. Live `latest.json` reports webVersion `118` and web SHA-256 `73c38c4b50c32dc6a0cb4a51395fdfe4362cd4345efe85dced274cffb4b20c00`; the successful publish workflow generated the mirror and feed hash after validating the HTML and JSON. APK remains `1.0.135` / versionCode `134`; no APK rebuild.
+- Physical phone visual check remains pending. User should open **Me → Check for Updates** and inspect the Diary entry button. Do not claim phone verification.
+- Rollback: restore `web-source/index.html` and `diary-web/index.html` from the two HTML backups above and `latest.json` from its backup; this Register backup is the pre-entry record.
