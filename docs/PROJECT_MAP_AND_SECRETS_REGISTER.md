@@ -739,3 +739,18 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Post-publish re-fetch verified `web-source/index.html` and `diary-web/index.html` are byte-identical with Git blob SHA `6bedf161736ab417291a560ab683fa7c613b621e`. Independently calculated UTF-8 SHA-256 `01bc624e78f33f8fd8f3596e26f159651bcee9003ca6dea190fb4af3c5372f55` passed the standard `abc` test vector and matches live `latest.json`. Live webVersion is `119`.
 - APK remains `1.0.135` / versionCode `134`, package `com.personal.diaryapp`; no APK rebuild or signing operation. Phone-side visual confirmation is pending; use **Me → Check for Updates**, then check that the pointing-hand cue appears beside Meri Diary and gently moves.
 - Rollback: restore both HTML files from the two pre-edit HTML backups above and restore `latest.json` from `backups/latest-before-tap-indicator-2026-11-12.json`; retain the Register backup as the pre-change record.
+
+
+# Web Update 121 — Larger directional tap indicator for the Diary entry (2026-11-12)
+
+- User asked to make the pointing hand larger and aim it toward the localized **Meri Diary** title. Updated the existing isolated tap cue from a small hand after the title to a larger right-pointing hand before the title, with a gentle horizontal nudge animation. For right-to-left title direction, the cue switches to a left-pointing hand so it still points toward the title. Reduced-motion accessibility preference still disables the animation.
+- Change is limited to the Diary entry title pseudo-element CSS. No wording, language dictionaries, icon, layout dimensions, button/click behavior, notes/photos, storage, PIN/recovery, APK, package identity, or signing data changed.
+- Pre-edit backups created and re-fetched byte-for-byte:
+  - `backups/web-source-index-before-larger-right-pointing-cue-2026-11-12.html`
+  - `backups/diary-web-index-before-larger-right-pointing-cue-2026-11-12.html`
+  - `backups/latest-before-larger-right-pointing-cue-2026-11-12.json`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-larger-right-pointing-cue-2026-11-12.md`
+- Final source commit: `31a5f1cd14dbdce054097ad0ad9e244ec03a7df3`. Final web-only publish workflow run `43250593694` (run 110) completed with **success**; all publish steps passed.
+- Post-publish re-fetch: source and `diary-web/index.html` are byte-identical, Git blob SHA `2e24d7aeef5a3bb481686d24c6831a4f2fefdb3e`. Independently calculated UTF-8 SHA-256 `9625b8563152a1883ac934411f3e260c3b07a62ccbf5bf1e492112fbab169648` matches live `latest.json` `webSha256`; live webVersion is `121`.
+- APK remains `1.0.135` / versionCode `134`, package `com.personal.diaryapp`; no APK rebuild or signing changes. Physical phone visual confirmation remains pending. Use **Me → Check for Updates** and verify that the larger hand points toward the Diary title in both left-to-right and right-to-left language layouts.
+- Rollback: restore both HTML files from the two pre-edit HTML backups above and `latest.json` from `backups/latest-before-larger-right-pointing-cue-2026-11-12.json`; retain the Register backup as the pre-edit record.
