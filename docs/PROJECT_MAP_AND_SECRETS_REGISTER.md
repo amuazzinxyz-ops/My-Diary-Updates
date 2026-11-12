@@ -1,3 +1,16 @@
+# Web Update 112 — In-app Note Lock wrong PIN message (2026-11-12)
+
+- Replaced the native WebView `window.alert` for a wrong temporary PIN in Note Lock → Forgot PIN with a custom in-app message popup.
+- The popup shows only the localized Diary message **“Diary PIN galat hai.”** and a close button; the Android page-address heading is no longer shown for this error.
+- Closing the message retries the temporary PIN prompt. PIN comparison and recovery logic are unchanged.
+- Backup: `backups/web111-before-custom-note-pin-error-2026-11-12.html`
+- Feed backup: `backups/latest-before-web112-custom-note-pin-error-2026-11-12.json`
+- Master Register backup: `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-web112-custom-note-pin-error-2026-11-12.md`
+- Source SHA-256: `28b0fca7bd482c728827bd4b47073adeb3d4a2387de8f6e42db14543dbf89e3a`; source/mirror sync is being verified.
+- Web Update 112 only; APK remains `1.0.135` and is not rebuilt. Device-side test pending.
+
+---
+
 # Web Update 111 — Note Lock wrong temporary PIN message (2026-11-12)
 
 - User-requested wording only: when the temporary PIN entered during Note Lock → Forgot PIN is wrong, the message now uses the existing Diary Lock wording: **“Diary PIN galat hai.”**
