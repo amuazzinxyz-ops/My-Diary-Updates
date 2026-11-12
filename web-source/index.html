@@ -2203,7 +2203,9 @@ body[data-diary-interface-theme]:not([data-diary-interface-theme="blue"]):not([d
 :root[dir="rtl"] #diaryMyNotesEntry #diaryMyNotesEntryTitle::after{
  content:"👉";
  inset-inline-start:auto;
- inset-inline-end:calc(100% + 8px);
+ inset-inline-end:auto;
+ left:auto;
+ right:calc(100% + 8px);
  animation-name:diary-entry-tap-cue-rtl;
 }
 @keyframes diary-entry-tap-cue-rtl{
