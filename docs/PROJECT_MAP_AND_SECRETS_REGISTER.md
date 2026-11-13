@@ -1591,3 +1591,12 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Source commit: `2f5bc69a2dbf38774df5c3092306912e0d597d80`; source and published mirror re-fetched and verified byte-identical, blob SHA `bdd72933f3c238957a893bc3cfcb1e0d61143823`.
 - Publisher workflow run `43428899194`, run 167, publish job completed successfully. Live `latest.json` reports webVersion `177`, webSha256 `8c22fecf2a7112996490b66417fea86ced92161a925ae1a9dbb201d5f432305d`.
 - Physical-device verification pending. Test after **Me → Check for Updates**: empty New Note hides ×; text/image makes it appear; tapping × clears the draft and hides ×.
+
+
+## Web Update 178 — New Note clear × right side restored (2026-11-13)
+- User clarified that only the separate × on the New Note writing pad had shifted to the left; it must return to the right. Kept the editor, title/body fields, images, visibility behavior, clear action, main Diary close button, saved notes, and all other functions unchanged.
+- Root cause: the clear × is a button (inline-block by default), so its auto left margin did not reliably align it to the right. Changed only its visible-state CSS selector to `#diaryMyNotesDraftClearX:not([hidden])` and set `display:block`; retained the existing right-aligning auto margin. Using the `:not([hidden])` selector preserves native hidden behavior when the draft is empty or after clearing.
+- Exact pre-edit files backed up on branch `backup/new-note-clear-x-right-2026-11-13`: `backups/web-source-before-new-note-clear-x-right-2026-11-13.html`, `backups/diary-web-before-new-note-clear-x-right-2026-11-13.html`, `backups/latest-before-new-note-clear-x-right-2026-11-13.json`, and `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-new-note-clear-x-right-2026-11-13.md`.
+- Source commit: `5efa345f140541b0055aa1135b4100257ddbe4d9`; source blob `7046e907a57068ad8f07f7707d4d69ed3cfe7dc7`. Web publisher workflow run `43429955889` completed successfully. Live webVersion is `178` with webSha256 `df38b4c0af55507788b9187f0ff05c6bdb1d21c7af2594765bb6ae61c8d9aaa7`.
+- Re-fetched source and published mirror are byte-identical (blob SHA `7046e907a57068ad8f07f7707d4d69ed3cfe7dc7`). APK remains unchanged at 1.0.136 / versionCode 135; no APK rebuild or signing changes.
+- Physical-device verification pending. Use **Me → Check for Updates**, open **＋ New Note**, type a short test, and confirm the × appears on the right. Tap it and confirm the draft clears, the × disappears, and the writing pad remains open. Empty New Note should keep × hidden.
