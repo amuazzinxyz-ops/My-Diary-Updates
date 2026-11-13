@@ -1734,15 +1734,36 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   box.appendChild(heading);box.appendChild(input);box.appendChild(recoveryStatus);box.appendChild(forgot);shade.appendChild(box);document.body.appendChild(shade);setTimeout(function(){input.focus();},50);
  }
  function compressDataUrlToBlob(dataUrl){var parts=String(dataUrl||'').split(',');var mime=(parts[0].match(/:(.*?);/)||[])[1]||'image/jpeg';var raw=atob(parts[1]||'');var arr=new Uint8Array(raw.length);for(var i=0;i<raw.length;i++)arr[i]=raw.charCodeAt(i);return new Blob([arr],{type:mime});}
- function shareNote(n){
+ var diaryShareImageCache=Object.create(null),diaryShareImagePending=Object.create(null);
+ function shareNote(n,prepareOnly){
+  /* Prepare the composed PNG while the expanded note is visible. The final
+     Share call then happens directly inside the user's tap, as mobile browsers require. */
+  var cacheKey=String(n.id||'')+':'+String(n.updated||0)+':'+language();
+  var ready=diaryShareImageCache[cacheKey];
+  var status=document.getElementById('diaryMyNotesStatus');
+  function setStatus(message){if(status)status.textContent=message;}
+  function downloadBlob(blob){try{var url=URL.createObjectURL(blob),a=el('a',{href:url,download:'Diary-Diary-Note.png'});document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},1500);setStatus(language()==='english'?'Combined diary image saved.':language()==='hindi'?'दोनों तस्वीरों और लिखे हुए पाठ वाली डायरी इमेज सेव हो गई।':'Dono images aur text ek saath image mein save ho gaya.');}catch(e){setStatus(t('copyFailed'));}}
+  if(prepareOnly){
+   if(ready||diaryShareImagePending[cacheKey])return;
+   diaryShareImagePending[cacheKey]=true;
+  }else if(ready){
+   try{
+    var readyFile=new File([ready.blob],'Diary-Diary-Note.png',{type:'image/png'});
+    if(navigator.share&&window.File&&(!navigator.canShare||navigator.canShare({files:[readyFile]}))){
+     var readyResult=navigator.share({files:[readyFile]});
+     if(readyResult&&readyResult.then)readyResult.then(function(){setStatus(language()==='english'?'Combined diary image shared.':language()==='hindi'?'डायरी की दोनों तस्वीरें और पाठ एक साथ शेयर हो गए।':'Dono images aur text ek saath share ho gaye.');}).catch(function(err){if(err&&err.name!=='AbortError')downloadBlob(ready.blob);});
+     else setStatus('Share opened.');
+     return;
+    }
+   }catch(e){}
+   downloadBlob(ready.blob);return;
+  }
   /* Share the title-field image + title text and body-field image + body text as ONE composed PNG. */
   var title=String(n.title||t('untitled')),body=String(n.body||'');
   var coverData=(typeof n.coverPhotoData==='string'&&n.coverPhotoData.indexOf('data:image/')===0)?n.coverPhotoData:null;
   var detailData=(typeof n.detailPhotoData==='string'&&n.detailPhotoData.indexOf('data:image/')===0)?n.detailPhotoData:null;
   var extraData=(typeof n.photoData==='string'&&n.photoData.indexOf('data:image/')===0)?n.photoData:null;
   var coverFormat=cleanDiaryTextFormat(n.coverTextFormat),detailFormat=cleanDiaryTextFormat(n.detailTextFormat);
-  var status=document.getElementById('diaryMyNotesStatus');
-  function setStatus(message){if(status)status.textContent=message;}
   function loadImage(data){return new Promise(function(resolve){if(!data){resolve(null);return;}var im=new Image();im.onload=function(){resolve(im)};im.onerror=function(){resolve(null)};im.src=data;});}
   /* Read the real editor field styling so text on an image is shared at the
      same alignment, inset, font size and vertical starting position as typed. */
@@ -1827,9 +1848,10 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    ctx.fillStyle='#fffaf0';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='800 27px Arial, sans-serif';ctx.fillText('My Diary',W/2,H-margin-45);
    ctx.restore();
    canvas.toBlob(function(blob){
-    if(!blob){setStatus(t('copyFailed'));return;}
+    if(!blob){delete diaryShareImagePending[cacheKey];setStatus(t('copyFailed'));return;}
+    if(prepareOnly){diaryShareImageCache[cacheKey]={blob:blob};delete diaryShareImagePending[cacheKey];return;}
     var file=new File([blob],'Diary-Diary-Note.png',{type:'image/png'});
-    function download(){try{var url=URL.createObjectURL(blob),a=el('a',{href:url,download:'Diary-Diary-Note.png'});document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},1500);setStatus(language()==='english'?'Combined diary image saved.':language()==='hindi'?'दोनों तस्वीरों और लिखे हुए पाठ वाली डायरी इमेज सेव हो गई।':'Dono images aur likha hua text ek saath image mein save ho gaya.');}catch(e){setStatus(t('copyFailed'));}}
+    function download(){downloadBlob(blob);}
     try{
      if(navigator.share&&window.File&&(!navigator.canShare||navigator.canShare({files:[file]}))){
       var shareResult=navigator.share({files:[file]});
@@ -1838,7 +1860,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      }else download();
     }catch(err){download();}
    },'image/png');
-  }).catch(function(){setStatus(t('copyFailed'));});
+  }).catch(function(){delete diaryShareImagePending[cacheKey];setStatus(t('copyFailed'));});
  }
 
  function newNote(){
@@ -2160,7 +2182,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      if(n.detailPhotoData&&String(n.detailPhotoData).indexOf('data:image/')===0){applyDiaryFieldImage(bodyDisplay,n.detailPhotoData,'body',n.detailColour);bodyDisplay.classList.add('diary-diary-card-field-image');}else if(n.detailColour&&n.detailColour.mode&&n.detailColour.mode!=='none'){applyDiaryFieldImage(bodyDisplay,null,'body',n.detailColour);}applyDiaryTextFormat(bodyDisplay,n.detailTextFormat);
      card.appendChild(bodyDisplay);
      if(n.photoData&&String(n.photoData).indexOf('data:image/')===0){var savedPhoto=el('img',{src:n.photoData,alt:t('attachedPhoto')});savedPhoto.className='diary-note-attached-photo';var savedPhotoCrop=cleanDiaryColour(n.photoColour);savedPhoto.style.transform='translate('+savedPhotoCrop.posX+'%,'+savedPhotoCrop.posY+'%) scale('+savedPhotoCrop.zoom+')';savedPhoto.style.transformOrigin='center center';var savedPhotoTheme=diaryPamphletStyle(cleanDiaryColour(n.photoColour).template);savedPhoto.style.cssText='padding:'+(savedPhotoTheme?'12px':'9px')+';background:'+(diaryColourCss(n.photoColour)||'#eee')+';border:'+(savedPhotoTheme?'5px double '+savedPhotoTheme.border:'2px solid #d4af37')+';border-radius:'+(savedPhotoTheme?'5px':'12px')+';';card.appendChild(savedPhoto);}
-     var shareBtn=el('button',{type:'button',class:'diary-note-edit'},t('shareNote'));shareBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();shareNote(n)});card.appendChild(shareBtn);
+     var shareBtn=el('button',{type:'button',class:'diary-note-edit'},t('shareNote'));shareBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();shareNote(n)});card.appendChild(shareBtn);shareNote(n,true);
      var copyBtn=el('button',{type:'button',class:'diary-note-edit'},t('copyAction'));
      copyBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();copyNote(n)});card.appendChild(copyBtn);
      var editBtn=el('button',{type:'button',class:'diary-note-edit'},t('editAction'));
