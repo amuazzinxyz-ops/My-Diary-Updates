@@ -2725,6 +2725,28 @@ body[data-diary-interface-theme]:not([data-diary-interface-theme="blue"]):not([d
 }
 </style>
 
+<style id="diary-note-lock-mobile-fit">
+/* Keep the expanded locked-note card and its PIN controls inside the available mobile width. */
+#diaryMyNotesList .diary-my-note:has(input[name="diary-note-pin"]){
+  box-sizing:border-box!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  overflow-wrap:anywhere!important;
+}
+#diaryMyNotesList .diary-my-note:has(input[name="diary-note-pin"]) .diary-note-full,
+#diaryMyNotesList .diary-my-note:has(input[name="diary-note-pin"]) input[name="diary-note-pin"],
+#diaryMyNotesList .diary-my-note:has(input[name="diary-note-pin"]) > div{
+  box-sizing:border-box!important;
+  min-width:0!important;
+  max-width:100%!important;
+}
+#diaryMyNotesList .diary-my-note:has(input[name="diary-note-pin"]) input[name="diary-note-pin"]{
+  display:block!important;
+  width:100%!important;
+}
+</style>
+
 </body>
 </html>
 <!-- SHA-256 release verification refresh 2026-11-12 -->
