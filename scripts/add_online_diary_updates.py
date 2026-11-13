@@ -159,7 +159,10 @@ handler = r"""
         }
     }
 """
-idx = s.rfind("\n}")
+class_start = s.find("class MainActivity")
+if class_start < 0:
+    raise SystemExit("MainActivity class declaration missing")
+idx = s.find("\n}", class_start)
 if idx < 0:
     raise SystemExit("MainActivity closing brace missing")
 s = s[:idx] + "\n" + handler + s[idx:]
