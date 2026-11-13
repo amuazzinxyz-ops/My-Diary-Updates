@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `179`; package `com.personal.diaryapp`. Live feed: `webSha256=14a3ef144df495d1919fc2a5f4b93f35ddda0a76b69adcec4b81ac43ab9749af`.
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `180`; package `com.personal.diaryapp`. Live feed: `webSha256=ddf7e372e7eaa03b294069059fb75f6b6894fc201ccd0fe583feb6cd2b4dc4a9`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -1603,6 +1603,24 @@ The user can simply say what they want in Roman Hindi. No special template, file
 
 
 ---
+
+# Web Update 180 — Show and support clear × while editing saved Notes (2026-11-13)
+
+- User request: while editing an existing saved Note, show the same editor-page × clear control used for a New Note and make it clear the current editor content in the same way.
+- Starting live state: Web Update 179; APK 1.0.136 / versionCode 135; package com.personal.diaryapp; source/mirror blob SHA 4996fe1441e649f29c772c058f06bbcf9470e500; prior feed SHA-256 14a3ef144df495d1919fc2a5f4b93f35ddda0a76b69adcec4b81ac43ab9749af.
+- Web-only scope: changed only web-source/index.html. The clear × is now visible in saved-note edit mode whenever the editor contains a title, body, attached photo, cover/detail image, or cover/detail text. Tapping it uses the existing New Note reset routine to clear the in-memory editor fields and image data, then restores the current saved note ID, category and Delete button so the user remains in Edit mode. The existing note is not written to storage or deleted by ×; any subsequent save continues to target that same note. The existing non-empty save validation remains unchanged.
+- The clear × visibility refreshes when an existing Note is opened. New Note visibility and behavior remain unchanged. The existing Note close button, save logic, note data format/storage keys, photos in saved records, PIN/lock/recovery, translations, updater, pamphlet-template backward compatibility, native Android source, APK, package identity and signing data were not changed.
+- Pre-edit backup branch: backup/edit-note-clear-x-2026-11-13. Four files were created and re-fetched readable:
+  - backups/web-source-before-edit-note-clear-x-2026-11-13.html — pre-edit source blob 4996fe1441e649f29c772c058f06bbcf9470e500
+  - backups/diary-web-before-edit-note-clear-x-2026-11-13.html — exact pre-edit published mirror
+  - backups/latest-before-edit-note-clear-x-2026-11-13.json — pre-edit feed
+  - backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-edit-note-clear-x-2026-11-13.md — pre-edit register
+- Source commit: 2abb20b5d958f61703d8a594f1d236c64dee8a67. The full diff was reviewed and contains only the clear × click routing, visibility gate, edit-draft reset helper, and openNote visibility refresh. Both inline JavaScript blocks parsed successfully. Targeted static checks confirmed the × routes New Note to its original reset and saved-note Edit to the new edit-preserving reset; the edit reset restores the active note ID/category and Delete control; openNote refreshes × visibility.
+- Web publisher workflow run 43432343803 (run 170) completed with **success**; publish job and all steps succeeded. Publisher commit: 4801bcdda217afe4ad4335c21fcaca7937dfd17e. Live source and published mirror are byte-identical; both blob SHA b612bde3339702f5c80feb63d5189531613bf504. Independently computed UTF-8 SHA-256 ddf7e372e7eaa03b294069059fb75f6b6894fc201ccd0fe583feb6cd2b4dc4a9 matches live latest.json webSha256. Live webVersion is 180.
+- APK unchanged: 1.0.136 / versionCode 135 / SHA-256 6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348. No APK rebuild or signing changes.
+- Physical-device verification pending. User should use Me → Check for Updates, open a saved Note with existing text/photo, confirm × appears, tap × and confirm text/images clear while the same Note remains in Edit mode; then type replacement text and confirm Save updates that same Note. Also confirm New Note × behavior remains unchanged. Do not claim phone-side verification until user confirms.
+- Rollback: exact pre-edit source, mirror, feed and register are preserved on backup/edit-note-clear-x-2026-11-13. Restore only the affected HTML if a regression is found; preserve saved notes, photos, settings and PIN data.
+
 
 # Web Update 179 — Remove Pamphlet Chunein button (2026-11-13)
 
