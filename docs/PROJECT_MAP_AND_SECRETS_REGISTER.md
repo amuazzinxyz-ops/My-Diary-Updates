@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-12:** APK `1.0.136` / versionCode `135`; webVersion `133`; package `com.personal.diaryapp`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current. (This line corrects the stale 126/126 figures recorded earlier.)
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `136`; package `com.personal.diaryapp`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current. (This line corrects the stale 126/126 figures recorded earlier.)
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -906,3 +906,26 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Post-publish checks: source and mirror re-fetched and confirmed identical; feed package/version/URL/hash checked; backup files re-fetched and confirmed readable. No APK signing secret or keystore was changed.
 - Phone verification remains **pending**. User should apply APK **1.0.136** through the existing **Me → Check for Updates** path, then open Diary, enter nested sections such as note editor / Me / Recently Deleted, and press Android Back once. Confirm that the entire Diary closes immediately and returns to the underlying screen. Do not claim physical-device testing until user confirms.
 - Rollback reference: backup branch above; pre-change main commit `2effcdd79bc4375a5f018afac014b88c13e3d8ff`; pre-change web feed backup listed above. Preserve all user data; do not clear app data or uninstall as a rollback shortcut.
+
+
+---
+
+# Web Update 136 — Add colour choices inside all three existing image buttons (2026-11-13)
+
+- User request: keep the existing Image Select buttons (no separate Colour Select button); when tapped, each existing button should offer both image selection and colour selection.
+- Starting live state: APK **1.0.136 / versionCode 135**, webVersion **133**, package `com.personal.diaryapp`. Live `latest.json` was read before editing.
+- Scope: web-only Diary editor, saved-note rendering, import compatibility and share-image rendering. No native Android source, APK, package identity, signing identity, storage keys, PIN/recovery logic, updater logic, or unrelated screens were changed.
+- Added the same in-button chooser to all three existing controls: **Note Cover Photo**, **Details Image**, and **Photo Lagayein**. Each offers **Choose Image**, **Solid Colour**, or **Gradient Colour** (two independently selectable colours). No separate top-level colour button was added.
+- Selected cover/detail colours are layered over the chosen image (without replacing it), or used as a background when no image is selected. The attached-photo colour is shown as a frame around the photo. Colour settings are saved with each note, restored when editing, retained in note backup import/export, shown on saved notes, and included in the composed share image.
+- Added localized chooser labels for all 10 supported languages: Roman English, English, Hindi, Urdu, Arabic, Bengali, Gujarati, Marathi, Tamil and Telugu.
+- Backups were created and re-fetched/readable on branch `backup/pre-image-button-colour-options-2026-11-13`:
+  - `backups/web-source-before-image-button-colour-options-2026-11-13.html`
+  - `backups/diary-web-before-image-button-colour-options-2026-11-13.html`
+  - `backups/latest-before-image-button-colour-options-2026-11-13.json`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-image-button-colour-options-2026-11-13.md`
+- Final source commit: `ccfafe5425b5765e47d1ce96270e70a99586c0a7`. Web-only publisher workflow run **43366404020** (run 126) completed with **success**. An intermediate syntax issue in an earlier attempt was corrected before the final successful run; the final embedded scripts both parse successfully.
+- Post-publish verification: `web-source/index.html` and `diary-web/index.html` are byte-identical; both Git blob SHA `c150cb5c0777f1b2e84c0fac96ee477c5b5b782f`. Independently computed UTF-8 SHA-256 `cce2170ace3f45721a5ddd8ebc79b1908d5119fce636941256c8f24be2903c93` matches live `latest.json.webSha256`. Live webVersion is **136**.
+- APK remains **1.0.136 / versionCode 135**, package `com.personal.diaryapp`; APK URL, checksum, certificate and signing identity are unchanged. No APK rebuild or signing operation occurred.
+- Static checks passed: both inline scripts parse; SHA-256 implementation passed the standard `abc` test vector; all 10 language dictionaries contain the new chooser labels; source/mirror/feed checks passed. Actual Android phone interaction and visual verification remain **pending**.
+- Phone test: use **Me → Check for Updates**. In a new note, tap each of the three existing image buttons. Confirm its menu offers image, solid colour and gradient; choose colours, attach images, save, reopen/edit, and share the note. Also check an older note to confirm its existing images still display normally. Do not claim phone-side testing until the user confirms.
+- Rollback: use the backup branch and the exact pre-change HTML, feed and Register files listed above; preserve all local notes and app data.
