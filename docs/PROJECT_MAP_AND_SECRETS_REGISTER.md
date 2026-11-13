@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `169`; package `com.personal.diaryapp`. Live feed: `webSha256=3aa66bec80991551df39d9de3807552ae76b15cab47eb8d5dd9bc3b6bdff0a94`.
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `170`; package `com.personal.diaryapp`. Live feed: `webSha256=ff55b50443518dc79d7384e6bcb6131d4bed7b957c1bab416150b44e91ac742e`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -1476,3 +1476,22 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK unchanged: 1.0.136 / versionCode 135; SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`. No APK rebuild or signing changes.
 - Physical-device verification **pending**. User should use **Me → Check for Updates**, then inspect the left/right border lines. Do not claim phone-side success until user confirms.
 - Rollback: restore only the pre-edit HTML from the verified backup branch if needed; preserve notes, photos, settings and PIN data.
+
+
+---
+
+# Web Update 170 — Further mobile Diary border clearance (2026-11-13)
+
+- User reported that the left/right Diary panel border remained clipped after Web Update 169. Checked the actual native update path in the generated Android project script: the “Diary pehle se update hai” response is shown when the installed `filesDir/diary-web/index.html` SHA-256 already matches the current feed hash; it then clears WebView cache and reloads the verified local file. Therefore this message did not mean the new CSS was skipped; it meant the current Web Update 169 HTML was already installed.
+- Rechecked the exact mobile CSS and confirmed Web Update 169 had the panel at `calc(100% - 20px)`, with `box-sizing:border-box`, `min-width:0`, flex shrink, and centered auto margins. The overlay itself has 10px padding, and the Diary panel has raised 3D edge/shadow styling. To provide additional visible clearance without changing vertical layout or 3D border styling, increased only the panel's mobile total width reduction by a further 10px: `width` and `max-width:calc(100% - 30px)`, i.e. 15px each side. Existing 420px breakpoint, flex shrink, min-width, box sizing, and centering remain.
+- Starting state: Web Update 169; APK 1.0.136 / versionCode 135; package `com.personal.diaryapp`. Source/mirror prior blob SHA `5dddf6c526402e6300ddb1028f746c45fd6c5c6a`; feed hash `3aa66bec80991551df39d9de3807552ae76b15cab47eb8d5dd9bc3b6bdff0a94`.
+- Changed only the existing `diary-mobile-border-fit` CSS block in `web-source/index.html`, source commit `4b56f17247c5a962d601fe0446f57770694c3a9a`, final source blob `06dc67027578c3a9ce8dfc6922f8aef0cca114e4`. No height, top/bottom position, border thickness/colour/style, panel content, application logic, translations, notes/photos, storage, PIN/recovery, native Android source, APK, package identity or signing data changed.
+- Pre-edit backup branch: `backup/pre-mobile-border-fit-30px-2026-11-13`. Exact backups re-fetched and verified identical:
+  - `backups/web-source-before-mobile-border-fit-30px-2026-11-13.html` — blob `5dddf6c526402e6300ddb1028f746c45fd6c5c6a`
+  - `backups/diary-web-before-mobile-border-fit-30px-2026-11-13.html` — same blob
+  - `backups/latest-before-mobile-border-fit-30px-2026-11-13.json` — blob `7511095bbdbf8b20386507f532acb06199eaad3a`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-mobile-border-fit-30px-2026-11-13.md` — blob `048b0800312cd866d45c0a9c53389589e0990154`
+- Diff limited to the one existing mobile CSS block; exact selector and declarations checked; braces balanced. Web-only publisher workflow run `43416391968`, run 160, completed successfully; publish job `131855257914` succeeded. Live source and published mirror are byte-identical, blob SHA `06dc67027578c3a9ce8dfc6922f8aef0cca114e4`. Independently calculated UTF-8 SHA-256 `ff55b50443518dc79d7384e6bcb6131d4bed7b957c1bab416150b44e91ac742e` matches live `latest.json.webSha256`; live `webVersion=170`.
+- APK unchanged: 1.0.136 / versionCode 135; SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`. No APK rebuild or signing changes.
+- Physical-device verification pending. User should tap **Me → Check for Updates**; if the checker again reports already updated, it indicates the installed HTML hash is current. Then inspect the left/right outer border. Do not claim phone-side success until the user confirms.
+- Rollback: exact pre-edit files preserved on `backup/pre-mobile-border-fit-30px-2026-11-13`; preserve all notes, photos, settings and PIN data.
