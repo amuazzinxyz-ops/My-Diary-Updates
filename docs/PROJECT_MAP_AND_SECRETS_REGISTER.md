@@ -1806,3 +1806,24 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK unchanged: 1.0.136 / versionCode 135 / SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`. No APK rebuild or signing changes.
 - Physical-device testing is pending. Test each section independently: unlock with the old PIN; if it was 5–8 digits, complete the one-time migration to a 4-digit PIN; test a normal unlock; use Forgot PIN, copy and re-enter the temporary PIN, then set a new PIN; test Change PIN and Remove Lock; confirm records and attachments remain. Do not claim phone-side testing until user confirms.
 - Rollback: restore the verified pre-edit `web-source/index.html` from the backup branch, republish, and re-check source/mirror/feed/hash. Preserve all user data.
+
+
+---
+
+# Web Update 192 — Require explicit recovery PIN verification for all three Me locks (2026-11-13)
+
+- User reported that after tapping **Forgot PIN**, a new PIN could be created without entering the temporary recovery PIN. User confirmed this affected all three protected sections: **My Kharcha**, **My Documents**, and **My Memories**.
+- Starting live state: Web Update 191; APK 1.0.136 / versionCode 135; source/mirror blob `5d13b32a95121f0933a28042df334c1416f69f5f`; feed blob `ce97d78d4310c042d11f6958ba8f40e4554bc2d4`.
+- Scope: changed only `web-source/index.html`; publisher mirrored it to `diary-web/index.html` and advanced the live web feed to Update 192. No APK, Android source, Note Lock, Diary Lock, protected records, attachments, or other features were intentionally changed.
+- Recovery flow hardening applied to the shared Me-section lock handler used by all three sections:
+  - Copying the displayed temporary PIN no longer closes the popup or advances the flow.
+  - A separate **Unlock / Continue** button is required to open the recovery-PIN entry dialog.
+  - Recovery-PIN entry no longer auto-submits after four digits. The user must explicitly tap **Unlock** (or press Enter) in that dialog.
+  - Only an exact match with the temporary PIN reaches `meFeatureAskNewPin`. A wrong PIN returns to verification; closing the dialog cancels recovery. Thus copying, closing, or entering an incorrect value cannot reach new-PIN creation.
+  - The existing new-PIN creation and confirmation, four-digit PIN storage, and section data are unchanged.
+- Pre-edit backup branch: `backup/section-recovery-verify-fix-2026-11-13`. Verified pre-edit source and mirror backups both have blob `5d13b32a95121f0933a28042df334c1416f69f5f`. Additional exact backup files: `backups/latest-before-section-recovery-verify-fix-2026-11-13.json` and `backups/register-before-section-recovery-verify-fix-2026-11-13.md`.
+- Source commit: `94798828f4c9c7f009842035cba5761a20c28da1`. Publisher commit: `4c7138c81d557def46cdf1dee087f28caa70fcde` (Publish My Diary web bundle update). Publisher diff confirms the source changes were mirrored and the feed was advanced.
+- Final live source and mirror are byte-identical; both Git blob SHA `7bf375b9d2345509f2b2f9307b05961cd84fae70`. Live `latest.json.webVersion`: **192**; `webSha256`: `a881d44a7ae85c7adb55374cd30b0cb1d29eeba0dfe2db46f25623e9569cb811`. Feed and published mirror were fetched after publishing.
+- APK unchanged: 1.0.136 / versionCode 135 / SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`; no APK rebuild or signing changes.
+- Physical-device verification is pending. User should install web update 192 through **Me → Check for Updates**, then test Forgot PIN independently in all three sections: copy the temporary PIN, verify that copy alone does not advance, tap Unlock, enter a wrong PIN and confirm no new-PIN screen appears, then enter the correct temporary PIN and confirm only then that new PIN setup opens. Also confirm existing records and attachments remain. Do not claim phone-side testing until the user confirms.
+- Rollback: restore the verified pre-edit `web-source/index.html` from the backup branch, republish, and re-check source/mirror/feed. Preserve all user data.
