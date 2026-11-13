@@ -10,5 +10,5 @@
   "webVersion": 135,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "66c1d666d564add7e681bb508dcf14c9932f86b9b8813db042d751fda72ff807",
-  "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
+  "webReleaseNotes": "Image buttons now offer image, solid-colour and gradient choices; selected colours are saved with notes and included when sharing. Existing notes and photos remain compatible."
 }
