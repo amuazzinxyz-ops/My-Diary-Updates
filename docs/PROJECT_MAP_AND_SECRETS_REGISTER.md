@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `174`; package `com.personal.diaryapp`. Live feed: `webSha256=c3ed3642eea1d28e18bdb1705939466ef4aa623ed0260879f9209b3273246bd5`.
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `179`; package `com.personal.diaryapp`. Live feed: `webSha256=14a3ef144df495d1919fc2a5f4b93f35ddda0a76b69adcec4b81ac43ab9749af`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -1600,3 +1600,24 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Source commit: `5efa345f140541b0055aa1135b4100257ddbe4d9`; source blob `7046e907a57068ad8f07f7707d4d69ed3cfe7dc7`. Web publisher workflow run `43429955889` completed successfully. Live webVersion is `178` with webSha256 `df38b4c0af55507788b9187f0ff05c6bdb1d21c7af2594765bb6ae61c8d9aaa7`.
 - Re-fetched source and published mirror are byte-identical (blob SHA `7046e907a57068ad8f07f7707d4d69ed3cfe7dc7`). APK remains unchanged at 1.0.136 / versionCode 135; no APK rebuild or signing changes.
 - Physical-device verification pending. Use **Me → Check for Updates**, open **＋ New Note**, type a short test, and confirm the × appears on the right. Tap it and confirm the draft clears, the × disappears, and the writing pad remains open. Empty New Note should keep × hidden.
+
+
+---
+
+# Web Update 179 — Remove Pamphlet Chunein button (2026-11-13)
+
+- User requested removal of the **🪄 Pamphlet Chunein** button.
+- Starting live state: APK `1.0.136` / versionCode `135`; webVersion `178`; package `com.personal.diaryapp`; source/mirror blob SHA `7046e907a57068ad8f07f7707d4d69ed3cfe7dc7`; prior feed SHA-256 `df38b4c0af55507788b9187f0ff05c6bdb1d21c7af2594765bb6ae61c8d9aaa7`.
+- Scope: web-only, only `attachDiaryColourChooser(kind)` in `web-source/index.html`. Removed creation and event handling of the Pamphlet Chunein button and its chooser gallery from the three existing image controls (Cover, Details, attached Photo). The existing Choose Image, Solid Colour and Gradient Colour controls remain.
+- Preserved backward compatibility: existing saved notes that already contain a pamphlet template ID still render with their stored design. `cleanDiaryColour`, `diaryPamphletStyle`, saved-note preview, image rendering and share artwork template support were not removed. Existing notes, photos, storage, PIN/recovery, translations, updater, native Android source, APK, package identity and signing data were not changed.
+- Pre-edit backup branch: `backup/pre-remove-pamphlet-button-2026-11-13`. Four exact files were created and re-fetched byte-identically:
+  - `backups/web-source-before-remove-pamphlet-button-2026-11-13.html` — blob `7046e907a57068ad8f07f7707d4d69ed3cfe7dc7`
+  - `backups/diary-web-before-remove-pamphlet-button-2026-11-13.html` — same blob
+  - `backups/latest-before-remove-pamphlet-button-2026-11-13.json` — blob `c171744f7da41c477014fe93846afea12f91f15f`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-remove-pamphlet-button-2026-11-13.md` — blob `4eda91076b66ee4a08a745cdf6a38e2f609d0479`
+- Source change commit: `1acb4e1ec1d369cce8b6c2b25f8b34ee81202eb7`; source blob SHA `4996fe1441e649f29c772c058f06bbcf9470e500`. The exact source diff was reviewed: it deletes only the pamphlet button/gallery construction and removes the button/gallery from the image chooser menu assembly.
+- Both inline JavaScript blocks parsed successfully. Targeted checks confirm no runtime pamphlet button/gallery construction or handler remains; image selection, solid colour, gradient colour and the existing saved-template renderer remain.
+- Publisher output commit: `230a8a0b31d314569d7d49d7afd1869779406055` (GitHub Actions bot, “Publish My Diary web bundle update”). It changed only `diary-web/index.html` and `latest.json`. Live source and mirror were re-fetched and are byte-identical; both blob SHA `4996fe1441e649f29c772c058f06bbcf9470e500`. Live feed reports webVersion `179` and `webSha256=14a3ef144df495d1919fc2a5f4b93f35ddda0a76b69adcec4b81ac43ab9749af`. The workflow run ID/conclusion was not independently exposed by the available GitHub read endpoint; publisher bot commit and matching live feed/mirror confirm publication, but do not substitute for a separately observed workflow conclusion.
+- APK unchanged: `1.0.136` / versionCode `135`; APK SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`. No APK rebuild or signing changes.
+- Physical-device verification pending. User should use **Me → Check for Updates**, then open each of the three image controls and confirm **Pamphlet Chunein** is absent while **Choose Image**, **Solid Colour**, and **Gradient Colour** remain. Also open an older note that already used a pamphlet design and confirm its saved appearance remains. Do not claim phone-side verification until user confirms.
+- Rollback: exact pre-edit source, mirror, feed and register are preserved on `backup/pre-remove-pamphlet-button-2026-11-13`; restore the exact HTML if testing reveals a regression. Preserve notes, photos, settings and PIN data.
