@@ -272,6 +272,21 @@ native = r"""
                 }
             }
         }
+        @JavascriptInterface fun hasExactAlarmPermission(): Boolean {
+            return android.os.Build.VERSION.SDK_INT < 31 ||
+                (getSystemService(android.content.Context.ALARM_SERVICE) as android.app.AlarmManager).canScheduleExactAlarms()
+        }
+        @JavascriptInterface fun requestExactAlarmPermission() {
+            runOnUiThread {
+                if (android.os.Build.VERSION.SDK_INT >= 31 && !hasExactAlarmPermission()) {
+                    try {
+                        startActivity(Intent(android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, android.net.Uri.parse("package:$packageName")))
+                    } catch (_: Exception) {
+                        Toast.makeText(this@MainActivity, "Alarms & reminders permission settings nahi khul sake.", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+        }
         @JavascriptInterface fun scheduleReminder(id: String, title: String, details: String, atMillis: Long): Boolean {
             if (id.isBlank() || title.isBlank() || atMillis <= System.currentTimeMillis()) return false
             if (!hasReminderNotificationPermission()) {
@@ -547,7 +562,7 @@ missing_permissions = [p for p in permissions if 'android:name="' + p + '"' not 
 if missing_permissions:
     p=ms.find(">", ms.find("<manifest"))
     if p<0: raise SystemExit("Manifest root tag missing")
-    block="\\n"+"\\n".join('    <uses-permission android:name="' + p + '" />' for p in missing_permissions)
+    block="\n"+"\\n".join('    <uses-permission android:name="' + p + '" />' for p in missing_permissions)
     ms=ms[:p+1]+block+ms[p+1:]
     manifest.write_text(ms,encoding="utf-8")
 
@@ -571,7 +586,7 @@ for receiver_name, actions in [
         receiver = ET.SubElement(app, "receiver")
         receiver.set("{" + android_ns + "}name", receiver_name)
         receiver.set("{" + android_ns + "}enabled", "true")
-        receiver.set("{" + android_ns + "}exported", "false")
+        receiver.set("{" + android_ns + "}exported", if receiver_name == ".DiaryReminderBootReceiver" else "false")
         if actions:
             intent_filter = ET.SubElement(receiver, "intent-filter")
             for action_name in actions:
