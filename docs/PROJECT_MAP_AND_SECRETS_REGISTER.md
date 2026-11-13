@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `186`; package `com.personal.diaryapp`. Live feed: `webSha256=4fa7cfc3c0366aa36e9fc0c4137907bebff544e270873e31b094a8c50770f5ea`.
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.137` / versionCode `136`; webVersion `195`; package `com.personal.diaryapp`. Live feed: `webSha256=b0c386146062439091df8c47645202d90678b548f7b7127a40933b976891ebdc`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -1852,3 +1852,66 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK unchanged: 1.0.136 / versionCode 135 / SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`; no APK rebuild, Android source change or signing change.
 - Physical-device verification is pending. Install web update 193 through **Me → Check for Updates** and test Forgot PIN separately in all three sections: copy temporary PIN, confirm recovery entry opens; enter a wrong four-digit PIN and confirm the error popup then retry; enter the correct temporary PIN and confirm only then that new PIN setup and confirmation open. Also verify Change PIN, Remove Lock and saved records/attachments remain intact. Do not claim phone-side testing until user confirms.
 - Rollback: restore `web-source/index.html` from the verified pre-edit backup branch, republish, and re-check source/mirror/feed. Preserve all user data.
+
+
+---
+
+# Web Update 195 + APK 1.0.137 — Smart Follow-up Reminder (2026-11-13)
+
+- User requested the Smart Follow-up Reminder idea. Added a fifth independent ⏰ Smart Reminder tool under Me.
+- Starting live state: APK 1.0.136 / versionCode 135, Web Update 193, source/mirror blob 6bbbb9d59cd4796673a4b7c0337809dfd13a9e02, web SHA-256 7a10ed398939bdc688e66e4be5a7afc789e97ce0b4658ac8eac7c952a1b56246.
+- Web behavior:
+  - Create a reminder with title, date, time and optional details.
+  - Optionally link it to an existing Note; choosing a linked Note fills an empty reminder title.
+  - Reject past date/time values.
+  - List, Smart Search (including time), edit and delete reminders. Editing reschedules the same reminder ID; deleting cancels its native alarm.
+  - Notifications provide 10-minute Snooze and Done actions.
+  - UI text is translated for Roman, English, Hindi, Urdu, Arabic, Bengali, Gujarati, Marathi, Tamil and Telugu.
+  - A browser-only HTML session without the native Android bridge does not claim to schedule alerts; it asks the user to use the latest installed My Diary app.
+- Android scheduling:
+  - Added native JavaScript bridge methods to schedule/cancel reminders and check/request notification and exact-alarm permissions.
+  - Uses Android AlarmManager with exact alarms where the user grants Alarms & reminders special access; Android 13+ also requires Notifications permission.
+  - Pending reminders are stored in app-private SharedPreferences and restored after device reboot or app package replacement through dedicated receivers.
+  - If exact-alarm access is not available, native scheduling has an inexact fallback, but the UI requests exact-alarm access before saving for the intended punctual behavior.
+  - Notification title/details may be visible on the phone lock screen. Reminder records are local to the device; no cloud upload or sync was added.
+- Storage and preservation:
+  - Reminder records reuse the existing diary_me_features_v1 IndexedDB database and records object store; no database version/schema migration.
+  - Existing Notes database/storage, Note Lock, Diary Lock, PIN/recovery data, old Notes, photos, attachments, existing Calendar, My Kharcha, My Documents and My Memories were not intentionally changed.
+  - The Me-feature IndexedDB data is not encrypted by the existing section PIN; do not assume the reminder content is encrypted at rest.
+- Files changed for this feature:
+  - web-source/index.html — Smart Reminder UI, translations, form validation, link-to-Note, search/edit/delete and native bridge calls.
+  - scripts/add_diary_app_actions.py — Android bridge, AlarmManager scheduler, notification actions, notification/boot permissions and receivers.
+  - scripts/add_online_diary_updates.py — keep the existing DiaryBundlePathHandler inside MainActivity when top-level reminder receiver classes are appended.
+  - .github/workflows/build-diary-from-zip.yml — next signed APK version advanced to 1.0.137 / versionCode 136; release guard, APK URL/name and release notes updated.
+  - Publisher workflows generated diary-web/index.html, latest.json, My-Diary.apk and My-Diary-1.0.137.apk.
+- Verified pre-edit backup branch: backup/pre-smart-follow-up-reminder-2026-11-13. All six backups were re-fetched and byte-identically verified:
+  - backups/web-source-before-smart-follow-up-reminder-2026-11-13.html — original blob 6bbbb9d59cd4796673a4b7c0337809dfd13a9e02
+  - backups/diary-web-before-smart-follow-up-reminder-2026-11-13.html — same original blob
+  - backups/latest-before-smart-follow-up-reminder-2026-11-13.json — blob d52cc10a33aa118efc84f9b65977103e875c7177
+  - backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-smart-follow-up-reminder-2026-11-13.md — blob 0c231f8a6161f18e0791fb8036fb081444079f3b
+  - backups/add_diary_app_actions-before-smart-follow-up-reminder-2026-11-13.py — blob 067a6cdaf5ac53cdd497894f8a6436f5cbe7a447
+  - backups/build-diary-from-zip-before-smart-follow-up-reminder-2026-11-13.yml — blob f6467078153e112b4b56e5d515c67a0b47d0a3be
+- Source and integration commits:
+  - Smart Reminder UI: 518a52f61b0314a288d000223009f969775cc760
+  - Native reminder scheduler/bridge: 620730aba25a9105556a843a41b01dcd4f14ca8a
+  - Exact-alarm permission methods: 5c1a25cc24a73b9dafff1913e69524859d806403
+  - Boot receiver manifest correction: 3bd7e6d91368789718714169b4e1b9a67e678505
+  - Duplicate-import correction: 9875e15d31c1f556602632d052d02c540c4a687c
+  - Existing online updater insertion-point correction: d709eabeae544992025c4d7053007cd06b12254b
+  - APK workflow version bump: c4ef435b7767bdd7a4e9048ea41b854ff182cf60
+  - Exact-alarm UI prompt: 29265136fe01efe1515533a52d70e28b7a5581be
+- Web publishing:
+  - Web Update 194 publisher run 43473902236 completed successfully.
+  - Web Update 195 publisher run 43474487869 completed successfully; publisher commit 2d94faf8b887f5b867fa980b96b3fbd64cb8792e.
+  - Final web-source/index.html and diary-web/index.html are byte-identical; both Git blob SHA a45b5803031a6e521e696c3169632e84a515c92d.
+  - Independently computed SHA-256 of the exact final UTF-8 source: b0c386146062439091df8c47645202d90678b548f7b7127a40933b976891ebdc. The implementation was checked against the standard SHA-256 abc test vector; the digest matches live latest.json webSha256.
+- APK publishing:
+  - Build/publish workflow run 43474419797 completed successfully.
+  - Debug and signed Release APK builds passed; Android Kotlin compilation passed; JavaScript module node --check passed; Android identity, FileProvider and translation audit checks passed.
+  - The existing signing certificate fingerprint was verified unchanged: 23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A.
+  - Publisher commit: 628375728d79e88e7d0aa1baf1e1713f8e1db15b.
+  - Live latest.json: APK 1.0.137 / versionCode 136; URL https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.137.apk; APK SHA-256 38439e536479d7adea7c50031b59873d8a898b0c103f845018cfa8b8e8b805bf; webVersion 195; web SHA-256 b0c386146062439091df8c47645202d90678b548f7b7127a40933b976891ebdc.
+  - The APK build used the immediately previous web bundle (Web Update 194); the live feed is Web Update 195. After installing APK 1.0.137, run Me → Check for Updates again if needed so the native updater applies web bundle 195.
+  - Two intermediate build attempts failed during integration (duplicate Android imports and the online updater class insertion point); these were corrected. The final build run above completed successfully. No failed/intermediate APK was published.
+- Physical-device verification is pending. User should update to APK 1.0.137, then use Me → Check for Updates again to apply Web Update 195 if it is still offered. In Me → Smart Reminder, create a test reminder 2–3 minutes ahead, allow Android Notifications and Alarms & reminders permissions, return to the form and tap Save again. Confirm the notification arrives with screen off/app closed, then test Snooze and Done. Also test after a device restart. Do not claim device-side testing until the user confirms.
+- Rollback: restore the exact web source, native integration scripts, build workflow and feed from backup/pre-smart-follow-up-reminder-2026-11-13. For any APK rollback after installation, preserve package identity/signing and publish a newer versionCode; never ask the user to uninstall or clear app data. Preserve all notes, photos, attachments, PIN/recovery data and user records.
