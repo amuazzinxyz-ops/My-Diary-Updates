@@ -1566,3 +1566,13 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK unchanged: 1.0.136 / versionCode 135; SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`. Web-only release; no APK rebuild or signing changes.
 - Physical-device verification **pending**. User should use **Me → Check for Updates**, open **＋ New Note**, type a short test, and tap ×. Confirm should discard and close; Cancel should keep the text and editor open. Also verify an empty New Note closes without a confirmation. Do not claim phone-side success until the user confirms.
 - Rollback: restore the exact pre-edit HTML from `backup/pre-new-note-close-discard-2026-11-13`; preserve all notes, photos, settings and PIN data.
+
+## Web Update 175 — New Note page par alag × se sirf draft clear (2026-11-13)
+- User clarified the intended behavior: New Note editor visible rahe; uske apne × par tap karne se typed title/body aur added draft images/content clear ho, editor band na ho.
+- Added a separate × control at the top of `diaryMyNotesEditor`. It calls the existing `newNote()` reset routine, so draft text, draft photo/image data and draft formatting reset while the writing pad stays visible. No extra confirmation dialog is shown.
+- The separate editor × is shown for a new unsaved note and hidden while editing an existing saved note.
+- Restored the main Diary overlay close button to its original direct `closeOverlay` behavior. It no longer contains the earlier mistaken draft-discard logic.
+- No changes to saved Notes, storage format, existing Note lock/PIN/recovery, share, search, APK/native code, package identity or signing.
+- Source commit: `131794e2f32a58a62fa85b33bbf0504202caa3db`; source/mirror blob SHA: `39e326970ad28dc3462c50e92edb4fbe6b396c96`. `web-source/index.html` and `diary-web/index.html` were re-fetched and verified byte-identical.
+- Publisher workflow run `43427869229` (run 165), publish job completed successfully. Live `latest.json` reports webVersion `175`, webSha256 `8785bf67609495c847d21a6248fa9b9cdf886852788fd38959760e58d57b0b19`.
+- Physical-device test pending. User should use **Me → Check for Updates**, open **＋ New Note**, type something and add a photo, then tap the new ×. Confirm the text/photo clear and the writing pad remains open. Do not claim phone-side verification until user confirms.
