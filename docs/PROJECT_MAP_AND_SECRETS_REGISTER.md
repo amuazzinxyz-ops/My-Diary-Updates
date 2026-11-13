@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `158`; package `com.personal.diaryapp`. Live feed: `webSha256=72b3a4268d2a2c6d7a990f9f527f098e26e226e466d5fe8a2122f0d41d74d9b2`.
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `159`; package `com.personal.diaryapp`. Live feed: `webSha256=bcb655b79f33742f44e6de283bd2af5286acb7d8f5bf70cd90f55d521e866f16`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -1273,8 +1273,26 @@ The user can simply say what they want in Roman Hindi. No special template, file
   - backups/latest-before-note-share-fix-2026-11-13.json (blob SHA 3b8f1fd35cf7921e83932274897f8a017b778414)
   - backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-note-share-fix-2026-11-13.md (blob SHA 75db3e09d122642bc6a6cc5fbf20ddf2dad99be1)
 - Source commits: initial implementation b401fed740e8397dd578f5ccf5520502fed687c8; final refinement 7d367e562ed1d682c769980d89919fb4f1083abb. Final diff reviewed and both inline JavaScript blocks parsed successfully. Static checks verified pre-generation on expanded notes, disabled-until-ready behavior, cached PNG, and synchronous share invocation on tap.
-- Publisher workflow runs 147 (43396317069) and 148 (43396414393) both completed successfully; each publish job succeeded. The final publisher output is Web Update 158 (run 148). Live feed confirms webVersion=158 and webSha256=72b3a4268d2a2c6d7a990f9f527f098e26e226e466d5fe8a2122f0d41d74d9b2.
+- Publisher workflow runs 147 (43396317069) and 148 (43396414393) both completed successfully; each publish job succeeded. The final publisher output is Web Update 158 (run 148). Live feed confirms webVersion=158 and webSha256=bcb655b79f33742f44e6de283bd2af5286acb7d8f5bf70cd90f55d521e866f16.
 - Post-publish: source and diary-web/index.html are byte-identical; both Git blob SHA 131469afbb2aa47b0132c07f7210b45e0eba0b6a.
 - APK unchanged: 1.0.136 / versionCode 135 / SHA-256 6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348; web-only workflow did not rebuild APK.
 - Physical-device verification pending. User should install via Me → Check for Updates, open/unlock a note, wait until 📤 Note Share Karein becomes enabled, then tap it and confirm Android's share sheet appears with the combined Diary PNG. If no compatible share target exists, the existing image-download fallback should run.
 - Rollback: exact pre-edit files are preserved on backup/pre-note-share-fix-2026-11-13; preserve all local notes, photos, PIN data and app identity.
+
+
+# Web Update 159 — Prevent Note Share tap from collapsing the note (2026-11-13)
+
+- User tested Web Update 158 and reported that tapping 📤 Note Share Karein only shifted/collapsed the page.
+- Inspection found the share button was deliberately disabled until the asynchronous PNG preparation completed. Because a disabled button does not dispatch its click event, the event could bubble to the parent note card, whose click handler collapses the expanded note. This explains the reported page movement.
+- Starting live state: Web Update 158; APK 1.0.136 / versionCode 135; source/mirror blob SHA 131469afbb2aa47b0132c07f7210b45e0eba0b6a.
+- Changed only web-source/index.html, source commit a67edf176d17d185fe4b56936152d563b85d2a08. The Share button is no longer disabled while the combined PNG is being prepared. Its click handler now always prevents default and stops propagation first, so tapping cannot trigger the parent note-card collapse. If the PNG is not ready yet, it displays a short “still preparing, tap again” message and ensures preparation is running. Once cached, the same button opens the native share sheet directly from the tap. Existing combined-image layout and download fallback remain. No note records, local photos, PIN/recovery, Android source, app identity or APK were changed.
+- Pre-edit backup branch backup/pre-note-share-button-tap-fix-2026-11-13; exact backups verified:
+  - backups/web-source-before-note-share-button-tap-fix-2026-11-13.html (blob SHA 131469afbb2aa47b0132c07f7210b45e0eba0b6)
+  - backups/latest-before-note-share-button-tap-fix-2026-11-13.json (blob SHA 4fd67f1313bc3586352f2768497b7c619aba7054)
+  - backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-note-share-button-tap-fix-2026-11-13.md (blob SHA 0abe02d7ca27b6c83564b781d147a16f20789d0b)
+- Both inline JavaScript blocks parsed successfully. Static checks confirm the button is never disabled, stops event propagation on every tap, retries image preparation when necessary, and calls share only after a composed PNG is cached.
+- Publisher workflow run 43397309941 (run 149) completed successfully. Publisher job succeeded. Live feed advanced to Web Update 159 with webSha256 bcb655b79f33742f44e6de283bd2af5286acb7d8f5bf70cd90f55d521e866f16.
+- Post-publish: web-source/index.html and diary-web/index.html are byte-identical; both blob SHA 9b5372c80a3f63c8e8f69fc8fa31324b2e4e1a81.
+- APK unchanged: 1.0.136 / versionCode 135 / SHA-256 6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348.
+- Physical-device verification pending. User should install Web Update 159 using Me → Check for Updates, open/unlock a note, tap Share once (if still preparing, wait briefly and tap again), and confirm the note stays expanded and Android's share sheet opens.
+- Rollback: exact pre-edit files are preserved on backup/pre-note-share-button-tap-fix-2026-11-13; preserve local notes, photos, PIN data and app identity.
