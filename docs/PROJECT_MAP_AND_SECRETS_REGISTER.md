@@ -1383,3 +1383,20 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Minimal change: add class `diary-note-share` to the Share button and CSS `.diary-my-note:has(.diary-note-share:active){transform:none!important;}` to prevent the enclosing note card's active scale animation only while Share is pressed. Existing Share logic and other controls are unchanged.
 - Earlier section “Pending source patch — stop note-card press animation on Share” is superseded by this completed publication record. Physical-device confirmation is still pending: user must verify that the share sheet opens and contains the composed note image. Do not claim the actual Share operation is confirmed until the user tests it.
 - Register pre-edit backup was saved and verified on branch `backup/note-share-motion-published-2026-11-13` at `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-note-share-motion-published-2026-11-13.md`.
+
+
+# Note Share readiness fix — Web Update 165 (2026-11-13)
+
+- User's repeated report: tapping **📤 Note Share Karein** only moved the note card and did not open Share. Inspection of the live Web Update 164 source found that the Share button was appended immediately while its composed PNG was still being generated. The click handler explicitly returned early while the cache was empty, so that tap never called `navigator.share`; it only displayed a preparation message. The enclosing note card also had active transform rules, which visually moved the card during the press.
+- Pre-edit backups were created and re-fetched successfully on branch `backup/share-ready-gate-2026-11-13`:
+  - `backups/web-source-before-share-ready-gate-2026-11-13.html` (blob SHA `fc2beb9cd8b4fecd2372273b635cecdf77a5705b`)
+  - `backups/diary-web-before-share-ready-gate-2026-11-13.html` (same blob SHA)
+  - `backups/latest-before-share-ready-gate-2026-11-13.json` (blob SHA `e6b4d223e9f3f44b2cf7523f5faca6344d1378b7`)
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-share-ready-gate-2026-11-13.md` (blob SHA `fc982c76464abd1a9261a22eecf5050cdd9c5f9a`)
+- Source-only patch commit: `2fba229b2959117bbfc999d1c7bfbbccbe3c43bf`; source blob SHA `3e585702b5560f9a7785c54895ad4e3769380bd4`. The Share button is now created only after the composed PNG cache is ready. While preparing, a visible status replaces the premature Share button; if image preparation fails, that status can be tapped to retry. Once ready, a single Share-button tap calls the existing `shareNote(n)` path directly. Both active note-card transform rules were neutralized to prevent the card from shifting on press. No image composition, notes, photos, storage, PIN, or native bridge code was changed.
+- Both inline JavaScript blocks passed syntax parsing after the patch. Targeted source checks confirmed the premature button/click path was removed, the ready-gated button is present, and the card active transforms are neutralized.
+- Publisher workflow run **43409526224**, run 155, head SHA `2fba229b2959117bbfc999d1c7bfbbccbe3c43bf`, completed successfully. Publisher output commit `f7b4c82ec2dbdd61d98101f27d9728db4bda4eff` changed only `diary-web/index.html` and `latest.json`.
+- Live feed reports webVersion `165` and SHA-256 `ba25e5c8d46931e8e50848a2cd118b0051c4d370a61e1fff1135c75f7f017e64`; this exact digest was printed by the successful publisher workflow. Independently fetched source and mirror are byte-identical, both blob SHA `3e585702b5560f9a7785c54895ad4e3769380bd4`.
+- APK remains unchanged: `1.0.136`, versionCode `135`, SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`.
+- Physical-device verification is still pending. Do not claim Share sheet operation is confirmed until user tests that the Share button appears after preparation and opens the share sheet with the composed note image. If the button does not appear, report that as a distinct image-preparation failure rather than asking the user to keep tapping.
+- This section supersedes the earlier pending/partial Share notes and the Web Update 164 card-motion-only fix for current live status.
