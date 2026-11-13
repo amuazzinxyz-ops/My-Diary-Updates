@@ -1428,7 +1428,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   function mfEl(tag,attrs,label){var n=el(tag,attrs||{});if(label!==undefined)n.textContent=label;return n;}
   function mfField(parent,label,type,name,required){
    var wrap=mfEl('label',{class:'diary-me-feature-field'});wrap.appendChild(mfEl('span',{},label));
-   var input=mfEl('input',{type:type||'text',name:name,required:!!required});
+   var inputAttrs={type:type||'text',name:name};if(required)inputAttrs.required='required';var input=mfEl('input',inputAttrs);
    if(type==='date')input.value=meFeatureToday();
    if(type==='file')input.accept=name==='file'?'image/*,application/pdf,.pdf':'image/*';
    wrap.appendChild(input);parent.appendChild(wrap);return input;
