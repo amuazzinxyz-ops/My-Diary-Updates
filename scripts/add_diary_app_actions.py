@@ -47,7 +47,7 @@ if s.count(back_old) != 1:
 s = s.replace(back_old, back_new, 1)
 if "class DiaryNativeActions" in s: raise SystemExit("Already patched")
 if "override fun onActivityResult(" in s: raise SystemExit("Existing onActivityResult found; safe merge required")
-s=s.replace("import android.content.Intent\n","import android.content.Intent\nimport android.app.AlertDialog\nimport android.app.ProgressDialog\nimport android.webkit.JavascriptInterface\nimport android.widget.Toast\nimport java.net.HttpURLConnection\nimport java.net.URL\n",1)
+s=s.replace("import android.content.Intent\n","import android.content.Intent\nimport android.app.AlertDialog\nimport android.app.AlarmManager\nimport android.app.Notification\nimport android.app.NotificationChannel\nimport android.app.NotificationManager\nimport android.app.PendingIntent\nimport android.app.ProgressDialog\nimport android.content.BroadcastReceiver\nimport android.content.Context\nimport android.content.pm.PackageManager\nimport android.net.Uri\nimport android.os.Build\nimport android.webkit.JavascriptInterface\nimport android.widget.Toast\nimport java.net.HttpURLConnection\nimport java.net.URL\n",1)
 s=s.replace("        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {","        webView.addJavascriptInterface(DiaryNativeActions(), \"DiaryAppActions\")\n\n        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {",1)
 native = r"""
     private inner class DiaryNativeActions {
@@ -259,6 +259,42 @@ native = r"""
                 }
             }.start()
         }
+
+        @JavascriptInterface fun hasReminderNotificationPermission(): Boolean {
+            return android.os.Build.VERSION.SDK_INT < 33 ||
+                checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) == android.content.pm.PackageManager.PERMISSION_GRANTED
+        }
+        @JavascriptInterface fun requestReminderNotificationPermission() {
+            runOnUiThread {
+                if (android.os.Build.VERSION.SDK_INT >= 33 &&
+                    checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), 7321)
+                }
+            }
+        }
+        @JavascriptInterface fun scheduleReminder(id: String, title: String, details: String, atMillis: Long): Boolean {
+            if (id.isBlank() || title.isBlank() || atMillis <= System.currentTimeMillis()) return false
+            if (!hasReminderNotificationPermission()) {
+                requestReminderNotificationPermission()
+                return false
+            }
+            return try {
+                DiaryReminderScheduler.schedule(this@MainActivity, id, title, details, atMillis)
+                true
+            } catch (e: Exception) {
+                false
+            }
+        }
+        @JavascriptInterface fun cancelReminder(id: String): Boolean {
+            if (id.isBlank()) return false
+            return try {
+                DiaryReminderScheduler.cancel(this@MainActivity, id)
+                true
+            } catch (e: Exception) {
+                false
+            }
+        }
+
     }
 """
 i=s.rfind("\n}")
@@ -321,16 +357,198 @@ outer = r"""
 class_end=s.rfind("\n}")
 if class_end < 0: raise SystemExit("MainActivity closing brace missing")
 s=s[:class_end]+"\n"+outer+s[class_end:]
+reminder_native = r"""
+private object DiaryReminderScheduler {
+    private const val PREFS = "diary_reminders_native_v1"
+    private const val ITEMS = "items"
+    const val ACTION_ALARM = "com.personal.diaryapp.action.REMINDER_ALARM"
+    const val ACTION_SNOOZE = "com.personal.diaryapp.action.REMINDER_SNOOZE"
+    const val ACTION_DONE = "com.personal.diaryapp.action.REMINDER_DONE"
+    private const val CHANNEL_ID = "diary_reminders"
+
+    private fun requestCode(id: String): Int = (id.hashCode() and 0x3fffffff) + 10
+    private fun pendingFlags(): Int = PendingIntent.FLAG_UPDATE_CURRENT or
+        (if (Build.VERSION.SDK_INT >= 23) PendingIntent.FLAG_IMMUTABLE else 0)
+
+    private fun alarmIntent(context: Context, id: String, title: String, details: String): Intent =
+        Intent(context, DiaryReminderReceiver::class.java).apply {
+            action = ACTION_ALARM
+            data = Uri.parse("mydiary-reminder://alarm/" + Uri.encode(id))
+            putExtra("diary_reminder_id", id)
+            putExtra("diary_reminder_title", title)
+            putExtra("diary_reminder_details", details)
+        }
+
+    private fun readItems(context: Context): org.json.JSONArray {
+        val raw = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString(ITEMS, "[]") ?: "[]"
+        return try { org.json.JSONArray(raw) } catch (_: Exception) { org.json.JSONArray() }
+    }
+
+    private fun writeItems(context: Context, items: org.json.JSONArray) {
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putString(ITEMS, items.toString()).apply()
+    }
+
+    fun schedule(context: Context, id: String, title: String, details: String, atMillis: Long) {
+        require(id.isNotBlank() && title.isNotBlank() && atMillis > System.currentTimeMillis())
+        val alarm = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val pending = PendingIntent.getBroadcast(context, requestCode(id), alarmIntent(context, id, title, details), pendingFlags())
+        if (Build.VERSION.SDK_INT >= 23) {
+            try {
+                alarm.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, atMillis, pending)
+            } catch (_: SecurityException) {
+                alarm.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, atMillis, pending)
+            }
+        } else {
+            alarm.setExact(AlarmManager.RTC_WAKEUP, atMillis, pending)
+        }
+        val old = readItems(context)
+        val next = org.json.JSONArray()
+        for (i in 0 until old.length()) {
+            val item = old.optJSONObject(i) ?: continue
+            if (item.optString("id") != id) next.put(item)
+        }
+        next.put(org.json.JSONObject().put("id", id).put("title", title).put("details", details).put("at", atMillis))
+        writeItems(context, next)
+    }
+
+    fun remove(context: Context, id: String) {
+        val old = readItems(context)
+        val next = org.json.JSONArray()
+        for (i in 0 until old.length()) {
+            val item = old.optJSONObject(i) ?: continue
+            if (item.optString("id") != id) next.put(item)
+        }
+        writeItems(context, next)
+    }
+
+    fun cancel(context: Context, id: String) {
+        val alarm = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val pending = PendingIntent.getBroadcast(
+            context, requestCode(id),
+            alarmIntent(context, id, "", ""),
+            pendingFlags()
+        )
+        alarm.cancel(pending)
+        pending.cancel()
+        remove(context, id)
+    }
+
+    fun restore(context: Context) {
+        val old = readItems(context)
+        val pending = ArrayList<org.json.JSONObject>()
+        for (i in 0 until old.length()) {
+            val item = old.optJSONObject(i) ?: continue
+            pending.add(item)
+        }
+        val now = System.currentTimeMillis()
+        pending.forEach { item ->
+            val id = item.optString("id")
+            val title = item.optString("title")
+            val details = item.optString("details")
+            val at = item.optLong("at")
+            if (id.isNotBlank() && title.isNotBlank()) {
+                if (at > now) schedule(context, id, title, details, at)
+                else if (at > now - 24L * 60L * 60L * 1000L) schedule(context, id, title, details, now + 5000L)
+                else remove(context, id)
+            }
+        }
+    }
+
+    fun showNotification(context: Context, id: String, title: String, details: String) {
+        if (Build.VERSION.SDK_INT >= 33 &&
+            context.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) return
+        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if (Build.VERSION.SDK_INT >= 26) {
+            val channel = NotificationChannel(CHANNEL_ID, "My Diary Reminders", NotificationManager.IMPORTANCE_HIGH).apply {
+                description = "Scheduled reminders from My Diary"
+                enableVibration(true)
+            }
+            manager.createNotificationChannel(channel)
+        }
+        val code = requestCode(id)
+        val launch = context.packageManager.getLaunchIntentForPackage(context.packageName) ?: Intent()
+        launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        launch.putExtra("diary_reminder_id", id)
+        val content = PendingIntent.getActivity(context, code + 1, launch, pendingFlags())
+        fun actionIntent(action: String, suffix: String): PendingIntent {
+            val actionIntent = Intent(context, DiaryReminderReceiver::class.java).apply {
+                this.action = action
+                data = Uri.parse("mydiary-reminder://" + suffix + "/" + Uri.encode(id))
+                putExtra("diary_reminder_id", id)
+                putExtra("diary_reminder_title", title)
+                putExtra("diary_reminder_details", details)
+            }
+            return PendingIntent.getBroadcast(context, code + if (action == ACTION_SNOOZE) 2 else 3, actionIntent, pendingFlags())
+        }
+        val builder = if (Build.VERSION.SDK_INT >= 26) Notification.Builder(context, CHANNEL_ID) else Notification.Builder(context)
+        val body = details.ifBlank { "My Diary reminder" }
+        builder.setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
+            .setContentTitle(title)
+            .setContentText(body)
+            .setStyle(Notification.BigTextStyle().bigText(body))
+            .setContentIntent(content)
+            .setAutoCancel(true)
+            .setPriority(Notification.PRIORITY_HIGH)
+            .setDefaults(Notification.DEFAULT_ALL)
+            .addAction(android.R.drawable.ic_lock_idle_alarm, "10 min baad", actionIntent(ACTION_SNOOZE, "snooze"))
+            .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Done", actionIntent(ACTION_DONE, "done"))
+        manager.notify(code, builder.build())
+    }
+}
+
+class DiaryReminderReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent?) {
+        val msg = intent ?: return
+        val id = msg.getStringExtra("diary_reminder_id") ?: return
+        val title = msg.getStringExtra("diary_reminder_title") ?: "My Diary Reminder"
+        val details = msg.getStringExtra("diary_reminder_details") ?: ""
+        when (msg.action) {
+            DiaryReminderScheduler.ACTION_SNOOZE -> {
+                val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                manager.cancel((id.hashCode() and 0x3fffffff) + 10)
+                DiaryReminderScheduler.schedule(context, id, title, details, System.currentTimeMillis() + 10L * 60L * 1000L)
+                return
+            }
+            DiaryReminderScheduler.ACTION_DONE -> {
+                val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                manager.cancel((id.hashCode() and 0x3fffffff) + 10)
+                DiaryReminderScheduler.cancel(context, id)
+                return
+            }
+        }
+        DiaryReminderScheduler.remove(context, id)
+        DiaryReminderScheduler.showNotification(context, id, title, details)
+    }
+}
+
+class DiaryReminderBootReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent?) {
+        val action = intent?.action
+        if (action == Intent.ACTION_BOOT_COMPLETED || action == Intent.ACTION_MY_PACKAGE_REPLACED) {
+            DiaryReminderScheduler.restore(context)
+        }
+    }
+}
+"""
+if "class DiaryReminderReceiver" in s or "object DiaryReminderScheduler" in s:
+    raise SystemExit("Reminder native classes already exist in script; refusing duplicate insertion")
+s += "\n" + reminder_native + "\n"
 kt.write_text(s,encoding="utf-8")
 
 manifest=base/"src/main/AndroidManifest.xml"
 ms=manifest.read_text(encoding="utf-8")
-permission='    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />'
-if "android.permission.REQUEST_INSTALL_PACKAGES" not in ms:
-    ms=ms.replace("<manifest", "<manifest", 1)
+permissions = [
+    "android.permission.REQUEST_INSTALL_PACKAGES",
+    "android.permission.POST_NOTIFICATIONS",
+    "android.permission.RECEIVE_BOOT_COMPLETED",
+    "android.permission.SCHEDULE_EXACT_ALARM",
+]
+missing_permissions = [p for p in permissions if 'android:name="' + p + '"' not in ms]
+if missing_permissions:
     p=ms.find(">", ms.find("<manifest"))
     if p<0: raise SystemExit("Manifest root tag missing")
-    ms=ms[:p+1]+"\\n"+permission+ms[p+1:]
+    block="\\n"+"\\n".join('    <uses-permission android:name="' + p + '" />' for p in missing_permissions)
+    ms=ms[:p+1]+block+ms[p+1:]
     manifest.write_text(ms,encoding="utf-8")
 
 # Keep the app's ORIGINAL FileProvider resource. Diary sharing already writes to
@@ -344,6 +562,21 @@ root = tree.getroot()
 app = root.find("application")
 if app is None:
     raise SystemExit("AndroidManifest application element missing")
+for receiver_name, actions in [
+    (".DiaryReminderReceiver", []),
+    (".DiaryReminderBootReceiver", ["android.intent.action.BOOT_COMPLETED", "android.intent.action.MY_PACKAGE_REPLACED"]),
+]:
+    existing = [node for node in app.findall("receiver") if node.get("{" + android_ns + "}name") == receiver_name]
+    if not existing:
+        receiver = ET.SubElement(app, "receiver")
+        receiver.set("{" + android_ns + "}name", receiver_name)
+        receiver.set("{" + android_ns + "}enabled", "true")
+        receiver.set("{" + android_ns + "}exported", "false")
+        if actions:
+            intent_filter = ET.SubElement(receiver, "intent-filter")
+            for action_name in actions:
+                action = ET.SubElement(intent_filter, "action")
+                action.set("{" + android_ns + "}name", action_name)
 authority = "${applicationId}.fileprovider"
 providers = app.findall("provider")
 provider = next((node for node in providers if node.get("{" + android_ns + "}name") == "androidx.core.content.FileProvider"), None)
