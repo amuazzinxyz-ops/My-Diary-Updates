@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `180`; package `com.personal.diaryapp`. Live feed: `webSha256=ddf7e372e7eaa03b294069059fb75f6b6894fc201ccd0fe583feb6cd2b4dc4a9`.
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `183`; package `com.personal.diaryapp`. Live feed: `webSha256=bb4c5985646ffc89c4ef0e9db6725e98ef6e9fa6c54fb07c75c73caf3d61efa3`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -1683,3 +1683,24 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Deliberately untouched: existing Notes and their storage, existing saved-Notes Calendar, photos already attached to Notes, Note Lock, Diary Lock/PIN/recovery, translations outside the new feature labels, updater, app sharing, theme controls, and all MUAZZIN project files.
 - Phone test pending. Ask the user to use **Me → Check for Updates**, install Web Update 182, then test each feature with dummy data: add/delete one date, one income and one expense, one sample PDF/image document, and one text/photo memory; close and reopen each page to confirm data persists. Do not claim phone-side success until the user confirms.
 - Rollback: restore only `web-source/index.html` from the verified pre-edit backup branch if regression is found; then re-run source/mirror/feed/hash checks. Preserve all user data and PIN records.
+
+
+---
+
+# Web Update 183 — Make My Kharcha amount entry obvious and visible (2026-11-13)
+
+- User reported that the **My Kharcha** page did not show a clear box for entering how much was spent. Live code inspection found the numeric amount input was generated, but its generic label was only “Raqam (₹)” / “Amount (₹)”; the user-facing amount field needed a more explicit label and stronger visual distinction. No assumption was made that the phone had been tested.
+- Starting live state: Web Update 182; APK 1.0.136 / versionCode 135; package `com.personal.diaryapp`; source/mirror blob `2797094230b8a7864d531988d65f33798f44e759`; feed blob `e196d0e94dcdf02566474b20d24f19aab5095ac1`; starting web SHA-256 `436873076a491bd9d8759e7b6506e517469a89fc57c9893b18708f69354c2dd1`.
+- Web-only scope: changed only `web-source/index.html`. The amount field label is now **“Kitna Kharcha Hua (₹)”** in Roman English, with matching English and Hindi labels. Added a clear example placeholder (“Yahan rakam likhein, jaise 500” / translated equivalents), decimal numeric keyboard hint, accessible label, and a dedicated high-contrast purple/gold input style with explicit visible/display sizing. The existing amount input, positive-number validation, expense/income selector, save operation, and totals/balance calculations remain in place.
+- No other feature, form, database, stored record, existing Notes, Personal Calendar, My Documents, My Memories, existing Note/Diary locks or PIN/recovery, updater, native Android source, APK, package identity, or signing data was changed.
+- Pre-edit backup branch: `backup/my-kharcha-amount-field-2026-11-13`. All four backups were re-fetched and confirmed readable:
+  - `backups/web-source-index-before-my-kharcha-amount-field-2026-11-13.html` — original blob `2797094230b8a7864d531988d65f33798f44e759`
+  - `backups/diary-web-index-before-my-kharcha-amount-field-2026-11-13.html` — same original blob
+  - `backups/latest-before-my-kharcha-amount-field-2026-11-13.json` — blob `e196d0e94dcdf02566474b20d24f19aab5095ac1`
+  - `backups/docs-PROJECT_MAP_AND_SECRETS_REGISTER-before-my-kharcha-amount-field-2026-11-13.md` — original register blob `dc411328b84f5d4ff29aab09fbabf5e674bbbff1`
+- Source change commit: `f201ec571857f94fe9ea3c8142e36e916aa0d5e7`. Diff reviewed: only the three language labels/placeholders, amount input accessibility/input-mode/class assignment, and dedicated amount-field CSS changed. Both inline JavaScript blocks passed syntax parsing. Static checks confirmed the new label/placeholder/style and the existing `record.amount=Number(amount.value)` save binding remains.
+- Publisher workflow run `43437336597` (run 173) completed with **success**; publish job `131925734864` completed successfully. Publisher commit: `f217904abf4cd9fd0afba22b792ef27112daf6b6`. Live webVersion: **183**.
+- Final live source and published mirror were re-fetched and are byte-identical; both blob SHA `c7ce6c6fd0456c416204e6ad3c37422cd21d6d32`. Independently calculated UTF-8 SHA-256 `bb4c5985646ffc89c4ef0e9db6725e98ef6e9fa6c54fb07c75c73caf3d61efa3` matches live `latest.json.webSha256`.
+- APK unchanged: 1.0.136 / versionCode 135 / SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`; no APK rebuild or signing changes.
+- Physical-device verification pending. User should use **Me → Check for Updates**, install Web Update 183, open **💰 My Kharcha**, and confirm the prominent **Kitna Kharcha Hua (₹)** box appears, accepts a test amount (e.g. 500), saves, and contributes to the expense total. Do not claim phone-side verification until user confirms.
+- Rollback: exact pre-edit source, published mirror, feed and register are preserved on `backup/my-kharcha-amount-field-2026-11-13`; restore only the affected HTML if testing reveals a regression. Preserve all saved data.
