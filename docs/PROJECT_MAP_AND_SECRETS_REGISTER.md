@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `168`; package `com.personal.diaryapp`. Live feed: `webSha256=e6d08089a138d3fc2026eceff7db1fcd5f247eda92ed4f616ca54b60e70d8b09`.
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `169`; package `com.personal.diaryapp`. Live feed: `webSha256=3aa66bec80991551df39d9de3807552ae76b15cab47eb8d5dd9bc3b6bdff0a94`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -1457,3 +1457,22 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK unchanged: 1.0.136 / versionCode 135; SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`. Web-only update; no APK rebuild or signing changes.
 - Physical-device verification pending. User should use **Me → Check for Updates** and inspect only the left/right border lines. Do not claim the phone-side clipping is fixed until the user confirms.
 - Rollback: exact pre-edit files are preserved on `backup/pre-mobile-diary-border-10px-2026-11-13`; restore only the affected HTML if required. Preserve notes, photos, settings and PIN data.
+
+
+---
+
+# Web Update 169 — Fix mobile Diary left/right border clipping (2026-11-13)
+
+- User reported that the left/right border lines were still clipped after Web Update 168 and asked to correct them. Re-inspection found that the Diary panel is a flex item inside `#diaryMyNotesOverlay`; its default `min-width:auto` can prevent the panel from shrinking below its automatic content minimum. The overlay also already has 10px horizontal padding.
+- Starting live state: Web Update 168; APK 1.0.136 / versionCode 135; package `com.personal.diaryapp`. Prior source/mirror blob SHA `d1b173fa83ee5cb85ffdc780d14205a0ee1a0402`; prior feed SHA-256 `e6d08089a138d3fc2026eceff7db1fcd5f247eda92ed4f616ca54b60e70d8b09`.
+- Changed only the existing `diary-mobile-border-fit` block in `web-source/index.html`, source commit `f8bc9dbc4d85fc0f892bfe86533fd81bcf662549`: added `min-width:0` and `flex:0 1 auto` so the flex item can shrink; increased the panel width reduction from 10px to 20px total (`width` and `max-width:calc(100% - 20px)`), keeping auto horizontal margins, border-box sizing and the existing 420px breakpoint. This creates an additional 10px of total clearance compared with Web Update 168. No vertical position/height, border thickness/colour/style, panel content, features, gestures, Share, translations, notes/photos, storage, PIN/recovery, native Android source, APK, package identity or signing data changed.
+- Pre-edit backup branch: `backup/pre-border-clip-followup-2026-11-13`. Exact readable backups re-fetched and verified byte-identical:
+  - `backups/web-source-before-border-clip-followup-2026-11-13.html` — blob `d1b173fa83ee5cb85ffdc780d14205a0ee1a0402`
+  - `backups/diary-web-before-border-clip-followup-2026-11-13.html` — same blob
+  - `backups/latest-before-border-clip-followup-2026-11-13.json` — blob `dc0794b352f5532034b0bf62ff37c7b62984eb54`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-border-clip-followup-2026-11-13.md` — blob `50a36e60e4ae52233c19f943e1a29322e2ee3241`
+- Diff was limited to the single existing mobile CSS block. The CSS block braces are balanced; targeted checks confirmed the new shrink allowance, 20px total panel width reduction, centering, unchanged 420px breakpoint and unchanged vertical rules. JavaScript and application logic were not modified.
+- Web-only publisher workflow run `43415645933`, run 159, completed with **success**; publish job `131852720937` succeeded. Publisher output commit: `6755760a81ca382438f620c4dcac151d4dbe8b78`. Live source and published mirror are byte-identical; both blob SHA `5dddf6c526402e6300ddb1028f746c45fd6c5c6a`. Independently calculated UTF-8 SHA-256 `3aa66bec80991551df39d9de3807552ae76b15cab47eb8d5dd9bc3b6bdff0a94` matches live `latest.json.webSha256`; live `webVersion=169`.
+- APK unchanged: 1.0.136 / versionCode 135; SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`. No APK rebuild or signing changes.
+- Physical-device verification **pending**. User should use **Me → Check for Updates**, then inspect the left/right border lines. Do not claim phone-side success until user confirms.
+- Rollback: restore only the pre-edit HTML from the verified backup branch if needed; preserve notes, photos, settings and PIN data.
