@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `160`; package `com.personal.diaryapp`. Live feed: `webSha256=9e62a60bfad90c5374d02ebad6e39d6138c5c217bffcb22c03ab3c8a1a31be1f`.
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `163`; package `com.personal.diaryapp`. Live feed: `webSha256=5170a6cba592960dbb2ff7b0b3773c6b38da1d6b16c99999029228ccfcdfdc37`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -1347,3 +1347,20 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Post-publish source and `diary-web/index.html` are byte-identical; both blob SHA `50420b05d0bd25d893b44d5e1c94c53f8c4b9975`. Feed reports Web Update `162`, SHA-256 `39d789052f285fb29abc4292f6e4e802382adc03ca3d876de3907c474cba7dcf`. Static post-publish checks confirmed fallback function, explicit true/false callback paths, and success-only enable logic.
 - APK unchanged at 1.0.136 / versionCode 135; no APK rebuild or signing change. Physical device/browser share-sheet test remains pending. Do not claim complete success until user confirms the actual share sheet opens and the composed image is attached.
 - User test path: Me → Check for Updates; open/unlock note; wait until Share button becomes enabled; tap once. If it stays disabled, report the visible status rather than tapping repeatedly.
+
+
+# Web Update 163 — Keep Note Share tappable and isolate touch events (2026-11-13)
+
+- User reported that tapping **📤 Note Share Karein** only moved the note page. Inspection of the live Web Update 162 source identified the exact cause: the Share button was set to `disabled` until its composed PNG cache was ready. A disabled HTML button does not dispatch the normal click event; on touch, the tap can be retargeted to the parent note card. The note card's pointer/scroll handling then receives the gesture instead of Share. This was not a new Android bridge failure.
+- Starting state: Web Update 162; APK 1.0.136 / versionCode 135; source and mirror blob SHA `50420b05d0bd25d893b44d5e1c94c53f8c4b9975`; feed SHA-256 `39d789052f285fb29abc4292f6e4e802382adc03ca3d876de3907c474cba7dcf`.
+- Pre-edit backups were created and re-fetched successfully on branch `backup/note-share-disabled-tap-event-2026-11-13`:
+  - `backups/web-source-before-note-share-disabled-tap-event-2026-11-13.html` (blob SHA `50420b05d0bd25d893b44d5e1c94c53f8c4b9975`)
+  - `backups/diary-web-before-note-share-disabled-tap-event-2026-11-13.html` (blob SHA `50420b05d0bd25d893b44d5e1c94c53f8c4b9975`)
+  - `backups/latest-before-note-share-disabled-tap-event-2026-11-13.json` (blob SHA `18df90e0cfb8819b9fc57ac0357c4624f0c85022`)
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-note-share-disabled-tap-event-2026-11-13.md` (blob SHA `a26cc24aa128fe63291c2806c65564147e7487c4`)
+- Changed only the Share-button creation/handler line in `web-source/index.html` (source commit `ebec0098ec2e7ef89a7e24d9bb87eff6b6ac3acd`). Share remains enabled while the PNG is preparing; pointerdown and touchstart stop propagation; click prevents default and stops propagation. If the image is not ready, the user sees a preparing message and preparation can be retried; when cached, the existing `shareNote(n)` is called synchronously from the tap. Existing composed-image artwork, layout, image/text placement, native Android bridge, browser share, download fallback, notes/photos/storage/PIN/recovery and APK were not changed.
+- Both inline JavaScript blocks in the updated source parsed successfully. The source/mirror publisher output commit is `6101336f899cf133706cc52ead800200af53efd5` (“Publish My Diary web bundle update”), which updated only `diary-web/index.html` and `latest.json`. The publisher workflow run ID was not independently exposed by the available read endpoint; the publisher bot output commit and live feed were verified.
+- Post-publish source and mirror are byte-identical; both blob SHA `5a75e86dce0a444af482ba20325963570d94f301`. Live feed reports webVersion `163` and `webSha256=5170a6cba592960dbb2ff7b0b3773c6b38da1d6b16c99999029228ccfcdfdc37`. Independently calculated SHA-256 from the exact UTF-8 source bytes matches the feed.
+- APK unchanged: 1.0.136 / versionCode 135 / SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`; no APK rebuild or signing changes.
+- Physical-device verification pending. User should use **Me → Check for Updates**, open/unlock a note, and tap **📤 Note Share Karein**. First confirm the note page no longer moves; then wait for the image-ready state and tap Share again if the preparation message appears. Confirm the actual Android/Chrome share sheet opens and contains the combined note image before claiming the feature fully works.
+- Rollback: exact pre-edit files are preserved on `backup/note-share-disabled-tap-event-2026-11-13`; preserve local notes, photos, PIN data and app identity.
