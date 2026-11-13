@@ -1120,3 +1120,25 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK remains 1.0.136 / versionCode 135; APK SHA-256 remains 6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348. No APK rebuild or signing operation.
 - Physical-device verification is **pending**. Do not claim horizontal drag or pinch zoom works until the user tests it on the phone after receiving Web Update 148.
 - Rollback: use the exact pre-edit files on backup/pre-layered-background-adjust-repair-2026-11-13. Preserve all local notes, photos, PIN data and app data.
+
+
+# Web Update 149 — Smooth two-axis image adjustment for Cover, Detail and Photo (2026-11-13)
+
+- User reported Web Update 148 still moved images only vertically, with excessively fast movement; horizontal drag and pinch zoom in/out were not working. User requested the same working adjustment across all three image areas: Cover, Detail and attached Photo.
+- Re-read the live Master Register, latest.json, source and mirror before editing. Starting live state: webVersion 148; APK 1.0.136 / versionCode 135; source/mirror blob SHA 962a0d43fc18dcbd8494cae4ec0ae603228c450d.
+- Root causes found in the actual adjustment math:
+  - Cover/Detail drag used Math.max(1, containerSize - imageSize). Because imageSize exceeds containerSize, the negative overflow denominator was replaced with 1, making even a tiny finger movement jump rapidly and hit position limits. The new calculation uses the positive overflow magnitude with the correct sign on both axes.
+  - The previous 1.25 image scale combined with the minimum saved zoom of 0.8 produced an effective scale of exactly 1.0, so one axis could have no overflow and could not be dragged. The base image scale is now 1.6, retaining overflow on both axes at the default zoom while keeping zoom-in/out range unchanged.
+  - Attached Photo stored its neutral position as 50/50 but applied those values as direct CSS translate percentages, causing an offset from the centre. Translation now uses (position - 50), so 50/50 is the neutral centre.
+- Changed only web-source/index.html. No APK rebuild, native Android change, storage/data key change, note/photo/PIN logic change, or unrelated UI change.
+- Pre-edit backup branch: backup/pre-smooth-two-axis-photo-adjust-2026-11-13. Verified backup files:
+  - backups/web-source-before-smooth-two-axis-photo-adjust-2026-11-13.html
+  - backups/diary-web-before-smooth-two-axis-photo-adjust-2026-11-13.html
+  - backups/latest-before-smooth-two-axis-photo-adjust-2026-11-13.json
+  - backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-smooth-two-axis-photo-adjust-2026-11-13.md
+- Source commit: 0c9935262b0bc7329f32cc2f3e0b926a2fbd5754. Web publisher workflow run 43382216940 (run 139) completed successfully; publish job and all listed steps succeeded.
+- Post-publish verification: web-source/index.html and diary-web/index.html are byte-identical; both Git blob SHA b965dfa16278ab1b6ca8e5a80596e25367fdf9fb. Live latest.json reports webVersion 149 and web SHA-256 53f635184494a5da270f55e4e1732e833c10ad928037beb4db3e74263cd9d228. Final publisher commit on main: 0a9320e6697e6727c6671c987319d4847194e3cb.
+- JavaScript parse check: both inline script blocks parsed successfully. Publisher workflow, source/mirror equality and live feed checks passed.
+- APK remains 1.0.136 / versionCode 135; APK SHA-256 remains 6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348. No APK rebuild or signing operation.
+- Physical-device verification is **pending**. Do not claim smooth horizontal/vertical drag or pinch zoom works until the user tests all three image areas on the phone after receiving Web Update 149.
+- Rollback: use the exact pre-edit files on backup/pre-smooth-two-axis-photo-adjust-2026-11-13. Preserve all local notes, photos, PIN data and app data.
