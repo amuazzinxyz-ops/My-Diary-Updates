@@ -1148,6 +1148,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  function diaryFingerTarget(kind){return kind==='Photo'?document.querySelector('#diaryMyNotesPhotoPreview img'):document.getElementById(kind==='Cover'?'diaryMyNotesTitle':'diaryMyNotesText');}
  function diaryFieldBackgroundPosition(v){var p=v.posX+'% '+v.posY+'%';return (v.mode==='gradient'||v.mode==='solid'?'0% 0%,0% 0%,':'0% 0%,')+p;}
  function diaryFieldBackgroundSize(v,w,h){var photo=w+'% '+h+'%';return (v.mode==='gradient'||v.mode==='solid'?'100% 100%,100% 100%,':'100% 100%,')+photo;}
+ function diaryFieldBackgroundRepeat(v){return v.mode==='gradient'||v.mode==='solid'?'no-repeat,no-repeat,no-repeat':'no-repeat,no-repeat';}
  function diaryFingerPaint(target,kind){
   if(!target)return;
   var v=diaryColourFor(kind);
@@ -1157,7 +1158,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    return;
   }
   target.style.setProperty('background-position',diaryFieldBackgroundPosition(v),'important');
-  target.style.setProperty('background-repeat','no-repeat','important');
+  target.style.setProperty('background-repeat',diaryFieldBackgroundRepeat(v),'important');
   var data=kind==='Cover'?activeCoverPhotoData:activeDetailPhotoData;
   if(!data)return;
   function paintSize(width,height){
