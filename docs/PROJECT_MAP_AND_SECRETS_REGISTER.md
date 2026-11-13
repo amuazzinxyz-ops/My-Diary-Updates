@@ -1160,3 +1160,22 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK remains 1.0.136 / versionCode 135. No APK rebuild or signing operation.
 - Physical-device verification is **pending**. Do not claim pinch zoom works until the user tests Cover, Detail and Photo on the phone after receiving Web Update 150. Drag was already confirmed by the user on Update 149; this change was limited to pointer gesture tracking.
 - Rollback: use the exact pre-edit files on backup/pre-pointer-pinch-zoom-repair-2026-11-13. Preserve all local notes, photos, PIN data and app data.
+
+
+# Web Update 151 — Detect both fingers across the selected image box (2026-11-13)
+
+- User tested Web Update 150 and reported that pinch zoom-in and zoom-out still did not work. Existing left/right and up/down drag in Cover, Detail and Photo had been confirmed working and must be preserved.
+- Re-read the live Master Register, latest.json, source and published mirror before editing. Starting state: webVersion 150; APK 1.0.136 / versionCode 135; source/mirror blob SHA fd1d38dc9d73bdabb5a074ef1449a2360712ff51.
+- Diagnosis: Pointer Events registered pointerdown only on the selected image element and used pointer capture. A second finger landing on another part of the image box/frame or a child element could fail to enter the tracked pointer set. The pinch calculation itself and zoom bounds were retained.
+- Changed only bindDiaryFingerAdjust(target,kind) in web-source/index.html: pointerdown is now captured at document level and each contact is registered when its coordinates fall inside the selected target's bounding rectangle. Removed explicit pointer capture and the related lost-capture handler; document-level pointermove/up/cancel continue tracking active contacts. Existing one-finger drag calculations, pinch ratio, zoom range 0.8–4, image painting, Touch Events fallback and stored state remain unchanged.
+- Explicitly untouched: pamphlet chooser/designs, image selection, editor layout, note/photo data and storage keys, save format, PIN/lock/recovery, translations, native Android source, APK, package identity, signing data and unrelated Diary features.
+- Pre-edit backup branch: backup/pre-document-pointerdown-pinch-repair-2026-11-13. Verified readable backups:
+  - backups/web-source-before-document-pointerdown-pinch-repair-2026-11-13.html
+  - backups/diary-web-before-document-pointerdown-pinch-repair-2026-11-13.html
+  - backups/latest-before-document-pointerdown-pinch-repair-2026-11-13.json
+  - backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-document-pointerdown-pinch-repair-2026-11-13.md
+- Source commit: 28d24528fdef97ef86b385f07e30f922f0a42c0c. Publisher commit: 998923d92b31dd1155e65ad843c3ae6fa2b39acb. Live feed advanced to webVersion 151; publisher commit synchronized the published mirror and feed.
+- Post-publish verification: source and mirror are byte-identical; both Git blob SHA 99785ad58c1a0a03f0b90b5dc3bd5fe3de9b6077. Independently calculated UTF-8 SHA-256 4043dc99f56adba90e65d54869f711bc7f05d3c54c3974e1f17108d7be05bfc8 matches live latest.json.webSha256. Both inline JavaScript blocks parsed successfully. Source, mirror and feed were re-fetched after publishing.
+- APK remains 1.0.136 / versionCode 135; no APK rebuild or signing operation. Notes, photos, PIN data, app data, and package/signing identity were not changed.
+- Physical-device verification is **pending**. User must install Web Update 151 through Me → Check for Updates and test pinch-in and pinch-out separately on Cover, Detail and Photo. Existing drag was already confirmed on Web Update 149; do not claim pinch zoom works until the user confirms it on the phone.
+- Rollback: use the exact pre-edit files on backup/pre-document-pointerdown-pinch-repair-2026-11-13; preserve all local notes, photos, PIN data and app data.
