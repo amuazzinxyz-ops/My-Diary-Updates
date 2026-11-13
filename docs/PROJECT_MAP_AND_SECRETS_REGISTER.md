@@ -1576,3 +1576,11 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Source commit: `131794e2f32a58a62fa85b33bbf0504202caa3db`; source/mirror blob SHA: `39e326970ad28dc3462c50e92edb4fbe6b396c96`. `web-source/index.html` and `diary-web/index.html` were re-fetched and verified byte-identical.
 - Publisher workflow run `43427869229` (run 165), publish job completed successfully. Live `latest.json` reports webVersion `175`, webSha256 `8785bf67609495c847d21a6248fa9b9cdf886852788fd38959760e58d57b0b19`.
 - Physical-device test pending. User should use **Me → Check for Updates**, open **＋ New Note**, type something and add a photo, then tap the new ×. Confirm the text/photo clear and the writing pad remains open. Do not claim phone-side verification until user confirms.
+
+## Web Update 176 — New Note × sirf draft par visible (2026-11-13)
+- User confirmed: × should remain hidden while New Note is empty, appear only after text is typed or an image is added, and disappear again when tapped to clear the draft.
+- Implemented live visibility updates for title/body typing and the existing photo, cover-image and detail-image preview completion paths. The button is shown only for an unsaved New Note with draft content. Tapping it calls the existing `newNote()` reset routine; it clears draft text/images and leaves the writing pad open.
+- No change to saved-note editing behavior, main Diary close button, saved notes/storage, Note lock/PIN/recovery, APK/native code, package identity or signing.
+- Source commit: `993551bb9455f12b028d0b2df97c24e2997ec653`; source and published mirror were re-fetched and verified byte-identical, blob SHA `098ec07a4f0ef8205a7b42367304c1b033b4d665`.
+- Publisher workflow run `43428578542`, run 166, and publish job completed successfully. Live `latest.json` reports webVersion `176`, webSha256 `19d6828ff323f044df54e8c1bac450da63a0f3e0ca72505672994119a95cb01b`.
+- Physical-device verification pending. User should use **Me → Check for Updates**, then test: empty New Note has no ×; typing or adding an image shows ×; tapping × clears the draft and hides × while keeping the pad open. Do not claim phone-side verification until user confirms.
