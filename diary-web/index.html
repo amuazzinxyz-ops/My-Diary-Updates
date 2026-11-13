@@ -2708,12 +2708,14 @@ body[data-diary-interface-theme]:not([data-diary-interface-theme="blue"]):not([d
 </style>
 
 <style id="diary-mobile-border-fit">
-/* Reduce the mobile Diary panel width by 10px total: 5px on each side. */
+/* Keep the mobile Diary panel clear of both screen edges; allow the flex item to shrink below its content's automatic minimum width. */
 @media(max-width:420px){
   #diaryMyNotesPanel{
     box-sizing:border-box!important;
-    width:calc(100% - 10px)!important;
-    max-width:calc(100% - 10px)!important;
+    min-width:0!important;
+    flex:0 1 auto!important;
+    width:calc(100% - 20px)!important;
+    max-width:calc(100% - 20px)!important;
     margin-left:auto!important;
     margin-right:auto!important;
   }
