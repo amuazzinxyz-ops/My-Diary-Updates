@@ -1866,7 +1866,7 @@ The user can simply say what they want in Roman Hindi. No special template, file
   - Reject past date/time values.
   - List, Smart Search (including time), edit and delete reminders. Editing reschedules the same reminder ID; deleting cancels its native alarm.
   - Notifications provide 10-minute Snooze and Done actions.
-  - UI text is translated for Roman, English, Hindi, Urdu, Arabic, Bengali, Gujarati, Marathi, Tamil and Telugu.
+  - Reminder form labels, validation messages and permission prompts are translated for Roman, English, Hindi, Urdu, Arabic, Bengali, Gujarati, Marathi, Tamil and Telugu. Android notification action labels currently display “10 min baad” and “Done”.
   - A browser-only HTML session without the native Android bridge does not claim to schedule alerts; it asks the user to use the latest installed My Diary app.
 - Android scheduling:
   - Added native JavaScript bridge methods to schedule/cancel reminders and check/request notification and exact-alarm permissions.
