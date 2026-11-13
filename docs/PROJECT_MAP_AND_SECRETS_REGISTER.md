@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `151`; package `com.personal.diaryapp`. Live feed: `webSha256=`4043dc99f56adba90e65d54869f711bc7f05d3c54c3974e1f17108d7be05bfc8`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current. Historical entries below remain unchanged.
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `152`; package `com.personal.diaryapp`. Live feed: `webSha256=`b3916ea90ea9f46a633a6e11fb47e89540f9ba2a17db7e7993f9cb2529ccef84`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current. Historical entries below remain unchanged.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -76,6 +76,23 @@ Keep historical entries as history. If an old entry contains stale version infor
 
 
 ---
+
+# Web Update 152 — Automatic finger adjustment after image selection (2026-11-13)
+
+- User requested removal of the separate “Ungli se Adjust Karein” button and automatic image adjustment as soon as an image is selected.
+- Starting live state: Web Update 151; APK 1.0.136 / versionCode 135; package `com.personal.diaryapp`; source/mirror blob SHA `99785ad58c1a0a03f0b90b5dc3bd5fe3de9b6077`; feed SHA-256 `4043dc99f56adba90e65d54869f711bc7f05d3c54c3974e1f17108d7be05bfc8`.
+- Changed only `web-source/index.html` in source commit `acc35a9b44f44cacffe8ddf610c142ea2dfecea2`. Removed the manual adjustment button and hint from the Cover, Detail and Photo image-design menu. Added automatic adjustment activation after successful image selection for Cover, Detail and attached Photo. Existing pointer/touch gesture engine, one-finger drag, two-finger pinch, zoom range 0.8–4, rendering and saved position/zoom state remain in place. No other feature, translation values, storage/data keys, note/photo records, PIN/recovery, native Android source, APK, package identity or signing data changed.
+- Pre-edit backup branch: `backup/pre-auto-finger-adjust-no-button-2026-11-13`. Verified readable exact backups:
+  - `backups/web-source-before-auto-finger-adjust-no-button-2026-11-13.html`
+  - `backups/diary-web-before-auto-finger-adjust-no-button-2026-11-13.html`
+  - `backups/latest-before-auto-finger-adjust-no-button-2026-11-13.json`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-auto-finger-adjust-no-button-2026-11-13.md`
+- Source diff reviewed; only the requested adjustment UI/activation logic changed. Both inline JavaScript blocks parsed successfully. No remaining `diary-finger-adjust-button` references in the updated source; the automatic activation function is called from all three image-selection handlers.
+- Publisher output commit: `23fe1494f9f5efa4b2681feef048e08060195b2c` (GitHub Actions bot, “Publish My Diary web bundle update”). Live feed advanced to Web Update 152. Re-fetched source and mirror are byte-identical; both Git blob SHA `4ea139d2ca9ee04b72a31b1a9cbc712a3d87ca41`. Independently computed UTF-8 SHA-256 `b3916ea90ea9f46a633a6e11fb47e89540f9ba2a17db7e7993f9cb2529ccef84` matches live `latest.json.webSha256`. Source/mirror/feed checks passed. The workflow-run listing/status endpoint did not expose a run ID or conclusion in this session; publisher bot output commit and updated feed/mirror were verified.
+- APK remains 1.0.136 / versionCode 135; APK SHA-256 remains `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`. No APK rebuild or signing operation.
+- Physical-device verification is **pending**. User should install Web Update 152 using the existing **Me → Check for Updates** path, then confirm image selection automatically enables drag and pinch zoom in Cover, Detail and Photo. Do not claim phone-side success until the user confirms.
+- Rollback: use exact pre-edit files on `backup/pre-auto-finger-adjust-no-button-2026-11-13`; preserve notes, photos, PIN data and app data.
+
 
 # Web Update 132 — Keep the Diary Me button label as “Me” in every language (2026-11-12)
 
