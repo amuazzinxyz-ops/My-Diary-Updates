@@ -1654,3 +1654,32 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Backup: `backup/register-success-entry-rule-2026-11-13` → `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-success-entry-rule-2026-11-13.md`; backup commit `945ca910ee7f2e59af6275197dec0c163096ec10`.
 - Scope: only `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md` changed on the default branch. No app source, mirror, latest.json, APK, signing data, notes, photos, settings, or PIN/recovery data changed.
 - Verification: live register was fetched before editing; pre-edit register backup was created on a separate backup branch. Post-edit re-fetch and content/section verification are required before reporting completion.
+
+
+---
+
+# Me Button — Four new independent tools (Web Update 182, 2026-11-13)
+
+- User selected and approved four new Me Button tools in this order: **Personal Calendar**, **My Kharcha**, **My Documents**, **My Memories**. Existing Diary Notes, existing saved-Notes Calendar, Note Lock, Diary Lock/PIN/recovery, updater and existing data must remain untouched.
+- Starting live state: Web Update 180; APK 1.0.136 / versionCode 135; package `com.personal.diaryapp`; source/mirror blob `b612bde3339702f5c80feb63d5189531613bf504`; starting feed blob `aa8fadea5b34cd8959410b371b3c86ec06b0abda`.
+- Scope: web-only, `web-source/index.html`. Added four separate purple/gold 3D-style buttons under Me, opening an independent feature page:
+  - **Personal Calendar:** add and list dated birthday, anniversary and important-day entries.
+  - **My Kharcha:** add income/expense entries with date, amount in INR, optional category/details, and running totals/balance.
+  - **My Documents:** save and open local image/PDF files with a title.
+  - **My Memories:** save dated text memories with an optional photo.
+- All four features use a new, separate IndexedDB database `diary_me_features_v1` and object store `records`; they do not reuse or modify the existing Notes storage keys or the Diary safety-copy database. Attachments are stored as local Blob data; file-size limit is 20 MB. User data remains on the device; no cloud upload was added.
+- A follow-up correction made optional form fields genuinely optional (the initial version mistakenly emitted a false-valued HTML boolean `required` attribute). Final source includes this correction.
+- Explicit limitations for this first version: no edit/search/export-import or integration with the existing Notes backup yet; Personal Calendar currently stores and lists dates but does not send reminders or auto-repeat birthdays/anniversaries. The new database is separate and is **not encrypted by the existing Diary PIN**, so device/app PIN must not be assumed to protect these new records. Physical-device verification is pending; use dummy/test entries only until storage backup and privacy protection are added and tested.
+- Pre-edit backup branch: `backup/me-four-features-before-implementation-2026-11-13`. Four exact, readable backups re-fetched successfully:
+  - `backups/web-source-before-me-four-features-2026-11-13.html` — original blob `b612bde3339702f5c80feb63d5189531613bf504`
+  - `backups/diary-web-before-me-four-features-2026-11-13.html` — same original blob
+  - `backups/latest-before-me-four-features-2026-11-13.json` — blob `aa8fadea5b34cd8959410b371b3c86ec06b0abda`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-me-four-features-2026-11-13.md` — blob `63942493cc15dda564fd9f01961ae47d02137c6c`
+- Source commits: initial implementation `23ec8cb253456ecfda775c243a31da1591cd012f`; optional-field correction `524629c81c3c937ea9b1d2fe7996348eb86cf366`.
+- Web-only publisher workflow runs: `43435266550` (run 171) and `43435584101` (run 172); both completed **successfully**, including all publish-job steps. Final live webVersion: **182**.
+- Final source and published mirror were re-fetched and are byte-identical; both Git blob SHA `2797094230b8a7864d531988d65f33798f44e759`. Independently calculated UTF-8 SHA-256 `436873076a491bd9d8759e7b6506e517469a89fc57c9893b18708f69354c2dd1` matches live `latest.json.webSha256`.
+- Both inline JavaScript blocks passed syntax parsing. Static checks confirmed the new feature database, four feature labels/buttons, and optional-field correction. No live-device runtime test was available.
+- APK unchanged: 1.0.136 / versionCode 135 / SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`. No APK rebuild, native Android, package identity or signing changes.
+- Deliberately untouched: existing Notes and their storage, existing saved-Notes Calendar, photos already attached to Notes, Note Lock, Diary Lock/PIN/recovery, translations outside the new feature labels, updater, app sharing, theme controls, and all MUAZZIN project files.
+- Phone test pending. Ask the user to use **Me → Check for Updates**, install Web Update 182, then test each feature with dummy data: add/delete one date, one income and one expense, one sample PDF/image document, and one text/photo memory; close and reopen each page to confirm data persists. Do not claim phone-side success until the user confirms.
+- Rollback: restore only `web-source/index.html` from the verified pre-edit backup branch if regression is found; then re-run source/mirror/feed/hash checks. Preserve all user data and PIN records.
