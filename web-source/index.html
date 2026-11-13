@@ -2708,17 +2708,20 @@ body[data-diary-interface-theme]:not([data-diary-interface-theme="blue"]):not([d
 </style>
 
 <style id="diary-mobile-border-fit">
-/* Keep the complete mobile Diary border inside the screen, with extra side clearance for the raised 3D edge and shadow. */
-@media(max-width:420px){
-  #diaryMyNotesPanel{
-    box-sizing:border-box!important;
-    min-width:0!important;
-    flex:0 1 auto!important;
-    width:calc(100% - 30px)!important;
-    max-width:calc(100% - 30px)!important;
-    margin-left:auto!important;
-    margin-right:auto!important;
-  }
+/* Size the Diary against the overlay's equal safe-area gutters; do not subtract a second percentage from an already padded parent. */
+#diaryMyNotesOverlay{
+  box-sizing:border-box!important;
+  padding-left:max(12px,env(safe-area-inset-left,0px))!important;
+  padding-right:max(12px,env(safe-area-inset-right,0px))!important;
+}
+#diaryMyNotesPanel{
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:760px!important;
+  min-width:0!important;
+  flex:0 1 760px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
 }
 </style>
 
