@@ -1173,40 +1173,49 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   target.setAttribute('data-finger-adjust-bound','1');
   var pts={},base=null,pinchSpan=0,pinchZoom=1;
   function span(){var ids=Object.keys(pts),n=ids.length;if(n<2)return 0;var cx=0,cy=0;ids.forEach(function(id){cx+=pts[id].x;cy+=pts[id].y;});cx/=n;cy/=n;var sum=0;ids.forEach(function(id){var dx=pts[id].x-cx,dy=pts[id].y-cy;sum+=dx*dx+dy*dy;});return Math.sqrt(sum/n);}
-  function rebase(){var ids=Object.keys(pts),v=diaryColourFor(kind);if(ids.length===1){var p=pts[ids[0]];base={x:p.x,y:p.y,posX:v.posX,posY:v.posY};pinchSpan=0;pinchZoom=v.zoom;}else if(ids.length>=2){base=null;pinchSpan=Math.max(1,span());pinchZoom=v.zoom;}else{base=null;pinchSpan=0;pinchZoom=v.zoom;}}
-  function begin(id,x,y){pts[id]={x:x,y:y};rebase();}
+  function imageOverflow(){
+   var boxW=Math.max(1,target.clientWidth),boxH=Math.max(1,target.clientHeight),data=kind==='Cover'?activeCoverPhotoData:activeDetailPhotoData,cache=target.__diaryFingerImageSize,ar=cache&&cache.src===data?cache.width/Math.max(1,cache.height):1,boxAr=boxW/boxH,wPct=100,hPct=100,v=diaryColourFor(kind);
+   if(ar>boxAr)wPct=ar/boxAr*100;else hPct=boxAr/ar*100;
+   wPct=Math.max(100,wPct)*1.25*v.zoom;hPct=Math.max(100,hPct)*1.25*v.zoom;
+   return {w:Math.max(boxW,boxW*wPct/100),h:Math.max(boxH,boxH*hPct/100),boxW:boxW,boxH:boxH};
+  }
+  function rebase(){var ids=Object.keys(pts),v=diaryColourFor(kind);if(ids.length===1){var p=pts[ids[0]],o=imageOverflow();base={x:p.x,y:p.y,posX:v.posX,posY:v.posY,overflow:o};pinchSpan=0;pinchZoom=v.zoom;}else if(ids.length>=2){base=null;pinchSpan=Math.max(1,span());pinchZoom=v.zoom;}else{base=null;pinchSpan=0;pinchZoom=v.zoom;}}
   function apply(){
    var ids=Object.keys(pts);if(!ids.length)return;
    var v=diaryColourFor(kind);
    if(ids.length>=2){var now=span();if(pinchSpan>0&&now>0)v.zoom=Math.max(.8,Math.min(4,pinchZoom*(now/pinchSpan)));}
-   else if(base){var p=pts[ids[0]],dx=p.x-base.x,dy=p.y-base.y,w=Math.max(1,target.clientWidth),h=Math.max(1,target.clientHeight);
-    if(kind==='Photo'){v.posX=Math.max(-50,Math.min(50,base.posX+dx/w*100));v.posY=Math.max(-50,Math.min(50,base.posY+dy/h*100));}
-    else{v.posX=Math.max(-50,Math.min(150,base.posX-dx/w*100));v.posY=Math.max(-50,Math.min(150,base.posY-dy/h*100));}
+   else if(base){
+    var p=pts[ids[0]],dx=p.x-base.x,dy=p.y-base.y;
+    if(kind==='Photo'){v.posX=Math.max(-150,Math.min(150,base.posX+dx/Math.max(1,target.clientWidth)*100));v.posY=Math.max(-150,Math.min(150,base.posY+dy/Math.max(1,target.clientHeight)*100));}
+    else{
+     var ox=base.overflow;
+     v.posX=Math.max(-200,Math.min(300,base.posX+dx/Math.max(1,ox.boxW-ox.w)*100));
+     v.posY=Math.max(-200,Math.min(300,base.posY+dy/Math.max(1,ox.boxH-ox.h)*100));
+    }
    }
    setDiaryColour(kind,v);diaryFingerPaint(target,kind);
   }
-  function move(id,x,y){if(!pts[id])return;pts[id]={x:x,y:y};apply();}
   function finish(id){if(!pts[id])return;delete pts[id];rebase();}
-  /* Android uses native Touch Events for reliable one-, two- and three-finger gestures. */
-  target.addEventListener('touchstart',function(e){
+  function inTarget(x,y){var r=target.getBoundingClientRect();return x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom;}
+  /* Capture all Android touch starts so a second/third finger is registered even if its event target differs. */
+  document.addEventListener('touchstart',function(e){
    if(diaryFingerAdjustKind!==kind)return;
-   e.preventDefault();e.stopPropagation();
-   Array.prototype.forEach.call(e.changedTouches,function(t){pts['t'+t.identifier]={x:t.clientX,y:t.clientY};});
-   rebase();
-  },{passive:false});
+   var added=false;
+   Array.prototype.forEach.call(e.changedTouches,function(t){if(inTarget(t.clientX,t.clientY)){pts['t'+t.identifier]={x:t.clientX,y:t.clientY};added=true;}});
+   if(added){e.preventDefault();e.stopPropagation();rebase();}
+  },{capture:true,passive:false});
   document.addEventListener('touchmove',function(e){
    if(diaryFingerAdjustKind!==kind)return;
    var active=false;
    Array.prototype.forEach.call(e.touches,function(t){if(pts['t'+t.identifier]){pts['t'+t.identifier]={x:t.clientX,y:t.clientY};active=true;}});
    if(!active)return;
-   e.preventDefault();apply();
-  },{passive:false});
-  document.addEventListener('touchend',function(e){Array.prototype.forEach.call(e.changedTouches,function(t){finish('t'+t.identifier);});},{passive:false});
-  document.addEventListener('touchcancel',function(e){Array.prototype.forEach.call(e.changedTouches,function(t){finish('t'+t.identifier);});},{passive:false});
-  /* Keep Pointer Events for mouse/pen on desktop; ignore touch pointers to avoid duplicate gestures. */
+   e.preventDefault();e.stopPropagation();apply();
+  },{capture:true,passive:false});
+  document.addEventListener('touchend',function(e){Array.prototype.forEach.call(e.changedTouches,function(t){finish('t'+t.identifier);});},true);
+  document.addEventListener('touchcancel',function(e){Array.prototype.forEach.call(e.changedTouches,function(t){finish('t'+t.identifier);});},true);
   if(window.PointerEvent){
-   target.addEventListener('pointerdown',function(e){if(e.pointerType==='touch'||diaryFingerAdjustKind!==kind)return;e.preventDefault();e.stopPropagation();begin('p'+e.pointerId,e.clientX,e.clientY);});
-   document.addEventListener('pointermove',function(e){if(e.pointerType==='touch'||diaryFingerAdjustKind!==kind||!pts['p'+e.pointerId])return;e.preventDefault();move('p'+e.pointerId,e.clientX,e.clientY);},{passive:false});
+   target.addEventListener('pointerdown',function(e){if(e.pointerType==='touch'||diaryFingerAdjustKind!==kind)return;e.preventDefault();e.stopPropagation();pts['p'+e.pointerId]={x:e.clientX,y:e.clientY};rebase();});
+   document.addEventListener('pointermove',function(e){if(e.pointerType==='touch'||diaryFingerAdjustKind!==kind||!pts['p'+e.pointerId])return;e.preventDefault();pts['p'+e.pointerId]={x:e.clientX,y:e.clientY};apply();},{passive:false});
    document.addEventListener('pointerup',function(e){if(e.pointerType!=='touch')finish('p'+e.pointerId);});
    document.addEventListener('pointercancel',function(e){if(e.pointerType!=='touch')finish('p'+e.pointerId);});
   }
