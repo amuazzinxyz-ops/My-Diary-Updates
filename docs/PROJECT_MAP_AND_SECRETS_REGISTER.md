@@ -1753,3 +1753,27 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK unchanged: 1.0.136 / versionCode 135 / SHA-256 6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348. No APK rebuild, native Android, package identity or signing changes.
 - Physical-device verification pending. User should use Me → Check for Updates, install Web Update 186, then test category suggestions and per-category totals, Smart Search in each section, PDF report creation for Kharcha and Calendar, and first-time PIN setup/re-entry for Kharcha, Documents and Memories. Use dummy/test records initially; the PIN gate is not at-rest encryption. Do not claim phone-side success until user confirms.
 - Rollback: restore web-source/index.html from the verified pre-edit backup branch, republish and re-check source/mirror/feed/hash. Preserve all user data and all existing Notes/PIN records.
+
+
+---
+
+# Web Update 187 — Manage and recover separate Me-section PIN locks (2026-11-13)
+
+- User approved adding three independent PIN-management options to **My Kharcha**, **My Documents** and **My Memories**: remove a lock, change its PIN, and recover a forgotten PIN.
+- Starting live state: Web Update 186; APK 1.0.136 / versionCode 135 / package `com.personal.diaryapp`; source/mirror blob `46c320b0597e54fbdca3371516a2c693bd06cb54`; starting feed SHA-256 `4fa7cfc3c0366aa36e9fc0c4137907bebff544e270873e31b094a8c50770f5ea`.
+- Web-only scope: changed only `web-source/index.html`; publisher mirrored it to `diary-web/index.html` and advanced the web feed to Update 187. No native Android source, APK, package identity, signing material, existing Notes, Note Lock, Diary Lock, or unrelated feature was changed.
+- Each protected section now has a **🔑 PIN** management control after it is unlocked. Changing PIN requires the current PIN and entering the new 4–8 digit PIN twice. Removing a lock requires the current PIN plus confirmation; it removes only that section's PIN/recovery configuration and does not delete its Kharcha/Documents/Memories records or attachments.
+- New PIN setup creates a random 20-character hexadecimal recovery code. The user must save it outside the app and re-enter it to confirm. Only a salted PBKDF2-SHA-256 hash is stored in localStorage; the plaintext recovery code is shown during setup, not persisted. Forgot PIN accepts this code, lets the user set a new PIN, then generates and requires confirmation of a replacement recovery code (one-time rotation).
+- Existing Update 186 PINs remain compatible and are not overwritten. Because those earlier PINs had no recovery code, the first successful unlock after this update prompts the user to create one. **If an existing PIN was already forgotten before a recovery code was created, this update cannot recover it retroactively.** The user must know the current PIN once to establish recovery.
+- All three UI language dictionaries (Roman English, English, Hindi) include the new PIN/recovery labels and messages. Existing PIN storage keys `diary_me_section_pin_v1_<kind>`, 4–8 digit PIN validation, PBKDF2-SHA-256 with 120,000 iterations, and protected-section mapping remain unchanged. New recovery hashes use separate keys `diary_me_section_recovery_v1_<kind>`.
+- Pre-edit backup branch: `backup/section-pin-management-recovery-2026-11-13`. Verified exact readable backups:
+  - `backups/web-source-before-section-pin-management-recovery-2026-11-13.html` — blob `46c320b0597e54fbdca3371516a2c693bd06cb54`
+  - `backups/diary-web-before-section-pin-management-recovery-2026-11-13.html` — same blob
+  - `backups/latest-before-section-pin-management-recovery-2026-11-13.json` — blob `6d1761e207a305e87dbf87443b60f0707be537a2`
+  - `backups/register-before-section-pin-management-recovery-2026-11-13.md` — blob `87506eb56fe9256f6ab69c8fa7f5411c9162b5a7`
+- Source commit: `7c90390050d2d270a6de986b335af087f6d16884`. The source diff is confined to the Me-feature language labels, protected-section PIN/recovery functions, and the PIN-management header control. Both inline JavaScript blocks passed syntax parsing. Static checks confirmed the three protected section IDs, original PIN storage key and digest parameters are preserved, and the new recovery/change/remove handlers are present.
+- Publisher workflow run `43460652702` completed with **success**; publish job `132006363405` and all five steps completed successfully. Publisher commit: `6014f03538c73a0a29d03727a3da77a89879f324`.
+- Final live source and published mirror are byte-identical; both Git blob SHA `9ff42b600813d36073b813ff8a5554a70f67771d`. Independently calculated UTF-8 SHA-256 `391951ff6ca63e24728c8f2f67d374cbcaf7aa0260cf7732a7669d06a9414137` matches live `latest.json.webSha256`. Live webVersion: **187**.
+- APK unchanged: 1.0.136 / versionCode 135 / SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`; no APK rebuild or signing changes.
+- Physical-device verification is **pending**. Test each of the three sections separately: first unlock an existing PIN and save the displayed recovery code; change PIN using old PIN and verify the new PIN; leave/re-enter and unlock; use Forgot PIN with the recovery code and save the replacement code; finally remove the lock using the current PIN and confirm saved records remain. Do not claim phone-side testing until the user confirms.
+- Rollback: restore `web-source/index.html` from the verified backup branch, republish, and re-check source/mirror/feed/hash. Preserve all user data.
