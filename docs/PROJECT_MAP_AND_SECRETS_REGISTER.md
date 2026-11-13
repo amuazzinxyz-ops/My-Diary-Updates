@@ -1718,3 +1718,14 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK unchanged: 1.0.136 / versionCode 135 / SHA-256 6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348; no APK rebuild, native Android, package identity or signing changes.
 - Physical-device verification remains pending. User should use Me → Check for Updates, install Web Update 184, then enter Raqam 5000 and Kharcha 2000 in separate boxes and save; confirm the summary shows Raqam ₹5,000.00, Kharcha ₹2,000.00 and Baqi ₹3,000.00. Do not claim phone-side success until user confirms.
 - Rollback: restore web-source/index.html from the verified pre-edit backup branch; republish and recheck source/mirror/feed/hash. Preserve all user data and the existing Notes/PIN records.
+---
+
+# Web Update 185 — Edit saved My Kharcha entries (2026-11-13)
+
+- User asked to be able to edit a My Kharcha entry after adding it. Added an Edit button to each saved Kharcha record (Roman English, English and Hindi labels). Selecting Edit fills the existing form with that record's date, Raqam, Kharcha, expense name and details.
+- Saving an edited entry reuses the original record ID and created timestamp, updating the existing IndexedDB record instead of creating a duplicate. The form returns to Add mode after a successful save. Delete behavior remains unchanged. Old-format Kharcha entries remain editable with compatible value prefill.
+- Scope: web-source/index.html only. Pre-edit backup branch: backup/my-kharcha-edit-entry-2026-11-13. Backups: backups/web-source-before-kharcha-edit-2026-11-13.html, backups/diary-web-before-kharcha-edit-2026-11-13.html, backups/latest-before-kharcha-edit-2026-11-13.json, backups/register-before-kharcha-edit-2026-11-13.md.
+- Source commit: 6e23e88fd5110ee2f556d40dda3da84b488c8f08. Published Web Update: 185. Source and published mirror are byte-identical; both blob SHA 746947562a558bcf5db02e4a65e797f534355962. latest.json webSha256: 9481d9d50d3258548ae73cf37bbf12027969f7762d45f682473ab00c868b61f8.
+- Both inline JavaScript blocks passed syntax parsing before commit. Static checks verified all three edit labels, the Edit button, record prefill, original ID preservation, save-mode reset and old-record compatibility. No APK rebuild; APK remains 1.0.136 / versionCode 135.
+- Physical-device verification is pending. After Me → Check for Updates installs Web Update 185, test adding Raqam 5000 / Kharcha 2000, editing one value, saving, and confirming the same entry updates without duplication and the totals/balance recalculate. Do not claim phone-side testing until user confirms.
+- Rollback: restore web-source/index.html from the verified pre-edit backup branch, republish, and verify mirror/feed. Preserve user records and all existing Diary/Notes/PIN features.
