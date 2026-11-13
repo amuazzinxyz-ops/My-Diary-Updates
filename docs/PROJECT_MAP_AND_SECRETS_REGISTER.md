@@ -1777,3 +1777,32 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK unchanged: 1.0.136 / versionCode 135 / SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`; no APK rebuild or signing changes.
 - Physical-device verification is **pending**. Test each of the three sections separately: first unlock an existing PIN and save the displayed recovery code; change PIN using old PIN and verify the new PIN; leave/re-enter and unlock; use Forgot PIN with the recovery code and save the replacement code; finally remove the lock using the current PIN and confirm saved records remain. Do not claim phone-side testing until the user confirms.
 - Rollback: restore `web-source/index.html` from the verified backup branch, republish, and re-check source/mirror/feed/hash. Preserve all user data.
+
+
+---
+
+# Web Update 191 — Match all three Me-section locks to Note Lock (2026-11-13)
+
+- User requested that the separate locks for **My Kharcha**, **My Documents** and **My Memories** work the same way as the existing Note Lock.
+- Starting live state: Web Update 187; APK 1.0.136 / versionCode 135; source/mirror blob `9ff42b600813d36073b813ff8a5554a70f67771d`; starting web SHA-256 `391951ff6ca63e24728c8f2f67d374cbcaf7aa0260cf7732a7669d06a9414137`.
+- Scope: only `web-source/index.html` was changed. The publisher mirrored it to `diary-web/index.html`. No Android source, APK, package identity, signing files, existing Note Lock, Diary Lock, notes, photos, or Me-section records/attachments were modified.
+- All three protected sections now use the Note Lock's **4-digit numeric PIN** flow:
+  - First setup asks for a new 4-digit PIN and confirmation, using the same style of on-screen PIN popup.
+  - Unlock accepts the current PIN. Four-digit PINs auto-submit as in Note Lock.
+  - **Forgot PIN** shows a newly generated temporary 4-digit PIN with a Copy button; after the user re-enters it correctly, the app asks them to create and confirm a new 4-digit PIN.
+  - **Change PIN** verifies the current PIN first, then asks for a new 4-digit PIN twice.
+  - **Remove Lock** verifies the current PIN before removing only the PIN setting for that section. The section's saved records and attachments remain.
+- Compatibility for PINs created in Update 186/187: existing 4-digit PINs remain valid and are marked as 4-digit after their first successful unlock. If an existing PIN is 5–8 digits, the user must enter it once successfully, then create a new 4-digit PIN. This avoids silently losing access to older PIN-protected sections.
+- Previous section-specific recovery-code setup is replaced by the Note Lock-style generated temporary PIN recovery flow. Any old section recovery hash is discarded when a new PIN is saved. **Security limitation:** like the existing Note Lock forgot-PIN flow, the temporary recovery PIN is displayed by the app to whoever can reach that section's lock screen; it is not an independent identity check. The lock remains an app access gate, not encryption of data at rest.
+- Roman English, English and Hindi labels were updated for 4-digit PIN instructions and temporary PIN verification. Existing Notes and Note Lock code was not changed.
+- Pre-edit backup branch: `backup/note-style-section-lock-2026-11-13`. Exact pre-edit backups were fetched back and compared:
+  - `backups/web-source-before-note-style-section-lock-2026-11-13.html` — blob `9ff42b600813d36073b813ff8a5554a70f67771d`
+  - `backups/diary-web-before-note-style-section-lock-2026-11-13.html` — same blob
+  - `backups/latest-before-note-style-section-lock-2026-11-13.json` — blob `7a0b4394d314b5e46450bde8cd366fd5c1fa8ae3`
+  - `backups/register-before-note-style-section-lock-2026-11-13.md` — blob `a1d7cda1780cc79dc264ec75660743d08cbd10a0`
+- Source changes were reviewed. Both inline JavaScript blocks passed syntax parsing. Static checks confirmed the Note-style four-digit setup/dialog, generated temporary PIN and copy flow, verification before changing/removing locks, legacy 5–8 digit PIN migration, all three language dictionaries, and unchanged section PIN storage key family.
+- Final source commit: `9e9fd3ce3ea4c6fd04762e802318cd7189fe5f59`. Final source and mirror are byte-identical; both Git blob SHA `5d13b32a95121f0933a28042df334c1416f69f5f`. Independently calculated UTF-8 SHA-256 `ad920b3597dc3f57ff06eeb8dfcbf2615807928d8417797b0f92275778a14ce5` matches live `latest.json.webSha256`. Live webVersion: **191**.
+- Publisher workflow run `43464715352` completed with **success**; publish job `132020633376` and all steps completed successfully.
+- APK unchanged: 1.0.136 / versionCode 135 / SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`. No APK rebuild or signing changes.
+- Physical-device testing is pending. Test each section independently: unlock with the old PIN; if it was 5–8 digits, complete the one-time migration to a 4-digit PIN; test a normal unlock; use Forgot PIN, copy and re-enter the temporary PIN, then set a new PIN; test Change PIN and Remove Lock; confirm records and attachments remain. Do not claim phone-side testing until user confirms.
+- Rollback: restore the verified pre-edit `web-source/index.html` from the backup branch, republish, and re-check source/mirror/feed/hash. Preserve all user data.
