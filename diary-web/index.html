@@ -1179,7 +1179,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  function bindDiaryFingerAdjust(target,kind){
   if(!target||target.getAttribute('data-finger-adjust-bound')==='1')return;
   target.setAttribute('data-finger-adjust-bound','1');
-  var pts={},base=null,pinchSpan=0,pinchZoom=1;
+  var pts={},starts={},base=null,pinchSpan=0,pinchZoom=1;
   function span(){var ids=Object.keys(pts),n=ids.length;if(n<2)return 0;var cx=0,cy=0;ids.forEach(function(id){cx+=pts[id].x;cy+=pts[id].y;});cx/=n;cy/=n;var sum=0;ids.forEach(function(id){var dx=pts[id].x-cx,dy=pts[id].y-cy;sum+=dx*dx+dy*dy;});return Math.sqrt(sum/n);}
   function imageOverflow(){
    var boxW=Math.max(1,target.clientWidth),boxH=Math.max(1,target.clientHeight),data=kind==='Cover'?activeCoverPhotoData:activeDetailPhotoData,cache=target.__diaryFingerImageSize,ar=cache&&cache.src===data?cache.width/Math.max(1,cache.height):1,boxAr=boxW/boxH,wPct=100,hPct=100,v=diaryColourFor(kind);
@@ -1203,7 +1203,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    }
    setDiaryColour(kind,v);diaryFingerPaint(target,kind);
   }
-  function finish(id){if(!pts[id])return;delete pts[id];rebase();}
+  function finish(id){if(!pts[id])return;delete pts[id];delete starts[id];rebase();}
   function inTarget(x,y){var r=target.getBoundingClientRect();return x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom;}
   /* Prefer Pointer Events on Android WebView: each finger has its own pointerId,
      so pinch zoom tracks both contacts reliably. Touch Events remain as fallback. */
@@ -1214,28 +1214,29 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     if(!inTarget(e.clientX,e.clientY))return;
     var id='p'+e.pointerId;
     if(pts[id])return;
-    e.preventDefault();e.stopPropagation();
-    pts[id]={x:e.clientX,y:e.clientY};
+    /* A simple tap must reach the input so the writing keyboard can open. */
+    pts[id]={x:e.clientX,y:e.clientY};starts[id]={x:e.clientX,y:e.clientY};
     rebase();
    },{capture:true,passive:false});
    document.addEventListener('pointermove',function(e){
-    if(!pts['p'+e.pointerId])return;
-    e.preventDefault();
-    pts['p'+e.pointerId]={x:e.clientX,y:e.clientY};
-    apply();
+    var id='p'+e.pointerId;if(!pts[id])return;
+    var start=starts[id]||pts[id],dx=e.clientX-start.x,dy=e.clientY-start.y;
+    if(Math.sqrt(dx*dx+dy*dy)<6)return;
+    e.preventDefault();e.stopPropagation();
+    pts[id]={x:e.clientX,y:e.clientY};apply();
    },{capture:true,passive:false});
    document.addEventListener('pointerup',function(e){finish('p'+e.pointerId);},true);
    document.addEventListener('pointercancel',function(e){finish('p'+e.pointerId);},true);
   }else{
    document.addEventListener('touchstart',function(e){
     var added=false;
-    Array.prototype.forEach.call(e.changedTouches,function(t){if(inTarget(t.clientX,t.clientY)){pts['t'+t.identifier]={x:t.clientX,y:t.clientY};added=true;}});
-    if(added){e.preventDefault();e.stopPropagation();rebase();}
+    Array.prototype.forEach.call(e.changedTouches,function(t){if(inTarget(t.clientX,t.clientY)){var id='t'+t.identifier;pts[id]={x:t.clientX,y:t.clientY};starts[id]={x:t.clientX,y:t.clientY};added=true;}});
+    if(added)rebase();
    },{capture:true,passive:false});
    document.addEventListener('touchmove',function(e){
-    var active=false;
-    Array.prototype.forEach.call(e.touches,function(t){if(pts['t'+t.identifier]){pts['t'+t.identifier]={x:t.clientX,y:t.clientY};active=true;}});
-    if(!active)return;
+    var active=false,moved=false;
+    Array.prototype.forEach.call(e.touches,function(t){var id='t'+t.identifier;if(pts[id]){var start=starts[id]||pts[id],dx=t.clientX-start.x,dy=t.clientY-start.y;pts[id]={x:t.clientX,y:t.clientY};active=true;if(Math.sqrt(dx*dx+dy*dy)>=6)moved=true;}});
+    if(!active||!moved)return;
     e.preventDefault();e.stopPropagation();apply();
    },{capture:true,passive:false});
    document.addEventListener('touchend',function(e){Array.prototype.forEach.call(e.changedTouches,function(t){finish('t'+t.identifier);});},true);
