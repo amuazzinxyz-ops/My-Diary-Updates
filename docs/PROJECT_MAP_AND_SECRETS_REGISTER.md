@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `153`; package `com.personal.diaryapp`. Live feed: `webSha256=d43796f0c2e4998cbeda3bc1f16dfe7019c44076d9574e9ef5e0f64dbdf0b145`.
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `154`; package `com.personal.diaryapp`. Live feed: `webSha256=dcfcf5244c66e2b46dbf8e33189344408754af9abd5cb45a4f5621e3f582ce0b`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -1213,3 +1213,19 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK remains 1.0.136 / versionCode 135; no APK rebuild or signing operation. Notes, photos, PIN data, app data, and package/signing identity were not changed.
 - Physical-device verification is **pending**. User must install Web Update 151 through Me → Check for Updates and test pinch-in and pinch-out separately on Cover, Detail and Photo. Existing drag was already confirmed on Web Update 149; do not claim pinch zoom works until the user confirms it on the phone.
 - Rollback: use the exact pre-edit files on backup/pre-document-pointerdown-pinch-repair-2026-11-13; preserve all local notes, photos, PIN data and app data.
+
+
+# Web Update 154 — Clear change-image control after image selection (2026-11-13)
+
+- User request: make it clear how to replace a selected image when it is not liked. A selected Cover, Detail or attached Photo now changes its picker button label to the localized **Change Image** wording. Tapping the same button opens the existing image-design chooser, where **Choose Image** opens the gallery; selecting a new image replaces only that image target.
+- Changed only `web-source/index.html`, source commit `9e3a180a7b6abd70f24a586e45abe3832de83a09`. Added localized `changeImage` wording for all 10 supported languages. Cover and Detail labels follow whether their respective image data exists; Photo label follows attached-photo state. Language switching refreshes all three labels. Existing image picker, colour/pamphlet chooser, crop/drag/pinch state, text, note records, storage keys, PIN/recovery, native Android source, APK, package identity and signing data were not changed.
+- Starting live state: Web Update 153; APK 1.0.136 / versionCode 135; source/mirror blob SHA `aa9a115ce37c1e3cad115046f13dcf3f7f63a75e`.
+- Pre-edit backup branch: `backup/pre-image-replacement-control-2026-11-13`. Verified readable backups:
+  - `backups/web-source-before-image-replacement-control-2026-11-13.html` (blob SHA `aa9a115ce37c1e3cad115046f13dcf3f7f63a75e`)
+  - `backups/latest-before-image-replacement-control-2026-11-13.json` (blob SHA `e5d475d13a82f5816060a05e83f83cce549310ad`)
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-image-replacement-control-2026-11-13.md` (blob SHA `4e58ae3fb839bec284cfa74f63bc1ea65b624076`)
+- Static checks: all 10 language entries and Cover/Detail/Photo label-state logic were found in the final source; language-refresh logic for all three controls was verified. The source commit changed only `web-source/index.html`. A JavaScript parser run and independent SHA-256 calculation were not available in this session; do not describe those checks as passed.
+- Publisher output commit: `4b53d41fe9bd51225c46aa6286ec930bbb15b653` (“Publish My Diary web bundle update”). Live feed advanced to Web Update 154. Re-fetched source and published mirror are byte-identical; both Git blob SHA `e145f56506ea6aef721a8673fecbb3fc859c76f9`. Live `latest.json.webSha256` is `dcfcf5244c66e2b46dbf8e33189344408754af9abd5cb45a4f5621e3f582ce0b` (publisher/feed value; independent calculation not performed). Workflow run ID/conclusion was not exposed by the available status lookup; the publisher output commit, mirrored file and advanced feed were verified.
+- APK unchanged: 1.0.136 / versionCode 135 / SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`; no APK rebuild or signing changes.
+- Physical-device verification pending. User should install Web Update 154 using **Me → Check for Updates**, then test changing Cover, Detail and Photo individually; confirm the existing text and the other images remain unchanged.
+- Rollback: use the exact pre-edit files on `backup/pre-image-replacement-control-2026-11-13`; preserve local notes, photos, PIN data and app data.
