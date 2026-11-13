@@ -1,0 +1,14 @@
+{
+  "appName": "My Diary",
+  "packageName": "com.personal.diaryapp",
+  "versionCode": 135,
+  "versionName": "1.0.136",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.136.apk",
+  "sha256": "6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348",
+  "releaseNotes": "Android Back now closes the entire Diary in one press from any Diary section. Existing notes, photos, PIN data, and app identity are preserved.",
+  "minimumSupportedVersionCode": 1,
+  "webVersion": 167,
+  "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
+  "webSha256": "87a7d661f06322370dfe5ac87a7aef555eeaeb6844c82ffe302465c9f3b53751",
+  "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
+}
