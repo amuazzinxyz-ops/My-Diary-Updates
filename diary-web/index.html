@@ -1203,13 +1203,16 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   /* Prefer Pointer Events on Android WebView: each finger has its own pointerId,
      so pinch zoom tracks both contacts reliably. Touch Events remain as fallback. */
   if(window.PointerEvent){
-   target.addEventListener('pointerdown',function(e){
-    if(diaryFingerAdjustKind!==kind)return;
+   /* Listen at document capture level so the second finger is detected anywhere
+      inside the selected image box, even when Android targets a frame/child node. */
+   document.addEventListener('pointerdown',function(e){
+    if(diaryFingerAdjustKind!==kind||!inTarget(e.clientX,e.clientY))return;
+    var id='p'+e.pointerId;
+    if(pts[id])return;
     e.preventDefault();e.stopPropagation();
-    pts['p'+e.pointerId]={x:e.clientX,y:e.clientY};
-    try{target.setPointerCapture(e.pointerId);}catch(ignore){}
+    pts[id]={x:e.clientX,y:e.clientY};
     rebase();
-   },{passive:false});
+   },{capture:true,passive:false});
    document.addEventListener('pointermove',function(e){
     if(diaryFingerAdjustKind!==kind||!pts['p'+e.pointerId])return;
     e.preventDefault();
@@ -1218,7 +1221,6 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    },{capture:true,passive:false});
    document.addEventListener('pointerup',function(e){finish('p'+e.pointerId);},true);
    document.addEventListener('pointercancel',function(e){finish('p'+e.pointerId);},true);
-   document.addEventListener('lostpointercapture',function(e){finish('p'+e.pointerId);},true);
   }else{
    document.addEventListener('touchstart',function(e){
     if(diaryFingerAdjustKind!==kind)return;
