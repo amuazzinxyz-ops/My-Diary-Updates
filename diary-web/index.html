@@ -639,11 +639,18 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 #diaryMyNotesPanel .diary-diary-card-image{max-width:100%;margin:10px auto}
 </style>
 <style id="diary-image-colour-choice-menu">
-#diaryMyNotesEditor .diary-image-choice-menu{display:flex;flex-wrap:wrap;align-items:center;gap:6px;width:100%;box-sizing:border-box;padding:8px;margin:3px 0 8px;border:1px solid #d4af37;border-radius:10px;background:linear-gradient(145deg,#fffdf5,#eee6ff);box-shadow:0 3px 9px rgba(40,20,60,.16)}
+#diaryMyNotesEditor .diary-image-choice-menu{display:block;width:100%;box-sizing:border-box;padding:12px;margin:7px 0 11px;border:2px solid #d4af37;border-radius:15px;background:radial-gradient(circle at top right,rgba(255,255,255,.96),transparent 42%),linear-gradient(145deg,#fff9e8 0%,#f1e8ff 52%,#fffdf5 100%);box-shadow:inset 0 2px 0 #fff,0 4px 0 #9b7415,0 8px 16px rgba(55,35,75,.16);overflow:hidden}
 #diaryMyNotesEditor .diary-image-choice-menu[hidden],#diaryMyNotesEditor .diary-gradient-colour-tools[hidden]{display:none!important}
-#diaryMyNotesEditor .diary-image-choice-menu button{padding:7px 10px!important;border:1px solid #a77a16!important;border-radius:8px!important;background:linear-gradient(145deg,#fff1bd,#d8b34d)!important;color:#382700!important;font-weight:800!important}
-#diaryMyNotesEditor .diary-image-choice-menu input[type=color]{width:38px;height:34px;padding:2px;border:1px solid #b28a2a;border-radius:7px;background:#fff}
-#diaryMyNotesEditor .diary-gradient-colour-tools{display:inline-flex;gap:6px;align-items:center}
+#diaryMyNotesEditor .diary-image-choice-intro{padding:2px 2px 9px}
+#diaryMyNotesEditor .diary-image-choice-kicker{font-size:10px;letter-spacing:1.5px;font-weight:1000;color:#94701d}
+#diaryMyNotesEditor .diary-image-choice-title{margin-top:3px;font-size:17px;line-height:1.25;font-weight:1000;color:#45236f}
+#diaryMyNotesEditor .diary-image-choice-description{margin-top:5px;font-size:13px;line-height:1.45;font-weight:700;color:#51465c}
+#diaryMyNotesEditor .diary-image-choice-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;align-items:stretch}
+#diaryMyNotesEditor .diary-image-choice-menu button{min-width:0;padding:9px 5px!important;border:1px solid #a77a16!important;border-radius:10px!important;background:linear-gradient(145deg,#fff1bd,#d8b34d)!important;color:#382700!important;font-size:12px!important;line-height:1.25;font-weight:900!important;box-shadow:inset 0 1px 0 #fff6d7,0 2px 0 #9b7415!important}
+#diaryMyNotesEditor .diary-image-choice-menu button:active{transform:translateY(2px);box-shadow:inset 0 1px 0 #fff6d7,0 0 0 #9b7415!important}
+#diaryMyNotesEditor .diary-image-choice-menu input[type=color]{width:46px;height:39px;margin:9px 5px 0 0;padding:3px;border:2px solid #d4af37;border-radius:9px;background:#fff;box-shadow:0 2px 0 #9b7415}
+#diaryMyNotesEditor .diary-gradient-colour-tools{display:flex;gap:9px;align-items:center;margin-top:7px}
+@media(max-width:380px){#diaryMyNotesEditor .diary-image-choice-actions{grid-template-columns:1fr}#diaryMyNotesEditor .diary-image-choice-menu button{font-size:13px!important}}
 </style>
 <style id="diary-image-controls-next-to-existing-fields">
 #diaryMyNotesEditor .diary-diary-field-label-row{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:7px 0 4px}
@@ -795,6 +802,20 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  telugu:{chooseImage:'🖼️ చిత్రాన్ని ఎంచుకోండి',solidColour:'🎨 ఒక రంగు',gradientColour:'🌈 రెండు రంగుల గ్రేడియెంట్',colourOne:'మొదటి రంగు',colourTwo:'రెండవ రంగు'}
  };
  Object.keys(diaryImageColourWords).forEach(function(k){Object.assign(words[k],diaryImageColourWords[k]);});
+ var diaryImagePurposeWords={
+ roman:{imageDesignKicker:'NOTE DESIGN',coverPickerTitle:'Note Cover Photo',coverPickerDesc:'Naam wale box ko sajane ke liye photo ya rang chunein.',detailPickerTitle:'Details Image',detailPickerDesc:'Likhne wale box ko sajane ke liye photo ya rang chunein.',photoPickerTitle:'Photo Lagayein',photoPickerDesc:'Note ke saath alag photo attach karein aur uska frame rang chunein.'},
+ english:{imageDesignKicker:'NOTE DESIGN',coverPickerTitle:'Note Cover Photo',coverPickerDesc:'Choose a photo or colour for the note title box.',detailPickerTitle:'Details Image',detailPickerDesc:'Choose a photo or colour for the writing box.',photoPickerTitle:'Attach Photo',photoPickerDesc:'Add a separate photo with your note and choose its frame colour.'},
+ hindi:{imageDesignKicker:'नोट डिज़ाइन',coverPickerTitle:'नोट कवर फ़ोटो',coverPickerDesc:'नाम वाले बॉक्स को सजाने के लिए फ़ोटो या रंग चुनें।',detailPickerTitle:'विवरण की तस्वीर',detailPickerDesc:'लिखने वाले बॉक्स को सजाने के लिए फ़ोटो या रंग चुनें।',photoPickerTitle:'फ़ोटो लगाएँ',photoPickerDesc:'नोट के साथ अलग फ़ोटो जोड़ें और उसके फ़्रेम का रंग चुनें।'},
+ urdu:{imageDesignKicker:'نوٹ ڈیزائن',coverPickerTitle:'نوٹ کور تصویر',coverPickerDesc:'نام والے خانے کو سجانے کے لیے تصویر یا رنگ منتخب کریں۔',detailPickerTitle:'تفصیل کی تصویر',detailPickerDesc:'لکھنے والے خانے کو سجانے کے لیے تصویر یا رنگ منتخب کریں۔',photoPickerTitle:'تصویر لگائیں',photoPickerDesc:'نوٹ کے ساتھ الگ تصویر لگائیں اور اس کے فریم کا رنگ منتخب کریں۔'},
+ arabic:{imageDesignKicker:'تصميم الملاحظة',coverPickerTitle:'صورة غلاف الملاحظة',coverPickerDesc:'اختر صورة أو لونًا لتزيين مربع عنوان الملاحظة.',detailPickerTitle:'صورة التفاصيل',detailPickerDesc:'اختر صورة أو لونًا لتزيين مربع الكتابة.',photoPickerTitle:'إرفاق صورة',photoPickerDesc:'أرفق صورة مستقلة بالملاحظة واختر لون إطارها.'},
+ bengali:{imageDesignKicker:'নোট ডিজাইন',coverPickerTitle:'নোট কভার ছবি',coverPickerDesc:'নামের ঘর সাজাতে ছবি বা রং বেছে নিন।',detailPickerTitle:'বিস্তারিত ছবি',detailPickerDesc:'লেখার ঘর সাজাতে ছবি বা রং বেছে নিন।',photoPickerTitle:'ছবি যোগ করুন',photoPickerDesc:'নোটের সঙ্গে আলাদা ছবি যোগ করুন এবং ফ্রেমের রং বেছে নিন।'},
+ gujarati:{imageDesignKicker:'નોટ ડિઝાઇન',coverPickerTitle:'નોટ કવર ફોટો',coverPickerDesc:'નામના બોક્સને સજાવવા ફોટો અથવા રંગ પસંદ કરો.',detailPickerTitle:'વિગતનો ફોટો',detailPickerDesc:'લખવાના બોક્સને સજાવવા ફોટો અથવા રંગ પસંદ કરો.',photoPickerTitle:'ફોટો ઉમેરો',photoPickerDesc:'નોટ સાથે અલગ ફોટો જોડો અને તેની ફ્રેમનો રંગ પસંદ કરો.'},
+ marathi:{imageDesignKicker:'नोट डिझाइन',coverPickerTitle:'नोट कव्हर फोटो',coverPickerDesc:'नावाचा बॉक्स सजवण्यासाठी फोटो किंवा रंग निवडा.',detailPickerTitle:'तपशीलांचा फोटो',detailPickerDesc:'लिहिण्याचा बॉक्स सजवण्यासाठी फोटो किंवा रंग निवडा.',photoPickerTitle:'फोटो जोडा',photoPickerDesc:'नोटसोबत वेगळा फोटो जोडा आणि त्याच्या फ्रेमचा रंग निवडा.'},
+ tamil:{imageDesignKicker:'குறிப்பு வடிவமைப்பு',coverPickerTitle:'குறிப்பு அட்டை படம்',coverPickerDesc:'பெயர் பெட்டியை அலங்கரிக்க படம் அல்லது நிறத்தைத் தேர்ந்தெடுக்கவும்.',detailPickerTitle:'விவரப் படம்',detailPickerDesc:'எழுதும் பெட்டியை அலங்கரிக்க படம் அல்லது நிறத்தைத் தேர்ந்தெடுக்கவும்.',photoPickerTitle:'படம் இணைக்கவும்',photoPickerDesc:'குறிப்புடன் தனிப் படத்தை இணைத்து அதன் சட்ட நிறத்தைத் தேர்ந்தெடுக்கவும்.'},
+ telugu:{imageDesignKicker:'నోట్ డిజైన్',coverPickerTitle:'నోట్ కవర్ ఫోటో',coverPickerDesc:'పేరు పెట్టెను అలంకరించడానికి ఫోటో లేదా రంగును ఎంచుకోండి.',detailPickerTitle:'వివరాల చిత్రం',detailPickerDesc:'వ్రాసే పెట్టెను అలంకరించడానికి ఫోటో లేదా రంగును ఎంచుకోండి.',photoPickerTitle:'ఫోటో జోడించండి',photoPickerDesc:'నోట్‌తో వేరే ఫోటోను జోడించి దాని ఫ్రేమ్ రంగును ఎంచుకోండి.'}
+ };
+ Object.keys(diaryImagePurposeWords).forEach(function(k){Object.assign(words[k],diaryImagePurposeWords[k]);});
+
  words["english"]["interfaceColours"]="🎨 Interface Colours";
  words["english"]["themeDefault"]="Restore My Diary Original Colour";
  words["english"]["themeBlue"]="Blue";
@@ -1081,19 +1102,36 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  function diaryColourCss(v){v=cleanDiaryColour(v);return v.mode==='gradient'?'linear-gradient(135deg,'+v.first+','+v.second+')':v.mode==='solid'?v.first:'';}
  function diaryTint(hex,a){var x=hex.slice(1);return 'rgba('+parseInt(x.slice(0,2),16)+','+parseInt(x.slice(2,4),16)+','+parseInt(x.slice(4,6),16)+','+a+')';}
  function attachDiaryColourChooser(btn,file,kind){
-  if(!btn||!file)return;var menu=el('div',{class:'diary-image-choice-menu',hidden:'hidden'});
-  var choose=el('button',{type:'button'},t('chooseImage')),solidBtn=el('button',{type:'button'},t('solidColour')),gradBtn=el('button',{type:'button'},t('gradientColour'));
-  var solid=el('input',{type:'color',value:'#f4e6a8','aria-label':t('solidColour')}),one=el('input',{type:'color',value:'#f4e6a8','aria-label':t('colourOne')}),two=el('input',{type:'color',value:'#8e63c6','aria-label':t('colourTwo')});
-  var grad=el('div',{class:'diary-gradient-colour-tools',hidden:'hidden'});solid.style.display='none';one.style.display='none';two.style.display='none';grad.append(one,two);menu.append(choose,solidBtn,solid,gradBtn,grad);
+  if(!btn||!file)return;
+  var titleKey=kind==='Cover'?'coverPickerTitle':kind==='Detail'?'detailPickerTitle':'photoPickerTitle';
+  var descKey=kind==='Cover'?'coverPickerDesc':kind==='Detail'?'detailPickerDesc':'photoPickerDesc';
+  var icon=kind==='Cover'?'📘':kind==='Detail'?'✍️':'🖼️';
+  var menu=el('section',{class:'diary-image-choice-menu',hidden:'hidden','aria-label':t(titleKey)});
+  var intro=el('div',{class:'diary-image-choice-intro'});
+  intro.appendChild(el('div',{class:'diary-image-choice-kicker'},t('imageDesignKicker')));
+  intro.appendChild(el('div',{class:'diary-image-choice-title'},icon+' '+t(titleKey)));
+  intro.appendChild(el('div',{class:'diary-image-choice-description'},t(descKey)));
+  var actions=el('div',{class:'diary-image-choice-actions'});
+  var choose=el('button',{type:'button',class:'diary-image-choice-image'},t('chooseImage'));
+  var solidBtn=el('button',{type:'button',class:'diary-image-choice-solid'},t('solidColour'));
+  var gradBtn=el('button',{type:'button',class:'diary-image-choice-gradient'},t('gradientColour'));
+  var solid=el('input',{type:'color',value:'#f4e6a8','aria-label':t('solidColour')});
+  var one=el('input',{type:'color',value:'#f4e6a8','aria-label':t('colourOne')});
+  var two=el('input',{type:'color',value:'#8e63c6','aria-label':t('colourTwo')});
+  var grad=el('div',{class:'diary-gradient-colour-tools',hidden:'hidden'});
+  solid.style.display='none';one.style.display='none';two.style.display='none';
+  grad.append(one,two);actions.append(choose,solidBtn,gradBtn);menu.append(intro,actions,solid,grad);
   function redraw(){if(kind==='Cover'||kind==='Detail')renderDiaryImagePreview(kind);else renderDiaryPhotoPreview();}
   function close(){menu.hidden=true;btn.setAttribute('aria-expanded','false');}
-  btn.setAttribute('aria-expanded','false');btn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();menu.hidden=!menu.hidden;btn.setAttribute('aria-expanded',menu.hidden?'false':'true');});
+  btn.setAttribute('aria-expanded','false');
+  btn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();menu.hidden=!menu.hidden;btn.setAttribute('aria-expanded',menu.hidden?'false':'true');});
   choose.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();close();file.click();});
   solidBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var v=diaryColourFor(kind);v.mode='solid';setDiaryColour(kind,v);solid.value=v.first;solid.style.display='inline-block';grad.hidden=true;one.style.display='none';two.style.display='none';redraw();solid.click();});
   solid.addEventListener('input',function(){var v=diaryColourFor(kind);v.mode='solid';v.first=solid.value;setDiaryColour(kind,v);redraw();});
   gradBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var v=diaryColourFor(kind);v.mode='gradient';setDiaryColour(kind,v);one.value=v.first;two.value=v.second;solid.style.display='none';grad.hidden=false;one.style.display='inline-block';two.style.display='inline-block';redraw();});
   function gradientChange(){var v=diaryColourFor(kind);v.mode='gradient';v.first=one.value;v.second=two.value;setDiaryColour(kind,v);redraw();}
-  one.addEventListener('input',gradientChange);two.addEventListener('input',gradientChange);btn.parentNode.insertBefore(menu,btn.nextSibling);
+  one.addEventListener('input',gradientChange);two.addEventListener('input',gradientChange);
+  btn.parentNode.insertBefore(menu,btn.nextSibling);
  }
  function makeDiaryImageSection(prefix,labelText){
   var wrap=el('div',{class:'diary-diary-image-picker',id:'diaryDiary'+prefix+'Picker'});
