@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `146`; package `com.personal.diaryapp`. Live feed: `webSha256=`9c3aacda52194dc8d1ebe25b3cdbb1b043c7ef48fce78768ae15d5ab80d83471`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current. This corrects the stale webVersion 140 entry below.
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `148`; package `com.personal.diaryapp`. Live feed: `webSha256=`0380cfa8045407eef7e58803514bfc4a1f0a5f3425286cebd0d247064e184ea0`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current. This corrects the stale webVersion 140 entry below.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -1100,3 +1100,23 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK unchanged at 1.0.136 / versionCode 135; no APK rebuild or signing operation.
 - Physical-device testing remains pending. Ask user to install Web Update 146 through Me → Check for Updates and test left/right drag, up/down drag, two-finger pinch-in and pinch-out. Do not claim phone-side success until user confirms.
 - Rollback: restore exact pre-edit files from backup/pre-horizontal-drag-pinch-repair-2026-11-13. Preserve all local notes, photos, PIN data and app data.
+
+---
+
+# Web Update 148 — Correct layered background image adjustment (2026-11-13)
+
+- User reported that after Web Update 146, the image still moved only vertically; horizontal drag and two-finger zoom in/out did not work. The “Diary pehle se update hai” message was traced to the installed HTML SHA matching the live web bundle, not to the APK version.
+- Re-inspected the current live Master Register, latest.json, web source and published mirror. Starting state: APK 1.0.136 / versionCode 135; webVersion 146; source/mirror blob SHA 6cc67040b3c3ecc20440b457a4eca7c9e4103d6f.
+- Root cause found in the actual field-image renderer: each field photo is painted as multiple CSS background layers (optional tint, dark overlay, and the photo). The adjustment code was not explicitly separating the fixed overlay layers from the movable/zoomable photo layer. The repair now computes matching per-layer background-position, background-size, and background-repeat lists: overlays stay fitted to the field while only the actual photo layer receives its saved position and zoom. The same helper is used by initial image rendering and live finger adjustment.
+- Scope: web-only; changed only web-source/index.html in two sequential commits: d6826be5e4eedd123f33938190bb93e23c3e81fe (initial layer separation) and 517faeb7a2671a8e165346944d52afd4e7e368c4 (per-layer repeat alignment). No APK rebuild, native Android change, data/storage key change, note/photo/PIN change, or unrelated UI change.
+- Pre-edit backup branch: backup/pre-layered-background-adjust-repair-2026-11-13. Verified readable backups:
+  - backups/web-source-before-layered-background-adjust-repair-2026-11-13.html
+  - backups/diary-web-before-layered-background-adjust-repair-2026-11-13.html
+  - backups/latest-before-layered-background-adjust-repair-2026-11-13.json
+  - backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-layered-background-adjust-repair-2026-11-13.md
+- Publisher workflows: run 43380705300 (run 137) and final run 43380881224 (run 138) both completed successfully; final run 138 publish job and all steps succeeded.
+- Post-publish verification: web-source/index.html and diary-web/index.html are byte-identical; both Git blob SHA 962a0d43fc18dcbd8494cae4ec0ae603228c450d. Independently calculated UTF-8 SHA-256 0380cfa8045407eef7e58803514bfc4a1f0a5f3425286cebd0d247064e184ea0 matches live latest.json.webSha256. Live webVersion is 148.
+- JavaScript parse check: both inline script blocks parsed successfully. Source/mirror/feed and backup checks passed.
+- APK remains 1.0.136 / versionCode 135; APK SHA-256 remains 6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348. No APK rebuild or signing operation.
+- Physical-device verification is **pending**. Do not claim horizontal drag or pinch zoom works until the user tests it on the phone after receiving Web Update 148.
+- Rollback: use the exact pre-edit files on backup/pre-layered-background-adjust-repair-2026-11-13. Preserve all local notes, photos, PIN data and app data.
