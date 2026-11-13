@@ -2257,12 +2257,12 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      });
      pinInput.addEventListener('keydown',function(e){e.stopPropagation();if(e.key==='Enter'){e.preventDefault();if(pinInput.value.length===4&&pinInput.dataset.autoSubmitted!=='1'){pinInput.dataset.autoSubmitted='1';unlockWithEnteredPin(n,pinInput);}}});
      card.appendChild(pinInput);
-     var actions=el('div');actions.style.cssText='display:flex;gap:8px;flex-wrap:nowrap;align-items:center;margin-top:7px;';
+     var actions=el('div');actions.style.cssText='display:flex;flex-direction:column;gap:9px;align-items:stretch;width:100%;min-width:0;box-sizing:border-box;margin-top:9px;';
      var forgotBtn=el('button',{type:'button',class:'diary-note-edit'},t('forgotPin'));
      forgotBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();forgotPin(n)});
      var offBtn=el('button',{type:'button',class:'diary-note-edit'},t('lockOff'));
      offBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();turnLockOff(n)});
-     forgotBtn.style.cssText='flex:1 1 0;min-width:0;white-space:nowrap;margin-top:0;padding:8px 5px;font-size:12px;';offBtn.style.cssText='flex:1 1 0;min-width:0;white-space:nowrap;margin-top:0;padding:8px 5px;font-size:12px;';actions.appendChild(forgotBtn);actions.appendChild(offBtn);card.appendChild(actions);
+     forgotBtn.style.cssText='display:block;flex:0 0 auto;width:100%;min-width:0;max-width:100%;min-height:46px;box-sizing:border-box;white-space:normal;overflow-wrap:anywhere;text-align:center;line-height:1.25;margin-top:0;padding:11px 12px;font-size:14px;font-weight:900;';offBtn.style.cssText='display:block;flex:0 0 auto;width:100%;min-width:0;max-width:100%;min-height:46px;box-sizing:border-box;white-space:normal;overflow-wrap:anywhere;text-align:center;line-height:1.25;margin-top:0;padding:11px 12px;font-size:14px;font-weight:900;';actions.appendChild(forgotBtn);actions.appendChild(offBtn);card.appendChild(actions);
     }
     if(!n.pinLock){var lockBtn=el('button',{type:'button',class:'diary-note-edit'},t('lockAction'));lockBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();setNoteLock(n)});card.appendChild(lockBtn);}
     else if(noteIsUnlocked(n)){var lockBtn=el('button',{type:'button',class:'diary-note-edit'},t('lockAction'));lockBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();setNoteLock(n)});card.appendChild(lockBtn);}
