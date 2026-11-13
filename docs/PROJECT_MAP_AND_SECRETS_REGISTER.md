@@ -929,3 +929,29 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Static checks passed: both inline scripts parse; SHA-256 implementation passed the standard `abc` test vector; all 10 language dictionaries contain the new chooser labels; source/mirror/feed checks passed. Actual Android phone interaction and visual verification remain **pending**.
 - Phone test: use **Me → Check for Updates**. In a new note, tap each of the three existing image buttons. Confirm its menu offers image, solid colour and gradient; choose colours, attach images, save, reopen/edit, and share the note. Also check an older note to confirm its existing images still display normally. Do not claim phone-side testing until the user confirms.
 - Rollback: use the backup branch and the exact pre-change HTML, feed and Register files listed above; preserve all local notes and app data.
+
+
+---
+
+# Web Update 137 — Purpose-specific design panels inside the three image buttons (2026-11-13)
+
+- User clarified that the three existing image buttons should open attractive, clearly explained panels, with the image and colour choices visible inside each panel.
+- Starting live state: APK **1.0.136 / versionCode 135**, webVersion **136**, package `com.personal.diaryapp`. Read the live feed and Master Register before editing.
+- Scope: web-only Diary image-picker panel UI, localized labels/descriptions and related CSS. No native Android source, APK, package/signing identity, updater logic, note storage keys, PIN/recovery logic, or unrelated features were changed.
+- All three existing controls now open a purpose-specific premium-style panel:
+  1. **Note Cover Photo** — explains that it decorates the note-name/title box.
+  2. **Details Image** — explains that it decorates the writing/details box.
+  3. **Photo Lagayein / Attach Photo** — explains that it attaches a separate photo to the note and styles its frame.
+- Each panel displays **Choose Image**, **Solid Colour**, and **Gradient Colour** choices within the same panel. No separate Colour button or extra image button was added. Existing colour selection and persistence logic from Web Update 136 remains in place.
+- Added panel headings and explanatory descriptions for all 10 supported languages: Roman English, English, Hindi, Urdu, Arabic, Bengali, Gujarati, Marathi, Tamil and Telugu.
+- Verified pre-edit backups on branch `backup/pre-image-button-pamphlet-panels-2026-11-13`:
+  - `backups/web-source-before-image-button-pamphlet-panels-2026-11-13.html`
+  - `backups/diary-web-before-image-button-pamphlet-panels-2026-11-13.html`
+  - `backups/latest-before-image-button-pamphlet-panels-2026-11-13.json`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-image-button-pamphlet-panels-2026-11-13.md`
+- Source change commit: `7e042007a60e0db45d140cbf117430fbe0bb34c5`. Web-only workflow run **43367264608** (run 127) completed successfully.
+- Post-publish verification: source and mirror are byte-identical; both Git blob SHA `fe20d5c8e6f15e6790cdfd75a86b81026b5aa461`. Independently calculated UTF-8 SHA-256 `113d77a5e1aa74d0358f978dfa71583bfdf806128b15ff16fdb9b6cbd419ad9d` exactly matches live `latest.json.webSha256`; live webVersion **137**.
+- Both inline scripts parse successfully. All 10 language dictionaries contain the seven panel heading/description labels.
+- APK remains **1.0.136 / versionCode 135**, SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`; no APK rebuild or signing operation occurred.
+- Phone-side visual and interaction testing remains **pending**. Use **Me → Check for Updates**, tap each of the three existing buttons, and confirm the correct purpose panel and its three choices appear. Test image selection and colour selection in each panel.
+- Rollback: use the verified backup branch and exact pre-change files listed above. Preserve all local notes, photos and app data.
