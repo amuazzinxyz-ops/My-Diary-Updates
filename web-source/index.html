@@ -1734,8 +1734,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   box.appendChild(heading);box.appendChild(input);box.appendChild(recoveryStatus);box.appendChild(forgot);shade.appendChild(box);document.body.appendChild(shade);setTimeout(function(){input.focus();},50);
  }
  function compressDataUrlToBlob(dataUrl){var parts=String(dataUrl||'').split(',');var mime=(parts[0].match(/:(.*?);/)||[])[1]||'image/jpeg';var raw=atob(parts[1]||'');var arr=new Uint8Array(raw.length);for(var i=0;i<raw.length;i++)arr[i]=raw.charCodeAt(i);return new Blob([arr],{type:mime});}
- var diaryShareImageCache=Object.create(null),diaryShareImagePending=Object.create(null);
- function shareNote(n,prepareOnly){
+ var diaryShareImageCache=Object.create(null),diaryShareImagePending=Object.create(null),diaryShareImageCallbacks=Object.create(null);
+ function shareNote(n,prepareOnly,onPrepared){
   /* Prepare the composed PNG while the expanded note is visible. The final
      Share call then happens directly inside the user's tap, as mobile browsers require. */
   var cacheKey=String(n.id||'')+':'+String(n.updated||0)+':'+language();
@@ -1744,8 +1744,9 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   function setStatus(message){if(status)status.textContent=message;}
   function downloadBlob(blob){try{var url=URL.createObjectURL(blob),a=el('a',{href:url,download:'Diary-Diary-Note.png'});document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},1500);setStatus(language()==='english'?'Combined diary image saved.':language()==='hindi'?'दोनों तस्वीरों और लिखे हुए पाठ वाली डायरी इमेज सेव हो गई।':'Dono images aur text ek saath image mein save ho gaya.');}catch(e){setStatus(t('copyFailed'));}}
   if(prepareOnly){
-   if(ready||diaryShareImagePending[cacheKey])return;
-   diaryShareImagePending[cacheKey]=true;
+   if(ready){if(onPrepared)onPrepared();return;}
+   if(diaryShareImagePending[cacheKey]){if(onPrepared)(diaryShareImageCallbacks[cacheKey]||(diaryShareImageCallbacks[cacheKey]=[])).push(onPrepared);return;}
+   diaryShareImagePending[cacheKey]=true;diaryShareImageCallbacks[cacheKey]=onPrepared?[onPrepared]:[];
   }else if(ready){
    try{
     var readyFile=new File([ready.blob],'Diary-Diary-Note.png',{type:'image/png'});
@@ -1848,8 +1849,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    ctx.fillStyle='#fffaf0';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='800 27px Arial, sans-serif';ctx.fillText('My Diary',W/2,H-margin-45);
    ctx.restore();
    canvas.toBlob(function(blob){
-    if(!blob){delete diaryShareImagePending[cacheKey];setStatus(t('copyFailed'));return;}
-    if(prepareOnly){diaryShareImageCache[cacheKey]={blob:blob};delete diaryShareImagePending[cacheKey];return;}
+    if(!blob){delete diaryShareImagePending[cacheKey];(diaryShareImageCallbacks[cacheKey]||[]).forEach(function(fn){try{fn();}catch(e){}});delete diaryShareImageCallbacks[cacheKey];setStatus(t('copyFailed'));return;}
+    if(prepareOnly){diaryShareImageCache[cacheKey]={blob:blob};delete diaryShareImagePending[cacheKey];(diaryShareImageCallbacks[cacheKey]||[]).forEach(function(fn){try{fn();}catch(e){}});delete diaryShareImageCallbacks[cacheKey];return;}
     var file=new File([blob],'Diary-Diary-Note.png',{type:'image/png'});
     function download(){downloadBlob(blob);}
     try{
@@ -1860,7 +1861,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      }else download();
     }catch(err){download();}
    },'image/png');
-  }).catch(function(){delete diaryShareImagePending[cacheKey];setStatus(t('copyFailed'));});
+  }).catch(function(){delete diaryShareImagePending[cacheKey];(diaryShareImageCallbacks[cacheKey]||[]).forEach(function(fn){try{fn();}catch(e){}});delete diaryShareImageCallbacks[cacheKey];setStatus(t('copyFailed'));});
  }
 
  function newNote(){
@@ -2182,7 +2183,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      if(n.detailPhotoData&&String(n.detailPhotoData).indexOf('data:image/')===0){applyDiaryFieldImage(bodyDisplay,n.detailPhotoData,'body',n.detailColour);bodyDisplay.classList.add('diary-diary-card-field-image');}else if(n.detailColour&&n.detailColour.mode&&n.detailColour.mode!=='none'){applyDiaryFieldImage(bodyDisplay,null,'body',n.detailColour);}applyDiaryTextFormat(bodyDisplay,n.detailTextFormat);
      card.appendChild(bodyDisplay);
      if(n.photoData&&String(n.photoData).indexOf('data:image/')===0){var savedPhoto=el('img',{src:n.photoData,alt:t('attachedPhoto')});savedPhoto.className='diary-note-attached-photo';var savedPhotoCrop=cleanDiaryColour(n.photoColour);savedPhoto.style.transform='translate('+savedPhotoCrop.posX+'%,'+savedPhotoCrop.posY+'%) scale('+savedPhotoCrop.zoom+')';savedPhoto.style.transformOrigin='center center';var savedPhotoTheme=diaryPamphletStyle(cleanDiaryColour(n.photoColour).template);savedPhoto.style.cssText='padding:'+(savedPhotoTheme?'12px':'9px')+';background:'+(diaryColourCss(n.photoColour)||'#eee')+';border:'+(savedPhotoTheme?'5px double '+savedPhotoTheme.border:'2px solid #d4af37')+';border-radius:'+(savedPhotoTheme?'5px':'12px')+';';card.appendChild(savedPhoto);}
-     var shareBtn=el('button',{type:'button',class:'diary-note-edit'},t('shareNote'));shareBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();shareNote(n)});card.appendChild(shareBtn);shareNote(n,true);
+     var shareKey=String(n.id||'')+':'+String(n.updated||0)+':'+language();var shareBtn=el('button',{type:'button',class:'diary-note-edit'},t('shareNote'));shareBtn.disabled=!diaryShareImageCache[shareKey];shareBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();shareNote(n)});card.appendChild(shareBtn);shareNote(n,true,function(){shareBtn.disabled=false;});
      var copyBtn=el('button',{type:'button',class:'diary-note-edit'},t('copyAction'));
      copyBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();copyNote(n)});card.appendChild(copyBtn);
      var editBtn=el('button',{type:'button',class:'diary-note-edit'},t('editAction'));
