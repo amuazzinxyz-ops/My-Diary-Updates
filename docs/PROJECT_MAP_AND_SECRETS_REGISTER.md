@@ -1827,3 +1827,28 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK unchanged: 1.0.136 / versionCode 135 / SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`; no APK rebuild or signing changes.
 - Physical-device verification is pending. User should install web update 192 through **Me → Check for Updates**, then test Forgot PIN independently in all three sections: copy the temporary PIN, verify that copy alone does not advance, tap Unlock, enter a wrong PIN and confirm no new-PIN screen appears, then enter the correct temporary PIN and confirm only then that new PIN setup opens. Also confirm existing records and attachments remain. Do not claim phone-side testing until the user confirms.
 - Rollback: restore the verified pre-edit `web-source/index.html` from the backup branch, republish, and re-check source/mirror/feed. Preserve all user data.
+
+
+---
+
+# Web Update 193 — Match Me-section recovery PIN steps to Note Lock (2026-11-13)
+
+- User confirmed the exact recovery behavior to align: after copying the temporary PIN, the popup should advance directly to PIN entry; entering four digits should automatically verify; a wrong PIN should show the Note Lock-style error popup and allow retry; only the correct temporary PIN may proceed to new PIN setup and confirmation.
+- Starting live state: Web Update 192; APK 1.0.136 / versionCode 135; source/mirror blob `7bf375b9d2345509f2b2f9307b05961cd84fae70`; starting web SHA-256 `a881d44a7ae85c7adb55374cd30b0cb1d29eeba0dfe2db46f25623e9569cb811`.
+- Scope: changed only the Me-section PIN recovery UI/flow in `web-source/index.html`. The shared handler covers My Kharcha, My Documents and My Memories. Existing PIN setup, PIN confirmation, current-PIN verification for Change/Remove, PBKDF2 PIN storage, section data and attachments remain unchanged. Note Lock and Diary Lock were not edited.
+- Recovery flow now follows Note Lock's sequence:
+  - The temporary-PIN popup has a Copy button only; successful copy closes it and opens the recovery PIN entry dialog.
+  - The recovery dialog auto-verifies as soon as four numeric digits are entered (Enter also works); there is no extra Unlock/Continue button.
+  - A wrong recovery PIN shows the same purple Note Lock-style error popup; closing that popup retries recovery PIN entry.
+  - A correct recovery PIN alone opens the existing new-PIN setup and confirmation flow. Closing recovery entry cancels without creating a new PIN.
+  - Clipboard failure leaves the temporary-PIN popup open and shows the localized failure label.
+- Pre-edit backup branch: `backup/me-lock-note-recovery-flow-2026-11-13`. Verified exact backups:
+  - `backups/web-source-before-me-lock-note-recovery-flow-2026-11-13.html` — blob `7bf375b9d2345509f2b2f9307b05961cd84fae70`
+  - `backups/diary-web-before-me-lock-note-recovery-flow-2026-11-13.html` — same blob
+  - `backups/latest-before-me-lock-note-recovery-flow-2026-11-13.json` — blob `1cbbbe0045c654c3e3fec06f0449caaa421fb21c`
+  - `backups/register-before-me-lock-note-recovery-flow-2026-11-13.md` — blob `b6571b82044ad07e8093873d87839f6f9fe6461e`
+- Source commit: `d6c5d64a39c1be9371311ca3073f79fa1accceae`. Diff review shows only `web-source/index.html` changed (11 additions, 5 deletions). Both inline JavaScript blocks passed syntax parsing. Static checks confirmed successful-copy advance, automatic four-digit recovery verification, wrong-PIN retry popup, and shared application to all three protected sections.
+- Publisher workflow run `43469878386` completed successfully, including the web-only publish step. Publisher/main commit: `1a6c34f83e052c9fc969e0618c7f62cc4661c644`. Published source and mirror are byte-identical; both blob SHA `6bbbb9d59cd4796673a4b7c0337809dfd13a9e02`. Live `latest.json.webVersion`: **193**; `webSha256`: `7a10ed398939bdc688e66e4be5a7afc789e97ce0b4658ac8eac7c952a1b56246`.
+- APK unchanged: 1.0.136 / versionCode 135 / SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`; no APK rebuild, Android source change or signing change.
+- Physical-device verification is pending. Install web update 193 through **Me → Check for Updates** and test Forgot PIN separately in all three sections: copy temporary PIN, confirm recovery entry opens; enter a wrong four-digit PIN and confirm the error popup then retry; enter the correct temporary PIN and confirm only then that new PIN setup and confirmation open. Also verify Change PIN, Remove Lock and saved records/attachments remain intact. Do not claim phone-side testing until user confirms.
+- Rollback: restore `web-source/index.html` from the verified pre-edit backup branch, republish, and re-check source/mirror/feed. Preserve all user data.
