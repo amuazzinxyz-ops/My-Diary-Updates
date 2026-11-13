@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `152`; package `com.personal.diaryapp`. Live feed: `webSha256=`b3916ea90ea9f46a633a6e11fb47e89540f9ba2a17db7e7993f9cb2529ccef84`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current. Historical entries below remain unchanged.
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `153`; package `com.personal.diaryapp`. Live feed: `webSha256=d43796f0c2e4998cbeda3bc1f16dfe7019c44076d9574e9ef5e0f64dbdf0b145`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -76,6 +76,23 @@ Keep historical entries as history. If an old entry contains stale version infor
 
 
 ---
+
+# Web Update 153 — Independent adjustment for each image (2026-11-13)
+
+- User reported that adjusting one image prevented another image from being adjusted. Root cause: shared `diaryFingerAdjustKind` gated all document-level Pointer/Touch handlers, so only the most recently activated image kind could receive gestures.
+- Starting state: Web Update 152; APK 1.0.136 / versionCode 135; package `com.personal.diaryapp`; prior source/mirror blob SHA `4ea139d2ca9ee04b72a31b1a9cbc712a3d87ca41`; prior feed SHA-256 `b3916ea90ea9f46a633a6e11fb47e89540f9ba2a17db7e7993f9cb2529ccef84`.
+- Changed only `web-source/index.html`, source commit `5b591b65deb262efc0fd988c3530ce60948a5efe`. Removed the global active-kind gate from pointer and touch gesture handlers; each bound image now accepts gestures only when the pointer is inside its own bounds / belongs to its own tracked pointer IDs. Starting adjustment no longer disables the previously selected image. Photo preview is always gesture-enabled when present. Clearing/resetting a note removes adjustment styling from all active image targets. Existing per-image colour/position/zoom state and zoom limits remain unchanged.
+- Pre-edit backup branch: `backup/pre-independent-image-adjustment-2026-11-13`; verified exact readable backups:
+  - `backups/web-source-before-independent-image-adjustment-2026-11-13.html`
+  - `backups/diary-web-before-independent-image-adjustment-2026-11-13.html`
+  - `backups/latest-before-independent-image-adjustment-2026-11-13.json`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-independent-image-adjustment-2026-11-13.md`
+- Diff contained only the shared gesture activation/gating and Photo preview active styling. Both inline JavaScript blocks parsed successfully. Targeted checks confirmed all four Pointer/Touch global-kind gates removed, independent per-target pointer tracking retained, and reset clears all active targets.
+- Publisher output commit: `de42b4b796738149e0dfe7c0ffbdbcc38fb9ee9a` (“Publish My Diary web bundle update”). Feed advanced to Web Update 153. Live source and mirror are byte-identical; both blob SHA `aa9a115ce37c1e3cad115046f13dcf3f7f63a75e`. Live feed web SHA-256: `d43796f0c2e4998cbeda3bc1f16dfe7019c44076d9574e9ef5e0f64dbdf0b145`. Publisher commit updated `diary-web/index.html` and `latest.json` with matching source patch and release metadata.
+- APK unchanged: 1.0.136 / versionCode 135 / SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`; no APK rebuild or signing changes.
+- Physical-device verification pending. Ask user to use **Me → Check for Updates**, then test adjustment separately on Cover, Detail and Photo, switching between them in both directions. Do not claim phone-side success until user confirms.
+- Rollback: exact pre-edit files on `backup/pre-independent-image-adjustment-2026-11-13`; preserve all diary data and settings.
+
 
 # Web Update 152 — Automatic finger adjustment after image selection (2026-11-13)
 
