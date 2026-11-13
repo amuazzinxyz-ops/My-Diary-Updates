@@ -1003,3 +1003,25 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK remains **1.0.136 / versionCode 135**, checksum, URL and package unchanged; no APK rebuild or signing operation.
 - Physical-device visual/interaction testing remains **pending**. User should use **Me → Check for Updates**, then open each of the three existing image buttons and inspect its distinct gallery, select a template, save/reopen the note, and test the existing image/solid/gradient options. Do not claim phone-side testing until user confirms.
 - Rollback: use the backup branch and exact pre-change files listed above. Preserve all local notes, photos and app data.
+
+
+---
+
+# Web Update 142 — Finger drag and pinch-to-zoom image adjustment (2026-11-13)
+
+- User approved touch adjustment for all three existing Diary image areas: Note Cover Photo, Details Image and attached Photo.
+- Starting live state: APK **1.0.136 / versionCode 135**, webVersion **140**, package `com.personal.diaryapp`. Read the live source, feed and Master Register before editing.
+- Scope: web-only Diary editor and note preview/share rendering in `web-source/index.html`; the publisher synchronized `diary-web/index.html` and updated `latest.json`. No APK, native Android code, package/signing identity, PIN/recovery logic, updater logic, or unrelated feature was changed.
+- Added a separate **Ungli se Adjust Karein / Adjust with Finger** control inside each of the three existing image panels. When enabled, one finger drags the image to reposition it and two fingers pinch to zoom (up to 3×). Tap the control again to finish. The editor remains normally editable when adjustment mode is off.
+- The crop position and zoom values are stored in the existing per-note cover/detail/photo colour settings, normalized safely for older notes, and restored when a note is reopened. The same crop is used in saved-note previews and the composed share image. Existing decorative pamphlet templates, image selection, solid colour and gradient colour choices remain in place.
+- Added the adjustment button and usage hint in all 10 supported languages: Roman English, English, Hindi, Urdu, Arabic, Bengali, Gujarati, Marathi, Tamil and Telugu.
+- Verified pre-edit backups on branch `backup/pre-finger-adjustment-2026-11-13`:
+  - `backups/web-source-before-finger-adjustment-2026-11-13.html`
+  - `backups/diary-web-before-finger-adjustment-2026-11-13.html`
+  - `backups/latest-before-finger-adjustment-2026-11-13.json`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-finger-adjustment-2026-11-13.md`
+- Source commits: `b633b0967e98c6832afe031b1dafa05705560533` and final refinement `2d78e2b27e31c0f4d73bd273e744de62c75696a6`. Final web-only publisher workflow run **43372607691** completed successfully; all publish job steps passed. The preceding publish run **43372558034** also completed successfully; final source is the later commit above.
+- Post-publish verification: `web-source/index.html` and `diary-web/index.html` are byte-identical; Git blob SHA `b9a7a01e1f226de50d01741ba8c5efa8eaa47663`. Both embedded JavaScript scripts parse successfully. All 10 language dictionaries contain the adjustment button text. Checks confirm the pointer drag/pinch handlers, saved crop data, new-note reset and all 12 existing pamphlet templates remain present.
+- Live feed reports webVersion **142** and web SHA-256 `6d7ba9eaa51e60642d1176abc7278d46a58aaa76d1e7105446405c356d835101`. APK remains **1.0.136 / versionCode 135**, URL, SHA-256 and package unchanged; no APK rebuild or signing operation.
+- Physical-device touch/visual testing remains **pending**. Use **Me → Check for Updates**, open each of the three image panels, choose an image or pamphlet, tap **Ungli se Adjust Karein**, drag with one finger and pinch with two fingers. Save and reopen the note and verify the crop remains. Do not claim phone-side testing until the user confirms.
+- Rollback: use the backup branch and exact pre-change files listed above. Preserve all local notes, photos and app data.
