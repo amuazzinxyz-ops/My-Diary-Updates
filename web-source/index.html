@@ -1527,7 +1527,6 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     submit.disabled=true;meFeatureVerifyValue(kind,value).then(function(ok){if(!ok){meFeatureStatus.textContent=mf('pinWrong');submit.disabled=false;submit.dataset.autoSubmitted='0';current.value='';current.focus();return;}callback(value);}).catch(function(){submit.disabled=false;meFeatureStatus.textContent=mf('failed');});
    });
    if(config&&config.digits===4){current.addEventListener('input',function(){if(current.value.length===4&&submit.dataset.autoSubmitted!=='1'){submit.dataset.autoSubmitted='1';submit.click();}});}
-   if(config&&config.digits===4){current.addEventListener('input',function(){if(current.value.length===4&&submit.dataset.autoSubmitted!=='1'){submit.dataset.autoSubmitted='1';submit.click();}});}
    meFeatureContent.append(form,meFeatureStatus);
   }
   function showMeFeaturePin(kind){
