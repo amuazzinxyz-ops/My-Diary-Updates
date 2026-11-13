@@ -1200,27 +1200,41 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   }
   function finish(id){if(!pts[id])return;delete pts[id];rebase();}
   function inTarget(x,y){var r=target.getBoundingClientRect();return x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom;}
-  /* Capture all Android touch starts so a second/third finger is registered even if its event target differs. */
-  document.addEventListener('touchstart',function(e){
-   if(diaryFingerAdjustKind!==kind)return;
-   var added=false;
-   Array.prototype.forEach.call(e.changedTouches,function(t){if(inTarget(t.clientX,t.clientY)){pts['t'+t.identifier]={x:t.clientX,y:t.clientY};added=true;}});
-   if(added){e.preventDefault();e.stopPropagation();rebase();}
-  },{capture:true,passive:false});
-  document.addEventListener('touchmove',function(e){
-   if(diaryFingerAdjustKind!==kind)return;
-   var active=false;
-   Array.prototype.forEach.call(e.touches,function(t){if(pts['t'+t.identifier]){pts['t'+t.identifier]={x:t.clientX,y:t.clientY};active=true;}});
-   if(!active)return;
-   e.preventDefault();e.stopPropagation();apply();
-  },{capture:true,passive:false});
-  document.addEventListener('touchend',function(e){Array.prototype.forEach.call(e.changedTouches,function(t){finish('t'+t.identifier);});},true);
-  document.addEventListener('touchcancel',function(e){Array.prototype.forEach.call(e.changedTouches,function(t){finish('t'+t.identifier);});},true);
+  /* Prefer Pointer Events on Android WebView: each finger has its own pointerId,
+     so pinch zoom tracks both contacts reliably. Touch Events remain as fallback. */
   if(window.PointerEvent){
-   target.addEventListener('pointerdown',function(e){if(e.pointerType==='touch'||diaryFingerAdjustKind!==kind)return;e.preventDefault();e.stopPropagation();pts['p'+e.pointerId]={x:e.clientX,y:e.clientY};rebase();});
-   document.addEventListener('pointermove',function(e){if(e.pointerType==='touch'||diaryFingerAdjustKind!==kind||!pts['p'+e.pointerId])return;e.preventDefault();pts['p'+e.pointerId]={x:e.clientX,y:e.clientY};apply();},{passive:false});
-   document.addEventListener('pointerup',function(e){if(e.pointerType!=='touch')finish('p'+e.pointerId);});
-   document.addEventListener('pointercancel',function(e){if(e.pointerType!=='touch')finish('p'+e.pointerId);});
+   target.addEventListener('pointerdown',function(e){
+    if(diaryFingerAdjustKind!==kind)return;
+    e.preventDefault();e.stopPropagation();
+    pts['p'+e.pointerId]={x:e.clientX,y:e.clientY};
+    try{target.setPointerCapture(e.pointerId);}catch(ignore){}
+    rebase();
+   },{passive:false});
+   document.addEventListener('pointermove',function(e){
+    if(diaryFingerAdjustKind!==kind||!pts['p'+e.pointerId])return;
+    e.preventDefault();
+    pts['p'+e.pointerId]={x:e.clientX,y:e.clientY};
+    apply();
+   },{capture:true,passive:false});
+   document.addEventListener('pointerup',function(e){finish('p'+e.pointerId);},true);
+   document.addEventListener('pointercancel',function(e){finish('p'+e.pointerId);},true);
+   document.addEventListener('lostpointercapture',function(e){finish('p'+e.pointerId);},true);
+  }else{
+   document.addEventListener('touchstart',function(e){
+    if(diaryFingerAdjustKind!==kind)return;
+    var added=false;
+    Array.prototype.forEach.call(e.changedTouches,function(t){if(inTarget(t.clientX,t.clientY)){pts['t'+t.identifier]={x:t.clientX,y:t.clientY};added=true;}});
+    if(added){e.preventDefault();e.stopPropagation();rebase();}
+   },{capture:true,passive:false});
+   document.addEventListener('touchmove',function(e){
+    if(diaryFingerAdjustKind!==kind)return;
+    var active=false;
+    Array.prototype.forEach.call(e.touches,function(t){if(pts['t'+t.identifier]){pts['t'+t.identifier]={x:t.clientX,y:t.clientY};active=true;}});
+    if(!active)return;
+    e.preventDefault();e.stopPropagation();apply();
+   },{capture:true,passive:false});
+   document.addEventListener('touchend',function(e){Array.prototype.forEach.call(e.changedTouches,function(t){finish('t'+t.identifier);});},true);
+   document.addEventListener('touchcancel',function(e){Array.prototype.forEach.call(e.changedTouches,function(t){finish('t'+t.identifier);});},true);
   }
  }
  function setDiaryFingerAdjust(kind,button,hint){var was=diaryFingerAdjustKind;diaryFingerAdjustKind=diaryFingerAdjustKind===kind?null:kind;if(was){var oldTarget=diaryFingerTarget(was);if(oldTarget){oldTarget.classList.remove('diary-finger-adjust-active');oldTarget.style.touchAction='';}var oldButton=document.querySelector('#diaryMyNotesEditor .diary-finger-adjust-button[aria-pressed="true"]');if(oldButton&&oldButton!==button){oldButton.setAttribute('aria-pressed','false');oldButton.textContent=t('fingerAdjust');var oldHint=oldButton.parentNode.querySelector('.diary-finger-adjust-hint');if(oldHint)oldHint.hidden=true;}}var target=diaryFingerTarget(kind);if(diaryFingerAdjustKind){if(target){bindDiaryFingerAdjust(target,kind);target.classList.add('diary-finger-adjust-active');target.style.touchAction='none';}button.setAttribute('aria-pressed','true');button.textContent=t('adjustDone');hint.hidden=false;}else{if(target){target.classList.remove('diary-finger-adjust-active');target.style.touchAction='';}button.setAttribute('aria-pressed','false');button.textContent=t('fingerAdjust');hint.hidden=true;}}
