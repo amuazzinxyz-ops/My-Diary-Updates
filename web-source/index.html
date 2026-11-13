@@ -1394,7 +1394,19 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    tamil:{smartReminder:'⏰ ஸ்மார்ட் நினைவூட்டல்',reminderDate:'தேதி',reminderTime:'நேரம்',reminderDetails:'விவரம் (விருப்பம்)',reminderRelatedNote:'தொடர்புடைய குறிப்பு (விருப்பம்)',reminderNoNote:'குறிப்புடன் இணைக்கப்படவில்லை',reminderPast:'எதிர்கால தேதியையும் நேரத்தையும் தேர்ந்தெடுக்கவும்.',reminderPermission:'நினைவூட்டலுக்கு அறிவிப்பு அனுமதி அளித்து மீண்டும் சேமிக்கவும்.',reminderAppRequired:'நினைவூட்டல் அறிவிப்புகளுக்கு My Diary-யின் புதிய செயலியை நிறுவவும்.',reminderSet:'நினைவூட்டல் அமைக்கப்பட்டது.',reminderFailed:'நினைவூட்டலை அமைக்க முடியவில்லை.',reminderSnooze:'10 நிமிடங்களில்',reminderDone:'முடிந்தது'},
    telugu:{smartReminder:'⏰ స్మార్ట్ రిమైండర్',reminderDate:'తేదీ',reminderTime:'సమయం',reminderDetails:'వివరాలు (ఐచ్ఛికం)',reminderRelatedNote:'సంబంధిత నోట్ (ఐచ్ఛికం)',reminderNoNote:'ఏ నోట్‌కూ లింక్ కాలేదు',reminderPast:'భవిష్యత్తు తేదీ మరియు సమయాన్ని ఎంచుకోండి.',reminderPermission:'రిమైండర్ కోసం నోటిఫికేషన్ అనుమతి ఇచ్చి మళ్లీ సేవ్ చేయండి.',reminderAppRequired:'రిమైండర్ అలర్ట్‌ల కోసం My Diary కొత్త యాప్‌ను ఇన్‌స్టాల్ చేయండి.',reminderSet:'రిమైండర్ సెట్ అయింది.',reminderFailed:'రిమైండర్ సెట్ కాలేదు.',reminderSnooze:'10 నిమిషాల తర్వాత',reminderDone:'పూర్తయింది'}
   };
-  function mf(k){var lang=language();return (meFeatureReminderCopy[lang]&&meFeatureReminderCopy[lang][k])||(meFeatureCopy[lang]&&meFeatureCopy[lang][k])||meFeatureCopy.roman[k]||k;}
+  var meFeatureReminderExactCopy={
+   roman:'Exact reminder ke liye Alarms & reminders permission allow karein, phir Save dobara dabayein.',
+   english:'Allow Alarms & reminders access, then tap Save again.',
+   hindi:'सही समय पर रिमाइंडर के लिए अलार्म और रिमाइंडर की अनुमति दें, फिर सेव दबाएँ।',
+   urdu:'درست وقت پر یاد دہانی کے لیے Alarms & reminders کی اجازت دیں، پھر محفوظ کریں۔',
+   arabic:'اسمح بإذن المنبّهات والتذكيرات لضبط الوقت بدقة، ثم اضغط حفظ مرة أخرى.',
+   bengali:'ঠিক সময়ে রিমাইন্ডারের জন্য Alarms & reminders অনুমতি দিন, তারপর আবার সেভ করুন।',
+   gujarati:'ચોક્કસ સમયે રિમાઇન્ડર માટે Alarms & reminders ની મંજૂરી આપો, પછી ફરી સેવ કરો.',
+   marathi:'अचूक वेळेच्या रिमाइंडरसाठी Alarms & reminders परवानगी द्या आणि पुन्हा सेव्ह करा.',
+   tamil:'சரியான நேர நினைவூட்டலுக்கு Alarms & reminders அனுமதி அளித்து மீண்டும் சேமிக்கவும்.',
+   telugu:'ఖచ్చితమైన సమయ రిమైండర్ కోసం Alarms & reminders అనుమతి ఇచ్చి మళ్లీ సేవ్ చేయండి.'
+  };
+  function mf(k){var lang=language();if(k==='reminderExactPermission')return meFeatureReminderExactCopy[lang]||meFeatureReminderExactCopy.roman;return (meFeatureReminderCopy[lang]&&meFeatureReminderCopy[lang][k])||(meFeatureCopy[lang]&&meFeatureCopy[lang][k])||meFeatureCopy.roman[k]||k;}
   var meFeatureTypes=[
    {id:'calendar',key:'personalCalendar'},
    {id:'reminders',key:'smartReminder'},
@@ -1494,6 +1506,10 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      if(typeof bridge.hasReminderNotificationPermission==='function'&&!bridge.hasReminderNotificationPermission()){
       if(typeof bridge.requestReminderNotificationPermission==='function')bridge.requestReminderNotificationPermission();
       meFeatureStatus.textContent=mf('reminderPermission');return;
+     }
+     if(typeof bridge.hasExactAlarmPermission==='function'&&!bridge.hasExactAlarmPermission()){
+      if(typeof bridge.requestExactAlarmPermission==='function')bridge.requestExactAlarmPermission();
+      meFeatureStatus.textContent=mf('reminderExactPermission');return;
      }
      if(!bridge.scheduleReminder(record.id,record.title,record.details||'',triggerAt)){meFeatureStatus.textContent=mf('reminderFailed');return;}
     }
