@@ -1934,3 +1934,18 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK unchanged: `1.0.137` / versionCode `136`; APK SHA-256 remains `38439e536479d7adea7c50031b59873d8a898b0c103f845018cfa8b8e8b805bf`. No APK rebuild, native source change, or signing operation. Publisher workflow run ID/conclusion was not exposed by the available workflow-run lookup in this session; the publisher bot commit and live source/mirror/feed were verified.
 - Physical-device verification is **pending**. User should open **Me → Smart Reminder** (and preferably each of the other four features), tap **Back**, and confirm the five-option Me menu remains visible. Also test the feature Close (×) button and backdrop close; confirm tapping the Me button itself still opens/closes the menu normally. Do not claim phone-side success until the user confirms.
 - Rollback: restore the exact pre-edit `web-source/index.html` from `backup/me-feature-back-retain-menu-2026-11-13`, republish, and re-check source/mirror/feed/hash. Preserve all user records and app data.
+
+
+---
+
+# Web Update 197 — Hide the redundant Lock button in My Kharcha (2026-11-13)
+
+- User request: after opening **💰 My Kharcha**, remove the visible `🔒 Lock` header button. This is a UI-only removal; keep My Kharcha's section PIN protection and lock/recovery system unchanged.
+- Starting live state: APK 1.0.137 / versionCode 136; Web Update 196; package `com.personal.diaryapp`. Starting source/mirror blob `fd585bed757ddb961098b3a8f9c7059d59543622`; feed blob `f4e3717e47aa72a426cad0bd844374083ba24063d`; register blob `e1e94bd23661b650099fd06c02485d89e6a242f7`.
+- Scope: changed exactly one line in `web-source/index.html`. The header `🔒 Lock` button is now hidden for `kharcha`; it remains governed as before for Documents and Memories. Existing `meFeatureProtected(kind)` still includes `kharcha`, `documents` and `memories`; the PIN gate, PIN/recovery storage keys, dialogs, records and other features were not changed. No APK/native source, data schema or translations changed.
+- Pre-edit backup branch: `backup/remove-kharcha-header-lock-button-2026-11-13`. Three backups were re-fetched; the HTML backup blob `fd585bed757ddb961098b3a8f9c7059d59543622` matches the exact pre-edit source.
+- Source commit: `deb0d2b582e22a800d547300e99f1589c6d29b43`. Reviewed diff contains only the one requested visibility change. Publisher commit: `c6f52a0f548621af8a1dc2dd0461e8ebe0bd7584` (“Publish My Diary web bundle update”).
+- Published verification: `web-source/index.html` and `diary-web/index.html` are byte-identical; blob SHA `58db1f74729e21bff7139b068aad202fe58b537d`. Independently computed SHA-256 of exact UTF-8 source: `4452235be464d6acb8622430f71e4f0a76b416579e41ad91207d52a4d256852e`, matching live `latest.json.webSha256`. Live `webVersion=197`.
+- APK unchanged: 1.0.137 / versionCode 136; APK SHA-256 `38439e536479d7adea7c50031b59873d8a898b0c103f845018cfa8b8e8b805bf`. No APK rebuild or signing change.
+- Physical-device verification is pending. User should apply **Me → Check for Updates** and open My Kharcha: confirm the header `🔒 Lock` button is absent, while the section PIN still prompts on entry and the records, add/edit/delete, PDF report and other tools still work. Also confirm Documents and Memories are unchanged. Do not claim phone-side testing until user confirms.
+- Rollback: restore exact pre-edit `web-source/index.html` from `backup/remove-kharcha-header-lock-button-2026-11-13`, republish, and verify source/mirror/feed/hash. Preserve all local records and PIN/recovery data.
