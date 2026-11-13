@@ -1584,3 +1584,10 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Source commit: `993551bb9455f12b028d0b2df97c24e2997ec653`; source and published mirror were re-fetched and verified byte-identical, blob SHA `098ec07a4f0ef8205a7b42367304c1b033b4d665`.
 - Publisher workflow run `43428578542`, run 166, and publish job completed successfully. Live `latest.json` reports webVersion `176`, webSha256 `19d6828ff323f044df54e8c1bac450da63a0f3e0ca72505672994119a95cb01b`.
 - Physical-device verification pending. User should use **Me → Check for Updates**, then test: empty New Note has no ×; typing or adding an image shows ×; tapping × clears the draft and hides × while keeping the pad open. Do not claim phone-side verification until user confirms.
+
+## Web Update 177 — New Note × hide/show CSS correction (2026-11-13)
+- User reported the clear × remained visible after tapping it to clear the draft.
+- Re-inspection found the button's CSS explicitly set `display:block`, which could override the browser's built-in `hidden` behavior. Removed that display declaration and switched the visibility function to the button's `hidden` property. The click handler now also refreshes visibility after the existing `newNote()` reset.
+- Source commit: `2f5bc69a2dbf38774df5c3092306912e0d597d80`; source and published mirror re-fetched and verified byte-identical, blob SHA `bdd72933f3c238957a893bc3cfcb1e0d61143823`.
+- Publisher workflow run `43428899194`, run 167, publish job completed successfully. Live `latest.json` reports webVersion `177`, webSha256 `8c22fecf2a7112996490b66417fea86ced92161a925ae1a9dbb201d5f432305d`.
+- Physical-device verification pending. Test after **Me → Check for Updates**: empty New Note hides ×; text/image makes it appear; tapping × clears the draft and hides ×.
