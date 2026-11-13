@@ -1744,6 +1744,31 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var ready=diaryShareImageCache[cacheKey];
   var status=document.getElementById('diaryMyNotesStatus');
   function setStatus(message){if(status)status.textContent=message;}
+  function shareWithDiaryNativeBridge(file){
+   var bridge=window.DiaryNativeShare;
+   if(!bridge||typeof bridge.postMessage!=='function'||typeof bridge.addEventListener!=='function')return false;
+   var reader=new FileReader();
+   reader.onerror=function(){setStatus('Diary image read nahi ho saki.');};
+   reader.onload=function(){
+    var dataUrl=String(reader.result||''),encoded=dataUrl.split(',')[1]||'';
+    var finished=false;
+    function finish(event){
+     if(finished)return;finished=true;
+     try{bridge.removeEventListener('message',finish);}catch(e){}
+     var result={};try{result=JSON.parse(event.data||'{}');}catch(e){}
+     if(result.ok)setStatus(language()==='english'?'Diary image shared.':language()==='hindi'?'डायरी इमेज शेयर हो गई।':'Diary image share ho gayi.');
+     else setStatus((result.error||'Diary Share sheet nahi khul saki.')+' — dobara koshish karein.');
+    }
+    bridge.addEventListener('message',finish);
+    try{
+     bridge.postMessage(JSON.stringify({title:'My Diary',text:'',files:[{name:'Diary-Diary-Note.png',type:'image/png',data:encoded}]}));
+    }catch(error){
+     try{bridge.removeEventListener('message',finish);}catch(e){}
+     if(!finished){finished=true;setStatus('Diary Share request nahi bheji ja saki.');}
+    }
+   };
+   try{reader.readAsDataURL(file);return true;}catch(error){setStatus('Diary image read nahi ho saki.');return true;}
+  }
   function downloadBlob(blob){try{var url=URL.createObjectURL(blob),a=el('a',{href:url,download:'Diary-Diary-Note.png'});document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},1500);setStatus(language()==='english'?'Combined diary image saved.':language()==='hindi'?'दोनों तस्वीरों और लिखे हुए पाठ वाली डायरी इमेज सेव हो गई।':'Dono images aur text ek saath image mein save ho gaya.');}catch(e){setStatus(t('copyFailed'));}}
   if(prepareOnly){
    if(ready){if(onPrepared)onPrepared(true);return;}
@@ -1752,6 +1777,9 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   }else if(ready){
    try{
     var readyFile=new File([ready.blob],'Diary-Diary-Note.png',{type:'image/png'});
+    /* Android WebView exposes the native bridge even when the updater reloads
+       the page with a cache-busting query string. Use it before Web Share. */
+    if(shareWithDiaryNativeBridge(readyFile))return;
     if(navigator.share&&window.File&&(!navigator.canShare||navigator.canShare({files:[readyFile]}))){
      var readyResult=navigator.share({files:[readyFile]});
      if(readyResult&&readyResult.then)readyResult.then(function(){setStatus(language()==='english'?'Combined diary image shared.':language()==='hindi'?'डायरी की दोनों तस्वीरें और पाठ एक साथ शेयर हो गए।':'Dono images aur text ek saath share ho gaye.');}).catch(function(err){if(err&&err.name!=='AbortError')downloadBlob(ready.blob);});
@@ -1861,6 +1889,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     var file=new File([blob],'Diary-Diary-Note.png',{type:'image/png'});
     function download(){downloadBlob(blob);}
     try{
+     if(shareWithDiaryNativeBridge(file))return;
      if(navigator.share&&window.File&&(!navigator.canShare||navigator.canShare({files:[file]}))){
       var shareResult=navigator.share({files:[file]});
       if(shareResult&&shareResult.then)shareResult.then(function(){setStatus(language()==='english'?'Combined diary image shared.':language()==='hindi'?'डायरी की दोनों तस्वीरें और पाठ एक साथ शेयर हो गए।':'Dono images aur text ek saath share ho gaye.');}).catch(function(err){if(err&&err.name!=='AbortError')download();});
