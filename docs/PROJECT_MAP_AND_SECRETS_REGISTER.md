@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `155`; package `com.personal.diaryapp`. Live feed: `webSha256=81813e198d9435ef84c66b5e7964d3c1ef72e41c349d78797e7859eada9cc88e`.
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `156`; package `com.personal.diaryapp`. Live feed: `webSha256=7404440c4db966789b67529d0f156191a715769b3d2513a9da13be8c4de92aef`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -1244,3 +1244,20 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK unchanged: 1.0.136 / versionCode 135 / SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`; publisher workflow explicitly ran without rebuilding APK.
 - Physical-device verification pending. User should use **Me → Check for Updates** to install Web Update 155, then tap Change Image for Cover, Detail and Photo and confirm Gallery opens directly; select a replacement and check other images/text remain unchanged.
 - Rollback: use the exact pre-edit files on `backup/direct-image-picker-2026-11-13`; preserve local notes, photos, PIN data and app data.
+
+
+# Web Update 156 — Restore writing by tapping an image field (2026-11-13)
+
+- User reported that tapping the image no longer opened the writing option/keyboard. Inspection found the automatic image-adjustment Pointer/Touch handlers were calling `preventDefault()` and `stopPropagation()` on every initial press, including taps on the Cover title input and Detail text area.
+- Starting live state: Web Update 155; APK 1.0.136 / versionCode 135; package `com.personal.diaryapp`; source/mirror blob SHA `82dd680c76336782cfeb9d1bcc67ec2f02ade1b5`; feed SHA-256 `81813e198d9435ef84c66b5e7964d3c1ef72e41c349d78797e7859eada9cc88e`.
+- Changed only `web-source/index.html`, source commit `c30e4a2aa010383ca5fa8149d7e7174dc5c83793`. Single taps now pass through to the input/textarea so the keyboard can open. Drag/pinch adjustment takes over only after movement reaches 6 pixels; the Touch Events fallback follows the same threshold. Existing zoom range, per-image positions, saved image/text data, and Web Update 155 direct Gallery replacement behavior remain unchanged.
+- Pre-edit backup branch: `backup/pre-image-tap-writing-fix-2026-11-13`; exact readable backups verified:
+  - `backups/web-source-before-image-tap-writing-fix-2026-11-13.html` (blob SHA `82dd680c76336782cfeb9d1bcc67ec2f02ade1b5`)
+  - `backups/latest-before-image-tap-writing-fix-2026-11-13.json` (blob SHA `0705bc5580afd5b96f16bd7dc4866c705dbe7aa4`)
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-image-tap-writing-fix-2026-11-13.md` (blob SHA `c80f161897a4928b0ffae5faf1e114ed511de5d9`)
+- Source diff reviewed: only the shared image gesture handler changed. Both inline JavaScript blocks parsed successfully. Static checks confirm tap events are no longer cancelled at pointer/touch start and both drag handlers use the 6-pixel movement threshold.
+- Web-only workflow run `43395054248` (run 146) completed with conclusion `success`; publish job `131783845220` succeeded. Publisher output advanced the live feed to Web Update 156.
+- Post-publish: source and `diary-web/index.html` are byte-identical; both Git blob SHA `3a9439731ca5965b381b938b86c5189b657c4999`. Independently computed UTF-8 SHA-256 `7404440c4db966789b67529d0f156191a715769b3d2513a9da13be8c4de92aef` matches live `latest.json.webSha256`; webVersion is 156.
+- APK unchanged: 1.0.136 / versionCode 135 / SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`; no APK rebuild or signing changes.
+- Physical-device verification **pending**. User should use **Me → Check for Updates**, then tap the Cover image field and Detail image field to confirm the writing keyboard opens; also verify one-finger drag and two-finger zoom still work. Tap **Image Badlein** on an existing image to confirm it still opens Gallery directly.
+- Rollback: verified pre-edit files on `backup/pre-image-tap-writing-fix-2026-11-13`; preserve all diary notes, photos, PIN data and app identity.
