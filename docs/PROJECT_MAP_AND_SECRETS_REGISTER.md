@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `183`; package `com.personal.diaryapp`. Live feed: `webSha256=bb4c5985646ffc89c4ef0e9db6725e98ef6e9fa6c54fb07c75c73caf3d61efa3`.
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `186`; package `com.personal.diaryapp`. Live feed: `webSha256=4fa7cfc3c0366aa36e9fc0c4137907bebff544e270873e31b094a8c50770f5ea`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -1729,3 +1729,27 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Both inline JavaScript blocks passed syntax parsing before commit. Static checks verified all three edit labels, the Edit button, record prefill, original ID preservation, save-mode reset and old-record compatibility. No APK rebuild; APK remains 1.0.136 / versionCode 135.
 - Physical-device verification is pending. After Me → Check for Updates installs Web Update 185, test adding Raqam 5000 / Kharcha 2000, editing one value, saving, and confirming the same entry updates without duplication and the totals/balance recalculate. Do not claim phone-side testing until user confirms.
 - Rollback: restore web-source/index.html from the verified pre-edit backup branch, republish, and verify mirror/feed. Preserve user records and all existing Diary/Notes/PIN features.
+
+---
+
+# Web Update 186 — My Kharcha categories, reports, separate section PIN locks and Smart Search (2026-11-13)
+
+- User approved four additions to the existing Me tools: expense categories with separate totals; PDF reports for My Kharcha and Personal Calendar; separate locks for My Kharcha, My Documents and My Memories; and Smart Search.
+- Starting live state: Web Update 185; APK 1.0.136 / versionCode 135; package com.personal.diaryapp. Starting source/mirror blob SHA 746947562a558bcf5db02e4a65e797f534355962; starting feed webSha256 9481d9d50d3258548ae73cf37bbf12027969f7762d45f682473ab00c868b61f8.
+- Scope: web-only, changed only web-source/index.html in source commit d7e80e91be2145686b5ef4fcb08a2cc4ddc05299. The publisher workflow mirrored the exact source into diary-web/index.html and advanced latest.json to Web Update 186.
+- My Kharcha category entry retains a free-text field and adds suggestions for Khana/Food, Safar/Travel, Shopping, Bill/Bills, Ghar/Home, Sehat/Health, Taleem/Education and Other. The summary now displays expense totals grouped by the category text; the category filter narrows the visible records without changing saved data or the all-record totals.
+- Smart Search is available within each Me feature list. It searches names/titles, dates, amounts, category, details, event type and document filename as applicable. Existing record IDs and stored record shapes remain intact.
+- PDF Report buttons are available in My Kharcha and Personal Calendar. They prepare a clean report in a separate browser tab/window; the user chooses the browser's Print / Save as PDF action. This is a browser-generated print-to-PDF flow, not a direct background PDF download. Popup permission may be required.
+- Separate PIN gates are added for My Kharcha, My Documents and My Memories. Each section creates its own 4–8 digit PIN on first access; salted PBKDF2-SHA-256 hashes are stored, not the raw PIN. Leaving the section returns to Me and requires the PIN again on next entry. **Important security limitation:** this is an app-screen access lock only. The existing IndexedDB records and attached files are not encrypted at rest, so this does not protect data from someone with direct access to browser/device storage. The UI explicitly tells the user this; do not describe it as file encryption or strong device-level protection.
+- Existing Kharcha data (including historical amount/flow records), Personal Calendar entries, documents, memories, photos, record IDs and IndexedDB database remain untouched; no migration or deletion was performed. Existing Notes storage, Note Lock, Diary Lock/PIN/recovery, native Android code, APK, package identity and signing data were not changed.
+- Pre-edit backup branch: backup/me-kharcha-category-pdf-lock-smart-search-2026-11-13. Exact readable backups, each re-fetched and compared with the pre-edit live content:
+  - backups/web-source-before-kharcha-category-pdf-lock-search-2026-11-13.html — blob 746947562a558bcf5db02e4a65e797f534355962
+  - backups/diary-web-before-kharcha-category-pdf-lock-search-2026-11-13.html — same source blob
+  - backups/latest-before-kharcha-category-pdf-lock-search-2026-11-13.json — blob eb3a05d2b9c98de601982efe662feab9c8b87aae
+  - backups/register-before-kharcha-category-pdf-lock-search-2026-11-13.md — blob a518c750d5fb7c9d4ed4491a0ba0fbcad4179be0
+- Diff review: the source commit changed only web-source/index.html (67 additions, 14 deletions). Both inline JavaScript blocks passed syntax parsing. Static checks confirmed the category suggestions and grouped totals, search controls and matching logic, report generation/print action, PBKDF2 PIN setup/check and all three language dictionaries (Roman English, English and Hindi).
+- Publisher workflow run 43458317453 (run 176) completed with conclusion success; its only publish job and every step completed successfully. Publisher commit: bbc32c1f4fdc855b6dbab7d086704d06af4a09a7.
+- Final live source and published mirror are byte-identical; both Git blob SHA 46c320b0597e54fbdca3371516a2c693bd06cb54. Independently computed UTF-8 SHA-256 4fa7cfc3c0366aa36e9fc0c4137907bebff544e270873e31b094a8c50770f5ea matches live latest.json.webSha256. Live webVersion is 186.
+- APK unchanged: 1.0.136 / versionCode 135 / SHA-256 6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348. No APK rebuild, native Android, package identity or signing changes.
+- Physical-device verification pending. User should use Me → Check for Updates, install Web Update 186, then test category suggestions and per-category totals, Smart Search in each section, PDF report creation for Kharcha and Calendar, and first-time PIN setup/re-entry for Kharcha, Documents and Memories. Use dummy/test records initially; the PIN gate is not at-rest encryption. Do not claim phone-side success until user confirms.
+- Rollback: restore web-source/index.html from the verified pre-edit backup branch, republish and re-check source/mirror/feed/hash. Preserve all user data and all existing Notes/PIN records.
