@@ -1479,7 +1479,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    return crypto.subtle.importKey('raw',new TextEncoder().encode(pin),'PBKDF2',false,['deriveBits']).then(function(key){return crypto.subtle.deriveBits({name:'PBKDF2',salt:saltBytes,iterations:120000,hash:'SHA-256'},key,256);}).then(function(bits){return Array.from(new Uint8Array(bits)).map(function(x){return x.toString(16).padStart(2,'0');}).join('');});
   }
   function meFeatureSalt(){var bytes=new Uint8Array(16);crypto.getRandomValues(bytes);return btoa(String.fromCharCode.apply(null,bytes));}
-  function meFeatureStorePin(kind,pin){var salt=meFeatureSalt();return meFeaturePinDigest(pin,salt).then(function(hash){localStorage.setItem('diary_me_section_pin_v1_'+kind,JSON.stringify({salt:salt,hash:hash,digits:4}));});}
+  function meFeatureStorePin(kind,pin){var salt=meFeatureSalt();return meFeaturePinDigest(pin,salt).then(function(hash){localStorage.setItem('diary_me_section_pin_v1_'+kind,JSON.stringify({salt:salt,hash:hash,digits:4}));localStorage.removeItem('diary_me_section_recovery_v1_'+kind);});}
   function meFeaturePinDialog(title){
    return new Promise(function(resolve){
     var shade=document.createElement('div');shade.style.cssText='position:fixed;inset:0;z-index:2147483647;background:rgba(0,0,0,.68);display:flex;align-items:center;justify-content:center;padding:20px;';
@@ -1524,8 +1524,9 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    var current=mfField(form,mf('pinPrompt'),'password','currentPin',true);current.inputMode='numeric';current.maxLength=config&&config.digits===4?4:8;current.placeholder=mf('pinPlaceholder');
    var submit=mfEl('button',{type:'submit',class:'diary-me-feature-save'},mf('unlock'));form.appendChild(submit);
    form.addEventListener('submit',function(e){e.preventDefault();var value=String(current.value||'').trim();if(!/^\d{4,8}$/.test(value)){meFeatureStatus.textContent=mf('pinNeed');return;}
-    submit.disabled=true;meFeatureVerifyValue(kind,value).then(function(ok){if(!ok){meFeatureStatus.textContent=mf('pinWrong');submit.disabled=false;current.value='';current.focus();return;}callback(value);}).catch(function(){submit.disabled=false;meFeatureStatus.textContent=mf('failed');});
+    submit.disabled=true;meFeatureVerifyValue(kind,value).then(function(ok){if(!ok){meFeatureStatus.textContent=mf('pinWrong');submit.disabled=false;submit.dataset.autoSubmitted='0';current.value='';current.focus();return;}callback(value);}).catch(function(){submit.disabled=false;meFeatureStatus.textContent=mf('failed');});
    });
+   if(config&&config.digits===4){current.addEventListener('input',function(){if(current.value.length===4&&submit.dataset.autoSubmitted!=='1'){submit.dataset.autoSubmitted='1';submit.click();}});}
    if(config&&config.digits===4){current.addEventListener('input',function(){if(current.value.length===4&&submit.dataset.autoSubmitted!=='1'){submit.dataset.autoSubmitted='1';submit.click();}});}
    meFeatureContent.append(form,meFeatureStatus);
   }
@@ -1542,16 +1543,16 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     var submit=mfEl('button',{type:'submit',class:'diary-me-feature-save'},mf('unlock'));form.appendChild(submit);
     if(config.digits===4){pin.addEventListener('input',function(){if(pin.value.length===4&&submit.dataset.autoSubmitted!=='1'){submit.dataset.autoSubmitted='1';submit.click();}});}
     var forgot=mfEl('button',{type:'button',class:'diary-me-feature-report'},mf('pinForgot'));
-    forgot.addEventListener('click',function(){var bytes=new Uint8Array(4);crypto.getRandomValues(bytes);var temp=String(((bytes[0]<<24)|(bytes[1]<<16)|(bytes[2]<<8)|bytes[3])>>>0).slice(-4).padStart(4,'0');meFeatureShowTemporaryPin(temp,function(){meFeaturePinDialog(mf('pinRecoveryPinPrompt')).then(function(entered){if(entered===null)return;if(entered!==temp){meFeatureStatus.textContent=mf('pinWrong');return;}meFeatureAskNewPin(kind,function(){showMeFeaturePage(kind);});});});});
+    forgot.addEventListener('click',function(){var bytes=new Uint8Array(4);crypto.getRandomValues(bytes);var temp=String(((bytes[0]<<24)|(bytes[1]<<16)|(bytes[2]<<8)|bytes[3])>>>0).slice(-4).padStart(4,'0');function verifyTemporaryPin(){meFeaturePinDialog(mf('pinRecoveryPinPrompt')).then(function(entered){if(entered===null)return;if(entered!==temp){meFeatureStatus.textContent=mf('pinWrong');verifyTemporaryPin();return;}meFeatureAskNewPin(kind,function(){showMeFeaturePage(kind);});});}meFeatureShowTemporaryPin(temp,verifyTemporaryPin);});
     form.appendChild(forgot);
     var off=mfEl('button',{type:'button',class:'diary-me-feature-delete'},mf('pinRemove'));
     off.addEventListener('click',function(){meFeatureVerifyCurrent(kind,function(){localStorage.removeItem('diary_me_section_pin_v1_'+kind);localStorage.removeItem('diary_me_section_recovery_v1_'+kind);meFeatureManage.hidden=true;meFeatureStatus.textContent=mf('pinRemoved');showMeFeaturePage(kind);});});
     form.appendChild(off);
     form.addEventListener('submit',function(e){e.preventDefault();var value=String(pin.value||'').trim();if(!/^\d{4,8}$/.test(value)){meFeatureStatus.textContent=mf('pinNeed');return;}
-     submit.disabled=true;meFeatureVerifyValue(kind,value).then(function(ok){if(!ok){meFeatureStatus.textContent=mf('pinWrong');submit.disabled=false;pin.value='';pin.focus();return;}
+     submit.disabled=true;meFeatureVerifyValue(kind,value).then(function(ok){if(!ok){meFeatureStatus.textContent=mf('pinWrong');submit.disabled=false;submit.dataset.autoSubmitted='0';pin.value='';pin.focus();return;}
       if(value.length===4){var latest=meFeaturePinConfig(kind);if(latest&&latest.digits!==4){latest.digits=4;localStorage.setItem('diary_me_section_pin_v1_'+kind,JSON.stringify(latest));}showMeFeaturePage(kind);}
       else{meFeatureStatus.textContent=mf('pinLegacy');meFeatureAskNewPin(kind,function(){showMeFeaturePage(kind);});}
-     }).catch(function(){meFeatureStatus.textContent=mf('failed');submit.disabled=false;});
+     }).catch(function(){meFeatureStatus.textContent=mf('failed');submit.disabled=false;submit.dataset.autoSubmitted='0';});
     });
     form.appendChild(mfEl('p',{class:'diary-me-feature-pin-note'},mf('pinNote')));
    }
