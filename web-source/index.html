@@ -1526,6 +1526,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    form.addEventListener('submit',function(e){e.preventDefault();var value=String(current.value||'').trim();if(!/^\d{4,8}$/.test(value)){meFeatureStatus.textContent=mf('pinNeed');return;}
     submit.disabled=true;meFeatureVerifyValue(kind,value).then(function(ok){if(!ok){meFeatureStatus.textContent=mf('pinWrong');submit.disabled=false;current.value='';current.focus();return;}callback(value);}).catch(function(){submit.disabled=false;meFeatureStatus.textContent=mf('failed');});
    });
+   if(config&&config.digits===4){current.addEventListener('input',function(){if(current.value.length===4&&submit.dataset.autoSubmitted!=='1'){submit.dataset.autoSubmitted='1';submit.click();}});}
    meFeatureContent.append(form,meFeatureStatus);
   }
   function showMeFeaturePin(kind){
@@ -1533,17 +1534,18 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    meFeatureTitle.textContent=mf(meFeatureTypes.filter(function(x){return x.id===kind;})[0].key);meFeatureManage.hidden=true;meFeatureLock.hidden=true;meFeatureContent.replaceChildren();meFeatureStatus.textContent='';
    if(!config){
     form.appendChild(mfEl('strong',{},mf('pinSet')));
-    var create=mfEl('button',{type:'button',class:'diary-me-feature-save'},mf('save'));create.addEventListener('click',function(){create.disabled=true;meFeatureAskNewPin(kind,function(){showMeFeaturePage(kind);});});
+    var create=mfEl('button',{type:'button',class:'diary-me-feature-save'},mf('save'));create.addEventListener('click',function(){meFeatureAskNewPin(kind,function(){showMeFeaturePage(kind);});});
     form.appendChild(create);form.appendChild(mfEl('p',{class:'diary-me-feature-pin-note'},mf('pinNote')));
    }else{
     form.appendChild(mfEl('strong',{},mf('pinPrompt')));
     var pin=mfField(form,mf('pinPrompt'),'password','pin',true);pin.inputMode='numeric';pin.maxLength=config.digits===4?4:8;pin.placeholder=mf('pinPlaceholder');
     var submit=mfEl('button',{type:'submit',class:'diary-me-feature-save'},mf('unlock'));form.appendChild(submit);
+    if(config.digits===4){pin.addEventListener('input',function(){if(pin.value.length===4&&submit.dataset.autoSubmitted!=='1'){submit.dataset.autoSubmitted='1';submit.click();}});}
     var forgot=mfEl('button',{type:'button',class:'diary-me-feature-report'},mf('pinForgot'));
     forgot.addEventListener('click',function(){var bytes=new Uint8Array(4);crypto.getRandomValues(bytes);var temp=String(((bytes[0]<<24)|(bytes[1]<<16)|(bytes[2]<<8)|bytes[3])>>>0).slice(-4).padStart(4,'0');meFeatureShowTemporaryPin(temp,function(){meFeaturePinDialog(mf('pinRecoveryPinPrompt')).then(function(entered){if(entered===null)return;if(entered!==temp){meFeatureStatus.textContent=mf('pinWrong');return;}meFeatureAskNewPin(kind,function(){showMeFeaturePage(kind);});});});});
     form.appendChild(forgot);
     var off=mfEl('button',{type:'button',class:'diary-me-feature-delete'},mf('pinRemove'));
-    off.addEventListener('click',function(){meFeaturePinDialog(mf('pinPrompt')).then(function(entered){if(entered===null)return;meFeatureVerifyValue(kind,entered).then(function(ok){if(!ok){meFeatureStatus.textContent=mf('pinWrong');return;}localStorage.removeItem('diary_me_section_pin_v1_'+kind);localStorage.removeItem('diary_me_section_recovery_v1_'+kind);meFeatureManage.hidden=true;meFeatureStatus.textContent=mf('pinRemoved');showMeFeaturePage(kind);}).catch(function(){meFeatureStatus.textContent=mf('failed');});});});
+    off.addEventListener('click',function(){meFeatureVerifyCurrent(kind,function(){localStorage.removeItem('diary_me_section_pin_v1_'+kind);localStorage.removeItem('diary_me_section_recovery_v1_'+kind);meFeatureManage.hidden=true;meFeatureStatus.textContent=mf('pinRemoved');showMeFeaturePage(kind);});});
     form.appendChild(off);
     form.addEventListener('submit',function(e){e.preventDefault();var value=String(pin.value||'').trim();if(!/^\d{4,8}$/.test(value)){meFeatureStatus.textContent=mf('pinNeed');return;}
      submit.disabled=true;meFeatureVerifyValue(kind,value).then(function(ok){if(!ok){meFeatureStatus.textContent=mf('pinWrong');submit.disabled=false;pin.value='';pin.focus();return;}
