@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `136`; package `com.personal.diaryapp`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current. (This line corrects the stale 126/126 figures recorded earlier.)
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `138`; package `com.personal.diaryapp`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current. (This line corrects the stale 126/126 figures recorded earlier.)
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -954,4 +954,25 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Both inline scripts parse successfully. All 10 language dictionaries contain the seven panel heading/description labels.
 - APK remains **1.0.136 / versionCode 135**, SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`; no APK rebuild or signing operation occurred.
 - Phone-side visual and interaction testing remains **pending**. Use **Me → Check for Updates**, tap each of the three existing buttons, and confirm the correct purpose panel and its three choices appear. Test image selection and colour selection in each panel.
+- Rollback: use the verified backup branch and exact pre-change files listed above. Preserve all local notes, photos and app data.
+
+
+---
+
+# Web Update 138 — Separate ready-made pamphlet chooser in all three Diary image panels (2026-11-13)
+
+- User clarified that the requested pamphlet choice must be a **separate option**, not merely the existing image/colour controls. User approved proceeding.
+- Starting live state: APK **1.0.136 / versionCode 135**, webVersion **137**, package `com.personal.diaryapp`. Live `latest.json` and Master Register were read before editing.
+- Scope: web-only `web-source/index.html`; the existing publisher synchronizes `diary-web/index.html` and updates `latest.json`. No native Android source, APK, package/signing identity, updater logic, note storage keys, PIN/recovery logic, or unrelated features changed.
+- Added a distinct **Pamphlet Chunein / Choose Pamphlet** option inside each of the three existing image panels: Note ka Cover Photo, Details Image, and Photo Lagayein. The option opens a separate ready-made design gallery with four selectable presets: Royal Gold, Purple Bloom, Emerald Garden and Ocean Blue. Selecting a preset applies its two-colour gradient to the relevant existing cover field, details field, or attached-photo frame.
+- Existing **Choose Image**, **Solid Colour**, and **Gradient Colour** options remain available and unchanged. No new top-level editor button was added; the pamphlet option is inside each existing panel. All six new labels were translated in all 10 supported languages.
+- Pre-edit backup branch: `backup/pre-pamphlet-chooser-2026-11-13`. Verified readable backup files:
+  - `backups/web-source-before-pamphlet-chooser-2026-11-13.html`
+  - `backups/diary-web-before-pamphlet-chooser-2026-11-13.html`
+  - `backups/latest-before-pamphlet-chooser-2026-11-13.json`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-pamphlet-chooser-2026-11-13.md`
+- Source commit: `2ad2a044f7fd7bce0b44164b4fa24fc823ac73e1`. Web-only publisher workflow run **43368466848** (run 128) completed successfully.
+- Post-publish verification: source and published mirror were re-fetched and have identical Git blob SHA `5cb65a2706d3e9165c05da43bbb8d75d8126ddc5`. Independently calculated SHA-256 over the exact UTF-8 source bytes: `01804fe61c88983e57833809fbcad705c2da75fc3ee88a948184c59420e064c3`, matching live `latest.json.webSha256`. Live webVersion **138**.
+- Both inline scripts parse successfully. Each of the six new translation keys is present in all 10 language dictionaries. SHA-256 implementation was checked against the standard `abc` test vector. APK remains **1.0.136 / versionCode 135**, APK hash and package identity unchanged; no APK rebuild or signing operation.
+- Physical-device visual and interaction verification remains **pending**. Use **Me → Check for Updates**, then open each of the three image panels, tap **Pamphlet Chunein**, choose each preset, and confirm it styles the intended field/photo frame. Also confirm the existing image, solid-colour and gradient-colour choices still work.
 - Rollback: use the verified backup branch and exact pre-change files listed above. Preserve all local notes, photos and app data.
