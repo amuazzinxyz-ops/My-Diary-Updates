@@ -586,7 +586,7 @@ for receiver_name, actions in [
         receiver = ET.SubElement(app, "receiver")
         receiver.set("{" + android_ns + "}name", receiver_name)
         receiver.set("{" + android_ns + "}enabled", "true")
-        receiver.set("{" + android_ns + "}exported", if receiver_name == ".DiaryReminderBootReceiver" else "false")
+        receiver.set("{" + android_ns + "}exported", "true" if receiver_name == ".DiaryReminderBootReceiver" else "false")
         if actions:
             intent_filter = ET.SubElement(receiver, "intent-filter")
             for action_name in actions:
