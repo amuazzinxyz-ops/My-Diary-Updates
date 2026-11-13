@@ -7,8 +7,8 @@
   "sha256": "6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348",
   "releaseNotes": "Android Back now closes the entire Diary in one press from any Diary section. Existing notes, photos, PIN data, and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 183,
+  "webVersion": 184,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "bb4c5985646ffc89c4ef0e9db6725e98ef6e9fa6c54fb07c75c73caf3d61efa3",
+  "webSha256": "97baad776de526da1ab8ad2a24b8f7242247ab3088583299289a4401f2b71b34",
   "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
 }
