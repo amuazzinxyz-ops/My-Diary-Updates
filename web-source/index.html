@@ -1265,50 +1265,12 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var choose=el('button',{type:'button',class:'diary-image-choice-image'},t('chooseImage'));
   var solidBtn=el('button',{type:'button',class:'diary-image-choice-solid'},t('solidColour'));
   var gradBtn=el('button',{type:'button',class:'diary-image-choice-gradient'},t('gradientColour'));
-  var pamphletBtn=el('button',{type:'button',class:'diary-image-choice-pamphlet','aria-expanded':'false'},t('pamphletChoose'));
-  var pamphletGallery=el('div',{class:'diary-pamphlet-gallery','data-purpose':kind,hidden:'hidden'});
-  pamphletGallery.appendChild(el('div',{class:'diary-pamphlet-gallery-title'},t('pamphletTitle')));
-  var pamphletPresets=kind==='Cover'?[
-   {id:'cover-floral',key:'pamphletFloral',ornament:'❀',sample:'MY DIARY'},
-   {id:'cover-islamic',key:'pamphletIslamic',ornament:'۞',sample:'بِسْمِ اللّٰهِ'},
-   {id:'cover-classic',key:'pamphletClassic',ornament:'✦',sample:'MY STORY'},
-   {id:'cover-nature',key:'pamphletNature',ornament:'❧',sample:'MY MEMORIES'}
-  ]:kind==='Detail'?[
-   {id:'detail-paper',key:'pamphletClassic',ornament:'❦',sample:'A little note...'},
-   {id:'detail-lined',key:'pamphletNature',ornament:'✎',sample:'Write your thoughts...'},
-   {id:'detail-islamic',key:'pamphletIslamic',ornament:'۞',sample:'الحمد لله'},
-   {id:'detail-nature',key:'pamphletFloral',ornament:'❀',sample:'Dear Diary...'}
-  ]:[
-   {id:'photo-polaroid',key:'pamphletClassic',ornament:'♡',sample:'PHOTO'},
-   {id:'photo-royal',key:'pamphletIslamic',ornament:'✦',sample:'MEMORIES'},
-   {id:'photo-floral',key:'pamphletFloral',ornament:'❀',sample:'SPECIAL DAY'},
-   {id:'photo-modern',key:'pamphletNature',ornament:'◈',sample:'MOMENTS'}
-  ];
-  pamphletPresets.forEach(function(preset){
-   var theme=diaryPamphletStyle(preset.id),tile=el('button',{type:'button',class:'diary-pamphlet-card','aria-label':t(preset.key)});
-   var sample=el('span',{class:'diary-pamphlet-sample','data-template':preset.id});
-   var inner=el('span',{class:'diary-pamphlet-sample-inner'});
-   inner.appendChild(el('span',{class:'diary-pamphlet-ornament'},preset.ornament));
-   inner.appendChild(el('span',{class:'diary-pamphlet-sample-text'},preset.sample));
-   inner.appendChild(el('span',{class:'diary-pamphlet-sample-rule'}));
-   sample.appendChild(inner);
-   var label=el('span',{class:'diary-pamphlet-label'},t(preset.key));
-   tile.append(sample,label);
-   tile.addEventListener('click',function(e){
-    e.preventDefault();e.stopPropagation();
-    var v=diaryColourFor(kind);v.template=preset.id;v.mode='none';v.first=theme.border;v.second=theme.accent;setDiaryColour(kind,v);
-    one.value=theme.border;two.value=theme.accent;solid.style.display='none';grad.hidden=true;
-    pamphletGallery.hidden=true;pamphletBtn.setAttribute('aria-expanded','false');redraw();
-   });
-   pamphletGallery.appendChild(tile);
-  });
-  pamphletBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();pamphletGallery.hidden=!pamphletGallery.hidden;pamphletBtn.setAttribute('aria-expanded',pamphletGallery.hidden?'false':'true');});
   var solid=el('input',{type:'color',value:'#f4e6a8','aria-label':t('solidColour')});
   var one=el('input',{type:'color',value:'#f4e6a8','aria-label':t('colourOne')});
   var two=el('input',{type:'color',value:'#8e63c6','aria-label':t('colourTwo')});
   var grad=el('div',{class:'diary-gradient-colour-tools',hidden:'hidden'});
   solid.style.display='none';one.style.display='none';two.style.display='none';
-  grad.append(one,two);actions.append(choose,solidBtn,gradBtn,pamphletBtn);menu.append(intro,actions,solid,grad,pamphletGallery);
+  grad.append(one,two);actions.append(choose,solidBtn,gradBtn);menu.append(intro,actions,solid,grad);
   function redraw(){if(kind==='Cover'||kind==='Detail')renderDiaryImagePreview(kind);else renderDiaryPhotoPreview();}
   function close(){menu.hidden=true;btn.setAttribute('aria-expanded','false');}
   btn.setAttribute('aria-expanded','false');
