@@ -2707,6 +2707,17 @@ body[data-diary-interface-theme]:not([data-diary-interface-theme="blue"]):not([d
 }
 </style>
 
+<style id="diary-mobile-border-fit">
+/* Keep the Diary panel's gold border fully inside the mobile overlay width. */
+@media(max-width:420px){
+  #diaryMyNotesPanel{
+    box-sizing:border-box!important;
+    width:100%!important;
+    max-width:100%!important;
+  }
+}
+</style>
+
 </body>
 </html>
 <!-- SHA-256 release verification refresh 2026-11-12 -->
