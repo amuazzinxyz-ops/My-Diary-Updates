@@ -1514,3 +1514,21 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK unchanged: 1.0.136 / versionCode 135; SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`. No APK rebuild or signing changes.
 - Physical-device verification **pending**. User should use **Me → Check for Updates**, then inspect whether the left and right outer borders have equal space and both remain fully visible. Do not claim the phone-side issue is fixed until the user confirms.
 - Rollback: exact pre-edit files preserved on `backup/pre-centered-mobile-diary-panel-2026-11-13`; preserve all Diary notes, photos, settings and PIN data.
+
+
+---
+
+# Web Update 172 — Fit locked Note card and PIN controls on mobile (2026-11-13)
+
+- User clarified that the left/right clipping is noticed specifically when a Note is locked, not on the general Diary page. Starting state: Web Update 171; APK 1.0.136 / versionCode 135; package `com.personal.diaryapp`; starting source blob `a47e48aa1eb74cd5f44ec655764ece6ce97ad532`; starting feed SHA-256 `51bb5ed38c96f360fa9de1ddb75faea159805f4a19e45c5844912f9d1598ad42`.
+- Changed only a new CSS block `diary-note-lock-mobile-fit` in `web-source/index.html`. It targets the expanded locked Note card containing the `diary-note-pin` input, constrains that card to the available list width with border-box sizing and zero minimum width, and keeps the PIN field and its content within the card. No Note Lock/Unlock logic or PIN/recovery data was changed.
+- The general Diary panel sizing CSS from Web Update 171 was left untouched. No notes, photos, settings, translations, storage keys, PIN/recovery logic, native Android source, APK, package identity or signing data changed.
+- Pre-edit backup branch: `backup/pre-note-lock-mobile-fit-2026-11-13`. Backups preserved:
+  - `backups/web-source-before-note-lock-mobile-fit-2026-11-13.html` — pre-edit source blob `a47e48aa1eb74cd5f44ec655764ece6ce97ad532`
+  - `backups/diary-web-before-note-lock-mobile-fit-2026-11-13.html` — exact pre-edit published mirror
+  - `backups/latest-before-note-lock-mobile-fit-2026-11-13.json`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-note-lock-mobile-fit-2026-11-13.md`
+- Source commit `72d68e7b9cb8f69bc9adfb24d5c341dc1cdfff58`. Web-only publisher workflow run `43418912556`, run 162, completed successfully. Live feed advanced to webVersion `172`; live `webSha256=3c17afe300473dd43e98201423961390ef431c1b01fca408795489559f71a7e2`. Source and published mirror are byte-identical; both blob SHA `34a031dedbdc94d50a861abb40b32a4dbb310125`.
+- APK unchanged: 1.0.136 / versionCode 135; SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`. No APK rebuild or signing changes.
+- Physical-device verification **pending**. Ask the user to use **Me → Check for Updates**, then lock a Note and check whether the locked Note card and both side borders fit evenly inside the mobile screen. Do not claim the phone-side issue is fixed until the user confirms.
+- Rollback: exact pre-edit files preserved on `backup/pre-note-lock-mobile-fit-2026-11-13`; preserve all Diary notes, photos, settings and PIN data.
