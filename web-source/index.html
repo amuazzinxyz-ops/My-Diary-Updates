@@ -1316,7 +1316,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var photoInput=el('input',{id:'diaryMyNotesPhotoInput',type:'file',accept:'image/*'});photoInput.style.display='none';
   var photoBtn=el('button',{id:'diaryMyNotesPhotoBtn',type:'button',class:'secondary'},t('addPhoto'));
   var photoPreview=el('div',{id:'diaryMyNotesPhotoPreview'});
-  attachDiaryColourChooser(photoBtn,photoInput,'Photo');
+
   photoInput.addEventListener('change',function(){var f=photoInput.files&&photoInput.files[0];if(!f)return;if(!/^image\//i.test(f.type)){photoInput.value='';return;}compressDiaryPhoto(f).then(function(data){activePhotoData=data;renderDiaryPhotoPreview();var st=document.getElementById('diaryMyNotesStatus');if(st)st.textContent=t('photoAdded');}).catch(function(){var st=document.getElementById('diaryMyNotesStatus');if(st)st.textContent=t('photoTooLarge');}).finally(function(){photoInput.value='';});});
   var actions=el('div',{id:'diaryMyNotesActions'});
   actions.appendChild(el('button',{id:'diaryMyNotesSave',type:'button'},t('save')));
@@ -1324,7 +1324,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   actions.appendChild(el('button',{id:'diaryMyNotesDelete',type:'button',class:'secondary'},t('remove')));
   var status=el('div',{id:'diaryMyNotesStatus','aria-live':'polite'});
   var list=el('div',{id:'diaryMyNotesList'});
-  editor.appendChild(label1Row);editor.appendChild(title);editor.appendChild(coverFormatControls.element);if(coverInput)editor.appendChild(coverInput);editor.appendChild(label2Row);editor.appendChild(note);editor.appendChild(detailFormatControls.element);if(detailInput)editor.appendChild(detailInput);editor.appendChild(photoBtn);editor.appendChild(photoInput);editor.appendChild(photoPreview);editor.appendChild(actions);
+  editor.appendChild(label1Row);editor.appendChild(title);editor.appendChild(coverFormatControls.element);if(coverInput)editor.appendChild(coverInput);editor.appendChild(label2Row);editor.appendChild(note);editor.appendChild(detailFormatControls.element);if(detailInput)editor.appendChild(detailInput);editor.appendChild(photoBtn);attachDiaryColourChooser(photoBtn,photoInput,'Photo');editor.appendChild(photoInput);editor.appendChild(photoPreview);editor.appendChild(actions);
   var tools=el('div',{id:'diaryMyNotesTools'});
   var categoryFilter=el('select',{id:'diaryMyNotesCategoryFilter','aria-label':t('categoryLabel')});
   categoryFilter.appendChild(el('option',{value:'all','data-i18n':'allCategories'},t('allCategories')));
