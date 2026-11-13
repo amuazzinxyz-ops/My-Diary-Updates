@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `167`; package `com.personal.diaryapp`. Live feed: `webSha256=87a7d661f06322370dfe5ac87a7aef555eeaeb6844c82ffe302465c9f3b53751`.
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `168`; package `com.personal.diaryapp`. Live feed: `webSha256=e6d08089a138d3fc2026eceff7db1fcd5f247eda92ed4f616ca54b60e70d8b09`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -1437,3 +1437,23 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK unchanged: 1.0.136 / versionCode 135; APK SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`. No APK rebuild or signing changes.
 - Physical-device verification pending. User should use the existing **Me → Check for Updates** path and confirm that both vertical border lines are now fully visible on the mobile screen. Do not claim phone-side success until the user confirms.
 - Rollback: restore the exact pre-edit HTML files from `backup/pre-mobile-diary-border-fit-2026-11-13`; preserve all notes, photos, settings, and PIN data.
+
+
+---
+
+# Web Update 168 — Reduce mobile Diary panel width by 10px total (2026-11-13)
+
+- User confirmed the previous border fit was still clipped and specified: reduce the total panel width by 10px. Applied exactly 10 CSS pixels total, equivalent to 5px on each side, on screens up to 420px.
+- Starting live state: Web Update 167; APK 1.0.136 / versionCode 135; package `com.personal.diaryapp`. Source/mirror prior blob SHA `00737e4bfe34a875dd1099555d9d6ff67381b472`; prior feed SHA-256 `87a7d661f06322370dfe5ac87a7aef555eeaeb6844c82ffe302465c9f3b53751`.
+- Changed only `web-source/index.html`, in the existing `diary-mobile-border-fit` CSS block: `width:calc(100% - 10px)`, matching `max-width`, and auto left/right margins. The existing `box-sizing:border-box` and 420px mobile breakpoint remain. No height, vertical position, border thickness/colour/style, panel content, feature logic, gestures, Share, translations, notes/photos, storage, PIN/recovery, native Android source, APK, package identity or signing data changed.
+- Pre-edit backup branch: `backup/pre-mobile-diary-border-10px-2026-11-13`. Exact backups created, re-fetched and verified byte-identical:
+  - `backups/web-source-before-mobile-diary-border-10px-2026-11-13.html` — blob `00737e4bfe34a875dd1099555d9d6ff67381b472`
+  - `backups/diary-web-before-mobile-diary-border-10px-2026-11-13.html` — same blob
+  - `backups/latest-before-mobile-diary-border-10px-2026-11-13.json` — blob `77fa17c622e285ad4073dd4f9fe84d838a42b34f`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-mobile-diary-border-10px-2026-11-13.md` — blob `461ee2c49201bee05fbaf0588e3cd9dab19b10bd`
+- Source patch commit `c2c795b47b55a17ce9c0fbb521d57b4305c6b650`; final source blob `d1b173fa83ee5cb85ffdc780d14205a0ee1a0402`. Both inline JavaScript blocks parsed successfully; mobile CSS braces balanced; targeted checks confirmed 10px total width reduction, horizontal centering, and no height/top/bottom changes.
+- Publisher workflow run `43413910094`, run 158, completed successfully; publish job `131846909543` succeeded. Publisher output commit `0071dba5a93091b6cea858a33b112a53f93c9a40` updated the published mirror and feed. Re-fetched source and mirror are byte-identical, both blob SHA `d1b173fa83ee5cb85ffdc780d14205a0ee1a0402`.
+- Live feed advanced to Web Update 168. Independently calculated UTF-8 SHA-256 `e6d08089a138d3fc2026eceff7db1fcd5f247eda92ed4f616ca54b60e70d8b09`, matching `latest.json.webSha256`.
+- APK unchanged: 1.0.136 / versionCode 135; SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`. Web-only update; no APK rebuild or signing changes.
+- Physical-device verification pending. User should use **Me → Check for Updates** and inspect only the left/right border lines. Do not claim the phone-side clipping is fixed until the user confirms.
+- Rollback: exact pre-edit files are preserved on `backup/pre-mobile-diary-border-10px-2026-11-13`; restore only the affected HTML if required. Preserve notes, photos, settings and PIN data.
