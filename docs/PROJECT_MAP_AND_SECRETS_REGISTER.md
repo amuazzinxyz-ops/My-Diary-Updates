@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `140`; package `com.personal.diaryapp`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current. (This line corrects the stale 126/126 figures recorded earlier.)
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `143`; package `com.personal.diaryapp`. Live feed: `webSha256=745d8e5fb5d794fac62f613d0783b6f20bf208a8c22e0060b86d231f531bd7c1`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current. This corrects the stale webVersion 140 entry below.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -1025,3 +1025,22 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Live feed reports webVersion **142** and web SHA-256 `6d7ba9eaa51e60642d1176abc7278d46a58aaa76d1e7105446405c356d835101`. APK remains **1.0.136 / versionCode 135**, URL, SHA-256 and package unchanged; no APK rebuild or signing operation.
 - Physical-device touch/visual testing remains **pending**. Use **Me → Check for Updates**, open each of the three image panels, choose an image or pamphlet, tap **Ungli se Adjust Karein**, drag with one finger and pinch with two fingers. Save and reopen the note and verify the crop remains. Do not claim phone-side testing until the user confirms.
 - Rollback: use the backup branch and exact pre-change files listed above. Preserve all local notes, photos and app data.
+
+
+---
+
+# Web Update 143 — Android touch drag and pinch adjustment repair (2026-11-13)
+
+- User reported that the finger-adjust button activated and the image appeared, but the image stayed fixed and could not be moved by touch.
+- Starting live state: APK 1.0.136 / versionCode 135; webVersion 142; source commit `4b8e2829e4f374881d0ba6b47615a40acd2befee`. Live `latest.json` was authoritative; the stale status line above previously said webVersion 140 and has now been corrected to 143.
+- Scope: web-only; changed only `bindDiaryFingerAdjust(target,kind)` in `web-source/index.html`. Added native Touch Events for Android touch dragging and two-finger pinch zoom; retained mouse/pen Pointer Events. Touch movement is handled at document level so dragging continues if the finger moves beyond the image/input boundary. Existing position/zoom state and paint functions remain in use.
+- Explicitly untouched: pamphlet designs/chooser, image selection, editor layout, notes/photos data, save format, PIN/lock/recovery, language dictionaries, native Android source, APK, package identity, signing data and all other features.
+- Pre-edit backup branch: `backup/pre-finger-drag-fix-2026-11-13`. Verified backup files:
+  - `backups/web-source-before-finger-drag-fix-2026-11-13.html`
+  - `backups/diary-web-before-finger-drag-fix-2026-11-13.html`
+  - `backups/latest-before-finger-drag-fix-2026-11-13.json`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-finger-drag-fix-2026-11-13.md`
+- Source change commit: `20376daa52c530163f1085a648d4a4b54b146f7b`. Web publisher workflow run `43378304747` (run 133) completed with **success**.
+- Post-publish verification: source and published mirror are byte-identical, both Git blob SHA `98d759b0b8b7637058affbba9307701bfd45d2ed`; independently calculated UTF-8 SHA-256 `745d8e5fb5d794fac62f613d0783b6f20bf208a8c22e0060b86d231f531bd7c1` matches live `latest.json.webSha256`; live webVersion is 143.
+- APK remains `1.0.136` / versionCode `135`; no APK rebuild or signing operation. Phone-side drag/zoom test is **pending**; do not claim device testing until user confirms.
+- Rollback: restore the verified pre-edit files from `backup/pre-finger-drag-fix-2026-11-13` if phone testing identifies a regression.
