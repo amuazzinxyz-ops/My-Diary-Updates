@@ -1696,7 +1696,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   function showMeFeaturePage(kind){
    currentMeFeatureKind=kind;
    meFeatureTitle.textContent=mf(meFeatureTypes.filter(function(x){return x.id===kind;})[0].key);
-   meFeatureBack.textContent=mf('back');meFeatureLock.hidden=!meFeatureProtected(kind);meFeatureManage.hidden=!meFeaturePinConfig(kind);meFeatureContent.replaceChildren();meFeatureStatus.textContent='';
+   meFeatureBack.textContent=mf('back');meFeatureLock.hidden=kind!=='documents'&&kind!=='memories';meFeatureManage.hidden=!meFeaturePinConfig(kind);meFeatureContent.replaceChildren();meFeatureStatus.textContent='';
    meFeatureSearchInput=null;meFeatureCategoryFilter=null;
    meFeatureContent.appendChild(meFeatureForm(kind));meFeatureContent.appendChild(meFeatureTools(kind));meFeatureContent.append(meFeatureStatus,meFeatureList);
    meFeatureModal.hidden=false;mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');
