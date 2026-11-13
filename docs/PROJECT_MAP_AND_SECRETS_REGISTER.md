@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `170`; package `com.personal.diaryapp`. Live feed: `webSha256=ff55b50443518dc79d7384e6bcb6131d4bed7b957c1bab416150b44e91ac742e`.
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `171`; package `com.personal.diaryapp`. Live feed: `webSha256=51bb5ed38c96f360fa9de1ddb75faea159805f4a19e45c5844912f9d1598ad42`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -1495,3 +1495,22 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK unchanged: 1.0.136 / versionCode 135; SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`. No APK rebuild or signing changes.
 - Physical-device verification pending. User should tap **Me → Check for Updates**; if the checker again reports already updated, it indicates the installed HTML hash is current. Then inspect the left/right outer border. Do not claim phone-side success until the user confirms.
 - Rollback: exact pre-edit files preserved on `backup/pre-mobile-border-fit-30px-2026-11-13`; preserve all notes, photos, settings and PIN data.
+
+
+---
+
+# Web Update 171 — Center Diary panel to equal mobile screen gutters (2026-11-13)
+
+- User reported that the Diary page did not appear evenly fitted to the mobile screen: moving the page left or right caused one side to move inward while the other remained clipped. The earlier mobile rule subtracted a second percentage from a flex overlay that already had 10px horizontal padding, making panel width depend on the padded content box rather than directly using the available screen width.
+- Starting state: Web Update 170; APK 1.0.136 / versionCode 135; package `com.personal.diaryapp`. Starting source/mirror blob SHA `06dc67027578c3a9ce8dfc6922f8aef0cca114e4`; feed SHA-256 `ff55b50443518dc79d7384e6bcb6131d4bed7b957c1bab416150b44e91ac742e`.
+- Changed only the existing `diary-mobile-border-fit` CSS block in `web-source/index.html`, source commit `b46f11410de693e98bd61ba6f710348c7f3ab2a7`. Removed the `calc(100% - 30px)` width rule. The overlay now supplies symmetric left/right gutters using `max(12px, env(safe-area-inset-left/right, 0px))`; the Diary panel uses `width:100%`, `max-width:760px`, `min-width:0`, a shrinkable flex basis, and auto side margins. This makes the panel fit the overlay's actual available width and keeps it centered without independent left/right nudging.
+- No panel height, vertical position, border thickness/colour, 3D border/shadow, Diary content, translations, notes/photos, storage keys, PIN/recovery, native Android source, APK, package identity or signing data changed. Full source commit diff reviewed: only the one existing CSS block changed.
+- Pre-edit backup branch: `backup/pre-centered-mobile-diary-panel-2026-11-13`. Verified readable exact backups:
+  - `backups/web-source-before-centered-mobile-diary-panel-2026-11-13.html` — blob `06dc67027578c3a9ce8dfc6922f8aef0cca114e4`
+  - `backups/diary-web-before-centered-mobile-diary-panel-2026-11-13.html` — same blob
+  - `backups/latest-before-centered-mobile-diary-panel-2026-11-13.json` — blob `2d846ca0573d03840885a5ccc3629996dbd1da69`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-centered-mobile-diary-panel-2026-11-13.md` — blob `f409ccea7adaef3d6d90c6d4cb060142594db751`
+- Web-only publisher workflow run `43417578157`, run 161, completed with **success**; publish job `131859266460` succeeded. Publisher advanced live feed to webVersion `171`. Re-fetched source and published mirror are byte-identical; both Git blob SHA `a47e48aa1eb74cd5f44ec655764ece6ce97ad532`. Independently calculated UTF-8 SHA-256 `51bb5ed38c96f360fa9de1ddb75faea159805f4a19e45c5844912f9d1598ad42` matches live `latest.json.webSha256`.
+- APK unchanged: 1.0.136 / versionCode 135; SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`. No APK rebuild or signing changes.
+- Physical-device verification **pending**. User should use **Me → Check for Updates**, then inspect whether the left and right outer borders have equal space and both remain fully visible. Do not claim the phone-side issue is fixed until the user confirms.
+- Rollback: exact pre-edit files preserved on `backup/pre-centered-mobile-diary-panel-2026-11-13`; preserve all Diary notes, photos, settings and PIN data.
