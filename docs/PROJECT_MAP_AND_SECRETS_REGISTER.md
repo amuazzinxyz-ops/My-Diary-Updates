@@ -1314,3 +1314,21 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK unchanged: 1.0.136 / versionCode 135 / SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`; no APK rebuild or signing changes.
 - Physical-device verification **pending**. User should use **Me → Check for Updates**, open/unlock a note, and tap **Share** once. Confirm the note stays expanded and the Android share sheet opens. Do not claim phone-side success until the user confirms.
 - Rollback: exact pre-edit files on `backup/pre-share-single-tap-restore-2026-11-13`; preserve all local notes, photos, PIN data and app identity.
+
+
+# Web Update 161 — Keep Note Share unavailable until the composed image is ready (2026-11-13)
+
+- User reported that `📤 Note Share Karein` still did not open Share and asked for the fix to work in both the Android APK and Chrome.
+- Starting live state: Web Update 160; APK 1.0.136 / versionCode 135; package `com.personal.diaryapp`; source/mirror blob SHA `8cd55c74c81a77232b53d22ff3da27d564617d37`; feed SHA-256 `9e62a60bfad90c5374d02ebad6e39d6138c5c217bffcb22c03ab3c8a1a31be1f`.
+- Audited the complete live `shareNote` function and the expanded-note rendering/click handlers. Confirmed that a cache-miss Share tap fell through to asynchronous image loading, canvas rendering and `toBlob`, then called `navigator.share` only after those asynchronous steps. That loses the transient browser user activation in Chrome. Also confirmed the Android project has a native `DiaryNativeShare` WebMessageListener and a `navigator.share` shim; it converts selected files to Base64 and invokes Android's FileProvider share intent.
+- Changed only `web-source/index.html`: the Share button now stays disabled until the composed PNG cache is ready, and its preparation callback enables the button only after the cached image exists. The parent note-card click handler now ignores taps originating from buttons/inputs/selects, preventing a not-yet-ready Share button tap from collapsing the expanded note. Once enabled, the button calls the existing `shareNote(n)` synchronously from the tap. Combined PNG artwork, image/text positioning, native Android share bridge, browser Web Share API, download fallback, notes, photos, storage, PIN/recovery and APK were not changed.
+- Pre-edit backup branch: `backup/pre-note-share-ready-gate-2026-11-13`; verified backup files:
+  - `backups/web-source-before-note-share-ready-gate-2026-11-13.html`
+  - `backups/latest-before-note-share-ready-gate-2026-11-13.json`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-note-share-ready-gate-2026-11-13.md`
+- Source change commit: `a5647aa33116ed4e30914911ba64da16e66cc474`; source blob SHA `893bb0524cbf409289784ff616fff453b2efd262`.
+- Web-only publisher workflow run `43406545302` (run 151) completed with conclusion `success`; publish job `131822149788` succeeded. Live source and `diary-web/index.html` are byte-identical; both blob SHA `893bb0524cbf409289784ff616fff453b2efd262`. Live feed advanced to Web Update 161 and reports `webSha256=72d57d63844f68f125c49f7bfb90fd62c38a060bd8804fd9dc129eb7561e3ccb`. The publisher workflow computed this SHA and wrote it to the feed; an independent local recomputation is still pending.
+- Static verification after publication confirmed the readiness gate, preparation callback, synchronous Share call after readiness, and parent-card control-target guard are all present in the published source. JavaScript parse/build validation for this exact web bundle is pending; no claim of complete automated syntax validation is made.
+- APK unchanged: 1.0.136 / versionCode 135 / SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`; no APK rebuild or signing change.
+- Physical-device/browser verification pending. User should use **Me → Check for Updates**, open and unlock a note, wait for the Share button to become enabled, then tap it once. Confirm the note stays expanded and the Android/Chrome share sheet opens with the single composed Diary image. Do not claim phone-side success until confirmed.
+- Rollback: exact pre-edit files are preserved on `backup/pre-note-share-ready-gate-2026-11-13`; preserve local notes, photos, PIN data and app identity.
