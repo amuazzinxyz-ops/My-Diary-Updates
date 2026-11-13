@@ -1150,20 +1150,26 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  function bindDiaryFingerAdjust(target,kind){
   if(!target||target.getAttribute('data-finger-adjust-bound')==='1')return;
   target.setAttribute('data-finger-adjust-bound','1');
-  var pts={},base=null,startDist=0,startZoom=1;
-  function distance(){var a=Object.keys(pts);if(a.length<2)return 0;var p=pts[a[0]],q=pts[a[1]];return Math.hypot(p.x-q.x,p.y-q.y);}
-  function begin(id,x,y){pts[id]={x:x,y:y};var v=diaryColourFor(kind);if(Object.keys(pts).length===1)base={x:x,y:y,posX:v.posX,posY:v.posY};else if(Object.keys(pts).length===2){startDist=distance()||1;startZoom=v.zoom;}}
-  function move(id,x,y){if(!pts[id])return;pts[id]={x:x,y:y};var v=diaryColourFor(kind),keys=Object.keys(pts);if(keys.length>=2){v.zoom=Math.max(1,Math.min(3,startZoom*(distance()/Math.max(1,startDist))));}else if(base){var dx=x-base.x,dy=y-base.y,w=Math.max(1,target.clientWidth),h=Math.max(1,target.clientHeight);if(kind==='Photo'){v.posX=Math.max(-50,Math.min(50,base.posX+dx/w*100));v.posY=Math.max(-50,Math.min(50,base.posY+dy/h*100));}else{v.posX=Math.max(-50,Math.min(150,base.posX-dx/w*100));v.posY=Math.max(-50,Math.min(150,base.posY-dy/h*100));}}setDiaryColour(kind,v);diaryFingerPaint(target,kind);}
-  function finish(id){if(pts[id])delete pts[id];var keys=Object.keys(pts),v=diaryColourFor(kind);if(keys.length===1){var p=pts[keys[0]];base={x:p.x,y:p.y,posX:v.posX,posY:v.posY};startZoom=v.zoom;startDist=0;}else base=null;}
-  /* Mouse/pen use Pointer Events; touch uses native Touch Events for Android WebView reliability. */
-  target.addEventListener('pointerdown',function(e){if(diaryFingerAdjustKind!==kind||e.pointerType==='touch')return;e.preventDefault();e.stopPropagation();begin('p'+e.pointerId,e.clientX,e.clientY);});
-  document.addEventListener('pointermove',function(e){if(e.pointerType==='touch'||!pts['p'+e.pointerId])return;e.preventDefault();move('p'+e.pointerId,e.clientX,e.clientY);},{passive:false});
-  document.addEventListener('pointerup',function(e){finish('p'+e.pointerId);});
-  document.addEventListener('pointercancel',function(e){finish('p'+e.pointerId);});
-  target.addEventListener('touchstart',function(e){if(diaryFingerAdjustKind!==kind)return;e.preventDefault();e.stopPropagation();Array.prototype.forEach.call(e.changedTouches,function(t){begin('t'+t.identifier,t.clientX,t.clientY);});},{passive:false});
-  document.addEventListener('touchmove',function(e){var active=false;Array.prototype.forEach.call(e.changedTouches,function(t){if(pts['t'+t.identifier])active=true;});if(!active)return;e.preventDefault();Array.prototype.forEach.call(e.changedTouches,function(t){move('t'+t.identifier,t.clientX,t.clientY);});},{passive:false});
-  document.addEventListener('touchend',function(e){Array.prototype.forEach.call(e.changedTouches,function(t){finish('t'+t.identifier);});},{passive:false});
-  document.addEventListener('touchcancel',function(e){Array.prototype.forEach.call(e.changedTouches,function(t){finish('t'+t.identifier);});},{passive:false});
+  var pts={},base=null,pinchSpan=0,pinchZoom=1;
+  function span(){var ids=Object.keys(pts),n=ids.length;if(n<2)return 0;var cx=0,cy=0;ids.forEach(function(id){cx+=pts[id].x;cy+=pts[id].y;});cx/=n;cy/=n;var sum=0;ids.forEach(function(id){var dx=pts[id].x-cx,dy=pts[id].y-cy;sum+=dx*dx+dy*dy;});return Math.sqrt(sum/n);}
+  function rebase(){var ids=Object.keys(pts),v=diaryColourFor(kind);if(ids.length===1){var p=pts[ids[0]];base={x:p.x,y:p.y,posX:v.posX,posY:v.posY};pinchSpan=0;pinchZoom=v.zoom;}else if(ids.length>=2){base=null;pinchSpan=Math.max(1,span());pinchZoom=v.zoom;}else{base=null;pinchSpan=0;pinchZoom=v.zoom;}}
+  function begin(id,x,y){pts[id]={x:x,y:y};rebase();}
+  function apply(){var ids=Object.keys(pts);if(!ids.length)return;var v=diaryColourFor(kind);if(ids.length>=2){var now=span();if(pinchSpan>0&&now>0)v.zoom=Math.max(1,Math.min(4,pinchZoom*(now/pinchSpan)));}else if(base){var p=pts[ids[0]],dx=p.x-base.x,dy=p.y-base.y,w=Math.max(1,target.clientWidth),h=Math.max(1,target.clientHeight);if(kind==='Photo'){v.posX=Math.max(-50,Math.min(50,base.posX+dx/w*100));v.posY=Math.max(-50,Math.min(50,base.posY+dy/h*100));}else{v.posX=Math.max(-50,Math.min(150,base.posX-dx/w*100));v.posY=Math.max(-50,Math.min(150,base.posY-dy/h*100));}}setDiaryColour(kind,v);diaryFingerPaint(target,kind);}
+  function move(id,x,y){if(!pts[id])return;pts[id]={x:x,y:y};apply();}
+  function finish(id){if(!pts[id])return;delete pts[id];rebase();}
+  /* Pointer Events handle Android multi-touch pointer IDs; legacy Touch Events are fallback only. */
+  if(window.PointerEvent){
+   target.addEventListener('pointerdown',function(e){if(diaryFingerAdjustKind!==kind)return;e.preventDefault();e.stopPropagation();begin('p'+e.pointerId,e.clientX,e.clientY);});
+   document.addEventListener('pointermove',function(e){if(diaryFingerAdjustKind!==kind||!pts['p'+e.pointerId])return;e.preventDefault();move('p'+e.pointerId,e.clientX,e.clientY);},{passive:false});
+   document.addEventListener('pointerup',function(e){finish('p'+e.pointerId);});
+   document.addEventListener('pointercancel',function(e){finish('p'+e.pointerId);});
+   document.addEventListener('lostpointercapture',function(e){finish('p'+e.pointerId);});
+  }else{
+   target.addEventListener('touchstart',function(e){if(diaryFingerAdjustKind!==kind)return;e.preventDefault();e.stopPropagation();Array.prototype.forEach.call(e.changedTouches,function(t){pts['t'+t.identifier]={x:t.clientX,y:t.clientY};});rebase();},{passive:false});
+   document.addEventListener('touchmove',function(e){if(diaryFingerAdjustKind!==kind)return;var active=false;Array.prototype.forEach.call(e.touches,function(t){if(pts['t'+t.identifier]){pts['t'+t.identifier]={x:t.clientX,y:t.clientY};active=true;}});if(!active)return;e.preventDefault();apply();},{passive:false});
+   document.addEventListener('touchend',function(e){Array.prototype.forEach.call(e.changedTouches,function(t){finish('t'+t.identifier);});},{passive:false});
+   document.addEventListener('touchcancel',function(e){Array.prototype.forEach.call(e.changedTouches,function(t){finish('t'+t.identifier);});},{passive:false});
+  }
  } function setDiaryFingerAdjust(kind,button,hint){var was=diaryFingerAdjustKind;diaryFingerAdjustKind=diaryFingerAdjustKind===kind?null:kind;if(was){var oldTarget=diaryFingerTarget(was);if(oldTarget){oldTarget.classList.remove('diary-finger-adjust-active');oldTarget.style.touchAction='';}var oldButton=document.querySelector('#diaryMyNotesEditor .diary-finger-adjust-button[aria-pressed="true"]');if(oldButton&&oldButton!==button){oldButton.setAttribute('aria-pressed','false');oldButton.textContent=t('fingerAdjust');var oldHint=oldButton.parentNode.querySelector('.diary-finger-adjust-hint');if(oldHint)oldHint.hidden=true;}}var target=diaryFingerTarget(kind);if(diaryFingerAdjustKind){if(target){bindDiaryFingerAdjust(target,kind);target.classList.add('diary-finger-adjust-active');target.style.touchAction='none';}button.setAttribute('aria-pressed','true');button.textContent=t('adjustDone');hint.hidden=false;}else{if(target){target.classList.remove('diary-finger-adjust-active');target.style.touchAction='';}button.setAttribute('aria-pressed','false');button.textContent=t('fingerAdjust');hint.hidden=true;}}
  function clearDiaryFingerAdjust(){var old=diaryFingerAdjustKind;if(old){var target=diaryFingerTarget(old);if(target){target.classList.remove('diary-finger-adjust-active');target.style.touchAction='';}}diaryFingerAdjustKind=null;document.querySelectorAll('#diaryMyNotesEditor .diary-finger-adjust-button').forEach(function(b){b.setAttribute('aria-pressed','false');b.textContent=t('fingerAdjust');var h=b.parentNode.querySelector('.diary-finger-adjust-hint');if(h)h.hidden=true;});}
  function attachDiaryColourChooser(btn,file,kind){
