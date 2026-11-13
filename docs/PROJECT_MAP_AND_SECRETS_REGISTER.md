@@ -1142,3 +1142,21 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK remains 1.0.136 / versionCode 135; APK SHA-256 remains 6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348. No APK rebuild or signing operation.
 - Physical-device verification is **pending**. Do not claim smooth horizontal/vertical drag or pinch zoom works until the user tests all three image areas on the phone after receiving Web Update 149.
 - Rollback: use the exact pre-edit files on backup/pre-smooth-two-axis-photo-adjust-2026-11-13. Preserve all local notes, photos, PIN data and app data.
+
+
+# Web Update 150 — Reliable multi-pointer pinch zoom (2026-11-13)
+
+- User confirmed Web Update 149 fixed equal left/right and up/down dragging in all three image targets (Cover, Detail, Photo), but pinch zoom-in and zoom-out still did not work.
+- Re-read the live Master Register, latest.json, source and mirror. Starting state: webVersion 149; APK 1.0.136 / versionCode 135; source/mirror blob SHA b965dfa16278ab1b6ca8e5a80596e25367fdf9fb.
+- Pinch zoom diagnosis: the existing gesture engine relied on document Touch Events while also installing Pointer Events but explicitly ignored touch pointers. Replaced this with Pointer Events as the primary Android/WebView gesture path: every finger is tracked by its independent pointerId; pointer capture keeps each contact associated with the selected image field; pointer move updates both points before calculating pinch distance; pointer up/cancel/lost capture rebase the remaining contact. Legacy Touch Events remain as fallback when PointerEvent is unavailable.
+- The existing shared pinch ratio, zoom range 0.8–4, position state, rendering, and drag math are retained. No changes to notes, local storage/data keys, photo content, PIN, editor UI, or APK.
+- Changed only web-source/index.html. Pre-edit backup branch: backup/pre-pointer-pinch-zoom-repair-2026-11-13. Verified backups:
+  - backups/web-source-before-pointer-pinch-zoom-repair-2026-11-13.html
+  - backups/diary-web-before-pointer-pinch-zoom-repair-2026-11-13.html
+  - backups/latest-before-pointer-pinch-zoom-repair-2026-11-13.json
+  - backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-pointer-pinch-zoom-repair-2026-11-13.md
+- Source commit: 760c573af312bc4bbf70f2125f311609aa41836e. Web publisher workflow run 43383223582 (run 140) completed successfully; publish job and all listed steps succeeded.
+- Post-publish verification: web-source/index.html and diary-web/index.html are byte-identical; both Git blob SHA fd1d38dc9d73bdabb5a074ef1449a2360712ff51. Live latest.json reports webVersion 150 and web SHA-256 ab6b55d80e6f157b77be6d8a82f8ae198b95284b66fb9a436487fd04104c176e. Both inline JavaScript blocks parse successfully.
+- APK remains 1.0.136 / versionCode 135. No APK rebuild or signing operation.
+- Physical-device verification is **pending**. Do not claim pinch zoom works until the user tests Cover, Detail and Photo on the phone after receiving Web Update 150. Drag was already confirmed by the user on Update 149; this change was limited to pointer gesture tracking.
+- Rollback: use the exact pre-edit files on backup/pre-pointer-pinch-zoom-repair-2026-11-13. Preserve all local notes, photos, PIN data and app data.
