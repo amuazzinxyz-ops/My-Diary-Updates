@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `154`; package `com.personal.diaryapp`. Live feed: `webSha256=dcfcf5244c66e2b46dbf8e33189344408754af9abd5cb45a4f5621e3f582ce0b`.
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `155`; package `com.personal.diaryapp`. Live feed: `webSha256=81813e198d9435ef84c66b5e7964d3c1ef72e41c349d78797e7859eada9cc88e`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -1229,3 +1229,18 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK unchanged: 1.0.136 / versionCode 135 / SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`; no APK rebuild or signing changes.
 - Physical-device verification pending. User should install Web Update 154 using **Me → Check for Updates**, then test changing Cover, Detail and Photo individually; confirm the existing text and the other images remain unchanged.
 - Rollback: use the exact pre-edit files on `backup/pre-image-replacement-control-2026-11-13`; preserve local notes, photos, PIN data and app data.
+
+
+# Web Update 155 — Change Image opens gallery directly (2026-11-13)
+
+- User clarification: tapping **🔄 Image Badlein / Change Image** should open image selection directly, not open the image-design chooser first.
+- Changed only `web-source/index.html`, source commit `f0f9430a9b8791a7875697ce8b8ad31cc4c12770`. In the shared Cover/Detail/Photo image chooser button handler, when that target already has an image, the button closes the chooser if needed and directly invokes its existing file input (`file.click()`). When no image is selected yet, the original chooser remains available so users can still choose an image, colour, gradient or pamphlet design. This keeps the requested direct-replace path while preserving first-time design choices.
+- Pre-edit backup branch: `backup/direct-image-picker-2026-11-13`. Verified readable backups:
+  - `backups/web-source-before-direct-image-picker-2026-11-13.html` (blob SHA `e145f56506ea6aef721a8673fecbb3fc859c76f9`)
+  - `backups/latest-before-direct-image-picker-2026-11-13.json` (blob SHA `28c8b747f2db2372a51cb92e8ef788e4029bc174`)
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-direct-image-picker-2026-11-13.md` (blob SHA `c98cde2e17003b314ec1efa0e94f4aef9f72e964`)
+- Static source review confirmed the one shared handler tests the selected-image state separately for Cover, Detail and Photo, and calls the existing file input directly for each selected image. Existing initial image chooser, pamphlet/colour options, image compression, image-position/zoom adjustment, text, notes, local storage, PIN/recovery, Android source, package identity and signing data were not changed. No JavaScript parser or independent SHA-256 calculation was run in this session.
+- Publisher workflow run `43390587303` (run 145, `.github/workflows/publish-diary-web-update.yml`) completed successfully. Its `publish` job and all steps succeeded. Publisher output commit was verified by live files: source and `diary-web/index.html` are byte-identical with Git blob SHA `82dd680c76336782cfeb9d1bcc67ec2f02ade1b5`. Live feed advanced to Web Update 155; `latest.json.webSha256=81813e198d9435ef84c66b5e7964d3c1ef72e41c349d78797e7859eada9cc88e`.
+- APK unchanged: 1.0.136 / versionCode 135 / SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`; publisher workflow explicitly ran without rebuilding APK.
+- Physical-device verification pending. User should use **Me → Check for Updates** to install Web Update 155, then tap Change Image for Cover, Detail and Photo and confirm Gallery opens directly; select a replacement and check other images/text remain unchanged.
+- Rollback: use the exact pre-edit files on `backup/direct-image-picker-2026-11-13`; preserve local notes, photos, PIN data and app data.
