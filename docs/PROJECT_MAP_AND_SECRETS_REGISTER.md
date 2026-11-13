@@ -50,6 +50,8 @@
 
 ## F. Register and release record
 
+**MANDATORY SUCCESS-ENTRY RULE:** Whenever any requested work is completed successfully, immediately append a dated entry to this Master Register before reporting the work as complete. This applies to every successful task—not only published releases—including small UI fixes, code changes, translations, investigations that resolve an issue, configuration changes, and confirmed user/device test results. Record what was requested, what was actually completed, the evidence/checks, exact files or areas changed (or explicitly state no files changed), what was left untouched, and any pending limitations. If a task is not successful or remains incomplete, record its status honestly as pending/blocked/failed where useful; never write an unverified success claim. Do not rely on chat history as a substitute for the Register entry.
+
 For every task, append a dated entry containing: user request; starting commit/version; exact files changed; exact behaviour changed; files/features deliberately untouched; backup paths; tests and results; workflow/run and commit IDs; source/mirror blob identity; independently verified SHA-256; feed values; APK/signing checks if applicable; rollback reference; and phone-test status. Mark unknown or untested items as **pending**, never as passed.
 
 Keep historical entries as history. If an old entry contains stale version information, do not silently rewrite history; clearly identify the current live values near the top and state that `latest.json` is authoritative.
@@ -69,6 +71,7 @@ Keep historical entries as history. If an old entry contains stale version infor
 - [ ] APK version/hash/signing fingerprint verified (APK change)
 - [ ] Workflow completed successfully
 - [ ] Changed files re-fetched and live metadata verified
+- [ ] **Successful work has a dated Master Register entry before completion is reported**
 - [ ] Register updated with evidence and backup paths
 - [ ] Phone-test status clearly marked; no unsupported success claim
 
@@ -1639,3 +1642,15 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK unchanged: `1.0.136` / versionCode `135`; APK SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`. No APK rebuild or signing changes.
 - Physical-device verification pending. User should use **Me → Check for Updates**, then open each of the three image controls and confirm **Pamphlet Chunein** is absent while **Choose Image**, **Solid Colour**, and **Gradient Colour** remain. Also open an older note that already used a pamphlet design and confirm its saved appearance remains. Do not claim phone-side verification until user confirms.
 - Rollback: exact pre-edit source, mirror, feed and register are preserved on `backup/pre-remove-pamphlet-button-2026-11-13`; restore the exact HTML if testing reveals a regression. Preserve notes, photos, settings and PIN data.
+
+
+---
+
+# Register Policy Update — Mandatory entry for every successful task (2026-11-13)
+
+- User instruction: always add a Master Register entry for work that is completed successfully, and add a standing rule requiring this for all future successful work.
+- Added the **MANDATORY SUCCESS-ENTRY RULE** to Section F and a matching mandatory item to the reusable task checklist in Section G. The rule covers all successful work, including small fixes and non-release tasks, and requires evidence plus honest pending/blocked status; chat history is not a substitute for a Register entry.
+- The existing **Web Update 180** entry already records the saved-Note clear × implementation, backup, checks, publishing workflow, source/mirror/feed verification, and pending physical-device test. No new code or release was made in this policy-only task.
+- Backup: `backup/register-success-entry-rule-2026-11-13` → `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-success-entry-rule-2026-11-13.md`; backup commit `945ca910ee7f2e59af6275197dec0c163096ec10`.
+- Scope: only `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md` changed on the default branch. No app source, mirror, latest.json, APK, signing data, notes, photos, settings, or PIN/recovery data changed.
+- Verification: live register was fetched before editing; pre-edit register backup was created on a separate backup branch. Post-edit re-fetch and content/section verification are required before reporting completion.
