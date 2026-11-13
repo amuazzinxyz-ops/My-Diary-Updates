@@ -93,6 +93,17 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 #diaryMyNotesEntry > #diaryMyNotesEntryTitle{display:block!important;flex:0 0 auto!important;width:100%!important;margin:0!important;text-align:center!important}
 #diaryMyNotesEntry > #diaryMyNotesEntrySub{display:block!important;flex:0 0 auto!important;width:100%!important;margin:0!important;text-align:center!important}
 </style>
+<style id="diary-ready-made-pamphlet-chooser">
+#diaryMyNotesEditor .diary-image-choice-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+#diaryMyNotesEditor .diary-image-choice-menu .diary-image-choice-pamphlet{background:linear-gradient(145deg,#f0e3ff,#b994e7)!important;border-color:#7540b8!important;color:#32165c!important;box-shadow:inset 0 1px 0 #fff,0 3px 0 #5b2d91!important}
+#diaryMyNotesEditor .diary-pamphlet-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:11px;padding:10px;border:1px solid #c6a9e5;border-radius:12px;background:linear-gradient(145deg,#fff,#f4edff);box-shadow:inset 0 1px 0 #fff,0 2px 0 #d7c5ec}
+#diaryMyNotesEditor .diary-pamphlet-gallery[hidden]{display:none!important}
+#diaryMyNotesEditor .diary-pamphlet-gallery-title{grid-column:1/-1;text-align:center;color:#4b267c;font-size:13px;font-weight:1000}
+#diaryMyNotesEditor .diary-image-choice-menu .diary-pamphlet-card{display:flex;flex-direction:column;align-items:stretch;gap:6px;min-height:84px;padding:7px!important;border:1px solid #b99bdc!important;border-radius:10px!important;background:linear-gradient(145deg,#fff,#f7f1ff)!important;color:#382653!important;box-shadow:0 2px 0 #c9b4df!important}
+#diaryMyNotesEditor .diary-pamphlet-sample{display:block;width:100%;height:39px;border:2px solid #fff;border-radius:7px;box-shadow:0 1px 0 #8f78a8,0 2px 5px #33204433}
+#diaryMyNotesEditor .diary-pamphlet-label{display:block;font-size:11px;font-weight:1000;line-height:1.2;text-align:center;overflow-wrap:anywhere}
+@media(max-width:380px){#diaryMyNotesEditor .diary-image-choice-actions,#diaryMyNotesEditor .diary-pamphlet-gallery{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+</style>
 </head>
 <body>
 <main class="diary-home">
@@ -815,6 +826,19 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  telugu:{imageDesignKicker:'నోట్ డిజైన్',coverPickerTitle:'నోట్ కవర్ ఫోటో',coverPickerDesc:'పేరు పెట్టెను అలంకరించడానికి ఫోటో లేదా రంగును ఎంచుకోండి.',detailPickerTitle:'వివరాల చిత్రం',detailPickerDesc:'వ్రాసే పెట్టెను అలంకరించడానికి ఫోటో లేదా రంగును ఎంచుకోండి.',photoPickerTitle:'ఫోటో జోడించండి',photoPickerDesc:'నోట్‌తో వేరే ఫోటోను జోడించి దాని ఫ్రేమ్ రంగును ఎంచుకోండి.'}
  };
  Object.keys(diaryImagePurposeWords).forEach(function(k){Object.assign(words[k],diaryImagePurposeWords[k]);});
+ var diaryPamphletWords={
+ roman:{pamphletChoose:'🪄 Pamphlet Chunein',pamphletTitle:'Apna ready-made design chunein',pamphletRoyal:'Royal Gold',pamphletPurple:'Purple Bloom',pamphletEmerald:'Emerald Garden',pamphletOcean:'Ocean Blue'},
+ english:{pamphletChoose:'🪄 Choose Pamphlet',pamphletTitle:'Choose a ready-made design',pamphletRoyal:'Royal Gold',pamphletPurple:'Purple Bloom',pamphletEmerald:'Emerald Garden',pamphletOcean:'Ocean Blue'},
+ hindi:{pamphletChoose:'🪄 पैम्फलेट चुनें',pamphletTitle:'अपना तैयार डिज़ाइन चुनें',pamphletRoyal:'शाही सुनहरा',pamphletPurple:'बैंगनी फूल',pamphletEmerald:'हरा बाग़',pamphletOcean:'समुद्री नीला'},
+ urdu:{pamphletChoose:'🪄 پمفلٹ منتخب کریں',pamphletTitle:'اپنا تیار ڈیزائن منتخب کریں',pamphletRoyal:'شاہی سنہری',pamphletPurple:'جامنی پھول',pamphletEmerald:'سبز باغ',pamphletOcean:'سمندری نیلا'},
+ arabic:{pamphletChoose:'🪄 اختر قالبًا',pamphletTitle:'اختر تصميمًا جاهزًا',pamphletRoyal:'ذهبي ملكي',pamphletPurple:'زهور بنفسجية',pamphletEmerald:'حديقة خضراء',pamphletOcean:'أزرق المحيط'},
+ bengali:{pamphletChoose:'🪄 প্যামফ্লেট বেছে নিন',pamphletTitle:'একটি তৈরি নকশা বেছে নিন',pamphletRoyal:'রাজকীয় সোনালি',pamphletPurple:'বেগুনি ফুল',pamphletEmerald:'সবুজ বাগান',pamphletOcean:'সমুদ্র নীল'},
+ gujarati:{pamphletChoose:'🪄 પેમ્ફલેટ પસંદ કરો',pamphletTitle:'તૈયાર ડિઝાઇન પસંદ કરો',pamphletRoyal:'શાહી સોનેરી',pamphletPurple:'જાંબલી ફૂલ',pamphletEmerald:'લીલો બગીચો',pamphletOcean:'સમુદ્રી વાદળી'},
+ marathi:{pamphletChoose:'🪄 पॅम्फ्लेट निवडा',pamphletTitle:'तयार डिझाइन निवडा',pamphletRoyal:'रॉयल गोल्ड',pamphletPurple:'जांभळे फूल',pamphletEmerald:'हिरवी बाग',pamphletOcean:'समुद्री निळा'},
+ tamil:{pamphletChoose:'🪄 பாம்ப்ளெட்டைத் தேர்ந்தெடுக்கவும்',pamphletTitle:'தயார் வடிவமைப்பைத் தேர்ந்தெடுக்கவும்',pamphletRoyal:'ராயல் தங்கம்',pamphletPurple:'ஊதா மலர்',pamphletEmerald:'பச்சைத் தோட்டம்',pamphletOcean:'கடல் நீலம்'},
+ telugu:{pamphletChoose:'🪄 పాంప్లెట్ ఎంచుకోండి',pamphletTitle:'సిద్ధంగా ఉన్న డిజైన్‌ను ఎంచుకోండి',pamphletRoyal:'రాయల్ గోల్డ్',pamphletPurple:'ఊదా పువ్వు',pamphletEmerald:'ఆకుపచ్చ తోట',pamphletOcean:'సముద్ర నీలం'}
+ };
+ Object.keys(diaryPamphletWords).forEach(function(k){Object.assign(words[k],diaryPamphletWords[k]);});
 
  words["english"]["interfaceColours"]="🎨 Interface Colours";
  words["english"]["themeDefault"]="Restore My Diary Original Colour";
@@ -1115,12 +1139,36 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var choose=el('button',{type:'button',class:'diary-image-choice-image'},t('chooseImage'));
   var solidBtn=el('button',{type:'button',class:'diary-image-choice-solid'},t('solidColour'));
   var gradBtn=el('button',{type:'button',class:'diary-image-choice-gradient'},t('gradientColour'));
+  var pamphletBtn=el('button',{type:'button',class:'diary-image-choice-pamphlet','aria-expanded':'false'},t('pamphletChoose'));
+  var pamphletGallery=el('div',{class:'diary-pamphlet-gallery',hidden:'hidden'});
+  pamphletGallery.appendChild(el('div',{class:'diary-pamphlet-gallery-title'},t('pamphletTitle')));
+  var pamphletPresets=[
+   {key:'pamphletRoyal',first:'#f7e7ad',second:'#9b7415'},
+   {key:'pamphletPurple',first:'#eadcff',second:'#7540b8'},
+   {key:'pamphletEmerald',first:'#dff3e6',second:'#087653'},
+   {key:'pamphletOcean',first:'#d9efff',second:'#28669a'}
+  ];
+  pamphletPresets.forEach(function(preset){
+   var tile=el('button',{type:'button',class:'diary-pamphlet-card'});
+   var sample=el('span',{class:'diary-pamphlet-sample'});
+   sample.style.background='linear-gradient(135deg,'+preset.first+','+preset.second+')';
+   var label=el('span',{class:'diary-pamphlet-label'},t(preset.key));
+   tile.append(sample,label);
+   tile.addEventListener('click',function(e){
+    e.preventDefault();e.stopPropagation();
+    var v=diaryColourFor(kind);v.mode='gradient';v.first=preset.first;v.second=preset.second;setDiaryColour(kind,v);
+    one.value=preset.first;two.value=preset.second;solid.style.display='none';grad.hidden=true;
+    pamphletGallery.hidden=true;pamphletBtn.setAttribute('aria-expanded','false');redraw();
+   });
+   pamphletGallery.appendChild(tile);
+  });
+  pamphletBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();pamphletGallery.hidden=!pamphletGallery.hidden;pamphletBtn.setAttribute('aria-expanded',pamphletGallery.hidden?'false':'true');});
   var solid=el('input',{type:'color',value:'#f4e6a8','aria-label':t('solidColour')});
   var one=el('input',{type:'color',value:'#f4e6a8','aria-label':t('colourOne')});
   var two=el('input',{type:'color',value:'#8e63c6','aria-label':t('colourTwo')});
   var grad=el('div',{class:'diary-gradient-colour-tools',hidden:'hidden'});
   solid.style.display='none';one.style.display='none';two.style.display='none';
-  grad.append(one,two);actions.append(choose,solidBtn,gradBtn);menu.append(intro,actions,solid,grad);
+  grad.append(one,two);actions.append(choose,solidBtn,gradBtn,pamphletBtn);menu.append(intro,actions,solid,grad,pamphletGallery);
   function redraw(){if(kind==='Cover'||kind==='Detail')renderDiaryImagePreview(kind);else renderDiaryPhotoPreview();}
   function close(){menu.hidden=true;btn.setAttribute('aria-expanded','false');}
   btn.setAttribute('aria-expanded','false');
