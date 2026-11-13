@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `173`; package `com.personal.diaryapp`. Live feed: `webSha256=73175c989ab35b7f72f5358336c056cc39e4112b036d71232f6b5c0b1fdc1d6f`.
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `174`; package `com.personal.diaryapp`. Live feed: `webSha256=c3ed3642eea1d28e18bdb1705939466ef4aa623ed0260879f9209b3273246bd5`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -1547,3 +1547,22 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK unchanged: 1.0.136 / versionCode 135; SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`. Web-only update; no APK rebuild or signing changes.
 - Physical-device verification **pending**. User should use **Me → Check for Updates**, open a locked Note, and confirm the two action buttons appear one above the other with all text inside. Do not claim phone-side success until user confirms.
 - Rollback: restore the exact pre-edit HTML from `backup/pre-note-lock-action-buttons-stack-2026-11-13`; preserve notes, photos, settings and PIN data.
+
+
+---
+
+# Web Update 174 — Confirm discard when closing an unsaved New Note (2026-11-13)
+
+- User requested an × close control flow while writing a new Note: ask before removing the unfinished writing.
+- Starting live state: Web Update 173; APK 1.0.136 / versionCode 135; package `com.personal.diaryapp`; starting source/mirror blob SHA `09a97742b81d4ba6794fc59bd3054b34f08d6fd0`; previous feed SHA-256 `73175c989ab35b7f72f5358336c056cc39e4112b036d71232f6b5c0b1fdc1d6f`.
+- Changed only the × button click handler and the three existing language dictionaries (Roman English, English, Hindi). When a new unsaved draft contains text, a cover/details/photo attachment, or a selected image colour, × asks for confirmation. Confirming resets only the in-memory new draft using the existing `newNote()` reset routine and closes the Diary. Choosing Cancel leaves the draft and editor open. Closing an existing saved Note does not ask and does not alter it. The overlay backdrop and Escape/Android Back paths were not changed.
+- Existing save flow, note storage format/keys, saved Notes, photos already saved, PIN/lock/recovery, search, editor layout, native Android code, APK, package identity and signing data were not changed.
+- Pre-edit backup branch: `backup/pre-new-note-close-discard-2026-11-13`. Exact pre-edit files were saved and re-fetched:
+  - `backups/web-source-before-new-note-close-discard-2026-11-13.html` — blob `09a97742b81d4ba6794fc59bd3054b34f08d6fd0`
+  - `backups/diary-web-before-new-note-close-discard-2026-11-13.html` — same blob
+  - `backups/latest-before-new-note-close-discard-2026-11-13.json` — blob `b1a5ed98412646aead746ce24b3e314d6d63887e`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-new-note-close-discard-2026-11-13.md` — blob `23d0d6defa08ff15569be16d7c98b348a9ac034b`
+- Source commit `572f82fa2fd35bbe7212813fb47ad3df83499491`; final source blob `ca8b9420b1c8ef58312d4fe627f6bffeaf312239`. The web-only publisher workflow run `43426737220`, run 164, completed successfully; publish job `131889866019` succeeded. Live feed advanced to webVersion `174`; live `webSha256=c3ed3642eea1d28e18bdb1705939466ef4aa623ed0260879f9209b3273246bd5`. Re-fetched source and published mirror are byte-identical (same blob SHA).
+- APK unchanged: 1.0.136 / versionCode 135; SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`. Web-only release; no APK rebuild or signing changes.
+- Physical-device verification **pending**. User should use **Me → Check for Updates**, open **＋ New Note**, type a short test, and tap ×. Confirm should discard and close; Cancel should keep the text and editor open. Also verify an empty New Note closes without a confirmation. Do not claim phone-side success until the user confirms.
+- Rollback: restore the exact pre-edit HTML from `backup/pre-new-note-close-discard-2026-11-13`; preserve all notes, photos, settings and PIN data.
