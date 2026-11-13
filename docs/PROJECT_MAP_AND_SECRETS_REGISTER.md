@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `172`; package `com.personal.diaryapp`. Live feed: `webSha256=3c17afe300473dd43e98201423961390ef431c1b01fca408795489559f71a7e2`.
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `173`; package `com.personal.diaryapp`. Live feed: `webSha256=73175c989ab35b7f72f5358336c056cc39e4112b036d71232f6b5c0b1fdc1d6f`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -1532,3 +1532,18 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK unchanged: 1.0.136 / versionCode 135; SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`. No APK rebuild or signing changes.
 - Physical-device verification **pending**. Ask the user to use **Me → Check for Updates**, then lock a Note and check whether the locked Note card and both side borders fit evenly inside the mobile screen. Do not claim the phone-side issue is fixed until the user confirms.
 - Rollback: exact pre-edit files preserved on `backup/pre-note-lock-mobile-fit-2026-11-13`; preserve all Diary notes, photos, settings and PIN data.
+
+
+---
+
+# Web Update 173 — Stack and enlarge locked Note PIN action buttons (2026-11-13)
+
+- User reported that the text on the locked Note actions “❓ PIN Bhool Gaye?” and “🔓 Tala Band Karein” overflowed their buttons while the buttons were side-by-side. User requested larger buttons arranged vertically.
+- Starting state: Web Update 172; APK 1.0.136 / versionCode 135; package `com.personal.diaryapp`; starting source/mirror blob SHA `34a031dedbdc94d50a861abb40b32a4dbb310125`; prior feed SHA-256 `3c17afe300473dd43e98201423961390ef431c1b01fca408795489559f71a7e2`.
+- Changed only the locked Note PIN action controls in `web-source/index.html`: their wrapper now uses a vertical flex column with full width and spacing; each button is full width, minimum 46px high, larger 14px bold text, increased padding, and wrapping enabled so localized labels stay inside. Button event handlers and PIN/lock behaviour remain unchanged.
+- No other Note cards, general Diary layout, languages/translations, notes/photos/storage, PIN/recovery data or logic, native Android source, APK, package identity or signing data changed.
+- Pre-edit backup branch: `backup/pre-note-lock-action-buttons-stack-2026-11-13`. Exact pre-edit source, published mirror, `latest.json`, and this Master Register were backed up under `backups/*-before-note-lock-action-buttons-stack-2026-11-13.*` on that branch.
+- Source commit `34a9cc0804793fd7c3d4e6c16c1aea411d06ce54`; final source/mirror blob SHA `09a97742b81d4ba6794fc59bd3054b34f08d6fd0`. Publisher workflow run `43419663486`, run 163, completed successfully; publish job `131866187842` succeeded. Live feed advanced to webVersion `173`; live `webSha256=73175c989ab35b7f72f5358336c056cc39e4112b036d71232f6b5c0b1fdc1d6f`. Re-fetched source and published mirror are byte-identical.
+- APK unchanged: 1.0.136 / versionCode 135; SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`. Web-only update; no APK rebuild or signing changes.
+- Physical-device verification **pending**. User should use **Me → Check for Updates**, open a locked Note, and confirm the two action buttons appear one above the other with all text inside. Do not claim phone-side success until user confirms.
+- Rollback: restore the exact pre-edit HTML from `backup/pre-note-lock-action-buttons-stack-2026-11-13`; preserve notes, photos, settings and PIN data.
