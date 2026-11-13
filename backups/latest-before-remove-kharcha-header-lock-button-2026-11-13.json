@@ -1,0 +1,14 @@
+{
+  "appName": "My Diary",
+  "packageName": "com.personal.diaryapp",
+  "versionCode": 136,
+  "versionName": "1.0.137",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.137.apk",
+  "sha256": "38439e536479d7adea7c50031b59873d8a898b0c103f845018cfa8b8e8b805bf",
+  "releaseNotes": "Smart Follow-up Reminder adds scheduled notifications, 10-minute snooze, and reminder restoration after device restart. Existing notes, photos, PIN data, and app identity are preserved.",
+  "minimumSupportedVersionCode": 1,
+  "webVersion": 196,
+  "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
+  "webSha256": "f55cb80a22ad6237d108d07c246a2ba9b0d03c33e3603f4f38e7cdcdd52eb43b",
+  "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
+}
