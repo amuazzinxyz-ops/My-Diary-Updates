@@ -338,7 +338,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 #diaryMyNotesActions button,#diaryMyNotesBackup button,#diaryMyNotesPin{box-shadow:0 4px 0 #06472f,0 7px 12px #123d2b24;transition:transform .16s,box-shadow .16s}
 #diaryMyNotesActions button:active,#diaryMyNotesBackup button:active,#diaryMyNotesPin:active{transform:translateY(3px);box-shadow:0 1px 0 #06472f,0 3px 6px #123d2b20}
 .diary-my-note{border:1px solid #d6e2d5;box-shadow:0 3px 0 #d8e4d6,0 7px 0 #edf2e9,0 12px 20px #173d2b18;transition:transform .2s,box-shadow .2s,background .2s}
-.diary-my-note:active{transform:translateY(2px) scale(.995);box-shadow:0 1px 0 #d8e4d6,0 4px 9px #173d2b16}
+.diary-my-note:active{transform:none!important;box-shadow:0 1px 0 #d8e4d6,0 4px 9px #173d2b16}
 .diary-my-note.expanded{background:linear-gradient(145deg,#fff,#f0f8ef);border-color:#c3d8c4;box-shadow:0 4px 0 #c8dcc8,0 10px 0 #e3eee1,0 16px 25px #173d2b20}
 .diary-my-note .diary-note-full{display:none;margin-top:10px;padding:11px;border-radius:12px;background:linear-gradient(145deg,#f8fcf7,#eaf3e9);color:#263e30;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6;font-size:14px;box-shadow:inset 0 1px 3px #173d2b12}
 .diary-my-note.expanded .diary-note-full{display:block}
@@ -367,7 +367,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 #diaryMyNotesBackup button{flex:1;min-height:39px;border-radius:12px;font-weight:850;cursor:pointer}
 #diaryMyNotesList{gap:10px}
 .diary-my-note{position:relative;padding:14px;border:1px solid #dce6da;border-radius:16px;background:linear-gradient(145deg,#fff,#fbfdf9);box-shadow:0 4px 13px #1a39250b;transition:transform .15s,box-shadow .15s}
-.diary-my-note:active{transform:scale(.99)}
+.diary-my-note:active{transform:none!important;}
 /* The note card should not animate when the Share control inside it is pressed. */
 .diary-my-note:has(.diary-note-share:active){transform:none!important;}
 .diary-my-note strong{font-size:15px;color:#174b34}
@@ -2190,7 +2190,16 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      if(n.detailPhotoData&&String(n.detailPhotoData).indexOf('data:image/')===0){applyDiaryFieldImage(bodyDisplay,n.detailPhotoData,'body',n.detailColour);bodyDisplay.classList.add('diary-diary-card-field-image');}else if(n.detailColour&&n.detailColour.mode&&n.detailColour.mode!=='none'){applyDiaryFieldImage(bodyDisplay,null,'body',n.detailColour);}applyDiaryTextFormat(bodyDisplay,n.detailTextFormat);
      card.appendChild(bodyDisplay);
      if(n.photoData&&String(n.photoData).indexOf('data:image/')===0){var savedPhoto=el('img',{src:n.photoData,alt:t('attachedPhoto')});savedPhoto.className='diary-note-attached-photo';var savedPhotoCrop=cleanDiaryColour(n.photoColour);savedPhoto.style.transform='translate('+savedPhotoCrop.posX+'%,'+savedPhotoCrop.posY+'%) scale('+savedPhotoCrop.zoom+')';savedPhoto.style.transformOrigin='center center';var savedPhotoTheme=diaryPamphletStyle(cleanDiaryColour(n.photoColour).template);savedPhoto.style.cssText='padding:'+(savedPhotoTheme?'12px':'9px')+';background:'+(diaryColourCss(n.photoColour)||'#eee')+';border:'+(savedPhotoTheme?'5px double '+savedPhotoTheme.border:'2px solid #d4af37')+';border-radius:'+(savedPhotoTheme?'5px':'12px')+';';card.appendChild(savedPhoto);}
-     var shareKey=String(n.id||'')+':'+String(n.updated||0)+':'+language();var shareBtn=el('button',{type:'button',class:'diary-note-edit diary-note-share'},t('shareNote'));shareBtn.style.touchAction='manipulation';if(!diaryShareImageCache[shareKey])shareBtn.setAttribute('aria-busy','true');shareBtn.addEventListener('pointerdown',function(e){e.stopPropagation();});shareBtn.addEventListener('touchstart',function(e){e.stopPropagation();},{passive:true});shareBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(!diaryShareImageCache[shareKey]){var shareStatus=document.getElementById('diaryMyNotesStatus');if(shareStatus)shareStatus.textContent=language()==='english'?'Image is still preparing. Tap Share again when ready.':language()==='hindi'?'इमेज तैयार हो रही है। तैयार होने पर फिर टैप करें।':'Image taiyar ho rahi hai. Taiyar hone par dobara tap karein.';shareBtn.setAttribute('aria-busy','true');if(!diaryShareImagePending[shareKey])shareNote(n,true,function(ok){shareBtn.removeAttribute('aria-busy');shareBtn.title=ok?'':t('copyFailed');});return;}shareBtn.removeAttribute('aria-busy');shareNote(n)});card.appendChild(shareBtn);if(!diaryShareImageCache[shareKey])shareNote(n,true,function(ok){shareBtn.removeAttribute('aria-busy');shareBtn.title=ok?'':t('copyFailed');});
+     var shareKey=String(n.id||'')+':'+String(n.updated||0)+':'+language();var shareBtn=null,sharePlaceholder=null;
+     function addReadyShareButton(){if(shareBtn)return;shareBtn=el('button',{type:'button',class:'diary-note-edit diary-note-share'},t('shareNote'));shareBtn.style.touchAction='manipulation';shareBtn.addEventListener('pointerdown',function(e){e.stopPropagation();});shareBtn.addEventListener('touchstart',function(e){e.stopPropagation();},{passive:true});shareBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();shareNote(n);});if(sharePlaceholder&&sharePlaceholder.parentNode)sharePlaceholder.parentNode.replaceChild(shareBtn,sharePlaceholder);else card.appendChild(shareBtn);}
+     if(diaryShareImageCache[shareKey]){addReadyShareButton();}else{
+      sharePlaceholder=el('div',{class:'diary-note-share-preparing'});sharePlaceholder.style.cssText='margin-top:10px;padding:9px 12px;border-radius:10px;background:#f2f5ed;color:#42634a;font-size:13px;font-weight:800;text-align:center;';
+      function setSharePreparing(){sharePlaceholder.textContent=language()==='english'?'Preparing note image…':language()==='hindi'?'नोट की इमेज तैयार हो रही है…':'Note ki image taiyar ho rahi hai…';}
+      function setShareFailed(){sharePlaceholder.textContent=language()==='english'?'Image could not be prepared. Tap here to retry.':language()==='hindi'?'इमेज तैयार नहीं हुई। दोबारा कोशिश करने के लिए यहाँ टैप करें।':'Image taiyar nahi hui. Dobara koshish ke liye yahan tap karein.';sharePlaceholder.style.cursor='pointer';}
+      sharePlaceholder.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(sharePlaceholder.dataset.retrying==='1')return;sharePlaceholder.dataset.retrying='1';setSharePreparing();shareNote(n,true,function(ok){if(ok)addReadyShareButton();else{sharePlaceholder.dataset.retrying='0';setShareFailed();}});});
+      setSharePreparing();card.appendChild(sharePlaceholder);
+      shareNote(n,true,function(ok){if(ok)addReadyShareButton();else{sharePlaceholder.dataset.retrying='0';setShareFailed();}});
+     }
      var copyBtn=el('button',{type:'button',class:'diary-note-edit'},t('copyAction'));
      copyBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();copyNote(n)});card.appendChild(copyBtn);
      var editBtn=el('button',{type:'button',class:'diary-note-edit'},t('editAction'));
