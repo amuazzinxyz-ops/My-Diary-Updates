@@ -1376,6 +1376,138 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   calendarNext.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();calendarMoveMonth(1);});
   calendarBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var opening=calendarPanel.hidden;calendarPanel.hidden=!opening;calendarBtn.setAttribute('aria-expanded',opening?'true':'false');if(opening)calendarRender();});
   mePanel.appendChild(calendarBtn);mePanel.appendChild(calendarPanel);
+  /* Four independent Me tools. Their records and attachments live in a separate IndexedDB database. */
+  var meFeatureCopy={
+   roman:{personalCalendar:'📅 Personal Calendar',kharcha:'💰 My Kharcha',documents:'📁 My Documents',memories:'📒 My Memories',back:'← Wapas',save:'💾 Save Karein',remove:'Hataayein',date:'Tareekh',title:'Naam',type:'Kism',birthday:'Birthday',anniversary:'Anniversary',event:'Zaroori Din',amount:'Raqam (₹)',flow:'Hisab',income:'Aamdani',expense:'Kharch',category:'Category',details:'Tafseel',file:'File chunein',photo:'Photo chunein',add:'＋ Add Karein',empty:'Abhi koi entry nahi.',saved:'Save ho gaya.',failed:'Save nahi ho saka. Phone ki storage check karein.',confirmDelete:'Kya is entry ko hata dein?',open:'Kholein',totalIncome:'Kul Aamdani',totalExpense:'Kul Kharch',balance:'Baqi',fileTooLarge:'File 20 MB se chhoti chunein.'},
+   english:{personalCalendar:'📅 Personal Calendar',kharcha:'💰 My Kharcha',documents:'📁 My Documents',memories:'📒 My Memories',back:'← Back',save:'💾 Save',remove:'Delete',date:'Date',title:'Title',type:'Type',birthday:'Birthday',anniversary:'Anniversary',event:'Important day',amount:'Amount (₹)',flow:'Entry type',income:'Income',expense:'Expense',category:'Category',details:'Details',file:'Choose file',photo:'Choose photo',add:'＋ Add',empty:'No entries yet.',saved:'Saved.',failed:'Could not save. Check phone storage.',confirmDelete:'Delete this entry?',open:'Open',totalIncome:'Total income',totalExpense:'Total expense',balance:'Balance',fileTooLarge:'Choose a file smaller than 20 MB.'},
+   hindi:{personalCalendar:'📅 Personal Calendar',kharcha:'💰 My Kharcha',documents:'📁 My Documents',memories:'📒 My Memories',back:'← वापस',save:'💾 सेव करें',remove:'हटाएँ',date:'तारीख़',title:'नाम',type:'क़िस्म',birthday:'जन्मदिन',anniversary:'सालगिरह',event:'ज़रूरी दिन',amount:'रकम (₹)',flow:'हिसाब',income:'आमदनी',expense:'खर्च',category:'श्रेणी',details:'विवरण',file:'फ़ाइल चुनें',photo:'फ़ोटो चुनें',add:'＋ जोड़ें',empty:'अभी कोई एंट्री नहीं है।',saved:'सेव हो गया।',failed:'सेव नहीं हुआ। फ़ोन की स्टोरेज जाँचें।',confirmDelete:'क्या यह एंट्री हटानी है?',open:'खोलें',totalIncome:'कुल आमदनी',totalExpense:'कुल खर्च',balance:'बाक़ी',fileTooLarge:'20 MB से छोटी फ़ाइल चुनें।'}
+  };
+  function mf(k){var lang=language();return (meFeatureCopy[lang]&&meFeatureCopy[lang][k])||meFeatureCopy.roman[k]||k;}
+  var meFeatureTypes=[
+   {id:'calendar',key:'personalCalendar'},
+   {id:'kharcha',key:'kharcha'},
+   {id:'documents',key:'documents'},
+   {id:'memories',key:'memories'}
+  ];
+  var meFeatureButtons={};
+  var meFeatureModal=el('section',{id:'diaryMeFeatureModal',hidden:'hidden','aria-modal':'true','role':'dialog'});
+  var meFeatureHead=el('div',{class:'diary-me-feature-head'});
+  var meFeatureTitle=el('strong',{id:'diaryMeFeatureTitle'},'');
+  var meFeatureBack=el('button',{type:'button',class:'diary-me-feature-back'},mf('back'));
+  var meFeatureClose=el('button',{type:'button',class:'diary-me-feature-close','aria-label':t('closeLabel')},'×');
+  meFeatureHead.append(meFeatureBack,meFeatureTitle,meFeatureClose);
+  var meFeatureContent=el('div',{id:'diaryMeFeatureContent'});
+  meFeatureModal.append(meFeatureHead,meFeatureContent);
+  ov.appendChild(meFeatureModal);
+  meFeatureTypes.forEach(function(item){
+   var button=el('button',{type:'button',class:'diary-me-feature-btn','data-me-feature':item.id},mf(item.key));
+   button.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();openMeFeature(item.id);});
+   mePanel.appendChild(button);meFeatureButtons[item.id]=button;
+  });
+  var meFeatureDbPromise=null,meFeatureObjectUrls=[];
+  function openMeFeatureDb(){
+   if(!window.indexedDB)return Promise.reject(new Error('IndexedDB unavailable'));
+   if(meFeatureDbPromise)return meFeatureDbPromise;
+   meFeatureDbPromise=new Promise(function(resolve,reject){
+    var req=indexedDB.open('diary_me_features_v1',1);
+    req.onupgradeneeded=function(){var db=req.result;if(!db.objectStoreNames.contains('records'))db.createObjectStore('records',{keyPath:'id'});};
+    req.onsuccess=function(){resolve(req.result);};req.onerror=function(){reject(req.error||new Error('Database open failed'));};
+   });
+   return meFeatureDbPromise;
+  }
+  function meFeatureAll(kind){
+   return openMeFeatureDb().then(function(db){return new Promise(function(resolve,reject){var tx=db.transaction('records','readonly'),req=tx.objectStore('records').getAll();req.onsuccess=function(){resolve((req.result||[]).filter(function(x){return x.kind===kind;}).sort(function(a,b){return String(b.date||'').localeCompare(String(a.date||''))||((b.created||0)-(a.created||0));}));};req.onerror=function(){reject(req.error);};});});
+  }
+  function meFeaturePut(record){
+   return openMeFeatureDb().then(function(db){return new Promise(function(resolve,reject){var tx=db.transaction('records','readwrite');tx.objectStore('records').put(record);tx.oncomplete=function(){resolve(true);};tx.onerror=function(){reject(tx.error||new Error('Save failed'));};tx.onabort=function(){reject(tx.error||new Error('Save aborted'));};});});
+  }
+  function meFeatureDelete(id){
+   return openMeFeatureDb().then(function(db){return new Promise(function(resolve,reject){var tx=db.transaction('records','readwrite');tx.objectStore('records').delete(id);tx.oncomplete=function(){resolve(true);};tx.onerror=function(){reject(tx.error||new Error('Delete failed'));};});});
+  }
+  function meFeatureToday(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+  function mfEl(tag,attrs,label){var n=el(tag,attrs||{});if(label!==undefined)n.textContent=label;return n;}
+  function mfField(parent,label,type,name,required){
+   var wrap=mfEl('label',{class:'diary-me-feature-field'});wrap.appendChild(mfEl('span',{},label));
+   var input=mfEl('input',{type:type||'text',name:name,required:!!required});
+   if(type==='date')input.value=meFeatureToday();
+   if(type==='file')input.accept=name==='file'?'image/*,application/pdf,.pdf':'image/*';
+   wrap.appendChild(input);parent.appendChild(wrap);return input;
+  }
+  function meFeatureForm(kind){
+   var form=mfEl('form',{class:'diary-me-feature-form'});
+   var title,date,amount,flow,category,details,file,type;
+   if(kind==='calendar'){
+    title=mfField(form,mf('title'),'text','title',true);date=mfField(form,mf('date'),'date','date',true);
+    var typeWrap=mfEl('label',{class:'diary-me-feature-field'});typeWrap.appendChild(mfEl('span',{},mf('type')));
+    type=mfEl('select',{name:'type'});[[ 'birthday','birthday'],['anniversary','anniversary'],['event','event']].forEach(function(x){type.appendChild(mfEl('option',{value:x[0]},mf(x[1])));});typeWrap.appendChild(type);form.appendChild(typeWrap);
+   }else if(kind==='kharcha'){
+    date=mfField(form,mf('date'),'date','date',true);amount=mfField(form,mf('amount'),'number','amount',true);amount.min='0.01';amount.step='0.01';
+    var flowWrap=mfEl('label',{class:'diary-me-feature-field'});flowWrap.appendChild(mfEl('span',{},mf('flow')));flow=mfEl('select',{name:'flow'});
+    flow.append(mfEl('option',{value:'expense'},mf('expense')),mfEl('option',{value:'income'},mf('income')));flowWrap.appendChild(flow);form.appendChild(flowWrap);
+    category=mfField(form,mf('category'),'text','category',false);details=mfField(form,mf('details'),'text','details',false);
+   }else if(kind==='documents'){
+    title=mfField(form,mf('title'),'text','title',true);file=mfField(form,mf('file'),'file','file',true);
+   }else{
+    title=mfField(form,mf('title'),'text','title',true);date=mfField(form,mf('date'),'date','date',true);details=mfField(form,mf('details'),'text','details',false);file=mfField(form,mf('photo'),'file','photo',false);
+   }
+   var submit=mfEl('button',{type:'submit',class:'diary-me-feature-save'},mf('add'));form.appendChild(submit);
+   form.addEventListener('submit',function(e){
+    e.preventDefault();var f=file&&file.files&&file.files[0];if(f&&f.size>20*1024*1024){meFeatureStatus.textContent=mf('fileTooLarge');return;}
+    var record={id:'mf-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),kind:kind,created:Date.now(),date:date?date.value:meFeatureToday()};
+    if(title)record.title=title.value.trim();
+    if(kind==='calendar')record.type=type.value;
+    if(kind==='kharcha'){record.amount=Number(amount.value);record.flow=flow.value;record.category=category.value.trim();record.details=details.value.trim();}
+    if(kind==='memories')record.details=details.value.trim();
+    if(f){record.fileBlob=f;record.fileName=f.name;record.fileType=f.type||'application/octet-stream';}
+    if(kind==='kharcha'&&(!Number.isFinite(record.amount)||record.amount<=0)){meFeatureStatus.textContent=mf('failed');return;}
+    meFeatureStatus.textContent='…';
+    meFeaturePut(record).then(function(){meFeatureStatus.textContent=mf('saved');renderMeFeatureList(kind);form.reset();var dateInput=form.querySelector('input[type="date"]');if(dateInput)dateInput.value=meFeatureToday();}).catch(function(){meFeatureStatus.textContent=mf('failed');});
+   });
+   return form;
+  }
+  var meFeatureStatus=mfEl('p',{id:'diaryMeFeatureStatus'},'');
+  var meFeatureList=mfEl('div',{id:'diaryMeFeatureList'});
+  function clearMeFeatureUrls(){meFeatureObjectUrls.forEach(function(u){URL.revokeObjectURL(u);});meFeatureObjectUrls=[];}
+  function renderMeFeatureList(kind){
+   clearMeFeatureUrls();meFeatureList.replaceChildren();
+   meFeatureAll(kind).then(function(records){
+    if(kind==='kharcha'){
+     var income=records.filter(function(x){return x.flow==='income';}).reduce(function(a,x){return a+(Number(x.amount)||0);},0);
+     var expense=records.filter(function(x){return x.flow!=='income';}).reduce(function(a,x){return a+(Number(x.amount)||0);},0);
+     var totals=mfEl('div',{class:'diary-me-feature-totals'},mf('totalIncome')+': ₹'+income.toFixed(2)+'  •  '+mf('totalExpense')+': ₹'+expense.toFixed(2)+'  •  '+mf('balance')+': ₹'+(income-expense).toFixed(2));meFeatureList.appendChild(totals);
+    }
+    if(!records.length)meFeatureList.appendChild(mfEl('p',{class:'diary-me-feature-empty'},mf('empty')));
+    records.forEach(function(record){
+     var card=mfEl('article',{class:'diary-me-feature-card'});
+     var heading=mfEl('strong',{},record.title||record.category||record.fileName||mf(record.type||'event'));
+     var meta=mfEl('small',{},record.date||'');
+     card.append(heading,meta);
+     if(kind==='calendar')card.appendChild(mfEl('p',{},mf(record.type||'event')));
+     if(kind==='kharcha')card.appendChild(mfEl('p',{},(record.flow==='income'?'+ ':'− ')+'₹'+Number(record.amount||0).toFixed(2)+(record.category?' • '+record.category:'')+(record.details?' • '+record.details:'')));
+     if(kind==='memories'&&record.details)card.appendChild(mfEl('p',{},record.details));
+     if(record.fileBlob){
+      var url=URL.createObjectURL(record.fileBlob);meFeatureObjectUrls.push(url);
+      if(kind==='memories'&&String(record.fileType||'').indexOf('image/')===0){var img=mfEl('img',{class:'diary-me-feature-thumb',alt:record.title||'Memory'});img.src=url;card.appendChild(img);}
+      var link=mfEl('a',{href:url,target:'_blank',rel:'noopener'},mf('open')+' · '+(record.fileName||mf('file')));card.appendChild(link);
+     }
+     var del=mfEl('button',{type:'button',class:'diary-me-feature-delete'},'🗑️ '+mf('remove'));
+     del.addEventListener('click',function(){if(!window.confirm(mf('confirmDelete')))return;meFeatureDelete(record.id).then(function(){renderMeFeatureList(kind);}).catch(function(){meFeatureStatus.textContent=mf('failed');});});
+     card.appendChild(del);meFeatureList.appendChild(card);
+    });
+   }).catch(function(){meFeatureList.replaceChildren(mfEl('p',{class:'diary-me-feature-empty'},mf('failed')));});
+  }
+  function openMeFeature(kind){
+   meFeatureTitle.textContent=mf(meFeatureTypes.filter(function(x){return x.id===kind;})[0].key);
+   meFeatureBack.textContent=mf('back');meFeatureContent.replaceChildren();meFeatureStatus.textContent='';
+   meFeatureContent.appendChild(meFeatureForm(kind));meFeatureContent.append(meFeatureStatus,meFeatureList);
+   meFeatureModal.hidden=false;mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');
+   renderMeFeatureList(kind);
+  }
+  function closeMeFeature(){
+   clearMeFeatureUrls();meFeatureModal.hidden=true;meFeatureContent.replaceChildren();mePanel.hidden=false;mePanel.scrollTop=0;meBtn.setAttribute('aria-expanded','true');panel.classList.add('diary-me-menu-open');
+  }
+  meFeatureBack.addEventListener('click',closeMeFeature);meFeatureClose.addEventListener('click',closeMeFeature);
+  meFeatureModal.addEventListener('click',function(e){if(e.target===meFeatureModal)closeMeFeature();});
   var interfaceColoursBtn=el('button',{id:'diaryInterfaceColoursBtn',type:'button','aria-expanded':'false','aria-controls':'diaryInterfaceColoursPanel'},t('interfaceColours'));
   var interfaceColoursPanel=el('div',{id:'diaryInterfaceColoursPanel',hidden:'hidden'});
   var originalDiaryColourBtn=el('button',{id:'diaryRestoreOriginalColourBtn',type:'button',class:'diary-interface-original-reset','aria-pressed':'false'},'↩ '+t('themeDefault'));
@@ -2733,6 +2865,33 @@ body[data-diary-interface-theme]:not([data-diary-interface-theme="blue"]):not([d
   display:block!important;
   width:100%!important;
 }
+</style>
+
+
+<style id="diary-four-me-features-style">
+#diaryDiaryMePanel .diary-me-feature-btn{display:flex!important;align-items:center!important;justify-content:flex-start!important;width:100%!important;min-height:44px!important;height:auto!important;padding:9px 11px!important;border:2px solid #7540b8!important;border-radius:11px!important;background:linear-gradient(145deg,#fff,#eadcff)!important;color:#35145f!important;font-size:16px!important;font-weight:1000!important;text-align:left!important;white-space:normal!important;box-shadow:inset 0 1px 0 #fff,0 3px 0 #4e247f,0 5px 8px #39204b22!important}
+#diaryDiaryMePanel .diary-me-feature-btn:active{transform:translateY(2px)!important;box-shadow:inset 0 1px 0 #fff,0 1px 0 #4e247f!important}
+#diaryMeFeatureModal[hidden]{display:none!important}
+#diaryMeFeatureModal{position:fixed!important;inset:0!important;z-index:2147483647!important;display:flex!important;flex-direction:column!important;gap:10px!important;box-sizing:border-box!important;padding:calc(12px + env(safe-area-inset-top,0px)) 12px calc(12px + env(safe-area-inset-bottom,0px))!important;background:linear-gradient(145deg,#fffdf7,#f1e8ff)!important;color:#302044!important;overflow-y:auto!important;overscroll-behavior:contain!important}
+.diary-me-feature-head{display:flex!important;align-items:center!important;gap:8px!important;min-height:44px!important;padding-bottom:8px!important;border-bottom:2px solid #d4af37!important}
+.diary-me-feature-head strong{flex:1!important;text-align:center!important;font-size:17px!important;font-weight:1000!important}
+.diary-me-feature-back,.diary-me-feature-close{min-width:42px!important;min-height:40px!important;border:2px solid #7540b8!important;border-radius:9px!important;background:linear-gradient(145deg,#fff,#eadcff)!important;color:#35145f!important;font-weight:900!important}
+.diary-me-feature-close{font-size:25px!important}
+.diary-me-feature-form{display:grid!important;grid-template-columns:1fr!important;gap:9px!important;padding:12px!important;border:2px solid #d4af37!important;border-radius:14px!important;background:#fff!important;box-shadow:0 3px 0 #9b7415!important}
+.diary-me-feature-field{display:flex!important;flex-direction:column!important;gap:5px!important;color:#422d5d!important;font-size:13px!important;font-weight:900!important}
+.diary-me-feature-field input,.diary-me-feature-field select{width:100%!important;min-height:42px!important;padding:8px!important;border:1px solid #cbb9df!important;border-radius:8px!important;background:#fff!important;color:#241a31!important;font-size:16px!important}
+.diary-me-feature-save,.diary-me-feature-delete{min-height:40px!important;padding:8px 12px!important;border:2px solid #d4af37!important;border-radius:10px!important;background:linear-gradient(145deg,#f7e8a8,#d1a33a)!important;color:#382700!important;font-weight:1000!important}
+#diaryMeFeatureStatus{min-height:18px!important;margin:0!important;text-align:center!important;font-size:13px!important;font-weight:800!important}
+#diaryMeFeatureList{display:flex!important;flex-direction:column!important;gap:9px!important;padding-bottom:20px!important}
+.diary-me-feature-card{display:flex!important;flex-direction:column!important;gap:6px!important;padding:11px!important;border:1px solid #cbb9df!important;border-left:4px solid #7540b8!important;border-radius:12px!important;background:#fff!important;box-shadow:0 2px 6px #30204418!important;overflow-wrap:anywhere!important}
+.diary-me-feature-card strong{font-size:15px!important;color:#382052!important}
+.diary-me-feature-card small{font-size:12px!important;color:#756781!important}
+.diary-me-feature-card p{margin:0!important;font-size:13px!important;white-space:pre-wrap!important;overflow-wrap:anywhere!important}
+.diary-me-feature-card a{color:#56308b!important;font-weight:800!important}
+.diary-me-feature-thumb{display:block!important;max-width:100%!important;max-height:190px!important;object-fit:contain!important;border-radius:8px!important}
+.diary-me-feature-delete{align-self:flex-end!important;min-height:34px!important;padding:6px 10px!important;background:linear-gradient(145deg,#fff,#f6e8e8)!important;border-color:#c77!important;color:#7d2424!important}
+.diary-me-feature-totals{padding:10px!important;border:1px solid #d4af37!important;border-radius:10px!important;background:#fff7d9!important;color:#513d0a!important;font-size:13px!important;font-weight:900!important;line-height:1.6!important}
+.diary-me-feature-empty{text-align:center!important;padding:16px!important;color:#756781!important;font-weight:800!important}
 </style>
 
 </body>
