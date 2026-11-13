@@ -1332,3 +1332,18 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK unchanged: 1.0.136 / versionCode 135 / SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`; no APK rebuild or signing change.
 - Physical-device/browser verification pending. User should use **Me → Check for Updates**, open and unlock a note, wait for the Share button to become enabled, then tap it once. Confirm the note stays expanded and the Android/Chrome share sheet opens with the single composed Diary image. Do not claim phone-side success until confirmed.
 - Rollback: exact pre-edit files are preserved on `backup/pre-note-share-ready-gate-2026-11-13`; preserve local notes, photos, PIN data and app identity.
+
+
+# Web Update 162 — Note Share canvas fallback and failure-safe readiness (2026-11-13)
+
+- User reported that Web Update 161 still did not make Note Share work. Re-audited the full share function and found a definite failure-path defect: when `canvas.toBlob` returned null or image preparation rejected, the code still called the readiness callback with no success value. The Share button then became enabled despite no cached image; the next tap rebuilt the image asynchronously and could lose the user activation again.
+- Created pre-edit backup branch `backup/pre-note-share-canvas-fallback-2026-11-13` with:
+  - `backups/web-source-before-note-share-canvas-fallback-2026-11-13.html`
+  - `backups/latest-before-note-share-canvas-fallback-2026-11-13.json`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-note-share-canvas-fallback-2026-11-13.md`
+- Changed only `web-source/index.html`: canvas PNG creation now uses `canvas.toBlob` when available and falls back to `canvas.toDataURL` -> Blob if `toBlob` is unavailable or returns null. Preparation callbacks now receive explicit success/failure; Share is enabled only after a successful cached PNG, and remains disabled on failure with an accessible error title/status. Existing composed layout, native Android bridge, browser share, download fallback, notes/photos/storage/PIN and app identity are unchanged.
+- Source commit `9949f2de30084cbfa64d5465aa959f8aad6b7054`; source blob `50420b05d0bd25d893b44d5e1c94c53f8c4b9975`.
+- Web-only publisher run `43407161971` (run 152) completed `success`; publish job `131824200908` completed `success`. Workflow's verification/publish step succeeded, including its bundle validation.
+- Post-publish source and `diary-web/index.html` are byte-identical; both blob SHA `50420b05d0bd25d893b44d5e1c94c53f8c4b9975`. Feed reports Web Update `162`, SHA-256 `39d789052f285fb29abc4292f6e4e802382adc03ca3d876de3907c474cba7dcf`. Static post-publish checks confirmed fallback function, explicit true/false callback paths, and success-only enable logic.
+- APK unchanged at 1.0.136 / versionCode 135; no APK rebuild or signing change. Physical device/browser share-sheet test remains pending. Do not claim complete success until user confirms the actual share sheet opens and the composed image is attached.
+- User test path: Me → Check for Updates; open/unlock note; wait until Share button becomes enabled; tap once. If it stays disabled, report the visible status rather than tapping repeatedly.
