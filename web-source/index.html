@@ -1557,7 +1557,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   }
   function drawPanel(ctx,im,x,y,w,h,caption,isTitle,fieldStyle,colour){
    ctx.save();ctx.beginPath();ctx.roundRect(x,y,w,h,26);ctx.clip();drawImageCover(ctx,im,x,y,w,h);
-   colour=cleanDiaryColour(colour);if(colour.mode!=='none'){if(colour.mode==='gradient'){var cg=ctx.createLinearGradient(x,y,x+w,y+h);cg.addColorStop(0,colour.first);cg.addColorStop(1,colour.second);ctx.fillStyle=cg;}else ctx.fillStyle=colour.first;ctx.globalAlpha=im?.32:1;ctx.fillRect(x,y,w,h);ctx.globalAlpha=1;}
+   colour=cleanDiaryColour(colour);if(colour.mode!=='none'){if(colour.mode==='gradient'){var cg=ctx.createLinearGradient(x,y,x+w,y+h);cg.addColorStop(0,colour.first);cg.addColorStop(1,colour.second);ctx.fillStyle=cg;}else ctx.fillStyle=colour.first;ctx.globalAlpha=im?0.32:1;ctx.fillRect(x,y,w,h);ctx.globalAlpha=1;}
    var shade=ctx.createLinearGradient(0,y,0,y+h);shade.addColorStop(0,'rgba(0,0,0,.34)');shade.addColorStop(.45,'rgba(0,0,0,.25)');shade.addColorStop(1,'rgba(0,0,0,.18)');ctx.fillStyle=shade;ctx.fillRect(x,y,w,h);
    var value=String(caption||' '),rtl=/[\u0590-\u08ff]/.test(value),size,lineH,insetL,insetR,tx,ty,align;
    if(fieldStyle){
