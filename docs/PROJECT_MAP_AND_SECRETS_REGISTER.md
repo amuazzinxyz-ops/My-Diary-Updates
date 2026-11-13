@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `156`; package `com.personal.diaryapp`. Live feed: `webSha256=7404440c4db966789b67529d0f156191a715769b3d2513a9da13be8c4de92aef`.
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `158`; package `com.personal.diaryapp`. Live feed: `webSha256=72b3a4268d2a2c6d7a990f9f527f098e26e226e466d5fe8a2122f0d41d74d9b2`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -1261,3 +1261,20 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK unchanged: 1.0.136 / versionCode 135 / SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`; no APK rebuild or signing changes.
 - Physical-device verification **pending**. User should use **Me → Check for Updates**, then tap the Cover image field and Detail image field to confirm the writing keyboard opens; also verify one-finger drag and two-finger zoom still work. Tap **Image Badlein** on an existing image to confirm it still opens Gallery directly.
 - Rollback: verified pre-edit files on `backup/pre-image-tap-writing-fix-2026-11-13`; preserve all diary notes, photos, PIN data and app identity.
+
+
+# Web Update 158 — Fix Note Share on mobile (2026-11-13)
+
+- User reported that 📤 Note Share Karein did not work. Root cause: the composed PNG was created asynchronously (Image loading and canvas.toBlob) and only then passed to navigator.share(). On mobile browsers the transient user activation from the tap can expire before this asynchronous work completes, so the native share sheet is blocked.
+- Starting live state: Web Update 156; APK 1.0.136 / versionCode 135; package com.personal.diaryapp; source/mirror blob SHA 3a9439731ca5965b381b938b86c5189b657c4999; feed SHA-256 7404440c4db966789b67529d0f156191a715769b3d2513a9da13be8c4de92aef.
+- Changed only web-source/index.html. When a note is expanded and unlocked, the app now prepares the same combined Diary PNG (cover image + title text + detail image + note text + attached photo) in advance. The Share button remains disabled until that PNG is ready, then its click calls navigator.share({files:[file]}) immediately within the user's tap. If file sharing is unsupported, the existing composed-image download fallback remains. Preparation is cached per note ID, update timestamp and selected language. Note content, image layout, formatting, notes storage, photos, PIN/recovery, app identity and Android source were not changed.
+- Pre-edit backup branch: backup/pre-note-share-fix-2026-11-13; verified exact backups:
+  - backups/web-source-before-note-share-fix-2026-11-13.html (blob SHA 3a9439731ca5965b381b938b86c5189b657c4999)
+  - backups/latest-before-note-share-fix-2026-11-13.json (blob SHA 3b8f1fd35cf7921e83932274897f8a017b778414)
+  - backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-note-share-fix-2026-11-13.md (blob SHA 75db3e09d122642bc6a6cc5fbf20ddf2dad99be1)
+- Source commits: initial implementation b401fed740e8397dd578f5ccf5520502fed687c8; final refinement 7d367e562ed1d682c769980d89919fb4f1083abb. Final diff reviewed and both inline JavaScript blocks parsed successfully. Static checks verified pre-generation on expanded notes, disabled-until-ready behavior, cached PNG, and synchronous share invocation on tap.
+- Publisher workflow runs 147 (43396317069) and 148 (43396414393) both completed successfully; each publish job succeeded. The final publisher output is Web Update 158 (run 148). Live feed confirms webVersion=158 and webSha256=72b3a4268d2a2c6d7a990f9f527f098e26e226e466d5fe8a2122f0d41d74d9b2.
+- Post-publish: source and diary-web/index.html are byte-identical; both Git blob SHA 131469afbb2aa47b0132c07f7210b45e0eba0b6a.
+- APK unchanged: 1.0.136 / versionCode 135 / SHA-256 6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348; web-only workflow did not rebuild APK.
+- Physical-device verification pending. User should install via Me → Check for Updates, open/unlock a note, wait until 📤 Note Share Karein becomes enabled, then tap it and confirm Android's share sheet appears with the combined Diary PNG. If no compatible share target exists, the existing image-download fallback should run.
+- Rollback: exact pre-edit files are preserved on backup/pre-note-share-fix-2026-11-13; preserve all local notes, photos, PIN data and app identity.
