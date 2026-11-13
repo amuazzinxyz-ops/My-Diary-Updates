@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `163`; package `com.personal.diaryapp`. Live feed: `webSha256=5170a6cba592960dbb2ff7b0b3773c6b38da1d6b16c99999029228ccfcdfdc37`.
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `167`; package `com.personal.diaryapp`. Live feed: `webSha256=87a7d661f06322370dfe5ac87a7aef555eeaeb6844c82ffe302465c9f3b53751`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -1417,3 +1417,23 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK remains unchanged at 1.0.136, versionCode 135, SHA-256 6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348. This is a web-only patch; no APK rebuild or signing change.
 - Physical phone verification remains pending. User should run Me → Check for Updates, open an unlocked note, wait for the Share button to appear, and tap it once. Do not claim success until the Android share sheet actually opens with the composed Diary PNG attached. If it fails, capture the visible status/error; do not repeatedly tap or assume a device-side success.
 - Rollback: exact pre-edit files are preserved on backup/native-share-bridge-query-fix-2026-11-13. Preserve local notes, photos, PIN data, and app identity.
+
+
+---
+
+# Web Update 167 — Mobile Diary left/right border fit (2026-11-13)
+
+- User reported that the left and right border lines of the opened Diary panel are slightly clipped on mobile. The CSS sizing was the cause: the panel had `width:min(760px,100%)` with a 2px border but no mobile `border-box`, allowing the border to extend beyond the overlay's available width.
+- Changed only `web-source/index.html`: added the isolated `diary-mobile-border-fit` CSS rule for screens up to 420px, setting `#diaryMyNotesPanel` to `box-sizing:border-box`, `width:100%`, and `max-width:100%`. This keeps the existing left/right border lines inside the mobile panel width. No vertical positioning, border style/colour, panel content, gesture behaviour, note/share code, translations, data/storage, PIN/recovery, native Android source, APK, package identity, or signing data changed.
+- Starting live state: feed Web Update 166; APK 1.0.136 / versionCode 135; package `com.personal.diaryapp`. Source/mirror prior blob SHA `ab23175252a017f0d19f5064969685a02d5044a9`; prior feed SHA-256 `1f9f4bb9707eb562f696f752d11868724a277a5c122edcff9531d5f32d6c89b9`.
+- Reconciled the stale status line at the top of this register: it incorrectly said Web Update 163 while the live feed was 166. The live feed was treated as authoritative. Current header now reflects Web Update 167 and its exact feed SHA-256.
+- Pre-edit backup branch: `backup/pre-mobile-diary-border-fit-2026-11-13`. Exact backups created and re-fetched byte-identically:
+  - `backups/web-source-before-mobile-diary-border-fit-2026-11-13.html` — blob `ab23175252a017f0d19f5064969685a02d5044a9`
+  - `backups/diary-web-before-mobile-diary-border-fit-2026-11-13.html` — blob `ab23175252a017f0d19f5064969685a02d5044a9`
+  - `backups/latest-before-mobile-diary-border-fit-2026-11-13.json` — blob `bc7fdc05e1e83f548b1e7b1d67a26a9e2bee502c`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-mobile-diary-border-fit-2026-11-13.md` — blob `643101011d6490c9ac60c2ab851f3655735f9d6f`
+- Source patch commit: `c1f1723c44c2f7e86710561903ee32459abfa4a2`; source blob `00737e4bfe34a875dd1099555d9d6ff67381b472`. Both inline JavaScript blocks parsed successfully; the added CSS braces are balanced and the mobile-only selector was confirmed in the final source.
+- Publisher output commit: `dede972e9c906579a59dd12fd4fa57eb852fd6b2` (“Publish My Diary web bundle update”), changing only `diary-web/index.html` and `latest.json`. Live source and mirror were re-fetched and are byte-identical, both blob SHA `00737e4bfe34a875dd1099555d9d6ff67381b472`. Independently computed UTF-8 SHA-256 `87a7d661f06322370dfe5ac87a7aef555eeaeb6844c82ffe302465c9f3b53751` matches `latest.json.webSha256`; live feed is Web Update 167.
+- APK unchanged: 1.0.136 / versionCode 135; APK SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`. No APK rebuild or signing changes.
+- Physical-device verification pending. User should use the existing **Me → Check for Updates** path and confirm that both vertical border lines are now fully visible on the mobile screen. Do not claim phone-side success until the user confirms.
+- Rollback: restore the exact pre-edit HTML files from `backup/pre-mobile-diary-border-fit-2026-11-13`; preserve all notes, photos, settings, and PIN data.
