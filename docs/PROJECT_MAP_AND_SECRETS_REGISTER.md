@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `144`; package `com.personal.diaryapp`. Live feed: `webSha256=`375ee8fd55eb2ce15e9d5065638e5b70f451df7a0fd7827cf9aaeaa1ee7240d2`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current. This corrects the stale webVersion 140 entry below.
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `145`; package `com.personal.diaryapp`. Live feed: `webSha256=`bc3fb24aecf6af0abe06fa1b27ff90042fb1eac769d798e568630d71fa9fb165`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current. This corrects the stale webVersion 140 entry below.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -1063,3 +1063,22 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Post-publish: source and mirror byte-identical; blob SHA `0f7b9e3fb63b974b0906ab92344060ec0463029b`; independently calculated UTF-8 SHA-256 `375ee8fd55eb2ce15e9d5065638e5b70f451df7a0fd7827cf9aaeaa1ee7240d2` matches live feed. Live webVersion `144`.
 - APK remains `1.0.136` / versionCode `135`; no APK build/signing change. Physical phone pinch test is **pending**; do not claim device confirmation until user tests.
 - Rollback: restore the exact pre-edit files from `backup/pre-pinch-zoom-fix-2026-11-13` if testing reveals regression.
+
+---
+
+# Web Update 145 — Two-axis image movement and Android multi-touch repair (2026-11-13)
+
+- User reported after Update 144 that an image could move only vertically; horizontal movement and pinch zoom/zoom-out still did not work.
+- Starting live state: APK 1.0.136 / versionCode 135; webVersion 144; source blob 0f7b9e3fb63b974b0906ab92344060ec0463029b. Re-read the live register, feed, source and mirror before editing.
+- Scope: web-only. Changed the finger-adjust image painting/gesture functions, image background sizing in the existing field-image renderer, the existing zoom-value clamp, and the existing pamphlet-template CSS override in web-source/index.html. No other Diary feature was changed.
+- Repair details: Android now uses native Touch Events for one-, two- and three-finger gestures even on browsers that also support Pointer Events; mouse/pen Pointer Events remain. Uploaded field images are sized with overflow on both axes so horizontal and vertical repositioning are possible. Background position and size are applied with CSS priority so the template rule cannot override image adjustment. Pinch zoom range now allows zoom-out to 0.8 and zoom-in up to 4×. Image dimensions are cached for adjustment rather than reloaded on every move.
+- Pre-edit backup branch: backup/pre-two-axis-adjust-fix-2026-11-13. Backups created and readable:
+  - backups/web-source-before-two-axis-adjust-fix-2026-11-13.html
+  - backups/diary-web-before-two-axis-adjust-fix-2026-11-13.html
+  - backups/latest-before-two-axis-adjust-fix-2026-11-13.json
+  - backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-two-axis-adjust-fix-2026-11-13.md
+- Source commit: 28cbd549a61bd92c9417b125e4a41f14691f726a. Web publisher workflow run 43379560399 (run 135) completed with success; publish job and all listed steps succeeded.
+- Post-publish verification: web-source/index.html and diary-web/index.html are byte-identical; both Git blob SHA c1417ddb7b940f922b98b034dee9a226da7926ba. Live feed reports webVersion 145 and web SHA-256 bc3fb24aecf6af0abe06fa1b27ff90042fb1eac769d798e568630d71fa9fb165. The live feed was re-fetched after publishing.
+- APK remains 1.0.136 / versionCode 135; APK URL, SHA-256 and package identity unchanged. No APK rebuild or signing operation.
+- Physical-device testing is pending. The user must install Web Update 145 through Me → Check for Updates, then test horizontal and vertical drag, two-finger pinch-in/zoom-out and pinch-out/zoom-in on a Cover image, Details image and attached Photo. Do not claim phone-side confirmation until the user reports the results.
+- Rollback: restore the exact pre-edit files from backup/pre-two-axis-adjust-fix-2026-11-13. Preserve all local notes, photos, PIN data and app data.
