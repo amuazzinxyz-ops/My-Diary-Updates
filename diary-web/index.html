@@ -1555,8 +1555,9 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    if(!im){var g=ctx.createLinearGradient(x,y,x+w,y+h);g.addColorStop(0,'#49316f');g.addColorStop(1,'#142f2b');ctx.fillStyle=g;ctx.fillRect(x,y,w,h);return;}
    var scale=Math.max(w/im.width,h/im.height),sw=w/scale,sh=h/scale,sx=(im.width-sw)/2,sy=(im.height-sh)/2;ctx.drawImage(im,sx,sy,sw,sh,x,y,w,h);
   }
-  function drawPanel(ctx,im,x,y,w,h,caption,isTitle,fieldStyle){
+  function drawPanel(ctx,im,x,y,w,h,caption,isTitle,fieldStyle,colour){
    ctx.save();ctx.beginPath();ctx.roundRect(x,y,w,h,26);ctx.clip();drawImageCover(ctx,im,x,y,w,h);
+   colour=cleanDiaryColour(colour);if(colour.mode!=='none'){if(colour.mode==='gradient'){var cg=ctx.createLinearGradient(x,y,x+w,y+h);cg.addColorStop(0,colour.first);cg.addColorStop(1,colour.second);ctx.fillStyle=cg;}else ctx.fillStyle=colour.first;ctx.globalAlpha=im?0.32:1;ctx.fillRect(x,y,w,h);ctx.globalAlpha=1;}
    var shade=ctx.createLinearGradient(0,y,0,y+h);shade.addColorStop(0,'rgba(0,0,0,.34)');shade.addColorStop(.45,'rgba(0,0,0,.25)');shade.addColorStop(1,'rgba(0,0,0,.18)');ctx.fillStyle=shade;ctx.fillRect(x,y,w,h);
    var value=String(caption||' '),rtl=/[\u0590-\u08ff]/.test(value),size,lineH,insetL,insetR,tx,ty,align;
    if(fieldStyle){
@@ -1598,9 +1599,9 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    var y=margin+headerH;
    var titleFieldStyle=readImageFieldStyle('diaryMyNotesTitle')||{};Object.assign(titleFieldStyle,{fontSize:coverFormat.size,fontFamily:coverFormat.family,fontWeight:coverFormat.bold?'900':'400',fontStyle:coverFormat.italic?'italic':'normal',textDecoration:coverFormat.underline?'underline':'none',color:coverFormat.colorCustom?coverFormat.color:(cover?'#ffffff':'#172033')});
    var bodyFieldStyle=readImageFieldStyle('diaryMyNotesText')||{};Object.assign(bodyFieldStyle,{fontSize:detailFormat.size,fontFamily:detailFormat.family,fontWeight:detailFormat.bold?'900':'400',fontStyle:detailFormat.italic?'italic':'normal',textDecoration:detailFormat.underline?'underline':'none',color:detailFormat.colorCustom?detailFormat.color:(detail?'#ffffff':'#172033')});
-   drawPanel(ctx,cover,margin,y,W-2*margin,coverH,title,true,titleFieldStyle);y+=coverH+gap;
-   drawPanel(ctx,detail,margin,y,W-2*margin,detailH,body||' ',false,bodyFieldStyle);y+=detailH;
-   if(extra){y+=gap;drawPanel(ctx,extra,margin,y,W-2*margin,extraH,'📷',false);y+=extraH;}
+   drawPanel(ctx,cover,margin,y,W-2*margin,coverH,title,true,titleFieldStyle,n.coverColour);y+=coverH+gap;
+   drawPanel(ctx,detail,margin,y,W-2*margin,detailH,body||' ',false,bodyFieldStyle,n.detailColour);y+=detailH;
+   if(extra){y+=gap;drawPanel(ctx,extra,margin,y,W-2*margin,extraH,'📷',false,null,n.photoColour);y+=extraH;}
    /* Bottom signature is also drawn into the PNG artwork itself. */
    ctx.save();ctx.fillStyle='#45266f';ctx.strokeStyle='#c69a27';ctx.lineWidth=4;ctx.beginPath();ctx.roundRect(margin+125,H-margin-76,W-2*margin-250,62,22);ctx.fill();ctx.stroke();
    ctx.fillStyle='#fffaf0';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='800 27px Arial, sans-serif';ctx.fillText('My Diary',W/2,H-margin-45);
