@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `145`; package `com.personal.diaryapp`. Live feed: `webSha256=`bc3fb24aecf6af0abe06fa1b27ff90042fb1eac769d798e568630d71fa9fb165`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current. This corrects the stale webVersion 140 entry below.
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `146`; package `com.personal.diaryapp`. Live feed: `webSha256=`9c3aacda52194dc8d1ebe25b3cdbb1b043c7ef48fce78768ae15d5ab80d83471`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current. This corrects the stale webVersion 140 entry below.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -1082,3 +1082,21 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK remains 1.0.136 / versionCode 135; APK URL, SHA-256 and package identity unchanged. No APK rebuild or signing operation.
 - Physical-device testing is pending. The user must install Web Update 145 through Me → Check for Updates, then test horizontal and vertical drag, two-finger pinch-in/zoom-out and pinch-out/zoom-in on a Cover image, Details image and attached Photo. Do not claim phone-side confirmation until the user reports the results.
 - Rollback: restore the exact pre-edit files from backup/pre-two-axis-adjust-fix-2026-11-13. Preserve all local notes, photos, PIN data and app data.
+---
+
+# Web Update 146 — Horizontal drag and multi-touch capture repair (2026-11-13)
+
+- User reported the same failure after Web Update 145: image moved only vertically; horizontal drag and pinch zoom/zoom-out did not work. Do not treat the user's phone-side test as passed.
+- Re-read the current live register, latest.json, source and mirror before editing. Starting live state: webVersion 145; APK 1.0.136 / versionCode 135.
+- Changed only bindDiaryFingerAdjust in web-source/index.html. The new handler captures touchstart at document capture phase and registers additional fingers by checking whether their coordinates are within the active image/field bounds. This avoids relying on the second finger's event target matching the first finger's target. Pinch span is recalculated when finger count changes.
+- Horizontal and vertical drag now convert pointer pixel movement into CSS background-position percentage using the actual image overflow dimensions, rather than scaling by the full field width/height. This addresses the very small horizontal shift when the image only overflows the field slightly. Attached Photo transform drag is retained.
+- Pre-edit backup branch: backup/pre-horizontal-drag-pinch-repair-2026-11-13. Backups created and readable:
+  - backups/web-source-before-horizontal-drag-pinch-repair-2026-11-13.html
+  - backups/diary-web-before-horizontal-drag-pinch-repair-2026-11-13.html
+  - backups/latest-before-horizontal-drag-pinch-repair-2026-11-13.json
+  - backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-horizontal-drag-pinch-repair-2026-11-13.md
+- Source commit: 08819ff9c8fd2285c7fdc0f450409a875ee13610. Publisher workflow run 43379986888 (run 136) completed with success.
+- Post-publish verification: source and mirror are byte-identical; both Git blob SHA 6cc67040b3c3ecc20440b457a4eca7c9e4103d6f. Live feed reports webVersion 146 and web SHA-256 9c3aacda52194dc8d1ebe25b3cdbb1b043c7ef48fce78768ae15d5ab80d83471.
+- APK unchanged at 1.0.136 / versionCode 135; no APK rebuild or signing operation.
+- Physical-device testing remains pending. Ask user to install Web Update 146 through Me → Check for Updates and test left/right drag, up/down drag, two-finger pinch-in and pinch-out. Do not claim phone-side success until user confirms.
+- Rollback: restore exact pre-edit files from backup/pre-horizontal-drag-pinch-repair-2026-11-13. Preserve all local notes, photos, PIN data and app data.
