@@ -1146,6 +1146,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  function diaryColourCss(v){v=cleanDiaryColour(v);var theme=diaryPamphletStyle(v.template);return theme?theme.bg:v.mode==='gradient'?'linear-gradient(135deg,'+v.first+','+v.second+')':v.mode==='solid'?v.first:'';}
  function diaryTint(hex,a){var x=hex.slice(1);return 'rgba('+parseInt(x.slice(0,2),16)+','+parseInt(x.slice(2,4),16)+','+parseInt(x.slice(4,6),16)+','+a+')';}
  function diaryFingerTarget(kind){return kind==='Photo'?document.querySelector('#diaryMyNotesPhotoPreview img'):document.getElementById(kind==='Cover'?'diaryMyNotesTitle':'diaryMyNotesText');}
+ function diaryFieldBackgroundPosition(v){var p=v.posX+'% '+v.posY+'%';return (v.mode==='gradient'||v.mode==='solid'?'0% 0%,0% 0%,':'0% 0%,')+p;}
+ function diaryFieldBackgroundSize(v,w,h){var photo=w+'% '+h+'%';return (v.mode==='gradient'||v.mode==='solid'?'100% 100%,100% 100%,':'100% 100%,')+photo;}
  function diaryFingerPaint(target,kind){
   if(!target)return;
   var v=diaryColourFor(kind);
@@ -1154,7 +1156,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    target.style.transformOrigin='center center';
    return;
   }
-  target.style.setProperty('background-position',v.posX+'% '+v.posY+'%','important');
+  target.style.setProperty('background-position',diaryFieldBackgroundPosition(v),'important');
   target.style.setProperty('background-repeat','no-repeat','important');
   var data=kind==='Cover'?activeCoverPhotoData:activeDetailPhotoData;
   if(!data)return;
@@ -1162,7 +1164,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    var current=diaryColourFor(kind),boxW=Math.max(1,target.clientWidth),boxH=Math.max(1,target.clientHeight),ar=width/Math.max(1,height),boxAr=boxW/boxH,wPct=100,hPct=100;
    if(ar>boxAr)wPct=(ar/boxAr)*100;else hPct=(boxAr/ar)*100;
    wPct=Math.max(100,wPct)*1.25;hPct=Math.max(100,hPct)*1.25;
-   target.style.setProperty('background-size',(wPct*current.zoom)+'% '+(hPct*current.zoom)+'%','important');
+   target.style.setProperty('background-size',diaryFieldBackgroundSize(current,wPct*current.zoom,hPct*current.zoom),'important');
   }
   var cached=target.__diaryFingerImageSize;
   if(cached&&cached.src===data){paintSize(cached.width,cached.height);}
@@ -1309,7 +1311,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  }
  function applyDiaryFieldImage(field,data,kind,colour){
   if(!field)return;colour=cleanDiaryColour(colour);var bg=diaryColourCss(colour),theme=diaryPamphletStyle(colour.template);if(theme){field.setAttribute('data-diary-template',colour.template);field.style.border='3px double '+theme.border;field.style.borderRadius='15px';field.style.boxShadow='inset 0 0 0 3px rgba(255,255,255,.78),0 2px 7px rgba(40,25,20,.13)';field.style.padding=kind==='body'?'16px':'12px';}else{field.removeAttribute('data-diary-template');field.style.border='';field.style.borderRadius='';field.style.boxShadow='';}
-  if(data){var tint=colour.mode==='gradient'?'linear-gradient(135deg,'+diaryTint(colour.first,.34)+','+diaryTint(colour.second,.34)+'),':colour.mode==='solid'?'linear-gradient('+diaryTint(colour.first,.34)+','+diaryTint(colour.first,.34)+'),':'';field.style.backgroundImage=tint+'linear-gradient(90deg,rgba(0,0,0,.34),rgba(0,0,0,.18)),url("'+data+'")';field.style.backgroundColor=colour.mode==='none'?'transparent':colour.first;field.style.backgroundSize='cover';field.style.setProperty('background-position',colour.posX+'% '+colour.posY+'%','important');field.style.backgroundRepeat='no-repeat';var bgImage=new Image();bgImage.onload=function(){if(!field.isConnected)return;var bw=Math.max(1,field.clientWidth),bh=Math.max(1,field.clientHeight),ar=bgImage.width/Math.max(1,bgImage.height),bar=bw/bh,wp=100,hp=100;if(ar>bar)wp=ar/bar*100;else hp=bar/ar*100;wp=Math.max(100,wp)*1.25;hp=Math.max(100,hp)*1.25;field.__diaryFingerImageSize={src:data,width:bgImage.width,height:bgImage.height};field.style.setProperty('background-size',(wp*colour.zoom)+'% '+(hp*colour.zoom)+'%','important');field.style.setProperty('background-repeat','no-repeat','important');};bgImage.src=data;field.style.color='#fff';field.style.textShadow='0 1px 3px #000,0 0 5px #000';field.classList.add('diary-diary-field-has-image');}
+  if(data){var tint=colour.mode==='gradient'?'linear-gradient(135deg,'+diaryTint(colour.first,.34)+','+diaryTint(colour.second,.34)+'),':colour.mode==='solid'?'linear-gradient('+diaryTint(colour.first,.34)+','+diaryTint(colour.first,.34)+'),':'';field.style.backgroundImage=tint+'linear-gradient(90deg,rgba(0,0,0,.34),rgba(0,0,0,.18)),url("'+data+'")';field.style.backgroundColor=colour.mode==='none'?'transparent':colour.first;field.style.backgroundSize='cover';field.style.setProperty('background-position',diaryFieldBackgroundPosition(colour),'important');field.style.backgroundRepeat='no-repeat';var bgImage=new Image();bgImage.onload=function(){if(!field.isConnected)return;var bw=Math.max(1,field.clientWidth),bh=Math.max(1,field.clientHeight),ar=bgImage.width/Math.max(1,bgImage.height),bar=bw/bh,wp=100,hp=100;if(ar>bar)wp=ar/bar*100;else hp=bar/ar*100;wp=Math.max(100,wp)*1.25;hp=Math.max(100,hp)*1.25;field.__diaryFingerImageSize={src:data,width:bgImage.width,height:bgImage.height};field.style.setProperty('background-size',diaryFieldBackgroundSize(colour,wp*colour.zoom,hp*colour.zoom),'important');field.style.setProperty('background-repeat','no-repeat,no-repeat,no-repeat','important');};bgImage.src=data;field.style.color='#fff';field.style.textShadow='0 1px 3px #000,0 0 5px #000';field.classList.add('diary-diary-field-has-image');}
   else{field.style.backgroundImage=bg;field.style.backgroundColor=colour.mode==='solid'?colour.first:'transparent';field.style.backgroundSize='cover';field.style.backgroundPosition='center';field.style.backgroundRepeat='no-repeat';field.style.color='';field.style.textShadow='';field.classList.remove('diary-diary-field-has-image');}
  }
  function renderDiaryImagePreview(prefix){var cover=prefix==='Cover',data=cover?activeCoverPhotoData:activeDetailPhotoData,field=document.getElementById(cover?'diaryMyNotesTitle':'diaryMyNotesText');applyDiaryFieldImage(field,data,cover?'title':'body',cover?activeCoverColour:activeDetailColour);applyDiaryTextFormat(field,cover?activeCoverTextFormat:activeDetailTextFormat);}
