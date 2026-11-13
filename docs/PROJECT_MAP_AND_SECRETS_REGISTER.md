@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `159`; package `com.personal.diaryapp`. Live feed: `webSha256=bcb655b79f33742f44e6de283bd2af5286acb7d8f5bf70cd90f55d521e866f16`.
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `160`; package `com.personal.diaryapp`. Live feed: `webSha256=9e62a60bfad90c5374d02ebad6e39d6138c5c217bffcb22c03ab3c8a1a31be1f`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -1296,3 +1296,21 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK unchanged: 1.0.136 / versionCode 135 / SHA-256 6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348.
 - Physical-device verification pending. User should install Web Update 159 using Me → Check for Updates, open/unlock a note, tap Share once (if still preparing, wait briefly and tap again), and confirm the note stays expanded and Android's share sheet opens.
 - Rollback: exact pre-edit files are preserved on backup/pre-note-share-button-tap-fix-2026-11-13; preserve local notes, photos, PIN data and app identity.
+
+
+# Web Update 160 — Restore the known-good one-tap Note Share handler (2026-11-13)
+
+- User reported Note Share remained nonfunctional after Web Update 159 and explicitly required evidence-based checking, not guesswork.
+- Starting live state: Web Update 159; APK 1.0.136 / versionCode 135; package `com.personal.diaryapp`; source/mirror blob SHA `9b5372c80a3f63c8e8f69fc8fa31324b2e4e1a81`; feed SHA-256 `bcb655b79f33742f44e6de283bd2af5286acb7d8f5bf70cd90f55d521e866f16`.
+- Historical comparison: fetched the actual Web Update 157 source at publisher commit `4705d62cb2222a677c2a438717116a48c0306cda`, then compared the Note Share function and button handler against Web Updates 158 and 159. Web 157's button handler calls `shareNote(n)` immediately from the tap. Web 158 introduced a disabled-until-ready state; Web 159 removed disabled state but added a cache-miss early return, so a tap while image preparation was pending did not invoke the known-good Share flow. This was the exact behavioral regression.
+- Scope: changed only the Note Share button's click handler in `web-source/index.html`. Restored the exact Web 157 handler behavior: prevent default, stop propagation, then call `shareNote(n)` immediately. Existing asynchronous pre-generation, cache, combined PNG composition, text/image placement, native share call, and download fallback remain. No other functions, UI, notes, photos, storage, PIN/recovery, Android source, package identity, APK or signing data changed.
+- Pre-edit backup branch: `backup/pre-share-single-tap-restore-2026-11-13`; verified readable exact backups:
+  - `backups/web-source-before-share-single-tap-restore-2026-11-13.html` (blob SHA `9b5372c80a3f63c8e8f69fc8fa31324b2e4e1a81`)
+  - `backups/diary-web-before-share-single-tap-restore-2026-11-13.html` (blob SHA `9b5372c80a3f63c8e8f69fc8fa31324b2e4e1a81`)
+  - `backups/latest-before-share-single-tap-restore-2026-11-13.json` (blob SHA `90ffff65ff474fe5b964de4244a13e520dc8e975`)
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-share-single-tap-restore-2026-11-13.md` (blob SHA `b290aecd5a204392285ad1b52bb50da5b81b33f6`)
+- Source change commit: `e648772ad8924e7fade1f58ef0b57b26ea158a34`; publisher output commit: `6e21edb1f4a89dd55601db21cd9b2596b268019b`. The exact branch diff was verified to equal one replacement of the Share click handler only.
+- Verification: both inline JavaScript blocks parsed successfully. Static checks confirmed the restored handler exists once, stops parent-card propagation, leaves pre-generation enabled, and preserves the composed PNG/native-share code. Re-fetched source and mirror are byte-identical; both Git blob SHA `8cd55c74c81a77232b53d22ff3da27d564617d37`. Independently calculated UTF-8 SHA-256 `9e62a60bfad90c5374d02ebad6e39d6138c5c217bffcb22c03ab3c8a1a31be1f` matches live feed `latest.json.webSha256`; live webVersion is 160. Publisher output commit and live mirror/feed update are verified; direct workflow run ID/conclusion was not available through the current read endpoint and is recorded as not independently retrieved.
+- APK unchanged: 1.0.136 / versionCode 135 / SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`; no APK rebuild or signing changes.
+- Physical-device verification **pending**. User should use **Me → Check for Updates**, open/unlock a note, and tap **Share** once. Confirm the note stays expanded and the Android share sheet opens. Do not claim phone-side success until the user confirms.
+- Rollback: exact pre-edit files on `backup/pre-share-single-tap-restore-2026-11-13`; preserve all local notes, photos, PIN data and app identity.
