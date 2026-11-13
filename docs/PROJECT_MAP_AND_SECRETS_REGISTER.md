@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `143`; package `com.personal.diaryapp`. Live feed: `webSha256=745d8e5fb5d794fac62f613d0783b6f20bf208a8c22e0060b86d231f531bd7c1`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current. This corrects the stale webVersion 140 entry below.
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `144`; package `com.personal.diaryapp`. Live feed: `webSha256=`375ee8fd55eb2ce15e9d5065638e5b70f451df7a0fd7827cf9aaeaa1ee7240d2`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current. This corrects the stale webVersion 140 entry below.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -1044,3 +1044,22 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Post-publish verification: source and published mirror are byte-identical, both Git blob SHA `98d759b0b8b7637058affbba9307701bfd45d2ed`; independently calculated UTF-8 SHA-256 `745d8e5fb5d794fac62f613d0783b6f20bf208a8c22e0060b86d231f531bd7c1` matches live `latest.json.webSha256`; live webVersion is 143.
 - APK remains `1.0.136` / versionCode `135`; no APK rebuild or signing operation. Phone-side drag/zoom test is **pending**; do not claim device testing until user confirms.
 - Rollback: restore the verified pre-edit files from `backup/pre-finger-drag-fix-2026-11-13` if phone testing identifies a regression.
+
+
+---
+
+# Web Update 144 — Multi-finger pinch zoom repair (2026-11-13)
+
+- User confirmed one-finger image dragging worked after Web Update 143, but two-/three-finger pinch zoom and zoom-out did not work.
+- Starting live state: APK 1.0.136 / versionCode 135; webVersion 143; starting source commit `ddd716f1ba3d8e88b1ee911f8bc4bd4c8d79afd6`.
+- Scope: web-only; replaced only `bindDiaryFingerAdjust(target,kind)` in `web-source/index.html`. Android touch-capable Pointer Events now handle each active pointer ID; legacy Touch Events remain as fallback. Pinch span is calculated from all active fingers around their centre, so two or three fingers can scale the image. Gesture baselines reset when fingers are added/removed to avoid jumps; one-finger drag is retained.
+- Explicitly untouched: pamphlet designs/chooser, image selection, layout, note/photo storage, save format, PIN/lock/recovery, language dictionaries, native Android code, APK, package/signing identity, and unrelated features.
+- Pre-edit backup branch: `backup/pre-pinch-zoom-fix-2026-11-13`. Verified readable backups:
+  - `backups/web-source-before-pinch-zoom-fix-2026-11-13.html`
+  - `backups/diary-web-before-pinch-zoom-fix-2026-11-13.html`
+  - `backups/latest-before-pinch-zoom-fix-2026-11-13.json`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-pinch-zoom-fix-2026-11-13.md`
+- Source commit: `0d576d9fe53c580416febbfcee3eaac4349b0316`. Web publisher workflow run `43378989369` (run 134) completed successfully.
+- Post-publish: source and mirror byte-identical; blob SHA `0f7b9e3fb63b974b0906ab92344060ec0463029b`; independently calculated UTF-8 SHA-256 `375ee8fd55eb2ce15e9d5065638e5b70f451df7a0fd7827cf9aaeaa1ee7240d2` matches live feed. Live webVersion `144`.
+- APK remains `1.0.136` / versionCode `135`; no APK build/signing change. Physical phone pinch test is **pending**; do not claim device confirmation until user tests.
+- Rollback: restore the exact pre-edit files from `backup/pre-pinch-zoom-fix-2026-11-13` if testing reveals regression.
