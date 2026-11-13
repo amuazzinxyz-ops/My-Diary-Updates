@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `138`; package `com.personal.diaryapp`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current. (This line corrects the stale 126/126 figures recorded earlier.)
+**Status checked against live `latest.json` on 2026-11-13:** APK `1.0.136` / versionCode `135`; webVersion `140`; package `com.personal.diaryapp`. The live feed is authoritative for current release values. Re-read it before every task; never assume these values remain current. (This line corrects the stale 126/126 figures recorded earlier.)
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -976,3 +976,30 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Both inline scripts parse successfully. Each of the six new translation keys is present in all 10 language dictionaries. SHA-256 implementation was checked against the standard `abc` test vector. APK remains **1.0.136 / versionCode 135**, APK hash and package identity unchanged; no APK rebuild or signing operation.
 - Physical-device visual and interaction verification remains **pending**. Use **Me → Check for Updates**, then open each of the three image panels, tap **Pamphlet Chunein**, choose each preset, and confirm it styles the intended field/photo frame. Also confirm the existing image, solid-colour and gradient-colour choices still work.
 - Rollback: use the verified backup branch and exact pre-change files listed above. Preserve all local notes, photos and app data.
+
+
+---
+
+# Web Update 140 — Actual decorative ready-made pamphlet templates (2026-11-13)
+
+- User clarified that “pamphlet” means fully designed, ready-made decorative templates commonly offered in other apps, not simple colour swatches or two-colour gradients. Replaced the previous four gradient swatches with real visual template previews and selectable designs.
+- Starting feed before this task: APK **1.0.136 / versionCode 135**, webVersion **138**, package `com.personal.diaryapp`. This live Register, feed and current source were read before editing.
+- Scope: web-only `web-source/index.html`; publisher synchronizes `diary-web/index.html` and updates `latest.json`. No native Android source, APK, package/signing identity, updater logic, note storage keys, PIN/recovery logic, or unrelated screens were changed.
+- Each existing image button retains its own separate `Pamphlet Chunein` option and its own purpose-specific ready-made gallery:
+  - **Note ka Cover Photo:** Floral, Islamic, Classic and Nature title-cover designs.
+  - **Details Image:** Paper, lined writing page, Islamic and Nature writing-area designs.
+  - **Photo Lagayein:** Polaroid, Royal, Floral and Modern photo-frame designs.
+- Each gallery displays a miniature decorated layout preview, ornamentation, border and sample typography—not just a colour tile. Selecting a template applies the decorative background/frame to its matching editor field or attached photo.
+- Template IDs are safely whitelisted and retained by the existing `cleanDiaryColour` normalization. Therefore selected template styling is saved with the note, restored when editing, carried through the existing note backup import/export path, applied to saved-note previews and reflected in the composed share artwork. Existing Choose Image, Solid Colour and Gradient Colour controls remain available.
+- Added localized template chooser headings and four style labels in all 10 supported languages: Roman English, English, Hindi, Urdu, Arabic, Bengali, Gujarati, Marathi, Tamil and Telugu.
+- Backups were created and readable on branch `backup/pre-real-pamphlet-templates-2026-11-13`:
+  - `backups/web-source-before-real-pamphlet-templates-2026-11-13.html`
+  - `backups/diary-web-before-real-pamphlet-templates-2026-11-13.html`
+  - `backups/latest-before-real-pamphlet-templates-2026-11-13.json`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-real-pamphlet-templates-2026-11-13.md`
+- Final source commit: `85711d1aee91d364fce973dda0e4f02f0be27c0f`. Final web-only publishing workflow run **43369439756** (run 130) completed successfully. An earlier publish for the same task was superseded by a small canvas-rendering correction; run 130 is the final source version.
+- Post-publish verification: source and mirror were re-fetched and have identical Git blob SHA `330c27bf9d12f50dcf06cab8be828e038a2ca20f`. Both inline JavaScript scripts parse successfully. Each of the six new chooser/label translation keys is present in all 10 language dictionaries. There are 12 distinct purpose-specific template choices across the three galleries.
+- Independently computed SHA-256 over exact UTF-8 source bytes: `8188d5d65d9dd04393e49c0e85b400a0b18904f9c4c0b38ec091c1018f8050d6`, matching live `latest.json.webSha256`. Live webVersion **140**.
+- APK remains **1.0.136 / versionCode 135**, checksum, URL and package unchanged; no APK rebuild or signing operation.
+- Physical-device visual/interaction testing remains **pending**. User should use **Me → Check for Updates**, then open each of the three existing image buttons and inspect its distinct gallery, select a template, save/reopen the note, and test the existing image/solid/gradient options. Do not claim phone-side testing until user confirms.
+- Rollback: use the backup branch and exact pre-change files listed above. Preserve all local notes, photos and app data.
