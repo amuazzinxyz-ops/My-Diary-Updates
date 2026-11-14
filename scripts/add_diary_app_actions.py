@@ -439,7 +439,7 @@ outer = r"""
                 val picked = data?.data
                 if (picked != null) {
                     try {
-                        val flags = data.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        val flags = (data?.flags ?: 0) and Intent.FLAG_GRANT_READ_URI_PERMISSION
                         if (flags != 0) contentResolver.takePersistableUriPermission(picked, flags)
                         val label = contentResolver.query(picked, null, null, null, null)?.use { cursor ->
                             val nameIndex = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
