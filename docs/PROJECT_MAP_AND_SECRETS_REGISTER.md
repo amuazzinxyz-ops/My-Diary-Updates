@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-14:** APK `1.0.143` / versionCode `142`; webVersion `204`; package `com.personal.diaryapp`. Live APK SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; web SHA-256 `ea4433cfcdfe05680c669d11117199ac97a6356ced47f181a5bd960130bec746`.
+**Status checked against live `latest.json` on 2026-11-14:** APK `1.0.143` / versionCode `142`; webVersion `205`; package `com.personal.diaryapp`. Live APK SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; web SHA-256 `ea4433cfcdfe05680c669d11117199ac97a6356ced47f181a5bd960130bec746`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -2241,3 +2241,24 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK remains 1.0.143 / versionCode 142 with unchanged SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; no APK rebuild or signing action.
 - Physical-device verification is **pending**. Install Web Update 204 through **Me → Check for Updates** and confirm × is absent in all five sections while Wapas/Back remains visible and works. Do not claim phone-side success until user confirms.
 - Rollback: restore only `web-source/index.html` from the verified backup branch above and publish a higher webVersion if required. Never clear app data or alter records, attachments, PIN/recovery data, notes, photos or APK/signing files.
+
+
+---
+
+# Web Update 205 — Open four PIN-removed sections directly (2026-11-14)
+
+- User reported that after removing a section PIN through the PIN control, reopening Personal Calendar, My Kharcha, My Documents or My Memories incorrectly asked them to create a new PIN. User clarified the PIN control should only set/remove the lock; when removed, the section should open directly.
+- Starting live state: APK 1.0.143 / versionCode 142; Web Update 204; package `com.personal.diaryapp`; source/mirror blob SHA `c8f2dd931eccc40f79be21ff5627518c2fe9d78a`; starting main commit `9b6ea378304212109618b554b6512d923957f492`.
+- Root cause: `openMeFeature(kind)` unconditionally showed the PIN setup/verification screen for every protected section, even when no PIN configuration existed.
+- Minimal web-only change: `openMeFeature(kind)` now calls `showMeFeaturePin(kind)` only when the section is protected **and** `meFeaturePinConfig(kind)` exists. If no PIN configuration exists because the user removed the lock, it opens the section directly. Existing configured PINs still require PIN verification. No PIN or recovery keys, stored values, section records, attachments, native Android source, APK, package identity or signing data were changed.
+- Verified pre-edit backups on `backup/pre-open-unlocked-four-sections-2026-11-14`, all fetched back and content-compared:
+  - `backups/web-source-before-open-unlocked-four-sections-2026-11-14.html` — blob `c8f2dd931eccc40f79be21ff5627518c2fe9d78a`
+  - `backups/diary-web-before-open-unlocked-four-sections-2026-11-14.html` — blob `c8f2dd931eccc40f79be21ff5627518c2fe9d78a`
+  - `backups/latest-before-open-unlocked-four-sections-2026-11-14.json` — blob `57fae8e887b6246e593a36381a92a1bcf30cfe85`
+  - `backups/master-register-before-open-unlocked-four-sections-2026-11-14.md` — blob `53674831a7c5eba841b2e60f81f4515afb6b720f`
+- Work branch: `work/open-unlocked-four-me-sections-2026-11-14`. PR #15 merged by squash as `b4a8f567f909665961a2334db44743bb86344a87`. Publisher workflow run `43615653486` completed with **success**; publisher commit `b98f605288c06f8cb18a24c79683d36520466205`.
+- Validation: both inline JavaScript blocks passed V8 syntax parsing. Targeted checks confirmed no-PIN sections open directly, existing configured PINs still invoke the PIN gate, and the PIN removal and PIN Manager code remains present and unchanged. Source PR changed only `web-source/index.html`.
+- Post-publish verification: live `web-source/index.html` and `diary-web/index.html` are byte-identical; both Git blob SHA `9d27305f6c0d93117291e60caffa399183842be7`, length 368919. Independently calculated UTF-8 SHA-256 `7c0f62ef52de645088c3ae7f782e503ee573e6c1209ba8bf2e9765c50b432b2c` matches live `latest.json.webSha256`; live webVersion is 205.
+- APK remains 1.0.143 / versionCode 142 with unchanged SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; no APK rebuild or signing operation.
+- Physical-device verification is **pending**. Install Web Update 205 through **Me → Check for Updates**. Confirm all four sections open directly after their PIN lock is removed; then set a PIN for one section and confirm that it still asks for the PIN on the next opening. Do not claim phone-side success until the user confirms.
+- Rollback: restore only `web-source/index.html` from the verified backup branch above and publish a higher webVersion if required. Never clear app data or alter PIN/recovery data, records, attachments, notes, photos or APK/signing files.
