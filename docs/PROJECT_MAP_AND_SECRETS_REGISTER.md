@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-14:** APK `1.0.143` / versionCode `142`; webVersion `201`; package `com.personal.diaryapp`. Live APK SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; web SHA-256 `5d0f47cca0424f0d9c31ce94e85a280caf38633ec53252f89951b85fb9f50686`.
+**Status checked against live `latest.json` on 2026-11-14:** APK `1.0.143` / versionCode `142`; webVersion `203`; package `com.personal.diaryapp`. Live APK SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; web SHA-256 `e7105a89a36a06e39b551f059cd68597565aad04950e15a6155964e322e98c58`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -2199,3 +2199,24 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK remains unchanged at 1.0.143 / versionCode 142 with SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`. This was a web-only update; no APK rebuild, native Android source change, signing action, package identity change, or app-data migration.
 - Physical-device verification is **pending**. Install Web Update 202 through **Me → Check for Updates**. Confirm the extra Lock button is absent from both My Documents and My Memories, and separately verify that opening each still presents its PIN gate and Forgot PIN/recovery remains available. Do not claim phone-side success until the user confirms.
 - Rollback: use the exact pre-edit backups above and restore only `web-source/index.html` if needed, then publish a higher webVersion. Never clear app data or delete/modify documents, memories, PIN/recovery data, notes, photos, or APK/signing files.
+
+
+---
+
+# Web Update 203 — Hide Unlock buttons in all four PIN-protected Me sections (2026-11-14)
+
+- User request: remove only the visible **Unlock** button from the PIN-entry screens of Personal Calendar, My Kharcha, My Documents and My Memories; entering the PIN should unlock automatically.
+- Starting live state: APK 1.0.143 / versionCode 142; Web Update 202; package `com.personal.diaryapp`; source/mirror blob SHA `1ee54525c9a6dcbfe8f2cd9ca2c94ddffbcd7e10`; main starting commit `9492ab683d6fd53a3961714e6a5a82cd15dd3adf`.
+- Scope: web-only change to `web-source/index.html`. The PIN submit button is hidden from the interface, while the existing form submit handler is still used programmatically when the entered PIN reaches the configured length (4 or 8 digits).
+- Preserved: all four PIN gates, PIN create/verify, Forgot PIN and recovery, PIN Manager, stored PIN/recovery keys, Calendar/Kharcha/Documents/Memories records and attachments, and all other Diary features. No native Android source, APK, signing data, package identity, data schema or user records changed.
+- Verified pre-edit backups on `backup/pre-four-section-unlock-button-removal-2026-11-14`:
+  - `backups/web-source-before-four-section-unlock-button-removal-2026-11-14.html` — blob `1ee54525c9a6dcbfe8f2cd9ca2c94ddffbcd7e10`
+  - `backups/diary-web-before-four-section-unlock-button-removal-2026-11-14.html` — blob `1ee54525c9a6dcbfe8f2cd9ca2c94ddffbcd7e10`
+  - `backups/latest-before-four-section-unlock-button-removal-2026-11-14.json` — blob `05cb21b16f187dbe47f2b21d6a2ef771107c61de`
+  - `backups/master-register-before-four-section-unlock-button-removal-2026-11-14.md` — blob `9addcfa4932780ff735da9036907c7c7174d13da`
+- Work branch: `work/remove-four-section-unlock-buttons-2026-11-14`; PR #13 merged by squash as `d26df0e8756eeef0c9c2a27bb644fa906fb64ed7`. Publisher commit: `72f3fae62265bcd787c945b1947816634fefbfd4`; live feed advanced to Web Update 203.
+- Both inline JavaScript blocks passed V8 syntax parsing. Targeted checks confirmed the submit control is hidden, auto-submit triggers at `pin.maxLength` (4 or 8), all four sections remain PIN-protected, and recovery helpers remain present.
+- Post-publish verification: source and mirror are byte-identical; both blob SHA `3704836682fb3f53b77ee370ae15a2e8fe12b9cc`, length 369079. Independently computed UTF-8 SHA-256 `e7105a89a36a06e39b551f059cd68597565aad04950e15a6155964e322e98c58` matches live `latest.json.webSha256`; live webVersion is 203.
+- APK remains 1.0.143 / versionCode 142 with unchanged SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; no APK rebuild or signing operation.
+- Physical-device verification is **pending**. Install Web Update 203 through **Me → Check for Updates**, then confirm the Unlock button is absent in all four sections, PIN entry unlocks automatically, and Forgot PIN/recovery remains available. Do not claim phone-side success until user confirms.
+- Rollback: restore only `web-source/index.html` from the verified backup branch above and publish a higher webVersion if needed. Never clear app data or alter PIN/recovery data, records, attachments, notes, photos or APK/signing files.
