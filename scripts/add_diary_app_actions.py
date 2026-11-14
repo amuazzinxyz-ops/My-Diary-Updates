@@ -414,13 +414,17 @@ private object DiaryReminderScheduler {
         if (Build.VERSION.SDK_INT >= 31 && !alarm.canScheduleExactAlarms()) {
             throw SecurityException("Exact alarm permission is required for reliable reminders")
         }
-        if (Build.VERSION.SDK_INT >= 23) {
-            // RTC_WAKEUP + exact/allow-while-idle is required so reminders fire while
-            // the phone is asleep. Never downgrade to an inexact alarm: Doze can defer it.
-            alarm.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, atMillis, pending)
-        } else {
-            alarm.setExact(AlarmManager.RTC_WAKEUP, atMillis, pending)
-        }
+        // Treat diary reminders as real alarm-clock events. AlarmClockInfo uses a
+        // wake-up alarm and is surfaced to Android as the user's next alarm, which
+        // is the strongest AlarmManager delivery class for alarms during idle modes.
+        val showIntent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+            ?: Intent(context, MainActivity::class.java)
+        showIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val showPending = PendingIntent.getActivity(
+            context, requestCode(id) + 100000000, showIntent, pendingFlags()
+        )
+        val alarmClock = AlarmManager.AlarmClockInfo(atMillis, showPending)
+        alarm.setAlarmClock(alarmClock, pending)
         val old = readItems(context)
         val next = org.json.JSONArray()
         for (i in 0 until old.length()) {
@@ -509,6 +513,7 @@ private object DiaryReminderScheduler {
             .setContentIntent(content)
             .setAutoCancel(true)
             .setPriority(Notification.PRIORITY_HIGH)
+            .setCategory(Notification.CATEGORY_ALARM)
             .setDefaults(Notification.DEFAULT_ALL)
             .addAction(android.R.drawable.ic_lock_idle_alarm, "10 min baad", actionIntent(ACTION_SNOOZE, "snooze"))
             .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Done", actionIntent(ACTION_DONE, "done"))
