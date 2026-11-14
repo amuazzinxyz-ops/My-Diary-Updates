@@ -1356,14 +1356,16 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   function calendarHijriLabel(date){
    try{return new Intl.DateTimeFormat('en-u-ca-islamic-umalqura',{day:'numeric',month:'short'}).format(date);}catch(e){try{return new Intl.DateTimeFormat('en-u-ca-islamic',{day:'numeric',month:'short'}).format(date);}catch(e2){return '';}}
   }
+  var calendarRenderToken=0;
   function calendarRender(){
-   var year=calendarMonth.getFullYear(),month=calendarMonth.getMonth();
+   var renderToken=++calendarRenderToken,year=calendarMonth.getFullYear(),month=calendarMonth.getMonth();
    var localeMap={roman:'en-IN',english:'en',hindi:'hi-IN',urdu:'ur-PK',arabic:'ar',bengali:'bn-BD',gujarati:'gu-IN',marathi:'mr-IN',tamil:'ta-IN',telugu:'te-IN'};var activeLocale=localeMap[language()]||'en';calendarMonthLabel.textContent=calendarMonth.toLocaleDateString(activeLocale,{month:'long',year:'numeric'});
    calendarHeading.replaceChildren();
    for(var weekday=0;weekday<7;weekday++){var weekdayDate=new Date(2024,0,7+weekday);calendarHeading.appendChild(el('span',{},weekdayDate.toLocaleDateString(activeLocale,{weekday:'short'})));}
    calendarDays.replaceChildren();
    var first=new Date(year,month,1),start=first.getDay(),count=new Date(year,month+1,0).getDate();
    Promise.all([Promise.resolve(read()||[]),meFeatureAll('calendar').catch(function(){return [];})]).then(function(results){
+    if(renderToken!==calendarRenderToken)return;
     var notes=results[0],events=results[1],byDay=Object.create(null),byEventDay=Object.create(null);
     notes.forEach(function(n){var stamp=Number(n.created||n.updated||0);if(!stamp)return;var key=calendarDateKey(new Date(stamp));(byDay[key]||(byDay[key]=[])).push(n);});
     events.forEach(function(event){
