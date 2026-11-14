@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-15:** APK `1.0.143` / versionCode `142`; webVersion `213`; package `com.personal.diaryapp`. Live APK SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; web SHA-256 `ecaff11b09037db2330241b87873d932ec956a4cdff30d559b900a7803c90885`.
+**Status checked against live `latest.json` on 2026-11-15:** APK `1.0.143` / versionCode `142`; webVersion `214`; package `com.personal.diaryapp`. Live APK SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; web SHA-256 `3aece64a96b3e288a247ca5c09353fc6321a5474238c2c0568094b392fead0c4`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -2381,10 +2381,16 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Rollback: use the verified pre-change backup files on `backup/before-remove-preset-colours-2026-11-14`; preserve all local notes, photos and PIN data.
 
 
-# Custom Colour button visibility fix — pending publication (2026-11-15)
+# Custom Colour button visibility fix — Web Update 214 (2026-11-15)
 
 - User clarified: keep the existing colour controls and existing button in the Cover/Naam and Detail/Likhne text menus; do not add a separate button. The word “Custom” was not appearing as the complete **Custom Colour** button on the phone.
 - Starting live state: Web Update 213; APK 1.0.143 / versionCode 142; package `com.personal.diaryapp`; main commit `07447acac8ba051d02e65d1e181cf6263d129b30`; source/mirror blob SHA `34b1a0276f83a082949052fd0fba4b0d6169075d`; feed SHA-256 `ecaff11b09037db2330241b87873d932ec956a4cdff30d559b900a7803c90885`.
 - Scope: web-only, one CSS addition in `web-source/index.html`. Keep the existing `diary-image-choice-solid` button and its colour-picker click handler. Give the existing action a full-width row and sufficient height/padding so the full **🎨 Custom Colour** label is visible in both Cover and Detail menus. No new button, no separate card, no change to colour values, picker logic, gradients, Photo menu, note data, storage, PIN/recovery, updater, native Android source, APK, package identity or signing.
 - Pre-edit backup branch: `backup/before-custom-colour-button-label-2026-11-15` (prior baseline) and this task's branch backup files: `backups/web-source-before-custom-colour-button-width-2026-11-15.html`, `backups/latest-before-custom-colour-button-width-2026-11-15.json`, `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-custom-colour-button-width-2026-11-15.md`.
-- Current work branch: `fix/custom-colour-button-width-2026-11-15`. Source patch prepared; automated syntax checks, PR merge, publishing workflow, source/mirror/feed hash verification and phone test are pending. Do not report as released until all required checks pass.
+- Work branch: `fix/custom-colour-button-width-2026-11-15`; dedicated backup branch: `backup/custom-colour-button-width-2026-11-15`. The three pre-edit backup files were re-fetched successfully and are readable.
+- PR #24 merged successfully by squash as commit `d2177f45da040cf4ef41cb23c8c4613a7ad9d6e1`. The PR diff contains exactly two files: `web-source/index.html` (7 additions, 1 deletion) and this register (9 additions); backup files are not part of the feature diff.
+- Publisher workflow run `43629161362` completed with **success**; publish job and every listed step completed successfully. Live Web Update advanced from 213 to **214**. Live source and published mirror were re-fetched and are byte-identical; both Git blob SHA `0e12683dc6e027a310e73a49100517fabbafaf93`. Live feed `latest.json.webSha256` is `3aece64a96b3e288a247ca5c09353fc6321a5474238c2c0568094b392fead0c4`; publisher workflow completed successfully and wrote this value to the live feed.
+- APK unchanged: `1.0.143` / versionCode `142`; package `com.personal.diaryapp`; APK SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`. No APK rebuild or signing operation.
+- Source checks: existing shared chooser call sites still attach the same colour chooser to both Cover and Detail; existing `diary-image-choice-solid` button and its colour-picker event handler remain; Photo's separate label logic remains unchanged. Only a CSS layout rule was added to give the existing Custom Colour button a full-width row and adequate dimensions. No additional button or separate panel was added.
+- Physical-device verification is **pending**. Use **Me → Check for Updates**, then open a new note and check Cover/Naam and Detail/Likhne menus: each should show one full-width **🎨 Custom Colour** button; tap it to confirm the existing colour picker opens. Also confirm Photo remains unchanged. Do not claim phone-side success until user confirms.
+- Rollback: use the readable pre-edit files on `backup/custom-colour-button-width-2026-11-15`; previous Web Update 213 backup branch remains preserved too.
