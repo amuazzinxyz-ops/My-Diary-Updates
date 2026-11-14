@@ -23,9 +23,9 @@ wake_insertion = """        if (intent?.getStringExtra("diary_reminder_id") != n
                 setTurnScreenOn(true)
             } else {
                 @Suppress("DEPRECATION")
-                window.addFlags(android.view.WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or android.view.WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
+                val legacyWakeFlags = android.view.WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or android.view.WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+                window.addFlags(legacyWakeFlags)
             }
-            window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }"""
 wake_anchor = "super.onCreate(savedInstanceState)"
 if s.count(wake_anchor) != 1:
