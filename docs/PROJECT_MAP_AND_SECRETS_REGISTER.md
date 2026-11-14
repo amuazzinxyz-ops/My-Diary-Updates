@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-15:** APK `1.0.143` / versionCode `142`; webVersion `216`; package `com.personal.diaryapp`. Live APK SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; web SHA-256 `cf54d5f058ca3175ba1a2eec6265f852b3c70fe09e959e26ddd3a04b1b94fff5`.
+**Status checked against live `latest.json` on 2026-11-15:** APK `1.0.143` / versionCode `142`; webVersion `217`; package `com.personal.diaryapp`. Live APK SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; web SHA-256 `ea90562b2af4c1703f670febd07ebba3831e0a01cae6aff929a1c1e8e7bf519c`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -81,6 +81,22 @@ Keep historical entries as history. If an old entry contains stale version infor
 ---
 
 
+
+# Web Update 217 — Make Custom Colour a clearly visible tappable button (2026-11-15)
+
+- User reported that the Cover and Detail control showed only the “🎨 Custom Colour” name and did not look like a proper tappable button. Requested a real visible button, while all other features remained correct.
+- Starting live state: Web Update 216; APK 1.0.143 / versionCode 142; package `com.personal.diaryapp`; source/mirror blob SHA `102531d7e44feccfb9283cba87ca835ac1e9a663`; live feed web SHA-256 `cf54d5f058ca3175ba1a2eec6265f852b3c70fe09e959e26ddd3a04b1b94fff5`.
+- Changed only the existing CSS rule in `web-source/index.html` for `.diary-image-choice-actions-custom .diary-image-choice-solid`: made the existing button explicitly display as a centered flex control, full width, minimum height 46px, with gold border, gold gradient fill, raised 3D shadow, bold centered label and pointer cursor. The existing HTML button element, label, and click handler are unchanged; the colour picker still opens through its original handler.
+- Cover and Detail only. Photo chooser, gradient controls, image selection, note data, photos, local storage, PIN/recovery, updater logic, native Android source, APK, package identity and signing data were not changed.
+- Pre-edit backup branch: `backup/before-custom-colour-button-style-2026-11-15`. Verified readable exact backups:
+  - `backups/web-source-before-custom-colour-button-style-2026-11-15.html`
+  - `backups/latest-before-custom-colour-button-style-2026-11-15.json`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-custom-colour-button-style-2026-11-15.md`
+- Source change PR #27 merged; merge commit `afe9d380f4a65bdecb32b916af3fbd6fd31ba50f`. Web-only workflow run `43632692522`, job `132562572265`, completed with **success**. Publisher commit `36cc17b` (“Publish My Diary web bundle update”).
+- Post-publish verification: source and mirror are byte-identical; both Git blob SHA `1d88a1847e29f807554a2d68679346621c1978ae`. Publisher independently calculated UTF-8 SHA-256 `ea90562b2af4c1703f670febd07ebba3831e0a01cae6aff929a1c1e8e7bf519c`, matching live `latest.json.webSha256`. Live `webVersion=217`. CSS brace counts and style-tag counts are balanced; targeted source check confirms the explicit full-width button rule is present. No JavaScript or HTML structure was changed by this CSS-only patch.
+- APK unchanged: 1.0.143 / versionCode 142 / SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; no APK rebuild or signing changes.
+- Physical-device verification is **pending**. User should use **Me → Check for Updates**, install Web Update 217, then confirm that Cover and Detail both show a full-width raised gold **🎨 Custom Colour** button and tapping anywhere on the button opens the colour picker. Photo and Gradient should remain unchanged. Do not claim phone-side success until confirmed.
+- Rollback: exact pre-edit files on `backup/before-custom-colour-button-style-2026-11-15`; preserve all diary data and settings.
 
 ---
 
