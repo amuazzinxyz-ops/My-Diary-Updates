@@ -1,0 +1,14 @@
+{
+  "appName": "My Diary",
+  "packageName": "com.personal.diaryapp",
+  "versionCode": 141,
+  "versionName": "1.0.142",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.142.apk",
+  "sha256": "9a538b5baa4a6ecf97158502e5b564473b158144c3bc324f41e1f8c83081a9d3",
+  "releaseNotes": "Smart Reminder repair: the screen lights on over the lock screen and notification/ringtone arrive, while a separate transparent wake-only activity prevents My Diary from opening automatically. A normal notification tap still opens My Diary; exact alarm scheduling, Snooze, Done, stored reminders, notes, photos, PIN data, and app identity remain unchanged.",
+  "minimumSupportedVersionCode": 1,
+  "webVersion": 197,
+  "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
+  "webSha256": "4452235be464d6acb8622430f71e4f0a76b416579e41ad91207d52a4d256852e",
+  "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
+}
