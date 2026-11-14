@@ -2046,3 +2046,13 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Live update feed at the start of this correction remains APK `1.0.140` / versionCode `139`, Web Update `197`; latest.json remains authoritative.
 - Phone verification on Vivo V2420 / Android 15 is pending. After a verified release is available, use **Me → Check for Updates**, then test screen-off notification + ringtone with My Diary staying closed and phone locked; separately verify tapping the notification opens the reminder normally.
 - Rollback for this workflow-only correction: restore the exact workflow from `backups/build-workflow-before-reminder-tap-check-2026-11-14.yml`; preserve all user data and the existing signing identity.
+
+## Final publication verification — APK 1.0.141 (2026-11-14)
+
+- Corrected workflow run `43600109747` completed with conclusion `success`; build job `132462842753` also completed successfully.
+- All release-critical steps passed: project/source validation, published HTML/hash checks, translation audit, app identity validation, target version `1.0.141` / versionCode `140`, debug build, signed Release configuration, publish verification, signed APK upload, and APK upload.
+- `latest.json` was re-fetched from `main` and now advertises APK `1.0.141`, versionCode `140`, URL `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.141.apk`, SHA-256 `aaaa7c49a76ed0fc0caef4f78b37cdf695ce22d5d2d0705d3ea275fecfaf959e`. Web Update remains `197` with unchanged SHA-256 `4452235be464d6acb8622430f71e4f0a76b416579e41ad91207d52a4d256852e`.
+- GitHub Actions run contains the non-expired `My-Diary-signed-Release-APK` artifact (1,949,061 bytes), and `My-Diary-debug-APK` (2,617,001 bytes). Signed release upload and publish steps report success.
+- The workflow's signing-readiness and keystore/alias validation steps passed. Preserve the established signing certificate fingerprint `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A`.
+- The app update is now published. Remaining verification is physical-device behavior only: user must install via **Me → Check for Updates** on Vivo V2420 / Android 15 and confirm notification + ringtone arrive with screen off while My Diary remains closed and the phone locked; then tap the notification to confirm it opens normally. Do not claim device-side confirmation until the user reports it.
+- User data remains untouched by this build; do not uninstall or clear app data.
