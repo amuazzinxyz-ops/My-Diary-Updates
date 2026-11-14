@@ -2030,3 +2030,19 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Next APK target: `1.0.141` / versionCode `140`; build/publish verification is **pending**. At this register update, live `latest.json` still points to APK 1.0.140 / code 139, so do not install or describe 1.0.141 as published yet. Existing signing certificate must remain `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A`.
 - Physical Vivo V2420 / Android 15 verification is **pending**. After a successful in-app update via **Me → Check for Updates**, create a short test reminder, lock the screen, and confirm notification + ringtone arrive while My Diary stays closed and the phone remains locked. Then test a reminder with the screen ON and confirm tapping its notification still opens the reminder normally. Never claim phone-side success until the user confirms.
 - Rollback: use the verified pre-edit files on `backup/no-auto-open-reminder-2026-11-14`; if needed, restore only the native integration script and workflow and publish a higher versionCode. Never uninstall, clear app data, or remove reminders/notes/photos/PIN data.
+
+---
+
+# APK 1.0.141 — Correct reminder notification tap-action build guard (2026-11-14)
+
+- Follow-up to the Smart Reminder no-auto-open repair. The first trigger run `43599842119` failed at the generated-Kotlin static assertion because the workflow expected the text `builder.setContentIntent(content)`, while the actual generated notification builder uses the chained call `.setContentIntent(content)`. This was a false-negative verification check; it did not indicate a runtime reminder-code failure.
+- Changed only `.github/workflows/build-diary-from-zip.yml`: the guard now requires exactly one `.setContentIntent(content)` occurrence. No Android runtime source, web HTML, reminder storage, notes, photos, PIN/recovery data, package identity, or signing configuration was changed in this correction.
+- Before-edit backups committed and readable in PR #5 branch:
+  - `backups/build-workflow-before-reminder-tap-check-2026-11-14.yml`
+  - `backups/latest-before-reminder-tap-check-2026-11-14.json`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-reminder-tap-check-2026-11-14.md`
+- PR [#5](https://github.com/amuazzinxyz-ops/My-Diary-Updates/pull/5) merged as commit `66adb151bc31167fa48dfa73fe604ffe137aed65`. Final workflow blob: `8f31523f90f9852e8aa4b3d64bcff07f3a463a41`. Reviewed PR diff: one workflow guard correction plus the three exact backups.
+- Corrected build workflow run `43600109747` was started and passed project verification, published HTML/hash checks, translation audit, identity checks, release version guard, and generated-source guard. At the time of this entry the Android debug APK build is still **in progress**; signed release build, APK publication, live feed update, APK hash and signing fingerprint verification are **pending**. Do not call APK 1.0.141 published until every release check passes and `latest.json` points to the verified artifact.
+- Live update feed at the start of this correction remains APK `1.0.140` / versionCode `139`, Web Update `197`; latest.json remains authoritative.
+- Phone verification on Vivo V2420 / Android 15 is pending. After a verified release is available, use **Me → Check for Updates**, then test screen-off notification + ringtone with My Diary staying closed and phone locked; separately verify tapping the notification opens the reminder normally.
+- Rollback for this workflow-only correction: restore the exact workflow from `backups/build-workflow-before-reminder-tap-check-2026-11-14.yml`; preserve all user data and the existing signing identity.
