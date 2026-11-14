@@ -448,3 +448,5 @@ jobs:
           path: diary-project/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
+
+# User-approved rebuild trigger: Smart Reminder must notify and ring without launching the Diary activity.
