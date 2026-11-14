@@ -1462,8 +1462,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var meFeatureBack=el('button',{type:'button',class:'diary-me-feature-back'},mf('back'));
   var meFeatureLock=el('button',{type:'button',class:'diary-me-feature-lock'},mf('lock'));
   var meFeatureManage=el('button',{type:'button',class:'diary-me-feature-lock'},mf('pinManage'));meFeatureManage.hidden=true;
-  var meFeatureClose=el('button',{type:'button',class:'diary-me-feature-close','aria-label':t('closeLabel')},'×');
-  meFeatureLock.hidden=true;meFeatureHead.append(meFeatureBack,meFeatureTitle,meFeatureManage,meFeatureLock,meFeatureClose);
+  meFeatureLock.hidden=true;meFeatureHead.append(meFeatureBack,meFeatureTitle,meFeatureManage,meFeatureLock);
   var meFeatureContent=el('div',{id:'diaryMeFeatureContent'});
   meFeatureModal.append(meFeatureHead,meFeatureContent);
   ov.appendChild(meFeatureModal);
@@ -1826,7 +1825,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    currentMeFeatureKind=null;++meFeatureRenderToken;clearMeFeatureUrls();meFeatureLock.hidden=true;meFeatureModal.hidden=true;meFeatureContent.replaceChildren();mePanel.hidden=false;mePanel.scrollTop=0;meBtn.setAttribute('aria-expanded','true');panel.classList.add('diary-me-menu-open');
   }
   meFeatureManage.addEventListener('click',function(){if(currentMeFeatureKind)showMeFeaturePinManager(currentMeFeatureKind);});
-  meFeatureBack.addEventListener('click',closeMeFeature);meFeatureLock.addEventListener('click',closeMeFeature);meFeatureClose.addEventListener('click',closeMeFeature);
+  meFeatureBack.addEventListener('click',closeMeFeature);meFeatureLock.addEventListener('click',closeMeFeature);
   meFeatureModal.addEventListener('click',function(e){e.stopPropagation();if(e.target===meFeatureModal)closeMeFeature();});
   var interfaceColoursBtn=el('button',{id:'diaryInterfaceColoursBtn',type:'button','aria-expanded':'false','aria-controls':'diaryInterfaceColoursPanel'},t('interfaceColours'));
   var interfaceColoursPanel=el('div',{id:'diaryInterfaceColoursPanel',hidden:'hidden'});
