@@ -418,7 +418,7 @@ jobs:
           meta["versionCode"] = int(lines[1])
           meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.143.apk"
           meta["sha256"] = lines[2]
-          meta["releaseNotes"] = "Smart Reminder repair: the screen lights on over the lock screen and notification/ringtone arrive, while a separate transparent wake-only activity prevents My Diary from opening automatically. A normal notification tap still opens My Diary; exact alarm scheduling, Snooze, Done, stored reminders, notes, photos, PIN data, and app identity remain unchanged."
+          meta["releaseNotes"] = "Smart Reminder now lets each reminder use a phone alarm/ringtone, an audio file selected from the device, or the default phone alarm. The chosen sound is saved with the reminder and retained through Snooze and reboot. Screen wake, notification tap behavior, exact alarm scheduling, Done, stored reminders, notes, photos, PIN data, and app identity remain unchanged."
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           cp /tmp/My-Diary-verified.apk My-Diary.apk
