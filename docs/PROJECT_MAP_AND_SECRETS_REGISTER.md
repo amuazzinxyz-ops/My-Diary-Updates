@@ -2135,3 +2135,22 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Live post-publish verification: `web-source/index.html` and `diary-web/index.html` were re-fetched and are byte-identical; both Git blob SHA `17e6e63fa9faf0074205b2cd5bfad3880cc6a0d9`, length 367,387 characters. Independently computed UTF-8 SHA-256 `529b3e39e1a7e26d85b235b17ada0f2a17b2cfdc85dee3940ac7a5b88bc93018` matches live `latest.json.webSha256`; live webVersion is 199. APK remains 1.0.143 / versionCode 142 with unchanged SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; no APK rebuild or signing action.
 - Phone verification is **pending**. User should install Web Update 199 through **Me → Check for Updates**, then test: Personal Calendar opens with its own PIN gate; create/edit/delete an event with date/time/details; check daily/weekly/monthly/yearly display in the main month view; verify Hijri labels in different languages; test one-time and recurring event alerts with screen off and after reboot; confirm Snooze/Done affect only that event occurrence and Smart Reminder continues unchanged. Do not claim physical-device success until user confirms.
 - Rollback: use the exact backups above on `work/personal-calendar-completion-2026-11-14`; restore only `web-source/index.html` if needed and publish a higher webVersion. Do not roll back or alter APK/native files, and never clear app data or delete Calendar records.
+
+
+---
+
+# Web Update 200 — Remove Personal Calendar inner lock button (2026-11-14)
+
+- User asked to remove the extra Lock button shown inside Personal Calendar. Confirmed the intended scope by inspecting the live implementation: this was the modal-header `meFeatureLock` control, whose click simply closes the feature and returns to Me. The actual Calendar PIN gate is a separate flow.
+- Minimal change to `web-source/index.html` only: hide `meFeatureLock` when `kind==='calendar'`. Preserve the PIN gate, PIN verify/create/forgot/recovery/manager functions, Calendar records, reminder alarms, and all other feature behavior. The existing button visibility for Documents and Memories remains unchanged; Kharcha remains unchanged.
+- Before editing, fetched the live Master Register, source/mirror, feed, native script and Android build workflow. Created branch `work/remove-calendar-inner-lock-button-2026-11-14`. Six backups were created and fetched back readable with exact pre-edit lengths:
+  - `backups/web-source-before-calendar-lock-button-removal-2026-11-14.html`
+  - `backups/diary-web-before-calendar-lock-button-removal-2026-11-14.html`
+  - `backups/latest-before-calendar-lock-button-removal-2026-11-14.json`
+  - `backups/master-register-before-calendar-lock-button-removal-2026-11-14.md`
+  - `backups/native-script-before-calendar-lock-button-removal-2026-11-14.py`
+  - `backups/build-workflow-before-calendar-lock-button-removal-2026-11-14.yml`
+- Both inline JavaScript blocks passed V8 syntax parsing. PR #10 merged by squash as commit `c6fe40c215883b9981d4973c295d7c068fe92c4e`.
+- Web publisher run `43610280385` completed with conclusion **success**. Live `webVersion=200`; `web-source/index.html` and `diary-web/index.html` were re-fetched and are byte-identical, both Git blob SHA `7d42a5aa280f0a9ed3217dabe81ad931a7156032`, 367,387 characters. Live feed `webSha256=eac11a930eb722e49ccf6b4146555d34868405f0b144d8ad1f9e060d65b61c48`.
+- APK remains unchanged at `1.0.143` / versionCode `142`, SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`. No APK rebuild, native Android source change, data migration or signing action.
+- Phone check: install the web change through **Me → Check for Updates**. Confirm the extra inner Lock button is gone from Personal Calendar and the PIN gate still appears when reopening it. No user-device test has yet been reported.
