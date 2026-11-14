@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-14:** APK `1.0.143` / versionCode `142`; webVersion `207`; package `com.personal.diaryapp`. Live APK SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; web SHA-256 `0584c0680e77ff35a78d52e4b8756b471a78d57a7b9e17b68441c55f931e8ccd`.
+**Status checked against live `latest.json` on 2026-11-14:** APK `1.0.143` / versionCode `142`; webVersion `209`; package `com.personal.diaryapp`. Live APK SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; web SHA-256 `df66a9c292933007a658456c77580073075903e48ca6912c367422128ebfa196`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -2302,3 +2302,22 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Post-publish verification: source and mirror are byte-identical; both blob SHA `336d00f415926a63a95ecc0b68bdd34c2e1a5f48`. Live `latest.json` webVersion `208`; its webSha256 matches the publisher-computed SHA-256 `4cc058b5317d752fd6e691a0475ab66692086b49b82060511160f7c2e4b70997`. Feed URL remains the web-source URL. APK remains 1.0.143 / versionCode 142; SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; no APK rebuild or signing change.
 - Rollback reference: restore only `web-source/index.html` from the verified pre-edit backup branch if needed, then allow the web publisher to sync the mirror/feed. Do not touch local user notes, photos or PIN data.
 - Physical-device verification pending. User should open My Diary → Me → Check for Updates, then open a new note and test both font selectors: confirm each shows 50 options, select different fonts in the title and body, save/reopen the note, and verify formatting remains. Some additional fonts require internet access to download; offline fallback may differ by device.
+
+
+---
+
+# Web Update 209 — Keep B, I and U formatting buttons together (2026-11-14)
+
+- User asked to move the **B (Bold)** and **I (Italic)** buttons beside **U (Underline)**. Inspection showed the three controls were already appended consecutively, but the toolbar's wrapping layout could split them across lines on narrow mobile screens.
+- Starting live state: Web Update 208; APK `1.0.143` / versionCode `142`; package `com.personal.diaryapp`; source/mirror blob SHA `336d00f415926a63a95ecc0b68bdd34c2e1a5f48`; feed web SHA-256 `4cc058b5317d752fd6e691a0475ab66692086b49b82060511160f7c2e4b70997`.
+- Changed only `web-source/index.html`: wrapped the existing B, I and U buttons in one inline-flex, non-wrapping group so they remain side-by-side. Existing button instances, click handlers, aria labels/pressed state, font-size and font-family controls, text colour control and both formatting-tool call sites remain unchanged.
+- Pre-edit backup branch: `backup/before-format-buttons-biu-order-2026-11-14`. Exact readable backups, fetched back and content-verified:
+  - `backups/web-source-before-format-buttons-biu-order-2026-11-14.html` — blob `336d00f415926a63a95ecc0b68bdd34c2e1a5f48`
+  - `backups/diary-web-before-format-buttons-biu-order-2026-11-14.html` — blob `336d00f415926a63a95ecc0b68bdd34c2e1a5f48`
+  - `backups/latest-before-format-buttons-biu-order-2026-11-14.json` — blob `76afdb76fe30db04153d2620eb416a8eec34c943`
+  - `backups/master-register-before-format-buttons-biu-order-2026-11-14.md` — blob `2e3afe348d26a1760fef540c4956e4a67cecab11`
+- Source commit `47ff63463c7730de9b7da31e0810ac1069bba0dd`; PR #19 squash-merged as `63099f3b96241582c59ee5b5bef3eca5eb46c70e`. Reviewed PR diff: exactly one file, `web-source/index.html`, with 3 additions and 1 deletion. Targeted checks confirmed the B/I/U group and non-wrapping CSS, existing shared formatting click handler, 50-font list, and retained font-size/family controls.
+- Web-only publisher workflow run `43624342152` completed with conclusion **success**. Live feed advanced to Web Update `209`. Post-publish source and mirror are byte-identical; both Git blob SHA `99c79234470753bf6284adfc56daa267902460cb`. Independently calculated UTF-8 SHA-256 `df66a9c292933007a658456c77580073075903e48ca6912c367422128ebfa196` matches live `latest.json.webSha256`.
+- APK remains `1.0.143` / versionCode `142`; SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; no APK rebuild or signing change.
+- Physical-device verification is **pending**. User should open My Diary → Me → Check for Updates, open a new note, and confirm B, I and U stay together in both formatting toolbars and each button still works. Do not claim phone-side success until the user confirms.
+- Rollback: restore only `web-source/index.html` from the verified pre-edit backup branch above and publish a higher webVersion if needed. Preserve notes, photos, formatting data, PIN/recovery data and all other user records.
