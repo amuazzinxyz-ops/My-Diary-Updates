@@ -2176,3 +2176,26 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Targeted source checks confirmed the Calendar form calls the existing sound picker, stores/restores the selected URI and label, and passes the URI to each `cal-` scheduled alarm. Existing records fall back to empty URI/default alarm. APK remains 1.0.143 / versionCode 142 with unchanged SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; no APK rebuild or signing operation.
 - Physical-device verification is **pending**. User should install Web Update 201 through **Me → Check for Updates**, then create a Calendar event with reminder enabled and test all three sound choices; edit the event to confirm the choice is retained; test one recurring event occurrence. Do not claim phone-side success until the user confirms.
 - Rollback: use the exact pre-edit backups above and restore only `web-source/index.html` if required; publish a higher webVersion. Never clear app data or alter Calendar records, PIN/recovery data, notes, photos, or APK/signing files.
+
+
+---
+
+# Web Update 202 — Remove inner Lock buttons from My Documents and My Memories (2026-11-14)
+
+- User request: remove only the extra header Lock button from **My Documents** and **My Memories**.
+- Starting live state: APK 1.0.143 / versionCode 142; Web Update 201; package `com.personal.diaryapp`; starting source/mirror Git blob SHA `2275664443613a817d12aaf42a3cf56889185a90`; starting main commit `6c49082e013babf782d7cfd6ed9971542102eacb`.
+- Scope: one-line web-only change in `web-source/index.html`: changed the modal-header Lock button visibility assignment to `meFeatureLock.hidden=true;`. This removes the extra button from the two requested sections. No other feature UI or behavior was changed.
+- Explicitly preserved: the separate Documents and Memories PIN protection gate (`meFeatureProtected` still includes both kinds), PIN create/verify, Forgot PIN and recovery configuration, PIN Manager, document and memory record storage, attached files/photos, and all other Diary features. No PIN or user-data storage key was modified or deleted. Calendar and Kharcha security logic remains unchanged.
+- Pre-edit backups were created on branch `backup/pre-documents-memories-lock-removal-2026-11-14` and fetched back readable with matching original Git blob SHAs:
+  - `backups/web-source-before-documents-memories-lock-removal-2026-11-14.html` — `2275664443613a817d12aaf42a3cf56889185a90`
+  - `backups/diary-web-before-documents-memories-lock-removal-2026-11-14.html` — `2275664443613a817d12aaf42a3cf56889185a90`
+  - `backups/latest-before-documents-memories-lock-removal-2026-11-14.json` — `83a86d6dbdcbbaa30bdb8d906ecbdf2afda27b86`
+  - `backups/master-register-before-documents-memories-lock-removal-2026-11-14.md` — `c9775ab431a8ff8479d7eae40e27af8572a06437`
+  - `backups/native-script-before-documents-memories-lock-removal-2026-11-14.py` — `865303b946368f79f0366407ae49138dc2907bb5`
+  - `backups/build-workflow-before-documents-memories-lock-removal-2026-11-14.yml` — `b313f11797f093b36ca38a11b7165bb796d6ed84`
+- Work branch: `work/remove-documents-memories-lock-buttons-2026-11-14`. PR #12 merged by squash as commit `e21f7ff03d0db75cd059b8c6beb4a3e0c352960a`. PR changed exactly one file with 1 insertion and 1 deletion.
+- Pre-merge validation: both inline JavaScript blocks passed V8 syntax parsing. Static checks confirmed the PIN protection gate, PIN configuration/recovery helpers, PIN Manager handler, and document/memory data paths remain present.
+- Web publisher automatically created commit `cfae818f2f343158c8f1a0ea3c191aa2daf521b6` (`Publish My Diary web bundle update`). Live `latest.json` advanced to Web Update 202 and reports web SHA-256 `7b7c2bee7ac1d575748734521cd5602e17bab12b718ed7f9606e41aadb857a0d`. Live `web-source/index.html` and `diary-web/index.html` were re-fetched and are identical; both Git blob SHA `1ee54525c9a6dcbfe8f2cd9ca2c94ddffbcd7e10`, length 369071 characters.
+- APK remains unchanged at 1.0.143 / versionCode 142 with SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`. This was a web-only update; no APK rebuild, native Android source change, signing action, package identity change, or app-data migration.
+- Physical-device verification is **pending**. Install Web Update 202 through **Me → Check for Updates**. Confirm the extra Lock button is absent from both My Documents and My Memories, and separately verify that opening each still presents its PIN gate and Forgot PIN/recovery remains available. Do not claim phone-side success until the user confirms.
+- Rollback: use the exact pre-edit backups above and restore only `web-source/index.html` if needed, then publish a higher webVersion. Never clear app data or delete/modify documents, memories, PIN/recovery data, notes, photos, or APK/signing files.
