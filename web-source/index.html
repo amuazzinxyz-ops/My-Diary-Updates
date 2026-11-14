@@ -1358,8 +1358,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      var parts=String(event.date||'').split('-').map(Number);if(parts.length!==3||!parts[0])return;
      for(var dayNo=1;dayNo<=count;dayNo++){
       var date=new Date(year,month,dayNo),match=false,baseYear=parts[0],baseMonth=parts[1],baseDay=parts[2],rule=event.repeat||'none';
-      if(rule==='yearly')match=date.getMonth()===baseMonth-1&&date.getDate()===baseDay;
-      else if(rule==='monthly')match=date.getDate()===Math.min(baseDay,new Date(date.getFullYear(),date.getMonth()+1,0).getDate());
+      if(rule==='yearly')match=date>=new Date(baseYear,baseMonth-1,baseDay)&&date.getMonth()===baseMonth-1&&date.getDate()===baseDay;
+      else if(rule==='monthly')match=date>=new Date(baseYear,baseMonth-1,baseDay)&&date.getDate()===Math.min(baseDay,new Date(date.getFullYear(),date.getMonth()+1,0).getDate());
       else if(rule==='weekly')match=date>=new Date(baseYear,baseMonth-1,baseDay)&&Math.round((new Date(date.getFullYear(),date.getMonth(),date.getDate())-new Date(baseYear,baseMonth-1,baseDay))/86400000)%7===0;
       else if(rule==='daily')match=date>=new Date(baseYear,baseMonth-1,baseDay);
       else match=date.getFullYear()===baseYear&&date.getMonth()===baseMonth-1&&date.getDate()===baseDay;
@@ -1581,8 +1581,9 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     if(title)record.title=title.value.trim();
     if(kind==='calendar'){
      record.type=type.value;record.time=time.value||'09:00';record.details=details.value.trim();record.repeat=repeatSelect.value;record.remind=!!calendarReminder.checked;
-     if(record.remind&&!calendarScheduleAlarms(record)){meFeatureStatus.textContent=mf('reminderFailed');return;}
-     if(!record.remind){calendarCancelAlarms(previous);record.reminderIds=[];}
+     if(previous&&previous.remind)calendarCancelAlarms(previous);
+     if(record.remind&&!calendarScheduleAlarms(record)){if(previous&&previous.remind)calendarScheduleAlarms(previous);meFeatureStatus.textContent=mf('reminderFailed');return;}
+     if(!record.remind)record.reminderIds=[];
     }
     if(kind==='reminders'){
      var triggerAt=new Date(date.value+'T'+time.value).getTime();
@@ -1605,13 +1606,13 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     if(f){record.fileBlob=f;record.fileName=f.name;record.fileType=f.type||'application/octet-stream';}
     if(kind==='kharcha'&&(!Number.isFinite(record.incomeAmount)||record.incomeAmount<=0||!Number.isFinite(record.expenseAmount)||record.expenseAmount<0)){meFeatureStatus.textContent=mf('failed');return;}
     meFeatureStatus.textContent='…';
-    meFeaturePut(record).then(function(){if(kind==='calendar'&&previous&&previous.remind)calendarCancelAlarms(previous);meFeatureStatus.textContent=(kind==='reminders'||(kind==='calendar'&&record.remind))?mf('reminderSet'):mf('saved');form._editingRecord=null;submit.textContent=mf('add');renderMeFeatureList(kind);form.reset();if(kind==='reminders'){var nextReminder=new Date(Date.now()+15*60*1000);date.value=nextReminder.getFullYear()+'-'+String(nextReminder.getMonth()+1).padStart(2,'0')+'-'+String(nextReminder.getDate()).padStart(2,'0');time.value=String(nextReminder.getHours()).padStart(2,'0')+':'+String(nextReminder.getMinutes()).padStart(2,'0');soundLabel.textContent=mf('reminderSoundDefault');window.__diaryActiveReminderForm=null;}else{var dateInput=form.querySelector('input[type="date"]');if(dateInput)dateInput.value=meFeatureToday();}}).catch(function(){if(kind==='reminders'&&window.DiaryAppActions){if(previous&&Number(previous.reminderAt)>Date.now())window.DiaryAppActions.scheduleReminder(previous.id,previous.title||'',previous.details||'',Number(previous.reminderAt),previous.soundUri||'');else window.DiaryAppActions.cancelReminder(record.id);}meFeatureStatus.textContent=mf('failed');});
+    meFeaturePut(record).then(function(){meFeatureStatus.textContent=(kind==='reminders'||(kind==='calendar'&&record.remind))?mf('reminderSet'):mf('saved');form._editingRecord=null;submit.textContent=mf('add');renderMeFeatureList(kind);form.reset();if(kind==='reminders'){var nextReminder=new Date(Date.now()+15*60*1000);date.value=nextReminder.getFullYear()+'-'+String(nextReminder.getMonth()+1).padStart(2,'0')+'-'+String(nextReminder.getDate()).padStart(2,'0');time.value=String(nextReminder.getHours()).padStart(2,'0')+':'+String(nextReminder.getMinutes()).padStart(2,'0');soundLabel.textContent=mf('reminderSoundDefault');window.__diaryActiveReminderForm=null;}else{var dateInput=form.querySelector('input[type="date"]');if(dateInput)dateInput.value=meFeatureToday();}}).catch(function(){if(kind==='reminders'&&window.DiaryAppActions){if(previous&&Number(previous.reminderAt)>Date.now())window.DiaryAppActions.scheduleReminder(previous.id,previous.title||'',previous.details||'',Number(previous.reminderAt),previous.soundUri||'');else window.DiaryAppActions.cancelReminder(record.id);}meFeatureStatus.textContent=mf('failed');});
    });
    return form;
   }
   var meFeatureStatus=mfEl('p',{id:'diaryMeFeatureStatus'},'');
   var meFeatureList=mfEl('div',{id:'diaryMeFeatureList'});
-  function meFeatureProtected(kind){return kind==='kharcha'||kind==='documents'||kind==='memories';}
+  function meFeatureProtected(kind){return kind==='calendar'||kind==='kharcha'||kind==='documents'||kind==='memories';}
   function meFeaturePinConfig(kind){try{return JSON.parse(localStorage.getItem('diary_me_section_pin_v1_'+kind)||'null');}catch(e){return null;}}
   function meFeatureRecoveryConfig(kind){try{return JSON.parse(localStorage.getItem('diary_me_section_recovery_v1_'+kind)||'null');}catch(e){return null;}}
   function meFeaturePinDigest(pin,saltText){
@@ -1791,7 +1792,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   function showMeFeaturePage(kind){
    currentMeFeatureKind=kind;
    meFeatureTitle.textContent=mf(meFeatureTypes.filter(function(x){return x.id===kind;})[0].key);
-   meFeatureBack.textContent=mf('back');meFeatureLock.hidden=kind!=='documents'&&kind!=='memories';meFeatureManage.hidden=!meFeaturePinConfig(kind);meFeatureContent.replaceChildren();meFeatureStatus.textContent='';
+   meFeatureBack.textContent=mf('back');meFeatureLock.hidden=kind!=='calendar'&&kind!=='documents'&&kind!=='memories';meFeatureManage.hidden=!meFeaturePinConfig(kind);meFeatureContent.replaceChildren();meFeatureStatus.textContent='';
    meFeatureSearchInput=null;meFeatureCategoryFilter=null;
    meFeatureContent.appendChild(meFeatureForm(kind));meFeatureContent.appendChild(meFeatureTools(kind));meFeatureContent.append(meFeatureStatus,meFeatureList);
    meFeatureModal.hidden=false;mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');
