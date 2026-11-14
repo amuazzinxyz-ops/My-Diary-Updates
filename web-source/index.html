@@ -1808,7 +1808,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     });
    }).catch(function(){meFeatureList.replaceChildren(mfEl('p',{class:'diary-me-feature-empty'},mf('failed')));});
   }
-  function openMeFeature(kind){if(meFeatureProtected(kind)){showMeFeaturePin(kind);return;}showMeFeaturePage(kind);}
+  function openMeFeature(kind){if(meFeatureProtected(kind)&&meFeaturePinConfig(kind)){showMeFeaturePin(kind);return;}showMeFeaturePage(kind);}
   var currentMeFeatureKind=null;
   function showMeFeaturePage(kind){
    currentMeFeatureKind=kind;
