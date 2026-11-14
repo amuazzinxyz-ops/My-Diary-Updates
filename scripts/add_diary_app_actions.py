@@ -16,22 +16,6 @@ if status_old in s:
     s = s.replace(status_old, status_new, 1)
 elif status_new not in s:
     raise SystemExit("Expected original Diary status-bar setup was not found; refusing unsafe patch")
-# Wake and reveal the Diary only when Android launches it for a reminder full-screen intent.
-wake_insertion = """        if (intent?.getStringExtra("diary_reminder_id") != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-                setShowWhenLocked(true)
-                setTurnScreenOn(true)
-            } else {
-                @Suppress("DEPRECATION")
-                val legacyWakeFlags = android.view.WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or android.view.WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
-                window.addFlags(legacyWakeFlags)
-            }
-        }"""
-wake_anchor = "super.onCreate(savedInstanceState)"
-if s.count(wake_anchor) != 1:
-    raise SystemExit("Expected exactly one MainActivity onCreate super call; refusing unsafe screen-wake insertion")
-s = s.replace(wake_anchor, wake_anchor + "\n" + wake_insertion, 1)
-
 back_old = """    @Deprecated("Deprecated in Android")
     override fun onBackPressed() {
         if (::webView.isInitialized && webView.canGoBack()) webView.goBack() else super.onBackPressed()
@@ -293,21 +277,6 @@ native = r"""
                 (getSystemService(android.content.Context.ALARM_SERVICE) as android.app.AlarmManager).canScheduleExactAlarms()
         }
 
-        @JavascriptInterface fun hasFullScreenIntentPermission(): Boolean {
-            return android.os.Build.VERSION.SDK_INT < 34 ||
-                (getSystemService(android.content.Context.NOTIFICATION_SERVICE) as android.app.NotificationManager).canUseFullScreenIntent()
-        }
-        @JavascriptInterface fun requestFullScreenIntentPermission() {
-            runOnUiThread {
-                if (android.os.Build.VERSION.SDK_INT >= 34 && !hasFullScreenIntentPermission()) {
-                    try {
-                        startActivity(Intent(android.provider.Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT, android.net.Uri.parse("package:$packageName")))
-                    } catch (_: Exception) {
-                        Toast.makeText(this@MainActivity, "Full-screen alarm permission settings nahi khul sake.", Toast.LENGTH_LONG).show()
-                    }
-                }
-            }
-        }
         @JavascriptInterface fun requestExactAlarmPermission() {
             runOnUiThread {
                 if (android.os.Build.VERSION.SDK_INT >= 31 && !hasExactAlarmPermission()) {
@@ -327,10 +296,6 @@ native = r"""
             }
             if (!hasExactAlarmPermission()) {
                 requestExactAlarmPermission()
-                return false
-            }
-            if (!hasFullScreenIntentPermission()) {
-                requestFullScreenIntentPermission()
                 return false
             }
             return try {
@@ -547,8 +512,6 @@ private object DiaryReminderScheduler {
             .setContentText(body)
             .setStyle(Notification.BigTextStyle().bigText(body))
             .setContentIntent(content)
-            // A full-screen alarm intent asks Android to show the alarm UI over the lock screen.
-            .setFullScreenIntent(content, true)
             .setAutoCancel(true)
             .setPriority(Notification.PRIORITY_HIGH)
             .setCategory(Notification.CATEGORY_ALARM)
@@ -605,7 +568,6 @@ permissions = [
     "android.permission.POST_NOTIFICATIONS",
     "android.permission.RECEIVE_BOOT_COMPLETED",
     "android.permission.SCHEDULE_EXACT_ALARM",
-    "android.permission.USE_FULL_SCREEN_INTENT",
 ]
 missing_permissions = [p for p in permissions if 'android:name="' + p + '"' not in ms]
 if missing_permissions:
