@@ -293,6 +293,10 @@ native = r"""
                 requestReminderNotificationPermission()
                 return false
             }
+            if (!hasExactAlarmPermission()) {
+                requestExactAlarmPermission()
+                return false
+            }
             return try {
                 DiaryReminderScheduler.schedule(this@MainActivity, id, title, details, atMillis)
                 true
@@ -407,12 +411,13 @@ private object DiaryReminderScheduler {
         require(id.isNotBlank() && title.isNotBlank() && atMillis > System.currentTimeMillis())
         val alarm = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val pending = PendingIntent.getBroadcast(context, requestCode(id), alarmIntent(context, id, title, details), pendingFlags())
+        if (Build.VERSION.SDK_INT >= 31 && !alarm.canScheduleExactAlarms()) {
+            throw SecurityException("Exact alarm permission is required for reliable reminders")
+        }
         if (Build.VERSION.SDK_INT >= 23) {
-            try {
-                alarm.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, atMillis, pending)
-            } catch (_: SecurityException) {
-                alarm.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, atMillis, pending)
-            }
+            // RTC_WAKEUP + exact/allow-while-idle is required so reminders fire while
+            // the phone is asleep. Never downgrade to an inexact alarm: Doze can defer it.
+            alarm.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, atMillis, pending)
         } else {
             alarm.setExact(AlarmManager.RTC_WAKEUP, atMillis, pending)
         }
