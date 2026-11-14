@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-14:** APK `1.0.143` / versionCode `142`; webVersion `211`; package `com.personal.diaryapp`. Live APK SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; web SHA-256 `df66a9c292933007a658456c77580073075903e48ca6912c367422128ebfa196`.
+**Status checked against live `latest.json` on 2026-11-15:** APK `1.0.143` / versionCode `142`; webVersion `213`; package `com.personal.diaryapp`. Live APK SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; web SHA-256 `ecaff11b09037db2330241b87873d932ec956a4cdff30d559b900a7803c90885`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -79,6 +79,21 @@ Keep historical entries as history. If an old entry contains stale version infor
 
 
 ---
+
+# Web Update 213 — Label Cover and Detail colour picker buttons “Custom Colour” (2026-11-15)
+
+- User request: show a clearly named **🎨 Custom Colour** button in both the Cover and Detail image-design menus, in the same position as the existing single-colour picker button.
+- Starting live state: Web Update 212; APK 1.0.143 / versionCode 142; package `com.personal.diaryapp`; source/mirror blob SHA `113e4cf0cdeb145ff03949890f09996de0586d34`; live feed SHA-256 `34fe487da10d5103c1aeea8dbe0e0a8eb73621d99fd59019d134ac21768baae3`.
+- Changed only `web-source/index.html`: the existing solid-colour button now displays **🎨 Custom Colour** when the chooser is for Cover or Detail. The button remains in the same location and keeps its existing native colour-picker behaviour. The separate Photo chooser retains its previous **Solid Colour** label. No picker logic, colour values, gradient controls, translations, stored note/photo data, storage keys, PIN/recovery, updater, native Android source, APK, package identity, or signing data changed.
+- Pre-edit backup branch: `backup/before-custom-colour-button-label-2026-11-15`. Verified readable backups:
+  - `backups/web-source-before-custom-colour-button-label-2026-11-15.html`
+  - `backups/latest-before-custom-colour-button-label-2026-11-15.json`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-custom-colour-button-label-2026-11-15.md`
+- Source change PR #23 merged. Source commit: `6bbe65567f6ad69e0500585612ea1fee28564f30`. Publisher commit: `77f41be13b33bb2b4f1a98ba7a8e75220fbd2a9b`. Web-only workflow run `43627992184` completed with **success**; all job steps completed successfully.
+- Post-publish verification: source and mirror are byte-identical; both Git blob SHA `34b1a0276f83a082949052fd0fba4b0d6169075d`. Publisher independently computed UTF-8 SHA-256 `ecaff11b09037db2330241b87873d932ec956a4cdff30d559b900a7803c90885`, printed in the successful workflow log, and it matches live `latest.json.webSha256`. Live `webVersion=213`; feed blob SHA `3fcf1855b2a267c36ba9c2f3f7f28ed9292877b1`. Both source and mirror contain the new label; Photo's original label remains unchanged.
+- APK unchanged: 1.0.143 / versionCode 142 / SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; no APK rebuild or signing changes.
+- Physical-device verification is **pending**. Use **Me → Check for Updates** and confirm the Cover and Detail menus both show **🎨 Custom Colour**, and the Photo menu still shows **Solid Colour**.
+- Rollback: exact pre-edit files on `backup/before-custom-colour-button-label-2026-11-15`; preserve all diary data and settings.
 
 # Web Update 153 — Independent adjustment for each image (2026-11-13)
 
