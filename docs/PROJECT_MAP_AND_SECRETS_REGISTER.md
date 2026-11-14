@@ -1,3 +1,22 @@
+# Text Colour “Custom” button — in progress (2026-11-15)
+
+- User request: in the existing Text Colour control inside both note-formatting toolbars (Cover/name and Details/text), replace the tiny native colour swatch control with a clearly visible **Custom** button in the same position. Tapping the button should open the existing native colour picker so the user can choose a custom text colour. Do not change any other item named Custom, including Cover/Detail image-design options, Interface Colours, or Diary Theme.
+- Starting authoritative state: Web Update 217; APK 1.0.143 / versionCode 142; package `com.personal.diaryapp`; source and mirror blob SHA `1d88a1847e29f807554a2d68679346621c1978ae`; live feed blob `2f6a4d737d6518a1baa707e757fda80b7c1e2419`; live web SHA-256 `ea90562b2af4c1703f670febd07ebba3831e0a01cae6aff929a1c1e8e7bf519c`.
+- Scope: web-only, `web-source/index.html`. In `makeDiaryTextFormatControls()`, add one visible **Custom** button in place of the visible native colour swatch; keep the original `input[type=color]` in the DOM but visually hidden and accessible to the button handler. The button calls `showPicker()` when available and falls back to `click()`. The original colour input `input` handler remains responsible for updating the selected formatting state and applying the colour. Both Cover and Details use the same shared function, so both get the button.
+- Explicitly untouched: Cover/Detail image-design Custom Colour controls, Photo/Gradient options, Interface Colours, Diary Theme, preset palettes, font size/family, B/I/U, notes/photos, storage keys/data, PIN/recovery, updater, native Android source, APK, package identity and signing data.
+- Pre-edit backup branch: `backup/before-text-colour-custom-button-2026-11-15`. Verified readable, exact backups:
+  - `backups/web-source-before-text-colour-custom-button-2026-11-15.html`
+  - `backups/diary-web-before-text-colour-custom-button-2026-11-15.html`
+  - `backups/latest-before-text-colour-custom-button-2026-11-15.json`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-text-colour-custom-button-2026-11-15.md`
+  Source/mirror were byte-identical before editing; both backup HTML files have blob SHA `1d88a1847e29f807554a2d68679346621c1978ae`.
+- Feature branch: `feature/text-colour-custom-button-2026-11-15`. Source patch commit: `85b4e669f4b07f6f959b7c06b0698eca5bf86d22`. Reviewed diff: only the Text Colour toolbar CSS and `makeDiaryTextFormatControls()` declaration/append/click handler changed. The existing input `input` event handler and all reset/load selectors that query `input[type=color]` remain unchanged.
+- Verification status: static targeted checks passed (button creation, button click opens the existing picker via `showPicker()`/fallback `click()`, original colour update handler retained, shared Cover and Details control instances retained). Automated JavaScript/HTML validation, PR checks, publisher workflow, live source/mirror equality, live feed hash and webVersion are **pending**. APK remains unchanged; no APK rebuild or signing action.
+- Physical-device verification: **pending**. Do not claim the button works on the phone until the user installs the published web update through **Me → Check for Updates** and confirms that tapping **Custom** opens the picker and selected text colour applies independently to both fields.
+- Rollback: restore only `web-source/index.html` from the verified backup branch above, then republish a higher webVersion if a release has already been published. Preserve all local notes, photos and PIN/recovery data.
+
+---
+
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
 **Status checked against live `latest.json` on 2026-11-15:** APK `1.0.143` / versionCode `142`; webVersion `217`; package `com.personal.diaryapp`. Live APK SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; web SHA-256 `ea90562b2af4c1703f670febd07ebba3831e0a01cae6aff929a1c1e8e7bf519c`.
