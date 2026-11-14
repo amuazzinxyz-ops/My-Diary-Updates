@@ -1,3 +1,20 @@
+# Restore original colour controls — custom colour button changes removed (2026-11-15)
+
+- User request: remove all work specifically introducing or styling Custom / Custom Colour buttons and restore the earlier colour-control appearance.
+- Starting live state: Web Update 218; APK 1.0.143 / versionCode 142; package `com.personal.diaryapp`; source/mirror blob SHA `5341263f65526888587c18685a344d7a979b5887`; feed web SHA-256 `0d1a4458326adf11568b4795ee565752d43f849a539dc0f72feb12a3abb86f34`.
+- Backup branch: `backup/before-remove-custom-colour-buttons-2026-11-15`; verified readable backups:
+  - `backups/web-source-before-remove-custom-colour-buttons-2026-11-15.html`
+  - `backups/diary-web-before-remove-custom-colour-buttons-2026-11-15.html`
+  - `backups/latest-before-remove-custom-colour-buttons-2026-11-15.json`
+  - `backups/REGISTER-before-remove-custom-colour-buttons-2026-11-15.md`
+- Proposed web-only changes to `web-source/index.html`: restore the original visible native text-colour input; remove the added Text Colour “Custom” button and its hidden-input/button CSS; restore the Cover/Detail image-design control label to the original Solid Colour label; remove only the custom-button-specific full-width styling and class. Existing picker inputs and their colour-application handlers remain. Interface Colours / Diary Theme custom colour controls are not part of this button rollback and remain unchanged.
+- Targeted source checks passed: no `diary-text-colour-custom-button`, `customColorButton`, `Custom Colour`, or `diary-image-choice-actions-custom` references remain; native Text Colour input is visible; original Solid Colour label is present; shared Cover and Detail formatting toolbars remain.
+- Feature branch: `feature/remove-custom-colour-buttons-2026-11-15`; source blob `25da0ffcef9e263bbdbb10cd419e1d5154f3bbaf`.
+- Mirror, release feed, PR merge, publishing workflow, source/mirror byte identity, and independent SHA-256 verification: **pending**. No claim that the live website has been updated yet.
+- APK, package identity, signing data, note/photo storage, PIN/recovery, and unrelated diary features are untouched. Phone verification pending.
+
+---
+
 # Text Colour “Custom” button — published as Web Update 218 (2026-11-15)
 
 - User request: in the existing Text Colour control inside both note-formatting toolbars (Cover/name and Details/text), replace the tiny native colour swatch control with a clearly visible **Custom** button in the same position. Tapping the button should open the existing native colour picker so the user can choose a custom text colour. Do not change any other item named Custom, including Cover/Detail image-design options, Interface Colours, or Diary Theme.
