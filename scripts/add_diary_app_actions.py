@@ -30,7 +30,7 @@ wake_insertion = """        if (intent?.getStringExtra("diary_reminder_id") != n
 wake_anchor = "super.onCreate(savedInstanceState)"
 if s.count(wake_anchor) != 1:
     raise SystemExit("Expected exactly one MainActivity onCreate super call; refusing unsafe screen-wake insertion")
-s = s.replace(wake_anchor, wake_anchor + "\\n" + wake_insertion, 1)
+s = s.replace(wake_anchor, wake_anchor + "\n" + wake_insertion, 1)
 
 back_old = """    @Deprecated("Deprecated in Android")
     override fun onBackPressed() {
