@@ -10,5 +10,5 @@
   "webVersion": 219,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "7ae94bf68546bb77c7b65fa738f82f6138ad0800bacbd531a830490b3991a57e",
-  "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
+  "webReleaseNotes": "Restored the original colour picker controls; removed the added Custom colour buttons. Existing diary data remains on this device."
 }
