@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-14:** APK `1.0.143` / versionCode `142`; webVersion `206`; package `com.personal.diaryapp`. Live APK SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; web SHA-256 `92dedf123be990a1ca71e3f4949425b18d11f7d61c9817f43c77bfd5b84d6d6c`.
+**Status checked against live `latest.json` on 2026-11-14:** APK `1.0.143` / versionCode `142`; webVersion `207`; package `com.personal.diaryapp`. Live APK SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; web SHA-256 `0584c0680e77ff35a78d52e4b8756b471a78d57a7b9e17b68441c55f931e8ccd`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -2276,3 +2276,14 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Post-publish source and mirror are byte-identical; both blob SHA 6e9f6a0ffb9375e57c829d4694d6d3f38c71f9da. Live feed webVersion 206; feed webSha256 92dedf123be990a1ca71e3f4949425b18d11f7d61c9817f43c77bfd5b84d6d6c. APK remains 1.0.143 / versionCode 142; SHA-256 4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961; no APK rebuild or signing change. Source/mirror/feed metadata consistency verified.
 - Physical-device verification pending. Install via Me → Check for Updates. Test each of the four sections: after removing the lock, the section opens directly and the in-section PIN button remains available to set a new PIN; after setting a PIN, reopening asks for the PIN and the manager offers Change PIN / Lock Hatayein.
 - Rollback: restore only web-source/index.html from the verified pre-edit backup branch if needed; preserve all user data and PIN/recovery state.
+
+
+# Web Update 207 — Keep Lock Hatayein out of the section-opening PIN prompt (2026-11-14)
+
+- User clarified that the four protected Me sections should show only PIN entry when opening a locked section; **Lock Hatayein** belongs only inside the section's PIN management button.
+- Starting state: Web Update 206; APK 1.0.143 / versionCode 142; package `com.personal.diaryapp`; starting source/mirror blob SHA `6e9f6a0ffb9375e57c829d4694d6d3f38c71f9da`; starting feed web SHA-256 `92dedf123be990a1ca71e3f4949425b18d11f7d61c9817f43c77bfd5b84d6d6c`.
+- Changed only `web-source/index.html`: removed the Lock Hatayein button and its handler from `showMeFeaturePin(kind)`, the screen shown while opening a locked section. Kept PIN entry, Forgot PIN, and the existing Lock Hatayein action in `showMeFeaturePinManager(kind)` unchanged. This applies to Personal Calendar, My Kharcha, My Documents and My Memories through the shared functions.
+- Backup branch: `backup/before-remove-pin-remove-from-entry-screen-2026-11-14`; verified backups: `backups/web-source-before-remove-pin-remove-from-entry-screen-2026-11-14.html`, `backups/diary-web-before-remove-pin-remove-from-entry-screen-2026-11-14.html`, `backups/latest-before-remove-pin-remove-from-entry-screen-2026-11-14.json`, `backups/master-register-before-remove-pin-remove-from-entry-screen-2026-11-14.md`.
+- PR #17 merged by squash as `8a4ba16117f5c3cd8f0be6897ceb285f55dad8e4`. The source diff was exactly three deletions (the entry-screen Lock Hatayein control and handler). Post-publish source and mirror are byte-identical with blob SHA `513044d87913a167e0c8b8acaa09e562093d15d6`. Live `latest.json` advanced to webVersion 207 with web SHA-256 `0584c0680e77ff35a78d52e4b8756b471a78d57a7b9e17b68441c55f931e8ccd`. The publisher run ID/conclusion was not exposed by the available workflow interface in this session; publication is verified from the live source, mirror and feed.
+- Targeted live-code check: no `pinRemove` control remains in the PIN-entry function; the single `pinRemove` action remains in the PIN manager. APK remains 1.0.143 / versionCode 142 with unchanged SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; no APK rebuild, signing, storage-key or data change.
+- Physical-device verification pending. Use **Me → Check for Updates**; for each of the four sections confirm that opening a locked section shows PIN entry without Lock Hatayein, and the in-section PIN manager still provides Lock Hatayein. Preserve all existing PIN/recovery data and user records.
