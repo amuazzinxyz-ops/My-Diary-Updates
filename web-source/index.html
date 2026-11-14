@@ -1712,8 +1712,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    }else{
     form.appendChild(mfEl('strong',{},mf('pinPrompt')));
     var pin=mfField(form,mf('pinPrompt'),'password','pin',true);pin.inputMode='numeric';pin.maxLength=config.digits===4?4:8;pin.placeholder=mf('pinPlaceholder');
-    var submit=mfEl('button',{type:'submit',class:'diary-me-feature-save'},mf('unlock'));form.appendChild(submit);
-    if(config.digits===4){pin.addEventListener('input',function(){if(pin.value.length===4&&submit.dataset.autoSubmitted!=='1'){submit.dataset.autoSubmitted='1';submit.click();}});}
+    var submit=mfEl('button',{type:'submit',class:'diary-me-feature-save'},mf('unlock'));submit.hidden=true;form.appendChild(submit);
+    pin.addEventListener('input',function(){if(pin.value.length===pin.maxLength&&submit.dataset.autoSubmitted!=='1'){submit.dataset.autoSubmitted='1';submit.click();}});
     var forgot=mfEl('button',{type:'button',class:'diary-me-feature-report'},mf('pinForgot'));
     forgot.addEventListener('click',function(){var bytes=new Uint8Array(4);crypto.getRandomValues(bytes);var temp=String(((bytes[0]<<24)|(bytes[1]<<16)|(bytes[2]<<8)|bytes[3])>>>0).slice(-4).padStart(4,'0');function verifyTemporaryPin(){meFeaturePinDialog(mf('pinRecoveryPinPrompt')).then(function(entered){if(entered===null)return;if(entered!==temp){meFeatureShowRecoveryError(mf('pinWrong'),verifyTemporaryPin);return;}meFeatureStatus.textContent='';meFeatureAskNewPin(kind,function(){showMeFeaturePage(kind);});});}meFeatureShowTemporaryPin(temp,verifyTemporaryPin);});
     form.appendChild(forgot);
