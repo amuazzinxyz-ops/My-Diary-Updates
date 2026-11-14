@@ -246,12 +246,12 @@ jobs:
           name = one(r'versionName\s*=\s*"([^"]+)"', "versionName")
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
-          if code != 136 or name != "1.0.137":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.137/136, found {name}/{code}")
+          if code != 137 or name != "1.0.138":
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.138/137, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if feed_version not in {(129, "1.0.130"), (130, "1.0.131"), (131, "1.0.132"), (132, "1.0.133"), (133, "1.0.134"), (134, "1.0.135"), (135, "1.0.136")}:  
+          if feed_version not in {(129, "1.0.130"), (130, "1.0.131"), (131, "1.0.132"), (132, "1.0.133"), (133, "1.0.134"), (134, "1.0.135"), (135, "1.0.136"), (136, "1.0.137")}:  
               raise SystemExit(f"BLOCKED: update feed is not the installed baseline or this exact repair release: {feed_version}")
-          print(f"PASS: package={package}, next version={name}/{code}; feed baseline is 1.0.136/135")
+          print(f"PASS: package={package}, next version={name}/{code}; feed baseline is 1.0.137/136")
           PY
 
       - name: Align Java and Kotlin JVM targets
