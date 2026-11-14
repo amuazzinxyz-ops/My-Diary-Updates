@@ -441,7 +441,10 @@ outer = r"""
                     try {
                         val flags = data.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION
                         if (flags != 0) contentResolver.takePersistableUriPermission(picked, flags)
-                        val label = picked.lastPathSegment?.substringAfterLast('/')?.takeIf { it.isNotBlank() } ?: "Selected audio file"
+                        val label = contentResolver.query(picked, null, null, null, null)?.use { cursor ->
+                            val nameIndex = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
+                            if (cursor.moveToFirst() && nameIndex >= 0) cursor.getString(nameIndex) else null
+                        }?.takeIf { it.isNotBlank() } ?: "Selected audio file"
                         notifyDiaryReminderSoundPicked(picked.toString(), label)
                     } catch (_: Exception) {
                         Toast.makeText(this@MainActivity, "Audio file ka access save nahi ho saka.", Toast.LENGTH_LONG).show()
