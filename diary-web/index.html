@@ -309,6 +309,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 #diaryMyNotesEditor .diary-format-emphasis-buttons{display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;white-space:nowrap}
 #diaryMyNotesEditor .diary-diary-format-tools button.is-active{background:linear-gradient(145deg,#d9c4ff,#8c5bc5);color:#fff;border-color:#7042a7}
 #diaryMyNotesEditor .diary-diary-format-tools input[type=color]{width:34px;height:30px;padding:2px;border:1px solid #cdbbdf;border-radius:7px;background:#fff}
+#diaryMyNotesEditor .diary-diary-format-tools .diary-text-colour-custom-button{min-width:68px;padding:6px 12px;border:1px solid #b99bdb;border-radius:8px;background:linear-gradient(145deg,#fff,#eee5ff);color:#432b66;font-weight:900;box-shadow:0 2px 0 #b99bdb;cursor:pointer}
+#diaryMyNotesEditor .diary-diary-format-tools input.diary-text-colour-native-input{position:absolute;width:1px;height:1px;padding:0;border:0;opacity:0;pointer-events:none}
 .dark #diaryMyNotesEditor .diary-diary-format-tools{background:linear-gradient(145deg,#2b2438,#26372f);border-color:#67527d}
 .dark #diaryMyNotesEditor .diary-diary-format-tools select{background:#1c2821;color:#fff}
 </style>
@@ -1158,13 +1160,14 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var size=el('input',{type:'range',min:'12',max:'36',step:'1','aria-label':t('fontSizeLabel')}),sizeValue=el('span',{class:'diary-diary-format-size'},'18 px');
   var family=el('select',{'aria-label':t('fontFamilyLabel')});
   DIARY_TEXT_FONT_OPTIONS.forEach(function(v){family.appendChild(el('option',{value:v[0]},v[1]));});
-  var bold=el('button',{type:'button','aria-pressed':'true','aria-label':t('boldLabel')},'B'),italic=el('button',{type:'button','aria-pressed':'false','aria-label':t('italicLabel')},'I'),underline=el('button',{type:'button','aria-pressed':'false','aria-label':t('underlineLabel')},'U'),color=el('input',{type:'color','aria-label':t('textColourLabel'),value:'#172033'});
+  var bold=el('button',{type:'button','aria-pressed':'true','aria-label':t('boldLabel')},'B'),italic=el('button',{type:'button','aria-pressed':'false','aria-label':t('italicLabel')},'I'),underline=el('button',{type:'button','aria-pressed':'false','aria-label':t('underlineLabel')},'U'),color=el('input',{type:'color',class:'diary-text-colour-native-input','aria-label':t('textColourLabel'),'aria-hidden':'true',tabindex:'-1',value:'#172033'}),customColorButton=el('button',{type:'button',class:'diary-text-colour-custom-button','aria-label':'Custom text colour'},'Custom');
   var emphasis=el('span',{class:'diary-format-emphasis-buttons'});emphasis.appendChild(bold);emphasis.appendChild(italic);emphasis.appendChild(underline);
 
-  wrap.appendChild(size);wrap.appendChild(sizeValue);wrap.appendChild(family);wrap.appendChild(emphasis);wrap.appendChild(color);
+  wrap.appendChild(size);wrap.appendChild(sizeValue);wrap.appendChild(family);wrap.appendChild(emphasis);wrap.appendChild(customColorButton);wrap.appendChild(color);
   function sync(){var f=getDiaryTextFormat(kind),field=document.getElementById(targetId);size.value=String(f.size);sizeValue.textContent=f.size+' px';family.value=f.family;color.value=f.color;[[bold,'bold'],[italic,'italic'],[underline,'underline']].forEach(function(x){x[0].setAttribute('aria-pressed',f[x[1]]?'true':'false');x[0].classList.toggle('is-active',!!f[x[1]]);});applyDiaryTextFormat(field,f);}
   size.addEventListener('input',function(){var f=getDiaryTextFormat(kind);f.size=parseInt(size.value,10)||18;setDiaryTextFormat(kind,f);sync();});
   family.addEventListener('change',function(){var f=getDiaryTextFormat(kind);f.family=family.value;setDiaryTextFormat(kind,f);sync();});
+  customColorButton.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(typeof color.showPicker==='function'){try{color.showPicker();return;}catch(err){}}color.click();});
   color.addEventListener('input',function(){var f=getDiaryTextFormat(kind);f.color=color.value;f.colorCustom=true;setDiaryTextFormat(kind,f);sync();});
   [[bold,'bold'],[italic,'italic'],[underline,'underline']].forEach(function(x){x[0].addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var f=getDiaryTextFormat(kind);f[x[1]]=!f[x[1]];setDiaryTextFormat(kind,f);sync();});});
   sync();return {element:wrap,refresh:sync};
