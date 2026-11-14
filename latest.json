@@ -7,8 +7,8 @@
   "sha256": "9a538b5baa4a6ecf97158502e5b564473b158144c3bc324f41e1f8c83081a9d3",
   "releaseNotes": "Smart Reminder repair: the screen lights on over the lock screen and notification/ringtone arrive, while a separate transparent wake-only activity prevents My Diary from opening automatically. A normal notification tap still opens My Diary; exact alarm scheduling, Snooze, Done, stored reminders, notes, photos, PIN data, and app identity remain unchanged.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 197,
+  "webVersion": 198,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "4452235be464d6acb8622430f71e4f0a76b416579e41ad91207d52a4d256852e",
+  "webSha256": "23543bb8712b99de25da4d27accf56bad86376a47f0ceca154c4cf2dc5f5ca74",
   "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
 }
