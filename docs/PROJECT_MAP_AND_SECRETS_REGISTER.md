@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-14:** APK `1.0.143` / versionCode `142`; webVersion `205`; package `com.personal.diaryapp`. Live APK SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; web SHA-256 `ea4433cfcdfe05680c669d11117199ac97a6356ced47f181a5bd960130bec746`.
+**Status checked against live `latest.json` on 2026-11-14:** APK `1.0.143` / versionCode `142`; webVersion `206`; package `com.personal.diaryapp`. Live APK SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; web SHA-256 `92dedf123be990a1ca71e3f4949425b18d11f7d61c9817f43c77bfd5b84d6d6c`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
