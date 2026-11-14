@@ -172,8 +172,8 @@ jobs:
               raise SystemExit("BLOCKED: reminder notification is not categorized as an alarm")
           if ".setFullScreenIntent(" in kotlin or "setShowWhenLocked(" in kotlin or "setTurnScreenOn(" in kotlin:
               raise SystemExit("BLOCKED: reminder notification must not launch or wake the Diary activity")
-          if "builder.setContentIntent(content)" not in kotlin:
-              raise SystemExit("BLOCKED: standard reminder notification tap action is missing")
+          if kotlin.count(".setContentIntent(content)") != 1:
+              raise SystemExit("BLOCKED: expected exactly one standard reminder notification tap action")
           print("PASS: AlarmClock scheduler, ordinary notification tap action, no full-screen activity launch, manifest receivers and permissions verified")
           PY
           python3 scripts/add_online_diary_updates.py
