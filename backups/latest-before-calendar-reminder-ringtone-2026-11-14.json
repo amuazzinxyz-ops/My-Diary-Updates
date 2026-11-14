@@ -1,0 +1,14 @@
+{
+  "appName": "My Diary",
+  "packageName": "com.personal.diaryapp",
+  "versionCode": 142,
+  "versionName": "1.0.143",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.143.apk",
+  "sha256": "4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961",
+  "releaseNotes": "Smart Reminder now lets each reminder use a phone alarm/ringtone, an audio file selected from the device, or the default phone alarm. The chosen sound is saved with the reminder and retained through Snooze and reboot. Screen wake, notification tap behavior, exact alarm scheduling, Done, stored reminders, notes, photos, PIN data, and app identity remain unchanged.",
+  "minimumSupportedVersionCode": 1,
+  "webVersion": 200,
+  "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
+  "webSha256": "eac11a930eb722e49ccf6b4146555d34868405f0b144d8ad1f9e060d65b61c48",
+  "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
+}
