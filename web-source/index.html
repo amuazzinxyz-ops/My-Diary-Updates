@@ -1282,7 +1282,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   intro.appendChild(el('div',{class:'diary-image-choice-description'},t(descKey)));
   var actions=el('div',{class:'diary-image-choice-actions'});
   var choose=el('button',{type:'button',class:'diary-image-choice-image'},t('chooseImage'));
-  var solidBtn=el('button',{type:'button',class:'diary-image-choice-solid'},t('solidColour'));
+  var solidBtn=el('button',{type:'button',class:'diary-image-choice-solid'},kind==='Photo'?t('solidColour'):'🎨 Custom Colour');
   var gradBtn=el('button',{type:'button',class:'diary-image-choice-gradient'},t('gradientColour'));
   var solid=el('input',{type:'color',value:'#f4e6a8','aria-label':t('solidColour')});
   var one=el('input',{type:'color',value:'#f4e6a8','aria-label':t('colourOne')});
