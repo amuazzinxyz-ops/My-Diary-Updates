@@ -277,6 +277,22 @@ native = r"""
                 (getSystemService(android.content.Context.ALARM_SERVICE) as android.app.AlarmManager).canScheduleExactAlarms()
         }
 
+        @JavascriptInterface fun hasFullScreenIntentPermission(): Boolean {
+            return android.os.Build.VERSION.SDK_INT < 34 ||
+                (getSystemService(android.content.Context.NOTIFICATION_SERVICE) as android.app.NotificationManager).canUseFullScreenIntent()
+        }
+        @JavascriptInterface fun requestFullScreenIntentPermission() {
+            runOnUiThread {
+                if (android.os.Build.VERSION.SDK_INT >= 34 && !hasFullScreenIntentPermission()) {
+                    try {
+                        startActivity(Intent(android.provider.Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT, android.net.Uri.parse("package:$packageName")))
+                    } catch (_: Exception) {
+                        Toast.makeText(this@MainActivity, "Full-screen alarm permission settings nahi khul sake.", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+        }
+
         @JavascriptInterface fun requestExactAlarmPermission() {
             runOnUiThread {
                 if (android.os.Build.VERSION.SDK_INT >= 31 && !hasExactAlarmPermission()) {
@@ -296,6 +312,10 @@ native = r"""
             }
             if (!hasExactAlarmPermission()) {
                 requestExactAlarmPermission()
+                return false
+            }
+            if (!hasFullScreenIntentPermission()) {
+                requestFullScreenIntentPermission()
                 return false
             }
             return try {
@@ -495,6 +515,12 @@ private object DiaryReminderScheduler {
         launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         launch.putExtra("diary_reminder_id", id)
         val content = PendingIntent.getActivity(context, code + 1, launch, pendingFlags())
+        val wakeIntent = Intent(context, DiaryReminderWakeActivity::class.java).apply {
+            action = "com.personal.diaryapp.action.REMINDER_WAKE_SCREEN"
+            data = Uri.parse("mydiary-reminder://wake/" + Uri.encode(id))
+            putExtra("diary_reminder_id", id)
+        }
+        val wakePending = PendingIntent.getActivity(context, code + 4, wakeIntent, pendingFlags())
         fun actionIntent(action: String, suffix: String): PendingIntent {
             val actionIntent = Intent(context, DiaryReminderReceiver::class.java).apply {
                 this.action = action
@@ -512,6 +538,7 @@ private object DiaryReminderScheduler {
             .setContentText(body)
             .setStyle(Notification.BigTextStyle().bigText(body))
             .setContentIntent(content)
+            .setFullScreenIntent(wakePending, true)
             .setAutoCancel(true)
             .setPriority(Notification.PRIORITY_HIGH)
             .setCategory(Notification.CATEGORY_ALARM)
@@ -555,6 +582,27 @@ class DiaryReminderBootReceiver : BroadcastReceiver() {
         }
     }
 }
+
+// This dedicated transparent activity wakes the display over the keyguard only.
+// It never opens MainActivity or unlocks the phone; the notification's normal
+// content tap remains the sole route into the Diary app.
+class DiaryReminderWakeActivity : android.app.Activity() {
+    override fun onCreate(savedInstanceState: android.os.Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O_MR1) {
+            setShowWhenLocked(true)
+            setTurnScreenOn(true)
+        } else {
+            @Suppress("DEPRECATION")
+            window.addFlags(
+                android.view.WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+                android.view.WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+            )
+        }
+        window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        android.os.Handler(mainLooper).postDelayed({ finish() }, 1500L)
+    }
+}
 """
 if "class DiaryReminderReceiver" in s or "object DiaryReminderScheduler" in s:
     raise SystemExit("Reminder native classes already exist in script; refusing duplicate insertion")
@@ -568,6 +616,7 @@ permissions = [
     "android.permission.POST_NOTIFICATIONS",
     "android.permission.RECEIVE_BOOT_COMPLETED",
     "android.permission.SCHEDULE_EXACT_ALARM",
+    "android.permission.USE_FULL_SCREEN_INTENT",
 ]
 missing_permissions = [p for p in permissions if 'android:name="' + p + '"' not in ms]
 if missing_permissions:
@@ -588,6 +637,19 @@ root = tree.getroot()
 app = root.find("application")
 if app is None:
     raise SystemExit("AndroidManifest application element missing")
+wake_activity_name = ".DiaryReminderWakeActivity"
+wake_activity = next((node for node in app.findall("activity")
+                      if node.get("{" + android_ns + "}name") == wake_activity_name), None)
+if wake_activity is None:
+    wake_activity = ET.SubElement(app, "activity")
+    wake_activity.set("{" + android_ns + "}name", wake_activity_name)
+wake_activity.set("{" + android_ns + "}exported", "false")
+wake_activity.set("{" + android_ns + "}excludeFromRecents", "true")
+wake_activity.set("{" + android_ns + "}noHistory", "true")
+wake_activity.set("{" + android_ns + "}showWhenLocked", "true")
+wake_activity.set("{" + android_ns + "}turnScreenOn", "true")
+wake_activity.set("{" + android_ns + "}taskAffinity", "")
+wake_activity.set("{" + android_ns + "}theme", "@android:style/Theme.Translucent.NoTitleBar")
 for receiver_name, actions in [
     (".DiaryReminderReceiver", []),
     (".DiaryReminderBootReceiver", ["android.intent.action.BOOT_COMPLETED", "android.intent.action.MY_PACKAGE_REPLACED"]),
