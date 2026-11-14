@@ -1,0 +1,14 @@
+{
+  "appName": "My Diary",
+  "packageName": "com.personal.diaryapp",
+  "versionCode": 138,
+  "versionName": "1.0.139",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.139.apk",
+  "sha256": "04588ba0971f5d68817e3133ae88b0370b1c4ffe8c2b47c9063d656c575b6004",
+  "releaseNotes": "Alarm reliability repair: schedule Smart Reminders with Android AlarmManager.setAlarmClock so the system treats them as alarm-clock events during idle modes. Existing notes, photos, PIN data, and app identity are preserved.",
+  "minimumSupportedVersionCode": 1,
+  "webVersion": 197,
+  "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
+  "webSha256": "4452235be464d6acb8622430f71e4f0a76b416579e41ad91207d52a4d256852e",
+  "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
+}
