@@ -613,6 +613,7 @@ private object DiaryReminderScheduler {
                 putExtra("diary_reminder_id", id)
                 putExtra("diary_reminder_title", title)
                 putExtra("diary_reminder_details", details)
+                putExtra("diary_reminder_sound_uri", soundUri)
             }
             return PendingIntent.getBroadcast(context, code + if (action == ACTION_SNOOZE) 2 else 3, actionIntent, pendingFlags())
         }
