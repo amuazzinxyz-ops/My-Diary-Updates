@@ -10,5 +10,5 @@
   "webVersion": 215,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "ecaff11b09037db2330241b87873d932ec956a4cdff30d559b900a7803c90885",
-  "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
+  "webReleaseNotes": "Restored the Diary main page using the verified Web Update 213 source. No APK or local diary data changed."
 }
