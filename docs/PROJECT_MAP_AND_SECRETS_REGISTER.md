@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-15:** APK `1.0.143` / versionCode `142`; webVersion `214`; package `com.personal.diaryapp`. Live APK SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; web SHA-256 `3aece64a96b3e288a247ca5c09353fc6321a5474238c2c0568094b392fead0c4`.
+**Status checked against live `latest.json` on 2026-11-15:** APK `1.0.143` / versionCode `142`; webVersion `215`; package `com.personal.diaryapp`. Live APK SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; web SHA-256 `ecaff11b09037db2330241b87873d932ec956a4cdff30d559b900a7803c90885`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -79,6 +79,26 @@ Keep historical entries as history. If an old entry contains stale version infor
 
 
 ---
+
+
+
+---
+
+# Web Update 215 — Restore Diary main page after Update 214 script break (2026-11-15)
+
+- User reported that the Diary main page had disappeared after Update 214.
+- Root cause confirmed by direct source comparison: the Update 214 CSS block `diary-custom-colour-button-full-label` had been inserted into the JavaScript-generated report HTML string, immediately after `<p>Loading…</p>`, instead of in the document head. The inserted raw newline/style markup broke the JavaScript source. Removing only that inserted block did not recreate the original; exact recovery used the verified pre-Update-214 backup.
+- Starting live state: Web Update 214; APK 1.0.143 / versionCode 142; package `com.personal.diaryapp`; broken source/mirror blob SHA `0e12683dc6e027a310e73a49100517fabbafaf93`; feed web SHA-256 `3aece64a96b3e288a247ca5c09353fc6321a5474238c2c0568094b392fead0c4`.
+- Restored `web-source/index.html` byte-for-byte from the verified Web Update 213 backup on branch `backup/custom-colour-button-width-2026-11-15`, file `backups/web-source-before-custom-colour-button-width-2026-11-15.html`. Restored `diary-web/index.html` to the same exact content. No other feature logic, storage keys, notes, photos, PIN/recovery, updater code, native Android source, APK, package identity or signing data was changed.
+- Before restore, backed up the broken live source, live feed and this register on branch `backup/before-main-page-restore-2026-11-15`:
+  - `backups/web-source-before-main-page-restore-2026-11-15.html` (source blob `0e12683dc6e027a310e73a49100517fabbafaf93`)
+  - `backups/latest-before-main-page-restore-2026-11-15.json`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-main-page-restore-2026-11-15.md`
+- Restore PR #25 merged; merge commit `75df5d1e99d8e9092f49dd8541d131f4809cb8f4`. Restored source blob and mirror blob are both `34b1a0276f83a082949052fd0fba4b0d6169075d`; source and mirror re-fetches are byte-identical. Main document markers `.diary-home` and `#diaryHomeEntryHost` are present; malformed CSS block is absent.
+- Feed advanced to Web Update 215; `latest.json` re-fetched and reports webVersion `215`, web SHA-256 `ecaff11b09037db2330241b87873d932ec956a4cdff30d559b900a7803c90885`, and the restored source URL. This SHA-256 is the independently recorded publisher-verified hash for the exact Web Update 213 source bytes, now restored unchanged.
+- APK unchanged: 1.0.143 / versionCode 142 / SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`.
+- Physical-device verification is pending. User should use **Me → Check for Updates**, install Web Update 215, then confirm the Diary main page opens. Do not claim phone-side recovery until confirmed.
+- Rollback/reference: preserve broken-state backup branch `backup/before-main-page-restore-2026-11-15` and known-good Web Update 213 backup branch `backup/custom-colour-button-width-2026-11-15`.
 
 # Web Update 213 — Label Cover and Detail colour picker buttons “Custom Colour” (2026-11-15)
 
