@@ -303,6 +303,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 #diaryMyNotesEditor .diary-diary-format-size{font-size:12px;font-weight:900;color:#50317b;min-width:38px}
 #diaryMyNotesEditor .diary-diary-format-tools select{min-width:105px;max-width:130px;padding:6px;border:1px solid #cdbbdf;border-radius:7px;background:#fff;color:#2e2140;font-size:12px}
 #diaryMyNotesEditor .diary-diary-format-tools button{min-width:32px;padding:5px 8px;border:1px solid #cdbbdf;border-radius:7px;background:#fff;color:#432b66;font-weight:900}
+#diaryMyNotesEditor .diary-format-emphasis-buttons{display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;white-space:nowrap}
 #diaryMyNotesEditor .diary-diary-format-tools button.is-active{background:linear-gradient(145deg,#d9c4ff,#8c5bc5);color:#fff;border-color:#7042a7}
 #diaryMyNotesEditor .diary-diary-format-tools input[type=color]{width:34px;height:30px;padding:2px;border:1px solid #cdbbdf;border-radius:7px;background:#fff}
 .dark #diaryMyNotesEditor .diary-diary-format-tools{background:linear-gradient(145deg,#2b2438,#26372f);border-color:#67527d}
@@ -1155,7 +1156,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var family=el('select',{'aria-label':t('fontFamilyLabel')});
   DIARY_TEXT_FONT_OPTIONS.forEach(function(v){family.appendChild(el('option',{value:v[0]},v[1]));});
   var bold=el('button',{type:'button','aria-pressed':'true','aria-label':t('boldLabel')},'B'),italic=el('button',{type:'button','aria-pressed':'false','aria-label':t('italicLabel')},'I'),underline=el('button',{type:'button','aria-pressed':'false','aria-label':t('underlineLabel')},'U'),color=el('input',{type:'color','aria-label':t('textColourLabel'),value:'#172033'});
-  wrap.appendChild(size);wrap.appendChild(sizeValue);wrap.appendChild(family);wrap.appendChild(bold);wrap.appendChild(italic);wrap.appendChild(underline);wrap.appendChild(color);
+  var emphasis=el('span',{class:'diary-format-emphasis-buttons'});emphasis.appendChild(bold);emphasis.appendChild(italic);emphasis.appendChild(underline);
+  wrap.appendChild(size);wrap.appendChild(sizeValue);wrap.appendChild(family);wrap.appendChild(emphasis);wrap.appendChild(color);
   function sync(){var f=getDiaryTextFormat(kind),field=document.getElementById(targetId);size.value=String(f.size);sizeValue.textContent=f.size+' px';family.value=f.family;color.value=f.color;[[bold,'bold'],[italic,'italic'],[underline,'underline']].forEach(function(x){x[0].setAttribute('aria-pressed',f[x[1]]?'true':'false');x[0].classList.toggle('is-active',!!f[x[1]]);});applyDiaryTextFormat(field,f);}
   size.addEventListener('input',function(){var f=getDiaryTextFormat(kind);f.size=parseInt(size.value,10)||18;setDiaryTextFormat(kind,f);sync();});
   family.addEventListener('change',function(){var f=getDiaryTextFormat(kind);f.family=family.value;setDiaryTextFormat(kind,f);sync();});
