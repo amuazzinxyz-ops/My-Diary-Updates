@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-14:** APK `1.0.143` / versionCode `142`; webVersion `203`; package `com.personal.diaryapp`. Live APK SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; web SHA-256 `e7105a89a36a06e39b551f059cd68597565aad04950e15a6155964e322e98c58`.
+**Status checked against live `latest.json` on 2026-11-14:** APK `1.0.143` / versionCode `142`; webVersion `204`; package `com.personal.diaryapp`. Live APK SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; web SHA-256 `ea4433cfcdfe05680c669d11117199ac97a6356ced47f181a5bd960130bec746`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -2220,3 +2220,24 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK remains 1.0.143 / versionCode 142 with unchanged SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; no APK rebuild or signing operation.
 - Physical-device verification is **pending**. Install Web Update 203 through **Me → Check for Updates**, then confirm the Unlock button is absent in all four sections, PIN entry unlocks automatically, and Forgot PIN/recovery remains available. Do not claim phone-side success until user confirms.
 - Rollback: restore only `web-source/index.html` from the verified backup branch above and publish a higher webVersion if needed. Never clear app data or alter PIN/recovery data, records, attachments, notes, photos or APK/signing files.
+
+
+---
+
+# Web Update 204 — Remove header × from five Me sections (2026-11-14)
+
+- User request: remove the **× close button only** from inside these five sections: Personal Calendar, Smart Reminder, My Kharcha, My Documents and My Memories. Keep the existing **Wapas/Back** button.
+- Starting live state: APK 1.0.143 / versionCode 142; Web Update 203; package `com.personal.diaryapp`; source/mirror blob SHA `3704836682fb3f53b77ee370ae15a2e8fe12b9cc`; main starting commit `58cb700bf6d1bbc28d7116d6d20dfc3b22b66c57`.
+- Scope: web-only change to `web-source/index.html`, in the shared Me-feature modal header used by all five sections. Removed the header × element and its click handler; retained the Wapas/Back button in the header and its existing `closeMeFeature` click action. Existing backdrop-click behavior is unchanged. No other × controls elsewhere in the app were targeted.
+- Preserved: all five feature contents and functions, PIN gates, automatic PIN verification, Forgot PIN/recovery, PIN Manager, records, attachments, reminders, and all other Diary features. No native Android source, APK, package/signing identity, data schema or user records changed.
+- Pre-edit backups created on `backup/pre-five-me-sections-close-x-removal-2026-11-14` and fetched back readable:
+  - `backups/web-source-before-five-me-section-close-x-removal-2026-11-14.html` — blob `3704836682fb3f53b77ee370ae15a2e8fe12b9cc`
+  - `backups/diary-web-before-five-me-section-close-x-removal-2026-11-14.html` — blob `3704836682fb3f53b77ee370ae15a2e8fe12b9cc`
+  - `backups/latest-before-five-me-section-close-x-removal-2026-11-14.json` — blob `e00f8aacede6206c7ec3ce1299e4131855e15f13`
+  - `backups/master-register-before-five-me-section-close-x-removal-2026-11-14.md` — blob `7b4bdc7d944d4b7c66dffae045cd6f8011311f92`
+- Work branch `work/remove-five-me-section-close-x-2026-11-14`; PR #14 merged by squash as `aa19d63283c99aa3d4908221bbc2db489fbf93fb`. Publisher commit `7d8aba5d9d90a2a62c422c9793cde606fdb24b2f`; live feed advanced to Web Update 204. The workflow-run status endpoint did not expose a run ID/conclusion in this session; publication is independently verified by the live source, mirror and feed.
+- Validation: both inline JavaScript blocks passed V8 syntax parsing. Targeted checks confirm the × element and its handler are absent; the Wapas/Back button remains in the header and still calls `closeMeFeature`. PR diff changed only `web-source/index.html` (2 additions, 3 deletions).
+- Post-publish verification: live `web-source/index.html` and `diary-web/index.html` are byte-identical; both blob SHA `c8f2dd931eccc40f79be21ff5627518c2fe9d78a`, length 368893. Independently calculated UTF-8 SHA-256 `ea4433cfcdfe05680c669d11117199ac97a6356ced47f181a5bd960130bec746` matches live `latest.json.webSha256`; live webVersion is 204.
+- APK remains 1.0.143 / versionCode 142 with unchanged SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; no APK rebuild or signing action.
+- Physical-device verification is **pending**. Install Web Update 204 through **Me → Check for Updates** and confirm × is absent in all five sections while Wapas/Back remains visible and works. Do not claim phone-side success until user confirms.
+- Rollback: restore only `web-source/index.html` from the verified backup branch above and publish a higher webVersion if required. Never clear app data or alter records, attachments, PIN/recovery data, notes, photos or APK/signing files.
