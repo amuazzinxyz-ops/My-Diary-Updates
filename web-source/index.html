@@ -123,6 +123,9 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 #diaryMyNotesEditor .diary-pamphlet-label{display:block;font-size:11px;font-weight:1000;line-height:1.2;text-align:center;overflow-wrap:anywhere}
 #diaryMyNotesEditor [data-diary-template^="cover-"]:not(.diary-diary-field-has-image),#diaryMyNotesEditor [data-diary-template^="detail-"]:not(.diary-diary-field-has-image){background-repeat:repeat!important;background-size:auto!important}
 @media(max-width:380px){#diaryMyNotesEditor .diary-image-choice-actions,#diaryMyNotesEditor .diary-pamphlet-gallery{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+
+/* Full-width existing Custom Colour button in Cover and Detail only; Photo stays unchanged. */
+#diaryMyNotesEditor .diary-image-choice-actions-custom .diary-image-choice-solid{grid-column:1/-1!important;width:100%!important;min-width:0!important;min-height:42px!important;padding:10px 8px!important;white-space:normal!important;font-size:14px!important;line-height:1.25!important}
 </style>
 <style id="diary-finger-adjustment-style">#diaryMyNotesEditor .diary-finger-adjust-active{outline:3px dashed #c49a32!important;outline-offset:2px;cursor:grab!important;touch-action:none!important}#diaryMyNotesPhotoPreview img.diary-finger-adjust-active{max-width:100%;}</style>
 <style id="diary-new-note-clear-x">
@@ -1280,7 +1283,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   intro.appendChild(el('div',{class:'diary-image-choice-kicker'},t('imageDesignKicker')));
   intro.appendChild(el('div',{class:'diary-image-choice-title'},icon+' '+t(titleKey)));
   intro.appendChild(el('div',{class:'diary-image-choice-description'},t(descKey)));
-  var actions=el('div',{class:'diary-image-choice-actions'});
+  var actions=el('div',{class:'diary-image-choice-actions'+(kind==='Photo'?'':' diary-image-choice-actions-custom')});
   var choose=el('button',{type:'button',class:'diary-image-choice-image'},t('chooseImage'));
   var solidBtn=el('button',{type:'button',class:'diary-image-choice-solid'},kind==='Photo'?t('solidColour'):'🎨 Custom Colour');
   var gradBtn=el('button',{type:'button',class:'diary-image-choice-gradient'},t('gradientColour'));
