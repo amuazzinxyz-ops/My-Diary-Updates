@@ -1,0 +1,14 @@
+{
+  "appName": "My Diary",
+  "packageName": "com.personal.diaryapp",
+  "versionCode": 137,
+  "versionName": "1.0.138",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.138.apk",
+  "sha256": "59b95893e6e412a1ed44a6f3880fd486ea3b6cf70ee484ceef4102ed7bef4b38",
+  "releaseNotes": "Reminder reliability repair: keep Android RTC_WAKEUP reminders exact and allow-while-idle; never silently downgrade to inexact alarms that Doze can delay. Existing notes, photos, PIN data, and app identity are preserved.",
+  "minimumSupportedVersionCode": 1,
+  "webVersion": 197,
+  "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
+  "webSha256": "4452235be464d6acb8622430f71e4f0a76b416579e41ad91207d52a4d256852e",
+  "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
+}
