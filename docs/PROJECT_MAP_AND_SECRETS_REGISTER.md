@@ -1,17 +1,17 @@
-# Restore original colour controls — custom colour button changes removed (2026-11-15)
+# Restore original colour controls — Custom buttons removed (2026-11-15)
 
-- User request: remove all work specifically introducing or styling Custom / Custom Colour buttons and restore the earlier colour-control appearance.
-- Starting live state: Web Update 218; APK 1.0.143 / versionCode 142; package `com.personal.diaryapp`; source/mirror blob SHA `5341263f65526888587c18685a344d7a979b5887`; feed web SHA-256 `0d1a4458326adf11568b4795ee565752d43f849a539dc0f72feb12a3abb86f34`.
-- Backup branch: `backup/before-remove-custom-colour-buttons-2026-11-15`; verified readable backups:
-  - `backups/web-source-before-remove-custom-colour-buttons-2026-11-15.html`
-  - `backups/diary-web-before-remove-custom-colour-buttons-2026-11-15.html`
-  - `backups/latest-before-remove-custom-colour-buttons-2026-11-15.json`
-  - `backups/REGISTER-before-remove-custom-colour-buttons-2026-11-15.md`
-- Proposed web-only changes to `web-source/index.html`: restore the original visible native text-colour input; remove the added Text Colour “Custom” button and its hidden-input/button CSS; restore the Cover/Detail image-design control label to the original Solid Colour label; remove only the custom-button-specific full-width styling and class. Existing picker inputs and their colour-application handlers remain. Interface Colours / Diary Theme custom colour controls are not part of this button rollback and remain unchanged.
-- Targeted source checks passed: no `diary-text-colour-custom-button`, `customColorButton`, `Custom Colour`, or `diary-image-choice-actions-custom` references remain; native Text Colour input is visible; original Solid Colour label is present; shared Cover and Detail formatting toolbars remain.
-- Feature branch: `feature/remove-custom-colour-buttons-2026-11-15`; source blob `25da0ffcef9e263bbdbb10cd419e1d5154f3bbaf`.
-- Mirror, release feed, PR merge, publishing workflow, source/mirror byte identity, and independent SHA-256 verification: **pending**. No claim that the live website has been updated yet.
-- APK, package identity, signing data, note/photo storage, PIN/recovery, and unrelated diary features are untouched. Phone verification pending.
+- User request: remove all work specifically introducing or styling Custom / Custom Colour buttons and restore the earlier controls.
+- Starting live state: Web Update 218; APK 1.0.143 / versionCode 142; package `com.personal.diaryapp`.
+- Backup branch: `backup/before-remove-custom-colour-buttons-2026-11-15`; all four backup files were created and re-fetched successfully.
+- Web-only files changed: `web-source/index.html` and identical mirror `diary-web/index.html`. Removed the added Text Colour “Custom” button and its styling; restored the visible native Text Colour input. Restored Cover/Detail image-design picker label to the original Solid Colour label and removed the Custom Colour button styling/class. Existing colour-picker inputs and colour application handlers remain.
+- Explicitly untouched: Interface Colours and Diary Theme custom-colour controls; photo/gradient/template choices; note/photo storage; PIN/recovery; updater logic; native Android source, APK, package identity and signing data.
+- Targeted checks: custom-button code references absent; native Text Colour input visible; original Solid Colour label restored; Cover and Detail shared formatting controls remain.
+- PR #29 merged successfully as `3e67d5b2bcb875cf1b99d649b28b3aa222d3b865`.
+- Live source/mirror blob SHA: `25da0ffcef9e263bbdbb10cd419e1d5154f3bbaf`; source and mirror are byte-identical: true.
+- Live feed: webVersion `219`; web SHA-256 `7ae94bf68546bb77c7b65fa738f82f6138ad0800bacbd531a830490b3991a57e`. Independently computed UTF-8 SHA-256 from the exact source text: `7ae94bf68546bb77c7b65fa738f82f6138ad0800bacbd531a830490b3991a57e`; it matches the feed.
+- APK remains `1.0.143` / versionCode `142`; no APK rebuild or signing change. Publisher workflow status was not available through the current run lookup; direct source/mirror/feed verification completed.
+- Physical-device verification pending. User should use **Me → Check for Updates**, install Web Update 219, then confirm Cover and Detail show the old Solid Colour control and both Text Colour toolbars show the original colour swatch. Do not claim phone-side success until confirmed.
+- Rollback: exact pre-change files on `backup/before-remove-custom-colour-buttons-2026-11-15`.
 
 ---
 
