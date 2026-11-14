@@ -7,8 +7,8 @@
   "sha256": "4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961",
   "releaseNotes": "Smart Reminder now lets each reminder use a phone alarm/ringtone, an audio file selected from the device, or the default phone alarm. The chosen sound is saved with the reminder and retained through Snooze and reboot. Screen wake, notification tap behavior, exact alarm scheduling, Done, stored reminders, notes, photos, PIN data, and app identity remain unchanged.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 201,
+  "webVersion": 202,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "5d0f47cca0424f0d9c31ce94e85a280caf38633ec53252f89951b85fb9f50686",
+  "webSha256": "7b7c2bee7ac1d575748734521cd5602e17bab12b718ed7f9606e41aadb857a0d",
   "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
 }
