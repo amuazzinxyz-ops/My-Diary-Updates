@@ -2321,3 +2321,21 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - APK remains `1.0.143` / versionCode `142`; SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; no APK rebuild or signing change.
 - Physical-device verification is **pending**. User should open My Diary → Me → Check for Updates, open a new note, and confirm B, I and U stay together in both formatting toolbars and each button still works. Do not claim phone-side success until the user confirms.
 - Rollback: restore only `web-source/index.html` from the verified pre-edit backup branch above and publish a higher webVersion if needed. Preserve notes, photos, formatting data, PIN/recovery data and all other user records.
+
+
+# Text Colour Palette — source change merged, release pending (2026-11-14)
+
+- User request: add more colours to both existing text-colour controls (Cover/name field and Details/text field). User confirmed the proposed preset palette while retaining the current custom colour picker and independent colour selection for each field.
+- Starting authoritative live state: Web Update 209; APK 1.0.143 / versionCode 142; package `com.personal.diaryapp`. Live feed blob `fd4ef7874d7eb0691a14acf84d7752c0d05102e0`; pre-change source/mirror blob `99c79234470753bf6284adfc56daa267902460cb`; live feed web SHA-256 `df66a9c292933007a658456c77580073075903e48ca6912c367422128ebfa196`.
+- Scope: web-only source change to `web-source/index.html`. Added 54 preset colour swatches to the existing two text-formatting toolbars. The native/custom colour input remains available. Each toolbar still updates its own Cover or Details formatting state. The B/I/U-only selectors in new-note reset and note-load logic were narrowed to the emphasis group so palette buttons cannot be mistaken for formatting toggles.
+- No APK/native source, updater/feed, storage keys, saved notes/photos, PIN/recovery, font selectors, or other Diary features were intentionally changed.
+- Pre-edit backup branch: `backup/before-text-colour-palette-2026-11-14`. Verified exact readable backups:
+  - `backups/web-source-before-text-colour-palette-2026-11-14.html` (blob `99c79234470753bf6284adfc56daa267902460cb`)
+  - `backups/diary-web-before-text-colour-palette-2026-11-14.html` (same blob)
+  - `backups/latest-before-text-colour-palette-2026-11-14.json` (blob `fd4ef7874d7eb0691a14acf84d7752c0d05102e0`)
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-text-colour-palette-2026-11-14.md` (blob `cf9e11bc5e93a187554e454cb261c937821d774b`)
+- Feature branch `feature/text-colour-palette-2026-11-14`; PR #20 merged. Feature commit `e50a404c703eff86532b2b3ebeb4e3f3a330ef3c`; squash merge commit `8eaf8a2e14cf3b96966a02ac2f3a3d5c69f697b9`. Reviewed diff: only `web-source/index.html`, 11 additions and 4 deletions.
+- Static source checks confirmed the palette builder, preserved custom colour input handler, independent toolbar instances, and scoped B/I/U selectors. No physical-device test was performed.
+- **Release is blocked/pending:** after merge, live `web-source/index.html` is updated (blob `22698acb7a4126bcdc6e76abc5930878cde95fab`), but `diary-web/index.html` remains at the pre-change blob `99c79234470753bf6284adfc56daa267902460cb`; `latest.json` remains Web Update 209 with the old SHA-256. The available GitHub Actions connector did not expose a workflow-run listing/dispatch action, and the commit-associated workflow lookup returned no runs. Therefore publisher workflow success, source/mirror equality, independent final SHA-256/feed match, and live release are **not verified**. Do not tell the user to update yet and do not claim this feature is live. Preserve the merged source change and verified backup until the publisher is run and all release checks pass.
+- APK unchanged: 1.0.143 / versionCode 142 / SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; no APK rebuild or signing operation.
+- Phone-test status: pending; user has not tested this change on device.
