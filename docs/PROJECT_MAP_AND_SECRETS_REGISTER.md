@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-14:** APK `1.0.140` / versionCode `139`; webVersion `197`; package `com.personal.diaryapp`. Live feed: `sha256=2936ddae0c7b8672bbfcccf1dccf344f4bc5aa4a21f6fc0fd1214a5cb559c588`; `webSha256=4452235be464d6acb8622430f71e4f0a76b416579e41ad91207d52a4d256852e`.
+**Status checked against live `latest.json` on 2026-11-14:** APK `1.0.142` / versionCode `141`; webVersion `197`; package `com.personal.diaryapp`. Live APK SHA-256 `9a538b5baa4a6ecf97158502e5b564473b158144c3bc324f41e1f8c83081a9d3`; web SHA-256 `4452235be464d6acb8622430f71e4f0a76b416579e41ad91207d52a4d256852e`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -2060,18 +2060,12 @@ The user can simply say what they want in Roman Hindi. No special template, file
 
 ---
 
-# APK 1.0.142 — Restore lock-screen wake without opening the Diary (2026-11-14) — BUILD PENDING
 
-- User clarified the exact regression: before the prior change, screen-off reminders lit the screen, showed the notification and played the ringtone; the only unwanted behaviour was My Diary opening automatically. The previous 1.0.141 change removed both the app-opening full-screen intent and the screen-wake behaviour, so it did not preserve the requested light-on behaviour.
-- Live starting feed: APK 1.0.141 / versionCode 140; package `com.personal.diaryapp`; APK SHA-256 `aaaa7c49a76ed0fc0caef4f78b37cdf695ce22d5d2d0705d3ea275fecfaf959e`; webVersion 197; web SHA-256 `4452235be464d6acb8622430f71e4f0a76b416579e41ad91207d52a4d256852e`.
-- Scope: native Android reminder path and release workflow only. Changed `scripts/add_diary_app_actions.py` to restore the full-screen alarm wake mechanism but route it to a new transparent, no-history, excluded-from-recents `DiaryReminderWakeActivity`, not `MainActivity`. The wake-only activity turns on the screen over the keyguard, keeps it awake briefly, then finishes; it does not dismiss the keyguard or show the Diary UI. The ordinary notification content tap still targets MainActivity. Restored the full-screen-intent permission check/request needed for Android 14+ and its manifest permission.
-- Preserved the AlarmClock scheduler, exact-alarm permission checks, notification channel/sound/defaults, notification content tap, Snooze, Done, boot/package-replacement restoration, reminder preference storage, and all Diary web/data/PIN/photo features. No HTML, storage keys, note data, package identity, or signing identity changed.
-- Updated `.github/workflows/build-diary-from-zip.yml` to validate the dedicated wake-only activity and ordinary notification tap separately, and to prepare APK 1.0.142 / versionCode 141 from live baseline 1.0.141 / versionCode 140.
-- Verified pre-edit backups on branch `backup/pre-wake-screen-no-app-open-2026-11-14`:
-  - `backups/native-script-py-before-wake-screen-no-app-open-2026-11-14.py`
-  - `backups/build-workflow-yml-before-wake-screen-no-app-open-2026-11-14.yml`
-  - `backups/latest-json-before-wake-screen-no-app-open-2026-11-14.json`
-  - `backups/master-register-md-before-wake-screen-no-app-open-2026-11-14.md`
-- Source commit for generator: `350a67b7da27277af429c8f65f3c13f8dd544bcc`; workflow commit: `e87f0d753e33b22d76a5ffd137ae2a21c3c89b8f`.
-- First workflow run `43601013277` used the workflow revision from just before the version/guard update and failed closed at the old no-full-screen-intent assertion. It did not publish or modify the live feed. Corrected workflow run `43601017474` is running; debug/release build, signed APK, feed, hash, and certificate checks are still **pending**.
-- Phone verification is **pending**. Do not ask the user to install until the corrected 1.0.142 signed APK is published and the live feed points to the verified artifact. After install, test screen-off reminder: display wakes to lock screen, notification and ringtone appear, My Diary does not open; tapping notification opens it normally. Do not uninstall or clear app data.
+## Final publication verification — APK 1.0.142 (2026-11-14)
+
+- Corrected workflow run `43601017474` completed with conclusion **success**; build job `132465753714` completed successfully. Debug APK, signed Release APK, publish, artifact upload and APK upload steps passed. Translation audit artifact was also uploaded.
+- Live `latest.json` re-fetched from `main`: APK `1.0.142`, versionCode `141`, package `com.personal.diaryapp`, URL `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.142.apk`, SHA-256 `9a538b5baa4a6ecf97158502e5b564473b158144c3bc324f41e1f8c83081a9d3`. Downloaded signed Release APK artifact independently hashed; exact SHA-256 matches live feed.
+- Workflow signing verification reports v1/JAR and v2 APK signatures valid. Signer certificate SHA-256 matches the existing trusted fingerprint `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A`. Package/version identity checks passed in workflow. Web Update remains `197`, with unchanged web SHA-256 `4452235be464d6acb8622430f71e4f0a76b416579e41ad91207d52a4d256852e`.
+- Release change is limited to the native Smart Reminder presentation: screen wake is routed to transparent `DiaryReminderWakeActivity`, not MainActivity; normal notification tap still targets MainActivity. Existing reminder scheduling, sound, Snooze/Done, restoration, storage and all Diary content/data remain preserved. No web HTML or user data changed.
+- Backups: branch `backup/pre-wake-screen-no-app-open-2026-11-14`; files `backups/native-script-py-before-wake-screen-no-app-open-2026-11-14.py`, `backups/build-workflow-yml-before-wake-screen-no-app-open-2026-11-14.yml`, `backups/latest-json-before-wake-screen-no-app-open-2026-11-14.json`, `backups/master-register-md-before-wake-screen-no-app-open-2026-11-14.md`.
+- Phone verification is **pending**. User may now install through **Me → Check for Updates**. Test with screen off: screen should wake to lock screen, notification and ringtone should arrive, and My Diary must not open by itself. Tapping the notification should open My Diary normally. Do not claim device-side success until user confirms. Never uninstall or clear app data.
