@@ -1732,11 +1732,19 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   function showMeFeaturePinManager(kind){
    var wrap=mfEl('div',{class:'diary-me-feature-form diary-me-feature-pin-form'});
    meFeatureTitle.textContent=mf('pinManage');meFeatureContent.replaceChildren();meFeatureStatus.textContent='';
-   var change=mfEl('button',{type:'button',class:'diary-me-feature-save'},mf('pinChange'));
-   var remove=mfEl('button',{type:'button',class:'diary-me-feature-delete'},mf('pinRemove'));
-   change.addEventListener('click',function(){meFeatureVerifyCurrent(kind,function(){meFeatureAskNewPin(kind,function(){showMeFeaturePage(kind);});});});
-   remove.addEventListener('click',function(){meFeatureVerifyCurrent(kind,function(){localStorage.removeItem('diary_me_section_pin_v1_'+kind);localStorage.removeItem('diary_me_section_recovery_v1_'+kind);meFeatureManage.hidden=true;meFeatureStatus.textContent=mf('pinRemoved');showMeFeaturePage(kind);});});
-   wrap.append(change,remove);meFeatureContent.append(wrap,meFeatureStatus);
+   var config=meFeaturePinConfig(kind);
+   if(!config){
+    var enable=mfEl('button',{type:'button',class:'diary-me-feature-save'},mf('pinSet'));
+    enable.addEventListener('click',function(){meFeatureAskNewPin(kind,function(){showMeFeaturePage(kind);});});
+    wrap.appendChild(enable);
+   }else{
+    var change=mfEl('button',{type:'button',class:'diary-me-feature-save'},mf('pinChange'));
+    var remove=mfEl('button',{type:'button',class:'diary-me-feature-delete'},mf('pinRemove'));
+    change.addEventListener('click',function(){meFeatureVerifyCurrent(kind,function(){meFeatureAskNewPin(kind,function(){showMeFeaturePage(kind);});});});
+    remove.addEventListener('click',function(){meFeatureVerifyCurrent(kind,function(){localStorage.removeItem('diary_me_section_pin_v1_'+kind);localStorage.removeItem('diary_me_section_recovery_v1_'+kind);meFeatureManage.hidden=false;meFeatureStatus.textContent=mf('pinRemoved');showMeFeaturePage(kind);});});
+    wrap.append(change,remove);
+   }
+   meFeatureContent.append(wrap,meFeatureStatus);
   }
   function meFeatureTools(kind){
    var wrap=mfEl('div',{class:'diary-me-feature-tools'}),search=mfEl('input',{type:'search',class:'diary-me-feature-search','aria-label':mf('search'),placeholder:mf('searchPlaceholder')});
@@ -1815,7 +1823,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    if(kind==='calendar')meFeatureAll('calendar').then(function(records){records.forEach(function(record){if(record.remind&&record.repeat&&record.repeat!=='none'&&calendarScheduleAlarms(record))meFeaturePut(record);});});
 
    meFeatureTitle.textContent=mf(meFeatureTypes.filter(function(x){return x.id===kind;})[0].key);
-   meFeatureBack.textContent=mf('back');meFeatureLock.hidden=true;meFeatureManage.hidden=!meFeaturePinConfig(kind);meFeatureContent.replaceChildren();meFeatureStatus.textContent='';
+   meFeatureBack.textContent=mf('back');meFeatureLock.hidden=true;meFeatureManage.hidden=!meFeatureProtected(kind);meFeatureContent.replaceChildren();meFeatureStatus.textContent='';
    meFeatureSearchInput=null;meFeatureCategoryFilter=null;
    meFeatureContent.appendChild(meFeatureForm(kind));meFeatureContent.appendChild(meFeatureTools(kind));meFeatureContent.append(meFeatureStatus,meFeatureList);
    meFeatureModal.hidden=false;mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');
