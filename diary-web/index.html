@@ -1716,9 +1716,6 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     var forgot=mfEl('button',{type:'button',class:'diary-me-feature-report'},mf('pinForgot'));
     forgot.addEventListener('click',function(){var bytes=new Uint8Array(4);crypto.getRandomValues(bytes);var temp=String(((bytes[0]<<24)|(bytes[1]<<16)|(bytes[2]<<8)|bytes[3])>>>0).slice(-4).padStart(4,'0');function verifyTemporaryPin(){meFeaturePinDialog(mf('pinRecoveryPinPrompt')).then(function(entered){if(entered===null)return;if(entered!==temp){meFeatureShowRecoveryError(mf('pinWrong'),verifyTemporaryPin);return;}meFeatureStatus.textContent='';meFeatureAskNewPin(kind,function(){showMeFeaturePage(kind);});});}meFeatureShowTemporaryPin(temp,verifyTemporaryPin);});
     form.appendChild(forgot);
-    var off=mfEl('button',{type:'button',class:'diary-me-feature-delete'},mf('pinRemove'));
-    off.addEventListener('click',function(){meFeatureVerifyCurrent(kind,function(){localStorage.removeItem('diary_me_section_pin_v1_'+kind);localStorage.removeItem('diary_me_section_recovery_v1_'+kind);meFeatureManage.hidden=true;meFeatureStatus.textContent=mf('pinRemoved');showMeFeaturePage(kind);});});
-    form.appendChild(off);
     form.addEventListener('submit',function(e){e.preventDefault();var value=String(pin.value||'').trim();if(!/^\d{4,8}$/.test(value)){meFeatureStatus.textContent=mf('pinNeed');return;}
      submit.disabled=true;meFeatureVerifyValue(kind,value).then(function(ok){if(!ok){meFeatureStatus.textContent=mf('pinWrong');submit.disabled=false;submit.dataset.autoSubmitted='0';pin.value='';pin.focus();return;}
       if(value.length===4){var latest=meFeaturePinConfig(kind);if(latest&&latest.digits!==4){latest.digits=4;localStorage.setItem('diary_me_section_pin_v1_'+kind,JSON.stringify(latest));}showMeFeaturePage(kind);}
