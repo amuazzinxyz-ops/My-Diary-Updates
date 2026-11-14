@@ -47,7 +47,7 @@ if s.count(back_old) != 1:
 s = s.replace(back_old, back_new, 1)
 if "class DiaryNativeActions" in s: raise SystemExit("Already patched")
 if "override fun onActivityResult(" in s: raise SystemExit("Existing onActivityResult found; safe merge required")
-s=s.replace("import android.content.Intent\n","import android.content.Intent\nimport android.app.AlertDialog\nimport android.app.AlarmManager\nimport android.app.Notification\nimport android.app.NotificationChannel\nimport android.app.NotificationManager\nimport android.app.PendingIntent\nimport android.app.ProgressDialog\nimport android.content.BroadcastReceiver\nimport android.content.Context\nimport android.os.Build\nimport android.webkit.JavascriptInterface\nimport android.widget.Toast\nimport java.net.HttpURLConnection\nimport java.net.URL\n",1)
+s=s.replace("import android.content.Intent\n","import android.content.Intent\nimport android.media.AudioAttributes\nimport android.media.RingtoneManager\nimport android.provider.Settings\nimport android.net.Uri\nimport android.app.AlertDialog\nimport android.app.AlarmManager\nimport android.app.Notification\nimport android.app.NotificationChannel\nimport android.app.NotificationManager\nimport android.app.PendingIntent\nimport android.app.ProgressDialog\nimport android.content.BroadcastReceiver\nimport android.content.Context\nimport android.os.Build\nimport android.webkit.JavascriptInterface\nimport android.widget.Toast\nimport java.net.HttpURLConnection\nimport java.net.URL\n",1)
 s=s.replace("        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {","        webView.addJavascriptInterface(DiaryNativeActions(), \"DiaryAppActions\")\n\n        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {",1)
 native = r"""
     private inner class DiaryNativeActions {
@@ -304,7 +304,10 @@ native = r"""
                 }
             }
         }
-        @JavascriptInterface fun scheduleReminder(id: String, title: String, details: String, atMillis: Long): Boolean {
+        @JavascriptInterface fun pickReminderSound(currentUri: String) {
+            this@MainActivity.startDiaryReminderSoundPicker(currentUri)
+        }
+        @JavascriptInterface fun scheduleReminder(id: String, title: String, details: String, atMillis: Long, soundUri: String): Boolean {
             if (id.isBlank() || title.isBlank() || atMillis <= System.currentTimeMillis()) return false
             if (!hasReminderNotificationPermission()) {
                 requestReminderNotificationPermission()
@@ -319,7 +322,7 @@ native = r"""
                 return false
             }
             return try {
-                DiaryReminderScheduler.schedule(this@MainActivity, id, title, details, atMillis)
+                DiaryReminderScheduler.schedule(this@MainActivity, id, title, details, atMillis, soundUri)
                 true
             } catch (e: Exception) {
                 false
@@ -343,6 +346,54 @@ s=s[:i]+native+s[i:]
 outer = r"""
     private var pendingDiaryBackupContent: String? = null
     private val DIARY_BACKUP_REQUEST_CODE = 7319
+    private val DIARY_REMINDER_SOUND_RINGTONE_REQUEST_CODE = 7320
+    private val DIARY_REMINDER_SOUND_FILE_REQUEST_CODE = 7321
+
+    private fun notifyDiaryReminderSoundPicked(uri: String, label: String) {
+        runOnUiThread {
+            val js = "window.__diaryReminderSoundPicked && window.__diaryReminderSoundPicked(" +
+                JSONObject.quote(uri) + "," + JSONObject.quote(label) + ");"
+            webView.evaluateJavascript(js, null)
+        }
+    }
+
+    private fun startDiaryReminderSoundPicker(currentUri: String) {
+        runOnUiThread {
+            val options = arrayOf("Phone ringtone / alarm tone", "Choose audio file", "Use default alarm sound")
+            AlertDialog.Builder(this@MainActivity)
+                .setTitle("Reminder sound")
+                .setItems(options) { _, which ->
+                    try {
+                        when (which) {
+                            0 -> {
+                                val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER).apply {
+                                    putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM)
+                                    putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Choose reminder alarm tone")
+                                    putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
+                                    putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM))
+                                    putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false)
+                                    if (currentUri.isNotBlank()) putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(currentUri))
+                                }
+                                startActivityForResult(intent, DIARY_REMINDER_SOUND_RINGTONE_REQUEST_CODE)
+                            }
+                            1 -> {
+                                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                                    addCategory(Intent.CATEGORY_OPENABLE)
+                                    type = "audio/*"
+                                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
+                                }
+                                startActivityForResult(intent, DIARY_REMINDER_SOUND_FILE_REQUEST_CODE)
+                            }
+                            2 -> notifyDiaryReminderSoundPicked("", "Default phone alarm sound")
+                        }
+                    } catch (_: Exception) {
+                        Toast.makeText(this@MainActivity, "Ringtone ya audio file nahi khul saki.", Toast.LENGTH_LONG).show()
+                    }
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
+        }
+    }
 
     private fun startDiaryBackupSave(content: String, suggestedName: String) {
         runOnUiThread {
@@ -374,6 +425,31 @@ outer = r"""
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == DIARY_REMINDER_SOUND_RINGTONE_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                val picked = data?.getParcelableExtra<Uri>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
+                    ?: RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+                val ringtone = picked?.let { RingtoneManager.getRingtone(this, it) }
+                notifyDiaryReminderSoundPicked(picked?.toString().orEmpty(), ringtone?.getTitle(this) ?: "Phone alarm tone")
+            }
+            return
+        }
+        if (requestCode == DIARY_REMINDER_SOUND_FILE_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                val picked = data?.data
+                if (picked != null) {
+                    try {
+                        val flags = data.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        if (flags != 0) contentResolver.takePersistableUriPermission(picked, flags)
+                        val label = picked.lastPathSegment?.substringAfterLast('/')?.takeIf { it.isNotBlank() } ?: "Selected audio file"
+                        notifyDiaryReminderSoundPicked(picked.toString(), label)
+                    } catch (_: Exception) {
+                        Toast.makeText(this@MainActivity, "Audio file ka access save nahi ho saka.", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+            return
+        }
         if (requestCode != DIARY_BACKUP_REQUEST_CODE) return
         val content = pendingDiaryBackupContent
         pendingDiaryBackupContent = null
@@ -410,13 +486,14 @@ private object DiaryReminderScheduler {
     private fun pendingFlags(): Int = PendingIntent.FLAG_UPDATE_CURRENT or
         (if (Build.VERSION.SDK_INT >= 23) PendingIntent.FLAG_IMMUTABLE else 0)
 
-    private fun alarmIntent(context: Context, id: String, title: String, details: String): Intent =
+    private fun alarmIntent(context: Context, id: String, title: String, details: String, soundUri: String): Intent =
         Intent(context, DiaryReminderReceiver::class.java).apply {
             action = ACTION_ALARM
             data = Uri.parse("mydiary-reminder://alarm/" + Uri.encode(id))
             putExtra("diary_reminder_id", id)
             putExtra("diary_reminder_title", title)
             putExtra("diary_reminder_details", details)
+            putExtra("diary_reminder_sound_uri", soundUri)
         }
 
     private fun readItems(context: Context): org.json.JSONArray {
@@ -428,10 +505,10 @@ private object DiaryReminderScheduler {
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putString(ITEMS, items.toString()).apply()
     }
 
-    fun schedule(context: Context, id: String, title: String, details: String, atMillis: Long) {
+    fun schedule(context: Context, id: String, title: String, details: String, atMillis: Long, soundUri: String) {
         require(id.isNotBlank() && title.isNotBlank() && atMillis > System.currentTimeMillis())
         val alarm = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val pending = PendingIntent.getBroadcast(context, requestCode(id), alarmIntent(context, id, title, details), pendingFlags())
+        val pending = PendingIntent.getBroadcast(context, requestCode(id), alarmIntent(context, id, title, details, soundUri), pendingFlags())
         if (Build.VERSION.SDK_INT >= 31 && !alarm.canScheduleExactAlarms()) {
             throw SecurityException("Exact alarm permission is required for reliable reminders")
         }
@@ -452,7 +529,7 @@ private object DiaryReminderScheduler {
             val item = old.optJSONObject(i) ?: continue
             if (item.optString("id") != id) next.put(item)
         }
-        next.put(org.json.JSONObject().put("id", id).put("title", title).put("details", details).put("at", atMillis))
+        next.put(org.json.JSONObject().put("id", id).put("title", title).put("details", details).put("at", atMillis).put("soundUri", soundUri))
         writeItems(context, next)
     }
 
@@ -470,7 +547,7 @@ private object DiaryReminderScheduler {
         val alarm = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val pending = PendingIntent.getBroadcast(
             context, requestCode(id),
-            alarmIntent(context, id, "", ""),
+            alarmIntent(context, id, "", "", ""),
             pendingFlags()
         )
         alarm.cancel(pending)
@@ -490,23 +567,31 @@ private object DiaryReminderScheduler {
             val id = item.optString("id")
             val title = item.optString("title")
             val details = item.optString("details")
+            val soundUri = item.optString("soundUri")
             val at = item.optLong("at")
             if (id.isNotBlank() && title.isNotBlank()) {
-                if (at > now) schedule(context, id, title, details, at)
-                else if (at > now - 24L * 60L * 60L * 1000L) schedule(context, id, title, details, now + 5000L)
+                if (at > now) schedule(context, id, title, details, at, soundUri)
+                else if (at > now - 24L * 60L * 60L * 1000L) schedule(context, id, title, details, now + 5000L, soundUri)
                 else remove(context, id)
             }
         }
     }
 
-    fun showNotification(context: Context, id: String, title: String, details: String) {
+    fun showNotification(context: Context, id: String, title: String, details: String, soundUri: String) {
         if (Build.VERSION.SDK_INT >= 33 &&
             context.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) return
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val alarmSound = if (soundUri.isBlank()) RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM) else Uri.parse(soundUri)
+        val channelId = if (soundUri.isBlank()) "diary_reminders_default" else "diary_reminders_" + Integer.toHexString(soundUri.hashCode())
+        val alarmAttributes = AudioAttributes.Builder()
+            .setUsage(AudioAttributes.USAGE_ALARM)
+            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+            .build()
         if (Build.VERSION.SDK_INT >= 26) {
-            val channel = NotificationChannel(CHANNEL_ID, "My Diary Reminders", NotificationManager.IMPORTANCE_HIGH).apply {
+            val channel = NotificationChannel(channelId, "My Diary Reminders", NotificationManager.IMPORTANCE_HIGH).apply {
                 description = "Scheduled reminders from My Diary"
                 enableVibration(true)
+                setSound(alarmSound, alarmAttributes)
             }
             manager.createNotificationChannel(channel)
         }
@@ -531,18 +616,19 @@ private object DiaryReminderScheduler {
             }
             return PendingIntent.getBroadcast(context, code + if (action == ACTION_SNOOZE) 2 else 3, actionIntent, pendingFlags())
         }
-        val builder = if (Build.VERSION.SDK_INT >= 26) Notification.Builder(context, CHANNEL_ID) else Notification.Builder(context)
+        val builder = if (Build.VERSION.SDK_INT >= 26) Notification.Builder(context, channelId) else Notification.Builder(context)
         val body = details.ifBlank { "My Diary reminder" }
         builder.setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
             .setContentTitle(title)
             .setContentText(body)
             .setStyle(Notification.BigTextStyle().bigText(body))
+            .setSound(if (Build.VERSION.SDK_INT < 26) alarmSound else null, alarmAttributes)
             .setContentIntent(content)
             .setFullScreenIntent(wakePending, true)
             .setAutoCancel(true)
             .setPriority(Notification.PRIORITY_HIGH)
             .setCategory(Notification.CATEGORY_ALARM)
-            .setDefaults(Notification.DEFAULT_ALL)
+            .setDefaults(Notification.DEFAULT_VIBRATE or Notification.DEFAULT_LIGHTS)
             .addAction(android.R.drawable.ic_lock_idle_alarm, "10 min baad", actionIntent(ACTION_SNOOZE, "snooze"))
             .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Done", actionIntent(ACTION_DONE, "done"))
         manager.notify(code, builder.build())
@@ -555,11 +641,12 @@ class DiaryReminderReceiver : BroadcastReceiver() {
         val id = msg.getStringExtra("diary_reminder_id") ?: return
         val title = msg.getStringExtra("diary_reminder_title") ?: "My Diary Reminder"
         val details = msg.getStringExtra("diary_reminder_details") ?: ""
+        val soundUri = msg.getStringExtra("diary_reminder_sound_uri") ?: ""
         when (msg.action) {
             DiaryReminderScheduler.ACTION_SNOOZE -> {
                 val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 manager.cancel((id.hashCode() and 0x3fffffff) + 10)
-                DiaryReminderScheduler.schedule(context, id, title, details, System.currentTimeMillis() + 10L * 60L * 1000L)
+                DiaryReminderScheduler.schedule(context, id, title, details, System.currentTimeMillis() + 10L * 60L * 1000L, soundUri)
                 return
             }
             DiaryReminderScheduler.ACTION_DONE -> {
@@ -570,7 +657,7 @@ class DiaryReminderReceiver : BroadcastReceiver() {
             }
         }
         DiaryReminderScheduler.remove(context, id)
-        DiaryReminderScheduler.showNotification(context, id, title, details)
+        DiaryReminderScheduler.showNotification(context, id, title, details, soundUri)
     }
 }
 
