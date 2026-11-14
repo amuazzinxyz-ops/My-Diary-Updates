@@ -1,6 +1,6 @@
 # MY DIARY — MANDATORY SAFE-WORK PROTOCOL (READ FIRST EVERY TASK)
 
-**Status checked against live `latest.json` on 2026-11-14:** APK `1.0.143` / versionCode `142`; webVersion `199`; package `com.personal.diaryapp`. Live APK SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; web SHA-256 `529b3e39e1a7e26d85b235b17ada0f2a17b2cfdc85dee3940ac7a5b88bc93018`.
+**Status checked against live `latest.json` on 2026-11-14:** APK `1.0.143` / versionCode `142`; webVersion `201`; package `com.personal.diaryapp`. Live APK SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; web SHA-256 `5d0f47cca0424f0d9c31ce94e85a280caf38633ec53252f89951b85fb9f50686`.
 
 **Project/repository:** `amuazzinxyz-ops/My-Diary-Updates`  
 **This register:** `docs/PROJECT_MAP_AND_SECRETS_REGISTER.md`  
@@ -2154,3 +2154,25 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Web publisher run `43610280385` completed with conclusion **success**. Live `webVersion=200`; `web-source/index.html` and `diary-web/index.html` were re-fetched and are byte-identical, both Git blob SHA `7d42a5aa280f0a9ed3217dabe81ad931a7156032`, 367,387 characters. Live feed `webSha256=eac11a930eb722e49ccf6b4146555d34868405f0b144d8ad1f9e060d65b61c48`.
 - APK remains unchanged at `1.0.143` / versionCode `142`, SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`. No APK rebuild, native Android source change, data migration or signing action.
 - Phone check: install the web change through **Me → Check for Updates**. Confirm the extra inner Lock button is gone from Personal Calendar and the PIN gate still appears when reopening it. No user-device test has yet been reported.
+
+
+---
+
+# Web Update 201 — Smart Reminder ringtone choices in Personal Calendar (2026-11-14)
+
+- User request: Personal Calendar event reminders should have the same ringtone/sound selection options as Smart Reminder.
+- Starting live state: APK 1.0.143 / versionCode 142; Web Update 200; package `com.personal.diaryapp`; starting source/mirror blob SHA `7d42a5aa280f0a9ed3217dabe81ad931a7156032`; starting main commit `2dc10f24f36aacf265aa302bf5b9fe6386fd52ba`.
+- Scope: web-only change to `web-source/index.html`; publisher regenerated `diary-web/index.html` and `latest.json`. No native Android source, Android build workflow, APK, package/signing identity, Smart Reminder code, Calendar PIN/recovery, recurrence rules/horizons, records database, or other Diary feature was changed.
+- Calendar form now reuses the exact existing Android Smart Reminder picker and bridge: choose a phone ringtone/alarm tone, choose an audio file from the device, or use the default phone alarm. It uses the existing localized `reminderSound` and `reminderSoundDefault` labels across all 10 supported languages.
+- Selected sound URI and label are saved with the Calendar event; the URI is passed to every scheduled Calendar occurrence, including recurring occurrences. Editing an existing event restores its previous sound selection. The event card shows the selected sound label when its reminder is enabled. Existing Calendar records without a saved sound continue to use the default phone alarm.
+- No native changes were needed: the existing Android `pickReminderSound` and `scheduleReminder(..., soundUri)` bridge already supports the same picker and sound URI for the separate `cal-` alarm IDs.
+- Pre-edit backup branch: `work/calendar-reminder-ringtone-2026-11-14`. Exact backups were created and fetched back readable before editing:
+  - `backups/web-source-before-calendar-reminder-ringtone-2026-11-14.html` — blob SHA `7d42a5aa280f0a9ed3217dabe81ad931a7156032`
+  - `backups/diary-web-before-calendar-reminder-ringtone-2026-11-14.html` — blob SHA `7d42a5aa280f0a9ed3217dabe81ad931a7156032`
+  - `backups/latest-before-calendar-reminder-ringtone-2026-11-14.json` — blob SHA `7362ea002629f1841d2fee7c72da3d6aaa0dbe9f`
+  - `backups/master-register-before-calendar-reminder-ringtone-2026-11-14.md` — blob SHA `836302ec91d79c334c32ff737bad10e47db0f648`
+- Source PR #11 merged by squash as commit `a54d578d1c162b8bd0af4e447807bde17cdce265`. Web publisher commit `d14dd75c5ec7e25eed852ad0399fc5da13a96c27` published Web Update 201. The publisher workflow run ID/conclusion was not exposed by the available run/status listing; publication itself was verified from the live source, mirror and feed.
+- Post-publish verification: live `web-source/index.html` and `diary-web/index.html` were re-fetched byte-identical; both Git blob SHA `2275664443613a817d12aaf42a3cf56889185a90`, length 369,123 characters. Independently calculated UTF-8 SHA-256 `5d0f47cca0424f0d9c31ce94e85a280caf38633ec53252f89951b85fb9f50686` matches live `latest.json.webSha256`; live webVersion is 201.
+- Targeted source checks confirmed the Calendar form calls the existing sound picker, stores/restores the selected URI and label, and passes the URI to each `cal-` scheduled alarm. Existing records fall back to empty URI/default alarm. APK remains 1.0.143 / versionCode 142 with unchanged SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`; no APK rebuild or signing operation.
+- Physical-device verification is **pending**. User should install Web Update 201 through **Me → Check for Updates**, then create a Calendar event with reminder enabled and test all three sound choices; edit the event to confirm the choice is retained; test one recurring event occurrence. Do not claim phone-side success until the user confirms.
+- Rollback: use the exact pre-edit backups above and restore only `web-source/index.html` if required; publish a higher webVersion. Never clear app data or alter Calendar records, PIN/recovery data, notes, photos, or APK/signing files.
