@@ -1891,7 +1891,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    meFeatureTitle.textContent=mf(meFeatureTypes.filter(function(x){return x.id===kind;})[0].key);
    meFeatureBack.textContent=mf('back');meFeatureLock.hidden=true;meFeatureManage.hidden=!meFeatureProtected(kind);meFeatureContent.replaceChildren();meFeatureStatus.textContent='';
    meFeatureSearchInput=null;meFeatureCategoryFilter=null;
-   if(kind==='memories'){meFeatureContent.appendChild(meFeatureTools(kind));meFeatureContent.appendChild(meFeatureForm(kind));}else{meFeatureContent.appendChild(meFeatureForm(kind));meFeatureContent.appendChild(meFeatureTools(kind));}meFeatureContent.append(meFeatureStatus,meFeatureList);
+   if(kind==='memories'||kind==='documents'){meFeatureContent.appendChild(meFeatureTools(kind));meFeatureContent.appendChild(meFeatureForm(kind));}else{meFeatureContent.appendChild(meFeatureForm(kind));meFeatureContent.appendChild(meFeatureTools(kind));}meFeatureContent.append(meFeatureStatus,meFeatureList);
    meFeatureModal.hidden=false;meFeatureModal.scrollTop=0;meFeatureContent.scrollTop=0;mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');window.requestAnimationFrame(function(){meFeatureModal.scrollTop=0;meFeatureContent.scrollTop=0;});
    renderMeFeatureList(kind);
   }
