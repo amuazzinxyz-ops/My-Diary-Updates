@@ -1836,9 +1836,31 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      }
      if(kind==='memories'&&record.details)card.appendChild(mfEl('p',{},record.details));
      if(record.fileBlob){
-      var url=URL.createObjectURL(record.fileBlob);meFeatureObjectUrls.push(url);
-      if(kind==='memories'&&String(record.fileType||'').indexOf('image/')===0){var img=mfEl('img',{class:'diary-me-feature-thumb',alt:record.title||'Memory'});img.src=url;card.appendChild(img);}
-      var link=mfEl('a',{href:url,target:'_blank',rel:'noopener'},mf('open')+' · '+(record.fileName||mf('file')));card.appendChild(link);
+      if(kind==='documents'){
+       var openDoc=mfEl('button',{type:'button',class:'diary-me-feature-edit'},'📄 '+mf('open')+' · '+(record.fileName||mf('file')));
+       openDoc.addEventListener('click',function(){
+        var bridge=window.DiaryAppActions;
+        if(!bridge||typeof bridge.openDocument!=='function'){meFeatureStatus.textContent=mf('failed');return;}
+        openDoc.disabled=true;meFeatureStatus.textContent='…';
+        var reader=new FileReader();
+        reader.onload=function(){
+         try{
+          var dataUrl=String(reader.result||''),base64=dataUrl.indexOf(',')>=0?dataUrl.substring(dataUrl.indexOf(',')+1):'';
+          if(!base64)throw new Error('Empty document');
+          var accepted=bridge.openDocument(base64,String(record.fileName||'document'),String(record.fileType||'application/octet-stream'));
+          meFeatureStatus.textContent=accepted?mf('saved'):mf('failed');
+         }catch(error){meFeatureStatus.textContent=mf('failed');}
+         openDoc.disabled=false;
+        };
+        reader.onerror=function(){meFeatureStatus.textContent=mf('failed');openDoc.disabled=false;};
+        try{reader.readAsDataURL(record.fileBlob);}catch(error){meFeatureStatus.textContent=mf('failed');openDoc.disabled=false;}
+       });
+       card.appendChild(openDoc);
+      }else{
+       var url=URL.createObjectURL(record.fileBlob);meFeatureObjectUrls.push(url);
+       if(kind==='memories'&&String(record.fileType||'').indexOf('image/')===0){var img=mfEl('img',{class:'diary-me-feature-thumb',alt:record.title||'Memory'});img.src=url;card.appendChild(img);}
+       var link=mfEl('a',{href:url,target:'_blank',rel:'noopener'},mf('open')+' · '+(record.fileName||mf('file')));card.appendChild(link);
+      }
      }
      var del=mfEl('button',{type:'button',class:'diary-me-feature-delete'},'🗑️ '+mf('remove'));
      del.addEventListener('click',function(){if(!window.confirm(mf('confirmDelete')))return;meFeatureDelete(record.id).then(function(){if(kind==='reminders'&&window.DiaryAppActions&&typeof window.DiaryAppActions.cancelReminder==='function')window.DiaryAppActions.cancelReminder(record.id);if(kind==='calendar')calendarCancelAlarms(record);renderMeFeatureList(kind);}).catch(function(){meFeatureStatus.textContent=mf('failed');});});
