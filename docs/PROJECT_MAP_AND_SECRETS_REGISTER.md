@@ -3242,3 +3242,12 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Live `latest.json` advertises package `com.personal.diaryapp`, versionName `1.0.169`, versionCode `168`, the exact APK URL/hash above, Web Update 246, and web SHA-256 `a660266c972f0b791ec45c337417b2534a77f1a76f7d45dfd2772a4a092a332a`.
 - Source and mirror are byte-identical at Git blob SHA `27009945f9d6bc11884ea45a145954bdf59cc5e6`. Web publisher run #247 (`43752168920`) independently computed the UTF-8 SHA-256 above and repaired the stale manifest checksum without incrementing Web Update 246.
 - Direct APK and in-app Check for Update now point to the same intended release. Repository/build/publication verification is PASS. Physical-phone incorrect-PIN display test is still pending user confirmation; do not claim phone-side PASS until user tests it.
+
+
+## Diary Lock not-set message stays inside app — Web Update 247 / APK release pending (2026-11-16)
+
+- User requested that tapping **Me → 🔓 Diary Lock Band Karein** when no Diary PIN has been configured should show only the existing “Diary Lock is not set.” message inside the app, without a browser alert or exposed website address.
+- Pre-edit backup branch: `backup/before-diary-lock-not-set-inline-message-2026-11-16`. Feature branch: `fix/diary-lock-not-set-inline-message-2026-11-16`.
+- Minimal change in `turnDiaryLockOff()`: replace only the no-lock `window.alert()` with the existing Diary status element `#diaryMyNotesStatus` text. The separate Forgot PIN flow, wrong-PIN inline feedback, PIN storage, lock/recovery logic, notes, photos, documents, IndexedDB data, reminders, app identity and signing identity are not changed.
+- Source and `diary-web/index.html` mirror are updated identically. `latest.json` is prepared for Web Update 247. PR merge, automatic checksum publication, signed APK rebuild/publication and exact live feed/artifact verification remain pending; do not tell the user to update until both APK and Check for Update routes are verified.
+- Phone-side verification is pending. Do not claim Android device PASS until the user tests the no-lock button and confirms only the message appears without a website address.
