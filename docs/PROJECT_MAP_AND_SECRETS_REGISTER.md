@@ -1,8 +1,28 @@
+# Correct welcome screen: remove upper heading and keep the lower tappable card — published Web Update 228 (2026-11-15)
+
+- User correction: the previous attempt left the wrong welcome content visible. User clearly specified that the **upper** `📒` / heading / subtitle block must be removed and the **lower tappable Diary card** must remain and receive the 3D design. Apologized for the previous mistake.
+- Root cause found by inspecting live source: Web Update 227's CSS had been inserted into the JavaScript string used to generate a report document, not into the actual app document. It did not style the live welcome screen. Removed that misplaced style block.
+- Corrected actual document: appended the CSS to the real main HTML document immediately before its final `</body>`. Hides only `.diary-home > .diary-mark`, `.diary-home > h1`, and `.diary-home > p`; removes the outer `.diary-home` card surface; retains `#diaryHomeEntryHost` and the existing `#diaryMyNotesEntry` as the one visible raised purple-and-gold 3D card.
+- Preserved the existing icon, localized title/subtitle, original click handler calling `openOverlay()`, language behavior, all JavaScript, and mobile tap target. No notes, photos, local storage/data keys, PIN/recovery, trash, reminders, updater logic, Android source, APK, package identity, signing data, or permissions changed.
+- Before-edit backups created and re-fetched byte-identical on `backup/before-correct-welcome-card-2026-11-15`:
+  - `backups/web-source-before-correct-welcome-card-2026-11-15.html`
+  - `backups/diary-web-before-correct-welcome-card-2026-11-15.html`
+  - `backups/latest-before-correct-welcome-card-2026-11-15.json`
+  - `backups/register-before-correct-welcome-card-2026-11-15.md`
+- Static checks: corrected CSS exists in the actual main document after the app scripts; upper logo/title/subtitle selectors are hidden; outer card surface is transparent; purple/gold 3D button styling is present; original button creation, localized text, and click handler remain; misplaced Web Update 227 style is absent.
+- Feature branch `feature/correct-single-welcome-tap-card-2026-11-15`; PR #38 merged as `40f93bfbc5571c4a0609a52a8ae9d0a26eb7dac9`. Only `web-source/index.html` changed (15 additions, 66 deletions).
+- Publisher workflow run `43684770691` completed with **success**. Live Web Update 228: source and `diary-web/index.html` mirror are byte-identical at blob SHA `abdbde83c4ccbef1ba63204b01153ce8950bc942`. Feed web SHA-256 `84299b287b0dcd1ae16ec17ac3a3621d16664c7cf7c9b1ff044109d932e76768`.
+- APK remains `1.0.143` / versionCode `142`; SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`. No APK rebuild.
+- Physical phone confirmation is still pending. User should install **Web Update 228**, then verify that the upper heading is gone, only the lower 3D tap card remains, and tapping it opens Diary. Do not claim device-side success before the user confirms.
+- Rollback: use the exact pre-edit files on `backup/before-correct-welcome-card-2026-11-15`; if already published, restore the desired source and publish a higher webVersion. Preserve all local notes, photos, and PIN/recovery data.
+
+---
+
 # Remove duplicate upper welcome heading; style the tap card — published Web Update 227 (2026-11-15)
 
 - User request: remove the upper repeated `📒 Meri Diary` and subtitle; keep the lower tappable Diary entry and give that same tap target a beautiful raised 3D design.
 - Starting live state: Web Update 226; APK `1.0.143` / versionCode `142`; package `com.personal.diaryapp`; source/mirror blob SHA `680e1b78909a5f5dc0cfacf7e741e8edea4a7052`; starting feed web SHA-256 `4f01fc4507093b086cb53965632563dfcf9cb39f0463fe7731b012a50eb09785`.
-- Scope: web-only CSS addition in `web-source/index.html`. Hid the upper welcome logo/title/subtitle, removed the outer wrapper's separate card appearance, and styled the existing lower `#diaryMyNotesEntry` as the sole purple-and-gold raised 3D card. Preserved the original icon, localized title/subtitle, existing click handler that calls `openOverlay()`, full-width tap target, and mobile sizing.
+- Scope as originally intended, but the implementation was faulty: the CSS block was accidentally inserted inside the report-export HTML string rather than the main Diary document. It therefore did not apply to the actual welcome screen. User reported that the wrong card remained. This was acknowledged and corrected in Web Update 228 below; do not treat Web Update 227 as the successful visual fix.
 - No JavaScript or HTML structure changed; comparison against the exact starting source confirms the only source difference is the inserted CSS block. Explicitly untouched: notes, photos, local storage/data keys, PIN/recovery, trash, note actions, reminders, updater logic, Android source, APK, package identity, signing data and permissions.
 - Pre-edit backups created and re-fetched byte-identical on branch `backup/before-remove-upper-welcome-duplicate-2026-11-15`:
   - `backups/web-source-before-remove-upper-welcome-duplicate-2026-11-15.html`
