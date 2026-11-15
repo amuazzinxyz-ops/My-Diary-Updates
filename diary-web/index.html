@@ -2889,9 +2889,10 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    b.appendChild(el('span',{class:'diary-more-icon'},'📒'));
    b.appendChild(el('span',{id:'diaryMyNotesEntryTitle'},t('button')));
    b.appendChild(el('small',{id:'diaryMyNotesEntrySub'},t('sub')));
-   b.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();openOverlay()});
    view.appendChild(b);
   }
+  /* Always bind the visible welcome card, including when it already exists in the DOM. */
+  b.onclick=function(e){e.preventDefault();e.stopPropagation();openOverlay()};
   b.querySelector('#diaryMyNotesEntryTitle').textContent=t('button');
   b.querySelector('#diaryMyNotesEntrySub').textContent=t('sub');
  }
