@@ -46,11 +46,11 @@ jobs:
           # web bundle to an older installed APK until the signed native release
           # is already present in the feed. The APK workflow's feed commit then
           # triggers this publisher again.
-          if "ringDurationSeconds" in text or "ringVolumePercent" in text or "snoozeInterval:" in text:
+          if "ringDurationSeconds" in text or "ringVolumePercent" in text or "snoozeInterval:" in text or "saveMemoryImage" in text:
               app_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-              if app_version < (146, "1.0.147"):
+              if app_version < ((161, "1.0.162") if "saveMemoryImage" in text else (146, "1.0.147")):
                   Path("/tmp/diary-web-publish-skipped").write_text("native release pending")
-                  print("SKIP: timed ringtone volume and screen-wake web bundle waits for signed APK 1.0.147/146")
+                  print("SKIP: native-dependent web bundle waits for its matching signed APK release")
                   raise SystemExit(0)
           mirror = Path("diary-web/index.html")
           if mirror.is_file() and mirror.read_bytes() == data:
@@ -63,7 +63,7 @@ jobs:
           meta["webVersion"] = version
           meta["webUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html"
           meta["webSha256"] = hashlib.sha256(data).hexdigest()
-          meta["webReleaseNotes"] = "Diary features and design updated online. Local notes and photos remain on this device."
+          meta["webReleaseNotes"] = "My Memories: search by partial or multiple name words and save existing images to Downloads/My Diary. Existing saved memories remain intact."
           meta_path.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           print("Prepared web-only update", version, "SHA-256", meta["webSha256"])
           PY

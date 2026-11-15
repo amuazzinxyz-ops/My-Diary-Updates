@@ -96,6 +96,38 @@ native = r"""
             if (content.isEmpty()) return
             this@MainActivity.startDiaryBackupSave(content, suggestedName)
         }
+        @JavascriptInterface fun saveMemoryImage(base64: String, fileName: String, mimeType: String): Boolean {
+            return try {
+                val bytes = android.util.Base64.decode(base64, android.util.Base64.DEFAULT)
+                if (bytes.isEmpty() || bytes.size > 20 * 1024 * 1024) throw Exception("Invalid image size")
+                val safeName = fileName.substringAfterLast('/').substringAfterLast('\\')
+                    .replace(Regex("[^A-Za-z0-9._ -]"), "_").take(120).ifBlank { "My-Memory.jpg" }
+                if (android.os.Build.VERSION.SDK_INT < 29) throw Exception("Downloads folder access requires Android 10 or newer")
+                val values = android.content.ContentValues().apply {
+                    put(android.provider.MediaStore.MediaColumns.DISPLAY_NAME, safeName)
+                    put(android.provider.MediaStore.MediaColumns.MIME_TYPE, mimeType.takeIf { it.startsWith("image/") } ?: "image/jpeg")
+                    put(android.provider.MediaStore.MediaColumns.RELATIVE_PATH, android.os.Environment.DIRECTORY_DOWNLOADS + "/My Diary")
+                    put(android.provider.MediaStore.MediaColumns.IS_PENDING, 1)
+                }
+                val destination = contentResolver.insert(android.provider.MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
+                    ?: throw java.io.IOException("Could not create Downloads file")
+                try {
+                    contentResolver.openOutputStream(destination)?.use { it.write(bytes) }
+                        ?: throw java.io.IOException("Could not open Downloads file")
+                    val ready = android.content.ContentValues().apply { put(android.provider.MediaStore.MediaColumns.IS_PENDING, 0) }
+                    contentResolver.update(destination, ready, null, null)
+                } catch (error: Exception) {
+                    contentResolver.delete(destination, null, null)
+                    throw error
+                }
+                runOnUiThread { Toast.makeText(this@MainActivity, "Photo Downloads/My Diary mein save ho gayi.", Toast.LENGTH_LONG).show() }
+                true
+            } catch (error: Exception) {
+                android.util.Log.e("MyDiaryMemories", "Saved image download failed", error)
+                runOnUiThread { Toast.makeText(this@MainActivity, "Photo download nahi ho saki.", Toast.LENGTH_LONG).show() }
+                false
+            }
+        }
         private fun currentVersion(): Int {
             val info=packageManager.getPackageInfo(packageName,0)
             @Suppress("DEPRECATION")

@@ -1,4 +1,4 @@
-# Release baseline guard: live update feed 1.0.160 / versionCode 159; next APK 1.0.161 / versionCode 160.
+# Release baseline guard: live update feed 1.0.161 / versionCode 160; next APK 1.0.162 / versionCode 161.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -111,7 +111,7 @@ jobs:
           source=Path("web-source/index.html")
           actual=hashlib.sha256(source.read_bytes()).hexdigest()
           meta["webSha256"]=actual
-          meta["webReleaseNotes"]="Personal Calendar and Smart Reminder now support adjustable ringtone volume, screen-on duration matched to ringtone playback, Snooze intervals of 2/5/10/15/20/30 minutes, and ringtone duration of 10/20/30 seconds or 1/2/5 minutes."
+          meta["webReleaseNotes"]="My Memories: search by partial or multiple name words and save existing images to Downloads/My Diary. Existing saved memories remain intact."
           Path("latest.json").write_text(json.dumps(meta,indent=2)+"\n",encoding="utf-8")
           expected=meta.get("webSha256","").lower()
           if len(expected)!=64 or actual!=expected:
@@ -178,6 +178,12 @@ jobs:
               raise SystemExit("BLOCKED: Android WebView DiaryAppActions bridge registration is missing")
           if "fun openDocument(base64: String, fileName: String, mimeType: String)" not in kotlin or "androidx.core.content.FileProvider.getUriForFile" not in kotlin or "Intent.ACTION_VIEW" not in kotlin or "ClipData.newUri(contentResolver, safeName, contentUri)" not in kotlin:
               raise SystemExit("BLOCKED: native My Documents FileProvider viewer handoff is missing")
+          if "fun saveMemoryImage(base64: String, fileName: String, mimeType: String)" not in kotlin or "android.provider.MediaStore.Downloads.EXTERNAL_CONTENT_URI" not in kotlin or "MediaStore.MediaColumns.RELATIVE_PATH" not in kotlin:
+              raise SystemExit("BLOCKED: My Memories native Downloads-folder save bridge is missing")
+          if "bridge.saveMemoryImage(base64" not in generated_html or "kind==='memories'" not in generated_html or "reader.readAsDataURL(record.fileBlob)" not in generated_html:
+              raise SystemExit("BLOCKED: My Memories Download button is not connected to the native Downloads save bridge")
+          if "meFeatureContent.appendChild(meFeatureTools(kind));meFeatureContent.appendChild(meFeatureForm(kind))" not in generated_html:
+              raise SystemExit("BLOCKED: My Memories search bar must appear before the entry form")
           if "val chooser = Intent.createChooser(viewIntent, \"Open document\")" not in kotlin or kotlin.count("clipData = grantClip") < 2 or "val extensionType = android.webkit.MimeTypeMap.getSingleton()" not in kotlin:
               raise SystemExit("BLOCKED: PDF/Office viewer chooser must carry its own read grant and extension-based MIME type")
           if "android.graphics.BitmapFactory.decodeFile" not in kotlin or "android.widget.ImageView.ScaleType.FIT_CENTER" not in kotlin or 'resolvedType.startsWith("image/")' not in kotlin:
@@ -311,7 +317,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved next Diary version 1.0.161 (versionCode 160)
+      - name: Set approved next Diary version 1.0.162 (versionCode 160)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
@@ -319,12 +325,12 @@ jobs:
           from pathlib import Path
           p = Path("app/build.gradle.kts")
           s = p.read_text(encoding="utf-8")
-          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 160', s, count=1)
-          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.161"', s, count=1)
+          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 161', s, count=1)
+          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.162"', s, count=1)
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary versionName=1.0.161, versionCode=160")
+          print("Set Diary versionName=1.0.162, versionCode=160")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -346,10 +352,10 @@ jobs:
           name = one(r'versionName\s*=\s*"([^"]+)"', "versionName")
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
-          if code != 160 or name != "1.0.161":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.161/160, found {name}/{code}")
+          if code != 161 or name != "1.0.162":
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.162/160, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if feed_version not in ((158, "1.0.159"), (159, "1.0.160")):
+          if feed_version not in ((159, "1.0.160"), (160, "1.0.161")):
               raise SystemExit(f"BLOCKED: update feed is neither the installed baseline nor the already-published exact repair release: {feed_version}")
           print(f"PASS: package={package}, repair release={name}/{code}; feed state is approved: {feed_version}")
           PY
@@ -447,7 +453,7 @@ jobs:
           test -s "$APK"
           SHA256="$(sha256sum "$APK" | awk '{print $1}')"
           cp "$APK" /tmp/My-Diary-verified.apk
-          printf '1.0.161\n160\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.162\n160\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -f -B diary-publish-main origin/main
           python3 - <<'PY'
@@ -455,25 +461,25 @@ jobs:
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in ((158, "1.0.159"), (159, "1.0.160")):
+          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in ((159, "1.0.160"), (160, "1.0.161")):
               raise SystemExit(f"BLOCKED: live main feed is neither the installed baseline nor the exact repair release being republished: {feed_version}")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
           meta["packageName"] = "com.personal.diaryapp"
           meta["versionName"] = lines[0]
           meta["versionCode"] = int(lines[1])
-          meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.161.apk"
+          meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.162.apk"
           meta["sha256"] = lines[2]
-          meta["releaseNotes"] = "Fix AndroidX WebMessageListener origin matching for My Documents PDF/photo open; retain native viewer and existing saved records. Existing saved records, file contents, notes, PIN data, reminders, and app identity remain preserved."
+          meta["releaseNotes"] = "Fix My Memories image downloads to the Android Downloads/My Diary folder and show the multi-word search bar at the top. Existing saved images, notes, PIN data, reminders, and app identity remain preserved."
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           cp /tmp/My-Diary-verified.apk My-Diary.apk
-          cp /tmp/My-Diary-verified.apk My-Diary-1.0.161.apk
+          cp /tmp/My-Diary-verified.apk My-Diary-1.0.162.apk
           python3 -m json.tool latest.json >/dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add My-Diary.apk My-Diary-1.0.161.apk latest.json
-          git commit -m "Publish verified My Diary update 1.0.161"
+          git add My-Diary.apk My-Diary-1.0.162.apk latest.json
+          git commit -m "Publish verified My Diary update 1.0.162"
           git push origin HEAD:main
       - name: Upload unsigned Release APK for private owner-side signing
         if: env.DIARY_RELEASE_READY != 'true'

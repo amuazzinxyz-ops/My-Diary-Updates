@@ -1778,7 +1778,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   }
   function meFeatureTools(kind){
    var wrap=mfEl('div',{class:'diary-me-feature-tools'}),search=mfEl('input',{type:'search',class:'diary-me-feature-search','aria-label':mf('search'),placeholder:mf('searchPlaceholder')});
-   meFeatureSearchInput=search;search.addEventListener('input',function(){renderMeFeatureList(kind);});wrap.appendChild(search);
+   meFeatureSearchInput=search;search.addEventListener('input',function(){renderMeFeatureList(kind);});if(kind==='memories'){wrap.style.display='block';wrap.style.width='100%';wrap.style.margin='0 0 12px';search.style.display='block';search.style.width='100%';search.style.minHeight='48px';search.style.boxSizing='border-box';search.style.margin='0 0 8px';}wrap.appendChild(search);
    meFeatureCategoryFilter=null;
    if(kind==='kharcha'){var filter=mfEl('select',{class:'diary-me-feature-category-filter','aria-label':mf('allCategories')});filter.appendChild(mfEl('option',{value:''},mf('allCategories')));meKharchaCategories.forEach(function(item){filter.appendChild(mfEl('option',{value:mf(item.key)},mf(item.key)));});meFeatureCategoryFilter=filter;filter.addEventListener('change',function(){renderMeFeatureList(kind);});wrap.appendChild(filter);}
    if(kind==='kharcha'||kind==='calendar'){var report=mfEl('button',{type:'button',class:'diary-me-feature-report'},mf('report'));report.addEventListener('click',function(){exportMeFeatureReport(kind);});wrap.appendChild(report);}
@@ -1866,7 +1866,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
       }else{
        var url=URL.createObjectURL(record.fileBlob);meFeatureObjectUrls.push(url);
        if(kind==='memories'&&String(record.fileType||'').indexOf('image/')===0){var img=mfEl('img',{class:'diary-me-feature-thumb',alt:record.title||'Memory'});img.src=url;card.appendChild(img);}
-       var link=mfEl('a',{href:url,target:'_blank',rel:'noopener'},mf('open')+' · '+(record.fileName||mf('file')));card.appendChild(link);if(kind==='memories'&&String(record.fileType||'').indexOf('image/')===0){var download=mfEl('a',{href:url,download:String(record.fileName||((record.title||'memory')+'.jpg')),class:'diary-me-feature-edit'},'⬇️ '+(mf('download')||'Download'));download.style.display='inline-flex';download.style.margin='8px 6px 0 0';download.addEventListener('click',function(e){e.stopPropagation();});card.appendChild(download);}
+       var link=mfEl('a',{href:url,target:'_blank',rel:'noopener'},mf('open')+' · '+(record.fileName||mf('file')));card.appendChild(link);if(kind==='memories'&&String(record.fileType||'').indexOf('image/')===0){var download=mfEl('a',{href:url,download:String(record.fileName||((record.title||'memory')+'.jpg')),class:'diary-me-feature-edit'},'⬇️ '+(mf('download')||'Download'));download.style.display='inline-flex';download.style.margin='8px 6px 0 0';download.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(!record.fileBlob){meFeatureStatus.textContent=mf('failed');return;}var reader=new FileReader();reader.onload=function(){try{var dataUrl=String(reader.result||''),comma=dataUrl.indexOf(','),base64=comma>=0?dataUrl.slice(comma+1):'';var bridge=window.DiaryAppActions;if(!base64||!bridge||typeof bridge.saveMemoryImage!=='function'){meFeatureStatus.textContent='Download ke liye My Diary ka naya APK install karein.';return;}var saved=bridge.saveMemoryImage(base64,String(record.fileName||((record.title||'memory')+'.jpg')),String(record.fileType||'image/jpeg'));if(!saved)meFeatureStatus.textContent=mf('failed');else meFeatureStatus.textContent='Photo Downloads folder mein save ho gayi.';}catch(err){meFeatureStatus.textContent=mf('failed');}};reader.onerror=function(){meFeatureStatus.textContent=mf('failed');};reader.readAsDataURL(record.fileBlob);});card.appendChild(download);}
       }
      }
      var del=mfEl('button',{type:'button',class:'diary-me-feature-delete'},'🗑️ '+mf('remove'));
@@ -1884,7 +1884,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    meFeatureTitle.textContent=mf(meFeatureTypes.filter(function(x){return x.id===kind;})[0].key);
    meFeatureBack.textContent=mf('back');meFeatureLock.hidden=true;meFeatureManage.hidden=!meFeatureProtected(kind);meFeatureContent.replaceChildren();meFeatureStatus.textContent='';
    meFeatureSearchInput=null;meFeatureCategoryFilter=null;
-   meFeatureContent.appendChild(meFeatureForm(kind));meFeatureContent.appendChild(meFeatureTools(kind));meFeatureContent.append(meFeatureStatus,meFeatureList);
+   if(kind==='memories'){meFeatureContent.appendChild(meFeatureTools(kind));meFeatureContent.appendChild(meFeatureForm(kind));}else{meFeatureContent.appendChild(meFeatureForm(kind));meFeatureContent.appendChild(meFeatureTools(kind));}meFeatureContent.append(meFeatureStatus,meFeatureList);
    meFeatureModal.hidden=false;mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');
    renderMeFeatureList(kind);
   }
