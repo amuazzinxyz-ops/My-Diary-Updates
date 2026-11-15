@@ -613,10 +613,18 @@ private object DiaryReminderScheduler {
         launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         launch.putExtra("diary_reminder_id", id)
         val content = PendingIntent.getActivity(context, code + 1, launch, pendingFlags())
-        // Brief full-screen handoff wakes the display; the activity exits quickly
-        // so Android can expose the public reminder notification card.
+        // Full-screen reminder surface shows the alert and actions immediately while
+        // the selected-duration wake activity holds the display.
         val wakeIntent = Intent(context, DiaryReminderWakeActivity::class.java).apply {
+            putExtra("diary_reminder_id", id)
+            putExtra("diary_reminder_title", title)
+            putExtra("diary_reminder_details", details)
+            putExtra("diary_reminder_sound_uri", soundUri)
+            putExtra("diary_reminder_snooze_minutes", snoozeMinutes)
+            putExtra("diary_reminder_snooze_limit", snoozeLimit)
+            putExtra("diary_reminder_snooze_used", snoozeUsed)
             putExtra("diary_reminder_ring_duration_seconds", ringDurationSeconds)
+            putExtra("diary_reminder_ring_volume_percent", ringVolumePercent)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_USER_ACTION)
         }
         val wakePending = PendingIntent.getActivity(context, code + 4, wakeIntent, pendingFlags())
@@ -796,6 +804,46 @@ class DiaryReminderSoundService : Service() {
 // content tap remains the sole route into the Diary app.
 // Screen-duration release trigger: wake-only activity holds FLAG_KEEP_SCREEN_ON for the configured ring duration.
 class DiaryReminderWakeActivity : android.app.Activity() {
+    private fun addLine(parent: android.widget.LinearLayout, value: String, size: Float, color: Int, bold: Boolean = false) {
+        val view = android.widget.TextView(this).apply {
+            text = value
+            textSize = size
+            setTextColor(color)
+            gravity = android.view.Gravity.CENTER
+            if (bold) setTypeface(null, android.graphics.Typeface.BOLD)
+            setPadding(8, 10, 8, 10)
+        }
+        parent.addView(view, android.widget.LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT))
+    }
+    private fun actionButton(parent: android.widget.LinearLayout, label: String, color: Int, action: String) {
+        val button = android.widget.Button(this).apply {
+            text = label
+            textSize = 17f
+            setTextColor(android.graphics.Color.WHITE)
+            background = android.graphics.drawable.GradientDrawable().apply { setColor(color); cornerRadius = 24f }
+            setOnClickListener { sendReminderAction(action); finish() }
+        }
+        val params = android.widget.LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT)
+        params.setMargins(4, 8, 4, 8)
+        parent.addView(button, params)
+    }
+    private fun sendReminderAction(action: String) {
+        val id = intent?.getStringExtra("diary_reminder_id") ?: return
+        val actionIntent = Intent(this, DiaryReminderReceiver::class.java).apply {
+            this.action = action
+            data = Uri.parse("mydiary-reminder://wake-action/" + action.substringAfterLast("_").lowercase() + "/" + Uri.encode(id))
+            putExtra("diary_reminder_id", id)
+            putExtra("diary_reminder_title", intent?.getStringExtra("diary_reminder_title") ?: "My Diary Reminder")
+            putExtra("diary_reminder_details", intent?.getStringExtra("diary_reminder_details") ?: "")
+            putExtra("diary_reminder_sound_uri", intent?.getStringExtra("diary_reminder_sound_uri") ?: "")
+            putExtra("diary_reminder_snooze_minutes", intent?.getIntExtra("diary_reminder_snooze_minutes", 10) ?: 10)
+            putExtra("diary_reminder_snooze_limit", intent?.getIntExtra("diary_reminder_snooze_limit", 3) ?: 3)
+            putExtra("diary_reminder_snooze_used", intent?.getIntExtra("diary_reminder_snooze_used", 0) ?: 0)
+            putExtra("diary_reminder_ring_duration_seconds", intent?.getIntExtra("diary_reminder_ring_duration_seconds", 30) ?: 30)
+            putExtra("diary_reminder_ring_volume_percent", intent?.getIntExtra("diary_reminder_ring_volume_percent", 80) ?: 80)
+        }
+        sendBroadcast(actionIntent)
+    }
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O_MR1) {
@@ -803,17 +851,44 @@ class DiaryReminderWakeActivity : android.app.Activity() {
             setTurnScreenOn(true)
         } else {
             @Suppress("DEPRECATION")
-            window.addFlags(
-                android.view.WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
-                android.view.WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
-            )
+            window.addFlags(android.view.WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or android.view.WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
         }
-        // Keep this transparent wake activity alive for the same duration as the
-        // selected ringtone. This keeps the display awake while leaving the keyguard
-        // and its public reminder notification visible underneath.
         window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        val id = intent?.getStringExtra("diary_reminder_id") ?: ""
+        val title = intent?.getStringExtra("diary_reminder_title") ?: "My Diary Reminder"
+        val details = intent?.getStringExtra("diary_reminder_details") ?: ""
+        val snoozeMinutes = (intent?.getIntExtra("diary_reminder_snooze_minutes", 10) ?: 10).coerceIn(2, 30)
+        val snoozeLimit = (intent?.getIntExtra("diary_reminder_snooze_limit", 3) ?: 3).coerceIn(0, 10)
+        val snoozeUsed = (intent?.getIntExtra("diary_reminder_snooze_used", 0) ?: 0).coerceIn(0, snoozeLimit)
         val durationSeconds = (intent?.getIntExtra("diary_reminder_ring_duration_seconds", 30) ?: 30).coerceIn(10, 300)
-        android.os.Handler(mainLooper).postDelayed({ finish() }, durationSeconds * 1000L)
+        val root = android.widget.LinearLayout(this).apply {
+            orientation = android.widget.LinearLayout.VERTICAL
+            gravity = android.view.Gravity.CENTER
+            setPadding(24, 24, 24, 24)
+            setBackgroundColor(android.graphics.Color.argb(205, 8, 18, 30))
+        }
+        val card = android.widget.LinearLayout(this).apply {
+            orientation = android.widget.LinearLayout.VERTICAL
+            gravity = android.view.Gravity.CENTER
+            setPadding(24, 28, 24, 24)
+            background = android.graphics.drawable.GradientDrawable().apply {
+                setColor(android.graphics.Color.rgb(248, 250, 252))
+                cornerRadius = 32f
+                setStroke(3, android.graphics.Color.rgb(194, 151, 55))
+            }
+        }
+        addLine(card, "⏰  MY DIARY REMINDER", 15f, android.graphics.Color.rgb(139, 98, 24), true)
+        addLine(card, title, 25f, android.graphics.Color.rgb(20, 35, 52), true)
+        if (details.isNotBlank()) addLine(card, details, 17f, android.graphics.Color.rgb(55, 65, 81))
+        addLine(card, "Reminder is ringing", 14f, android.graphics.Color.rgb(100, 116, 139))
+        if (snoozeUsed < snoozeLimit) actionButton(card, "Snooze  •  ${snoozeMinutes} min", android.graphics.Color.rgb(35, 105, 83), DiaryReminderScheduler.ACTION_SNOOZE)
+        actionButton(card, "Done  ✓", android.graphics.Color.rgb(155, 45, 52), DiaryReminderScheduler.ACTION_DONE)
+        root.addView(card, android.widget.LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT))
+        setContentView(root)
+        android.os.Handler(mainLooper).postDelayed({
+            if (id.isNotBlank()) (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancel((id.hashCode() and 0x3fffffff) + 10)
+            finish()
+        }, durationSeconds * 1000L)
     }
 }
 """

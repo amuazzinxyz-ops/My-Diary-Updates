@@ -1,3 +1,20 @@
+# Immediate reminder display — APK 1.0.151 in progress (2026-11-15)
+
+- User tested APK 1.0.150 and confirmed the selected screen/ringtone duration now behaves correctly, but the lock-screen notification card only appears after the screen and ringtone turn off.
+- Source inspection: Android launches `.setFullScreenIntent(wakePending, true)` for the reminder. While that full-screen Activity is active, Android presents the Activity instead of its ordinary lock-screen notification card. The notification is posted first, but its visible card is suppressed/covered until the Activity finishes.
+- Approved fix: turn the wake-only Activity into the immediate reminder surface. It displays the reminder title/details and in-screen Snooze/Done actions immediately, while retaining `setShowWhenLocked`, `setTurnScreenOn`, `FLAG_KEEP_SCREEN_ON`, and the selected ringtone-duration timeout. The ordinary notification remains posted for the notification shade; the wake Activity cancels its stale lock-screen card at timeout so it cannot pop up late.
+- Snooze and Done buttons send the same existing receiver actions with the full reminder metadata; they reuse existing Snooze scheduling, repeat limits, Done cancellation and ringtone-stop behavior. No HTML/Web Update, saved Diary data, notes/photos/PIN, app identity, package or signing identity is intentionally changed.
+- Exact pre-edit snapshots are saved on `backup/before-immediate-reminder-display-151-2026-11-15`:
+  - `backups/scripts-add_diary_app_actions.py-before-immediate-reminder-display-151-2026-11-15.txt`
+  - `backups/-github-workflows-build-diary-from-zip-yml-before-immediate-reminder-display-151-2026-11-15.txt`
+  - `backups/latest-json-before-immediate-reminder-display-151-2026-11-15.txt`
+  - `backups/docs-PROJECT_MAP_AND_SECRETS_REGISTER-md-before-immediate-reminder-display-151-2026-11-15.txt`
+- Feature branch: `feature/immediate-reminder-display-151-2026-11-15`. Backup branch: `backup/before-immediate-reminder-display-151-2026-11-15`.
+- Planned APK version 1.0.151 / versionCode 150. Build, signature verification, publication and physical Android test are pending. Do not call the notification timing fixed until the user tests the new APK.
+- Important UI distinction: during ringing, the user sees a native full-screen reminder card with the title/details and Snooze/Done; Android's regular lock-screen notification card itself may remain suppressed by full-screen intent policy. The shade notification remains posted.
+
+---
+
 # Selected-duration reminder screen hold — APK 1.0.150 published (2026-11-15)
 
 - User physically tested APK 1.0.149 with a 20-second ringtone and confirmed the display went dark while the ringtone continued. Waking the display manually stopped the ringtone. Do not mark the device-side issue resolved until the user tests this release.
