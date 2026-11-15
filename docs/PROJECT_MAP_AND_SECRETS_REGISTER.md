@@ -1,3 +1,17 @@
+# My Diary 1.0.164 candidate rejected — wrong bundled HTML detected and build guard corrected (2026-11-15)
+
+- User asked to continue the combined Full Backup/Restore work from PR #75. The existing signed test candidate artifact (Actions run `43725480976`, artifact `14166079074`) was downloaded and inspected before any phone installation or release.
+- Artifact audit found the candidate APK was 19,294,908 bytes. Its `assets/index.html` was 29,097,452 bytes and began with unrelated MUAZZIN project source/comments, not the standalone My Diary page. The APK therefore fails the project boundary and size expectations. **Do not install or publish this candidate.** It was never placed in `latest.json`; production remains APK 1.0.163 / versionCode 162 and Web Update 238.
+- Root cause: the signed-candidate and compile-only workflows extracted the legacy Android ZIP but did not replace its pre-existing `app/src/main/assets/index.html` with the authoritative standalone Diary source. The PR branch's two Diary mirrors are identical at 408,426 characters, but were not copied into the extracted APK project.
+- Minimal workflow correction committed only on PR #75 feature branch:
+  - `.github/workflows/safe-diary-signed-candidate.yml` commit `ac603fec7adbdde6765bc943856696fda88be159`.
+  - `.github/workflows/safe-diary-native-compile.yml` commit `e67c2ccc124550a9f57f2e908f33e9ca6b3c899e`.
+  - Both now explicitly copy `web-source/index.html` into the extracted Android assets before native bridge changes, compare the asset with the authoritative source, reject oversized HTML, and reject MUAZZIN markers.
+- These commits are on the feature branch only; main, live feed, official APK and the separate MUAZZIN project were not changed. Rebuild after the workflow correction and inspect the resulting APK contents/size before offering a test download.
+- Remaining: verify the corrected candidate's `assets/index.html` matches Diary source and contains no MUAZZIN content; confirm signing fingerprint and APK identity; only then ask user to install as an update without uninstalling or clearing data. Device tests for automatic snapshots, newest-30 retention, manual Full Backup, restore including Memories/Documents attachments, existing Notes-only backup, and update-install persistence remain pending. Keep PR #75 open and unmerged until device tests pass and user explicitly approves merge/publication.
+
+---
+
 # My Memories search visibility and download response repair — APK 1.0.163 published; phone test PASS (user-confirmed, 2026-11-15)
 
 - User reported that after APK 1.0.162 the My Memories Search bar was still not visible and tapping Download produced no visible response. Re-inspection found the search field was inserted before the large form, but the Memories screen could retain an old scroll position when reopened; the Download handler wrote its status into the general status area below the large form, so progress/failure/success could remain off-screen.
