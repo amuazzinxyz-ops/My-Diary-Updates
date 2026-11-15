@@ -83,12 +83,42 @@ native = r"""
                 if (!folder.exists() && !folder.mkdirs()) throw java.io.IOException("Cannot create document cache")
                 val document = File(folder, "document-" + System.currentTimeMillis() + "-" + safeName)
                 document.writeBytes(bytes)
-                val contentUri = androidx.core.content.FileProvider.getUriForFile(
-                    this@MainActivity, "$packageName.fileprovider", document
-                )
                 val resolvedType = mimeType.takeIf { it.isNotBlank() && it != "application/octet-stream" }
                     ?: android.webkit.MimeTypeMap.getSingleton().getMimeTypeFromExtension(safeName.substringAfterLast('.', "").lowercase())
                     ?: "*/*"
+                // Open photos directly inside My Diary so gallery apps that reject FileProvider
+                // URIs cannot leave the user with a non-responsive document tap.
+                if (resolvedType.startsWith("image/") && resolvedType != "image/gif") {
+                    val bounds = android.graphics.BitmapFactory.Options().apply { inJustDecodeBounds = true }
+                    android.graphics.BitmapFactory.decodeFile(document.absolutePath, bounds)
+                    if (bounds.outWidth <= 0 || bounds.outHeight <= 0) throw Exception("Invalid image")
+                    val maxSide = 2400
+                    var sample = 1
+                    while (bounds.outWidth / sample > maxSide || bounds.outHeight / sample > maxSide) sample *= 2
+                    val bitmap = android.graphics.BitmapFactory.decodeFile(
+                        document.absolutePath,
+                        android.graphics.BitmapFactory.Options().apply { inSampleSize = sample }
+                    ) ?: throw Exception("Image decode failed")
+                    val imageView = android.widget.ImageView(this@MainActivity).apply {
+                        setImageBitmap(bitmap)
+                        scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
+                        adjustViewBounds = true
+                        maxWidth = (resources.displayMetrics.widthPixels * 0.92f).toInt()
+                        maxHeight = (resources.displayMetrics.heightPixels * 0.72f).toInt()
+                        setPadding(12, 12, 12, 12)
+                    }
+                    runOnUiThread {
+                        android.app.AlertDialog.Builder(this@MainActivity)
+                            .setTitle(safeName)
+                            .setView(imageView)
+                            .setPositiveButton("Close", null)
+                            .show()
+                    }
+                    return true
+                }
+                val contentUri = androidx.core.content.FileProvider.getUriForFile(
+                    this@MainActivity, "$packageName.fileprovider", document
+                )
                 val viewIntent = Intent(Intent.ACTION_VIEW).apply {
                     setDataAndType(contentUri, resolvedType)
                     addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
