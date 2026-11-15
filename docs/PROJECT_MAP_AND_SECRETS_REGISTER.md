@@ -1,3 +1,19 @@
+# Screen-awake ringtone playback and adjustable ringtone volume — pending release (2026-11-15)
+
+- User tested APK 1.0.145 / Web Update 234 with a 20-second ringtone: ringtone continued after the screen went dark and stopped only when the screen was manually woken. User also pointed out that the requested in-app volume setting had not been implemented in the previous release.
+- Starting live baseline: APK 1.0.145 / versionCode 144; Web Update 234; source/mirror blob SHA `767632bf8444a7b5ca782e194e8810c5b4e1114b`; live feed reports the matching APK and web hashes recorded in the previous section below.
+- Exact pre-edit full-file backups were created and verified on `backup/before-screen-wake-and-ringtone-volume-2026-11-15` for web source, published mirror, latest.json, Master Register, native patch script and APK build workflow. Do not edit or delete the backup branch.
+- Feature branch: `fix/screen-wake-and-ringtone-volume-2026-11-15`.
+- Web changes: both Personal Calendar and Smart Reminder now expose a ringtone-volume slider from 0% to 100% in 5% steps, default 80%. The value is saved with each record, restored while editing, passed to Android scheduling, shown in saved-entry details, and preserved through Snooze and reboot restoration. Existing records without a saved volume default to 80%.
+- Native changes: Android's dedicated ringtone foreground service now applies the saved per-ringtone volume using `Ringtone.setVolume` on API 28+; older Android versions retain the device alarm-volume behavior. The service acquires a timed `SCREEN_BRIGHT_WAKE_LOCK` for the same configured ringtone duration and releases it when playback ends or the user taps Snooze/Done. Added `WAKE_LOCK` permission. The existing ringtone picker, repeat count, Snooze intervals, notification actions, Calendar recurrence, package identity and signing identity are preserved.
+- Important Android limitation: releasing the timed screen wake lock at the chosen duration returns display control to Android's normal screen-timeout policy. The app does not force-lock the device with Device Admin privileges. Physical testing is required to confirm how the user's phone transitions the display after release; do not claim exact forced screen-off until tested.
+- Planned next APK: 1.0.146 / versionCode 145. Build workflow release guard and web-publisher gate were advanced from the current live baseline 1.0.145/144 and now require the matching signed 1.0.146/145 APK before publishing the web bundle.
+- Static source checks currently confirm: volume setting is exposed in both forms and all ten language dictionaries; record save/edit/reset/list paths include the value; Calendar and Smart Reminder both pass it to the native bridge; native scheduling, persistence, Snooze, reboot restore, notification action and playback service carry it; timed screen wake and `WAKE_LOCK` permission are present; workflow checks include the new behavior.
+- Build, signed certificate verification, publication and physical Android testing are **pending**. Do not publish or claim success until the Android build workflow passes, signed APK certificate matches the trusted existing fingerprint, APK hash matches live latest.json, web source and mirror match, and the user confirms phone testing.
+- Preserve all existing local Diary data, notes, photos, PIN/recovery, Calendar entries, Smart Reminders, recurrence, Snooze/repeat settings and the previous release backup.
+
+---
+
 # Timed ringtone and expanded Snooze options — published APK 1.0.145 and Web Update 234 (2026-11-15)
 
 - User request: in both **Personal Calendar** and **Smart Reminder**, add Snooze intervals 2/5/10/15/20/30 minutes and let the user choose how long the selected ringtone actually plays: 10/20/30 seconds or 1/2/5 minutes.
