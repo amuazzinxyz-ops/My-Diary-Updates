@@ -1,3 +1,15 @@
+# Reminder notification persistence — APK 1.0.152 in progress (2026-11-15)
+
+- User tested APK 1.0.151 and confirmed the reminder title/card remains visible while ringtone and screen are active, but the notification disappears when the selected ringtone/screen duration ends.
+- Source root cause: `DiaryReminderWakeActivity` explicitly canceled the reminder notification at its duration timeout, immediately before finishing the wake screen.
+- Approved correction: the timeout now finishes only the full-screen wake activity. It does not cancel the notification. The reminder notification remains in the notification shade/notification area until the user chooses Snooze or Done; those existing receiver actions continue to cancel it and retain their prior scheduling/stop behavior.
+- The selected screen/ringtone duration, ringtone volume, Snooze intervals/limits, Done action, reminder data, HTML/Web Update, notes/photos/PIN, app package and signing identity are preserved.
+- Exact pre-edit snapshots are saved on `backup/before-reminder-notification-persistence-152-2026-11-15` for the generator, workflow, update feed and this register.
+- Feature branch: `fix-reminder-notification-stays-151-2026-11-15`. Planned release: APK 1.0.152 / versionCode 151. Build, signing verification, publication and physical Android test are pending.
+- Build guard now fails if the wake activity timeout contains notification cancellation. Do not mark device-side behavior fixed until the user tests APK 1.0.152.
+
+---
+
 # Immediate reminder display — APK 1.0.151 in progress (2026-11-15)
 
 - User tested APK 1.0.150 and confirmed the selected screen/ringtone duration now behaves correctly, but the lock-screen notification card only appears after the screen and ringtone turn off.
