@@ -3107,3 +3107,15 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Web update feed is version 237. Its SHA-256 is calculated from the UTF-8 bytes of `web-source/index.html`; source and published mirror are identical. APK remains 1.0.161 / versionCode 160; this is a web-only update, so no APK rebuild was made.
 - Android device verification is still pending. Test partial 2–4 word search and saving the downloaded image to the phone's Downloads/Gallery before marking device behavior verified.
 - Pre-edit snapshots remain on `backup/before-memories-search-download-2026-11-15`.
+
+
+## Check for Update repair — phone-tested Diary 1.0.167 published (2026-11-15)
+
+- User explicitly confirmed PASS after installing and testing the signed 1.0.167 / versionCode 166 candidate.
+- Approved release workflow run #233 (43742278440) completed successfully; signing certificate fingerprint was checked against the established certificate.
+- Published APK: My-Diary-1.0.167.apk and compatibility alias My-Diary.apk; both are 2,027,847 bytes in the main branch. APK SHA-256: ef3655fbbb9f7fb239c2eae57ad303e7d7ac6f44c485493f6a43a03a4ee5c6e4.
+- Live APK URL: https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.167.apk.
+- Live latest.json advertises package com.personal.diaryapp, versionName 1.0.167, versionCode 166, and the matching APK SHA-256 above. The published signed APK was independently extracted from workflow artifact #14173505335 and its SHA-256 matched latest.json exactly.
+- Web Update remains version 238 at web-source/index.html, with SHA-256 00188bc0b173156df29fe1750ce5c71321db27742d14faa16f81465c7092ee5e. The 1.0.167 build embeds the currently published Web Update 238; existing saved Diary data, notes, documents, PIN data, reminders, package identity and signing identity are preserved.
+- Main publication commit: 2745096077fa32c5b44a23185961917c1a38ca4e. Workflow configuration commit: b8536a077a96c1cd3f571b4b9299800c96e9b7a2.
+- User's PASS is recorded as user-reported device verification. No remote access to the user's phone was performed. For future update checks, installed versions below 1.0.167 can receive the APK; version 1.0.167 receives any newer web bundle through the web-update path.
