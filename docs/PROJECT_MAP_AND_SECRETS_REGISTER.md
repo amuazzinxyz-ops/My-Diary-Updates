@@ -1,3 +1,13 @@
+# Direct tap from the welcome screen into My Diary — pending Web Update 230 (2026-11-15)
+
+- User clarified that they are still on the welcome screen and cannot enter the app to reach Me / Check for Updates. The welcome card itself must directly open Diary when tapped.
+- Checked live Web Update 229. `#diaryMyNotesEntry` was the button, but the action was bound to that button. To make the entire visible welcome entry area a direct tap target, moved the action to its parent `#diaryHomeEntryHost` using a single `onclick` handler; the card button no longer needs its own click handler. Added pointer cursor and mobile touch-action styling to the host. The action calls the existing `openOverlay()` function, which preserves the current PIN unlock flow.
+- The one purple/gold 3D card, visible label/language, layout, notes/photos, local storage, PIN/recovery, reminders, and all other app behavior are unchanged. No APK/source Android changes.
+- Pre-edit backups on `backup/before-direct-welcome-card-entry-2026-11-15` were re-fetched and verified byte-identical for web source, mirror, latest feed, and this register.
+- Static validation before publish: host click action must exist once, button handler removed, host/card IDs and 3D CSS retained, `openOverlay()` still routes to existing PIN unlock or Diary panel. After publish verify web source/mirror equality and latest feed webVersion/hash. Device tap remains pending user confirmation.
+
+---
+
 # Restore the visible welcome card's Diary tap action — published Web Update 229 (2026-11-15)
 
 - User reported that the one visible welcome card did not open Diary when tapped. Apologized and checked the live Web Update 228 source before changing anything.
