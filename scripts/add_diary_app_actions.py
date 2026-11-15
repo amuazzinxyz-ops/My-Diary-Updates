@@ -613,13 +613,6 @@ private object DiaryReminderScheduler {
         launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         launch.putExtra("diary_reminder_id", id)
         val content = PendingIntent.getActivity(context, code + 1, launch, pendingFlags())
-        val wakeIntent = Intent(context, DiaryReminderWakeActivity::class.java).apply {
-            action = "com.personal.diaryapp.action.REMINDER_WAKE_SCREEN"
-            data = Uri.parse("mydiary-reminder://wake/" + Uri.encode(id))
-            putExtra("diary_reminder_id", id)
-            putExtra("diary_reminder_ring_duration_seconds", ringDurationSeconds)
-        }
-        val wakePending = PendingIntent.getActivity(context, code + 4, wakeIntent, pendingFlags())
         fun actionIntent(action: String, suffix: String): PendingIntent {
             val actionIntent = Intent(context, DiaryReminderReceiver::class.java).apply {
                 this.action = action
@@ -644,7 +637,7 @@ private object DiaryReminderScheduler {
             .setStyle(Notification.BigTextStyle().bigText(body))
             .setSound(null, alarmAttributes)
             .setContentIntent(content)
-            .setFullScreenIntent(wakePending, true)
+            .setVisibility(Notification.VISIBILITY_PUBLIC)
             .setAutoCancel(true)
             .setPriority(Notification.PRIORITY_HIGH)
             .setCategory(Notification.CATEGORY_ALARM)
