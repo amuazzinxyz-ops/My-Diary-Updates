@@ -799,10 +799,10 @@ class DiaryReminderSoundService : Service() {
     }
 }
 
-// This dedicated transparent activity wakes the display over the keyguard only.
+// This dedicated full-screen activity displays the reminder over the keyguard.
 // It never opens MainActivity or unlocks the phone; the notification's normal
 // content tap remains the sole route into the Diary app.
-// Screen-duration release trigger: wake-only activity holds FLAG_KEEP_SCREEN_ON for the configured ring duration.
+// Screen-duration release trigger: reminder activity holds FLAG_KEEP_SCREEN_ON for the configured ring duration.
 class DiaryReminderWakeActivity : android.app.Activity() {
     private fun addLine(parent: android.widget.LinearLayout, value: String, size: Float, color: Int, bold: Boolean = false) {
         val view = android.widget.TextView(this).apply {
@@ -854,7 +854,6 @@ class DiaryReminderWakeActivity : android.app.Activity() {
             window.addFlags(android.view.WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or android.view.WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
         }
         window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        val id = intent?.getStringExtra("diary_reminder_id") ?: ""
         val title = intent?.getStringExtra("diary_reminder_title") ?: "My Diary Reminder"
         val details = intent?.getStringExtra("diary_reminder_details") ?: ""
         val snoozeMinutes = (intent?.getIntExtra("diary_reminder_snooze_minutes", 10) ?: 10).coerceIn(2, 30)
@@ -885,8 +884,9 @@ class DiaryReminderWakeActivity : android.app.Activity() {
         actionButton(card, "Done  ✓", android.graphics.Color.rgb(155, 45, 52), DiaryReminderScheduler.ACTION_DONE)
         root.addView(card, android.widget.LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT))
         setContentView(root)
+        // End only the wake screen at the selected ring duration. Keep the
+        // reminder notification posted until the user taps Done or Snooze.
         android.os.Handler(mainLooper).postDelayed({
-            if (id.isNotBlank()) (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancel((id.hashCode() and 0x3fffffff) + 10)
             finish()
         }, durationSeconds * 1000L)
     }
