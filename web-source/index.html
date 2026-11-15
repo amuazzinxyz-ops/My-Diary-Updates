@@ -1624,7 +1624,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     expenseAmount=mfField(form,mf('expenseAmount'),'number','expenseAmount',true);expenseAmount.min='0';expenseAmount.step='0.01';expenseAmount.placeholder=mf('expenseAmountPlaceholder');expenseAmount.inputMode='decimal';expenseAmount.setAttribute('aria-label',mf('expenseAmount'));expenseAmount.classList.add('diary-me-feature-amount-input');
     category=mfField(form,mf('category'),'text','category',false);category.setAttribute('list','diaryMeKharchaCategories');var categoryList=mfEl('datalist',{id:'diaryMeKharchaCategories'});meKharchaCategories.forEach(function(item){categoryList.appendChild(mfEl('option',{value:mf(item.key)}));});form.appendChild(categoryList);details=mfField(form,mf('details'),'text','details',false);
    }else if(kind==='documents'){
-    title=mfField(form,mf('title'),'text','title',true);file=mfField(form,mf('file'),'file','file',true);
+    title=mfField(form,mf('title'),'text','title',true);file=mfField(form,mf('file'),'file','file',true);file.accept='*/*';
    }else{
     title=mfField(form,mf('title'),'text','title',true);date=mfField(form,mf('date'),'date','date',true);details=mfField(form,mf('details'),'text','details',false);file=mfField(form,mf('photo'),'file','photo',false);
    }
@@ -1848,7 +1848,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
           var dataUrl=String(reader.result||''),base64=dataUrl.indexOf(',')>=0?dataUrl.substring(dataUrl.indexOf(',')+1):'';
           if(!base64)throw new Error('Empty document');
           var accepted=bridge.openDocument(base64,String(record.fileName||'document'),String(record.fileType||'application/octet-stream'));
-          meFeatureStatus.textContent=accepted?mf('saved'):mf('failed');
+          meFeatureStatus.textContent=accepted?'':mf('failed');
          }catch(error){meFeatureStatus.textContent=mf('failed');}
          openDoc.disabled=false;
         };
