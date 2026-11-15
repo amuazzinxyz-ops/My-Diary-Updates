@@ -151,8 +151,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    <option value="telugu">తెలుగు</option>
   </select>
  </div>
-</main>
 <div id="diaryHomeEntryHost" aria-label=""></div>
+</main>
 <style id="v134-me-compact-buttons-left-text">
 /* Compact both Me-menu buttons; preserve their vertical order and menu position. */
 #diaryDiaryMePanel #diaryDiaryFontLabel,
@@ -3324,6 +3324,57 @@ body[data-diary-interface-theme]:not([data-diary-interface-theme="blue"]):not([d
 #diaryDiaryMePanel .diary-language{display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;gap:6px!important;width:100%!important;margin:0 0 7px!important;padding:8px!important;box-sizing:border-box!important;border:1px solid #d4af37!important;border-radius:10px!important;background:#fff!important}
 #diaryDiaryMePanel .diary-language label{font-size:14px!important;font-weight:900!important;color:#50317b!important;text-align:left!important}
 #diaryDiaryMePanel .diary-language select{display:block!important;width:100%!important;min-height:42px!important;box-sizing:border-box!important}
+</style>
+
+<style id="diary-single-3d-welcome-card">
+/* One unified welcome card: the Diary heading and its existing open button share one raised surface. */
+body{background:radial-gradient(ellipse at 50% 12%,#fff 0%,#f5edff 42%,#e8dcf8 100%)!important}
+.diary-home{
+  position:relative!important;
+  isolation:isolate!important;
+  overflow:hidden!important;
+  width:min(100%,480px)!important;
+  max-width:480px!important;
+  margin:clamp(22px,9vh,76px) auto 0!important;
+  padding:30px 20px 22px!important;
+  border:3px solid #7540b8!important;
+  border-radius:28px!important;
+  background:linear-gradient(145deg,#fffefa 0%,#f6efff 52%,#fff 100%)!important;
+  box-shadow:inset 0 2px 0 #fff, inset 0 -3px 0 #e4d5f4, 0 4px 0 #4c247c, 0 8px 0 #d4af37, 0 15px 28px rgba(54,30,82,.22)!important;
+}
+.diary-home:before{
+  content:""!important;
+  position:absolute!important;
+  z-index:-1!important;
+  top:0!important;left:14%!important;right:14%!important;
+  height:5px!important;
+  border-radius:0 0 8px 8px!important;
+  background:linear-gradient(90deg,#d4af37,#fff1b7,#d4af37)!important;
+}
+.diary-mark{font-size:52px!important;line-height:1.12!important;filter:drop-shadow(0 4px 2px rgba(50,25,75,.24))!important}
+.diary-home h1{margin:10px 0 5px!important;font-size:30px!important;font-weight:1000!important;letter-spacing:.2px!important;color:#4b267c!important;text-shadow:0 1px 0 #fff,0 2px 0 #d7c4ed,0 4px 0 #b79bd7,0 6px 9px rgba(47,25,76,.2)!important}
+.diary-home p{margin:0 0 9px!important;font-size:13px!important;font-weight:900!important;color:#655078!important;text-shadow:0 1px 0 #fff,0 2px 0 #ded2ef,0 4px 6px rgba(47,25,76,.16)!important}
+#diaryHomeEntryHost{display:flex!important;justify-content:center!important;width:100%!important;max-width:none!important;margin:15px auto 0!important}
+#diaryMyNotesEntry{
+  display:flex!important;
+  width:100%!important;max-width:100%!important;
+  min-height:78px!important;height:auto!important;
+  margin:0!important;padding:9px 8px!important;
+  border:0!important;border-radius:14px!important;
+  background:transparent!important;
+  color:#4a2674!important;
+  box-shadow:none!important;
+  text-shadow:0 1px 0 #fff,0 2px 0 #d8c7ea!important;
+}
+#diaryMyNotesEntry .diary-more-icon{font-size:30px!important;filter:drop-shadow(0 3px 2px rgba(50,25,75,.25))!important}
+#diaryMyNotesEntryTitle{font-size:19px!important;font-weight:1000!important;color:#4b267c!important}
+#diaryMyNotesEntrySub{font-size:12px!important;font-weight:800!important;color:#66527b!important}
+#diaryMyNotesEntry:active{transform:translateY(2px)!important;background:rgba(117,64,184,.07)!important;box-shadow:none!important}
+@media(max-width:420px){
+  .diary-home{margin-top:clamp(18px,7vh,54px)!important;padding:25px 15px 17px!important;border-radius:24px!important}
+  .diary-mark{font-size:48px!important}
+  .diary-home h1{font-size:27px!important}
+}
 </style>
 </body>
 </html>
