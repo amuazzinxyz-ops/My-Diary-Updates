@@ -1,3 +1,14 @@
+# My Diary 1.0.159 APK filename publication correction — rebuild required (2026-11-15)
+
+- APK 1.0.159 / versionCode 158 compiled and signed successfully in Actions run 43711555397; all build steps passed.
+- Final feed/file audit found the workflow metadata pointed to `My-Diary-1.0.159.apk` but the publish step copied the signed APK as `My-Diary-1.0.158.apk`. This would make the versioned download URL fail even though the stable APK path was updated.
+- Corrected workflow to publish `My-Diary-1.0.159.apk` and add that exact filename to the commit. Stable `My-Diary.apk` is also retained.
+- Backup branch: `backup/before-159-apk-filename-correction-2026-11-15`. Fix branch: `fix/159-published-apk-filename-2026-11-15`.
+- Rebuild and live feed / APK SHA-256 / exact URL verification are pending. Do not send a download link until the published versioned file exists and its SHA-256 matches `latest.json`.
+- The prior public-bridge correction and its verification guard remain in the merged workflow. Do not claim real-device PDF/photo testing has happened.
+
+---
+
 # My Documents native bridge visibility correction — APK 1.0.159 in progress (2026-11-15)
 
 - User tested APK 1.0.158 and reported tapping Open for both PDF and photo files produces no visible response.
