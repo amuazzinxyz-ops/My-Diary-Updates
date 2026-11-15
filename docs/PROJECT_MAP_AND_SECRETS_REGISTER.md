@@ -1,3 +1,13 @@
+# APK 1.0.158 publish-guard correction — build retry required (2026-11-15)
+
+- First build run #221 (commit `f23498f27815447124ecb934bcf3fd8394b61ed1`) passed source/version guards, debug build and signed release build configuration, but failed at the publication step before changing `latest.json`.
+- Log inspection found stale hard-coded values in the publish script: it still expected feed baseline 1.0.156/155 and still wrote APK version 1.0.157/156. The live feed is correctly 1.0.157/156, so the guard safely stopped publication. No incorrect APK was published and the current update feed remains unchanged.
+- Minimal workflow correction: publish script now expects live feed 1.0.157/156 and publishes APK 1.0.158/157 with filename `My-Diary-1.0.158.apk`. Build baseline/source guards already targeted this same version.
+- Feature code remains merged: PDF and photo Android View creation/display moved to the main UI thread. Backup branch `backup/before-document-viewer-ui-thread-fix-2026-11-15` retains the pre-change snapshot. New publish-guard repair branch: `fix/publish-guard-158-2026-11-15`.
+- New build and signing/publication verification are pending. Do not tell the user to update until `latest.json`, APK checksum and signed artifact are verified. Physical phone test remains pending.
+
+---
+
 # My Documents PDF and photo viewer UI-thread repair — APK 1.0.158 in progress (2026-11-15)
 
 - User reported that My Documents PDF and photo files still do not open. Re-inspection of the 1.0.157 native bridge found the root cause: `@JavascriptInterface openDocument()` runs on a WebView bridge/background thread, but both viewer branches were constructing Android Views (and the PDF dialog) on that non-UI thread. This can throw a CalledFromWrongThreadException before a viewer appears.
