@@ -2200,7 +2200,16 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  }
  function turnDiaryLockOff(){
   var current=localStorage.getItem(DIARY_MASTER_PIN_KEY)||'';
-  if(!current){var noLockStatus=document.getElementById('diaryMyNotesStatus');if(noLockStatus)noLockStatus.textContent=t('diaryNoLock');return;}
+  if(!current){
+   var noLockShade=document.getElementById('diaryDiaryLockOffShade');if(noLockShade&&noLockShade.parentNode)noLockShade.parentNode.removeChild(noLockShade);
+   noLockShade=el('div',{id:'diaryDiaryLockOffShade'});
+   noLockShade.style.cssText='position:fixed;inset:0;z-index:2147483647;background:rgba(20,10,35,.86);display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;';
+   var noLockBox=el('section');noLockBox.style.cssText='width:min(340px,100%);box-sizing:border-box;padding:22px 18px;border-radius:18px;text-align:center;background:linear-gradient(145deg,#fff,#f0e8ff);border:3px solid #d4af37;box-shadow:inset 0 2px 0 #fff,0 5px 0 #9b7415,0 14px 35px rgba(0,0,0,.4);';
+   var noLockMessage=el('strong',null,t('diaryNoLock'));noLockMessage.style.cssText='display:block;font-size:18px;line-height:1.45;font-weight:900;color:#4b287e;margin:0 0 16px;';
+   var noLockClose=el('button',{type:'button'},t('closeLabel'));noLockClose.style.cssText='width:100%;padding:11px;border:1px solid #8b5acb;border-radius:10px;background:#eee5ff;color:#4b287e;font-weight:900;';
+   noLockClose.addEventListener('click',function(){if(noLockShade.parentNode)noLockShade.parentNode.removeChild(noLockShade);});
+   noLockBox.appendChild(noLockMessage);noLockBox.appendChild(noLockClose);noLockShade.appendChild(noLockBox);document.body.appendChild(noLockShade);return;
+  }
   var previous=document.getElementById('diaryDiaryLockOffShade');if(previous&&previous.parentNode)previous.parentNode.removeChild(previous);
   var shade=el('div',{id:'diaryDiaryLockOffShade'});
   shade.style.cssText='position:fixed;inset:0;z-index:2147483647;background:rgba(20,10,35,.86);display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;';
