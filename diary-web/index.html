@@ -1844,6 +1844,12 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      if(kind==='memories'&&record.details)card.appendChild(mfEl('p',{},record.details));
      if(record.fileBlob){
       if(kind==='documents'){
+       var documentImagePreview=null;
+       if(String(record.fileType||'').toLowerCase().indexOf('image/')===0){
+        var documentImageUrl=URL.createObjectURL(record.fileBlob);meFeatureObjectUrls.push(documentImageUrl);
+        documentImagePreview=mfEl('img',{class:'diary-me-feature-thumb',alt:record.title||record.fileName||'Document image'});
+        documentImagePreview.src=documentImageUrl;documentImagePreview.style.cursor='zoom-in';
+       }
        var openDoc=mfEl('button',{type:'button',class:'diary-me-feature-edit'},'📄 '+mf('open')+' · '+(record.fileName||mf('file')));
        openDoc.addEventListener('click',function(){
         var bridge=window.DiaryAppActions;
@@ -1869,6 +1875,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
         reader.onerror=function(){meFeatureStatus.textContent=mf('failed');openDoc.disabled=false;};
         try{reader.readAsDataURL(record.fileBlob);}catch(error){meFeatureStatus.textContent=mf('failed');openDoc.disabled=false;}
        });
+       if(documentImagePreview){documentImagePreview.addEventListener('click',function(){openDoc.click();});card.appendChild(documentImagePreview);}
        card.appendChild(openDoc);
       }else{
        var url=URL.createObjectURL(record.fileBlob);meFeatureObjectUrls.push(url);
