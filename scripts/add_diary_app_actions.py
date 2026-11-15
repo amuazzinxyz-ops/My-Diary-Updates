@@ -83,8 +83,12 @@ native = r"""
                 if (!folder.exists() && !folder.mkdirs()) throw java.io.IOException("Cannot create document cache")
                 val document = File(folder, "document-" + System.currentTimeMillis() + "-" + safeName)
                 document.writeBytes(bytes)
-                val resolvedType = mimeType.takeIf { it.isNotBlank() && it != "application/octet-stream" }
-                    ?: android.webkit.MimeTypeMap.getSingleton().getMimeTypeFromExtension(safeName.substringAfterLast('.', "").lowercase())
+                // Prefer the actual filename extension over a picker-supplied generic or
+                // vendor MIME type so Android can match the installed PDF/Office viewer.
+                val extensionType = android.webkit.MimeTypeMap.getSingleton()
+                    .getMimeTypeFromExtension(safeName.substringAfterLast('.', "").lowercase())
+                val resolvedType = extensionType
+                    ?: mimeType.takeIf { it.isNotBlank() && it != "application/octet-stream" }
                     ?: "*/*"
                 // Open photos directly inside My Diary so gallery apps that reject FileProvider
                 // URIs cannot leave the user with a non-responsive document tap.
@@ -119,18 +123,26 @@ native = r"""
                 val contentUri = androidx.core.content.FileProvider.getUriForFile(
                     this@MainActivity, "$packageName.fileprovider", document
                 )
+                val readGrant = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                val grantClip = android.content.ClipData.newUri(contentResolver, safeName, contentUri)
                 val viewIntent = Intent(Intent.ACTION_VIEW).apply {
                     setDataAndType(contentUri, resolvedType)
-                    // Explicit ClipData carries the FileProvider read grant through Android's chooser
-                    // to PDF/Office viewers that do not inspect data-only URI grants.
-                    clipData = android.content.ClipData.newUri(contentResolver, safeName, contentUri)
-                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    clipData = grantClip
+                    addFlags(readGrant)
+                }
+                // Put the same URI grant on the chooser wrapper as well as its target
+                // intent. Some Android 13–15 chooser implementations otherwise drop
+                // the FileProvider grant before handing the document to the viewer.
+                val chooser = Intent.createChooser(viewIntent, "Open document").apply {
+                    clipData = grantClip
+                    addFlags(readGrant)
                 }
                 runOnUiThread {
                     try {
-                        startActivity(Intent.createChooser(viewIntent, "Open document"))
-                    } catch (_: Exception) {
-                        Toast.makeText(this@MainActivity, "Is file ko kholne ke liye compatible PDF ya document viewer install karein.", Toast.LENGTH_LONG).show()
+                        startActivity(chooser)
+                    } catch (error: Exception) {
+                        android.util.Log.e("MyDiaryDocuments", "Unable to launch document viewer", error)
+                        Toast.makeText(this@MainActivity, "Document viewer nahi khul saka. File type ya viewer check karein.", Toast.LENGTH_LONG).show()
                     }
                 }
                 true
