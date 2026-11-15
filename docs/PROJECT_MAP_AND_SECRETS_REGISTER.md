@@ -3028,3 +3028,14 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Code inspection found the AndroidX WebMessageListener already has an origin allowlist for `https://appassets.androidplatform.net`, but its callback redundantly compares `sourceOrigin.toString()` to a string. This brittle string comparison can reject the allowed origin representation and silently drop the Open request. Change callback validation to compare `sourceOrigin.scheme` and `sourceOrigin.host` while retaining the allowlist and main-frame check.
 - Next target: My Diary `1.0.161`, versionCode `160`; publisher guard advances from live `1.0.160/159` only. No change to IndexedDB documents, file contents, PIN, notes, reminders, package/signing identity, or native PDF/photo rendering.
 - Do not publish or claim success until build, signed APK, feed SHA-256, and APK bytes are verified. Physical device test remains required after user installs it.
+
+
+## My Documents origin-check correction — APK 1.0.161 published and verified (2026-11-15)
+
+- PR #69 merged as `fd73221dc3890f69dcbff2c573d160a6dc981c95`; build workflow run #227 (`43713843433`) completed successfully.
+- Release: My Diary `1.0.161`, versionCode `160`, package `com.personal.diaryapp`; APK filename `My-Diary-1.0.161.apk`.
+- Published APK URL: `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.161.apk`.
+- Live feed SHA-256: `cf3e760f77f3b7bbb5df2bdf5ac3f1a12cc2d99522dea42258ac21485ed90d1c`. Independently extracted signed-release APK artifact size 2,025,736 bytes and computed SHA-256 exactly matches the feed. Main branch Git tree confirms the exact APK path and size.
+- Correction: WebMessageListener callback validates HTTPS scheme and `appassets.androidplatform.net` host rather than brittle exact `sourceOrigin.toString()` comparison. The WebMessageListener origin allowlist and main-frame check remain in place.
+- Build, signed APK, feed publication, APK artifact SHA-256, and main branch APK path are verified. Physical device test is still pending: user must install 1.0.161 and test both an image and PDF in My Documents. Do not claim device-side success until user confirms.
+- Backup branch: `backup/before-161-origin-check-fix-2026-11-15`.
