@@ -3095,3 +3095,14 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Web update feed is version 237. Its SHA-256 is calculated from the UTF-8 bytes of `web-source/index.html`; source and published mirror are identical. APK remains 1.0.161 / versionCode 160; this is a web-only update, so no APK rebuild was made.
 - Android device verification is still pending. Test partial 2–4 word search and saving the downloaded image to the phone's Downloads/Gallery before marking device behavior verified.
 - Pre-edit snapshots remain on `backup/before-memories-search-download-2026-11-15`.
+
+
+## Combined Diary data backup/restore — implementation branch (2026-11-15)
+
+- User requirement: prevent Notes, My Memories photos/PDFs, and My Documents files from silently disappearing during app updates or restore operations. Existing Notes-only Backup/Restore must remain intact and compatible.
+- Safety branch: `backup/before-data-protection-work-2026-11-15`; implementation branch: `fix/full-diary-data-protection-2026-11-15`.
+- Added separate **Teeno ka Full Backup** and **Full Backup Restore** controls beside the existing Notes-only Backup/Restore controls. Existing Notes-only export/import functions were not replaced.
+- Full backup format v2 includes Notes, the current Notes trash list, every My Memories record with its original `fileBlob` encoded as a data URL, and every My Documents record with its original `fileBlob` encoded as a data URL. Backup creation stops if a photo/PDF's original bytes are unavailable; it must not silently produce an incomplete attachment backup.
+- Full restore validates the complete file structure and attachment data before writing. It merges records by ID and does not overwrite existing records; it does not clear either IndexedDB database. Existing local Notes and trash records are retained.
+- `web-source/index.html` and `diary-web/index.html` are identical on the implementation branch. The branch is six commits ahead of main and has no changes to `latest.json`, APK, package identity, signing identity, or Android native code.
+- **Status: implementation only; not yet built, merged, published, or phone-tested.** This is a manual full backup/restore layer, not yet an automatic background copy to Downloads. Never claim protection against uninstall/app-data clearing until an external automatic backup and restore flow is implemented and tested. Do not publish until backup/restore logic is validated and the update build/feed checks pass.
