@@ -2282,15 +2282,17 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     ctx.direction=fieldStyle.direction|| (rtl?'rtl':'ltr');ctx.textAlign=align;ctx.textBaseline='top';
     var indent=(Number(fieldStyle.textIndent)||0)*scale;
     tx=align==='right'?x+w-insetR-indent:align==='center'?x+w/2:x+insetL+indent;
-    ty=isTitle?y+Math.max(8,(h-lineH)/2):y+(Number(fieldStyle.paddingTop)||12)*scale;
+    var lineTextOffset=Math.max(0,(lineH-size)/2);
+    ty=isTitle?y+Math.max(8,(h-lineH)/2)+lineTextOffset:y+(Number(fieldStyle.paddingTop)||12)*scale+lineTextOffset;
    }else{
+    if('letterSpacing' in ctx)ctx.letterSpacing='0px';
     size=isTitle?58:43;lineH=size*1.35;insetL=insetR=42;align=rtl?'right':'left';
     ctx.font='900 '+size+'px Arial, sans-serif';ctx.direction=rtl?'rtl':'ltr';ctx.textAlign=align;ctx.textBaseline='top';
     tx=rtl?x+w-insetR:x+insetL;ty=isTitle?y+Math.max(14,(h-lineH*3)/2):y+28;
    }
    ctx.fillStyle=fieldStyle&&fieldStyle.color?fieldStyle.color:'#fff';ctx.shadowColor='#000';ctx.shadowBlur=5;ctx.shadowOffsetX=1;ctx.shadowOffsetY=1;
    var maxWidth=Math.max(20,w-insetL-insetR),lines=wrapLines(ctx,value,maxWidth);
-   if(fieldStyle&&isTitle)ty=y+Math.max(8,(h-lines.length*lineH)/2);
+   if(fieldStyle&&isTitle)ty=y+Math.max(8,(h-lines.length*lineH)/2)+Math.max(0,(lineH-size)/2);
    if(!fieldStyle&&isTitle){var legacyTotal=lines.length*lineH;ty=y+Math.max(14,(h-legacyTotal)/2);}
    lines.forEach(function(line){ctx.fillText(line,tx,ty);if(fieldStyle&&fieldStyle.textDecoration==='underline'){var lw=ctx.measureText(line).width,ux=align==='right'?tx-lw:align==='center'?tx-lw/2:tx;ctx.beginPath();ctx.moveTo(ux,ty+lineH*.9);ctx.lineTo(ux+lw,ty+lineH*.9);ctx.lineWidth=Math.max(1,size/16);ctx.strokeStyle=fieldStyle.color||'#fff';ctx.stroke();}ty+=lineH;});
    ctx.restore();ctx.strokeStyle=pamphlet?pamphlet.border:'#d7b64e';ctx.lineWidth=pamphlet?7:5;ctx.beginPath();ctx.roundRect(x,y,w,h,26);ctx.stroke();if(pamphlet){ctx.strokeStyle=pamphlet.accent;ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(x+12,y+12,w-24,h-24,19);ctx.stroke();ctx.font='900 28px Georgia,serif';ctx.fillStyle=pamphlet.accent;ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText(colour.template.indexOf('islamic')>=0?'۞':colour.template.indexOf('floral')>=0?'❀':colour.template.indexOf('nature')>=0?'❧':'✦',x+w/2,y+17);ctx.textBaseline='alphabetic';}
