@@ -96,10 +96,10 @@ jobs:
           import re
           p=Path("app/build.gradle.kts")
           s=p.read_text(encoding="utf-8")
-          s,n=re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 164', s, count=1)
-          if n!=1: raise SystemExit("Could not safely set candidate versionCode 164")
-          s,n=re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.165"', s, count=1)
-          if n!=1: raise SystemExit("Could not safely set candidate versionName 1.0.165")
+          s,n=re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 165', s, count=1)
+          if n!=1: raise SystemExit("Could not safely set candidate versionCode 165")
+          s,n=re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.166"', s, count=1)
+          if n!=1: raise SystemExit("Could not safely set candidate versionName 1.0.166")
           p.write_text(s,encoding="utf-8")
           PY
           cat >> app/build.gradle.kts <<'GRADLE'
@@ -169,7 +169,7 @@ jobs:
       - name: Upload signed candidate only — never publish
         uses: actions/upload-artifact@v4
         with:
-          name: My-Diary-1.0.164-signed-test-candidate
+          name: My-Diary-1.0.166-signed-test-candidate
           path: diary-project/app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
           retention-days: 7
