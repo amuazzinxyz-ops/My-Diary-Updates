@@ -48,10 +48,28 @@ jobs:
         run: |
           mkdir -p diary-project
           unzip -q 'Diary-Android-Project-v13 (6).zip' -d diary-project
+          # Never inherit the unrelated HTML bundled in the old Android ZIP.
+          # The APK must contain only the exact standalone My Diary source.
+          cp web-source/index.html diary-project/app/src/main/assets/index.html
+          cmp -s web-source/index.html diary-project/app/src/main/assets/index.html
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path("diary-project/app/src/main/assets/index.html")
+          data=p.read_bytes()
+          if len(data) > 2_000_000:
+              raise SystemExit(f"BLOCKED: Diary HTML unexpectedly large: {len(data)} bytes")
+          head=data[:4096].decode("utf-8",errors="replace").upper()
+          if "MUAZZIN V" in head or "MUAZZIN SAHEB HTML PROJECT" in head:
+              raise SystemExit("BLOCKED: unrelated MUAZZIN HTML detected in Diary APK asset")
+          if b"<!doctype html>" not in data[:256].lower():
+              raise SystemExit("BLOCKED: APK asset is not the standalone Diary HTML")
+          print(f"PASS: APK asset is standalone My Diary HTML ({len(data)} bytes)")
+          PY
           python3 scripts/add_diary_app_actions.py
           python3 scripts/add_online_diary_updates.py
           python3 scripts/apply_diary_identity.py
-          cmp web-source/index.html diary-web/index.html
+          cmp -s web-source/index.html diary-web/index.html
+          cmp -s web-source/index.html diary-project/app/src/main/assets/index.html
           python3 -m py_compile scripts/add_diary_app_actions.py scripts/add_online_diary_updates.py scripts/apply_diary_identity.py
 
       - name: Set up Java 17
