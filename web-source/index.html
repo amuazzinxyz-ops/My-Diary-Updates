@@ -2939,7 +2939,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     var payload={app:'Diary Saheb My Diary Full Backup',format:'my-diary-full-backup',version:2,exported:new Date().toISOString(),notes:read(),trash:readTrash(),memories:saved[0],documents:saved[1]};
     var json=JSON.stringify(payload);
     if(window.DiaryAppActions&&typeof window.DiaryAppActions.saveBackup==='function'){
-     window.diaryFullBackupSaveResult=function(ok){var elStatus=document.getElementById('diaryMyNotesStatus');if(elStatus)elStatus.textContent=ok?'✅ Full backup file save ho gayi. Downloads/selected folder mein check karein.':'❌ Backup save nahi hua.';};
+     window.diaryBackupSaveResult=function(ok){var elStatus=document.getElementById('diaryMyNotesStatus');if(elStatus)elStatus.textContent=ok?'✅ Full backup file save ho gayi. Ab is file ko Downloads/My Diary mein rakhein.':'❌ Backup save nahi hua.';};
      window.DiaryAppActions.saveBackup(json,'My-Diary-Full-Backup.json');
     }else{
      var blob=new Blob([json],{type:'application/json'}),url=URL.createObjectURL(blob),a=el('a',{href:url,download:'My-Diary-Full-Backup.json'});
