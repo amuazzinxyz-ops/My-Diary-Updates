@@ -142,7 +142,7 @@ jobs:
           SIGNER="$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -1)"
           OUT="$("$SIGNER" verify --verbose --print-certs "$APK")"
           echo "$OUT"
-          ACTUAL="$(echo "$OUT" | sed -nE 's/.*certificate SHA-256 digest: ([0-9a-fA-F]{64}).*/\\1/p' | head -n1 | tr '[:lower:]' '[:upper:]')"
+          ACTUAL="$(printf '%s\n' "$OUT" | awk '/certificate SHA-256 digest:/ {print toupper($NF); exit}')"
           EXPECTED="23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A"
           test "$ACTUAL" = "$EXPECTED"
           rm -f app/diary-release.jks
