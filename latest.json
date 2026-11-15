@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 245,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "f0fe55323d5fe12fe4633dd6b224e6d57ec654baf91adaa1ec7ac4b20e986ee9",
+  "webSha256": "a78af2b9f582d671998106fdc7dc9299ea0c5993a6a7bc7adc007e1feb9b8775",
   "webReleaseNotes": "My Memories duplicate image preview removed. One saved image now displays as a single thumbnail; tapping it opens the existing full-size image viewer. Existing saved data and download action are preserved."
 }
