@@ -3057,3 +3057,13 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Each saved image now retains its existing Open link and also shows a Download link using the original saved filename, with a title-based `.jpg` fallback when no filename exists. No records, blobs, names, or local storage keys are rewritten.
 - This is a source implementation branch only. Build/publish workflow, live `latest.json`, APK/web version and Master Register main branch have not yet been updated. Android WebView/mobile download behavior still requires a published build and user device verification; do not claim it is already working on the phone.
 - Backup branch contains pre-edit snapshots of the web source, mirror, `latest.json`, and this register.
+
+
+## My Memories search and download — published web update (2026-11-15)
+
+- PR #70 merged to `main` as commit `d1c4b811001a03ef3354b7947e54597c819abb95`.
+- My Memories supports partial/multi-word search: all words typed in the search field must occur in the saved record's searchable text, including the saved title and filename. Other sections keep their prior search behavior.
+- Saved image cards retain Open and now include Download using the original filename (title-based `.jpg` fallback only when filename is absent). Saved records and blobs are not migrated or deleted.
+- Web update feed is version 237. Its SHA-256 is calculated from the UTF-8 bytes of `web-source/index.html`; source and published mirror are identical. APK remains 1.0.161 / versionCode 160; this is a web-only update, so no APK rebuild was made.
+- Android device verification is still pending. Test partial 2–4 word search and saving the downloaded image to the phone's Downloads/Gallery before marking device behavior verified.
+- Pre-edit snapshots remain on `backup/before-memories-search-download-2026-11-15`.
