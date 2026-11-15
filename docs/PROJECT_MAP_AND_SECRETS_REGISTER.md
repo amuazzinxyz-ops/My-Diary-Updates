@@ -1,11 +1,14 @@
-# My Documents photo opening — APK 1.0.154 planned (2026-11-15)
+# My Documents photo opening — APK 1.0.154 published (2026-11-15)
 
-- User reported that a document/photo added in My Documents appears in the list but tapping Open does not open it; clarified the affected file is a photo.
-- Source review found the Open button already passes the saved Blob to the Android bridge, but the native bridge always hands the image to an external ACTION_VIEW chooser via FileProvider. Some Android gallery/viewer apps do not handle that handoff reliably.
-- Approved focused fix: image/* files (except GIF) are decoded with BitmapFactory using a downsampled image size and displayed in an in-app, fit-center ImageView dialog with the file name and Close action. Non-image documents and GIF retain the existing external ACTION_VIEW handoff.
-- Preserve My Documents storage, file names, saved records, delete behavior, all Diary features, reminder behavior, package/signing identity and the published HTML unless necessary.
-- Backup branch: `backup/before-my-documents-open-153-2026-11-15`. Feature branch: `fix-my-documents-open-153-clean-2026-11-15`.
-- Build guard checks the generated Android native photo-viewer path. APK 1.0.154 / versionCode 153 is planned; merge, build, signing, publication and device-side test remain pending; live feed baseline is now APK 1.0.153 / versionCode 152. Do not claim device testing until user confirms.
+- User reported that a photo added in My Documents appears in the list but tapping Open does not open it.
+- Root cause: the native bridge always handed image files to an external ACTION_VIEW chooser via FileProvider; some Android gallery/viewer apps do not handle that handoff reliably.
+- Fix: image/* files (except GIF) are decoded with BitmapFactory using a downsampled image size and displayed inside My Diary in a fit-center ImageView dialog with the file name and Close action. Non-image documents and GIF retain the existing external ACTION_VIEW handoff.
+- Preservation: My Documents storage, file names, saved records, delete behavior, other Diary features, reminders, package/signing identity and published HTML remain unchanged.
+- Backup branch: `backup/before-my-documents-open-153-2026-11-15`. Merged feature branch: `fix-my-documents-open-153-clean-2026-11-15`. PR #57 merged as `cd5c0492cd21e5614131ce044fbea7623d8a91e4`.
+- GitHub Actions run #43705047165 completed successfully: debug build, signed Release build, certificate fingerprint verification, APK publication and artifact upload all passed.
+- Published APK: `1.0.154`, versionCode `153`, package `com.personal.diaryapp`; SHA-256 `650c136e3b29e8ed8f7fee1e31f0ebac98db6a22608ae9c667af8bec10b120ef`.
+- Download: https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.154.apk
+- User installation and on-device photo-opening test are still pending. Do not claim device testing until user confirms.
 
 ---
 
