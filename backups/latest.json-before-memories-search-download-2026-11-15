@@ -1,0 +1,14 @@
+{
+  "appName": "My Diary",
+  "packageName": "com.personal.diaryapp",
+  "versionCode": 160,
+  "versionName": "1.0.161",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.161.apk",
+  "sha256": "cf3e760f77f3b7bbb5df2bdf5ac3f1a12cc2d99522dea42258ac21485ed90d1c",
+  "releaseNotes": "Fix AndroidX WebMessageListener origin matching for My Documents PDF/photo open; retain native viewer and existing saved records. Existing saved records, file contents, notes, PIN data, reminders, and app identity remain preserved.",
+  "minimumSupportedVersionCode": 1,
+  "webVersion": 236,
+  "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
+  "webSha256": "df050bf253f643b782284efb93f45c6eb078594cd9d4793755bddbcf8a56bb36",
+  "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
+}
