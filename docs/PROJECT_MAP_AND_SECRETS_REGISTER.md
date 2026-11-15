@@ -2999,3 +2999,13 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Change scope: Android WebView native bridge visibility for My Documents open action; release notes state photo and paginated PDF viewer launch path hardened. Existing local records/data and app identity are to be preserved.
 - Build and feed publication are verified. Physical Android testing is still pending: user must install the update and test opening both a PDF and a photo in My Documents. Do not claim device-side verification until confirmed.
 - Prior safety backup branch remains: `backup/before-159-feed-guard-repair-2026-11-15`.
+
+
+# My Documents PDF/photo open — WebMessageListener repair in progress (2026-11-15)
+
+- User tested the published 1.0.159 APK and confirmed the same My Documents PDF/photo Open-button failure remains. Therefore the earlier public JavaScript-interface visibility change was insufficient; do not describe that repair as successful.
+- Backup branch created before this correction: `backup/before-docs-webmessage-bridge-2026-11-15`.
+- New feature branch: `fix/docs-webmessage-open-2026-11-15`.
+- Corrective approach: route document bytes from the Diary WebView through an origin-restricted AndroidX `WebMessageListener` named `DiaryNativeDocuments`, dispatching to the existing native in-app PDF/photo viewer on a background thread. Retain the existing JavaScript-interface route only as fallback. Keep document records, IndexedDB storage, local notes, photos, PIN data, reminders, package identity, and signing identity unchanged.
+- New release target: My Diary `1.0.160`, versionCode `159`; do not reuse the previous 1.0.159/158 version.
+- Build guard must verify the native listener and the HTML message-channel call before APK compilation/publication. Physical device verification remains pending until the user tests the new APK.

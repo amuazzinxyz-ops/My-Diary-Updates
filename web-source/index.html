@@ -1840,15 +1840,22 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
        var openDoc=mfEl('button',{type:'button',class:'diary-me-feature-edit'},'📄 '+mf('open')+' · '+(record.fileName||mf('file')));
        openDoc.addEventListener('click',function(){
         var bridge=window.DiaryAppActions;
-        if(!bridge||typeof bridge.openDocument!=='function'){meFeatureStatus.textContent=mf('failed');return;}
+        if((!bridge||typeof bridge.openDocument!=='function')&&(!window.DiaryNativeDocuments||typeof window.DiaryNativeDocuments.postMessage!=='function')){meFeatureStatus.textContent=mf('failed');return;}
         openDoc.disabled=true;meFeatureStatus.textContent='…';
         var reader=new FileReader();
         reader.onload=function(){
          try{
           var dataUrl=String(reader.result||''),base64=dataUrl.indexOf(',')>=0?dataUrl.substring(dataUrl.indexOf(',')+1):'';
           if(!base64)throw new Error('Empty document');
-          var accepted=bridge.openDocument(base64,String(record.fileName||'document'),String(record.fileType||'application/octet-stream'));
-          meFeatureStatus.textContent=accepted?'':mf('failed');
+          var documentName=String(record.fileName||'document'),documentType=String(record.fileType||'application/octet-stream');
+          var messageBridge=window.DiaryNativeDocuments;
+          if(messageBridge&&typeof messageBridge.postMessage==='function'){
+           messageBridge.postMessage(JSON.stringify({base64:base64,fileName:documentName,mimeType:documentType}));
+           meFeatureStatus.textContent='';
+          }else{
+           var accepted=bridge.openDocument(base64,documentName,documentType);
+           meFeatureStatus.textContent=accepted?'':mf('failed');
+          }
          }catch(error){meFeatureStatus.textContent=mf('failed');}
          openDoc.disabled=false;
         };

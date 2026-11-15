@@ -1,4 +1,4 @@
-# Release baseline guard: live update feed 1.0.158 / versionCode 157; next APK 1.0.159 / versionCode 158.
+# Release baseline guard: live update feed 1.0.158 / versionCode 157; next APK 1.0.160 / versionCode 159.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -186,6 +186,8 @@ jobs:
               raise SystemExit("BLOCKED: PDF files must open in the in-app paginated PDF viewer")
           if "bridge.openDocument(base64" not in generated_html or "kind==='documents'" not in generated_html:
               raise SystemExit("BLOCKED: My Documents Open button is not connected to the native viewer")
+          if "messageBridge.postMessage(JSON.stringify" not in generated_html or "DiaryNativeDocuments" not in kotlin or "DiaryNativeActions().openDocument(encoded, name, type)" not in kotlin:
+              raise SystemExit("BLOCKED: My Documents Open must use the origin-restricted WebMessageListener channel with native viewer dispatch")
           if "alarm.setAlarmClock(alarmClock, pending)" not in kotlin or "AlarmManager.AlarmClockInfo" not in kotlin:
               raise SystemExit("BLOCKED: AlarmClock scheduling code is missing")
           if "setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP" in kotlin or "setAndAllowWhileIdle(" in kotlin:
@@ -309,7 +311,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved next Diary version 1.0.159 (versionCode 158)
+      - name: Set approved next Diary version 1.0.160 (versionCode 159)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
@@ -317,12 +319,12 @@ jobs:
           from pathlib import Path
           p = Path("app/build.gradle.kts")
           s = p.read_text(encoding="utf-8")
-          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 158', s, count=1)
-          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.159"', s, count=1)
+          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 159', s, count=1)
+          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.160"', s, count=1)
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary versionName=1.0.159, versionCode=158")
+          print("Set Diary versionName=1.0.160, versionCode=159")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -344,8 +346,8 @@ jobs:
           name = one(r'versionName\s*=\s*"([^"]+)"', "versionName")
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
-          if code != 158 or name != "1.0.159":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.159/158, found {name}/{code}")
+          if code != 159 or name != "1.0.160":
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.160/159, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
           if feed_version not in ((157, "1.0.158"), (158, "1.0.159")):
               raise SystemExit(f"BLOCKED: update feed is neither the installed baseline nor the already-published exact repair release: {feed_version}")
@@ -445,7 +447,7 @@ jobs:
           test -s "$APK"
           SHA256="$(sha256sum "$APK" | awk '{print $1}')"
           cp "$APK" /tmp/My-Diary-verified.apk
-          printf '1.0.159\n158\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.160\n159\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -f -B diary-publish-main origin/main
           python3 - <<'PY'
@@ -460,18 +462,18 @@ jobs:
           meta["packageName"] = "com.personal.diaryapp"
           meta["versionName"] = lines[0]
           meta["versionCode"] = int(lines[1])
-          meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.159.apk"
+          meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.160.apk"
           meta["sha256"] = lines[2]
-          meta["releaseNotes"] = "My Documents native bridge visibility corrected; photo and paginated PDF viewer launch path hardened. Existing saved records, file contents, notes, PIN data, reminders, and app identity remain preserved."
+          meta["releaseNotes"] = "My Documents PDF/photo open routed through AndroidX WebMessageListener with native viewer fallback; existing saved records and app identity preserved. Existing saved records, file contents, notes, PIN data, reminders, and app identity remain preserved."
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           cp /tmp/My-Diary-verified.apk My-Diary.apk
-          cp /tmp/My-Diary-verified.apk My-Diary-1.0.159.apk
+          cp /tmp/My-Diary-verified.apk My-Diary-1.0.160.apk
           python3 -m json.tool latest.json >/dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add My-Diary.apk My-Diary-1.0.159.apk latest.json
-          git commit -m "Publish verified My Diary update 1.0.159"
+          git add My-Diary.apk My-Diary-1.0.160.apk latest.json
+          git commit -m "Publish verified My Diary update 1.0.160"
           git push origin HEAD:main
       - name: Upload unsigned Release APK for private owner-side signing
         if: env.DIARY_RELEASE_READY != 'true'
