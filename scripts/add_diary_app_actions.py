@@ -128,6 +128,47 @@ native = r"""
                 false
             }
         }
+        @JavascriptInterface fun saveFullDiaryBackup(content: String): Boolean {
+            return try {
+                if (content.isBlank() || android.os.Build.VERSION.SDK_INT < 29) throw Exception("Automatic backup requires Android 10 or newer")
+                val bytes = content.toByteArray(Charsets.UTF_8)
+                if (bytes.isEmpty() || bytes.size > 150 * 1024 * 1024) throw Exception("Full backup is empty or too large")
+                val relativePath = android.os.Environment.DIRECTORY_DOWNLOADS + "/My Diary/"
+                val tempName = "My-Diary-Auto-Backup-TEMP-" + System.currentTimeMillis() + ".json"
+                val values = android.content.ContentValues().apply {
+                    put(android.provider.MediaStore.MediaColumns.DISPLAY_NAME, tempName)
+                    put(android.provider.MediaStore.MediaColumns.MIME_TYPE, "application/json")
+                    put(android.provider.MediaStore.MediaColumns.RELATIVE_PATH, relativePath)
+                    put(android.provider.MediaStore.MediaColumns.IS_PENDING, 1)
+                }
+                val destination = contentResolver.insert(android.provider.MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
+                    ?: throw java.io.IOException("Could not create automatic backup")
+                try {
+                    contentResolver.openOutputStream(destination)?.use { it.write(bytes) }
+                        ?: throw java.io.IOException("Could not write automatic backup")
+                    val ready = android.content.ContentValues().apply { put(android.provider.MediaStore.MediaColumns.IS_PENDING, 0) }
+                    contentResolver.update(destination, ready, null, null)
+                    val rename = android.content.ContentValues().apply { put(android.provider.MediaStore.MediaColumns.DISPLAY_NAME, "My-Diary-Auto-Backup.json") }
+                    val renamed = contentResolver.update(destination, rename, null, null)
+                    if (renamed <= 0) throw java.io.IOException("Could not finalize automatic backup name")
+                    val selection = android.provider.MediaStore.MediaColumns.DISPLAY_NAME + "=? AND " + android.provider.MediaStore.MediaColumns.RELATIVE_PATH + "=?"
+                    contentResolver.query(android.provider.MediaStore.Downloads.EXTERNAL_CONTENT_URI, arrayOf(android.provider.MediaStore.MediaColumns._ID), selection, arrayOf("My-Diary-Auto-Backup.json", relativePath), null)?.use { cursor ->
+                        while (cursor.moveToNext()) {
+                            val oldId = cursor.getLong(0)
+                            val oldUri = android.content.ContentUris.withAppendedId(android.provider.MediaStore.Downloads.EXTERNAL_CONTENT_URI, oldId)
+                            if (oldUri != destination) contentResolver.delete(oldUri, null, null)
+                        }
+                    }
+                } catch (error: Exception) {
+                    contentResolver.delete(destination, null, null)
+                    throw error
+                }
+                true
+            } catch (error: Exception) {
+                android.util.Log.e("MyDiaryBackup", "Automatic full backup failed", error)
+                false
+            }
+        }
         private fun currentVersion(): Int {
             val info=packageManager.getPackageInfo(packageName,0)
             @Suppress("DEPRECATION")
