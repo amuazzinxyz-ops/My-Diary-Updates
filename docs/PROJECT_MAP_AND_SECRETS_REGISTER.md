@@ -1,3 +1,14 @@
+# My Documents in-app PDF viewer — APK 1.0.157 in progress (2026-11-15)
+
+- User tested APK 1.0.156 and reported that My Documents still does not open files. Previous external ACTION_VIEW chooser handoff is not considered fixed.
+- New native approach: keep the existing in-app image preview, and render PDF pages directly inside My Diary using Android PdfRenderer with Previous/Next page controls and a Close button. This removes dependence on a third-party PDF app and FileProvider chooser for PDFs. Other document types retain the existing FileProvider chooser with extension-based MIME and explicit read grants.
+- Preserve IndexedDB records and Blob bytes, filenames, delete behavior, private cache handling, 20 MB file limit, FileProvider configuration, notes, PIN/recovery, reminders, app identity and signing.
+- Backup branch: `backup/before-in-app-pdf-viewer-157-2026-11-15`. Feature branch: `fix-in-app-pdf-viewer-157-2026-11-15`.
+- Planned release: APK 1.0.157 / versionCode 156. Build, signing verification, publication and phone test pending. The APK release will also be delivered through Check for Updates because the installed app's updater downloads the APK whenever latest.json has a higher versionCode.
+- Do not claim device-side PDF/image success until user tests the published APK.
+
+---
+
 # My Documents PDF/image viewer handoff — APK 1.0.156 published (2026-11-15)
 
 - User asked that the repair be available through both direct APK installation and “Check for Updates”. Confirmed the installed app's native `checkForUpdates()` reads `latest.json`; when `versionCode` is newer than the installed app it calls `downloadAndInstall()`, which downloads the published APK and validates its SHA-256 before installation. Live feed is versionCode 155 / APK 1.0.156, so an app on versionCode 154 receives this native viewer repair through Check for Updates as well as by direct APK download. The HTML-only Web Update remains 235; it cannot replace native Kotlin code, and no fake Web Update version bump is needed.
