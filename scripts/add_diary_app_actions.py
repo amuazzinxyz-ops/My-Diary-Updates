@@ -49,6 +49,32 @@ if "class DiaryNativeActions" in s: raise SystemExit("Already patched")
 if "override fun onActivityResult(" in s: raise SystemExit("Existing onActivityResult found; safe merge required")
 s=s.replace("import android.content.Intent\n","import android.content.Intent\nimport android.media.AudioAttributes\nimport android.media.RingtoneManager\nimport android.media.Ringtone\nimport android.app.Service\nimport android.content.pm.ServiceInfo\nimport android.os.Handler\nimport android.os.Looper\nimport android.os.IBinder\nimport android.app.AlertDialog\nimport android.app.AlarmManager\nimport android.app.Notification\nimport android.app.NotificationChannel\nimport android.app.NotificationManager\nimport android.app.PendingIntent\nimport android.app.ProgressDialog\nimport android.content.BroadcastReceiver\nimport android.content.Context\nimport android.os.Build\nimport android.webkit.JavascriptInterface\nimport android.widget.Toast\nimport java.net.HttpURLConnection\nimport java.net.URL\n",1)
 s=s.replace("        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {","        webView.addJavascriptInterface(DiaryNativeActions(), \"DiaryAppActions\")\n\n        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {",1)
+s=s.replace("        webView.webViewClient = object : WebViewClientCompat() {", """        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {
+            WebViewCompat.addWebMessageListener(webView, "DiaryNativeDocuments", setOf("https://appassets.androidplatform.net")) { _, message, sourceOrigin, isMainFrame, replyProxy ->
+                if (isMainFrame && sourceOrigin.toString() == "https://appassets.androidplatform.net") {
+                    try {
+                        val payload = JSONObject(message.data ?: "{}")
+                        val encoded = payload.optString("base64", "")
+                        val name = payload.optString("fileName", "document")
+                        val type = payload.optString("mimeType", "application/octet-stream")
+                        if (encoded.isBlank()) throw IllegalArgumentException("Empty document")
+                        Thread {
+                            try {
+                                DiaryNativeActions().openDocument(encoded, name, type)
+                            } catch (error: Exception) {
+                                android.util.Log.e("MyDiaryDocuments", "Web message document open failed", error)
+                                runOnUiThread { Toast.makeText(this@MainActivity, "Document khol nahi saka.", Toast.LENGTH_LONG).show() }
+                            }
+                        }.start()
+                        replyProxy.postMessage("{\\"accepted\\":true}")
+                    } catch (error: Exception) {
+                        android.util.Log.e("MyDiaryDocuments", "Invalid document open message", error)
+                        replyProxy.postMessage("{\\"accepted\\":false}")
+                    }
+                }
+            }
+        }
+        webView.webViewClient = object : WebViewClientCompat() {""", 1)
 native = r"""
     inner class DiaryNativeActions {
         private fun metadata(): JSONObject {
