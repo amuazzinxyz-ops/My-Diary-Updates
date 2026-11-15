@@ -7,8 +7,8 @@
   "sha256": "cf06081fb53e546069d1b008233ab68b0d7ad7f204a0be8344e43ca91f4df9f3",
   "releaseNotes": "My Diary 1.0.168: My Documents multi-word search, matching signed APK and Check for Update feed. Existing documents, saved images, notes, PIN, reminders and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 240,
+  "webVersion": 241,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "4086d69ff0ad56c2e9467a55cfeb736fea4395660588a3d01375a8672105ee53",
-  "webReleaseNotes": "My Memories: search by partial or multiple name words and save existing images to Downloads/My Diary. Existing saved memories remain intact."
+  "webSha256": "69a471825452b9ed4a835d757445032d201bc03f38fc40bc95d075ceb1c80133",
+  "webReleaseNotes": "My Documents: saved image files now show an image preview like My Memories; tap the preview to open the full image. PDFs and other files keep their existing Open action."
 }
