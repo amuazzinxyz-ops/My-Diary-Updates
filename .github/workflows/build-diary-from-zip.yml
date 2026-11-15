@@ -120,6 +120,12 @@ jobs:
           required=("diaryMyNotesOverlay","diaryMyNotesPanel","diary_personal_notes_v1","diaryCheckUpdatesBtn","diaryDiaryRefreshBtn","diaryInterfaceColoursBtn","diaryShareAppBtn")
           missing=[x for x in required if x not in html]
           if missing: raise SystemExit("BLOCKED: published Diary HTML missing required features: "+", ".join(missing))
+          if "name:'ringVolumePercent'" not in html or "type:'range'" not in html:
+              raise SystemExit("BLOCKED: Calendar/Smart Reminder ringtone-volume slider is missing")
+          if html.count("record.ringVolumePercent=Number(snoozeControls.volume.value)") != 2:
+              raise SystemExit("BLOCKED: ringtone volume is not saved by both reminder forms")
+          if html.count("ringVolume:") != 10:
+              raise SystemExit("BLOCKED: ringtone-volume label is missing from one or more language dictionaries")
           target=Path("diary-project/app/src/main/assets/index.html")
           target.write_text(html,encoding="utf-8")
           print(f"PASS: Android APK source is the exact published Diary HTML ({len(html)} chars; SHA-256 {actual})")
