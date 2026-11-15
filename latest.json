@@ -7,8 +7,8 @@
   "sha256": "d7a1a6929067fb9a3f2a3040360f34ac4dba07576084a089aacfff56adc7db3d",
   "releaseNotes": "Fix My Memories image downloads to the Android Downloads/My Diary folder and show the multi-word search bar at the top. Existing saved images, notes, PIN data, reminders, and app identity remain preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 237,
+  "webVersion": 238,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "f38400cc4a9bc8b4fec4c2b5577258b3804a50affe40f23ee889cb8476d3b685",
-  "webReleaseNotes": "My Memories: search saved images by partial or multiple name words and download saved images again. Existing saved memories remain intact."
+  "webSha256": "00188bc0b173156df29fe1750ce5c71321db27742d14faa16f81465c7092ee5e",
+  "webReleaseNotes": "My Memories: search by partial or multiple name words and save existing images to Downloads/My Diary. Existing saved memories remain intact."
 }
