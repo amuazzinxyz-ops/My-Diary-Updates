@@ -48,6 +48,19 @@ jobs:
           unzip -q 'Diary-Android-Project-v13 (6).zip' -d diary-project
           test -f diary-project/app/build.gradle.kts
           test -f diary-project/app/src/main/assets/index.html
+          # Replace the legacy HTML inside the Android ZIP with Diary-only source.
+          cp web-source/index.html diary-project/app/src/main/assets/index.html
+          cmp -s web-source/index.html diary-project/app/src/main/assets/index.html
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path("diary-project/app/src/main/assets/index.html")
+          data=p.read_bytes()
+          if len(data) > 2_000_000:
+              raise SystemExit("BLOCKED: unexpected oversized Diary HTML asset")
+          head=data[:4096].decode("utf-8",errors="replace").upper()
+          if "MUAZZIN V" in head or "MUAZZIN SAHEB HTML PROJECT" in head:
+              raise SystemExit("BLOCKED: unrelated MUAZZIN HTML detected")
+          PY
 
       - name: Apply the exact reviewed Diary native and update bridges
         run: |
