@@ -116,7 +116,8 @@ jobs:
           if not raw: raise SystemExit("Empty signing keystore")
           Path("app/diary-release.jks").write_bytes(raw)
           p=Path("app/build.gradle.kts")
-          p.write_text(p.read_text(encoding="utf-8")+""
+          with p.open("a",encoding="utf-8") as f:
+              f.write('''
           
           android {
               signingConfigs {
@@ -133,7 +134,7 @@ jobs:
                   }
               }
           }
-          """,encoding="utf-8")
+          ''')
           PY
           gradle --no-daemon :app:assembleRelease
           APK="app/build/outputs/apk/release/app-release.apk"
