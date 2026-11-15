@@ -3251,3 +3251,9 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Minimal change in `turnDiaryLockOff()`: replace only the no-lock `window.alert()` with the existing Diary status element `#diaryMyNotesStatus` text. The separate Forgot PIN flow, wrong-PIN inline feedback, PIN storage, lock/recovery logic, notes, photos, documents, IndexedDB data, reminders, app identity and signing identity are not changed.
 - Source and `diary-web/index.html` mirror are updated identically. `latest.json` is prepared for Web Update 247. PR merge, automatic checksum publication, signed APK rebuild/publication and exact live feed/artifact verification remain pending; do not tell the user to update until both APK and Check for Update routes are verified.
 - Phone-side verification is pending. Do not claim Android device PASS until the user tests the no-lock button and confirms only the message appears without a website address.
+
+
+### APK + Check for Update release preparation — Diary 1.0.170 / code 169
+
+- The merged HTML-only correction is being delivered under the permanent dual-release rule. The Android build workflow is advanced from 1.0.169/168 to 1.0.170/169, with the current published 1.0.169/168 feed accepted as the baseline and the exact new release as the only re-publication state.
+- The workflow embeds the exact main-branch `web-source/index.html`, computes its UTF-8 SHA-256, and publishes the signed APK plus matching `latest.json` APK/web metadata. Build, signature continuity, artifact checksum, published URL, and live feed verification are pending; do not tell the user to update until all pass.
