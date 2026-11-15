@@ -54,7 +54,7 @@ if s.count(webview_client_anchor) != 1:
     raise SystemExit("Expected exactly one WebViewClient insertion point for document message bridge")
 s=s.replace(webview_client_anchor, """        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {
             WebViewCompat.addWebMessageListener(webView, "DiaryNativeDocuments", setOf("https://appassets.androidplatform.net")) { _, message, sourceOrigin, isMainFrame, replyProxy ->
-                if (isMainFrame && sourceOrigin.toString() == "https://appassets.androidplatform.net") {
+                if (isMainFrame && sourceOrigin.scheme == "https" && sourceOrigin.host == "appassets.androidplatform.net") {
                     try {
                         val payload = JSONObject(message.data ?: "{}")
                         val encoded = payload.optString("base64", "")

@@ -3019,3 +3019,12 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Independently downloaded signed-release workflow artifact, extracted APK size 2,025,563 bytes, and computed SHA-256 `92d95a59d490680f4861b169b4168ea8edf8165a355d4c7855133263d3785cb9`; exact match with live feed.
 - APK build, signed release configuration, upload, publication, and all workflow steps succeeded. The HTML Open action now prefers the origin-restricted AndroidX `DiaryNativeDocuments` WebMessageListener channel; the existing JavascriptInterface remains fallback. Native PDF/photo viewer logic and existing file records are preserved.
 - Physical device verification is still pending. User must install 1.0.160 and test opening both PDF and photo documents; do not claim that device testing has passed until user confirms.
+
+
+## My Documents still not opening after 1.0.160 — origin-check correction in progress (2026-11-15)
+
+- User tested `Check for update` on 1.0.160 and confirmed both image and PDF still do not open. The 1.0.160 build/hash publication succeeded, but device functionality is NOT verified and must not be described as fixed.
+- New backup branch: `backup/before-161-origin-check-fix-2026-11-15`; repair branch: `fix/161-origin-check-open-docs-2026-11-15`.
+- Code inspection found the AndroidX WebMessageListener already has an origin allowlist for `https://appassets.androidplatform.net`, but its callback redundantly compares `sourceOrigin.toString()` to a string. This brittle string comparison can reject the allowed origin representation and silently drop the Open request. Change callback validation to compare `sourceOrigin.scheme` and `sourceOrigin.host` while retaining the allowlist and main-frame check.
+- Next target: My Diary `1.0.161`, versionCode `160`; publisher guard advances from live `1.0.160/159` only. No change to IndexedDB documents, file contents, PIN, notes, reminders, package/signing identity, or native PDF/photo rendering.
+- Do not publish or claim success until build, signed APK, feed SHA-256, and APK bytes are verified. Physical device test remains required after user installs it.
