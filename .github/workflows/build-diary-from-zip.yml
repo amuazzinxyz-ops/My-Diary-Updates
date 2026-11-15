@@ -1,4 +1,4 @@
-# Test-candidate build: current live feed remains 1.0.163/162; build 1.0.167/166 without publishing until device test and explicit approval.
+# Approved release build: publish signed Diary 1.0.167/166 after user phone-test PASS.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -319,7 +319,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set Check-for-Update test candidate Diary version 1.0.167 (versionCode 166)
+      - name: Set approved Diary release version 1.0.167 (versionCode 166)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
@@ -355,7 +355,7 @@ jobs:
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
           if code != 166 or name != "1.0.167":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.163/162, found {name}/{code}")
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.167/166, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
           if feed_version != (162, "1.0.163"): 
               raise SystemExit(f"BLOCKED: update feed is neither the installed baseline nor the already-published exact repair release: {feed_version}")
@@ -446,8 +446,8 @@ jobs:
           echo "Release APK certificate matches the previously supplied SHA-256 fingerprint."
           rm -f app/diary-release.jks
 
-      - name: Publish verified Diary update (disabled for test candidate; requires phone test and explicit approval)
-        if: false
+      - name: Publish verified Diary update 1.0.167 after user phone-test PASS
+        if: env.DIARY_RELEASE_READY == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -455,7 +455,7 @@ jobs:
           test -s "$APK"
           SHA256="$(sha256sum "$APK" | awk '{print $1}')"
           cp "$APK" /tmp/My-Diary-verified.apk
-          printf '1.0.163\n162\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.167\n166\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -f -B diary-publish-main origin/main
           python3 - <<'PY'
@@ -470,18 +470,18 @@ jobs:
           meta["packageName"] = "com.personal.diaryapp"
           meta["versionName"] = lines[0]
           meta["versionCode"] = int(lines[1])
-          meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.163.apk"
+          meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.167.apk"
           meta["sha256"] = lines[2]
-          meta["releaseNotes"] = "Fix My Memories image downloads to the Android Downloads/My Diary folder and show the multi-word search bar at the top. Existing saved images, notes, PIN data, reminders, and app identity remain preserved."
+          meta["releaseNotes"] = "My Diary 1.0.167: matching signed APK and update feed for Check for Update; includes current Web Update 238. Existing saved images, notes, PIN data, reminders, documents, and app identity remain preserved."
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           cp /tmp/My-Diary-verified.apk My-Diary.apk
-          cp /tmp/My-Diary-verified.apk My-Diary-1.0.163.apk
+          cp /tmp/My-Diary-verified.apk My-Diary-1.0.167.apk
           python3 -m json.tool latest.json >/dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add My-Diary.apk My-Diary-1.0.163.apk latest.json
-          git commit -m "Publish verified My Diary update 1.0.163"
+          git add My-Diary.apk My-Diary-1.0.167.apk latest.json
+          git commit -m "Publish phone-tested My Diary update 1.0.167"
           git push origin HEAD:main
       - name: Upload unsigned Release APK for private owner-side signing
         if: env.DIARY_RELEASE_READY != 'true'
