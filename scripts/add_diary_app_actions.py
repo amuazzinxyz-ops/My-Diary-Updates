@@ -660,7 +660,7 @@ class DiaryReminderReceiver : BroadcastReceiver() {
         val title = msg.getStringExtra("diary_reminder_title") ?: "My Diary Reminder"
         val details = msg.getStringExtra("diary_reminder_details") ?: ""
         val soundUri = msg.getStringExtra("diary_reminder_sound_uri") ?: ""
-        val snoozeMinutes = msg.getIntExtra("diary_reminder_snooze_minutes", 10).coerceIn(5, 30)
+        val snoozeMinutes = msg.getIntExtra("diary_reminder_snooze_minutes", 10).coerceIn(2, 30)
         val snoozeLimit = msg.getIntExtra("diary_reminder_snooze_limit", 3).coerceIn(0, 10)
         val snoozeUsed = msg.getIntExtra("diary_reminder_snooze_used", 0).coerceIn(0, snoozeLimit)
         val ringDurationSeconds = msg.getIntExtra("diary_reminder_ring_duration_seconds", 30).coerceIn(10, 300)
