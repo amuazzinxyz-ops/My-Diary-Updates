@@ -307,8 +307,8 @@ native = r"""
         @JavascriptInterface fun pickReminderSound(currentUri: String) {
             this@MainActivity.startDiaryReminderSoundPicker(currentUri)
         }
-        @JavascriptInterface fun scheduleReminder(id: String, title: String, details: String, atMillis: Long, soundUri: String): Boolean {
-            if (id.isBlank() || title.isBlank() || atMillis <= System.currentTimeMillis()) return false
+        @JavascriptInterface fun scheduleReminder(id: String, title: String, details: String, atMillis: Long, soundUri: String, snoozeMinutes: Int, snoozeLimit: Int): Boolean {
+            if (id.isBlank() || title.isBlank() || atMillis <= System.currentTimeMillis() || snoozeMinutes !in setOf(5, 10, 15, 30) || snoozeLimit !in setOf(0, 3, 5, 10)) return false
             if (!hasReminderNotificationPermission()) {
                 requestReminderNotificationPermission()
                 return false
@@ -322,7 +322,7 @@ native = r"""
                 return false
             }
             return try {
-                DiaryReminderScheduler.schedule(this@MainActivity, id, title, details, atMillis, soundUri)
+                DiaryReminderScheduler.schedule(this@MainActivity, id, title, details, atMillis, soundUri, snoozeMinutes, snoozeLimit)
                 true
             } catch (e: Exception) {
                 false
@@ -489,7 +489,7 @@ private object DiaryReminderScheduler {
     private fun pendingFlags(): Int = PendingIntent.FLAG_UPDATE_CURRENT or
         (if (Build.VERSION.SDK_INT >= 23) PendingIntent.FLAG_IMMUTABLE else 0)
 
-    private fun alarmIntent(context: Context, id: String, title: String, details: String, soundUri: String): Intent =
+    private fun alarmIntent(context: Context, id: String, title: String, details: String, soundUri: String, snoozeMinutes: Int = 10, snoozeLimit: Int = 3, snoozeUsed: Int = 0): Intent =
         Intent(context, DiaryReminderReceiver::class.java).apply {
             action = ACTION_ALARM
             data = Uri.parse("mydiary-reminder://alarm/" + Uri.encode(id))
@@ -497,6 +497,9 @@ private object DiaryReminderScheduler {
             putExtra("diary_reminder_title", title)
             putExtra("diary_reminder_details", details)
             putExtra("diary_reminder_sound_uri", soundUri)
+            putExtra("diary_reminder_snooze_minutes", snoozeMinutes)
+            putExtra("diary_reminder_snooze_limit", snoozeLimit)
+            putExtra("diary_reminder_snooze_used", snoozeUsed)
         }
 
     private fun readItems(context: Context): org.json.JSONArray {
@@ -508,10 +511,10 @@ private object DiaryReminderScheduler {
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putString(ITEMS, items.toString()).apply()
     }
 
-    fun schedule(context: Context, id: String, title: String, details: String, atMillis: Long, soundUri: String) {
-        require(id.isNotBlank() && title.isNotBlank() && atMillis > System.currentTimeMillis())
+    fun schedule(context: Context, id: String, title: String, details: String, atMillis: Long, soundUri: String, snoozeMinutes: Int = 10, snoozeLimit: Int = 3, snoozeUsed: Int = 0) {
+        require(id.isNotBlank() && title.isNotBlank() && atMillis > System.currentTimeMillis() && snoozeMinutes in setOf(5, 10, 15, 30) && snoozeLimit in setOf(0, 3, 5, 10) && snoozeUsed in 0..snoozeLimit)
         val alarm = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val pending = PendingIntent.getBroadcast(context, requestCode(id), alarmIntent(context, id, title, details, soundUri), pendingFlags())
+        val pending = PendingIntent.getBroadcast(context, requestCode(id), alarmIntent(context, id, title, details, soundUri, snoozeMinutes, snoozeLimit, snoozeUsed), pendingFlags())
         if (Build.VERSION.SDK_INT >= 31 && !alarm.canScheduleExactAlarms()) {
             throw SecurityException("Exact alarm permission is required for reliable reminders")
         }
@@ -532,7 +535,7 @@ private object DiaryReminderScheduler {
             val item = old.optJSONObject(i) ?: continue
             if (item.optString("id") != id) next.put(item)
         }
-        next.put(org.json.JSONObject().put("id", id).put("title", title).put("details", details).put("at", atMillis).put("soundUri", soundUri))
+        next.put(org.json.JSONObject().put("id", id).put("title", title).put("details", details).put("at", atMillis).put("soundUri", soundUri).put("snoozeMinutes", snoozeMinutes).put("snoozeLimit", snoozeLimit).put("snoozeUsed", snoozeUsed))
         writeItems(context, next)
     }
 
@@ -571,16 +574,19 @@ private object DiaryReminderScheduler {
             val title = item.optString("title")
             val details = item.optString("details")
             val soundUri = item.optString("soundUri")
+            val snoozeMinutes = item.optInt("snoozeMinutes", 10)
+            val snoozeLimit = item.optInt("snoozeLimit", 3)
+            val snoozeUsed = item.optInt("snoozeUsed", 0)
             val at = item.optLong("at")
             if (id.isNotBlank() && title.isNotBlank()) {
-                if (at > now) schedule(context, id, title, details, at, soundUri)
-                else if (at > now - 24L * 60L * 60L * 1000L) schedule(context, id, title, details, now + 5000L, soundUri)
+                if (at > now) schedule(context, id, title, details, at, soundUri, snoozeMinutes, snoozeLimit, snoozeUsed)
+                else if (at > now - 24L * 60L * 60L * 1000L) schedule(context, id, title, details, now + 5000L, soundUri, snoozeMinutes, snoozeLimit, snoozeUsed)
                 else remove(context, id)
             }
         }
     }
 
-    fun showNotification(context: Context, id: String, title: String, details: String, soundUri: String) {
+    fun showNotification(context: Context, id: String, title: String, details: String, soundUri: String, snoozeMinutes: Int, snoozeLimit: Int, snoozeUsed: Int) {
         if (Build.VERSION.SDK_INT >= 33 &&
             context.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) return
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -617,6 +623,9 @@ private object DiaryReminderScheduler {
                 putExtra("diary_reminder_title", title)
                 putExtra("diary_reminder_details", details)
                 putExtra("diary_reminder_sound_uri", soundUri)
+                putExtra("diary_reminder_snooze_minutes", snoozeMinutes)
+                putExtra("diary_reminder_snooze_limit", snoozeLimit)
+                putExtra("diary_reminder_snooze_used", snoozeUsed)
             }
             return PendingIntent.getBroadcast(context, code + if (action == ACTION_SNOOZE) 2 else 3, actionIntent, pendingFlags())
         }
@@ -633,8 +642,10 @@ private object DiaryReminderScheduler {
             .setPriority(Notification.PRIORITY_HIGH)
             .setCategory(Notification.CATEGORY_ALARM)
             .setDefaults(Notification.DEFAULT_VIBRATE or Notification.DEFAULT_LIGHTS)
-            .addAction(android.R.drawable.ic_lock_idle_alarm, "10 min baad", actionIntent(ACTION_SNOOZE, "snooze"))
-            .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Done", actionIntent(ACTION_DONE, "done"))
+        if (snoozeUsed < snoozeLimit) {
+            builder.addAction(android.R.drawable.ic_lock_idle_alarm, "$snoozeMinutes min baad", actionIntent(ACTION_SNOOZE, "snooze"))
+        }
+        builder.addAction(android.R.drawable.ic_menu_close_clear_cancel, "Done", actionIntent(ACTION_DONE, "done"))
         manager.notify(code, builder.build())
     }
 }
@@ -646,11 +657,14 @@ class DiaryReminderReceiver : BroadcastReceiver() {
         val title = msg.getStringExtra("diary_reminder_title") ?: "My Diary Reminder"
         val details = msg.getStringExtra("diary_reminder_details") ?: ""
         val soundUri = msg.getStringExtra("diary_reminder_sound_uri") ?: ""
+        val snoozeMinutes = msg.getIntExtra("diary_reminder_snooze_minutes", 10).coerceIn(5, 30)
+        val snoozeLimit = msg.getIntExtra("diary_reminder_snooze_limit", 3).coerceIn(0, 10)
+        val snoozeUsed = msg.getIntExtra("diary_reminder_snooze_used", 0).coerceIn(0, snoozeLimit)
         when (msg.action) {
             DiaryReminderScheduler.ACTION_SNOOZE -> {
                 val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 manager.cancel((id.hashCode() and 0x3fffffff) + 10)
-                DiaryReminderScheduler.schedule(context, id, title, details, System.currentTimeMillis() + 10L * 60L * 1000L, soundUri)
+                if (snoozeUsed < snoozeLimit) DiaryReminderScheduler.schedule(context, id, title, details, System.currentTimeMillis() + snoozeMinutes.toLong() * 60L * 1000L, soundUri, snoozeMinutes, snoozeLimit, snoozeUsed + 1)
                 return
             }
             DiaryReminderScheduler.ACTION_DONE -> {
@@ -661,7 +675,7 @@ class DiaryReminderReceiver : BroadcastReceiver() {
             }
         }
         DiaryReminderScheduler.remove(context, id)
-        DiaryReminderScheduler.showNotification(context, id, title, details, soundUri)
+        DiaryReminderScheduler.showNotification(context, id, title, details, soundUri, snoozeMinutes, snoozeLimit, snoozeUsed)
     }
 }
 
