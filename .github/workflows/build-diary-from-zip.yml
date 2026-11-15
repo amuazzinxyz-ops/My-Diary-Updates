@@ -347,9 +347,9 @@ jobs:
           if code != 158 or name != "1.0.159":
               raise SystemExit(f"BLOCKED: expected approved APK version 1.0.159/158, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if feed_version != (157, "1.0.158"): 
-              raise SystemExit(f"BLOCKED: update feed is not the installed baseline or this exact repair release: {feed_version}")
-          print(f"PASS: package={package}, next version={name}/{code}; feed baseline is 1.0.158/157")
+          if feed_version not in ((157, "1.0.158"), (158, "1.0.159")):
+              raise SystemExit(f"BLOCKED: update feed is neither the installed baseline nor the already-published exact repair release: {feed_version}")
+          print(f"PASS: package={package}, repair release={name}/{code}; feed state is approved: {feed_version}")
           PY
 
       - name: Align Java and Kotlin JVM targets
@@ -453,8 +453,8 @@ jobs:
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if meta.get("packageName") != "com.personal.diaryapp" or feed_version != (157, "1.0.158"):
-              raise SystemExit(f"BLOCKED: live main feed is not the installed baseline or exact repair release: {feed_version}")
+          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in ((157, "1.0.158"), (158, "1.0.159")):
+              raise SystemExit(f"BLOCKED: live main feed is neither the installed baseline nor the exact repair release being republished: {feed_version}")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
           meta["packageName"] = "com.personal.diaryapp"
