@@ -119,9 +119,9 @@ native = r"""
                         addView(next, android.widget.LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
                     }
                     val scroll = android.widget.ScrollView(this@MainActivity).apply {
-                        addView(imageView, android.widget.ScrollView.LayoutParams(
-                            android.widget.ScrollView.LayoutParams.MATCH_PARENT,
-                            android.widget.ScrollView.LayoutParams.WRAP_CONTENT
+                        addView(imageView, android.widget.FrameLayout.LayoutParams(
+                            android.widget.FrameLayout.LayoutParams.MATCH_PARENT,
+                            android.widget.FrameLayout.LayoutParams.WRAP_CONTENT
                         ))
                     }
                     val content = android.widget.LinearLayout(this@MainActivity).apply {
