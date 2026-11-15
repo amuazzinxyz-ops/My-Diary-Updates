@@ -3191,3 +3191,11 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - The user already installed candidate versionCode 163 / versionName 1.0.164. A rebuilt APK with the same versionCode cannot install as an update over it. Therefore the corrected candidate is explicitly bumped to versionCode 164 / versionName 1.0.165.
 - Updated `.github/workflows/safe-diary-signed-candidate.yml` at commit `1dbbefdf2ec2a25ce38d9bed7f4b1003c563a17c`. This affects only the isolated test-candidate workflow; it does not edit the live feed or publish anything.
 - The signed build must finish and be checked for exact versionCode 164, versionName 1.0.165, approved signing identity, and embedded corrected HTML before sending the APK. Physical device verification remains pending.
+
+
+## 2026-11-15 — Corrected My Documents APK 1.0.165 built and verified
+- Signed candidate build run `43737230530` completed successfully at commit `1dbbefdf2ec2a25ce38d9bed7f4b1003c563a17c`; data protection source validation run `43737235781` passed. Candidate is `versionName 1.0.165` / `versionCode 164`, so it can install over the user's previously installed 1.0.164 / versionCode 163.
+- APK extracted from artifact `14171360615`; file `My-Diary-1.0.165.apk`, 2,031,647 bytes; SHA-256 `f1d7aa8305bf60a478d807cd3af6538fcfe5161717ca2ca9e5dd1c67efeb4c8f`.
+- Build log confirms BUILD SUCCESSFUL and approved V2 signing certificate SHA-256 `23a4e93f3c7911dce18389ea583548700c6ad6a3759707f1cd222d07e2408b5a`. Embedded standalone Diary HTML is 461,870 bytes; APK archive integrity passed.
+- Embedded HTML checks passed: My Documents search heading and sticky search input present; Documents search/tools are appended before the add-document form (same top placement as My Memories); image MIME detection falls back to common image extensions; newly saved images infer MIME type from extension; native Open action remains for PDF/other files.
+- This is a signed test candidate only. It is not published. Live production remains unchanged. User must install over existing app without uninstalling or clearing data, then test search, image previews, PDF/other Open, existing data/PIN/reminders, and backup/restore. Do not merge PR #75 or publish until user testing and explicit approval.
