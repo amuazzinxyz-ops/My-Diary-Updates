@@ -9,7 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 246,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "a78af2b9f582d671998106fdc7dc9299ea0c5993a6a7bc7adc007e1feb9b8775",
+  "webSha256": "a660266c972f0b791ec45c337417b2534a77f1a76f7d45dfd2772a4a092a332a",
   "webReleaseNotes": "Diary Lock: incorrect PIN is shown inside the PIN box as 'PIN galat hai'; browser alert/address is no longer shown. Existing lock and saved data are preserved."
 }
-
