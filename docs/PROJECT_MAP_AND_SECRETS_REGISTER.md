@@ -3150,3 +3150,10 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Candidate artifact `My-Diary-1.0.164-signed-test-candidate` uploaded successfully, artifact ID `14166079074`, size 19,242,907 bytes. Artifact expires 2026-11-22 14:40:13 UTC. SHA-256 of the artifact ZIP: `f554738817e8f3aaaa656e79ce63053ba91c1b14676954b45086c9bea365fa04`.
 - Candidate app version is `1.0.164` / versionCode `163`. This is a signed test candidate only, not a published release; no live update feed, main branch, or release publication was changed.
 - PR #75 remains open and unmerged. The signed candidate build is complete, but full backup/restore behavior, automatic Downloads/My Diary snapshots, retention, and update-install persistence still require physical Android testing. Do not mark these runtime checks PASS until user confirms. Preserve existing local Notes, Memories attachments, Documents files, PIN/recovery, reminders, app identity, and signing identity.
+
+
+## 2026-11-15 — My Documents search and image preview
+- Added the same prominent sticky search-bar treatment used by My Memories to My Documents, including partial multi-word matching against saved file names and metadata.
+- Added an inline thumbnail for image files saved in My Documents; tapping the thumbnail opens the original image in a full-size browser view. Existing native Open action remains in place for files, including PDFs and other document types.
+- Kept `web-source/index.html` and `diary-web/index.html` byte-identical after the change.
+- Change is on the existing data-protection test branch / PR #75 only. Not merged or published; APK and live update feed remain unchanged. Requires automated checks and Android phone testing before release.
