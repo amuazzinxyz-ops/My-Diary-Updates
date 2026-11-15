@@ -77,7 +77,7 @@ native = r"""
             return try {
                 val bytes = android.util.Base64.decode(base64, android.util.Base64.DEFAULT)
                 if (bytes.isEmpty() || bytes.size > 20 * 1024 * 1024) throw Exception("Invalid document size")
-                val safeName = fileName.substringAfterLast('/').substringAfterLast('\\\\')
+                val safeName = fileName.substringAfterLast('/').substringAfterLast('\\')
                     .replace(Regex("[^A-Za-z0-9._ -]"), "_").take(120).ifBlank { "My-Document" }
                 val folder = File(cacheDir, "diary-share")
                 if (!folder.exists() && !folder.mkdirs()) throw java.io.IOException("Cannot create document cache")
