@@ -134,6 +134,7 @@ native = r"""
                 val bytes = content.toByteArray(Charsets.UTF_8)
                 if (bytes.isEmpty() || bytes.size > 150 * 1024 * 1024) throw Exception("Full backup is empty or too large")
                 val relativePath = android.os.Environment.DIRECTORY_DOWNLOADS + "/My Diary/"
+                val finalName = "My-Diary-Auto-Backup-" + System.currentTimeMillis() + ".json"
                 val tempName = "My-Diary-Auto-Backup-TEMP-" + System.currentTimeMillis() + ".json"
                 val values = android.content.ContentValues().apply {
                     put(android.provider.MediaStore.MediaColumns.DISPLAY_NAME, tempName)
@@ -146,17 +147,21 @@ native = r"""
                 try {
                     contentResolver.openOutputStream(destination)?.use { it.write(bytes) }
                         ?: throw java.io.IOException("Could not write automatic backup")
-                    val ready = android.content.ContentValues().apply { put(android.provider.MediaStore.MediaColumns.IS_PENDING, 0) }
-                    contentResolver.update(destination, ready, null, null)
-                    val rename = android.content.ContentValues().apply { put(android.provider.MediaStore.MediaColumns.DISPLAY_NAME, "My-Diary-Auto-Backup.json") }
-                    val renamed = contentResolver.update(destination, rename, null, null)
-                    if (renamed <= 0) throw java.io.IOException("Could not finalize automatic backup name")
-                    val selection = android.provider.MediaStore.MediaColumns.DISPLAY_NAME + "=? AND " + android.provider.MediaStore.MediaColumns.RELATIVE_PATH + "=?"
-                    contentResolver.query(android.provider.MediaStore.Downloads.EXTERNAL_CONTENT_URI, arrayOf(android.provider.MediaStore.MediaColumns._ID), selection, arrayOf("My-Diary-Auto-Backup.json", relativePath), null)?.use { cursor ->
+                    val ready = android.content.ContentValues().apply {
+                        put(android.provider.MediaStore.MediaColumns.IS_PENDING, 0)
+                        put(android.provider.MediaStore.MediaColumns.DISPLAY_NAME, finalName)
+                    }
+                    if (contentResolver.update(destination, ready, null, null) <= 0) throw java.io.IOException("Could not finalize automatic backup")
+                    val selection = android.provider.MediaStore.MediaColumns.DISPLAY_NAME + " LIKE ? AND " + android.provider.MediaStore.MediaColumns.RELATIVE_PATH + "=?"
+                    contentResolver.query(android.provider.MediaStore.Downloads.EXTERNAL_CONTENT_URI, arrayOf(android.provider.MediaStore.MediaColumns._ID, android.provider.MediaStore.MediaColumns.DATE_MODIFIED), selection, arrayOf("My-Diary-Auto-Backup-%.json", relativePath), android.provider.MediaStore.MediaColumns.DATE_MODIFIED + " DESC")?.use { cursor ->
+                        var kept = 0
                         while (cursor.moveToNext()) {
-                            val oldId = cursor.getLong(0)
-                            val oldUri = android.content.ContentUris.withAppendedId(android.provider.MediaStore.Downloads.EXTERNAL_CONTENT_URI, oldId)
-                            if (oldUri != destination) contentResolver.delete(oldUri, null, null)
+                            kept++
+                            if (kept > 30) {
+                                val oldId = cursor.getLong(0)
+                                val oldUri = android.content.ContentUris.withAppendedId(android.provider.MediaStore.Downloads.EXTERNAL_CONTENT_URI, oldId)
+                                contentResolver.delete(oldUri, null, null)
+                            }
                         }
                     }
                 } catch (error: Exception) {
