@@ -1,0 +1,14 @@
+{
+  "appName": "My Diary",
+  "packageName": "com.personal.diaryapp",
+  "versionCode": 149,
+  "versionName": "1.0.150",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.150.apk",
+  "sha256": "c9abb30f543930db3042ef851acd37b4e87558495ad06b40e27734edd97de19b",
+  "releaseNotes": "Personal Calendar and Smart Reminder now support selectable ringtone volume (0–100%), screen-on time matched to the chosen ringtone duration, Snooze intervals (2/5/10/15/20/30 minutes), repeat limits (off/3/5/10), and ringtone duration (10/20/30 seconds or 1/2/5 minutes). Existing ringtone choice, calendar recurrence, notifications, notes, photos, PIN data, and app identity remain preserved.",
+  "minimumSupportedVersionCode": 1,
+  "webVersion": 235,
+  "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
+  "webSha256": "7e4509905645dadc788f48c7a784e227fa419662ddf90f82c6e1c9c39b2d3b76",
+  "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
+}
