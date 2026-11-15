@@ -1,0 +1,156 @@
+name: Safe Diary signed release candidate (no publish)
+
+on:
+  push:
+    branches:
+      - fix/full-diary-data-protection-2026-11-15
+    paths:
+      - "Diary-Android-Project-v13 (6).zip"
+      - "scripts/**"
+      - "web-source/**"
+      - "diary-web/**"
+      - ".github/workflows/safe-diary-signed-candidate.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: diary-safe-signed-candidate
+  cancel-in-progress: true
+
+jobs:
+  signed-candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      DIARY_RELEASE_READY: ${{ secrets.DIARY_KEYSTORE_BASE64 != '' && secrets.DIARY_KEY_ALIAS != '' && secrets.DIARY_KEY_PASSWORD != '' && secrets.DIARY_STORE_PASSWORD != '' }}
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@v4
+
+      - name: Require signing secrets without printing values
+        env:
+          HAS_KEYSTORE: ${{ secrets.DIARY_KEYSTORE_BASE64 != '' }}
+          HAS_ALIAS: ${{ secrets.DIARY_KEY_ALIAS != '' }}
+          HAS_KEY_PASSWORD: ${{ secrets.DIARY_KEY_PASSWORD != '' }}
+          HAS_STORE_PASSWORD: ${{ secrets.DIARY_STORE_PASSWORD != '' }}
+        run: |
+          echo "Keystore present: $HAS_KEYSTORE"
+          echo "Alias present: $HAS_ALIAS"
+          echo "Key password present: $HAS_KEY_PASSWORD"
+          echo "Store password present: $HAS_STORE_PASSWORD"
+          test "$HAS_KEYSTORE" = true
+          test "$HAS_ALIAS" = true
+          test "$HAS_KEY_PASSWORD" = true
+          test "$HAS_STORE_PASSWORD" = true
+
+      - name: Extract Android project and apply reviewed bridges
+        run: |
+          mkdir -p diary-project
+          unzip -q 'Diary-Android-Project-v13 (6).zip' -d diary-project
+          python3 scripts/add_diary_app_actions.py
+          python3 scripts/add_online_diary_updates.py
+          python3 scripts/apply_diary_identity.py
+          cmp web-source/index.html diary-web/index.html
+          python3 -m py_compile scripts/add_diary_app_actions.py scripts/add_online_diary_updates.py scripts/apply_diary_identity.py
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install Android SDK
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+
+      - name: Set candidate version without touching live feed
+        working-directory: diary-project
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path("app/build.gradle.kts")
+          s=p.read_text(encoding="utf-8")
+          s,n=re.subn(r'versionCode\\s*=\\s*\\d+', 'versionCode = 163', s, count=1)
+          if n!=1: raise SystemExit("Could not safely set candidate versionCode 163")
+          s,n=re.subn(r'versionName\\s*=\\s*"[^"]+"', 'versionName = "1.0.164"', s, count=1)
+          if n!=1: raise SystemExit("Could not safely set candidate versionName 1.0.164")
+          p.write_text(s,encoding="utf-8")
+          PY
+          cat >> app/build.gradle.kts <<'GRADLE'
+
+          android {
+              compileOptions {
+                  sourceCompatibility = JavaVersion.VERSION_17
+                  targetCompatibility = JavaVersion.VERSION_17
+              }
+          }
+          tasks.withType<JavaCompile>().configureEach {
+              sourceCompatibility = JavaVersion.VERSION_17.toString()
+              targetCompatibility = JavaVersion.VERSION_17.toString()
+          }
+          tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+              kotlinOptions.jvmTarget = "17"
+          }
+          GRADLE
+
+      - name: Configure signing and build candidate APK
+        working-directory: diary-project
+        env:
+          DIARY_KEYSTORE_BASE64: ${{ secrets.DIARY_KEYSTORE_BASE64 }}
+          DIARY_KEY_ALIAS: ${{ secrets.DIARY_KEY_ALIAS }}
+          DIARY_KEY_PASSWORD: ${{ secrets.DIARY_KEY_PASSWORD }}
+          DIARY_STORE_PASSWORD: ${{ secrets.DIARY_STORE_PASSWORD }}
+        run: |
+          python3 - <<'PY'
+          import base64, os
+          from pathlib import Path
+          raw=base64.b64decode(os.environ["DIARY_KEYSTORE_BASE64"],validate=True)
+          if not raw: raise SystemExit("Empty signing keystore")
+          Path("app/diary-release.jks").write_bytes(raw)
+          p=Path("app/build.gradle.kts")
+          p.write_text(p.read_text(encoding="utf-8")+""
+          
+          android {
+              signingConfigs {
+                  create("diaryRelease") {
+                      storeFile = file("diary-release.jks")
+                      storePassword = System.getenv("DIARY_STORE_PASSWORD")
+                      keyAlias = System.getenv("DIARY_KEY_ALIAS")
+                      keyPassword = System.getenv("DIARY_KEY_PASSWORD")
+                  }
+              }
+              buildTypes {
+                  getByName("release") {
+                      signingConfig = signingConfigs.getByName("diaryRelease")
+                  }
+              }
+          }
+          """,encoding="utf-8")
+          PY
+          gradle --no-daemon :app:assembleRelease
+          APK="app/build/outputs/apk/release/app-release.apk"
+          test -s "$APK"
+          SIGNER="$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -1)"
+          OUT="$("$SIGNER" verify --verbose --print-certs "$APK")"
+          echo "$OUT"
+          ACTUAL="$(echo "$OUT" | sed -nE 's/.*certificate SHA-256 digest: ([0-9a-fA-F]{64}).*/\\1/p' | head -n1 | tr '[:lower:]' '[:upper:]')"
+          EXPECTED="23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A"
+          test "$ACTUAL" = "$EXPECTED"
+          rm -f app/diary-release.jks
+          sha256sum "$APK"
+
+      - name: Upload signed candidate only — never publish
+        uses: actions/upload-artifact@v4
+        with:
+          name: My-Diary-1.0.164-signed-test-candidate
+          path: diary-project/app/build/outputs/apk/release/app-release.apk
+          if-no-files-found: error
+          retention-days: 7
