@@ -1,3 +1,15 @@
+# Check-for-Update version mismatch — signed test candidate built (2026-11-15)
+
+- User reported the installed Diary app says it is already newer than the update channel. Live feed baseline at investigation was APK 1.0.163 / versionCode 162, while the user's installed test candidate was reported as 1.0.166 / code 165. This is expected when a higher-version test APK is installed but the production feed remains older.
+- Created backup branch `backup/before-check-update-fix-2026-11-15`.
+- Updated the APK build workflow on main (commit `15b10782dc9b162a87139f735ae18710db1dbc63`) to build a signed test candidate at versionName `1.0.167` / versionCode `166`, while explicitly disabling production publication. The guard requires the expected source version and live feed baseline; no production APK or `latest.json` was changed.
+- GitHub Actions run `43741458258` completed successfully. Debug build and signed Release APK build passed; the publication step was skipped by design. Signed test-candidate artifact ID `14171624884`, artifact name `My-Diary-1.0.167-signed-test-candidate`.
+- Downloaded the signed artifact ZIP and extracted `app-release.apk` (2,027,847 bytes). APK SHA-256: `05fc95f0d47b3519302d407f7b9b4f72cb45fef6c6ebc69a56a0dbb2fa9844d2`.
+- This is a private test candidate, NOT a published update. It does not yet eliminate the “installed version newer than update channel” condition while production latest.json remains at 1.0.163/162. Do not update production feed or publish the APK until the user installs/tests this exact candidate and explicitly approves production publication.
+- Preserve all local Diary records, photos, notes, PIN/recovery data, reminders, package identity and signing identity. Do not ask the user to uninstall or clear app data.
+
+---
+
 # My Memories search visibility and download response repair — APK 1.0.163 published; phone test PASS (user-confirmed, 2026-11-15)
 
 - User reported that after APK 1.0.162 the My Memories Search bar was still not visible and tapping Download produced no visible response. Re-inspection found the search field was inserted before the large form, but the Memories screen could retain an old scroll position when reopened; the Download handler wrote its status into the general status area below the large form, so progress/failure/success could remain off-screen.
