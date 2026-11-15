@@ -1,4 +1,4 @@
-# Release baseline guard: live update feed 1.0.143 / versionCode 142; next APK 1.0.144 / versionCode 143.
+# Release baseline guard: live update feed 1.0.144 / versionCode 143; next APK 1.0.145 / versionCode 144.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -178,6 +178,18 @@ jobs:
               raise SystemExit("BLOCKED: full-screen intent does not target the wake-only activity")
           if "android.permission.USE_FULL_SCREEN_INTENT" not in permissions:
               raise SystemExit("BLOCKED: full-screen alarm permission is missing")
+          if not {"android.permission.FOREGROUND_SERVICE", "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"} <= permissions:
+              raise SystemExit("BLOCKED: media playback foreground-service permissions are missing")
+          services = {x.get(ns + "name"): x for x in app.findall("service")}
+          sound_service = services.get(".DiaryReminderSoundService")
+          if sound_service is None or sound_service.get(ns + "exported") != "false" or sound_service.get(ns + "foregroundServiceType") != "mediaPlayback":
+              raise SystemExit("BLOCKED: timed ringtone foreground service manifest is missing or misconfigured")
+          if "DiaryReminderSoundService.start(context, soundUri, ringDurationSeconds)" not in kotlin or "ringDurationSeconds" not in kotlin:
+              raise SystemExit("BLOCKED: selected ringtone duration is not connected to native playback")
+          if "setSound(null, null)" not in kotlin or "setSound(null, alarmAttributes)" not in kotlin:
+              raise SystemExit("BLOCKED: reminder notification must be silent while timed ringtone playback runs")
+          if "setOf(2, 5, 10, 15, 20, 30)" not in kotlin or "setOf(10, 20, 30, 60, 120, 300)" not in kotlin:
+              raise SystemExit("BLOCKED: approved Snooze and ringtone-duration choices are missing")
           wake_activities = [x for x in app.findall("activity") if x.get(ns + "name") == ".DiaryReminderWakeActivity"]
           if len(wake_activities) != 1 or wake_activities[0].get(ns + "exported") != "false" or wake_activities[0].get(ns + "excludeFromRecents") != "true":
               raise SystemExit("BLOCKED: wake-only activity manifest configuration is invalid")
@@ -265,7 +277,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved next Diary version 1.0.144 (versionCode 143)
+      - name: Set approved next Diary version 1.0.145 (versionCode 144)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
@@ -273,12 +285,12 @@ jobs:
           from pathlib import Path
           p = Path("app/build.gradle.kts")
           s = p.read_text(encoding="utf-8")
-          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 143', s, count=1)
-          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.144"', s, count=1)
+          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 144', s, count=1)
+          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.145"', s, count=1)
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary versionName=1.0.144, versionCode=143")
+          print("Set Diary versionName=1.0.145, versionCode=144")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -300,12 +312,12 @@ jobs:
           name = one(r'versionName\s*=\s*"([^"]+)"', "versionName")
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
-          if code != 143 or name != "1.0.144":
+          if code != 144 or name != "1.0.145":
               raise SystemExit(f"BLOCKED: expected approved APK version 1.0.144/143, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if feed_version != (142, "1.0.143"):
+          if feed_version != (143, "1.0.144"):
               raise SystemExit(f"BLOCKED: update feed is not the installed baseline or this exact repair release: {feed_version}")
-          print(f"PASS: package={package}, next version={name}/{code}; feed baseline is 1.0.143/142")
+          print(f"PASS: package={package}, next version={name}/{code}; feed baseline is 1.0.144/143")
           PY
 
       - name: Align Java and Kotlin JVM targets
@@ -401,7 +413,7 @@ jobs:
           test -s "$APK"
           SHA256="$(sha256sum "$APK" | awk '{print $1}')"
           cp "$APK" /tmp/My-Diary-verified.apk
-          printf '1.0.144\n143\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.145\n144\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -f -B diary-publish-main origin/main
           python3 - <<'PY'
@@ -416,9 +428,9 @@ jobs:
           meta["packageName"] = "com.personal.diaryapp"
           meta["versionName"] = lines[0]
           meta["versionCode"] = int(lines[1])
-          meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.144.apk"
+          meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.145.apk"
           meta["sha256"] = lines[2]
-          meta["releaseNotes"] = "Personal Calendar and Smart Reminder now support a selectable Snooze interval (5/10/15/30 minutes) and repeat limit (off/3/5/10 times). Existing ringtone selection, reminder timing, notification actions, calendar recurrence, notes, photos, PIN data, and app identity remain preserved."
+          meta["releaseNotes"] = "Personal Calendar and Smart Reminder now support Snooze intervals (2/5/10/15/20/30 minutes), repeat limits (off/3/5/10), and ringtone playback duration (10/20/30 seconds or 1/2/5 minutes). Existing ringtone choice, calendar recurrence, notifications, notes, photos, PIN data, and app identity remain preserved."
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           cp /tmp/My-Diary-verified.apk My-Diary.apk
