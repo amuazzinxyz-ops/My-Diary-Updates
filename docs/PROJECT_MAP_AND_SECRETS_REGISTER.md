@@ -1,3 +1,23 @@
+# Remove duplicate upper welcome heading; style the tap card — published Web Update 227 (2026-11-15)
+
+- User request: remove the upper repeated `📒 Meri Diary` and subtitle; keep the lower tappable Diary entry and give that same tap target a beautiful raised 3D design.
+- Starting live state: Web Update 226; APK `1.0.143` / versionCode `142`; package `com.personal.diaryapp`; source/mirror blob SHA `680e1b78909a5f5dc0cfacf7e741e8edea4a7052`; starting feed web SHA-256 `4f01fc4507093b086cb53965632563dfcf9cb39f0463fe7731b012a50eb09785`.
+- Scope: web-only CSS addition in `web-source/index.html`. Hid the upper welcome logo/title/subtitle, removed the outer wrapper's separate card appearance, and styled the existing lower `#diaryMyNotesEntry` as the sole purple-and-gold raised 3D card. Preserved the original icon, localized title/subtitle, existing click handler that calls `openOverlay()`, full-width tap target, and mobile sizing.
+- No JavaScript or HTML structure changed; comparison against the exact starting source confirms the only source difference is the inserted CSS block. Explicitly untouched: notes, photos, local storage/data keys, PIN/recovery, trash, note actions, reminders, updater logic, Android source, APK, package identity, signing data and permissions.
+- Pre-edit backups created and re-fetched byte-identical on branch `backup/before-remove-upper-welcome-duplicate-2026-11-15`:
+  - `backups/web-source-before-remove-upper-welcome-duplicate-2026-11-15.html`
+  - `backups/diary-web-before-remove-upper-welcome-duplicate-2026-11-15.html`
+  - `backups/before-remove-upper-welcome-duplicate-2026-11-15.json`
+  - `backups/docs-before-remove-upper-welcome-duplicate-2026-11-15-register.md`
+- Feature branch `feature/remove-upper-welcome-duplicate-3d-card-2026-11-15`; PR #37 merged as `b3577aecd7b3d8f3bdd48808e48dd225f6c0380b`. Only `web-source/index.html` changed (66 additions, 1 deletion).
+- Web publisher workflow run `43684123945` completed with **success**. Publisher commit: `08147f57f41dece17044d8292c4dab2767f670ee`.
+- Post-publish verification: live source and `diary-web/index.html` mirror are byte-identical; both blob SHA `ba42b35b2dc2351fbf999b8e9560678bc5138fbd`. Live `latest.json` blob `acb7aff27f8bd014c22383b4b8471f1041737553` reports `webVersion=227` and `webSha256=848cac17d663e6073d32688e6cfdb423c3735e31fd1f0fe35feee476029de335`. Independently calculated SHA-256 from the exact source text matches the feed.
+- APK unchanged: `1.0.143` / versionCode `142`; SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`. No APK rebuild or signing change.
+- Physical-device verification of Web Update 227 is pending. Ask the user to use **Me → Check for Updates**, install Web Update 227, confirm only the lower 3D tap card remains (no upper duplicate), and tap it to verify Diary opens. Do not claim phone-side success until confirmed.
+- Rollback: use the exact pre-change files on `backup/before-remove-upper-welcome-duplicate-2026-11-15`; if already published, restore the source and publish a higher webVersion. Preserve local notes, photos and PIN/recovery data.
+
+---
+
 # Single 3D welcome card — published Web Update 226 (2026-11-15)
 
 - User request: make the Diary welcome screen one beautiful, raised 3D card, after checking the existing layout and choosing the appropriate design.
@@ -15,7 +35,7 @@
 - Publisher commit: `b98b19a983dab2c51b7f9119b2ac9766d95dcdfb`. Published Web Update 226. Live source and mirror are byte-identical at blob SHA `680e1b78909a5f5dc0cfacf7e741e8edea4a7052`. Live `latest.json` blob `e858d428fc4b19515d8deb1f71918d2065d544a9` reports `webVersion=226` and `webSha256=4f01fc4507093b086cb53965632563dfcf9cb39f0463fe7731b012a50eb09785`.
 - Static validation: both inline JavaScript blocks parse; exactly one entry host and one language selector remain; the entry host is inside the welcome card; the existing entry button and click handler remain; the new single-card styling is present. Source and mirror are byte-identical.
 - APK remains `1.0.143` / versionCode `142`; SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`. No APK rebuild or signing changes.
-- Physical Android visual verification is pending. User should install Web Update 226 and confirm the welcome screen shows one unified card, with no second separate entry card; confirm tapping it still opens Diary. Do not claim phone-side success until user confirms.
+- Phone-side visual confirmation: user confirmed on 2026-11-15 that the welcome screen shows one card. The user did not explicitly confirm the tap-to-open action, so that interaction remained unverified at this point.
 - Rollback: use the exact pre-change backups on `backup/before-single-3d-welcome-card-2026-11-15`; if already published, restore the source and publish a higher webVersion. Preserve local notes, photos and PIN/recovery data.
 
 ---
