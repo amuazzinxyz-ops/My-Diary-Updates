@@ -1,3 +1,15 @@
+# My Documents PDF and document viewer handoff — APK 1.0.155 in progress (2026-11-15)
+
+- User reported that photos now open inside My Diary on APK 1.0.154, but PDF and other documents still do not open reliably.
+- Source inspection: the native FileProvider ACTION_VIEW intent set FLAG_GRANT_READ_URI_PERMISSION and a content URI as its data, but did not include the URI in ClipData. Some Android document viewers and chooser handoffs rely on ClipData to receive the temporary read grant.
+- Minimal native correction: attach ClipData.newUri(contentResolver, safeName, contentUri) to the existing ACTION_VIEW intent while retaining its exact MIME type, FileProvider URI, read permission flag, chooser, private cache file and existing error messages. No storage permission or new provider is added.
+- Existing photo-in-Diary viewer, My Documents saved records/Blob contents, filenames, delete behavior, notes, PIN/recovery, reminders, HTML/Web Update 235, app package and signing identity remain unchanged.
+- Exact pre-edit snapshots were saved on backup branch backup/before-document-viewer-grant-155-2026-11-15 for the native generator, build workflow, latest.json and this register.
+- Feature branch: fix-my-documents-viewer-grants-155-2026-11-15. Planned APK 1.0.155 / versionCode 154. Build guard now requires the ClipData grant handoff. Build, signing verification, publication and phone testing are pending; do not claim PDF/Office opening works until tested on the user's Android device.
+- Rollback: restore the exact snapshots on the backup branch and publish only after verifying the release baseline. Preserve all existing local Diary data.
+
+---
+
 # My Documents photo opening — APK 1.0.154 published (2026-11-15)
 
 - User reported that a photo added in My Documents appears in the list but tapping Open does not open it.
