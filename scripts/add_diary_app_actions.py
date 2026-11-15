@@ -644,7 +644,7 @@ private object DiaryReminderScheduler {
             .setStyle(Notification.BigTextStyle().bigText(body))
             .setSound(null, alarmAttributes)
             .setContentIntent(content)
-            .setFullScreenIntent(wakePending, true)
+            .setVisibility(Notification.VISIBILITY_PUBLIC)
             .setAutoCancel(true)
             .setPriority(Notification.PRIORITY_HIGH)
             .setCategory(Notification.CATEGORY_ALARM)
