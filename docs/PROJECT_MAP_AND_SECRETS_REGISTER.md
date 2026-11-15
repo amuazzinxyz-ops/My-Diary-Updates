@@ -3269,3 +3269,13 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Live feed: package `com.personal.diaryapp`, versionName `1.0.170`, versionCode `169`, APK URL `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.170.apk`, APK SHA-256 `0ec0c15f00f2e80a64558729ba1dce23bcb85e27c04389c557b4ebcfa88ac379`, webVersion 247 and matching web SHA-256 above. The workflow validates the release signing certificate against the previously approved fingerprint before publishing.
 - Both delivery routes are live: signed APK 1.0.170 and in-app Check for Update Web Update 247. Local data, notes, photos, documents, PIN/recovery, reminders, package identity and signing identity were preserved.
 - Phone-side test of this specific no-lock message remains pending; do not claim device PASS until user confirms. Repository/build/feed/artifact checks are PASS.
+
+
+# Diary Lock no-lock message moved into the same popup box — Web Update 248 / APK 1.0.171 (2026-11-16)
+
+- User clarified that the no-lock message must appear in the same centered popup box where the browser alert used to appear, not as a separate status line below the Diary content.
+- Backup branch: `backup/before-diary-lock-no-lock-popup-box-fix-2026-11-16`. Feature branch: `fix/diary-lock-no-lock-popup-box-248-2026-11-16`.
+- Minimal change in `turnDiaryLockOff()`: when no Diary PIN exists, show the existing translated `diaryNoLock` message inside the same centered gold-bordered popup style, with a Close button. Do not write it to `diaryMyNotesStatus`. The PIN-entry dialog and correct-PIN unlock flow remain unchanged.
+- Preserve all local notes, photos, documents, IndexedDB records, PIN/recovery data, reminders, package identity and signing identity.
+- Planned Web Update 248 SHA-256: `13dbccd3b369b6674a75bfc06e48ccaa1a75a62c98c239952ba80d999addd26c`. Source and mirror are updated identically.
+- Planned APK 1.0.171 / versionCode 170 is required under the permanent dual-delivery rule. APK build, signature continuity, published APK SHA, latest.json live verification, and phone test are pending; do not claim release completion until verified.

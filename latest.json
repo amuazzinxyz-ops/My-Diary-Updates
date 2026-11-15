@@ -1,14 +1,14 @@
 {
   "appName": "My Diary",
   "packageName": "com.personal.diaryapp",
-  "versionCode": 169,
-  "versionName": "1.0.170",
-  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.170.apk",
-  "sha256": "0ec0c15f00f2e80a64558729ba1dce23bcb85e27c04389c557b4ebcfa88ac379",
-  "releaseNotes": "My Diary 1.0.170: Diary Lock not-set message appears inside the app without a browser alert or website address; matching signed APK and Check for Update feed. Existing documents, saved images, notes, PIN, reminders and app identity are preserved.",
+  "versionCode": 170,
+  "versionName": "1.0.171",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.171.apk",
+  "sha256": "PENDING_APK_BUILD_SHA256",
+  "releaseNotes": "My Diary 1.0.171: Diary Lock not-set message appears in the same centered in-app popup box, with no browser alert or website address. Matching signed APK and Check for Update feed; existing documents, saved images, notes, PIN, reminders and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 247,
+  "webVersion": 248,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "1fb8a2c22bf5e233370f9638601046ac977a747c3bd7a1f585a877be5b686c46",
-  "webReleaseNotes": "Diary Lock: when '🔓 Diary Lock Band Karein' is tapped while no PIN lock is set, 'Diary Lock is not set.' appears inside the app without a browser alert or website address. The APK release embeds the same update."
+  "webSha256": "13dbccd3b369b6674a75bfc06e48ccaa1a75a62c98c239952ba80d999addd26c",
+  "webReleaseNotes": "Diary Lock: when '🔓 Diary Lock Band Karein' is tapped while no PIN lock is set, 'Diary Lock is not set.' now appears in the same centered in-app popup box (with a close button), not in a separate lower status area or browser alert. The matching APK embeds this update."
 }
