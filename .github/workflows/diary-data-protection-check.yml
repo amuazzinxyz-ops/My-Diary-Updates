@@ -1,0 +1,61 @@
+name: Diary data protection checks
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "web-source/index.html"
+      - "diary-web/index.html"
+      - "scripts/add_diary_app_actions.py"
+      - ".github/workflows/build-diary-from-zip.yml"
+      - ".github/workflows/diary-data-protection-check.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Verify mirrored Diary source and JavaScript syntax
+        run: |
+          set -euo pipefail
+          cmp -s web-source/index.html diary-web/index.html
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          html = Path("web-source/index.html").read_text(encoding="utf-8")
+          scripts = re.findall(r"<script[^>]*>(.*?)</script>", html, re.I | re.S)
+          module = next((item for item in scripts if "function openDiaryPanel" in item), None)
+          if module is None:
+              raise SystemExit("Diary JavaScript module not found")
+          Path("/tmp/diary-module.js").write_text(module, encoding="utf-8")
+          required = [
+              "format:'my-diary-full-backup'",
+              "meFeatureAll('memories')",
+              "meFeatureAll('documents')",
+              "bridge.saveFullDiaryBackup(json)",
+              "window.addEventListener('diary-data-changed',scheduleDiaryAutoBackup)",
+              "function importFullDiaryBackup",
+          ]
+          missing = [item for item in required if item not in html]
+          if missing:
+              raise SystemExit("Full backup flow missing: " + ", ".join(missing))
+          PY
+          node --check /tmp/diary-module.js
+      - name: Verify native backup bridge generator syntax and guards
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/add_diary_app_actions.py
+          grep -Fq 'fun saveFullDiaryBackup(content: String): Boolean' scripts/add_diary_app_actions.py
+          grep -Fq 'My-Diary-Auto-Backup-' scripts/add_diary_app_actions.py
+          grep -Fq 'kept > 30' scripts/add_diary_app_actions.py
+          grep -Fq 'fun saveFullDiaryBackup(content: String): Boolean' .github/workflows/build-diary-from-zip.yml
+          grep -Fq "bridge.saveFullDiaryBackup(json)" .github/workflows/build-diary-from-zip.yml
