@@ -1,3 +1,21 @@
+# Selected-duration reminder screen hold — APK 1.0.150 published (2026-11-15)
+
+- User physically tested APK 1.0.149 with a 20-second ringtone and confirmed the display went dark while the ringtone continued. Waking the display manually stopped the ringtone. Do not mark the device-side issue resolved until the user tests this release.
+- Root cause confirmed in generated Kotlin source: `DiaryReminderWakeActivity` finished after a hard-coded 650 ms. Its `FLAG_KEEP_SCREEN_ON` therefore stopped protecting the display almost immediately, while the ringtone service continued for the configured duration.
+- Exact pre-edit snapshots are preserved on `backup/before-duration-screen-hold-150-2026-11-15`:
+  - `backups/scripts-add_diary_app_actions-py-before-duration-screen-hold-150-2026-11-15.txt`
+  - `backups/-github-workflows-build-diary-from-zip-yml-before-duration-screen-hold-150-2026-11-15.txt`
+  - `backups/latest-json-before-duration-screen-hold-150-2026-11-15.txt`
+  - `backups/docs-PROJECT_MAP_AND_SECRETS_REGISTER-md-before-duration-screen-hold-150-2026-11-15.txt`
+- PR #52 merged as commit `56d841464d39626a5131cfd900d19acc42336635`. Native script blob: `53452eeb6209bb550e5c7e7c3fff03de82dbe7a2`; build workflow blob: `dd8468a3c133845e8727d46997b1860d38e90e5f`.
+- Fix: the transparent `DiaryReminderWakeActivity` now reads `diary_reminder_ring_duration_seconds` from the same reminder intent and stays alive with `FLAG_KEEP_SCREEN_ON` for `durationSeconds * 1000L`, bounded to 10–300 seconds. It then finishes at the selected duration. It remains `setShowWhenLocked(true)` / `setTurnScreenOn(true)`, translucent, and excludes the Diary MainActivity; the keyguard and public reminder notification remain visible underneath. Existing sound service continues to stop the ringtone on the same selected duration. No changes to ringtone selection/volume, Snooze options, Done, repeat limits, stored reminders, notes/photos/PIN, app identity, or web HTML.
+- Build guard explicitly asserts that the wake activity reads the selected duration and finishes at `durationSeconds * 1000L`; APK version baseline advanced from 1.0.149 / code 148 to 1.0.150 / code 149.
+- **APK 1.0.150 / versionCode 149 successfully built and published.** Workflow run #206, ID `43698122928`, completed successfully. Debug build, release build, source checks, APK signature verification, and artifact upload all passed. Signing certificate matched existing trusted SHA-256 fingerprint `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A`.
+- Published APK URL: `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.150.apk`. Live `latest.json` reports SHA-256 `c9abb30f543930db3042ef851acd37b4e87558495ad06b40e27734edd97de19b`. Signed Release APK artifact ID `14155248843`.
+- Web Update remains 235. Physical Android test for 1.0.150 is pending. Ask the user to install via Me → Check for Updates and test the screen-off locked reminder at 20 seconds and one longer duration. Verify screen stays on for the full selected duration, notification is visible, ringtone stops at the same moment, and display turns off afterward. Do not claim device-side success until the user confirms.
+
+---
+
 # Lock-screen reminder wake + notification handoff — APK 1.0.149 published (2026-11-15)
 
 - User reported that the lock-screen display/light had regressed after APK 1.0.148 while notification visibility was being prioritized. Inspection confirmed that the notification builder no longer invoked the existing `.DiaryReminderWakeActivity`; the activity class and timed service wake lock still existed, but the wake activity was unused.
