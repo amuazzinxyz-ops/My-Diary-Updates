@@ -2544,15 +2544,18 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Rollback: restore the exact pre-edit source and register/feed copies from backup/before-note-longpress-inline-actions-2026-11-15; if already published, restore source and publish a higher webVersion. Preserve all local notes, photos and PIN/recovery data.
 
 
-# Correct note action-menu placement inside the pressed note card — pending publication (2026-11-15)
+# Correct note action-menu placement inside the pressed note card — published Web Update 224 (2026-11-15)
 
 - User reported that the previous floating text menu appeared outside the Diary, directly below the language selector, rather than beside the note.
-- Live starting point: Web Update 223, APK 1.0.143 / versionCode 142. Before this correction, live source and mirror were byte-identical (blob SHA 8c2b9cd28288f999ad4e0fd9b11a07392889625e); live feed reported webVersion 223 and webSha256 4c3a0875e96df08a9bddeef0064ef7bb87830a847cf61df45d06e977e0c5af32.
+- Live starting point was Web Update 223, APK 1.0.143 / versionCode 142. Before this correction, live source and mirror were byte-identical (blob SHA 8c2b9cd28288f999ad4e0fd9b11a07392889625e); live feed reported webVersion 223 and webSha256 4c3a0875e96df08a9bddeef0064ef7bb87830a847cf61df45d06e977e0c5af32.
 - Root cause addressed: menu placement trusted touch-event client coordinates. On the affected Android runtime these coordinates evidently did not represent the note location, so the menu could be placed near the page origin/language selector. The menu no longer uses touch coordinates.
 - Web-only correction: append the text menu as an absolutely positioned child of the exact note card being long-pressed; use that card's live getBoundingClientRect() for placement. Temporarily set only that card's position/z-index and restore both original inline values when the menu closes. This keeps the menu physically within the Diary note card, near its note, instead of appending it to document.body.
 - Preserved: Delete, Copy, Pin/Unpin, Edit, Share, Select; existing toggleNoteSelection; locked-note PIN restrictions; outside-tap dismissal; normal tap-to-open; all note/photo data, PIN/recovery, delete/trash and share logic.
 - Backup branch: backup/before-note-menu-card-anchor-fix-2026-11-15. Four live files (web source, mirror, latest feed and Master Register) were copied and re-fetched byte-identically before editing.
-- Feature branch: fix/note-menu-anchor-to-card-2026-11-15. Static checks: both inline JavaScript blocks parse; menu is an absolute child of the pressed card; position comes from card.getBoundingClientRect(); touch coordinates and document.body append are absent; no full-screen modal or action buttons; all six actions and multi-select wiring remain. PR and publication pending.
-- APK, package identity, signing and native Android source are not changed. No APK rebuild.
-- Physical Android verification remains pending. Do not claim the menu placement is phone-tested until the user confirms it appears beside the correct note and all actions work.
+- Feature branch: fix/note-menu-anchor-to-card-2026-11-15. PR #34 merged as `881ca6fc2e5ce562cf1006007ccfb0928c173b6b`.
+- Publisher workflow run 43682053362 completed successfully. Publish job steps all succeeded, including "Verify and publish HTML bundle without rebuilding APK".
+- Published state: `latest.json` blob `32a26a6c8c91af6341192fc02fb6bcab7033b615` reports `webVersion=224` and `webSha256=36ee6089a3a0dde0700386efa8a083e9f28d3998b8e10566caa4eb18a144bdda`. Live `web-source/index.html` and `diary-web/index.html` are byte-identical at blob SHA `ab93dac3ceedf270c06c8714c8e31b90295672dc`.
+- Static validation: both inline JavaScript blocks parse successfully; menu is an absolute child of the pressed card; placement uses that card's bounding rectangle; no touch-event coordinates or document.body append; no full-screen modal or action buttons; all six actions and multi-select wiring remain.
+- APK remains 1.0.143 / versionCode 142 with SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`. No APK rebuild, native Android, package identity or signing change.
+- Physical Android verification remains pending. Do not claim phone-side success until the user confirms that the menu appears beside the correct note and all actions work.
 - Rollback: restore source/feed/register from backup/before-note-menu-card-anchor-fix-2026-11-15; if already published, publish a higher webVersion. Preserve all local notes, photos and PIN/recovery data.
