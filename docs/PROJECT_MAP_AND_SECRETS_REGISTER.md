@@ -1,4 +1,15 @@
-# My Documents viewer handoff hardening — APK 1.0.156 in progress (2026-11-15)
+# My Documents PDF/image viewer handoff — APK 1.0.156 published (2026-11-15)
+
+- User asked that the repair be available through both the APK and “Check for Update”. The native FileProvider/MIME/chooser permission repair is Android Kotlin code and therefore requires an APK; an HTML-only Web Update cannot replace native Android code. Do not publish a fake Web Update version bump with unchanged HTML. Current Web Update remains 235; its HTML already calls the existing native `bridge.openDocument` method for My Documents.
+- PR #60 merged to main as `3c677fddddc51fcb2480151bc85f104c23fbcd3a`. GitHub Actions run #217 / ID `43707045930` completed successfully: signing keystore validation, source guard, debug build, signed Release configuration, APK publication and signed APK artifact upload all passed.
+- Published APK: `1.0.156`, versionCode `155`, package `com.personal.diaryapp`. Download: https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.156.apk
+- Published `latest.json` SHA-256: `12bc21001974da8557a4a32c0326d103d92c2e464786f35bc9e49dcad98e241c`. Live feed confirms versionName `1.0.156` and versionCode `155`.
+- Native fix: derive MIME from filename extension; attach FileProvider ClipData and FLAG_GRANT_READ_URI_PERMISSION to both ACTION_VIEW and chooser wrapper. Existing in-app photo preview, stored IndexedDB Blob records, private cache, FileProvider paths, user data, notes, PIN and reminders are preserved.
+- Device-side PDF/Office/image opening test is still pending. Do not claim the viewer works on the phone until user installs 1.0.156 and confirms. “Check for Update” alone cannot apply this native permission fix; use the APK for this release. Existing Web Update 235 remains the latest HTML package.
+
+---
+
+# My Documents viewer handoff hardening — APK 1.0.156 published; phone test pending (2026-11-15)
 
 - User tested APK 1.0.155 and reported that tapping Open still did nothing despite a PDF viewer being installed. Do not treat the previous ClipData-only fix as successful.
 - Rechecked current live native generator and My Documents web code. The native viewer was still relying on the MIME type supplied by the file picker and attached the URI read grant only to the inner ACTION_VIEW intent, not the chooser wrapper.
