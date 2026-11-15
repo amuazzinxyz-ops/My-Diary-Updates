@@ -786,7 +786,7 @@ class DiaryReminderSoundService : Service() {
 // This dedicated transparent activity wakes the display over the keyguard only.
 // It never opens MainActivity or unlocks the phone; the notification's normal
 // content tap remains the sole route into the Diary app.
-# Screen-duration release trigger: wake-only activity holds FLAG_KEEP_SCREEN_ON for the configured ring duration.
+// Screen-duration release trigger: wake-only activity holds FLAG_KEEP_SCREEN_ON for the configured ring duration.
 class DiaryReminderWakeActivity : android.app.Activity() {
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
