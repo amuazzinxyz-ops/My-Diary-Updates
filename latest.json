@@ -4,7 +4,7 @@
   "versionCode": 168,
   "versionName": "1.0.169",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.169.apk",
-  "sha256": "fee954b5f2da273677a9f2b8408adbe5182de76bac1dbaa107f1b48742664429",
+  "sha256": "aa7fa1f6f40defd443774a9df0bf8e01f2c7c6430175353a1f442979e1ad6d7e",
   "releaseNotes": "My Diary 1.0.169: Diary Lock incorrect-PIN feedback is displayed inside the PIN dialog; matching signed APK and Check for Update feed. Existing documents, saved images, notes, PIN, reminders and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 247,
