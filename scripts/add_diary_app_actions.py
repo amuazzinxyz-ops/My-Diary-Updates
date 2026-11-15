@@ -72,6 +72,42 @@ native = r"""
             @Suppress("DEPRECATION")
             return if(android.os.Build.VERSION.SDK_INT>=28) info.longVersionCode.toInt() else info.versionCode
         }
+        @JavascriptInterface fun openDocument(base64: String, fileName: String, mimeType: String): Boolean {
+            if (base64.isBlank()) return false
+            return try {
+                val bytes = android.util.Base64.decode(base64, android.util.Base64.DEFAULT)
+                if (bytes.isEmpty() || bytes.size > 20 * 1024 * 1024) throw Exception("Invalid document size")
+                val safeName = fileName.substringAfterLast('/').substringAfterLast('\\')
+                    .replace(Regex("[^A-Za-z0-9._ -]"), "_").take(120).ifBlank { "My-Document" }
+                val folder = File(cacheDir, "diary-share")
+                if (!folder.exists() && !folder.mkdirs()) throw java.io.IOException("Cannot create document cache")
+                val document = File(folder, "document-" + System.currentTimeMillis() + "-" + safeName)
+                document.writeBytes(bytes)
+                val contentUri = androidx.core.content.FileProvider.getUriForFile(
+                    this@MainActivity, "$packageName.fileprovider", document
+                )
+                val resolvedType = mimeType.takeIf { it.isNotBlank() && it != "application/octet-stream" }
+                    ?: android.webkit.MimeTypeMap.getSingleton().getMimeTypeFromExtension(safeName.substringAfterLast('.', "").lowercase())
+                    ?: "*/*"
+                val viewIntent = Intent(Intent.ACTION_VIEW).apply {
+                    setDataAndType(contentUri, resolvedType)
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                runOnUiThread {
+                    try {
+                        startActivity(Intent.createChooser(viewIntent, "Open document"))
+                    } catch (_: Exception) {
+                        Toast.makeText(this@MainActivity, "Is file ko kholne ke liye compatible PDF ya document viewer install karein.", Toast.LENGTH_LONG).show()
+                    }
+                }
+                true
+            } catch (_: Exception) {
+                runOnUiThread {
+                    Toast.makeText(this@MainActivity, "Document khol nahi saka. File dobara add karke dekhein.", Toast.LENGTH_LONG).show()
+                }
+                false
+            }
+        }
         @JavascriptInterface fun shareApp() {
             val share = Intent(Intent.ACTION_SEND).apply {
                 type = "text/plain"
