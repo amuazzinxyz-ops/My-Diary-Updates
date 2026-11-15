@@ -3039,3 +3039,11 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Correction: WebMessageListener callback validates HTTPS scheme and `appassets.androidplatform.net` host rather than brittle exact `sourceOrigin.toString()` comparison. The WebMessageListener origin allowlist and main-frame check remain in place.
 - Build, signed APK, feed publication, APK artifact SHA-256, and main branch APK path are verified. Physical device test is still pending: user must install 1.0.161 and test both an image and PDF in My Documents. Do not claim device-side success until user confirms.
 - Backup branch: `backup/before-161-origin-check-fix-2026-11-15`.
+
+
+## User-confirmed My Documents and update-route verification — APK 1.0.161 (2026-11-15)
+
+- After installing/testing the published My Diary APK 1.0.161, the user confirmed that the update process is working and replied “Ha Hogaya” to the combined check covering both direct APK update and the in-app **Check for Updates** route, plus opening both photo and PDF files in **Me → My Documents**. Record this as user-reported device verification; no independent remote access to the user's phone was performed.
+- Release remains APK 1.0.161 / versionCode 160, package `com.personal.diaryapp`. Live `latest.json` advertises APK URL `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.161.apk` and SHA-256 `cf3e760f77f3b7bbb5df2bdf5ac3f1a12cc2d99522dea42258ac21485ed90d1c`; webVersion 236 remains unchanged.
+- User confirmation closes the previously pending phone-test item for the APK update routes and My Documents photo/PDF opening. Preserve existing local Diary data, documents, notes, PIN/recovery, reminders, app identity and signing identity. No app source, APK, or update-feed version was changed for this register-only entry.
+- Register pre-edit backup branch: `backup/before-device-confirmation-register-2026-11-15`; exact previous register snapshot: `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-device-confirmation-2026-11-15.md`.
