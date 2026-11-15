@@ -3115,3 +3115,11 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Automated source validation run `43724688836` completed successfully. Native Android compile-only run `43724688896` also completed successfully: generated manifest/Kotlin checks, Java 17, Android SDK, Gradle setup, JVM target alignment, and `:app:assembleDebug` all passed.
 - GitHub Actions uploaded diagnostic artifact `My-Diary-native-compile-check-debug` (artifact ID `14165299764`, 20,803,642 bytes). It expires 2026-11-22. This is a debug/diagnostic APK only; it is not the signed production release and may not install over the existing production APK.
 - **Status remains: not merged, not published, and not phone-tested.** Successful compilation does not prove automatic backup/restore works on the user's device. Keep PR #75 open; do not merge or publish without explicit approval and the required on-device tests. Existing Notes-only backup/restore remains untouched.
+
+
+## Combined Diary backup — signed test APK built and uploaded (2026-11-15)
+
+- Signed-candidate workflow run `43725480976` completed successfully on feature branch commit `f14ef2ffca727729ba5f0e157eb7a9453b8316f2`. Android release build and signing step passed; certificate SHA-256 matched the approved existing identity `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A`.
+- Candidate artifact `My-Diary-1.0.164-signed-test-candidate` uploaded successfully, artifact ID `14166079074`, size 19,242,907 bytes. Artifact expires 2026-11-22 14:40:13 UTC. SHA-256 of the artifact ZIP: `f554738817e8f3aaaa656e79ce63053ba91c1b14676954b45086c9bea365fa04`.
+- Candidate app version is `1.0.164` / versionCode `163`. This is a signed test candidate only, not a published release; no live update feed, main branch, or release publication was changed.
+- PR #75 remains open and unmerged. The signed candidate build is complete, but full backup/restore behavior, automatic Downloads/My Diary snapshots, retention, and update-install persistence still require physical Android testing. Do not mark these runtime checks PASS until user confirms. Preserve existing local Notes, Memories attachments, Documents files, PIN/recovery, reminders, app identity, and signing identity.
