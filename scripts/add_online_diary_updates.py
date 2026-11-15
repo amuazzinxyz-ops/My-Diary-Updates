@@ -15,7 +15,11 @@ if s.count(old) != 1:
 s = s.replace(old, new, 1)
 
 old_toast = 'if(latest>currentVersion()) runOnUiThread { downloadAndInstall() }\n                    else runOnUiThread { downloadWebBundleIfAvailable(j) }'
-new_toast = 'if(latest>currentVersion()) runOnUiThread { downloadAndInstall() }\n                    else runOnUiThread { downloadWebBundleIfAvailable(j) }'
+new_toast = '''if (latest > currentVersion()) runOnUiThread { downloadAndInstall() }
+                    else if (latest < currentVersion()) runOnUiThread {
+                        Toast.makeText(this@MainActivity, "Aapka installed Diary version update channel se naya hai. Purana update nahi lagaya.", Toast.LENGTH_LONG).show()
+                    }
+                    else runOnUiThread { downloadWebBundleIfAvailable(j) }'''
 if s.count(old_toast) != 1:
     raise SystemExit("Could not safely locate existing APK latest-check branch")
 s = s.replace(old_toast, new_toast, 1)
@@ -33,20 +37,22 @@ web_method = r"""
                 return
             }
             val installedFile = File(filesDir, "diary-web/index.html")
-            val installedHash = if (installedFile.isFile) {
-                try {
-                    val md = java.security.MessageDigest.getInstance("SHA-256")
-                    installedFile.inputStream().use { input ->
-                        val buffer = ByteArray(16384)
-                        while (true) {
-                            val count = input.read(buffer)
-                            if (count < 0) break
-                            md.update(buffer, 0, count)
-                        }
+            // If no downloaded override exists, hash the HTML bundled in this APK.
+            // This prevents Check for Updates from needlessly replacing a newer test
+            // candidate bundle with the older public webVersion currently on main.
+            val installedHash = try {
+                val md = java.security.MessageDigest.getInstance("SHA-256")
+                val input = if (installedFile.isFile) installedFile.inputStream() else assets.open("index.html")
+                input.use { stream ->
+                    val buffer = ByteArray(16384)
+                    while (true) {
+                        val count = stream.read(buffer)
+                        if (count < 0) break
+                        md.update(buffer, 0, count)
                     }
-                    md.digest().joinToString("") { "%02x".format(it.toInt() and 0xff) }
-                } catch (_: Exception) { "" }
-            } else ""
+                }
+                md.digest().joinToString("") { "%02x".format(it.toInt() and 0xff) }
+            } catch (_: Exception) { "" }
             if (installedHash == expected) {
                 prefs.edit().putInt("webVersion", target).apply()
                 // The file is current, but the WebView may still be displaying an older page

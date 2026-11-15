@@ -1,0 +1,139 @@
+name: Safe Diary native compile check (no publish)
+
+on:
+  push:
+    branches:
+      - fix/full-diary-data-protection-2026-11-15
+    paths:
+      - "Diary-Android-Project-v13 (6).zip"
+      - "scripts/**"
+      - "web-source/**"
+      - "diary-web/**"
+      - ".github/workflows/safe-diary-native-compile.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "Diary-Android-Project-v13 (6).zip"
+      - "scripts/**"
+      - "web-source/**"
+      - "diary-web/**"
+      - ".github/workflows/safe-diary-native-compile.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: diary-safe-native-compile-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  compile-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Check mirrored Diary web source
+        run: |
+          cmp web-source/index.html diary-web/index.html
+          node --version
+          python3 -m py_compile scripts/add_diary_app_actions.py scripts/add_online_diary_updates.py scripts/apply_diary_identity.py
+
+      - name: Extract original Android project
+        run: |
+          test -f 'Diary-Android-Project-v13 (6).zip'
+          mkdir -p diary-project
+          unzip -q 'Diary-Android-Project-v13 (6).zip' -d diary-project
+          test -f diary-project/app/build.gradle.kts
+          test -f diary-project/app/src/main/assets/index.html
+          # Replace the legacy HTML inside the Android ZIP with Diary-only source.
+          cp web-source/index.html diary-project/app/src/main/assets/index.html
+          cmp -s web-source/index.html diary-project/app/src/main/assets/index.html
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path("diary-project/app/src/main/assets/index.html")
+          data=p.read_bytes()
+          if len(data) > 2_000_000:
+              raise SystemExit("BLOCKED: unexpected oversized Diary HTML asset")
+          head=data[:4096].decode("utf-8",errors="replace").upper()
+          if "MUAZZIN V" in head or "MUAZZIN SAHEB HTML PROJECT" in head:
+              raise SystemExit("BLOCKED: unrelated MUAZZIN HTML detected")
+          PY
+
+      - name: Apply the exact reviewed Diary native and update bridges
+        run: |
+          python3 scripts/add_diary_app_actions.py
+          python3 scripts/add_online_diary_updates.py
+          python3 scripts/apply_diary_identity.py
+
+      - name: Validate generated Android manifest and Kotlin source
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+          manifest=Path("diary-project/app/src/main/AndroidManifest.xml")
+          ET.parse(manifest)
+          kotlin=list(Path("diary-project/app/src/main/java").rglob("MainActivity.kt"))
+          if len(kotlin)!=1:
+              raise SystemExit(f"Expected exactly one MainActivity.kt, found {len(kotlin)}")
+          source=kotlin[0].read_text(encoding="utf-8")
+          for marker in (
+              "saveFullDiaryBackup(content: String)",
+              "My-Diary-Auto-Backup-",
+              "MediaStore.Downloads.EXTERNAL_CONTENT_URI",
+              "class DiaryReminderReceiver",
+          ):
+              if marker not in source:
+                  raise SystemExit("Missing generated native code: "+marker)
+          print("Manifest XML and required generated Kotlin sections found.")
+          PY
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install Android SDK
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+
+      - name: Align JVM targets
+        working-directory: diary-project
+        run: |
+          cat >> app/build.gradle.kts <<'GRADLE'
+
+          android {
+              compileOptions {
+                  sourceCompatibility = JavaVersion.VERSION_17
+                  targetCompatibility = JavaVersion.VERSION_17
+              }
+          }
+          tasks.withType<JavaCompile>().configureEach {
+              sourceCompatibility = JavaVersion.VERSION_17.toString()
+              targetCompatibility = JavaVersion.VERSION_17.toString()
+          }
+          tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+              kotlinOptions.jvmTarget = "17"
+          }
+          GRADLE
+
+      - name: Compile debug APK only (never publish)
+        working-directory: diary-project
+        run: gradle --no-daemon :app:assembleDebug
+
+      - name: Upload compile-only diagnostic APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: My-Diary-native-compile-check-debug
+          path: diary-project/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 7

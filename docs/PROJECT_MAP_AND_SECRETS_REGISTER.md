@@ -1,3 +1,30 @@
+# My Diary 1.0.164 corrected signed test candidate — standalone Diary asset verified (2026-11-15)
+
+- Rebuilt after the wrong bundled HTML issue was found and guarded. Signed candidate workflow run `43728012157` completed successfully; native compile-only workflow run `43728068502` completed successfully; data-protection validation run `43728068472` completed successfully.
+- Corrected candidate artifact: `My-Diary-1.0.164-signed-test-candidate`, artifact ID `14167292959`, ZIP size 1,973,875 bytes, expires 2026-11-22. Downloaded and extracted the APK for inspection.
+- Actual signed APK size is 2,030,846 bytes (~1.94 MiB), SHA-256 `55721001552261b7550518c97d5a7ca185cfcb321db5f998b5416c56f2a528f6`. This is back near the established 2 MB Diary APK size; it is not a 19 MB APK.
+- Inspected `assets/index.html` inside the APK: 460,438 bytes, begins with the standalone My Diary HTML doctype/comment; no MUAZZIN markers. Build log independently confirms the exact Diary asset size and the new workflow rejects oversized or MUAZZIN HTML before compile.
+- `web-source/index.html` and `diary-web/index.html` are identical at 408,426 characters and Git blob SHA `9c5c6e1cc8f3999377d3225366eddbcf7c67b9ae`. APK embeds the Diary HTML file from that source.
+- Build log confirms APK signing v1 and v2 verification true; release certificate SHA-256 remains the approved `23a4e93f3c7911dce18389ea583548700c6ad6a3759707f1cd222d07e2408b5a`. Build completed successfully, versionName 1.0.164 / versionCode 163.
+- Candidate remains test-only. It is not published in `latest.json`; production remains 1.0.163 / code 162. PR #75 remains open/unmerged. Do not publish until user tests the update install and all backup/restore cases on device and explicitly approves.
+- Remaining phone checks: install as update without uninstalling or clearing app data; test automatic snapshots on open and after Notes/Memories/Documents changes; retention of newest 30 completed backups; manual Full Backup; Full Restore including Memories and Documents attachments with merge/no destructive overwrite; existing Notes-only backup/restore; persistence of all prior data and PIN/recovery/reminders after update. Device tests are not yet claimed.
+
+---
+
+# My Diary 1.0.164 candidate rejected — wrong bundled HTML detected and build guard corrected (2026-11-15)
+
+- User asked to continue the combined Full Backup/Restore work from PR #75. The existing signed test candidate artifact (Actions run `43725480976`, artifact `14166079074`) was downloaded and inspected before any phone installation or release.
+- Artifact audit found the candidate APK was 19,294,908 bytes. Its `assets/index.html` was 29,097,452 bytes and began with unrelated MUAZZIN project source/comments, not the standalone My Diary page. The APK therefore fails the project boundary and size expectations. **Do not install or publish this candidate.** It was never placed in `latest.json`; production remains APK 1.0.163 / versionCode 162 and Web Update 238.
+- Root cause: the signed-candidate and compile-only workflows extracted the legacy Android ZIP but did not replace its pre-existing `app/src/main/assets/index.html` with the authoritative standalone Diary source. The PR branch's two Diary mirrors are identical at 408,426 characters, but were not copied into the extracted APK project.
+- Minimal workflow correction committed only on PR #75 feature branch:
+  - `.github/workflows/safe-diary-signed-candidate.yml` commit `ac603fec7adbdde6765bc943856696fda88be159`.
+  - `.github/workflows/safe-diary-native-compile.yml` commit `e67c2ccc124550a9f57f2e908f33e9ca6b3c899e`.
+  - Both now explicitly copy `web-source/index.html` into the extracted Android assets before native bridge changes, compare the asset with the authoritative source, reject oversized HTML, and reject MUAZZIN markers.
+- These commits are on the feature branch only; main, live feed, official APK and the separate MUAZZIN project were not changed. Rebuild after the workflow correction and inspect the resulting APK contents/size before offering a test download.
+- Remaining: verify the corrected candidate's `assets/index.html` matches Diary source and contains no MUAZZIN content; confirm signing fingerprint and APK identity; only then ask user to install as an update without uninstalling or clearing data. Device tests for automatic snapshots, newest-30 retention, manual Full Backup, restore including Memories/Documents attachments, existing Notes-only backup, and update-install persistence remain pending. Keep PR #75 open and unmerged until device tests pass and user explicitly approves merge/publication.
+
+---
+
 # My Memories search visibility and download response repair — APK 1.0.163 published; phone test PASS (user-confirmed, 2026-11-15)
 
 - User reported that after APK 1.0.162 the My Memories Search bar was still not visible and tapping Download produced no visible response. Re-inspection found the search field was inserted before the large form, but the Memories screen could retain an old scroll position when reopened; the Download handler wrote its status into the general status area below the large form, so progress/failure/success could remain off-screen.
@@ -3095,3 +3122,96 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Web update feed is version 237. Its SHA-256 is calculated from the UTF-8 bytes of `web-source/index.html`; source and published mirror are identical. APK remains 1.0.161 / versionCode 160; this is a web-only update, so no APK rebuild was made.
 - Android device verification is still pending. Test partial 2–4 word search and saving the downloaded image to the phone's Downloads/Gallery before marking device behavior verified.
 - Pre-edit snapshots remain on `backup/before-memories-search-download-2026-11-15`.
+
+
+## Combined Diary data backup/restore — implementation branch (2026-11-15)
+
+- User requirement: prevent Notes, My Memories photos/PDFs, and My Documents files from silently disappearing during app updates or restore operations. Existing Notes-only Backup/Restore must remain intact and compatible.
+- Safety branch: `backup/before-data-protection-work-2026-11-15`; implementation branch: `fix/full-diary-data-protection-2026-11-15`.
+- Added separate **Teeno ka Full Backup** and **Full Backup Restore** controls beside the existing Notes-only Backup/Restore controls. Existing Notes-only export/import functions were not replaced.
+- Full backup format v2 includes Notes, the current Notes trash list, every My Memories record with its original `fileBlob` encoded as a data URL, and every My Documents record with its original `fileBlob` encoded as a data URL. Backup creation stops if a photo/PDF's original bytes are unavailable; it must not silently produce an incomplete attachment backup.
+- Full restore validates the complete file structure and attachment data before writing. It merges records by ID and does not overwrite existing records; it does not clear either IndexedDB database. Existing local Notes and trash records are retained.
+- `web-source/index.html` and `diary-web/index.html` are identical on the implementation branch. The branch is 18 commits ahead of main and has no changes to `latest.json`, APK, package identity, signing identity, or Android native code.
+- Added native automatic backup writing to Android `Downloads/My Diary` after Notes, Memories, or Documents data changes and when Diary opens. It writes timestamped JSON snapshots and retains the newest 30 completed backups; each snapshot includes original photo/PDF/document bytes. Android bridge is added through `scripts/add_diary_app_actions.py`, with workflow guards for the native method and JS trigger.
+- **Status: implementation and automated validation passed (GitHub Actions run 43723987808); not yet built, merged, published, or phone-tested.** Automatic backups require the new APK/native bridge; older APKs cannot create them. Before merge/release, build the APK and validate backup creation, retention, restore, large attachments, and update persistence on-device. Automated validation checks mirrored HTML, JavaScript syntax, Python generator syntax, and native bridge guards; it does not prove Android runtime behavior. Do not publish until build/feed checks and device tests pass. App uninstall or clearing app data remains a separate risk; the external Downloads copies are intended to protect against it.
+
+
+## Combined Diary backup — isolated Android compile check passed (2026-11-15)
+
+- Compile-only workflow added on implementation branch in commit `8089e3e353bf063e57080a90a050ab71fef39162`: `.github/workflows/safe-diary-native-compile.yml`.
+- Automated source validation run `43724688836` completed successfully. Native Android compile-only run `43724688896` also completed successfully: generated manifest/Kotlin checks, Java 17, Android SDK, Gradle setup, JVM target alignment, and `:app:assembleDebug` all passed.
+- GitHub Actions uploaded diagnostic artifact `My-Diary-native-compile-check-debug` (artifact ID `14165299764`, 20,803,642 bytes). It expires 2026-11-22. This is a debug/diagnostic APK only; it is not the signed production release and may not install over the existing production APK.
+- **Status remains: not merged, not published, and not phone-tested.** Successful compilation does not prove automatic backup/restore works on the user's device. Keep PR #75 open; do not merge or publish without explicit approval and the required on-device tests. Existing Notes-only backup/restore remains untouched.
+
+
+## Combined Diary backup — signed test APK built and uploaded (2026-11-15)
+
+- Signed-candidate workflow run `43725480976` completed successfully on feature branch commit `f14ef2ffca727729ba5f0e157eb7a9453b8316f2`. Android release build and signing step passed; certificate SHA-256 matched the approved existing identity `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A`.
+- Candidate artifact `My-Diary-1.0.164-signed-test-candidate` uploaded successfully, artifact ID `14166079074`, size 19,242,907 bytes. Artifact expires 2026-11-22 14:40:13 UTC. SHA-256 of the artifact ZIP: `f554738817e8f3aaaa656e79ce63053ba91c1b14676954b45086c9bea365fa04`.
+- Candidate app version is `1.0.164` / versionCode `163`. This is a signed test candidate only, not a published release; no live update feed, main branch, or release publication was changed.
+- PR #75 remains open and unmerged. The signed candidate build is complete, but full backup/restore behavior, automatic Downloads/My Diary snapshots, retention, and update-install persistence still require physical Android testing. Do not mark these runtime checks PASS until user confirms. Preserve existing local Notes, Memories attachments, Documents files, PIN/recovery, reminders, app identity, and signing identity.
+
+
+## 2026-11-15 — My Documents search and always-visible image preview
+- Added the same prominent sticky search-bar treatment used by My Memories to My Documents, including partial multi-word matching against saved file names and metadata.
+- Corrected the image behavior to match My Memories: saved image files are rendered directly as visible inline thumbnails in each My Documents card without requiring a tap. The filename remains visible; no separate click-to-open image link is added. Existing native Open action remains available for PDFs and other document types.
+- Kept `web-source/index.html` and `diary-web/index.html` byte-identical; latest verified blob SHA is `53944d424907dc283ccfddbcbd340ce22646c3e1`.
+- Latest implementation commit: `300f6b3734e2e16c0ebf0aa701ea887e9ccb23e2`; register-only follow-up commit: `b07976e185e0d457945aac543b8ae7d9afb7e786`. PR #75 remains open on the isolated feature branch. Diary data-protection checks run `43734674958`, native compile run `43734668366`, and signed-candidate run `43734668384` all completed successfully.
+- Signed test candidate: My Diary `1.0.164` / versionCode `163`; artifact ID `14170510385`, artifact name `My-Diary-1.0.164-signed-test-candidate`, artifact ZIP 1,974,081 bytes (expires 2026-11-22). Extracted APK is 2,031,021 bytes; SHA-256 `b298b2e5d5ecb3c064f49f526a9d3cfd5114f76f80e86577ab9df24d9fdb0ec5`. Workflow verified the approved V2 signing certificate SHA-256 `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A`. Embedded standalone Diary HTML is 461,215 bytes and contains the Documents search and direct inline image preview; no MUAZZIN HTML markers were found.
+- Candidate is test-only. No APK has been published and live `latest.json` remains at production 1.0.163 / Web Update 238. Install only as an update over the existing app; do not uninstall or clear app data. Physical Android testing remains pending for Documents search, always-visible images, PDF/other-file Open, existing data persistence, automatic snapshots, retention, manual Full Backup/Restore, and existing Notes-only backup/restore. Keep PR #75 unmerged and do not publish until those tests pass and the user explicitly approves release.
+- Do not mark this as phone-tested. After a signed test APK is built, install as an update without uninstalling or clearing app data and verify Documents search, always-visible image thumbnails, PDF/other-file Open, existing records, and the separate full backup/restore test plan. Keep PR #75 unmerged and production unchanged until device tests pass and the user explicitly approves release.
+
+## 2026-11-15 — Check for Updates correction
+- Corrected the Android update-check decision path: if the installed APK version is ahead of the public update feed (as with a test candidate), do not apply the older live HTML bundle. Show a clear message instead. If the feed has a newer APK, download/install it; if APK versions match, check the web bundle.
+- Corrected the web-bundle comparison to hash the active downloaded override when present, otherwise hash the HTML embedded in the installed APK. This avoids treating every fresh install as an empty bundle and unnecessarily downloading the live bundle, and allows a genuine newer web bundle to be detected by SHA-256.
+- This prevents the 1.0.164 test candidate (versionCode 163) from being overwritten by production's older 1.0.163 / versionCode 162 web feed when the user taps Check for Updates. It also preserves the normal update path when the public APK version matches the installed app.
+- Implementation in `scripts/add_online_diary_updates.py`, commit `d15c7fbdc4f9ea4426f1f798efc90d64cc55fedd`; original script backed up at `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-check-for-updates-fix-2026-11-15.md`. Signed candidate must be rebuilt and checks rerun. No production feed change, merge, or publication is authorized. Phone testing is still required before release.
+
+## 2026-11-15 — Rebuilt candidate with Check for Updates fix
+- Updated source commit: `d15c7fbdc4f9ea4426f1f798efc90d64cc55fedd`.
+- Data protection checks run `43735298071`, native compile run `43735294933`, and signed candidate run `43735294465` completed successfully. Candidate build log confirms standalone Diary HTML asset size 461,215 bytes and approved V2 signing certificate SHA-256 `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A`.
+- Rebuilt test APK: My Diary `1.0.164`, versionCode `163`, APK size 2,031,422 bytes; SHA-256 `89f2b72b2a747bb3fa8c557ded194ec03c63cc9625dc5c91fed3f21ee3eaf4a8`; artifact ID `14169537971`, expires 2026-11-22. The APK was extracted and verified in the working container.
+- Check for Updates now compares the installed APK version with the live feed: if the installed app is newer than the feed (test candidate), it does not downgrade/replace its HTML with the older live bundle; if the feed APK is newer, it offers APK install; if APK versions match, it checks the web bundle using the active override or the APK's embedded HTML SHA-256. This corrects the earlier missing embedded-asset hash fallback.
+- Test-only: do not publish, merge PR #75, or modify live `latest.json`. Production remains 1.0.163 / Web Update 238. User phone test is still required: install as update over existing Diary (never uninstall/clear data), tap Check for Updates and confirm it does not downgrade the test candidate, then verify Documents search/inline photo previews, PDF Open, existing data/PIN/reminders, and backup/restore workflows. Explicit user approval required before release.
+
+
+## 2026-11-15 — My Documents search placement and image MIME correction
+- User reported that after installing the previously supplied 1.0.164 candidate, the My Documents search bar was not visible and image attachments were not displayed inline. Investigation found the search controls were appended after the large document-add form, unlike My Memories where search appears first. This made the search bar easy to miss and did not meet the requested same placement.
+- Corrected My Documents page order so the sticky search bar appears at the top before the add-document form, matching My Memories.
+- Improved image detection: use the actual image MIME type when available and fall back to common image filename extensions (JPG/JPEG, PNG, GIF, WEBP, BMP, HEIC/HEIF, AVIF). Set inferred image MIME on newly saved files and render detected images inline automatically without tapping. Existing PDF/other-file Open action is retained.
+- Exact backups created before edits:
+  - `backups/web-source-index-before-documents-search-preview-order-fix-2026-11-15.html`
+  - `backups/diary-web-index-before-documents-search-preview-order-fix-2026-11-15.html`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-documents-search-preview-order-fix-2026-11-15.md`
+- Source changes: `web-source/index.html` commit `81dee1e6c13c188e860445d4b0b85352c9a01276`; mirror `diary-web/index.html` commit `9af9ed07b6faaddcdf249481e183cd06ca1b393f`. The two HTML files were re-fetched and confirmed byte-identical after the change.
+- Build and device testing are pending. Do not merge PR #75 or publish to the live update feed until the new candidate is built, source checks pass, the user tests the app on the phone, and explicitly approves release. Preserve all existing records, attachments, PIN/recovery, reminders, and backup/restore.
+
+
+## 2026-11-15 — Corrected installable candidate version
+- The user already installed candidate versionCode 163 / versionName 1.0.164. A rebuilt APK with the same versionCode cannot install as an update over it. Therefore the corrected candidate is explicitly bumped to versionCode 164 / versionName 1.0.165.
+- Updated `.github/workflows/safe-diary-signed-candidate.yml` at commit `1dbbefdf2ec2a25ce38d9bed7f4b1003c563a17c`. This affects only the isolated test-candidate workflow; it does not edit the live feed or publish anything.
+- The signed build must finish and be checked for exact versionCode 164, versionName 1.0.165, approved signing identity, and embedded corrected HTML before sending the APK. Physical device verification remains pending.
+
+
+## 2026-11-15 — Corrected My Documents APK 1.0.165 built and verified
+- Signed candidate build run `43737230530` completed successfully at commit `1dbbefdf2ec2a25ce38d9bed7f4b1003c563a17c`; data protection source validation run `43737235781` passed. Candidate is `versionName 1.0.165` / `versionCode 164`, so it can install over the user's previously installed 1.0.164 / versionCode 163.
+- APK extracted from artifact `14171360615`; file `My-Diary-1.0.165.apk`, 2,031,647 bytes; SHA-256 `f1d7aa8305bf60a478d807cd3af6538fcfe5161717ca2ca9e5dd1c67efeb4c8f`.
+- Build log confirms BUILD SUCCESSFUL and approved V2 signing certificate SHA-256 `23a4e93f3c7911dce18389ea583548700c6ad6a3759707f1cd222d07e2408b5a`. Embedded standalone Diary HTML is 461,870 bytes; APK archive integrity passed.
+- Embedded HTML checks passed: My Documents search heading and sticky search input present; Documents search/tools are appended before the add-document form (same top placement as My Memories); image MIME detection falls back to common image extensions; newly saved images infer MIME type from extension; native Open action remains for PDF/other files.
+- This is a signed test candidate only. It is not published. Live production remains unchanged. User must install over existing app without uninstalling or clearing data, then test search, image previews, PDF/other Open, existing data/PIN/reminders, and backup/restore. Do not merge PR #75 or publish until user testing and explicit approval.
+
+
+## 2026-11-15 — My Documents search visibility and image decoding follow-up
+- The user reported the previous 1.0.165 candidate still did not show the My Documents search field and did not display image files automatically. Do not mark these behaviors phone-verified.
+- Updated `web-source/index.html` to give My Documents and My Memories search controls stable IDs, explicit visible display/visibility styles, autocomplete off, and dedicated accessible labels. The Documents search wrapper is explicitly identifiable for UI verification.
+- Changed My Documents preview handling to attempt image decoding of every saved file blob and display it automatically only when the WebView successfully decodes it; non-image files silently keep their existing Open action. This covers providers that return generic MIME types or filenames without image extensions.
+- Kept PDF/other-file Open action intact. Backups created before edits: `backups/web-source-index-before-documents-visible-search-image-sniff-fix-2026-11-15.html`, `backups/diary-web-index-before-documents-visible-search-image-sniff-fix-2026-11-15.html`, and this register's corresponding backup.
+- Mirrored `web-source/index.html` to `diary-web/index.html`; they must remain byte-identical. Bumped only the isolated signed test-candidate workflow to versionName `1.0.166` / versionCode `165` so it can install over 1.0.165. Live `main/latest.json` and production APK remain unchanged. Await signed build and source validation; do not merge PR #75 or publish without phone testing and explicit user approval.
+
+
+## 2026-11-15 — My Diary 1.0.166 signed candidate built and checked
+- Signed candidate workflow run `43738289291` completed successfully; artifact `My-Diary-1.0.166-signed-test-candidate` (artifact ID `14170983531`) is available until 2026-11-22. Candidate is versionName `1.0.166` / versionCode `165`, allowing update install over 1.0.165.
+- Downloaded and extracted candidate APK: `My-Diary-1.0.166.apk`, 2,031,749 bytes, SHA-256 `53edd02219bf621fc5eee566e40f81bdfc564719726f41c8bd164717e73a5307`. APK archive integrity passed; embedded standalone HTML is 462,530 bytes.
+- Embedded checks passed: dedicated My Documents search input ID present; explicit visible styling present; auto image-decode preview present; PDF/other Open action retained; full backup code remains present. Both inline JavaScript blocks passed `node --check` syntax validation.
+- Signed build log confirms `BUILD SUCCESSFUL` and approved V2 signing certificate SHA-256 `23a4e93f3c7911dce18389ea583548700c6ad6a3759707f1cd222d07e2408b5a`. Data protection validation and native compile-only workflow run `43738299580` both passed.
+- This remains a test candidate. No physical phone verification, no merge of PR #75, and no changes to live `main/latest.json` or production APK. User must install over the existing app without uninstalling or clearing data and confirm the Documents search field and automatic image previews before any production release.

@@ -111,7 +111,7 @@ jobs:
           source=Path("web-source/index.html")
           actual=hashlib.sha256(source.read_bytes()).hexdigest()
           meta["webSha256"]=actual
-          meta["webReleaseNotes"]="My Memories: search by partial or multiple name words and save existing images to Downloads/My Diary. Existing saved memories remain intact."
+          meta["webReleaseNotes"]="Adds combined Full Backup/Restore for Notes, My Memories photos/PDFs, and My Documents files; preserves existing Notes-only Backup/Restore and merges restored records without overwriting."
           Path("latest.json").write_text(json.dumps(meta,indent=2)+"\n",encoding="utf-8")
           expected=meta.get("webSha256","").lower()
           if len(expected)!=64 or actual!=expected:
@@ -180,6 +180,12 @@ jobs:
               raise SystemExit("BLOCKED: native My Documents FileProvider viewer handoff is missing")
           if "fun saveMemoryImage(base64: String, fileName: String, mimeType: String)" not in kotlin or "android.provider.MediaStore.Downloads.EXTERNAL_CONTENT_URI" not in kotlin or "MediaStore.MediaColumns.RELATIVE_PATH" not in kotlin:
               raise SystemExit("BLOCKED: My Memories native Downloads-folder save bridge is missing")
+          if "fun saveFullDiaryBackup(content: String): Boolean" not in kotlin or "My-Diary-Auto-Backup-" not in kotlin or "kept > 30" not in kotlin:
+              raise SystemExit("BLOCKED: automatic rolling full-backup writer is missing")
+          if "format:'my-diary-full-backup'" not in generated_html or "meFeatureAll('memories')" not in generated_html or "meFeatureAll('documents')" not in generated_html or "bridge.saveFullDiaryBackup(json)" not in generated_html:
+              raise SystemExit("BLOCKED: combined Notes/Memories/Documents full-backup flow is incomplete")
+          if "window.addEventListener('diary-data-changed',scheduleDiaryAutoBackup)" not in generated_html or "window.dispatchEvent(new Event('diary-data-changed'))" not in generated_html:
+              raise SystemExit("BLOCKED: automatic backup is not connected to saved data changes")
           if "bridge.saveMemoryImage(base64" not in generated_html or "kind==='memories'" not in generated_html or "reader.readAsDataURL(record.fileBlob)" not in generated_html:
               raise SystemExit("BLOCKED: My Memories Download button is not connected to the native Downloads save bridge")
           if "meFeatureContent.appendChild(meFeatureTools(kind));meFeatureContent.appendChild(meFeatureForm(kind))" not in generated_html:
