@@ -7,8 +7,8 @@
   "sha256": "fee954b5f2da273677a9f2b8408adbe5182de76bac1dbaa107f1b48742664429",
   "releaseNotes": "My Diary 1.0.169: Diary Lock incorrect-PIN feedback is displayed inside the PIN dialog; matching signed APK and Check for Update feed. Existing documents, saved images, notes, PIN, reminders and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 246,
+  "webVersion": 247,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "a660266c972f0b791ec45c337417b2534a77f1a76f7d45dfd2772a4a092a332a",
-  "webReleaseNotes": "Diary Lock: incorrect PIN is shown inside the PIN box as 'PIN galat hai'; browser alert/address is no longer shown. Existing lock and saved data are preserved."
+  "webReleaseNotes": "Diary Lock: when '🔓 Diary Lock Band Karein' is tapped while no PIN lock is set, 'Diary Lock is not set.' appears inside the app without a browser alert or website address. The APK release embeds the same update."
 }
