@@ -195,7 +195,7 @@ jobs:
               raise SystemExit("BLOCKED: wake-only activity manifest configuration is invalid")
           if kotlin.count(".setContentIntent(content)") != 1:
               raise SystemExit("BLOCKED: expected exactly one standard reminder notification tap action")
-          for required in ("RingtoneManager.ACTION_RINGTONE_PICKER", "Intent.ACTION_OPEN_DOCUMENT", "setSound(alarmSound, alarmAttributes)", "diary_reminder_sound_uri", "diary_reminder_snooze_minutes", "diary_reminder_snooze_limit", "snoozeUsed", 'put("soundUri", soundUri)', 'put("snoozeMinutes", snoozeMinutes)', 'put("snoozeLimit", snoozeLimit)'):
+          for required in ("RingtoneManager.ACTION_RINGTONE_PICKER", "Intent.ACTION_OPEN_DOCUMENT", "setSound(null, alarmAttributes)", "diary_reminder_sound_uri", "diary_reminder_snooze_minutes", "diary_reminder_snooze_limit", "snoozeUsed", 'put("soundUri", soundUri)', 'put("snoozeMinutes", snoozeMinutes)', 'put("snoozeLimit", snoozeLimit)'):
               if required not in kotlin:
                   raise SystemExit("BLOCKED: custom reminder sound support is missing: " + required)
           if "pickReminderSound(currentUri: String)" not in kotlin:
@@ -313,7 +313,7 @@ jobs:
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
           if code != 144 or name != "1.0.145":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.144/143, found {name}/{code}")
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.145/144, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
           if feed_version != (143, "1.0.144"):
               raise SystemExit(f"BLOCKED: update feed is not the installed baseline or this exact repair release: {feed_version}")
@@ -421,7 +421,7 @@ jobs:
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if meta.get("packageName") != "com.personal.diaryapp" or feed_version != (142, "1.0.143"):
+          if meta.get("packageName") != "com.personal.diaryapp" or feed_version != (143, "1.0.144"):
               raise SystemExit(f"BLOCKED: live main feed is not the installed baseline or exact repair release: {feed_version}")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
@@ -434,12 +434,12 @@ jobs:
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           cp /tmp/My-Diary-verified.apk My-Diary.apk
-          cp /tmp/My-Diary-verified.apk My-Diary-1.0.144.apk
+          cp /tmp/My-Diary-verified.apk My-Diary-1.0.145.apk
           python3 -m json.tool latest.json >/dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add My-Diary.apk My-Diary-1.0.144.apk latest.json
-          git commit -m "Publish verified My Diary update 1.0.144"
+          git add My-Diary.apk My-Diary-1.0.145.apk latest.json
+          git commit -m "Publish verified My Diary update 1.0.145"
           git push origin HEAD:main
       - name: Upload unsigned Release APK for private owner-side signing
         if: env.DIARY_RELEASE_READY != 'true'
