@@ -10,5 +10,5 @@
   "webVersion": 232,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "a1678160ed47a258decd5ab53b2687f4e8f093eb3914faaf653d2742244666b6",
-  "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
+  "webReleaseNotes": "Reminder Snooze controls are ready; update the Diary web bundle after installing the matching APK."
 }
