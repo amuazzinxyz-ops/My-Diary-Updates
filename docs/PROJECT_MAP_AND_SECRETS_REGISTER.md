@@ -11,6 +11,8 @@
 
 ---
 
+## Investigation notes before the 1.0.157 release
+
 - User tested APK 1.0.156 and reported that My Documents still does not open files. Previous external ACTION_VIEW chooser handoff is not considered fixed.
 - New native approach: keep the existing in-app image preview, and render PDF pages directly inside My Diary using Android PdfRenderer with Previous/Next page controls and a Close button. This removes dependence on a third-party PDF app and FileProvider chooser for PDFs. Other document types retain the existing FileProvider chooser with extension-based MIME and explicit read grants.
 - Preserve IndexedDB records and Blob bytes, filenames, delete behavior, private cache handling, 20 MB file limit, FileProvider configuration, notes, PIN/recovery, reminders, app identity and signing.
