@@ -121,6 +121,9 @@ native = r"""
                 )
                 val viewIntent = Intent(Intent.ACTION_VIEW).apply {
                     setDataAndType(contentUri, resolvedType)
+                    // Explicit ClipData carries the FileProvider URI grant through Android's chooser
+                    // to PDF/Office viewer apps, including apps that do not inspect data-only grants.
+                    clipData = android.content.ClipData.newUri(contentResolver, safeName, contentUri)
                     addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
                 }
                 runOnUiThread {
