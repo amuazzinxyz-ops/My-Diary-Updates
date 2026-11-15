@@ -317,7 +317,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved next Diary version 1.0.162 (versionCode 160)
+      - name: Set approved next Diary version 1.0.162 (versionCode 161)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
@@ -330,7 +330,7 @@ jobs:
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary versionName=1.0.162, versionCode=160")
+          print("Set Diary versionName=1.0.162, versionCode=161")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -353,9 +353,9 @@ jobs:
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
           if code != 161 or name != "1.0.162":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.162/160, found {name}/{code}")
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.162/161, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if feed_version not in ((159, "1.0.160"), (160, "1.0.161")):
+          if feed_version not in ((159, "1.0.160"), (160, "1.0.161"), (160, "1.0.162"), (161, "1.0.162")):
               raise SystemExit(f"BLOCKED: update feed is neither the installed baseline nor the already-published exact repair release: {feed_version}")
           print(f"PASS: package={package}, repair release={name}/{code}; feed state is approved: {feed_version}")
           PY
@@ -453,7 +453,7 @@ jobs:
           test -s "$APK"
           SHA256="$(sha256sum "$APK" | awk '{print $1}')"
           cp "$APK" /tmp/My-Diary-verified.apk
-          printf '1.0.162\n160\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.162\n161\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -f -B diary-publish-main origin/main
           python3 - <<'PY'
@@ -461,7 +461,7 @@ jobs:
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in ((159, "1.0.160"), (160, "1.0.161")):
+          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in ((159, "1.0.160"), (160, "1.0.161"), (160, "1.0.162"), (161, "1.0.162")):
               raise SystemExit(f"BLOCKED: live main feed is neither the installed baseline nor the exact repair release being republished: {feed_version}")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
