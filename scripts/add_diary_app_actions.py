@@ -617,6 +617,7 @@ private object DiaryReminderScheduler {
             action = "com.personal.diaryapp.action.REMINDER_WAKE_SCREEN"
             data = Uri.parse("mydiary-reminder://wake/" + Uri.encode(id))
             putExtra("diary_reminder_id", id)
+            putExtra("diary_reminder_ring_duration_seconds", ringDurationSeconds)
         }
         val wakePending = PendingIntent.getActivity(context, code + 4, wakeIntent, pendingFlags())
         fun actionIntent(action: String, suffix: String): PendingIntent {
@@ -805,8 +806,12 @@ class DiaryReminderWakeActivity : android.app.Activity() {
                 android.view.WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
             )
         }
+        // Keep this transparent wake-only activity alive for the exact selected
+        // ringtone duration. FLAG_KEEP_SCREEN_ON is tied to the visible activity,
+        // avoiding reliance on deprecated SCREEN_BRIGHT_WAKE_LOCK alone.
         window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        android.os.Handler(mainLooper).postDelayed({ finish() }, 1500L)
+        val durationSeconds = (intent?.getIntExtra("diary_reminder_ring_duration_seconds", 30) ?: 30).coerceIn(10, 300)
+        android.os.Handler(mainLooper).postDelayed({ finish() }, durationSeconds * 1000L)
     }
 }
 """
@@ -934,9 +939,9 @@ print("PASS: original FileProvider resource, authority, and shared updater cache
 
 g=base/"build.gradle.kts"
 t=g.read_text(encoding="utf-8")
-t=re.sub(r"versionCode\s*=\s*\d+","versionCode = 97",t,count=1)
-t=re.sub(r'versionName\s*=\s*"[^"]+"','versionName = "1.0.97"',t,count=1)
-if "versionCode = 97" not in t: raise SystemExit("Version code patch failed")
+t=re.sub(r"versionCode\s*=\s*\d+","versionCode = 98",t,count=1)
+t=re.sub(r'versionName\s*=\s*"[^"]+"','versionName = "1.0.98"',t,count=1)
+if "versionCode = 98" not in t: raise SystemExit("Version code patch failed")
 g.write_text(t,encoding="utf-8")
 
 m=base/"src/main/assets/index.html"

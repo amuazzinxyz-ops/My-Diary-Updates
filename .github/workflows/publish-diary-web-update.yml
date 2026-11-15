@@ -48,9 +48,9 @@ jobs:
           # triggers this publisher again.
           if "ringDurationSeconds" in text or "ringVolumePercent" in text or "snoozeInterval:" in text:
               app_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-              if app_version < (145, "1.0.146"):
+              if app_version < (146, "1.0.147"):
                   Path("/tmp/diary-web-publish-skipped").write_text("native release pending")
-                  print("SKIP: timed ringtone volume and screen-wake web bundle waits for signed APK 1.0.146/145")
+                  print("SKIP: timed ringtone volume and screen-wake web bundle waits for signed APK 1.0.147/146")
                   raise SystemExit(0)
           mirror = Path("diary-web/index.html")
           if mirror.is_file() and mirror.read_bytes() == data:
