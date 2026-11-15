@@ -1,3 +1,12 @@
+# My Documents search bar parity with My Memories — feature branch prepared (2026-11-15)
+
+- User requested the My Documents search to match My Memories exactly. Created pre-change backup branch `backup/before-documents-search-parity-2026-11-15` and isolated feature branch `fix/documents-search-memories-parity-2026-11-15`, both from main commit `72a575ee7ed3d7b126e7d5135e8dcdbdc8437799`.
+- Existing Documents tools were already ordered before the entry form, but unlike Memories the Documents search lacked its visible section heading and the multi-word filter only used whole-phrase matching. Updated both web source and mirror so My Documents has the same full-width, 52px search field, sticky header/search placement, spacing and visible heading as My Memories, with a Documents-specific label and localized placeholder.
+- Search now matches every entered word independently against saved title, filename and available metadata, so 2–3 words in any order or the full name can find a document. Empty search still lists all saved documents. Existing IndexedDB records, file blobs, open/view action and delete behavior are unchanged.
+- Source and mirror are required to remain byte-identical. This is an isolated web UI/filter change; no APK, production feed or live Web Update has been published. Build/test, PR and phone verification are pending. Do not merge/publish until user tests search and explicitly approves.
+
+---
+
 # Check-for-Update version mismatch — signed test candidate built (2026-11-15)
 
 - User reported the installed Diary app says it is already newer than the update channel. Live feed baseline at investigation was APK 1.0.163 / versionCode 162, while the user's installed test candidate was reported as 1.0.166 / code 165. This is expected when a higher-version test APK is installed but the production feed remains older.
