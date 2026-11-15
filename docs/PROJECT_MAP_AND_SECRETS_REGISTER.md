@@ -3199,3 +3199,11 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Created pre-edit backup branch `backup/before-memories-duplicate-thumbnail-fix-2026-11-16` from main commit `048c885cb2b7cac8d87a78e7e809f208611ca7f6`. Feature branch: `fix/memories-single-thumbnail-web245-2026-11-16`.
 - Web Update 245 removes only the newly-added duplicate thumbnail block. It retains the original single image preview, original full-size native viewer handler, existing file link and Download button. No IndexedDB records/blobs, photos, notes, PIN/recovery, reminders, or APK identity are changed.
 - Source and mirror must remain byte-identical; latest.json webVersion and SHA-256 must match exact UTF-8 source bytes before merge/publish. Android verification remains pending until user confirms one thumbnail per saved image.
+
+
+## My Memories duplicate thumbnail — Web Update 245 phone verification PASS (2026-11-16)
+
+- User has now tested Web Update 245 on their Android phone and explicitly confirmed the duplicate-thumbnail issue is fixed: one saved image displays only once. Record this as user-reported device verification; no independent remote access to the phone was performed.
+- The phone test closes the pending Web Update 245 item. The single original My Memories thumbnail remains, tapping it opens the full-size image, and the existing Download action is retained as implemented. This confirmation specifically verifies the duplicate-image display fix; it does not claim unrelated features were tested.
+- No app source, mirror, latest.json, APK, or update version was changed for this register-only entry. Existing saved photos, notes, documents, PIN/recovery data, reminders, package identity and signing identity remain untouched.
+- Register pre-edit backup branch: `backup/before-memories-web245-phone-pass-register-2026-11-16`.
