@@ -3143,3 +3143,13 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Web Update 240 successfully published by workflow run `43745605152`. Source and mirror are identical at blob SHA `b329d9d9f3f35112366662b87ed477639b9474fe`; web SHA-256 `4086d69ff0ad56c2e9467a55cfeb736fea4395660588a3d01375a8672105ee53`. Live `latest.json` advertises webVersion 240 and the matching SHA-256.
 - APK workflow run `43745605125` was triggered automatically and was still in progress at the time of this register update. The web bundle is already published for the installed app's Check for Update route; do not claim the APK rebuild has completed unless separately verified.
 - Phone-side display/scroll verification is pending. User should open My Documents after Check for Update and confirm the search bar is immediately below the feature heading and above the add-document form. No remote phone test was performed.
+
+
+## My Documents image preview — Web Update 241 (2026-11-15)
+
+- User requested that image files in **Me → My Documents** visibly preview like images in **My Memories**, instead of showing only the PDF/document Open button.
+- PR #80 merged to main as commit `036af5c9d02187161749230889e5085b1b205fd5` (squash publication commit). Pre-edit backup branch: `backup/before-documents-image-preview-2026-11-15`; exact HTML snapshot: `backups/web-source-index-before-documents-image-preview-2026-11-15.html`.
+- My Documents now creates a thumbnail for saved image MIME types using the existing Blob URL lifecycle and the same `.diary-me-feature-thumb` styling used by My Memories. Tapping the thumbnail invokes the existing Open button handler, preserving the native full-image viewer path. PDFs and other non-image files retain the existing Open button with no image thumbnail.
+- No IndexedDB records, Blob contents, filenames, search logic, document-open bridge, PIN/recovery, notes, reminders, package identity, or signing identity were changed. Source and mirror are identical at blob SHA `381ce902a26d74438ceab1debf2d7b7fc39272fe`.
+- Web Update 241 is published in `latest.json`, with web SHA-256 `69a471825452b9ed4a835d757445032d201bc03f38fc40bc95d075ceb1c80133`. APK remains My Diary 1.0.168 / versionCode 167; this is a web-only update delivered through Check for Update, so no APK rebuild is required.
+- Physical Android display/tap test is pending. Do not claim the user's phone has verified the image preview until the user opens My Documents after Check for Update and confirms.
