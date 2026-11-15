@@ -1,3 +1,16 @@
+# My Documents native bridge visibility correction — APK 1.0.159 in progress (2026-11-15)
+
+- User tested APK 1.0.158 and reported tapping Open for both PDF and photo files produces no visible response.
+- Rechecked the complete Android bridge generator and web caller. The WebView registers `DiaryNativeActions` as `DiaryAppActions`, and the HTML calls `window.DiaryAppActions.openDocument(...)`. The generated Kotlin bridge declaration was `private inner class DiaryNativeActions`, which can prevent Java reflection from invoking its annotated public methods. This is the leading source-level cause under investigation; device-side confirmation is still required.
+- Minimal correction on feature branch: change the bridge class to a publicly accessible `inner class DiaryNativeActions`, preserving the existing `@JavascriptInterface` methods, file decoding, PDF renderer, photo viewer, FileProvider path, saved IndexedDB Blob data, and all other Diary features.
+- Added a fail-closed workflow guard requiring the public bridge class and exact `webView.addJavascriptInterface(DiaryNativeActions(), "DiaryAppActions")` registration before building.
+- Current live baseline: APK 1.0.158 / versionCode 157. Next planned release: APK 1.0.159 / versionCode 158. Workflow baseline and publication paths have been advanced to this exact pair.
+- Exact pre-edit snapshot branch: `backup/before-public-bridge-visibility-fix-2026-11-15`. Feature branch: `fix/public-diary-bridge-visibility-159-2026-11-15`.
+- PR, build, signed APK verification, publication, and physical Android test are pending. Do not tell the user to update or claim the viewer is fixed until the release is built, checksum-verified against the live feed, and the user tests both a photo and a PDF.
+- Preserve all existing local Diary data and the current app signing identity. Roll back from the backup branch if validation fails.
+
+---
+
 # APK 1.0.158 Check for Updates download URL repair — fixed and verified (2026-11-15)
 
 - User reported Check for Updates returned HTTP 404 after feed advertised 1.0.158. Investigation confirmed latest.json pointed to `My-Diary-1.0.158.apk`, but the publish workflow had copied the signed APK under `My-Diary.apk` and the stale name `My-Diary-1.0.157.apk`; the 1.0.158-named file did not exist. This was a release publication filename mismatch, not a device/network problem.
