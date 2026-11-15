@@ -171,6 +171,11 @@ jobs:
           if not {"android.intent.action.BOOT_COMPLETED", "android.intent.action.MY_PACKAGE_REPLACED"} <= boot_actions:
               raise SystemExit("BLOCKED: reminder restore receiver lacks boot/update actions")
           kotlin = Path("diary-project/app/src/main/java/com/muazzin/diary/MainActivity.kt").read_text(encoding="utf-8")
+          generated_html = Path("diary-project/app/src/main/assets/index.html").read_text(encoding="utf-8")
+          if "fun openDocument(base64: String, fileName: String, mimeType: String)" not in kotlin or "androidx.core.content.FileProvider.getUriForFile" not in kotlin or "Intent.ACTION_VIEW" not in kotlin:
+              raise SystemExit("BLOCKED: native My Documents FileProvider viewer handoff is missing")
+          if "bridge.openDocument(base64" not in generated_html or "kind==='documents'" not in generated_html:
+              raise SystemExit("BLOCKED: My Documents Open button is not connected to the native viewer")
           if "alarm.setAlarmClock(alarmClock, pending)" not in kotlin or "AlarmManager.AlarmClockInfo" not in kotlin:
               raise SystemExit("BLOCKED: AlarmClock scheduling code is missing")
           if "setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP" in kotlin or "setAndAllowWhileIdle(" in kotlin:
