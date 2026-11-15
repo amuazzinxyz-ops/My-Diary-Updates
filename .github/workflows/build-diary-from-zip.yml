@@ -358,7 +358,7 @@ jobs:
           if code != 167 or name != "1.0.168":
               raise SystemExit(f"BLOCKED: expected approved APK version 1.0.168/167, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if feed_version != (166, "1.0.167"):  
+          if feed_version not in ((166, "1.0.167"), (167, "1.0.168")):  
               raise SystemExit(f"BLOCKED: update feed is neither the installed baseline nor the already-published exact repair release: {feed_version}")
           print(f"PASS: package={package}, repair release={name}/{code}; feed state is approved: {feed_version}")
           PY
@@ -464,7 +464,7 @@ jobs:
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if meta.get("packageName") != "com.personal.diaryapp" or feed_version != (166, "1.0.167"): 
+          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in ((166, "1.0.167"), (167, "1.0.168")): 
               raise SystemExit(f"BLOCKED: live main feed is neither the installed baseline nor the exact repair release being republished: {feed_version}")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
@@ -473,15 +473,15 @@ jobs:
           meta["versionCode"] = int(lines[1])
           meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.168.apk"
           meta["sha256"] = lines[2]
-          meta["releaseNotes"] = "My Diary 1.0.168: My Documents multi-word search, matching signed APK and Check for Update feed. Existing documents, saved data, notes, PIN, reminders and app identity are preserved. Existing saved images, notes, PIN data, reminders, documents, and app identity remain preserved."
+          meta["releaseNotes"] = "My Diary 1.0.168: My Documents multi-word search, matching signed APK and Check for Update feed. Existing documents, saved images, notes, PIN, reminders and app identity are preserved."
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           cp /tmp/My-Diary-verified.apk My-Diary.apk
-          cp /tmp/My-Diary-verified.apk My-Diary-1.0.167.apk
+          cp /tmp/My-Diary-verified.apk My-Diary-1.0.168.apk
           python3 -m json.tool latest.json >/dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add My-Diary.apk My-Diary-1.0.167.apk latest.json
+          git add My-Diary.apk My-Diary-1.0.168.apk latest.json
           git commit -m "Publish phone-tested My Diary update 1.0.168"
           git push origin HEAD:main
       - name: Upload unsigned Release APK for private owner-side signing
