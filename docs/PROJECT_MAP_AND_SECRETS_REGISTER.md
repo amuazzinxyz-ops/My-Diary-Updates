@@ -1,3 +1,17 @@
+# Timed ringtone and expanded Snooze options — implementation pending publication (2026-11-15)
+
+- User request: in both **Personal Calendar** and **Smart Reminder**, add Snooze intervals 2/5/10/15/20/30 minutes and let the user choose how long the selected ringtone actually plays: 10/20/30 seconds or 1/2/5 minutes.
+- Pre-change live baseline: APK 1.0.144 / versionCode 143; Web Update 233; source/mirror blob SHA `753ea41f6296ccb1454fa1ca24cd28efd0e1c823`; native patch script blob SHA `8f47a318bcfa58719aed6352fa8d03073cc4c6df`; live feed blob SHA `b205d6b90599e5d051541348ba71130085484f38`.
+- Exact full-repository backup branch: `backup/before-ring-duration-snooze-options-2026-11-15`. Verified source HTML, native patch script, both relevant workflows, latest.json and this register have identical Git blob SHAs on backup branch and main before edits.
+- Feature branch: `feature/ring-duration-snooze-options-2026-11-15`.
+- Native design: notification remains visible and silent; a dedicated Android media-playback foreground service plays the selected alarm ringtone and stops automatically at the chosen duration. Snooze and Done stop playback immediately. This avoids relying on Android notification-channel sound duration, which the app cannot set. Alarm loudness remains controlled by Android's device alarm-volume setting; no fake in-app volume slider is added.
+- Planned APK version: 1.0.145 / versionCode 144. Web publisher waits for the matching signed native APK before exposing the updated web bundle.
+- Status: implementation prepared on the feature branch; build, signing, PR merge, publication and physical-phone testing are not yet confirmed. Do not tell the user the feature is published until signed build and live feed/source hashes are verified.
+- Preserve Calendar recurrence (daily/weekly/monthly/yearly), repeat limit (off/3/5/10), ringtone picker, Done action, screen wake, local notes/photos, PIN/recovery, package identity and signing certificate.
+- Rollback snapshot: `backup/before-ring-duration-snooze-options-2026-11-15`.
+
+---
+
 # Configurable Snooze for Personal Calendar and Smart Reminder — published APK 1.0.144 and Web Update 233 (2026-11-15)
 
 - User request: add configurable repeat-notification/Snooze controls to **Personal Calendar** and **Smart Reminder**, without disturbing the existing working app.
