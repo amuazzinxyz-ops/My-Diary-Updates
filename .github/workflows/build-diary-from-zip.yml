@@ -309,7 +309,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved next Diary version 1.0.158 (versionCode 157)
+      - name: Set approved next Diary version 1.0.159 (versionCode 158)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
