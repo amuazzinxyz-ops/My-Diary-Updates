@@ -3007,5 +3007,15 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Backup branch created before this correction: `backup/before-docs-webmessage-bridge-2026-11-15`.
 - New feature branch: `fix/docs-webmessage-open-2026-11-15`.
 - Corrective approach: route document bytes from the Diary WebView through an origin-restricted AndroidX `WebMessageListener` named `DiaryNativeDocuments`, dispatching to the existing native in-app PDF/photo viewer on a background thread. Retain the existing JavaScript-interface route only as fallback. Keep document records, IndexedDB storage, local notes, photos, PIN data, reminders, package identity, and signing identity unchanged.
-- New release target: My Diary `1.0.160`, versionCode `159`; do not reuse the previous 1.0.159/158 version.
+- New release target: My Diary `1.0.160`, versionCode `159`; the new release has been built and published as recorded below.
 - Build guard must verify the native listener and the HTML message-channel call before APK compilation/publication. Physical device verification remains pending until the user tests the new APK.
+
+
+## My Documents WebMessageListener repair — APK 1.0.160 published (2026-11-15)
+
+- PR #68 merged as `453ebbf0514781361cf52bcee837ad49b8364b60`; build workflow run #226 (`43713165065`) completed successfully.
+- Android release: My Diary `1.0.160`, versionCode `159`, package `com.personal.diaryapp`; exact published APK `My-Diary-1.0.160.apk`.
+- Live feed URL: `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.160.apk`; live `latest.json` SHA-256 `92d95a59d490680f4861b169b4168ea8edf8165a355d4c7855133263d3785cb9`.
+- Independently downloaded signed-release workflow artifact, extracted APK size 2,025,563 bytes, and computed SHA-256 `92d95a59d490680f4861b169b4168ea8edf8165a355d4c7855133263d3785cb9`; exact match with live feed.
+- APK build, signed release configuration, upload, publication, and all workflow steps succeeded. The HTML Open action now prefers the origin-restricted AndroidX `DiaryNativeDocuments` WebMessageListener channel; the existing JavascriptInterface remains fallback. Native PDF/photo viewer logic and existing file records are preserved.
+- Physical device verification is still pending. User must install 1.0.160 and test opening both PDF and photo documents; do not claim that device testing has passed until user confirms.
