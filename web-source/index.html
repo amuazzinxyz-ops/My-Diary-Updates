@@ -1628,7 +1628,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     var previous=form._editingRecord||null;var record=Object.assign({},previous||{},{id:previous?previous.id:'mf-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),kind:kind,created:previous?previous.created:Date.now(),date:date?date.value:meFeatureToday()});
     if(title)record.title=title.value.trim();
     if(kind==='calendar'){
-     record.type=type.value;record.time=time.value||'09:00';record.details=details.value.trim();record.repeat=repeatSelect.value;record.remind=!!calendarReminder.checked;record.soundUri=soundInput.value||'';record.soundLabel=soundLabel.textContent||mf('reminderSoundDefault');record.snoozeMinutes=Number(snoozeControls.interval.value)||10;record.snoozeLimit=Number(snoozeControls.limit.value);record.ringDurationSeconds=Number(snoozeControls.duration.value)||30;
+     record.type=type.value;record.time=time.value||'09:00';record.details=details.value.trim();record.repeat=repeatSelect.value;record.remind=!!calendarReminder.checked;record.soundUri=soundInput.value||'';record.soundLabel=soundLabel.textContent||mf('reminderSoundDefault');record.snoozeMinutes=Number(snoozeControls.interval.value)||10;record.snoozeLimit=Number(snoozeControls.limit.value);record.ringDurationSeconds=Number(snoozeControls.duration.value)||30;record.ringDurationSeconds=Number(snoozeControls.duration.value)||30;
      if(previous&&previous.remind)calendarCancelAlarms(previous);
      if(record.remind&&!calendarScheduleAlarms(record)){if(previous&&previous.remind)calendarScheduleAlarms(previous);meFeatureStatus.textContent=mf('reminderFailed');return;}
      if(!record.remind)record.reminderIds=[];
@@ -1806,7 +1806,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      var heading=mfEl('strong',{},record.title||record.category||record.fileName||mf(record.type||'event'));
      var meta=mfEl('small',{},kind==='reminders'?(String(record.date||'')+' • '+String(record.time||'')):(record.date||''));
      card.append(heading,meta);
-     if(kind==='reminders'&&record.details)card.appendChild(mfEl('p',{},record.details));if(kind==='reminders'&&record.soundUri)card.appendChild(mfEl('small',{},'🔔 '+(record.soundLabel||mf('reminderSound'))));if(kind==='reminders')card.appendChild(mfEl('small',{},mf('snoozeInterval')+': '+(record.snoozeMinutes||10)+' min • '+mf('snoozeLimit')+': '+(record.snoozeLimit===undefined?3:record.snoozeLimit)));
+     if(kind==='reminders'&&record.details)card.appendChild(mfEl('p',{},record.details));if(kind==='reminders'&&record.soundUri)card.appendChild(mfEl('small',{},'🔔 '+(record.soundLabel||mf('reminderSound'))));if(kind==='reminders')card.appendChild(mfEl('small',{},mf('snoozeInterval')+': '+(record.snoozeMinutes||10)+' min • '+mf('snoozeLimit')+': '+(record.snoozeLimit===undefined?3:record.snoozeLimit)+' • '+mf('ringDuration')+': '+(record.ringDurationSeconds||30)+' sec+' • '+mf('ringDuration')+': '+(record.ringDurationSeconds||30)+' sec));
      if(kind==='reminders'&&record.noteId){var linkedNote=(read()||[]).filter(function(n){return String(n.id)===String(record.noteId);})[0];if(linkedNote)card.appendChild(mfEl('small',{},mf('reminderRelatedNote')+': '+((linkedNote.title||mf('untitled')).trim()||mf('untitled'))));}
      if(kind==='reminders'){
       var reminderEdit=mfEl('button',{type:'button',class:'diary-me-feature-edit'},'✏️ '+mf('edit'));
