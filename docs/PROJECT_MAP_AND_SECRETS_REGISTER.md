@@ -3190,3 +3190,12 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Web Update 243 feed checksum was stale: it advertised `d4bf3a1ad626ea5f9081bf5240453412d23af56dc2073a8321e57c5beaec99d9`. New Web Update 244 checksum calculated over the exact UTF-8 bytes is `9f26eb32b40f896fe04715116e8fd3703054f657b81e9853433fa5572e056252` (459522 bytes). APK metadata and signing identity remain unchanged.
 - Source/mirror/feed/register changes are prepared on the feature branch. Publish only after exact source/mirror equality, independent SHA-256 re-read, updater guard checks, and successful workflow validation. Android device test remains pending; do not claim full-size opening is phone-verified until user confirms.
 - Existing local notes, photos, PIN data and all other app data must be preserved. No MUAZZIN project files are involved.
+
+
+## My Memories duplicate thumbnail corrected — Web Update 245 (2026-11-16)
+
+- User confirmed Web Update 244 installed, but reported that saving one image showed two image thumbnails in My Memories.
+- Root cause verified in the exact source: the original saved-image preview and native full-size open handler were already present in the existing `else` branch. Web Update 244 had added a second thumbnail in a new `if(kind==='memories'...)` block, producing duplicate previews.
+- Created pre-edit backup branch `backup/before-memories-duplicate-thumbnail-fix-2026-11-16` from main commit `048c885cb2b7cac8d87a78e7e809f208611ca7f6`. Feature branch: `fix/memories-single-thumbnail-web245-2026-11-16`.
+- Web Update 245 removes only the newly-added duplicate thumbnail block. It retains the original single image preview, original full-size native viewer handler, existing file link and Download button. No IndexedDB records/blobs, photos, notes, PIN/recovery, reminders, or APK identity are changed.
+- Source and mirror must remain byte-identical; latest.json webVersion and SHA-256 must match exact UTF-8 source bytes before merge/publish. Android verification remains pending until user confirms one thumbnail per saved image.
