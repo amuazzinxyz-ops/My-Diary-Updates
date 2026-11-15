@@ -2239,7 +2239,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    var field=document.getElementById(id),cs=field&&window.getComputedStyle?window.getComputedStyle(field):null;
    var fieldWidth=field?(field.clientWidth||field.getBoundingClientRect().width||0):0;
    var width=fieldWidth||Math.max(240,(window.innerWidth||408)-48),size=Number(format&&format.size)||18;
-   var firstStrong=String(value||'').match(/[\\u0590-\\u08ffA-Za-z\\u0900-\\u097f]/),direction=firstStrong&&/[\\u0590-\\u08ff]/.test(firstStrong[0])?'rtl':'ltr';
+   var firstStrong=String(value||'').match(/[\u0590-\u08ffA-Za-z\u0900-\u097f]/),direction=firstStrong&&/[\u0590-\u08ff]/.test(firstStrong[0])?'rtl':'ltr';
    if(cs&&cs.direction==='rtl'&&field&&String(field.value||'')===String(value||''))direction='rtl';
    return {width:width,textAlign:cs&&cs.textAlign||'start',direction:direction,fontFamily:format&&format.family||cs&&cs.fontFamily||'Arial, sans-serif',fontWeight:format&&format.bold?'900':'400',fontSize:size,lineHeight:size*(id==='diaryMyNotesText'?1.55:1.2),paddingLeft:cs?(parseFloat(cs.paddingLeft)||12):12,paddingRight:cs?(parseFloat(cs.paddingRight)||12):12,paddingTop:cs?(parseFloat(cs.paddingTop)||12):12,textIndent:cs?(parseFloat(cs.textIndent)||0):0,letterSpacing:cs&&cs.letterSpacing||'0px',verticalAlign:id==='diaryMyNotesTitle'?'middle':'top'};
   }
