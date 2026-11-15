@@ -1,0 +1,14 @@
+{
+  "appName": "My Diary",
+  "packageName": "com.personal.diaryapp",
+  "versionCode": 153,
+  "versionName": "1.0.154",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.154.apk",
+  "sha256": "650c136e3b29e8ed8f7fee1e31f0ebac98db6a22608ae9c667af8bec10b120ef",
+  "releaseNotes": "My Documents now opens saved photos directly inside My Diary with a fit-center image viewer; other supported documents retain the Android document-viewer handoff. Existing saved records, file contents, notes, PIN data, reminders, and app identity remain preserved.",
+  "minimumSupportedVersionCode": 1,
+  "webVersion": 235,
+  "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
+  "webSha256": "7e4509905645dadc788f48c7a784e227fa419662ddf90f82c6e1c9c39b2d3b76",
+  "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
+}
