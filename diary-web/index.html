@@ -1107,7 +1107,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   if(!copy)return;
   var home=document.querySelector('.diary-home');
   if(!home)return;
-  var heading=home.querySelector('h1'),subtitle=home.querySelector('p'),label=home.querySelector('label[for="diaryLanguageSelect"]');
+  var heading=home.querySelector('h1'),subtitle=home.querySelector('p'),label=document.querySelector('label[for="diaryLanguageSelect"]');
   if(heading)heading.textContent=copy.title;
   if(subtitle)subtitle.textContent=copy.subtitle;
   if(label)label.textContent=copy.language;var homeEntry=document.getElementById('diaryHomeEntryHost');if(homeEntry)homeEntry.setAttribute('aria-label',copy.openDiary||t('openDiary'));
@@ -1333,6 +1333,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var meWrap=el('div',{id:'diaryDiaryMeWrap'});
   var meBtn=el('button',{id:'diaryDiaryMeBtn',type:'button','aria-expanded':'false'},t('me'));
   var mePanel=el('div',{id:'diaryDiaryMePanel',hidden:'hidden'});
+  /* Reuse the one existing language selector inside Me; do not create a duplicate control. */
+  var languageControl=document.querySelector('.diary-language');if(languageControl)mePanel.appendChild(languageControl);
   var settingsRow=el('div',{id:'diaryDiaryMeSettingsRow'});
   var fontGroup=el('div',{id:'diaryDiaryFontGroup'});
   var fontLabel=el('button',{id:'diaryDiaryFontLabel',type:'button','aria-expanded':'false','aria-controls':'diaryDiaryFontSlider'},t('fontSize'));
@@ -3315,6 +3317,14 @@ body[data-diary-interface-theme]:not([data-diary-interface-theme="blue"]):not([d
 .diary-me-feature-empty{text-align:center!important;padding:16px!important;color:#756781!important;font-weight:800!important}
 </style>
 
+
+<style id="diary-language-selector-me-menu">
+/* Keep the language selector off the welcome screen; show the same control inside Me. */
+.diary-home>.diary-language{display:none!important}
+#diaryDiaryMePanel .diary-language{display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;gap:6px!important;width:100%!important;margin:0 0 7px!important;padding:8px!important;box-sizing:border-box!important;border:1px solid #d4af37!important;border-radius:10px!important;background:#fff!important}
+#diaryDiaryMePanel .diary-language label{font-size:14px!important;font-weight:900!important;color:#50317b!important;text-align:left!important}
+#diaryDiaryMePanel .diary-language select{display:block!important;width:100%!important;min-height:42px!important;box-sizing:border-box!important}
+</style>
 </body>
 </html>
 <!-- SHA-256 release verification refresh 2026-11-12 -->
