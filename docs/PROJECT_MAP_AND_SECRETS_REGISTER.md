@@ -1,3 +1,24 @@
+# Move language selector into Me menu — published Web Update 225 (2026-11-15)
+
+- User request: move the existing Language / Zaban selector from the Diary welcome screen into the **Me** menu.
+- Starting live state: Web Update 224; APK `1.0.143` / versionCode `142`; package `com.personal.diaryapp`; source/mirror blob SHA `ab93dac3ceedf270c06c8714c8e31b90295672dc`; feed web SHA-256 `36ee6089a3a0dde0700386efa8a083e9f28d3998b8e10566caa4eb18a144bdda`.
+- Scope: web-only change to `web-source/index.html`. Reused and moved the original `.diary-language` wrapper and its one `#diaryLanguageSelect` control into `#diaryDiaryMePanel` when the Diary overlay is created; hid it on the welcome screen; styled it as a full-width selector inside Me. Updated the language-label lookup to find the moved label outside `.diary-home`.
+- Preserved all 10 existing language choices, the same select element/id, the existing change listener, direction handling (including Urdu/Arabic RTL), the existing `diary_language_v204` key, and all other language translation logic.
+- Explicitly untouched: notes, photos, storage data/keys, PIN/recovery, trash, note actions, updater logic, Android source, APK, package identity, signing data and permissions.
+- Pre-edit backup branch: `backup/before-move-language-selector-into-me-2026-11-15`. All four backups were re-fetched and verified byte-identical to the starting live files:
+  - `backups/web-source-before-move-language-selector-into-me-2026-11-15.html` (blob `ab93dac3ceedf270c06c8714c8e31b90295672dc`)
+  - `backups/diary-web-before-move-language-selector-into-me-2026-11-15.html` (same blob)
+  - `backups/latest-before-move-language-selector-into-me-2026-11-15.json`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-move-language-selector-into-me-2026-11-15.md`
+- Feature branch: `feature/move-language-selector-into-me-2026-11-15`. PR #35 merged successfully as `58419af5eb0169eb67f61ceb3e38c3af983cf7bf`; diff changed only `web-source/index.html` (11 additions, 1 deletion).
+- Publisher bot commit: `3659ba7bc493cabb5e073972732c6fa2408db4c2`. Its diff confirms the mirror and feed were published: live `web-source/index.html` and `diary-web/index.html` are byte-identical at blob SHA `c77067a5c9a360613d05f567a70e58c9f971ce87`. Live `latest.json` blob `4e748ab90b78e2e78366f3caa77b1a632f1bac40` reports `webVersion=225` and `webSha256=efdfc3c03c3ff5f040df7754830bd3c2d110d219c38ecd1a7b20becd0de6e5ff`.
+- Static checks: both inline JavaScript blocks parse; exactly one `diaryLanguageSelect` remains; the existing wrapper is moved rather than duplicated; welcome-screen hiding and Me-menu display rules are present; original language key and change listener remain. Publisher commit and live feed confirm Web Update 225 publication; the workflow run ID/log was not separately surfaced by the available status lookup.
+- APK remains `1.0.143` / versionCode `142`; SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`. No APK rebuild or signing change.
+- Physical Android verification is **pending**. User should open **My Diary → Me**, confirm the Language / Zaban selector is inside Me and absent from the welcome screen, change among languages, and confirm the Diary labels and Urdu/Arabic direction update. Do not claim phone-side success until the user confirms.
+- Rollback: restore the exact pre-change source/feed/register copies from `backup/before-move-language-selector-into-me-2026-11-15`; if already published, restore the source and publish a higher webVersion. Preserve all local notes, photos and PIN/recovery data.
+
+---
+
 # Note Cover Photo and full-text sharing repair — Web Update 220 (2026-11-15)
 
 - User request: fix three Note Share problems: text placed over **Note ka Cover Photo** shifts from its editor position; long note text is cut off after a line / shown with `...`; and no-photo text-share artwork appears black/dark.
