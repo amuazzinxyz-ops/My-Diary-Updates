@@ -1,3 +1,16 @@
+# Reminder display-duration repair — merged, APK build pending (2026-11-15)
+
+- User-reported failure on APK 1.0.146 / Web Update 235: with a 20-second reminder, the ringtone continued while the display went dark; waking the display manually stopped the ringtone. Do not mark the phone-side behavior fixed until the user tests it.
+- Pre-edit live baseline: APK 1.0.146 / versionCode 145; Web Update 235; main commit `bbfcfa5bad9b04aca67b07a0df46ab0fad59a944`.
+- Full pre-edit snapshot branch: `backup/before-screen-on-activity-duration-2026-11-15`. Feature branch: `feature/screen-on-activity-duration-2026-11-15`. PR #48 merged as commit `6b361a4a44dfaca11eae27092f67ca3eba28bda0`.
+- Native change in `scripts/add_diary_app_actions.py`: the full-screen wake-only activity now receives the selected `diary_reminder_ring_duration_seconds`, holds `FLAG_KEEP_SCREEN_ON`, and finishes after that same duration instead of the previous fixed 1.5 seconds. The existing timed wake lock, ringtone foreground service, per-reminder 0–100% volume, ringtone selection, Snooze/Done, recurrence, local notes/photos, PIN/recovery and app identity are otherwise unchanged.
+- Build workflow now validates that the selected duration is passed to the wake activity and configures APK **1.0.147 / versionCode 146**, only when the live baseline remains 1.0.146 / 145. Web publisher waits for matching signed APK 1.0.147 / 146.
+- **Build and publication status: pending verification.** Do not tell the user an APK is ready or provide a download link until the signed build succeeds, signing fingerprint matches the trusted certificate, the published APK hash matches the feed, and source/mirror/register checks pass.
+- Physical Android testing remains pending even after publication. User must verify 20 seconds and longer ringtone durations, display staying on for the same duration, ringtone stopping at the same time, volume low/medium/high, and Snooze/Done in both Personal Calendar and Smart Reminder.
+- Preserve the existing volume slider and all Diary data. Do not claim physical-device success from source/build checks.
+
+---
+
 # Timed screen wake and adjustable ringtone volume — published APK 1.0.146 and Web Update 235 (2026-11-15)
 
 - User tested APK 1.0.145 / Web Update 234 with a 20-second ringtone: ringtone continued after the display went dark and stopped only when the screen was manually woken. User also pointed out that the requested in-app volume setting had not been implemented in the previous release.
