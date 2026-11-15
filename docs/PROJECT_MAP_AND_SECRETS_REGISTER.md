@@ -1,3 +1,26 @@
+# Configurable Snooze for Personal Calendar and Smart Reminder — implementation prepared, verification pending (2026-11-15)
+
+- User request: add the new repeat-notification/Snooze controls to **Personal Calendar** and **Smart Reminder** without disturbing existing working features.
+- Starting live state: Web Update 232; APK 1.0.143 / versionCode 142; package `com.personal.diaryapp`; live source/mirror blob SHA `aa587245b2cd93b39c9dcad8e56398c6181029d1`; live feed blob SHA `ad0b0eb0f5412ed195b2108806b55b3b5b42c61c`.
+- Backup branch: `backup/before-calendar-smart-snooze-2026-11-15`. Exact pre-edit copies were created and re-fetched byte-identically for web source, published mirror, latest.json, this register, native patch script, APK build workflow, and web publisher workflow:
+  - `backups/web-source-before-calendar-smart-snooze-2026-11-15.html`
+  - `backups/diary-web-before-calendar-smart-snooze-2026-11-15.html`
+  - `backups/latest-before-calendar-smart-snooze-2026-11-15.json`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-calendar-smart-snooze-2026-11-15.md`
+  - `backups/add_diary_app_actions-before-calendar-smart-snooze-2026-11-15.py`
+  - `backups/build-diary-from-zip-before-calendar-smart-snooze-2026-11-15.yml`
+  - `backups/publish-diary-web-update-before-calendar-smart-snooze-2026-11-15.yml`
+- Feature branch: `feature/calendar-smart-reminder-snooze-controls-2026-11-15`.
+- Intended behavior: each new or edited Calendar event reminder and Smart Reminder can select Snooze interval 5/10/15/30 minutes and maximum Snooze count off/3/5/10. Defaults are 10 minutes and 3 repeats. The Android notification's Snooze action uses the selected interval; the action disappears after the selected maximum is reached. Done remains available. The selected interval, limit and used count are stored by the native scheduler and restored after reboot. Calendar's existing Daily/Weekly/Monthly/Yearly event recurrence remains separate and unchanged.
+- Existing sound picker, selected ringtone/file persistence, notification channel sound, alarm timing, exact AlarmClock scheduling, screen wake, Done action, note/photo/PIN storage and app identity are intended to remain unchanged.
+- Sound duration and independent 0–100% volume are **not** included in this implementation: Android notification-channel sound duration/volume are controlled by Android/device settings; changing that would require a separate native playback service and should not be faked as a setting.
+- Files changed on feature branch: `web-source/index.html` (translated controls for all 10 app languages, save/edit/default handling and native bridge arguments); `scripts/add_diary_app_actions.py` (persisted configurable Snooze scheduling/action handling); `.github/workflows/build-diary-from-zip.yml` (next signed release 1.0.144/versionCode 143 and baseline guards); `.github/workflows/publish-diary-web-update.yml` (do not expose the new bridge-dependent web source before signed APK 1.0.144/143; publish after APK feed commit).
+- Safety sequencing: web publisher is gated until the native APK version is in the feed; it is also triggered by the APK workflow's latest.json commit so the web mirror/feed can publish after the signed APK. This avoids sending a 7-argument bridge call to the previous 5-argument APK.
+- Current status at register update: source edits prepared; PR/merge, native compile, debug and signed Release build, certificate fingerprint, APK SHA-256, feed/mirror hashes and phone verification are **pending**. Do not install or announce completion until the workflows and live artifacts pass.
+- Rollback: restore exact source/script/workflow/register/feed copies from `backup/before-calendar-smart-snooze-2026-11-15`; if any web bundle was published, restore desired source and publish a higher webVersion. Preserve local notes, photos, PIN and all existing user data.
+
+---
+
 # Double-size purple/gold 3D welcome card — published Web Update 232 (2026-11-15)
 
 - User request: make the existing welcome-screen card much more beautiful and approximately double its current size.
