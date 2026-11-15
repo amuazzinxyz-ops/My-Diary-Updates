@@ -3222,3 +3222,13 @@ The user can simply say what they want in Roman Hindi. No special template, file
 7. This rule applies to every future Diary feature/fix release, regardless of whether the code change is native Android, HTML/JavaScript, or both. Pure documentation/register-only edits with no app-code change do not require a new APK.
 
 **User explicitly requested this rule as a permanent default on 2026-11-16. Apply it automatically; do not ask the user to repeat or approve it for each future app change.**
+
+
+## Diary Lock wrong-PIN message stays inside PIN box — Web Update 246 + APK 1.0.169/168 (2026-11-16)
+
+- User requested one narrowly scoped correction: when using **Me → 🔓 Diary Lock Band Karein**, entering an incorrect 4-digit Diary PIN should show only the wrong-PIN message, without a browser alert that also exposes the website address.
+- Pre-edit backup branch: `backup/before-diary-lock-wrong-pin-inline-message-2026-11-16`. Feature branch: `fix/diary-lock-wrong-pin-inline-message-2026-11-16`.
+- In `turnDiaryLockOff()`, replaced only the incorrect-PIN `window.alert()` with an inline red, bold status message inside the existing PIN dialog. The entered PIN is cleared and focus returns to the PIN field. Successful PIN verification and lock removal are unchanged. Storage failure is shown in the same inline status area.
+- Existing Diary PIN value, lock flow, recovery behavior, notes, photos, documents, IndexedDB data, reminders, package identity and signing identity are not changed.
+- Web Update 246 is advertised in `latest.json`; source and `diary-web/index.html` mirror are updated from the same HTML. The build workflow is advanced to APK 1.0.169 / versionCode 168, with baseline 1.0.168 / code 167, and will embed the exact published web source in the APK and update the feed checksum.
+- Release verification is pending: confirm source/mirror byte equality, computed UTF-8 web SHA-256, successful signed APK build, signing certificate continuity, APK SHA-256, published APK URL and live latest.json. Do not mark complete or tell the user to update until both APK and Check for Update routes are verified. Physical phone testing remains pending until the user confirms.
