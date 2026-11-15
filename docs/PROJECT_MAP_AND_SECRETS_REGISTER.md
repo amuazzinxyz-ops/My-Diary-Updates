@@ -1,3 +1,21 @@
+# Lock-screen reminder wake + notification handoff — APK 1.0.149 published (2026-11-15)
+
+- User reported that the lock-screen display/light had regressed after APK 1.0.148 while notification visibility was being prioritized. Inspection confirmed that the notification builder no longer invoked the existing `.DiaryReminderWakeActivity`; the activity class and timed service wake lock still existed, but the wake activity was unused.
+- Exact pre-edit snapshots are preserved on `backup/before-lockscreen-wake-notification-149-2026-11-15`:
+  - `backups/add_diary_app_actions-py-before-lockscreen-wake-notification-149-2026-11-15.txt`
+  - `backups/build-diary-from-zip-yml-before-lockscreen-wake-notification-149-2026-11-15.txt`
+  - `backups/latest-json-before-lockscreen-wake-notification-149-2026-11-15.txt`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-md-before-lockscreen-wake-notification-149-2026-11-15.txt`
+- PR #51 merged as commit `03e416d83eb288baa50da1768d25b04872f445d2`. Native script blob: `be978e44605184a86b1cc55ba4d141453d156606`; build workflow blob: `6e14b3b5e75c887e1533e9823c4c93f0967daa67`.
+- Native reminder notification now uses the existing transparent `DiaryReminderWakeActivity` as a brief full-screen wake handoff. The activity calls `setShowWhenLocked(true)` / `setTurnScreenOn(true)`, briefly holds `FLAG_KEEP_SCREEN_ON`, then finishes after 650 ms so the public lock-screen reminder notification can be exposed. The ringtone foreground service retains its existing timed `SCREEN_BRIGHT_WAKE_LOCK` for exactly the selected ringtone duration (`seconds * 1000L`). The notification remains public, high priority, and categorized as an alarm.
+- Build guard now requires exactly one full-screen wake handoff, the quick 650 ms activity exit, lock-screen wake flags, `USE_FULL_SCREEN_INTENT`, public notification visibility, and the selected-duration service wake lock. The approved release baseline was advanced from 1.0.148 / versionCode 147 to 1.0.149 / versionCode 148.
+- **APK 1.0.149 / versionCode 148 successfully built and published.** GitHub Actions workflow run #205, ID `43697285385`, completed successfully. Debug build, native/source checks, release signing and APK verification all passed. The signed APK certificate matched the existing trusted SHA-256 fingerprint `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A`.
+- Published APK URL: `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.149.apk`. Live `latest.json` reports SHA-256 `2ebe02db06384793cee033225f973f747e66467202154f8533bfd896d7212ecc`. Signed Release APK artifact: `My-Diary-signed-Release-APK`, artifact ID `14154778171`.
+- Web Update remains 235; no web HTML, app package identity, signing identity, reminder volume, Snooze options, Done behavior, calendar recurrence, local notes/photos, PIN/recovery or existing Diary data were changed.
+- **Physical Android verification is still pending.** User must install APK 1.0.149 via Me → Check for Updates and test with the phone locked and screen off: notification card appears, screen/light wakes, ringtone plays and display stays on for the selected duration, then ringtone stops at the selected time. Also confirm Snooze and Done. Do not claim device-side success until user confirms.
+
+---
+
 # Reminder display-duration repair — merged, APK build pending (2026-11-15)
 
 - User-reported failure on APK 1.0.146 / Web Update 235: with a 20-second reminder, the ringtone continued while the display went dark; waking the display manually stopped the ringtone. Do not mark the phone-side behavior fixed until the user tests it.
