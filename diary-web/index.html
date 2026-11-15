@@ -1877,6 +1877,31 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
        });
        if(documentImagePreview){documentImagePreview.addEventListener('click',function(){openDoc.click();});card.appendChild(documentImagePreview);}
        card.appendChild(openDoc);
+       if(documentImagePreview){
+        var documentDownload=mfEl('button',{type:'button',class:'diary-me-feature-edit'},'⬇️ '+(mf('download')||'Download'));
+        documentDownload.style.display='inline-flex';documentDownload.style.margin='8px 6px 0 0';documentDownload.style.minHeight='42px';
+        var documentDownloadStatus=mfEl('small',{class:'diary-document-download-status'},'');
+        documentDownloadStatus.style.display='block';documentDownloadStatus.style.margin='6px 0 10px';documentDownloadStatus.style.fontWeight='800';documentDownloadStatus.style.color='#35145f';
+        documentDownload.addEventListener('click',function(e){
+         e.preventDefault();e.stopPropagation();documentDownloadStatus.textContent='⏳ Download taiyaar ho raha hai…';documentDownload.disabled=true;
+         if(!record.fileBlob){documentDownloadStatus.textContent='Download nahi hua: saved image data nahi mila.';documentDownload.disabled=false;return;}
+         var reader=new FileReader();
+         reader.onload=function(){
+          try{
+           var dataUrl=String(reader.result||''),comma=dataUrl.indexOf(','),base64=comma>=0?dataUrl.slice(comma+1):'';
+           var bridge=window.DiaryAppActions;
+           if(!base64){documentDownloadStatus.textContent='Download nahi hua: image data khaali hai.';documentDownload.disabled=false;return;}
+           if(!bridge||typeof bridge.saveMemoryImage!=='function'){documentDownloadStatus.textContent='Is app mein Downloads support nahi mila. My Diary ka latest APK install karein.';documentDownload.disabled=false;return;}
+           var saved=bridge.saveMemoryImage(base64,String(record.fileName||((record.title||'document')+'.jpg')),String(record.fileType||'image/jpeg'));
+           documentDownloadStatus.textContent=saved?'✅ Photo Downloads/My Diary mein save ho gayi.':'❌ Download fail hua. Dobara koshish karein.';
+          }catch(err){documentDownloadStatus.textContent='❌ Download error: '+String(err&&err.message||err);}
+          finally{documentDownload.disabled=false;}
+         };
+         reader.onerror=function(){documentDownloadStatus.textContent='❌ Photo read nahi ho saki.';documentDownload.disabled=false;};
+         try{reader.readAsDataURL(record.fileBlob);}catch(err){documentDownloadStatus.textContent='❌ Photo read nahi ho saki: '+String(err&&err.message||err);documentDownload.disabled=false;}
+        });
+        card.append(documentDownload,documentDownloadStatus);
+       }
       }else{
        var url=URL.createObjectURL(record.fileBlob);meFeatureObjectUrls.push(url);
        if(kind==='memories'&&String(record.fileType||'').indexOf('image/')===0){var img=mfEl('img',{class:'diary-me-feature-thumb',alt:record.title||'Memory'});img.src=url;card.appendChild(img);}

@@ -3153,3 +3153,12 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - No IndexedDB records, Blob contents, filenames, search logic, document-open bridge, PIN/recovery, notes, reminders, package identity, or signing identity were changed. Source and mirror are identical at blob SHA `381ce902a26d74438ceab1debf2d7b7fc39272fe`.
 - Web Update 241 is published in `latest.json`, with web SHA-256 `69a471825452b9ed4a835d757445032d201bc03f38fc40bc95d075ceb1c80133`. APK remains My Diary 1.0.168 / versionCode 167; this is a web-only update delivered through Check for Update, so no APK rebuild is required.
 - Physical Android display/tap test is pending. Do not claim the user's phone has verified the image preview until the user opens My Documents after Check for Update and confirms.
+
+
+## My Documents image Download button — Web Update 242 (2026-11-15)
+
+- User requested a My Memories-style Download option for image files in **Me → My Documents**, in addition to the existing Open action.
+- Created pre-edit backup branch: `backup/before-documents-image-download-2026-11-15`. Feature branch: `fix/documents-image-download-2026-11-15`.
+- Implementation adds a Download button only for records already identified as image previews. It reads the existing saved Blob, passes base64 bytes, original filename and MIME type to the existing `DiaryAppActions.saveMemoryImage` native bridge, and displays progress/success/failure beside the button. The existing Open button and thumbnail viewer remain unchanged; PDFs and other non-image documents receive no Download button.
+- No IndexedDB records, Blob contents, filenames, search, PIN/recovery, notes, reminders, app/package identity or signing identity are changed. Existing My Memories download flow is not modified.
+- Web Update 242 publication and source/mirror/feed hash verification are pending. Device-side download test must remain pending until the user tests it on Android.
