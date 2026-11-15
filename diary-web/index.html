@@ -2057,7 +2057,11 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var exportBtn=el('button',{id:'diaryMyNotesExport',type:'button',class:'secondary'},t('export'));
   var importBtn=el('button',{id:'diaryMyNotesImport',type:'button',class:'secondary'},t('import'));
   var importFile=el('input',{id:'diaryMyNotesImportFile',type:'file',accept:'application/json,.json'});importFile.style.display='none';
+  var fullExportBtn=el('button',{id:'diaryFullBackupExport',type:'button',class:'secondary'},'🛡️ Teeno ka Full Backup');
+  var fullImportBtn=el('button',{id:'diaryFullBackupImport',type:'button',class:'secondary'},'♻️ Full Backup Restore');
+  var fullImportFile=el('input',{id:'diaryFullBackupImportFile',type:'file',accept:'application/json,.json'});fullImportFile.style.display='none';
   backup.appendChild(exportBtn);backup.appendChild(importBtn);backup.appendChild(importFile);
+  backup.appendChild(fullExportBtn);backup.appendChild(fullImportBtn);backup.appendChild(fullImportFile);
   var allNotesBtn=el('button',{id:'diaryMyNotesAllNotes',type:'button','aria-expanded':'false','aria-controls':'diaryMyNotesList'},t('allNotes'));
   var trashBtn=el('button',{id:'diaryMyNotesTrash',type:'button',class:'secondary','aria-expanded':'false'},t('recentlyDeleted'));
   trashBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();showingTrash=!showingTrash;allNotesBtn.style.display=showingTrash?'none':'';trashBtn.setAttribute('aria-expanded',showingTrash?'true':'false');list.style.display=showingTrash?'':'none';if(showingTrash){mePanel.appendChild(list);mePanel.scrollTop=0;var diaryOverlay=document.getElementById('diaryMyNotesOverlay');if(diaryOverlay){diaryOverlay.classList.add('open');diaryOverlay.setAttribute('aria-hidden','false');}mePanel.hidden=false;meBtn.setAttribute('aria-expanded','true');panel.classList.add('diary-me-menu-open');renderList();}else{body.appendChild(list);renderList();}});
@@ -2078,6 +2082,9 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   document.getElementById('diaryMyNotesExport').addEventListener('click',exportNotes);
   document.getElementById('diaryMyNotesImport').addEventListener('click',function(){document.getElementById('diaryMyNotesImportFile').click()});
   document.getElementById('diaryMyNotesImportFile').addEventListener('change',importNotes);
+  document.getElementById('diaryFullBackupExport').addEventListener('click',exportFullDiaryBackup);
+  document.getElementById('diaryFullBackupImport').addEventListener('click',function(){document.getElementById('diaryFullBackupImportFile').click()});
+  document.getElementById('diaryFullBackupImportFile').addEventListener('change',importFullDiaryBackup);
  }
  function refreshLabels(){
   var ov=document.getElementById('diaryMyNotesOverlay');if(!ov)return;
@@ -2911,6 +2918,72 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  }
 
  function exportNotes(){var data=JSON.stringify({app:'Diary Saheb My Diary',version:1,exported:new Date().toISOString(),notes:read()},null,2);if(window.DiaryAppActions&&typeof window.DiaryAppActions.saveBackup==='function'){window.diaryBackupSaveResult=function(saved){var status=document.getElementById('diaryMyNotesStatus');if(status)status.textContent=saved?t('backupReady'):'';};try{window.DiaryAppActions.saveBackup(data,'Diary-My-Notes-Backup.json');}catch(e){window.diaryBackupSaveResult(false);}return;}var blob=new Blob([data],{type:'application/json'});var url=URL.createObjectURL(blob);var a=el('a',{href:url,download:'Diary-My-Notes-Backup.json'});document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},1000);document.getElementById('diaryMyNotesStatus').textContent=t('backupReady');}
+ function diaryBlobToDataUrl(blob){
+  return new Promise(function(resolve,reject){
+   if(!blob){resolve(null);return;}
+   var reader=new FileReader();reader.onload=function(){resolve(String(reader.result||''));};reader.onerror=function(){reject(reader.error||new Error('File read failed'));};
+   try{reader.readAsDataURL(blob);}catch(err){reject(err);}
+  });
+ }
+ function diaryDataUrlToBlob(dataUrl){
+  if(typeof dataUrl!=='string'||!/^data:[^;,]+;base64,/i.test(dataUrl))throw new Error('Attachment data invalid');
+  var comma=dataUrl.indexOf(','),mime=(dataUrl.slice(5,dataUrl.indexOf(';'))||'application/octet-stream'),raw=atob(dataUrl.slice(comma+1)),bytes=new Uint8Array(raw.length);
+  for(var i=0;i<raw.length;i++)bytes[i]=raw.charCodeAt(i);
+  return new Blob([bytes],{type:mime});
+ }
+ function exportFullDiaryBackup(){
+  var status=document.getElementById('diaryMyNotesStatus');if(status)status.textContent='⏳ Teeno sections ka backup ban raha hai…';
+  Promise.all([meFeatureAll('memories'),meFeatureAll('documents')]).then(function(groups){
+   var memoryRows=groups[0],documentRows=groups[1];
+   return Promise.all([memoryRows,documentRows].map(function(rows){return Promise.all(rows.map(function(record){return diaryBlobToDataUrl(record.fileBlob).then(function(fileDataUrl){var copy=Object.assign({},record);delete copy.fileBlob;copy.fileDataUrl=fileDataUrl;return copy;});}));})).then(function(saved){
+    var payload={app:'Diary Saheb My Diary Full Backup',format:'my-diary-full-backup',version:2,exported:new Date().toISOString(),notes:read(),trash:readTrash(),memories:saved[0],documents:saved[1]};
+    var json=JSON.stringify(payload);
+    if(window.DiaryAppActions&&typeof window.DiaryAppActions.saveBackup==='function'){
+     window.diaryFullBackupSaveResult=function(ok){var elStatus=document.getElementById('diaryMyNotesStatus');if(elStatus)elStatus.textContent=ok?'✅ Full backup file save ho gayi. Downloads/selected folder mein check karein.':'❌ Backup save nahi hua.';};
+     window.DiaryAppActions.saveBackup(json,'My-Diary-Full-Backup.json');
+    }else{
+     var blob=new Blob([json],{type:'application/json'}),url=URL.createObjectURL(blob),a=el('a',{href:url,download:'My-Diary-Full-Backup.json'});
+     document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},1500);
+     if(status)status.textContent='✅ Full backup download shuru ho gaya.';
+    }
+   });
+  }).catch(function(err){if(status)status.textContent='❌ Full backup nahi bana: '+String(err&&err.message||err);});
+ }
+ function importFullDiaryBackup(e){
+  var file=e.target.files&&e.target.files[0];if(!file)return;
+  var status=document.getElementById('diaryMyNotesStatus');if(status)status.textContent='⏳ Backup ki jaanch ho rahi hai…';
+  var reader=new FileReader();reader.onerror=function(){if(status)status.textContent='❌ Backup file read nahi hui.';e.target.value='';};
+  reader.onload=function(){
+   var payload,memories,documents,notes,trash;
+   try{
+    payload=JSON.parse(String(reader.result||''));
+    if(!payload||payload.format!=='my-diary-full-backup'||payload.version!==2||!Array.isArray(payload.notes)||!Array.isArray(payload.memories)||!Array.isArray(payload.documents)||!Array.isArray(payload.trash))throw new Error('Yeh valid Full Backup nahi hai.');
+    notes=payload.notes;trash=payload.trash;memories=payload.memories;documents=payload.documents;
+    [notes,trash].forEach(function(rows){rows.forEach(function(n){if(!n||typeof n!=='object'||typeof n.id!=='string')throw new Error('Notes data invalid');});});
+    [memories,documents].forEach(function(rows){rows.forEach(function(r){if(!r||typeof r!=='object'||typeof r.id!=='string'||(r.fileDataUrl!==null&&r.fileDataUrl!==undefined&&typeof r.fileDataUrl!=='string'))throw new Error('Photo/PDF data invalid');});});
+   }catch(err){if(status)status.textContent='❌ Restore ruka diya: '+String(err&&err.message||err);e.target.value='';return;}
+   var prepared;
+   try{prepared=memories.map(function(r){var c=Object.assign({},r);if(c.fileDataUrl){c.fileBlob=diaryDataUrlToBlob(c.fileDataUrl);}delete c.fileDataUrl;return c;}).concat(documents.map(function(r){var c=Object.assign({},r);if(c.fileDataUrl){c.fileBlob=diaryDataUrlToBlob(c.fileDataUrl);}delete c.fileDataUrl;return c;}));}
+   catch(err){if(status)status.textContent='❌ Attachment check fail; kuch restore nahi hua.';e.target.value='';return;}
+   openMeFeatureDb().then(function(db){return new Promise(function(resolve,reject){
+    var tx=db.transaction('records','readwrite'),store=tx.objectStore('records'),get=store.getAll(),added=0;
+    get.onsuccess=function(){var existing=Object.create(null);(get.result||[]).forEach(function(r){existing[String(r.id)]=true;});
+     prepared.forEach(function(r){if(!existing[String(r.id)]){store.put(r);existing[String(r.id)]=true;added++;}});
+    };
+    get.onerror=function(){try{tx.abort();}catch(ignore){}reject(get.error||new Error('Existing records read failed'));};
+    tx.oncomplete=function(){resolve(added);};tx.onerror=function(){reject(tx.error||new Error('File restore failed'));};tx.onabort=function(){reject(tx.error||new Error('File restore cancelled'));};
+   });}).then(function(fileAdded){
+    var current=read(),noteIds=Object.create(null),trashCurrent=readTrash(),trashIds=Object.create(null),noteAdded=0,trashAdded=0;
+    current.forEach(function(n){noteIds[n.id]=true;});trashCurrent.forEach(function(n){trashIds[n.id]=true;});
+    notes.forEach(function(n){if(!noteIds[n.id]){current.push(n);noteIds[n.id]=true;noteAdded++;}});
+    trash.forEach(function(n){if(!trashIds[n.id]&&!noteIds[n.id]){trashCurrent.push(n);trashIds[n.id]=true;trashAdded++;}});
+    if(!write(current)||!writeTrash(trashCurrent))throw new Error('Notes storage full; files were restored, notes were not fully restored. Retry after freeing storage.');
+    if(status)status.textContent='✅ Restore complete: '+noteAdded+' Notes, '+memories.length+' Memories aur '+documents.length+' Documents backup mein mile. '+fileAdded+' naye file records add hue. Existing data overwrite nahi hua.';
+    renderList();
+   }).catch(function(err){if(status)status.textContent='❌ Restore poora nahi hua: '+String(err&&err.message||err)+'. Existing data delete nahi kiya gaya.';}).finally(function(){e.target.value='';});
+  };
+  reader.readAsText(file);
+ }
  function importNotes(e){var file=e.target.files&&e.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(){try{var obj=JSON.parse(String(reader.result||''));var incoming=Array.isArray(obj)?obj:obj.notes;if(!Array.isArray(incoming))throw new Error('Invalid backup');var current=read(),ids={};current.forEach(function(n){ids[n.id]=true});var added=0;incoming.forEach(function(n){if(n&&typeof n==='object'&&typeof n.id==='string'&&!ids[n.id]&&(typeof n.body==='string'||typeof n.title==='string')){var restored={id:n.id,title:String(n.title||''),body:String(n.body||''),category:String(n.category||'general'),coverColour:cleanDiaryColour(n.coverColour),detailColour:cleanDiaryColour(n.detailColour),photoColour:cleanDiaryColour(n.photoColour),favourite:!!(n.favourite||n.pinned),pinnedNote:!!n.pinnedNote,photoData:(typeof n.photoData==='string'&&n.photoData.indexOf('data:image/')===0&&n.photoData.length<1400000)?n.photoData:null,coverPhotoData:(typeof n.coverPhotoData==='string'&&n.coverPhotoData.indexOf('data:image/')===0&&n.coverPhotoData.length<1400000)?n.coverPhotoData:null,coverText:String(n.coverText||''),detailPhotoData:(typeof n.detailPhotoData==='string'&&n.detailPhotoData.indexOf('data:image/')===0&&n.detailPhotoData.length<1400000)?n.detailPhotoData:null,detailText:String(n.detailText||''),coverTextFormat:cleanDiaryTextFormat(n.coverTextFormat),detailTextFormat:cleanDiaryTextFormat(n.detailTextFormat),created:Number(n.created)||Date.now(),updated:Number(n.updated)||Date.now()};if(n.pinLock&&typeof n.pinLock.pinValue==='string'){restored.pinLock={pinValue:n.pinLock.pinValue,changePinOnNextLock:!!n.pinLock.changePinOnNextLock};}else if(n.pinLock&&typeof n.pinLock.salt==='string'&&typeof n.pinLock.hash==='string'){restored.pinLock={salt:n.pinLock.salt,hash:n.pinLock.hash};if(typeof n.pinLock.recoverySalt==='string'&&typeof n.pinLock.recoveryHash==='string'){restored.pinLock.recoverySalt=n.pinLock.recoverySalt;restored.pinLock.recoveryHash=n.pinLock.recoveryHash;}}current.push(restored);ids[n.id]=true;added++}});if(!write(current))throw new Error('Storage unavailable');document.getElementById('diaryMyNotesStatus').textContent=added+' '+t('restoreCount');renderList();}catch(err){document.getElementById('diaryMyNotesStatus').textContent=t('invalidBackup');}e.target.value='';};reader.readAsText(file);}
  function openOverlay(){
   if(!diaryStorageReady){prepareDiaryStorage().then(function(){openOverlay()});return;}
