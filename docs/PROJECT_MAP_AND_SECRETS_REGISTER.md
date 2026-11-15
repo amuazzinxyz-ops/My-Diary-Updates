@@ -1,4 +1,4 @@
-# My Memories search visibility and download response repair — APK 1.0.163 published; phone test pending (2026-11-15)
+# My Memories search visibility and download response repair — APK 1.0.163 published; phone test PASS (user-confirmed, 2026-11-15)
 
 - User reported that after APK 1.0.162 the My Memories Search bar was still not visible and tapping Download produced no visible response. Re-inspection found the search field was inserted before the large form, but the Memories screen could retain an old scroll position when reopened; the Download handler wrote its status into the general status area below the large form, so progress/failure/success could remain off-screen.
 - PR #73 merged as `34f8adb7a4f8ea0414d143e7c6a92baffe05811e`. Web Update 238 now resets the Memories screen scroll to the top on open, keeps the header and full-width labelled search field visible/sticky, and uses an explicit 2–3-word search hint. Each image Download button now shows immediate progress and a nearby success or actionable error message. Existing IndexedDB records and the native save bridge are not rewritten.
@@ -8,7 +8,7 @@
 - Corrected APK build run #231 (ID `43721235582`) completed successfully. Debug and Release builds passed, signing certificate matches the previously supplied fingerprint `23a4e93f3c7911dce18389ea583548700c6ad6a3759707f1cd222d07e2408b5a`, APK Signature Scheme v2 verification passed, and publication/artifact upload steps succeeded.
 - Live `latest.json` confirms package `com.personal.diaryapp`, versionName `1.0.163`, versionCode `162`, APK URL `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.163.apk`, and APK SHA-256 `0dc99b3f89f223fee522127757518e0fe2b9db71a469775932f305d91fb28f8d`. Both `My-Diary-1.0.163.apk` and stable `My-Diary.apk` exist and are the same 2,027,845-byte signed APK (same Git blob SHA `5e201f96da6af92319f91f35354825d0bf1eca46`).
 - Web Update 238 remains in the live feed with the SHA above. The exact source/mirror are identical, and the build's HTML guard requires the new visible search and per-image status UI. App package and signing identity remain unchanged.
-- Phone-side verification is still pending. User must install APK 1.0.163 / versionCode 162, then test My Memories search visibility, 2–3-word matching, and image download to `Downloads/My Diary`. Do not claim device testing is complete until user confirms. Preserve all existing saved memories, photos, notes, PIN/recovery, reminders, package identity and signing identity.
+- User has now confirmed that after installing/testing APK 1.0.163 / versionCode 162, the My Memories Search Bar is visible and search works, and tapping Download successfully downloads the saved image. Mark both phone-side checks PASS based on user report; no independent remote access to the phone was performed. Preserve all existing saved memories, photos, notes, PIN/recovery, reminders, package identity and signing identity.
 
 ---
 
