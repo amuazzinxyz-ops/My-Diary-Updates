@@ -3207,3 +3207,18 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - The phone test closes the pending Web Update 245 item. The single original My Memories thumbnail remains, tapping it opens the full-size image, and the existing Download action is retained as implemented. This confirmation specifically verifies the duplicate-image display fix; it does not claim unrelated features were tested.
 - No app source, mirror, latest.json, APK, or update version was changed for this register-only entry. Existing saved photos, notes, documents, PIN/recovery data, reminders, package identity and signing identity remain untouched.
 - Register pre-edit backup branch: `backup/before-memories-web245-phone-pass-register-2026-11-16`.
+
+
+## Permanent release rule — every Diary feature change ships as APK + Check for Update (2026-11-16)
+
+**This is a standing, mandatory rule for all future My Diary app feature work, improvements, bug fixes, UI changes, and code corrections. It overrides older entries that describe a web-only release or say that no APK rebuild is needed.**
+
+1. **Always provide both delivery routes for every app change:** (a) build and publish a new installable APK and give the user its direct download link; and (b) publish the matching update metadata so the installed app can receive the same change through its in-app **Check for Update** flow. Neither route is optional.
+2. For HTML/WebView-only changes too, include the changed web bundle in a newly built APK, publish that APK with a higher valid versionCode/versionName, and publish the matching web bundle/version/checksum in `latest.json`. Do not stop at a webVersion-only update.
+3. Before release, create a backup and make only the requested minimal change. Preserve existing local notes, photos, documents, IndexedDB records, PIN/recovery data, reminders, package/application ID, and established signing identity.
+4. Verify the exact APK artifact, signature/certificate continuity, APK SHA-256, published APK URL/file, and all relevant `latest.json` version and checksum fields. Verify the web source and mirror are byte-identical and the advertised web SHA-256 matches the exact UTF-8 bytes. Confirm the release workflow/build and publication steps succeeded.
+5. **Do not call the task complete and do not tell the user to update** unless both the direct APK and the in-app Check for Update route point to the intended release and all available build/publication/hash checks pass. If any check fails, stop, keep the last good release intact, report the exact blocker, and repair before delivery. Never publish a partial or mismatched release.
+6. In every completion message, provide the new APK download link and state that **Check for Update** also receives the update. Clearly distinguish repository/build verification from physical-phone testing; only mark phone testing PASS after the user confirms it.
+7. This rule applies to every future Diary feature/fix release, regardless of whether the code change is native Android, HTML/JavaScript, or both. Pure documentation/register-only edits with no app-code change do not require a new APK.
+
+**User explicitly requested this rule as a permanent default on 2026-11-16. Apply it automatically; do not ask the user to repeat or approve it for each future app change.**
