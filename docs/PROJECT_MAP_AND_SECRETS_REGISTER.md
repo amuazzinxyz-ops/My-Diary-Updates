@@ -1,3 +1,16 @@
+# My Memories search visibility and native image download fix — merged; APK build pending (2026-11-15)
+
+- User tested Web Update 237 and reported two defects: the Download link did nothing when tapped, and the Search bar was not visible.
+- Root causes: the search tools were appended after the large Memories entry form, placing the search field below it; Android WebView did not honor the HTML `download` attribute for the saved Blob URL.
+- PR #71 merged to `main` as commit `f553abfd4c51827e5983d480322ffcf752a097e0`.
+- Web source and mirror now place the Memories search bar first and give it full-width visible sizing. Multi-word search matching remains unchanged.
+- Android native bridge generator now exposes `saveMemoryImage`, which writes the existing saved image bytes into `Downloads/My Diary` using MediaStore on Android 10+ and reports success/failure. The existing saved IndexedDB Blob and record are read only; no records, local storage keys, PIN/recovery, notes, reminders, or app identity are rewritten.
+- The Download click reads the existing Blob and passes its bytes, filename and MIME type to the native bridge. Publisher guard holds this native-dependent web bundle until APK 1.0.162 / versionCode 161 is published.
+- Backup branch: `backup/before-memories-download-ui-fix-2026-11-15`. Feature branch: `fix/memories-search-visible-native-download-2026-11-15`.
+- JavaScript module syntax validation passed. Build workflow is configured for APK 1.0.162 / versionCode 161 and checks search placement and native download wiring. APK build/signing/publication and phone-side verification are still pending. Do not tell the user to update until the new APK and webVersion are live and their hashes are verified.
+
+---
+
 # My Diary 1.0.159 APK filename publication correction — rebuild required (2026-11-15)
 
 - APK 1.0.159 / versionCode 158 compiled and signed successfully in Actions run 43711555397; all build steps passed.
