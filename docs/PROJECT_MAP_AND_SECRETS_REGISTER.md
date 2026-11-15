@@ -3279,3 +3279,14 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Preserve all local notes, photos, documents, IndexedDB records, PIN/recovery data, reminders, package identity and signing identity.
 - Planned Web Update 248 SHA-256: `13dbccd3b369b6674a75bfc06e48ccaa1a75a62c98c239952ba80d999addd26c`. Source and mirror are updated identically.
 - Planned APK 1.0.171 / versionCode 170 is required under the permanent dual-delivery rule. APK build, signature continuity, published APK SHA, latest.json live verification, and phone test are pending; do not claim release completion until verified.
+
+
+# Diary Lock no-lock popup box correction — APK 1.0.171 / Web Update 248 published (2026-11-16)
+
+- User clarified that the no-lock message must appear in the same centered popup box where the browser alert used to appear, rather than below the Diary panel. PR #89 merged as `6550cecb769a40240a47ddefb2ad3cfc57d74994`.
+- Implementation: `turnDiaryLockOff()` now shows the translated `diaryNoLock` message in the same centered gold-bordered popup style with a Close button. It no longer writes this message to the separate `diaryMyNotesStatus` area. The actual PIN-entry/unlock flow is unchanged.
+- Web Update 248: source and mirror are byte-identical, Git blob SHA `e1bd3baded0490d460353b988290f0f0e9813335`. Live `latest.json` advertises webVersion 248 and SHA-256 `13dbccd3b369b6674a75bfc06e48ccaa1a75a62c98c239952ba80d999addd26c`. Web publisher run #249 (`43754369962`) completed successfully.
+- APK 1.0.171 / versionCode 170: build run #246 (`43754632088`) completed successfully. The first run #245 safely stopped at the publication guard because one remaining accepted-feed tuple still used the old baseline; PR #90 corrected that exact guard and the successful #246 run followed.
+- Signing certificate continuity guard passed against the established SHA-256 fingerprint `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A`. Signed APK artifact `My-Diary-1.0.171-signed-test-candidate` was downloaded and independently checked: 2,028,818 bytes; APK SHA-256 `a3c29b2673bd484228b63f74ecdd1f8df194bdb4c757957648c458fc4817bb93`; Git blob SHA `3965093988ca075d657a7e5ea088693b1df37cb2`.
+- Live `latest.json` confirms package `com.personal.diaryapp`, versionName `1.0.171`, versionCode `170`, APK URL `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.171.apk`, and APK SHA-256 matching the signed artifact. Both versioned APK and stable `My-Diary.apk` paths were verified to reference the exact same blob SHA `3965093988ca075d657a7e5ea088693b1df37cb2`.
+- Existing notes, photos, documents, IndexedDB records, PIN/recovery, reminders, app package and signing identity were not changed. Physical phone test is still pending; do not mark device PASS until the user confirms.
