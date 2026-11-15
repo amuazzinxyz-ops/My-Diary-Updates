@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 242,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "aff90cdaeb41945ff9768ecd4b840c73f884d88ad54a7625b0bc0755ae73027e",
+  "webSha256": "74868d9ddd7ccc9fc75403d5ee76f56f87bfc4dda87deb4bcc3e28bf78c2df9d",
   "webReleaseNotes": "My Documents: image files now have a Download button like My Memories; photos save through the existing Android Downloads/My Diary bridge. Open remains available; PDFs and other files are unchanged."
 }
