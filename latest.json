@@ -4,7 +4,7 @@
   "versionCode": 158,
   "versionName": "1.0.159",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.159.apk",
-  "sha256": "507cb7f54b8bba747ccd5c96f61e50ca1ebb177254bb226d8381b3490440eb65",
+  "sha256": "e77ccd4cc73a3b9dd99a93073090dfa7c59c6249a5a3efb5f9d676508a1b23fc",
   "releaseNotes": "My Documents native bridge visibility corrected; photo and paginated PDF viewer launch path hardened. Existing saved records, file contents, notes, PIN data, reminders, and app identity remain preserved.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 235,
