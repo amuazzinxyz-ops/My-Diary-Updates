@@ -178,6 +178,12 @@ jobs:
               raise SystemExit("BLOCKED: Android WebView DiaryAppActions bridge registration is missing")
           if "fun openDocument(base64: String, fileName: String, mimeType: String)" not in kotlin or "androidx.core.content.FileProvider.getUriForFile" not in kotlin or "Intent.ACTION_VIEW" not in kotlin or "ClipData.newUri(contentResolver, safeName, contentUri)" not in kotlin:
               raise SystemExit("BLOCKED: native My Documents FileProvider viewer handoff is missing")
+          if "fun saveMemoryImage(base64: String, fileName: String, mimeType: String)" not in kotlin or "android.provider.MediaStore.Downloads.EXTERNAL_CONTENT_URI" not in kotlin or "MediaStore.MediaColumns.RELATIVE_PATH" not in kotlin:
+              raise SystemExit("BLOCKED: My Memories native Downloads-folder save bridge is missing")
+          if "bridge.saveMemoryImage(base64" not in generated_html or "kind==='memories'" not in generated_html or "reader.readAsDataURL(record.fileBlob)" not in generated_html:
+              raise SystemExit("BLOCKED: My Memories Download button is not connected to the native Downloads save bridge")
+          if "meFeatureContent.appendChild(meFeatureTools(kind));meFeatureContent.appendChild(meFeatureForm(kind))" not in generated_html:
+              raise SystemExit("BLOCKED: My Memories search bar must appear before the entry form")
           if "val chooser = Intent.createChooser(viewIntent, \"Open document\")" not in kotlin or kotlin.count("clipData = grantClip") < 2 or "val extensionType = android.webkit.MimeTypeMap.getSingleton()" not in kotlin:
               raise SystemExit("BLOCKED: PDF/Office viewer chooser must carry its own read grant and extension-based MIME type")
           if "android.graphics.BitmapFactory.decodeFile" not in kotlin or "android.widget.ImageView.ScaleType.FIT_CENTER" not in kotlin or 'resolvedType.startsWith("image/")' not in kotlin:
