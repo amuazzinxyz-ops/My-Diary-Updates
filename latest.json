@@ -1,10 +1,10 @@
 {
   "appName": "My Diary",
   "packageName": "com.personal.diaryapp",
-  "versionCode": 160,
+  "versionCode": 161,
   "versionName": "1.0.162",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.162.apk",
-  "sha256": "4fa04e2bbbfa28f272a853e89cd53d9c42b18149ddd071832eae744bdccb1bdf",
+  "sha256": "d7a1a6929067fb9a3f2a3040360f34ac4dba07576084a089aacfff56adc7db3d",
   "releaseNotes": "Fix My Memories image downloads to the Android Downloads/My Diary folder and show the multi-word search bar at the top. Existing saved images, notes, PIN data, reminders, and app identity remain preserved.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 237,
