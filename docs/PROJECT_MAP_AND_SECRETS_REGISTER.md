@@ -3173,3 +3173,15 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Rebuilt test APK: My Diary `1.0.164`, versionCode `163`, APK size 2,031,422 bytes; SHA-256 `89f2b72b2a747bb3fa8c557ded194ec03c63cc9625dc5c91fed3f21ee3eaf4a8`; artifact ID `14169537971`, expires 2026-11-22. The APK was extracted and verified in the working container.
 - Check for Updates now compares the installed APK version with the live feed: if the installed app is newer than the feed (test candidate), it does not downgrade/replace its HTML with the older live bundle; if the feed APK is newer, it offers APK install; if APK versions match, it checks the web bundle using the active override or the APK's embedded HTML SHA-256. This corrects the earlier missing embedded-asset hash fallback.
 - Test-only: do not publish, merge PR #75, or modify live `latest.json`. Production remains 1.0.163 / Web Update 238. User phone test is still required: install as update over existing Diary (never uninstall/clear data), tap Check for Updates and confirm it does not downgrade the test candidate, then verify Documents search/inline photo previews, PDF Open, existing data/PIN/reminders, and backup/restore workflows. Explicit user approval required before release.
+
+
+## 2026-11-15 — My Documents search placement and image MIME correction
+- User reported that after installing the previously supplied 1.0.164 candidate, the My Documents search bar was not visible and image attachments were not displayed inline. Investigation found the search controls were appended after the large document-add form, unlike My Memories where search appears first. This made the search bar easy to miss and did not meet the requested same placement.
+- Corrected My Documents page order so the sticky search bar appears at the top before the add-document form, matching My Memories.
+- Improved image detection: use the actual image MIME type when available and fall back to common image filename extensions (JPG/JPEG, PNG, GIF, WEBP, BMP, HEIC/HEIF, AVIF). Set inferred image MIME on newly saved files and render detected images inline automatically without tapping. Existing PDF/other-file Open action is retained.
+- Exact backups created before edits:
+  - `backups/web-source-index-before-documents-search-preview-order-fix-2026-11-15.html`
+  - `backups/diary-web-index-before-documents-search-preview-order-fix-2026-11-15.html`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-documents-search-preview-order-fix-2026-11-15.md`
+- Source changes: `web-source/index.html` commit `81dee1e6c13c188e860445d4b0b85352c9a01276`; mirror `diary-web/index.html` commit `9af9ed07b6faaddcdf249481e183cd06ca1b393f`. The two HTML files were re-fetched and confirmed byte-identical after the change.
+- Build and device testing are pending. Do not merge PR #75 or publish to the live update feed until the new candidate is built, source checks pass, the user tests the app on the phone, and explicitly approves release. Preserve all existing records, attachments, PIN/recovery, reminders, and backup/restore.
