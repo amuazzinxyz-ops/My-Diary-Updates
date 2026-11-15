@@ -584,7 +584,7 @@ private object DiaryReminderScheduler {
             val at = item.optLong("at")
             if (id.isNotBlank() && title.isNotBlank()) {
                 if (at > now) schedule(context, id, title, details, at, soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, snoozeUsed)
-                else if (at > now - 24L * 60L * 60L * 1000L) schedule(context, id, title, details, now + 5000L, soundUri, snoozeMinutes, snoozeLimit, snoozeUsed)
+                else if (at > now - 24L * 60L * 60L * 1000L) schedule(context, id, title, details, now + 5000L, soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, snoozeUsed)
                 else remove(context, id)
             }
         }
