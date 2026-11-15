@@ -3047,3 +3047,13 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Release remains APK 1.0.161 / versionCode 160, package `com.personal.diaryapp`. Live `latest.json` advertises APK URL `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.161.apk` and SHA-256 `cf3e760f77f3b7bbb5df2bdf5ac3f1a12cc2d99522dea42258ac21485ed90d1c`; webVersion 236 remains unchanged.
 - User confirmation closes the previously pending phone-test item for the APK update routes and My Documents photo/PDF opening. Preserve existing local Diary data, documents, notes, PIN/recovery, reminders, app identity and signing identity. No app source, APK, or update-feed version was changed for this register-only entry.
 - Register pre-edit backup branch: `backup/before-device-confirmation-register-2026-11-15`; exact previous register snapshot: `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-device-confirmation-2026-11-15.md`.
+
+
+## My Memories multi-word search and image download — implementation branch (2026-11-15)
+
+- User requested search by the saved image name and a way to download an already-saved image to the mobile device again.
+- Feature branch: `feat/memories-search-download-2026-11-15`; pre-edit backup branch: `backup/before-memories-search-download-2026-11-15`.
+- Both `web-source/index.html` and `diary-web/index.html` were updated identically. My Memories search now treats a multi-word query as matching when every typed word occurs in the saved record's searchable text (including its saved title and filename); this supports partial names and 2–4 words without requiring the full exact title. Other sections retain their existing search behavior.
+- Each saved image now retains its existing Open link and also shows a Download link using the original saved filename, with a title-based `.jpg` fallback when no filename exists. No records, blobs, names, or local storage keys are rewritten.
+- This is a source implementation branch only. Build/publish workflow, live `latest.json`, APK/web version and Master Register main branch have not yet been updated. Android WebView/mobile download behavior still requires a published build and user device verification; do not claim it is already working on the phone.
+- Backup branch contains pre-edit snapshots of the web source, mirror, `latest.json`, and this register.
