@@ -3257,3 +3257,15 @@ The user can simply say what they want in Roman Hindi. No special template, file
 
 - The merged HTML-only correction is being delivered under the permanent dual-release rule. The Android build workflow is advanced from 1.0.169/168 to 1.0.170/169, with the current published 1.0.169/168 feed accepted as the baseline and the exact new release as the only re-publication state.
 - The workflow embeds the exact main-branch `web-source/index.html`, computes its UTF-8 SHA-256, and publishes the signed APK plus matching `latest.json` APK/web metadata. Build, signature continuity, artifact checksum, published URL, and live feed verification are pending; do not tell the user to update until all pass.
+
+
+## Diary Lock not-set message release verified — Web Update 247 + APK 1.0.170 (2026-11-16)
+
+- User request: when **Me → 🔓 Diary Lock Band Karein** is tapped while no Diary PIN lock exists, show only the existing “Diary Lock is not set.” message inside the app, without a browser alert or website address.
+- Minimal code change in `turnDiaryLockOff()`: the no-lock branch writes `t('diaryNoLock')` to existing `#diaryMyNotesStatus` instead of calling `window.alert()`. Wrong-PIN feedback from Web Update 246 remains inline. Forgot PIN flow and lock setup/clear/recovery logic were not altered.
+- Feature branch merged in PR #87; merged main commit `013e2e2c1bded25f36a3d10ecfaae2f38918b900`. Web Update 247 publisher workflow run #248 (`43753132223`) completed successfully.
+- Exact source/mirror equality verified: `web-source/index.html` and `diary-web/index.html` both blob `b380b5ad9245210a07765e90022acd96b95f403a`. Live `latest.json` advertises webVersion 247 and UTF-8 SHA-256 `1fb8a2c22bf5e233370f9638601046ac977a747c3bd7a1f585a877be5b686c46`.
+- APK build workflow run #244 (`43753353911`) completed successfully. All workflow steps passed, including signing readiness, keystore/alias validation, exact latest HTML embedded in APK, version guard, signed Release build, release verification/publish, and APK upload. Signed APK artifact `My-Diary-1.0.170-signed-test-candidate` (artifact 14177267027) was downloaded and its APK extracted. Extracted APK SHA-256 `0ec0c15f00f2e80a64558729ba1dce23bcb85e27c04389c557b4ebcfa88ac379` matches live `latest.json` exactly.
+- Live feed: package `com.personal.diaryapp`, versionName `1.0.170`, versionCode `169`, APK URL `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.170.apk`, APK SHA-256 `0ec0c15f00f2e80a64558729ba1dce23bcb85e27c04389c557b4ebcfa88ac379`, webVersion 247 and matching web SHA-256 above. The workflow validates the release signing certificate against the previously approved fingerprint before publishing.
+- Both delivery routes are live: signed APK 1.0.170 and in-app Check for Update Web Update 247. Local data, notes, photos, documents, PIN/recovery, reminders, package identity and signing identity were preserved.
+- Phone-side test of this specific no-lock message remains pending; do not claim device PASS until user confirms. Repository/build/feed/artifact checks are PASS.
