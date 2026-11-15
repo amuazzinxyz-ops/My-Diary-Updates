@@ -3171,4 +3171,13 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Root cause: `latest.json` advertised stale Web Update 242 SHA-256 `74868d9ddd7ccc9fc75403d5ee76f56f87bfc4dda87deb4bcc3e28bf78c2df9d`, which did not match the actual source/mirror bytes. The web bundle itself and both mirrors were not modified.
 - Backup branch: `backup/before-web-update-242-sha-repair-2026-11-16`. Repair branch: `fix/web-update-242-sha256-mismatch-2026-11-16`.
 - Updated only `latest.json.webSha256` to the independently calculated value above; APK metadata, APK URL/hash, webVersion 242, source/mirror content, app package/signing identity, and local app data remain unchanged.
-- PR/merge and live raw-feed recheck are pending. Do not ask the user to retry until the corrected feed is live. After merge, the user can tap Check for Update again; Android notes/photos/PIN data are not rewritten by this metadata-only repair.
+- PR #82 was merged to main as commit `f1af8b9bc485863acf2581b9998894d5e0ac4995`; live `latest.json` and raw web source were rechecked. The user later confirmed Check for Update successfully delivered Web Update 242. This user report verifies the update flow on their phone.
+
+
+## My Memories full-size image opening — Web Update 243 (2026-11-16)
+
+- User reports that tapping a saved image in **Me → My Memories** shows only the small thumbnail rather than opening the full image like **My Documents**.
+- Created pre-edit backup branch: `backup/before-memories-full-image-open-2026-11-16`. Feature branch: `fix/memories-full-image-open-2026-11-16`.
+- Implementation makes the saved My Memories image thumbnail activate the same native document/image viewer bridge used by My Documents (`DiaryNativeDocuments.postMessage` or `DiaryAppActions.openDocument`), passing the already-saved Blob bytes, original filename and MIME type. Keyboard Enter/Space also opens it. If the native viewer bridge is unavailable, it falls back to opening the existing Blob URL in a new tab.
+- The existing My Memories Download button and saved image Blob/storage records are not modified. No IndexedDB schema/data, PIN/recovery, notes, documents, reminders, package identity or signing identity are changed. Source and mirror must be identical and `latest.json` must advertise Web Update 243 with its independently computed UTF-8 SHA-256 before publishing.
+- Device-side full-image opening test is pending until the user confirms after Check for Update.
