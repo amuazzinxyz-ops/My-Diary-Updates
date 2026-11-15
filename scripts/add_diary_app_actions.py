@@ -99,6 +99,10 @@ native = r"""
                         descriptor.close()
                         throw Exception("Empty PDF")
                     }
+                    // WebView JavaScript interfaces run off the Android UI thread.
+                    // Build and display every PDF view on the main thread.
+                    runOnUiThread {
+                        try {
                     val imageView = android.widget.ImageView(this@MainActivity).apply {
                         scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
                         adjustViewBounds = true
@@ -166,6 +170,13 @@ native = r"""
                         try { descriptor.close() } catch (_: Exception) {}
                     }
                     pdfDialog.show()
+                        } catch (error: Exception) {
+                            try { renderer.close() } catch (_: Exception) {}
+                            try { descriptor.close() } catch (_: Exception) {}
+                            android.util.Log.e("MyDiaryDocuments", "Unable to display PDF", error)
+                            Toast.makeText(this@MainActivity, "PDF nahi khul saka. File dobara add karke dekhein.", Toast.LENGTH_LONG).show()
+                        }
+                    }
                     return true
                 }
                 // Open photos directly inside My Diary so gallery apps that reject FileProvider
@@ -181,20 +192,26 @@ native = r"""
                         document.absolutePath,
                         android.graphics.BitmapFactory.Options().apply { inSampleSize = sample }
                     ) ?: throw Exception("Image decode failed")
-                    val imageView = android.widget.ImageView(this@MainActivity).apply {
-                        setImageBitmap(bitmap)
-                        scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
-                        adjustViewBounds = true
-                        maxWidth = (resources.displayMetrics.widthPixels * 0.92f).toInt()
-                        maxHeight = (resources.displayMetrics.heightPixels * 0.72f).toInt()
-                        setPadding(12, 12, 12, 12)
-                    }
                     runOnUiThread {
-                        android.app.AlertDialog.Builder(this@MainActivity)
-                            .setTitle(safeName)
-                            .setView(imageView)
-                            .setPositiveButton("Close", null)
-                            .show()
+                        try {
+                            // Android Views must be created and attached on the main UI thread.
+                            val imageView = android.widget.ImageView(this@MainActivity).apply {
+                                setImageBitmap(bitmap)
+                                scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
+                                adjustViewBounds = true
+                                maxWidth = (resources.displayMetrics.widthPixels * 0.92f).toInt()
+                                maxHeight = (resources.displayMetrics.heightPixels * 0.72f).toInt()
+                                setPadding(12, 12, 12, 12)
+                            }
+                            android.app.AlertDialog.Builder(this@MainActivity)
+                                .setTitle(safeName)
+                                .setView(imageView)
+                                .setPositiveButton("Close", null)
+                                .show()
+                        } catch (error: Exception) {
+                            android.util.Log.e("MyDiaryDocuments", "Unable to display image", error)
+                            Toast.makeText(this@MainActivity, "Photo nahi khul saki. File dobara add karke dekhein.", Toast.LENGTH_LONG).show()
+                        }
                     }
                     return true
                 }

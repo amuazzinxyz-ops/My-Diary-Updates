@@ -1,3 +1,13 @@
+# My Documents PDF and photo viewer UI-thread repair — APK 1.0.158 in progress (2026-11-15)
+
+- User reported that My Documents PDF and photo files still do not open. Re-inspection of the 1.0.157 native bridge found the root cause: `@JavascriptInterface openDocument()` runs on a WebView bridge/background thread, but both viewer branches were constructing Android Views (and the PDF dialog) on that non-UI thread. This can throw a CalledFromWrongThreadException before a viewer appears.
+- Minimal native correction in `scripts/add_diary_app_actions.py`: PDF view construction, page rendering, controls and dialog presentation now run inside `runOnUiThread`; photo bitmap decoding remains off the UI thread, while ImageView/dialog creation and presentation move entirely to the UI thread. Added branch-specific logging and user-facing failure messages. Existing file bytes, IndexedDB records, filename handling, size limit, PDF pagination, image scaling, FileProvider handling for other document types, notes, PIN/recovery, reminders and app identity are preserved.
+- Pre-edit exact snapshot branch: `backup/before-document-viewer-ui-thread-fix-2026-11-15`. Feature branch: `fix/document-viewers-main-ui-thread-2026-11-15`.
+- Next release target: APK 1.0.158 / versionCode 157; current live baseline remains APK 1.0.157 / versionCode 156. Build guard updated accordingly. Build, signing verification, publication and physical Android testing are pending.
+- Do not claim PDF or photo opening is fixed on the user's phone until the user installs the new APK and tests both file types.
+
+---
+
 # My Documents in-app PDF viewer — APK 1.0.157 published; phone test pending (2026-11-15)
 
 - APK 1.0.157 / versionCode 156 is published. GitHub Actions run #220 / ID `43708118724` completed successfully: source/version guards, debug build, signed Release build, signing certificate verification, publication and APK artifact upload all passed.
