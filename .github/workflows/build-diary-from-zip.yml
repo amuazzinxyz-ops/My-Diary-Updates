@@ -339,7 +339,7 @@ jobs:
           if code != 154 or name != "1.0.155":
               raise SystemExit(f"BLOCKED: expected approved APK version 1.0.155/154, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if feed_version != (153, "1.0.155"): 
+          if feed_version != (153, "1.0.154"): 
               raise SystemExit(f"BLOCKED: update feed is not the installed baseline or this exact repair release: {feed_version}")
           print(f"PASS: package={package}, next version={name}/{code}; feed baseline is 1.0.154/153")
           PY
@@ -445,7 +445,7 @@ jobs:
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if meta.get("packageName") != "com.personal.diaryapp" or feed_version != (153, "1.0.155"):
+          if meta.get("packageName") != "com.personal.diaryapp" or feed_version != (153, "1.0.154"):
               raise SystemExit(f"BLOCKED: live main feed is not the installed baseline or exact repair release: {feed_version}")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
@@ -454,7 +454,7 @@ jobs:
           meta["versionCode"] = int(lines[1])
           meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.155.apk"
           meta["sha256"] = lines[2]
-          meta["releaseNotes"] = "My Documents now opens saved photos directly inside My Diary with a fit-center image viewer; other supported documents retain the Android document-viewer handoff. Existing saved records, file contents, notes, PIN data, reminders, and app identity remain preserved."
+          meta["releaseNotes"] = "My Documents now opens saved photos inside My Diary and passes explicit FileProvider read grants to PDF and other document viewers. Existing saved records, file contents, notes, PIN data, reminders, and app identity remain preserved."
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           cp /tmp/My-Diary-verified.apk My-Diary.apk
