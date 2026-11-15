@@ -7,8 +7,8 @@
   "sha256": "acd45604277ebe56ce03805f5d1da8a5642ffedba97e54c5e01c04520ea57e2c",
   "releaseNotes": "Personal Calendar and Smart Reminder now support Snooze intervals (2/5/10/15/20/30 minutes), repeat limits (off/3/5/10), and ringtone playback duration (10/20/30 seconds or 1/2/5 minutes). Existing ringtone choice, calendar recurrence, notifications, notes, photos, PIN data, and app identity remain preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 233,
+  "webVersion": 234,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "b3d902bbddf4868c5108ae405fad70003a6cb0ab5c6d3c3252a643260ae61177",
+  "webSha256": "3e419d0ba8d8165b4ab66af32c220f14ba5602fd757fdf1019851bde2b84dea4",
   "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
 }
