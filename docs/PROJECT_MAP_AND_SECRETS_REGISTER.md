@@ -3132,3 +3132,14 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Live `latest.json` advertises versionName `1.0.168`, versionCode `167`, APK URL `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.168.apk`, matching APK SHA-256 above, and webVersion `239` with matching web SHA-256. Thus direct APK and in-app Check for Update both point to the same published release metadata.
 - Device test is **not yet confirmed** for this release. Do not mark phone-side installation, My Documents search behavior, or in-app Check for Update as user-tested until the user tests on their phone and reports PASS. The successful CI build, signed artifact, live feed, URLs and hashes are repository/workflow verification only.
 - Preserve all existing local Diary documents and files, notes, saved images, PIN/recovery, reminders, app/package identity and signing identity. No MUAZZIN project files were touched.
+
+
+
+## My Documents search bar moved above the add-document form — Web Update 240 (2026-11-15)
+
+- User reported that the My Documents search bar was not at the top like My Memories. Root cause: `showMeFeaturePage()` inserted the search tools before the form only for `kind==='memories'`; documents used the opposite order.
+- PR #79 merged to main as commit `c632c262cf7373450846412cea5b5048f26e2a16`. The single ordering condition now treats both `memories` and `documents` the same: search bar first, add form below. No search matching logic, records, file blobs, document-open handlers, PIN, or other feature code was changed.
+- Pre-edit backup branch: `backup/before-documents-search-top-order-2026-11-15`.
+- Web Update 240 successfully published by workflow run `43745605152`. Source and mirror are identical at blob SHA `b329d9d9f3f35112366662b87ed477639b9474fe`; web SHA-256 `4086d69ff0ad56c2e9467a55cfeb736fea4395660588a3d01375a8672105ee53`. Live `latest.json` advertises webVersion 240 and the matching SHA-256.
+- APK workflow run `43745605125` was triggered automatically and was still in progress at the time of this register update. The web bundle is already published for the installed app's Check for Update route; do not claim the APK rebuild has completed unless separately verified.
+- Phone-side display/scroll verification is pending. User should open My Documents after Check for Update and confirm the search bar is immediately below the feature heading and above the add-document form. No remote phone test was performed.
