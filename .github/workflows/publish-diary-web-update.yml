@@ -53,19 +53,29 @@ jobs:
                   print("SKIP: native-dependent web bundle waits for its matching signed APK release")
                   raise SystemExit(0)
           mirror = Path("diary-web/index.html")
-          if mirror.is_file() and mirror.read_bytes() == data:
-              Path("/tmp/diary-web-publish-skipped").write_text("mirror already current")
-              print("SKIP: published mirror already matches source")
+          actual_sha = hashlib.sha256(data).hexdigest()
+          mirror_matches = mirror.is_file() and mirror.read_bytes() == data
+          if mirror_matches and meta.get("webSha256", "").lower() == actual_sha:
+              Path("/tmp/diary-web-publish-skipped").write_text("mirror and checksum already current")
+              print("SKIP: published mirror and advertised checksum already match source")
               raise SystemExit(0)
-          version = int(meta.get("webVersion", 0)) + 1
-          Path("diary-web").mkdir(exist_ok=True)
-          Path("diary-web/index.html").write_bytes(data)
-          meta["webVersion"] = version
-          meta["webUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html"
-          meta["webSha256"] = hashlib.sha256(data).hexdigest()
-          meta["webReleaseNotes"] = "My Memories: search by partial or multiple name words and save existing images to Downloads/My Diary. Existing saved memories remain intact."
-          meta_path.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-          print("Prepared web-only update", version, "SHA-256", meta["webSha256"])
+          if mirror_matches:
+              # Repair stale manifest metadata without incrementing the web version
+              # or rewriting the already-correct published HTML mirror.
+              meta["webSha256"] = actual_sha
+              meta["webUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html"
+              meta_path.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+              print("Repaired stale web checksum for existing update", meta.get("webVersion"), "SHA-256", actual_sha)
+          else:
+              version = int(meta.get("webVersion", 0)) + 1
+              Path("diary-web").mkdir(exist_ok=True)
+              Path("diary-web/index.html").write_bytes(data)
+              meta["webVersion"] = version
+              meta["webUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html"
+              meta["webSha256"] = actual_sha
+              meta["webReleaseNotes"] = "My Diary web bundle update. Existing saved data and app identity are preserved."
+              meta_path.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+              print("Prepared web-only update", version, "SHA-256", actual_sha)
           PY
           if test -f /tmp/diary-web-publish-skipped; then exit 0; fi
           python3 -m json.tool latest.json >/dev/null
