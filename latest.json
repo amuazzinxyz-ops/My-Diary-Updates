@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 247,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "a660266c972f0b791ec45c337417b2534a77f1a76f7d45dfd2772a4a092a332a",
+  "webSha256": "1fb8a2c22bf5e233370f9638601046ac977a747c3bd7a1f585a877be5b686c46",
   "webReleaseNotes": "Diary Lock: when '🔓 Diary Lock Band Karein' is tapped while no PIN lock is set, 'Diary Lock is not set.' appears inside the app without a browser alert or website address. The APK release embeds the same update."
 }
