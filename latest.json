@@ -7,8 +7,8 @@
   "sha256": "e77ccd4cc73a3b9dd99a93073090dfa7c59c6249a5a3efb5f9d676508a1b23fc",
   "releaseNotes": "My Documents native bridge visibility corrected; photo and paginated PDF viewer launch path hardened. Existing saved records, file contents, notes, PIN data, reminders, and app identity remain preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 235,
+  "webVersion": 236,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "7e4509905645dadc788f48c7a784e227fa419662ddf90f82c6e1c9c39b2d3b76",
+  "webSha256": "df050bf253f643b782284efb93f45c6eb078594cd9d4793755bddbcf8a56bb36",
   "webReleaseNotes": "Diary features and design updated online. Local notes and photos remain on this device."
 }
