@@ -46,11 +46,11 @@ jobs:
           # web bundle to an older installed APK until the signed native release
           # is already present in the feed. The APK workflow's feed commit then
           # triggers this publisher again.
-          if "ringDurationSeconds" in text or "snoozeInterval:" in text:
+          if "ringDurationSeconds" in text or "ringVolumePercent" in text or "snoozeInterval:" in text:
               app_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-              if app_version < (144, "1.0.145"):
+              if app_version < (145, "1.0.146"):
                   Path("/tmp/diary-web-publish-skipped").write_text("native release pending")
-                  print("SKIP: Snooze and timed-ringtone web bundle waits for signed APK 1.0.145/144")
+                  print("SKIP: timed ringtone volume and screen-wake web bundle waits for signed APK 1.0.146/145")
                   raise SystemExit(0)
           mirror = Path("diary-web/index.html")
           if mirror.is_file() and mirror.read_bytes() == data:
