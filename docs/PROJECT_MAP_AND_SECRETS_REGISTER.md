@@ -1,3 +1,24 @@
+# Double-size purple/gold 3D welcome card — published Web Update 232 (2026-11-15)
+
+- User request: make the existing welcome-screen card much more beautiful and approximately double its current size.
+- Starting live state: Web Update 231; APK `1.0.143` / versionCode `142`; package `com.personal.diaryapp`; source and mirror blob SHA `708e08ebcb27e3a78e98775740b7c75d09003ebe`; starting feed SHA-256 `5a2817aa33c53714ee37b2522739292649fad02be6cacc30dc8e4c19978d5647`.
+- Scope: CSS-only change appended to `web-source/index.html`. The existing welcome card remains full-width within the phone viewport; its height is doubled to 300px (280px on narrow/mobile screens), icon enlarged to 70px (62px mobile), title to 42px (36px mobile), and subtitle to 21px (18px mobile). Added richer gold double border, layered purple/gold 3D depth, brighter lavender/gold gradient and deeper press feedback.
+- Preserved the existing single welcome card, original card IDs, direct parent tap handler calling `openOverlay()`, existing PIN/open flow, language text and layout width. No JavaScript or HTML behavior changed.
+- Explicitly untouched: notes, photos, storage/data keys, PIN/recovery, trash, note actions, reminders, language logic, updater logic, Android source, APK, package identity, signing data and permissions.
+- Pre-edit backups created on `backup/before-double-welcome-card-2026-11-15` and re-fetched byte-identical to live files before the change:
+  - `backups/web-source-before-double-welcome-card-2026-11-15.html` (blob `708e08ebcb27e3a78e98775740b7c75d09003ebe`)
+  - `backups/diary-web-before-double-welcome-card-2026-11-15.html` (same blob)
+  - `backups/latest-before-double-welcome-card-2026-11-15.json`
+  - `backups/register-before-double-welcome-card-2026-11-15.md`
+- Feature branch `feature/double-welcome-card-size-2026-11-15`; PR #42 merged as `f51d1f77398da641d1182b0b1779a674ad5358a5`. Only `web-source/index.html` changed (53 additions, 0 deletions).
+- Publisher workflow completed and published Web Update 232. Live `web-source/index.html` and `diary-web/index.html` are byte-identical at blob SHA `aa587245b2cd93b39c9dcad8e56398c6181029d1`. Live feed `latest.json` reports `webVersion=232` and `webSha256=a1678160ed47a258decd5ab53b2687f4e8f093eb3914faaf653d2742244666b6`.
+- Static validation after publish: new CSS block exists exactly once; desktop/mobile height and responsive font sizes are present; original single-card style and direct tap handler remain. Source and mirror are byte-identical.
+- APK remains `1.0.143` / versionCode `142`; no APK rebuild or signing changes.
+- Physical Android verification is pending. User should tap Me → Check for Updates only if needed; user previously confirmed welcome-card tap opens Diary, and this update is CSS-only. Do not claim phone-side appearance confirmation until the user confirms.
+- Rollback: use the exact pre-change backups on `backup/before-double-welcome-card-2026-11-15`; if already published, restore the desired source and publish a higher webVersion. Preserve all local notes, photos and PIN/recovery data.
+
+---
+
 # Direct tap from the welcome screen into My Diary — published Web Update 231 (2026-11-15)
 
 - User clarified that they are still on the welcome screen and cannot enter the app to reach Me / Check for Updates. The welcome card itself must directly open Diary when tapped.
