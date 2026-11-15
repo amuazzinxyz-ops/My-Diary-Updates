@@ -1,4 +1,4 @@
-# Release baseline guard: current feed 1.0.163 / versionCode 162; safely republish the same verified APK.
+# Test-candidate build: current live feed remains 1.0.163/162; build 1.0.167/166 without publishing until device test and explicit approval.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -319,7 +319,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved next Diary version 1.0.163 (versionCode 162)
+      - name: Set Check-for-Update test candidate Diary version 1.0.167 (versionCode 166)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
@@ -327,12 +327,12 @@ jobs:
           from pathlib import Path
           p = Path("app/build.gradle.kts")
           s = p.read_text(encoding="utf-8")
-          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 162', s, count=1)
-          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.163"', s, count=1)
+          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 166', s, count=1)
+          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.167"', s, count=1)
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary versionName=1.0.163, versionCode=162")
+          print("Set Diary test candidate versionName=1.0.167, versionCode=166")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -354,10 +354,10 @@ jobs:
           name = one(r'versionName\s*=\s*"([^"]+)"', "versionName")
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
-          if code != 162 or name != "1.0.163":
+          if code != 166 or name != "1.0.167":
               raise SystemExit(f"BLOCKED: expected approved APK version 1.0.163/162, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if feed_version not in ((161, "1.0.162"), (162, "1.0.163")): 
+          if feed_version != (162, "1.0.163"): 
               raise SystemExit(f"BLOCKED: update feed is neither the installed baseline nor the already-published exact repair release: {feed_version}")
           print(f"PASS: package={package}, repair release={name}/{code}; feed state is approved: {feed_version}")
           PY
@@ -446,8 +446,8 @@ jobs:
           echo "Release APK certificate matches the previously supplied SHA-256 fingerprint."
           rm -f app/diary-release.jks
 
-      - name: Publish verified Diary update
-        if: env.DIARY_RELEASE_READY == 'true'
+      - name: Publish verified Diary update (disabled for test candidate; requires phone test and explicit approval)
+        if: false
         shell: bash
         run: |
           set -euo pipefail
@@ -496,7 +496,7 @@ jobs:
         if: env.DIARY_RELEASE_READY == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: My-Diary-signed-Release-APK
+          name: My-Diary-1.0.167-signed-test-candidate
           path: diary-project/app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
           retention-days: 30
@@ -512,7 +512,7 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: My-Diary-debug-APK
+          name: My-Diary-1.0.167-debug-test-candidate
           path: diary-project/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
