@@ -50,7 +50,7 @@ if "override fun onActivityResult(" in s: raise SystemExit("Existing onActivityR
 s=s.replace("import android.content.Intent\n","import android.content.Intent\nimport android.media.AudioAttributes\nimport android.media.RingtoneManager\nimport android.media.Ringtone\nimport android.app.Service\nimport android.content.pm.ServiceInfo\nimport android.os.Handler\nimport android.os.Looper\nimport android.os.IBinder\nimport android.app.AlertDialog\nimport android.app.AlarmManager\nimport android.app.Notification\nimport android.app.NotificationChannel\nimport android.app.NotificationManager\nimport android.app.PendingIntent\nimport android.app.ProgressDialog\nimport android.content.BroadcastReceiver\nimport android.content.Context\nimport android.os.Build\nimport android.webkit.JavascriptInterface\nimport android.widget.Toast\nimport java.net.HttpURLConnection\nimport java.net.URL\n",1)
 s=s.replace("        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {","        webView.addJavascriptInterface(DiaryNativeActions(), \"DiaryAppActions\")\n\n        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {",1)
 native = r"""
-    private inner class DiaryNativeActions {
+    inner class DiaryNativeActions {
         private fun metadata(): JSONObject {
             val metadataUrl=URL("https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/latest.json?cacheBust="+System.currentTimeMillis())
             val c=metadataUrl.openConnection() as HttpURLConnection
