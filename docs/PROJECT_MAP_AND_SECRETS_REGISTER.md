@@ -2988,3 +2988,14 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Pre-edit backup branch: `backup/before-159-feed-guard-repair-2026-11-15`, created from main commit `0745c53733d8058c77c488eaf2c04bb6bb387597`.
 - Workflow change is not yet merged or rebuilt. Do not distribute the 1.0.159 APK until the new run succeeds, the exact versioned APK exists, and its SHA-256 matches live `latest.json`. Physical Android testing of opening both PDF and photo attachments remains pending; do not claim device-side verification.
 - Preserve the existing package/signing identity and all local notes, documents, photos, PIN/recovery data, and reminders. If any subsequent build or hash verification fails, stop and retain the last verified release.
+
+
+# My Documents PDF/photo Open repair — 1.0.159 build published (2026-11-15)
+
+- Workflow run #225 (`43712054992`) completed successfully on main commit `a84e93656898217f996643c78250a7bac03d6ee6`. Signed Release APK configuration, APK upload, and update-feed publication all succeeded.
+- Published release: My Diary `1.0.159`, versionCode `158`, package `com.personal.diaryapp`.
+- Exact APK filename: `My-Diary-1.0.159.apk`; published URL: `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.159.apk`.
+- Live `latest.json` SHA-256: `e77ccd4cc73a3b9dd99a93073090dfa7c59c6249a5a3efb5f9d676508a1b23fc`. The feed is updated to webVersion `235`.
+- Change scope: Android WebView native bridge visibility for My Documents open action; release notes state photo and paginated PDF viewer launch path hardened. Existing local records/data and app identity are to be preserved.
+- Build and feed publication are verified. Physical Android testing is still pending: user must install the update and test opening both a PDF and a photo in My Documents. Do not claim device-side verification until confirmed.
+- Prior safety backup branch remains: `backup/before-159-feed-guard-repair-2026-11-15`.
