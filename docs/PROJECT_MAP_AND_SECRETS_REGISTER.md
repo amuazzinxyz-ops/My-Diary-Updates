@@ -2523,3 +2523,21 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Minimal repair: the note card's `contextmenu` handler now always prevents the native browser menu and, if the Diary menu has not already opened, directly opens `showNoteActionMenu(n)`. The existing 550 ms pointer timer remains as the first trigger; the contextmenu event is a fallback for Android long-press. Existing menu actions (Delete, Copy, Pin/Unpin, Edit, Share, Select) and `toggleNoteSelection` implementation remain unchanged. Tap-to-open, selection mode, note data, photos, PIN/recovery, storage, native Android and APK remain unchanged.
 - Pre-edit backup branch: `backup/before-note-longpress-contextmenu-fix-2026-11-15`; exact live source, latest feed and this register were copied to backup files before editing.
 - Feature branch: `fix/note-longpress-contextmenu-2026-11-15`. Source change is isolated to the note-card `contextmenu` handler. Physical Android verification is still required after publication; do not mark the feature phone-tested until user confirms both long-press menu and multi-select.
+
+
+# WhatsApp-style inline text menu for long-pressed notes — pending publication (2026-11-15)
+
+- User clarified that the actions must appear beside the exact note being long-pressed, like WhatsApp, as plain text options—not as buttons and not in a centered full-screen modal.
+- Starting live state: Web Update 222; APK 1.0.143 / versionCode 142; package com.personal.diaryapp; source and mirror blob SHA 50c3eab4568509fed33d83cbbcfb8b3edd5880c6; live latest.json webSha256 52951c244f492fcb5ddf3eea26d87243d2e3b0cbb045a115b41fbbfb252a5a49.
+- Scope: web-only change to the existing note long-press action menu and the note-card pointer/contextmenu event arguments in web-source/index.html. Replaced the centered dimmed overlay and stacked button controls with a compact floating text-only menu positioned near the long-press coordinates on the same note. Text actions are separated by small dots; tapping outside dismisses it; its position is clamped to the visible screen.
+- Preserved actions: Delete, Copy, Pin/Unpin, Edit, Share, and Select. Select still calls the existing toggleNoteSelection handler, so multi-select remains available. Locked notes continue to hide protected actions until unlocked and retain the existing PIN prompt.
+- Explicitly untouched: note/photo storage and formats, note content, PIN/recovery, delete/trash logic, share/copy/edit/pin handlers, normal tap-to-open, updater, Android source, APK, package identity and signing.
+- Pre-edit backup branch: backup/before-note-longpress-inline-actions-2026-11-15. Exact live copies re-fetched and verified byte-identical:
+  - backups/web-source-before-note-longpress-inline-actions-2026-11-15.html (blob 50c3eab4568509fed33d83cbbcfb8b3edd5880c6)
+  - backups/diary-web-before-note-longpress-inline-actions-2026-11-15.html (same blob)
+  - backups/latest-before-note-longpress-inline-actions-2026-11-15.json
+  - backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-note-longpress-inline-actions-2026-11-15.md
+- Feature branch: feature/note-longpress-inline-actions-2026-11-15. Source change is limited to the existing showNoteActionMenu/closeNoteActionMenu functions and the note-card long-press pointer/contextmenu handlers. Static targeted checks confirm a floating position anchored to the press coordinates, text spans rather than button elements, no dimmed overlay, all requested actions, outside-dismiss handling, viewport clamping, and retained Select wiring. Full JavaScript/CI validation and publication are pending PR checks.
+- Expected next web release: Web Update 223 after publisher success. APK remains 1.0.143 / versionCode 142; no APK rebuild or signing change.
+- Physical Android verification is pending. After publication, use My Diary → Me → Check for Updates, install Web Update 223, then test long-press on an unlocked note, all six text actions, normal tap-to-open, multi-select, and a locked note. Do not claim phone-side success until the user confirms.
+- Rollback: restore the exact pre-edit source and register/feed copies from backup/before-note-longpress-inline-actions-2026-11-15; if already published, restore source and publish a higher webVersion. Preserve all local notes, photos and PIN/recovery data.
