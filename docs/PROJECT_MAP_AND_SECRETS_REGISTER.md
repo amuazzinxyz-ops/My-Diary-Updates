@@ -3152,8 +3152,9 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - PR #75 remains open and unmerged. The signed candidate build is complete, but full backup/restore behavior, automatic Downloads/My Diary snapshots, retention, and update-install persistence still require physical Android testing. Do not mark these runtime checks PASS until user confirms. Preserve existing local Notes, Memories attachments, Documents files, PIN/recovery, reminders, app identity, and signing identity.
 
 
-## 2026-11-15 — My Documents search and image preview
+## 2026-11-15 — My Documents search and always-visible image preview
 - Added the same prominent sticky search-bar treatment used by My Memories to My Documents, including partial multi-word matching against saved file names and metadata.
-- Added an inline thumbnail for image files saved in My Documents; tapping the thumbnail opens the original image in a full-size browser view. Existing native Open action remains in place for files, including PDFs and other document types.
-- Kept `web-source/index.html` and `diary-web/index.html` byte-identical after the change.
-- Change is on the existing data-protection test branch / PR #75 only. Not merged or published; APK and live update feed remain unchanged. Requires automated checks and Android phone testing before release.
+- Corrected the image behavior to match My Memories: saved image files are rendered directly as visible inline thumbnails in each My Documents card without requiring a tap. The filename remains visible; no separate click-to-open image link is added. Existing native Open action remains available for PDFs and other document types.
+- Kept `web-source/index.html` and `diary-web/index.html` byte-identical; latest verified blob SHA is `53944d424907dc283ccfddbcbd340ce22646c3e1`.
+- Latest implementation commit: `300f6b3734e2e16c0ebf0aa701ea887e9ccb23e2`; PR #75 remains open on the isolated feature branch. Automated Diary data-protection checks passed on this commit; signed APK candidate build and native compile are running. No APK has been published and live `latest.json` remains at production 1.0.163 / Web Update 238.
+- Do not mark this as phone-tested. After a signed test APK is built, install as an update without uninstalling or clearing app data and verify Documents search, always-visible image thumbnails, PDF/other-file Open, existing records, and the separate full backup/restore test plan. Keep PR #75 unmerged and production unchanged until device tests pass and the user explicitly approves release.
