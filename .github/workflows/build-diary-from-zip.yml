@@ -1,4 +1,4 @@
-# Release baseline guard: live update feed 1.0.151 / versionCode 150; next APK 1.0.153 / versionCode 152.
+# Release baseline guard: live update feed 1.0.152 / versionCode 151; next APK 1.0.153 / versionCode 152.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -307,7 +307,7 @@ jobs:
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary versionName=1.0.153, versionCode=151")
+          print("Set Diary versionName=1.0.153, versionCode=152")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -329,7 +329,7 @@ jobs:
           name = one(r'versionName\s*=\s*"([^"]+)"', "versionName")
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
-          if code != 151 or name != "1.0.153":
+          if code != 152 or name != "1.0.153":
               raise SystemExit(f"BLOCKED: expected approved APK version 1.0.153/151, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
           if feed_version != (151, "1.0.152"):
