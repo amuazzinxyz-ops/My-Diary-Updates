@@ -78,9 +78,9 @@ jobs:
           import re
           p=Path("app/build.gradle.kts")
           s=p.read_text(encoding="utf-8")
-          s,n=re.subn(r'versionCode\\s*=\\s*\\d+', 'versionCode = 163', s, count=1)
+          s,n=re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 163', s, count=1)
           if n!=1: raise SystemExit("Could not safely set candidate versionCode 163")
-          s,n=re.subn(r'versionName\\s*=\\s*"[^"]+"', 'versionName = "1.0.164"', s, count=1)
+          s,n=re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.164"', s, count=1)
           if n!=1: raise SystemExit("Could not safely set candidate versionName 1.0.164")
           p.write_text(s,encoding="utf-8")
           PY
