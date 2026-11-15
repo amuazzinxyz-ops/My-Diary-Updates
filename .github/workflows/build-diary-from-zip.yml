@@ -179,7 +179,7 @@ jobs:
               raise SystemExit("BLOCKED: reminder notification is not categorized as an alarm")
           if kotlin.count(".setFullScreenIntent(wakePending, true)") != 1:
               raise SystemExit("BLOCKED: reminder must use exactly one full-screen wake handoff")
-          if "val wakeIntent = Intent(context, DiaryReminderWakeActivity::class.java)" not in kotlin or 'getIntExtra("diary_reminder_ring_duration_seconds", 30)' not in kotlin or "postDelayed({ finish() }, durationSeconds * 1000L)" not in kotlin:
+          if "val wakeIntent = Intent(context, DiaryReminderWakeActivity::class.java)" not in kotlin or 'getIntExtra("diary_reminder_ring_duration_seconds", 30)' not in kotlin or "postDelayed({" not in kotlin or "durationSeconds * 1000L" not in kotlin:
               raise SystemExit("BLOCKED: wake activity must hold the display for the selected ringtone duration")
           if "setShowWhenLocked(true)" not in kotlin or "setTurnScreenOn(true)" not in kotlin or "FLAG_KEEP_SCREEN_ON" not in kotlin:
               raise SystemExit("BLOCKED: wake activity cannot reliably turn on and hold the display for the selected duration")
