@@ -808,11 +808,12 @@ class DiaryReminderWakeActivity : android.app.Activity() {
                 android.view.WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
             )
         }
-        // Briefly wake the display, then get out of the way so Android can show
-        // the public reminder notification card. The sound service separately
-        // holds the timed screen wake lock for the full selected ringtone duration.
+        // Keep this transparent wake activity alive for the same duration as the
+        // selected ringtone. This keeps the display awake while leaving the keyguard
+        // and its public reminder notification visible underneath.
         window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        android.os.Handler(mainLooper).postDelayed({ finish() }, 650L)
+        val durationSeconds = (intent?.getIntExtra("diary_reminder_ring_duration_seconds", 30) ?: 30).coerceIn(10, 300)
+        android.os.Handler(mainLooper).postDelayed({ finish() }, durationSeconds * 1000L)
     }
 }
 """
