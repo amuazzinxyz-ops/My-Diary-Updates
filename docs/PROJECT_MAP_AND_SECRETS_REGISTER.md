@@ -1,3 +1,16 @@
+# My Diary 1.0.164 corrected signed test candidate — standalone Diary asset verified (2026-11-15)
+
+- Rebuilt after the wrong bundled HTML issue was found and guarded. Signed candidate workflow run `43728012157` completed successfully; native compile-only workflow run `43728068502` completed successfully; data-protection validation run `43728068472` completed successfully.
+- Corrected candidate artifact: `My-Diary-1.0.164-signed-test-candidate`, artifact ID `14167292959`, ZIP size 1,973,875 bytes, expires 2026-11-22. Downloaded and extracted the APK for inspection.
+- Actual signed APK size is 2,030,846 bytes (~1.94 MiB), SHA-256 `55721001552261b7550518c97d5a7ca185cfcb321db5f998b5416c56f2a528f6`. This is back near the established 2 MB Diary APK size; it is not a 19 MB APK.
+- Inspected `assets/index.html` inside the APK: 460,438 bytes, begins with the standalone My Diary HTML doctype/comment; no MUAZZIN markers. Build log independently confirms the exact Diary asset size and the new workflow rejects oversized or MUAZZIN HTML before compile.
+- `web-source/index.html` and `diary-web/index.html` are identical at 408,426 characters and Git blob SHA `9c5c6e1cc8f3999377d3225366eddbcf7c67b9ae`. APK embeds the Diary HTML file from that source.
+- Build log confirms APK signing v1 and v2 verification true; release certificate SHA-256 remains the approved `23a4e93f3c7911dce18389ea583548700c6ad6a3759707f1cd222d07e2408b5a`. Build completed successfully, versionName 1.0.164 / versionCode 163.
+- Candidate remains test-only. It is not published in `latest.json`; production remains 1.0.163 / code 162. PR #75 remains open/unmerged. Do not publish until user tests the update install and all backup/restore cases on device and explicitly approves.
+- Remaining phone checks: install as update without uninstalling or clearing app data; test automatic snapshots on open and after Notes/Memories/Documents changes; retention of newest 30 completed backups; manual Full Backup; Full Restore including Memories and Documents attachments with merge/no destructive overwrite; existing Notes-only backup/restore; persistence of all prior data and PIN/recovery/reminders after update. Device tests are not yet claimed.
+
+---
+
 # My Diary 1.0.164 candidate rejected — wrong bundled HTML detected and build guard corrected (2026-11-15)
 
 - User asked to continue the combined Full Backup/Restore work from PR #75. The existing signed test candidate artifact (Actions run `43725480976`, artifact `14166079074`) was downloaded and inspected before any phone installation or release.
