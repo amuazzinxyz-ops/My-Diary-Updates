@@ -2208,17 +2208,18 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var heading=el('strong',null,t('diaryPinEnter'));heading.style.cssText='display:block;font-size:19px;font-weight:900;color:#4b287e;margin-bottom:14px;';
   var input=el('input',{type:'password',name:'diary-lock-off-pin',inputmode:'numeric',pattern:'[0-9]*',maxlength:'4',autocomplete:'new-password',autocapitalize:'off',autocorrect:'off',spellcheck:'false','aria-autocomplete':'none','data-lpignore':'true','data-1p-ignore':'true'});
   input.placeholder=t('pinPrompt');input.style.cssText='width:100%;box-sizing:border-box;padding:13px;border:2px solid #d4af37;border-radius:10px;font-size:22px;letter-spacing:8px;text-align:center;';
+  var pinStatus=el('div');pinStatus.style.cssText='min-height:20px;margin:8px 0 0;color:#b42318;font-size:14px;font-weight:900;';
   function submitPin(){
    if(String(input.value||'').length!==4)return;
    var saved=localStorage.getItem(DIARY_MASTER_PIN_KEY)||'';
    if(String(input.value)===saved&&saved){
     try{localStorage.removeItem(DIARY_MASTER_PIN_KEY);if(shade.parentNode)shade.parentNode.removeChild(shade);var st=document.getElementById('diaryMyNotesStatus');if(st)st.textContent=t('diaryLockRemoved');}
-    catch(e){window.alert(t('storageUnavailable'));}
-   }else{window.alert(t('diaryPinWrong'));input.value='';input.focus();}
+    catch(e){pinStatus.textContent=t('storageUnavailable');}
+   }else{pinStatus.textContent=t('diaryPinWrong');input.value='';input.focus();}
   }
   input.addEventListener('input',function(){input.value=String(input.value||'').replace(/\\D/g,'').slice(0,4);if(input.value.length===4)submitPin();});
   input.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();submitPin();}});
-  box.appendChild(heading);box.appendChild(input);shade.appendChild(box);document.body.appendChild(shade);setTimeout(function(){input.focus();},50);
+  box.appendChild(heading);box.appendChild(input);box.appendChild(pinStatus);shade.appendChild(box);document.body.appendChild(shade);setTimeout(function(){input.focus();},50);
  }
  function forgotDiaryPin(onDone){
   var current=localStorage.getItem(DIARY_MASTER_PIN_KEY)||'';
