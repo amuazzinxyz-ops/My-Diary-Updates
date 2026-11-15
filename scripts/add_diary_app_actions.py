@@ -1190,4 +1190,4 @@ if "override fun onJsPrompt(" not in kotlin:
 kotlin_path.write_text(kotlin, encoding="utf-8")
 print("PASS: Diary PIN fields disable address autofill and native PIN prompts use numeric password input.")
 
-# Trigger APK 1.0.151 build after reminder wake-screen merge.
+# Trigger APK 1.0.152 build after reminder notification persistence fix.
