@@ -1,4 +1,15 @@
-# My Documents in-app PDF viewer — APK 1.0.157 in progress (2026-11-15)
+# My Documents in-app PDF viewer — APK 1.0.157 published; phone test pending (2026-11-15)
+
+- APK 1.0.157 / versionCode 156 is published. GitHub Actions run #220 / ID `43708118724` completed successfully: source/version guards, debug build, signed Release build, signing certificate verification, publication and APK artifact upload all passed.
+- Published `latest.json` confirms package `com.personal.diaryapp`, versionName `1.0.157`, versionCode `156`, and direct APK URL: https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.157.apk
+- Published APK SHA-256 independently verified against the downloaded signed Release artifact: `3d3631b838fcb33433771f2b23ea2e1a1c0344ddaff1182ad300002735d35d5c`. The artifact contains `app-release.apk`; its exact bytes match the SHA in live `latest.json`.
+- Native PDF approach: existing in-app image preview remains; PDF pages render inside My Diary using Android PdfRenderer with Previous/Next and Close controls. Other document types retain extension-based MIME and FileProvider read grants.
+- PR #61 was merged, then a minimal FrameLayout.LayoutParams compile correction was committed. The first build attempt failed before publication; corrected run #220 passed all release steps.
+- Existing saved records, file contents, notes, PIN/recovery, reminders, app identity and Web Update 235 are preserved by the source workflow. Check for Updates receives this native fix because latest.json now has versionCode 156, higher than the installed 155 baseline.
+- Physical Android testing remains pending. Do not claim PDFs or other documents open successfully on the user's phone until the user installs 1.0.157 and confirms.
+- Backup branch: `backup/before-in-app-pdf-viewer-157-2026-11-15`. Feature branch: `fix-in-app-pdf-viewer-157-2026-11-15`. PR #61: https://github.com/amuazzinxyz-ops/My-Diary-Updates/pull/61
+
+---
 
 - User tested APK 1.0.156 and reported that My Documents still does not open files. Previous external ACTION_VIEW chooser handoff is not considered fixed.
 - New native approach: keep the existing in-app image preview, and render PDF pages directly inside My Diary using Android PdfRenderer with Previous/Next page controls and a Close button. This removes dependence on a third-party PDF app and FileProvider chooser for PDFs. Other document types retain the existing FileProvider chooser with extension-based MIME and explicit read grants.
