@@ -12,3 +12,4 @@
   "webSha256": "a78af2b9f582d671998106fdc7dc9299ea0c5993a6a7bc7adc007e1feb9b8775",
   "webReleaseNotes": "Diary Lock: incorrect PIN is shown inside the PIN box as 'PIN galat hai'; browser alert/address is no longer shown. Existing lock and saved data are preserved."
 }
+
