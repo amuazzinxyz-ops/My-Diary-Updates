@@ -1,3 +1,15 @@
+# My Documents open fix — APK 1.0.153 in progress (2026-11-15)
+
+- User reported that files added in Me → My Documents are listed but tapping Open does not launch the document.
+- Source cause: saved file Blobs were rendered as object-URL anchors with target="_blank". The Android WebView does not provide a reliable external-window/document-viewer handoff for this pattern.
+- Approved fix: My Documents Open now reads the saved Blob and passes its Base64 bytes, original filename and MIME type to a dedicated Android JavaScript bridge method. Native Android writes the bytes into the existing app-private cacheDir/diary-share folder, creates a read-only FileProvider content URI using the already configured provider, and launches ACTION_VIEW via a chooser. No public storage permission is added.
+- Existing My Documents IndexedDB records and Blob contents remain unchanged. The temporary cache copy is not a replacement for the saved record. Other feature file handling, My Memories, reminders, notes/photos/PIN and app identity are intended to remain unchanged.
+- Backup branch: `backup/before-my-documents-open-153-2026-11-15`; exact pre-edit snapshots of web source, mirror, native patch generator, build workflow, latest.json and this register are stored under `backups/*-before-my-documents-open-153-2026-11-15.txt`.
+- Feature branch: `fix-my-documents-open-153-2026-11-15`. Planned release: APK 1.0.153 / versionCode 152. Build, signed publication and physical Android test are pending. Do not claim device-side success until the user installs and tests PDF and other supported file types.
+- Existing FileProvider authority and `@xml/file_paths` resource are reused; no new provider or storage permission is introduced.
+
+---
+
 # Reminder notification persistence — APK 1.0.152 in progress (2026-11-15)
 
 - User tested APK 1.0.151 and confirmed the reminder title/card remains visible while ringtone and screen are active, but the notification disappears when the selected ringtone/screen duration ends.
