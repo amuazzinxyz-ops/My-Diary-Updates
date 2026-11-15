@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "web-source/index.html"
+      - "latest.json"
 
 permissions:
   contents: write
@@ -41,6 +42,21 @@ jobs:
           meta = json.loads(meta_path.read_text(encoding="utf-8"))
           if meta.get("appName") != "My Diary" or meta.get("packageName") != "com.personal.diaryapp":
               raise SystemExit("Wrong app identity in update feed")
+          # This feature changes the native JavaScript bridge. Do not expose its
+          # web bundle to an older installed APK until the signed native release
+          # is already present in the feed. The APK workflow's feed commit then
+          # triggers this publisher again.
+          if "snoozeInterval:" in text:
+              app_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
+              if app_version < (143, "1.0.144"):
+                  Path("/tmp/diary-web-publish-skipped").write_text("native release pending")
+                  print("SKIP: snooze web bundle waits for signed APK 1.0.144/143")
+                  raise SystemExit(0)
+          mirror = Path("diary-web/index.html")
+          if mirror.is_file() and mirror.read_bytes() == data:
+              Path("/tmp/diary-web-publish-skipped").write_text("mirror already current")
+              print("SKIP: published mirror already matches source")
+              raise SystemExit(0)
           version = int(meta.get("webVersion", 0)) + 1
           Path("diary-web").mkdir(exist_ok=True)
           Path("diary-web/index.html").write_bytes(data)
@@ -51,6 +67,7 @@ jobs:
           meta_path.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           print("Prepared web-only update", version, "SHA-256", meta["webSha256"])
           PY
+          if test -f /tmp/diary-web-publish-skipped; then exit 0; fi
           python3 -m json.tool latest.json >/dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
