@@ -3185,3 +3185,9 @@ The user can simply say what they want in Roman Hindi. No special template, file
   - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-documents-search-preview-order-fix-2026-11-15.md`
 - Source changes: `web-source/index.html` commit `81dee1e6c13c188e860445d4b0b85352c9a01276`; mirror `diary-web/index.html` commit `9af9ed07b6faaddcdf249481e183cd06ca1b393f`. The two HTML files were re-fetched and confirmed byte-identical after the change.
 - Build and device testing are pending. Do not merge PR #75 or publish to the live update feed until the new candidate is built, source checks pass, the user tests the app on the phone, and explicitly approves release. Preserve all existing records, attachments, PIN/recovery, reminders, and backup/restore.
+
+
+## 2026-11-15 — Corrected installable candidate version
+- The user already installed candidate versionCode 163 / versionName 1.0.164. A rebuilt APK with the same versionCode cannot install as an update over it. Therefore the corrected candidate is explicitly bumped to versionCode 164 / versionName 1.0.165.
+- Updated `.github/workflows/safe-diary-signed-candidate.yml` at commit `1dbbefdf2ec2a25ce38d9bed7f4b1003c563a17c`. This affects only the isolated test-candidate workflow; it does not edit the live feed or publish anything.
+- The signed build must finish and be checked for exact versionCode 164, versionName 1.0.165, approved signing identity, and embedded corrected HTML before sending the APK. Physical device verification remains pending.
