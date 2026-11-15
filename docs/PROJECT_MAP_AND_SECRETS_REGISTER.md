@@ -3232,3 +3232,13 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Existing Diary PIN value, lock flow, recovery behavior, notes, photos, documents, IndexedDB data, reminders, package identity and signing identity are not changed.
 - Web Update 246 is advertised in `latest.json`; source and `diary-web/index.html` mirror are updated from the same HTML. The build workflow is advanced to APK 1.0.169 / versionCode 168, with baseline 1.0.168 / code 167, and will embed the exact published web source in the APK and update the feed checksum.
 - Release verification is pending: confirm source/mirror byte equality, computed UTF-8 web SHA-256, successful signed APK build, signing certificate continuity, APK SHA-256, published APK URL and live latest.json. Do not mark complete or tell the user to update until both APK and Check for Update routes are verified. Physical phone testing remains pending until the user confirms.
+
+
+### Release verification — Diary Lock incorrect-PIN feedback (2026-11-16)
+
+- PR #86 merged to main as `8481ac1ecd45beaf75e0aeed54bcd56c94a362f7`.
+- APK build workflow run #242 (`43751849578`) completed successfully. Debug build and signed Release build passed; the workflow verified the existing signing certificate fingerprint `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A` and published APK 1.0.169 / versionCode 168.
+- Published APK URL: `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.169.apk`. Live feed SHA-256: `fee954b5f2da273677a9f2b8408adbe5182de76bac1dbaa107f1b48742664429`. Independently downloaded signed workflow artifact `app-release.apk` is 2,028,633 bytes and computes to the same SHA-256. Its Git blob SHA `c39d631695599f594c000dd4e6e7472ea6781cc1` matches the published APK path and size in the main branch tree.
+- Live `latest.json` advertises package `com.personal.diaryapp`, versionName `1.0.169`, versionCode `168`, the exact APK URL/hash above, Web Update 246, and web SHA-256 `a660266c972f0b791ec45c337417b2534a77f1a76f7d45dfd2772a4a092a332a`.
+- Source and mirror are byte-identical at Git blob SHA `27009945f9d6bc11884ea45a145954bdf59cc5e6`. Web publisher run #247 (`43752168920`) independently computed the UTF-8 SHA-256 above and repaired the stale manifest checksum without incrementing Web Update 246.
+- Direct APK and in-app Check for Update now point to the same intended release. Repository/build/publication verification is PASS. Physical-phone incorrect-PIN display test is still pending user confirmation; do not claim phone-side PASS until user tests it.
