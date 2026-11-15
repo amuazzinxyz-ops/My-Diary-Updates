@@ -1,3 +1,15 @@
+# Restore the visible welcome card's Diary tap action — pending Web Update 229 (2026-11-15)
+
+- User reported that the one visible welcome card did not open Diary when tapped. Apologized and checked the live Web Update 228 source before changing anything.
+- Root cause: `installEntry()` attached the click listener only inside the `if (!b)` creation branch. If the visible `#diaryMyNotesEntry` button already existed in the DOM, the function updated its localized title/subtitle but never attached the open action. This is the exact case that can leave a visible card without a working tap.
+- Minimal correction: keep the same single visible card, 3D CSS, language text, and `openOverlay()` behavior; move the click binding outside the creation-only branch and assign it idempotently with `b.onclick = function(e){ e.preventDefault(); e.stopPropagation(); openOverlay(); }`. The new button is still created only when absent. This ensures both newly created and already-existing card elements open the Diary.
+- Pre-edit backups created on `backup/before-restore-diary-card-tap-2026-11-15` and re-fetched byte-identical to live files: `backups/web-source-before-restore-diary-card-tap-2026-11-15.html`, `backups/diary-web-before-restore-diary-card-tap-2026-11-15.html`, `backups/latest-before-restore-diary-card-tap-2026-11-15.json`, and `backups/register-before-restore-diary-card-tap-2026-11-15.md`.
+- Scope: one JavaScript binding correction in `web-source/index.html`; publisher will regenerate the web mirror and feed. No CSS/card layout, notes/photos/local storage, PIN/recovery, trash, reminder, language, Android source, APK, package identity, signing or permissions changes.
+- Static validation required before merge: exactly one welcome entry creation block; one idempotent `b.onclick` binding outside `if (!b)`; no creation-only click listener; original `openOverlay()` and overlay/PIN flow intact. After publish verify source/mirror equality, feed hash/version, publisher workflow success, and register update. Physical tap-to-open remains unverified until the user tests it on the phone.
+- Rollback: restore the exact pre-edit source backup and publish a higher webVersion; preserve all local Diary data.
+
+---
+
 # Correct welcome screen: remove upper heading and keep the lower tappable card — published Web Update 228 (2026-11-15)
 
 - User correction: the previous attempt left the wrong welcome content visible. User clearly specified that the **upper** `📒` / heading / subtitle block must be removed and the **lower tappable Diary card** must remain and receive the 3D design. Apologized for the previous mistake.
