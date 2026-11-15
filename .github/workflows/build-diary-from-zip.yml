@@ -183,6 +183,8 @@ jobs:
               raise SystemExit("BLOCKED: dedicated lock-screen wake activity is missing screen-on behavior")
           if "Intent(context, DiaryReminderWakeActivity::class.java)" not in kotlin:
               raise SystemExit("BLOCKED: full-screen intent does not target the wake-only activity")
+          if 'putExtra("diary_reminder_ring_duration_seconds", ringDurationSeconds)' not in kotlin or "durationSeconds * 1000L" not in kotlin or "FLAG_KEEP_SCREEN_ON" not in kotlin:
+              raise SystemExit("BLOCKED: wake-only activity does not keep the display on for the selected ringtone duration")
           if "android.permission.USE_FULL_SCREEN_INTENT" not in permissions:
               raise SystemExit("BLOCKED: full-screen alarm permission is missing")
           if not {"android.permission.FOREGROUND_SERVICE", "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"} <= permissions:
@@ -320,7 +322,7 @@ jobs:
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
           if code != 146 or name != "1.0.147":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.146/145, found {name}/{code}")
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.147/146, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
           if feed_version != (145, "1.0.146"):
               raise SystemExit(f"BLOCKED: update feed is not the installed baseline or this exact repair release: {feed_version}")
@@ -441,12 +443,12 @@ jobs:
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           cp /tmp/My-Diary-verified.apk My-Diary.apk
-          cp /tmp/My-Diary-verified.apk My-Diary-1.0.146.apk
+          cp /tmp/My-Diary-verified.apk My-Diary-1.0.147.apk
           python3 -m json.tool latest.json >/dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add My-Diary.apk My-Diary-1.0.146.apk latest.json
-          git commit -m "Publish verified My Diary update 1.0.146"
+          git add My-Diary.apk My-Diary-1.0.147.apk latest.json
+          git commit -m "Publish verified My Diary update 1.0.147"
           git push origin HEAD:main
       - name: Upload unsigned Release APK for private owner-side signing
         if: env.DIARY_RELEASE_READY != 'true'
