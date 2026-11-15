@@ -1,4 +1,4 @@
-# Release baseline guard: live update feed 1.0.149 / versionCode 148; next APK 1.0.150 / versionCode 149.
+# Release baseline guard: live update feed 1.0.150 / versionCode 149; next APK 1.0.151 / versionCode 150.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -183,6 +183,9 @@ jobs:
               raise SystemExit("BLOCKED: wake activity must hold the display for the selected ringtone duration")
           if "setShowWhenLocked(true)" not in kotlin or "setTurnScreenOn(true)" not in kotlin or "FLAG_KEEP_SCREEN_ON" not in kotlin:
               raise SystemExit("BLOCKED: wake activity cannot reliably turn on and hold the display for the selected duration")
+          for visible in ("MY DIARY REMINDER", "diary_reminder_title", "diary_reminder_details", "sendReminderAction(action)", "ACTION_SNOOZE", "ACTION_DONE", "NotificationManager"):
+              if visible not in kotlin:
+                  raise SystemExit("BLOCKED: immediate full-screen reminder display/action missing: " + visible)
           if ".setVisibility(Notification.VISIBILITY_PUBLIC)" not in kotlin:
               raise SystemExit("BLOCKED: reminder notification is not explicitly visible on the lock screen")
           if "SCREEN_BRIGHT_WAKE_LOCK" not in kotlin or "ACQUIRE_CAUSES_WAKEUP" not in kotlin or "acquire(seconds * 1000L)" not in kotlin:
@@ -288,7 +291,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved next Diary version 1.0.150 (versionCode 149)
+      - name: Set approved next Diary version 1.0.151 (versionCode 150)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
@@ -296,12 +299,12 @@ jobs:
           from pathlib import Path
           p = Path("app/build.gradle.kts")
           s = p.read_text(encoding="utf-8")
-          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 149', s, count=1)
-          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.150"', s, count=1)
+          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 150', s, count=1)
+          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.151"', s, count=1)
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary versionName=1.0.150, versionCode=149")
+          print("Set Diary versionName=1.0.151, versionCode=150")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -323,12 +326,12 @@ jobs:
           name = one(r'versionName\s*=\s*"([^"]+)"', "versionName")
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
-          if code != 149 or name != "1.0.150":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.150/149, found {name}/{code}")
+          if code != 150 or name != "1.0.151":
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.151/150, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if feed_version != (148, "1.0.149"):
+          if feed_version != (149, "1.0.150"):
               raise SystemExit(f"BLOCKED: update feed is not the installed baseline or this exact repair release: {feed_version}")
-          print(f"PASS: package={package}, next version={name}/{code}; feed baseline is 1.0.149/148")
+          print(f"PASS: package={package}, next version={name}/{code}; feed baseline is 1.0.150/149")
           PY
 
       - name: Align Java and Kotlin JVM targets
@@ -424,7 +427,7 @@ jobs:
           test -s "$APK"
           SHA256="$(sha256sum "$APK" | awk '{print $1}')"
           cp "$APK" /tmp/My-Diary-verified.apk
-          printf '1.0.150\n149\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.151\n150\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -f -B diary-publish-main origin/main
           python3 - <<'PY'
@@ -432,25 +435,25 @@ jobs:
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if meta.get("packageName") != "com.personal.diaryapp" or feed_version != (148, "1.0.149"):
+          if meta.get("packageName") != "com.personal.diaryapp" or feed_version != (149, "1.0.150"):
               raise SystemExit(f"BLOCKED: live main feed is not the installed baseline or exact repair release: {feed_version}")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
           meta["packageName"] = "com.personal.diaryapp"
           meta["versionName"] = lines[0]
           meta["versionCode"] = int(lines[1])
-          meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.150.apk"
+          meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.151.apk"
           meta["sha256"] = lines[2]
           meta["releaseNotes"] = "Personal Calendar and Smart Reminder now support selectable ringtone volume (0–100%), screen-on time matched to the chosen ringtone duration, Snooze intervals (2/5/10/15/20/30 minutes), repeat limits (off/3/5/10), and ringtone duration (10/20/30 seconds or 1/2/5 minutes). Existing ringtone choice, calendar recurrence, notifications, notes, photos, PIN data, and app identity remain preserved."
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           cp /tmp/My-Diary-verified.apk My-Diary.apk
-          cp /tmp/My-Diary-verified.apk My-Diary-1.0.150.apk
+          cp /tmp/My-Diary-verified.apk My-Diary-1.0.151.apk
           python3 -m json.tool latest.json >/dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add My-Diary.apk My-Diary-1.0.150.apk latest.json
-          git commit -m "Publish verified My Diary update 1.0.150"
+          git add My-Diary.apk My-Diary-1.0.151.apk latest.json
+          git commit -m "Publish verified My Diary update 1.0.151"
           git push origin HEAD:main
       - name: Upload unsigned Release APK for private owner-side signing
         if: env.DIARY_RELEASE_READY != 'true'
