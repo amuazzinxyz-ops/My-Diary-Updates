@@ -613,6 +613,13 @@ private object DiaryReminderScheduler {
         launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         launch.putExtra("diary_reminder_id", id)
         val content = PendingIntent.getActivity(context, code + 1, launch, pendingFlags())
+        // Brief full-screen handoff wakes the display; the activity exits quickly
+        // so Android can expose the public reminder notification card.
+        val wakeIntent = Intent(context, DiaryReminderWakeActivity::class.java).apply {
+            putExtra("diary_reminder_ring_duration_seconds", ringDurationSeconds)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_USER_ACTION)
+        }
+        val wakePending = PendingIntent.getActivity(context, code + 4, wakeIntent, pendingFlags())
         fun actionIntent(action: String, suffix: String): PendingIntent {
             val actionIntent = Intent(context, DiaryReminderReceiver::class.java).apply {
                 this.action = action
@@ -637,6 +644,7 @@ private object DiaryReminderScheduler {
             .setStyle(Notification.BigTextStyle().bigText(body))
             .setSound(null, alarmAttributes)
             .setContentIntent(content)
+            .setFullScreenIntent(wakePending, true)
             .setVisibility(Notification.VISIBILITY_PUBLIC)
             .setAutoCancel(true)
             .setPriority(Notification.PRIORITY_HIGH)
@@ -800,12 +808,11 @@ class DiaryReminderWakeActivity : android.app.Activity() {
                 android.view.WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
             )
         }
-        // Keep this transparent wake-only activity alive for the exact selected
-        // ringtone duration. FLAG_KEEP_SCREEN_ON is tied to the visible activity,
-        // avoiding reliance on deprecated SCREEN_BRIGHT_WAKE_LOCK alone.
+        // Briefly wake the display, then get out of the way so Android can show
+        // the public reminder notification card. The sound service separately
+        // holds the timed screen wake lock for the full selected ringtone duration.
         window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        val durationSeconds = (intent?.getIntExtra("diary_reminder_ring_duration_seconds", 30) ?: 30).coerceIn(10, 300)
-        android.os.Handler(mainLooper).postDelayed({ finish() }, durationSeconds * 1000L)
+        android.os.Handler(mainLooper).postDelayed({ finish() }, 650L)
     }
 }
 """
