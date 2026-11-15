@@ -111,7 +111,7 @@ jobs:
           source=Path("web-source/index.html")
           actual=hashlib.sha256(source.read_bytes()).hexdigest()
           meta["webSha256"]=actual
-          meta["webReleaseNotes"]="Note Lock Off now turns off immediately after the correct 4-digit PIN; no extra OK confirmation. Other Diary features remain unchanged."
+          meta["webReleaseNotes"]="Personal Calendar and Smart Reminder now support Snooze intervals of 2/5/10/15/20/30 minutes and selectable ringtone playback duration of 10/20/30 seconds or 1/2/5 minutes."
           Path("latest.json").write_text(json.dumps(meta,indent=2)+"\n",encoding="utf-8")
           expected=meta.get("webSha256","").lower()
           if len(expected)!=64 or actual!=expected:
@@ -195,7 +195,7 @@ jobs:
               raise SystemExit("BLOCKED: wake-only activity manifest configuration is invalid")
           if kotlin.count(".setContentIntent(content)") != 1:
               raise SystemExit("BLOCKED: expected exactly one standard reminder notification tap action")
-          for required in ("RingtoneManager.ACTION_RINGTONE_PICKER", "Intent.ACTION_OPEN_DOCUMENT", "setSound(null, alarmAttributes)", "diary_reminder_sound_uri", "diary_reminder_snooze_minutes", "diary_reminder_snooze_limit", "snoozeUsed", 'put("soundUri", soundUri)', 'put("snoozeMinutes", snoozeMinutes)', 'put("snoozeLimit", snoozeLimit)'):
+          for required in ("RingtoneManager.ACTION_RINGTONE_PICKER", "Intent.ACTION_OPEN_DOCUMENT", "setSound(null, alarmAttributes)", "diary_reminder_sound_uri", "diary_reminder_snooze_minutes", "diary_reminder_snooze_limit", "diary_reminder_ring_duration_seconds", "ringDurationSeconds", "snoozeUsed", 'put("soundUri", soundUri)', 'put("snoozeMinutes", snoozeMinutes)', 'put("snoozeLimit", snoozeLimit)'):
               if required not in kotlin:
                   raise SystemExit("BLOCKED: custom reminder sound support is missing: " + required)
           if "pickReminderSound(currentUri: String)" not in kotlin:
