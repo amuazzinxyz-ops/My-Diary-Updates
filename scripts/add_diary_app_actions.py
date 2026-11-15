@@ -90,6 +90,84 @@ native = r"""
                 val resolvedType = extensionType
                     ?: mimeType.takeIf { it.isNotBlank() && it != "application/octet-stream" }
                     ?: "*/*"
+                // Render PDFs inside My Diary instead of relying on an external viewer app.
+                if (resolvedType == "application/pdf" || safeName.substringAfterLast('.', "").equals("pdf", true)) {
+                    val descriptor = android.os.ParcelFileDescriptor.open(document, android.os.ParcelFileDescriptor.MODE_READ_ONLY)
+                    val renderer = android.graphics.pdf.PdfRenderer(descriptor)
+                    if (renderer.pageCount <= 0) {
+                        renderer.close()
+                        descriptor.close()
+                        throw Exception("Empty PDF")
+                    }
+                    val imageView = android.widget.ImageView(this@MainActivity).apply {
+                        scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
+                        adjustViewBounds = true
+                        setPadding(8, 8, 8, 8)
+                    }
+                    val pageLabel = android.widget.TextView(this@MainActivity).apply {
+                        gravity = android.view.Gravity.CENTER
+                        textSize = 14f
+                        setPadding(8, 12, 8, 12)
+                    }
+                    val previous = android.widget.Button(this@MainActivity).apply { text = "‹ Previous" }
+                    val next = android.widget.Button(this@MainActivity).apply { text = "Next ›" }
+                    val controls = android.widget.LinearLayout(this@MainActivity).apply {
+                        orientation = android.widget.LinearLayout.HORIZONTAL
+                        gravity = android.view.Gravity.CENTER
+                        addView(previous, android.widget.LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+                        addView(pageLabel, android.widget.LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+                        addView(next, android.widget.LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+                    }
+                    val scroll = android.widget.ScrollView(this@MainActivity).apply {
+                        addView(imageView, android.widget.ScrollView.LayoutParams(
+                            android.widget.ScrollView.LayoutParams.MATCH_PARENT,
+                            android.widget.ScrollView.LayoutParams.WRAP_CONTENT
+                        ))
+                    }
+                    val content = android.widget.LinearLayout(this@MainActivity).apply {
+                        orientation = android.widget.LinearLayout.VERTICAL
+                        addView(scroll, android.widget.LinearLayout.LayoutParams(
+                            android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f
+                        ))
+                        addView(controls)
+                    }
+                    var pageIndex = 0
+                    fun renderPdfPage(index: Int) {
+                        val page = renderer.openPage(index)
+                        try {
+                            val maxWidth = (resources.displayMetrics.widthPixels * 0.88f).toInt().coerceAtLeast(600)
+                            val scale = minOf(maxWidth.toFloat() / page.width.toFloat(), 2.0f)
+                            val bitmap = android.graphics.Bitmap.createBitmap(
+                                (page.width * scale).toInt().coerceAtLeast(1),
+                                (page.height * scale).toInt().coerceAtLeast(1),
+                                android.graphics.Bitmap.Config.ARGB_8888
+                            )
+                            page.render(bitmap, null, null, android.graphics.pdf.PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+                            imageView.setImageBitmap(bitmap)
+                            pageLabel.text = "Page ${index + 1} of ${renderer.pageCount}"
+                            previous.isEnabled = index > 0
+                            next.isEnabled = index < renderer.pageCount - 1
+                            pageIndex = index
+                            scroll.scrollTo(0, 0)
+                        } finally {
+                            page.close()
+                        }
+                    }
+                    renderPdfPage(0)
+                    previous.setOnClickListener { if (pageIndex > 0) renderPdfPage(pageIndex - 1) }
+                    next.setOnClickListener { if (pageIndex < renderer.pageCount - 1) renderPdfPage(pageIndex + 1) }
+                    val pdfDialog = android.app.AlertDialog.Builder(this@MainActivity)
+                        .setTitle(safeName)
+                        .setView(content)
+                        .setPositiveButton("Close", null)
+                        .create()
+                    pdfDialog.setOnDismissListener {
+                        try { renderer.close() } catch (_: Exception) {}
+                        try { descriptor.close() } catch (_: Exception) {}
+                    }
+                    pdfDialog.show()
+                    return true
+                }
                 // Open photos directly inside My Diary so gallery apps that reject FileProvider
                 // URIs cannot leave the user with a non-responsive document tap.
                 if (resolvedType.startsWith("image/") && resolvedType != "image/gif") {
