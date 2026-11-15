@@ -2891,8 +2891,10 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    b.appendChild(el('small',{id:'diaryMyNotesEntrySub'},t('sub')));
    view.appendChild(b);
   }
-  /* Always bind the visible welcome card, including when it already exists in the DOM. */
-  b.onclick=function(e){e.preventDefault();e.stopPropagation();openOverlay()};
+  /* Make the whole welcome entry area a direct tap target, even when the button already exists. */
+  b.onclick=null;
+  view.onclick=function(e){e.preventDefault();e.stopPropagation();openOverlay()};
+  view.style.cursor='pointer';
   b.querySelector('#diaryMyNotesEntryTitle').textContent=t('button');
   b.querySelector('#diaryMyNotesEntrySub').textContent=t('sub');
  }
@@ -3381,7 +3383,7 @@ body{background:radial-gradient(ellipse at 50% 12%,#fff 0%,#f5edff 42%,#e8dcf8 1
 /* One welcome card only: remove the upper heading block and retain the original tappable Diary entry. */
 .diary-home{width:min(100%,480px)!important;max-width:480px!important;margin:clamp(36px,12vh,100px) auto 0!important;padding:0 14px!important;box-sizing:border-box!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;text-align:center!important;overflow:visible!important}
 .diary-home>.diary-mark,.diary-home>h1,.diary-home>p{display:none!important}
-#diaryHomeEntryHost{display:flex!important;justify-content:center!important;align-items:center!important;width:100%!important;max-width:none!important;margin:0 auto!important}
+#diaryHomeEntryHost{display:flex!important;justify-content:center!important;align-items:center!important;width:100%!important;max-width:none!important;margin:0 auto!important}\n#diaryHomeEntryHost{cursor:pointer!important;touch-action:manipulation!important}
 #diaryMyNotesEntry{position:relative!important;isolation:isolate!important;overflow:hidden!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:7px!important;width:100%!important;max-width:100%!important;min-height:150px!important;height:auto!important;margin:0!important;padding:20px 14px 18px!important;box-sizing:border-box!important;border:2px solid #d4af37!important;border-radius:25px!important;background:linear-gradient(145deg,#fffdf8 0%,#f4eaff 43%,#dfc8fa 100%)!important;color:#45216f!important;box-shadow:inset 0 2px 0 rgba(255,255,255,.98),inset 0 -3px 0 rgba(112,68,158,.14),0 3px 0 #a77c20,0 7px 0 #7540b8,0 13px 22px rgba(47,25,76,.25)!important;cursor:pointer!important;text-align:center!important;transition:transform .12s ease,box-shadow .12s ease!important}
 #diaryMyNotesEntry:before{content:""!important;position:absolute!important;z-index:-1!important;top:0!important;left:12%!important;right:12%!important;height:5px!important;border-radius:0 0 8px 8px!important;background:linear-gradient(90deg,#b88922,#fff1b7,#d4af37)!important}
 #diaryMyNotesEntry .diary-more-icon{display:block!important;font-size:39px!important;line-height:1.05!important;filter:drop-shadow(0 3px 2px rgba(54,30,82,.25))!important}
