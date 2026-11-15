@@ -1,3 +1,23 @@
+# Note Cover Photo and full-text sharing repair — Web Update 220 (2026-11-15)
+
+- User request: fix three Note Share problems: text placed over **Note ka Cover Photo** shifts from its editor position; long note text is cut off after a line / shown with `...`; and no-photo text-share artwork appears black/dark.
+- Starting authoritative state: Web Update 219; APK `1.0.143` / versionCode `142`; package `com.personal.diaryapp`; starting source/mirror blob `25da0ffcef9e263bbdbb10cd419e1d5154f3bbaf`; starting feed web SHA-256 `7ae94bf68546bb77c7b65fa738f82f6138ad0800bacbd531a830490b3991a57e`.
+- Scope: web-only change to `web-source/index.html`, inside the existing `shareNote()` canvas composition helpers. Corrected missing editor-style fallback metrics when sharing from the saved-note card (including width, direction, alignment, font, line height, padding, text indent and letter spacing); matched the canvas text line-box offset; calculated Cover and Details panel heights from the actual saved formatting and wrapped content; removed the line-count truncation and appended ellipsis; changed no-photo panels to a light background without the dark photo overlay. Photo panels retain their dark readability overlay.
+- Explicitly untouched: saved note/photo data, storage keys and formats, PIN/recovery, note editing and saving, image selection/finger adjustment, unrelated Diary features, updater logic, Android source, APK, package identity and signing data.
+- Pre-edit backup branch: `backup/before-note-cover-photo-share-fix-2026-11-15`. All four files were re-fetched and compared exactly with the starting live files:
+  - `backups/web-source-before-note-cover-photo-share-fix-2026-11-15.html` (blob `25da0ffcef9e263bbdbb10cd419e1d5154f3bbaf`)
+  - `backups/diary-web-before-note-cover-photo-share-fix-2026-11-15.html` (same blob)
+  - `backups/latest-before-note-cover-photo-share-fix-2026-11-15.json`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-note-cover-photo-share-fix-2026-11-15.md`
+- Feature branch: `feature/note-cover-photo-share-fix-2026-11-15`; PR #30 merged successfully as `93922f29e9703eb29eeb1b4ad8ec95e21e8c2079`. PR diff contains exactly one changed file, `web-source/index.html` (34 additions, 20 deletions). No storage/data/PIN code was changed.
+- Checks: both inline JavaScript blocks parsed successfully; targeted checks confirmed a non-empty style fallback, dynamic panel sizing, no text truncation/ellipsis cap, preserved typed spaces/newlines, and dark overlay applied only to photo panels. Final source and `diary-web/index.html` mirror were re-fetched and are byte-identical; both blob SHA `d53c8f4ebbab33ebd73db732824ef928b9845ffb` (373,250 characters).
+- Web Update 220 published through the configured publisher path; publisher bot commit `1025107c149cb52866a89497713cf395ee6e413c` updated the mirror and feed. Live `latest.json`: `webVersion=220`; `webSha256=fbd78a8999898fbfc9f53e728d53ee30f8095a790e6abf508c24eba93db3366d`. Independently computed UTF-8 SHA-256 from the exact re-fetched source bytes matches the feed. The workflow-run/status endpoint did not expose the publisher run details in this session; do not claim its run log was inspected.
+- APK unchanged: `1.0.143` / versionCode `142`; package `com.personal.diaryapp`; APK SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`. No APK rebuild or signing operation.
+- Physical-device verification is **pending**. User should use **My Diary → Me → Check for Updates**, install Web Update 220, then share a note with a Cover Photo and long text; verify the text stays in place, the entire writing appears without `...`, and a no-photo text share is readable. Do not claim phone-side success until the user confirms.
+- Rollback: exact pre-edit source, mirror, feed and register files on `backup/before-note-cover-photo-share-fix-2026-11-15`. Preserve all local notes, photos and PIN/recovery data.
+
+---
+
 # Restore original colour controls — Custom buttons removed (2026-11-15)
 
 - User request: remove all work specifically introducing or styling Custom / Custom Colour buttons and restore the earlier controls.
