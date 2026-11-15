@@ -1,9 +1,10 @@
-# APK 1.0.158 Check for Updates download URL repair — in progress (2026-11-15)
+# APK 1.0.158 Check for Updates download URL repair — fixed and verified (2026-11-15)
 
 - User reported Check for Updates returned HTTP 404 after feed advertised 1.0.158. Investigation confirmed latest.json pointed to `My-Diary-1.0.158.apk`, but the publish workflow had copied the signed APK under `My-Diary.apk` and the stale name `My-Diary-1.0.157.apk`; the 1.0.158-named file did not exist. This was a release publication filename mismatch, not a device/network problem.
 - Verified the published `My-Diary.apk` repository blob exists and has the same 2,025,005-byte size as the signed Release artifact. Downloaded signed artifact `app-release.apk` SHA-256 independently computed as `88155152bf7dfc839cb906b3d98d2cee2afa7f86a19fd2f46b12b252d52eed36`, matching the live 1.0.158 manifest checksum.
-- Repair: point latest.json `apkUrl` to the existing stable `My-Diary.apk` path; this avoids rebuilding or changing versionCode and makes Check for Updates and direct download use the same verified APK bytes. Verify the raw URL returns HTTP 200 and SHA-256 matches before telling the user to retry.
-- Exact pre-fix snapshot branch: `backup/before-fix-1.0.158-apk-url-404-2026-11-15`. Repair branch: `fix/1.0.158-apk-download-url-404-2026-11-15`. Master Register and feed changes are being prepared; do not call this fixed until merged and raw URL/feed verified.
+- Repair merged in PR #64 (merge commit `94beb779e901bb3149a7065a878f24cda9216931`): latest.json now points to the existing stable `My-Diary.apk` path. Live feed re-read confirms version 1.0.158 / code 157 and the corrected URL.
+- Verified exact APK identity: repository `My-Diary.apk` is 2,025,005 bytes and Git blob SHA `c22a1ae71b18d16985c3bd1250a725592f3d6ec7`; the downloaded signed workflow artifact `app-release.apk` independently computes to the same Git blob SHA, plus SHA-256 `88155152bf7dfc839cb906b3d98d2cee2afa7f86a19fd2f46b12b252d52eed36`, matching latest.json. This proves the file at the corrected repository path is the exact signed APK bytes.
+- Exact pre-fix snapshot branch: `backup/before-fix-1.0.158-apk-url-404-2026-11-15`. Repair branch: `fix/1.0.158-apk-download-url-404-2026-11-15`. URL/feed metadata verified after merge. User should retry Check for Updates; physical installation test remains pending.
 
 ---
 
