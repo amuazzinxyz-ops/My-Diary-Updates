@@ -3162,3 +3162,13 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Implementation adds a Download button only for records already identified as image previews. It reads the existing saved Blob, passes base64 bytes, original filename and MIME type to the existing `DiaryAppActions.saveMemoryImage` native bridge, and displays progress/success/failure beside the button. The existing Open button and thumbnail viewer remain unchanged; PDFs and other non-image documents receive no Download button.
 - No IndexedDB records, Blob contents, filenames, search, PIN/recovery, notes, reminders, app/package identity or signing identity are changed. Existing My Memories download flow is not modified.
 - Web Update 242 publication and source/mirror/feed hash verification are pending. Device-side download test must remain pending until the user tests it on Android.
+
+
+## Web Update 242 SHA-256 mismatch — manifest repaired (2026-11-16)
+
+- User reported that tapping **Check for Update** displayed: “Diary update nahi ho saka — SHA-256 match nahi hua.” The updater correctly refused to apply the downloaded bundle; this is a feed checksum mismatch, not evidence of local data corruption.
+- Re-fetched the exact main-branch web source and mirror. Both files are byte-identical (Git blob SHA `2e0681b3e7f5fa697fd46b323b7c1e9e5103578a`, 403,670 characters). Independently computed SHA-256 over the UTF-8 source bytes: `c4da44f0ba2545a0cc8ba35e21149a974cd98d1abafdcaca75ef213bae2a6530`.
+- Root cause: `latest.json` advertised stale Web Update 242 SHA-256 `74868d9ddd7ccc9fc75403d5ee76f56f87bfc4dda87deb4bcc3e28bf78c2df9d`, which did not match the actual source/mirror bytes. The web bundle itself and both mirrors were not modified.
+- Backup branch: `backup/before-web-update-242-sha-repair-2026-11-16`. Repair branch: `fix/web-update-242-sha256-mismatch-2026-11-16`.
+- Updated only `latest.json.webSha256` to the independently calculated value above; APK metadata, APK URL/hash, webVersion 242, source/mirror content, app package/signing identity, and local app data remain unchanged.
+- PR/merge and live raw-feed recheck are pending. Do not ask the user to retry until the corrected feed is live. After merge, the user can tap Check for Update again; Android notes/photos/PIN data are not rewritten by this metadata-only repair.
