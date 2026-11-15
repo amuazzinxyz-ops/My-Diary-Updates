@@ -3181,3 +3181,12 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Implementation makes the saved My Memories image thumbnail activate the same native document/image viewer bridge used by My Documents (`DiaryNativeDocuments.postMessage` or `DiaryAppActions.openDocument`), passing the already-saved Blob bytes, original filename and MIME type. Keyboard Enter/Space also opens it. If the native viewer bridge is unavailable, it falls back to opening the existing Blob URL in a new tab.
 - The existing My Memories Download button and saved image Blob/storage records are not modified. No IndexedDB schema/data, PIN/recovery, notes, documents, reminders, package identity or signing identity are changed. Source and mirror must be identical and `latest.json` must advertise Web Update 243 with its independently computed UTF-8 SHA-256 before publishing.
 - Device-side full-image opening test is pending until the user confirms after Check for Update.
+
+
+## My Memories full-size image open and Check for Update SHA repair — Web Update 244 prepared (2026-11-16)
+
+- Created pre-edit backup branch `backup/before-memories-full-open-and-sha-repair-2026-11-16` from main commit `faae8d8ffdabdeb82a37a038393c566a664b2d5f`. Feature branch: `fix/memories-full-open-sha-244-2026-11-16`.
+- The exact source and mirror were byte-identical before editing (Git blob SHA `d34f3895eaf9e2e37b6ee08c4fe262b7a4d1b3ff`). The My Memories image card now creates a thumbnail from its existing saved Blob and opens it through the same native full-image viewer bridge used by My Documents when tapped; Enter/Space keyboard activation is supported. Existing Download button, IndexedDB records/blobs, notes, documents, PIN/recovery, reminders and app identity are untouched.
+- Web Update 243 feed checksum was stale: it advertised `d4bf3a1ad626ea5f9081bf5240453412d23af56dc2073a8321e57c5beaec99d9`. New Web Update 244 checksum calculated over the exact UTF-8 bytes is `9f26eb32b40f896fe04715116e8fd3703054f657b81e9853433fa5572e056252` (459522 bytes). APK metadata and signing identity remain unchanged.
+- Source/mirror/feed/register changes are prepared on the feature branch. Publish only after exact source/mirror equality, independent SHA-256 re-read, updater guard checks, and successful workflow validation. Android device test remains pending; do not claim full-size opening is phone-verified until user confirms.
+- Existing local notes, photos, PIN data and all other app data must be preserved. No MUAZZIN project files are involved.

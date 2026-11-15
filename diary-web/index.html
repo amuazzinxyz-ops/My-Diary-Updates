@@ -1843,7 +1843,41 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      }
      if(kind==='memories'&&record.details)card.appendChild(mfEl('p',{},record.details));
      if(record.fileBlob){
-      if(kind==='documents'){
+      if(kind==='memories'&&String(record.fileType||'').toLowerCase().indexOf('image/')===0){
+      var memoryImageUrl=URL.createObjectURL(record.fileBlob);meFeatureObjectUrls.push(memoryImageUrl);
+      var memoryImagePreview=mfEl('img',{class:'diary-me-feature-thumb',alt:record.title||record.fileName||'Saved memory image'});
+      memoryImagePreview.src=memoryImageUrl;memoryImagePreview.style.cursor='zoom-in';
+      memoryImagePreview.setAttribute('role','button');memoryImagePreview.setAttribute('tabindex','0');
+      var openMemoryImage=function(){
+       var bridge=window.DiaryAppActions;
+       var messageBridge=window.DiaryNativeDocuments;
+       if((!bridge||typeof bridge.openDocument!=='function')&&(!messageBridge||typeof messageBridge.postMessage!=='function')){meFeatureStatus.textContent=mf('failed');return;}
+       memoryImagePreview.style.opacity='.65';
+       var reader=new FileReader();
+       reader.onload=function(){
+        try{
+         var dataUrl=String(reader.result||''),base64=dataUrl.indexOf(',')>=0?dataUrl.substring(dataUrl.indexOf(',')+1):'';
+         if(!base64)throw new Error('Empty image');
+         var imageName=String(record.fileName||((record.title||'memory-image')+'.jpg'));
+         var imageType=String(record.fileType||'image/jpeg');
+         if(messageBridge&&typeof messageBridge.postMessage==='function'){
+          messageBridge.postMessage(JSON.stringify({base64:base64,fileName:imageName,mimeType:imageType}));
+          meFeatureStatus.textContent='';
+         }else{
+          var accepted=bridge.openDocument(base64,imageName,imageType);
+          meFeatureStatus.textContent=accepted?'':mf('failed');
+         }
+        }catch(error){meFeatureStatus.textContent=mf('failed');}
+        memoryImagePreview.style.opacity='1';
+       };
+       reader.onerror=function(){meFeatureStatus.textContent=mf('failed');memoryImagePreview.style.opacity='1';};
+       try{reader.readAsDataURL(record.fileBlob);}catch(error){meFeatureStatus.textContent=mf('failed');memoryImagePreview.style.opacity='1';}
+      };
+      memoryImagePreview.addEventListener('click',openMemoryImage);
+      memoryImagePreview.addEventListener('keydown',function(event){if(event.key==='Enter'||event.key===' '){event.preventDefault();openMemoryImage();}});
+      card.appendChild(memoryImagePreview);
+     }
+     if(kind==='documents'){
        var documentImagePreview=null;
        if(String(record.fileType||'').toLowerCase().indexOf('image/')===0){
         var documentImageUrl=URL.createObjectURL(record.fileBlob);meFeatureObjectUrls.push(documentImageUrl);
