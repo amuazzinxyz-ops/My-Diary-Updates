@@ -3611,3 +3611,12 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Signed artifact `My-Diary-1.0.183-signed-test-candidate` (artifact ID `14245480546`) was downloaded and independently inspected. Extracted APK size: 2,039,096 bytes; SHA-256: `6d71b4ac55693d2adb3141ea0f4be72ec0c1bdf1592be5ea1832e44d4ea6fd75`, matching live `latest.json`.
 - Live feed advertises package `com.personal.diaryapp`, versionName `1.0.183`, versionCode `182`, direct APK URL `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.183.apk`, matching APK SHA-256, Web Update 273, and matching web SHA-256. Both APK and Check for Update delivery routes are published.
 - Repository/build/publication verification: PASS. Physical-phone confirmation that the Welcome Screen no longer shows Backup/Restore messages and that the old in-Note status display behaves correctly is still pending.
+
+
+# Remove “Ek Rang Chunein” from Cover and Detail photo menus — release pending (2026-11-16)
+
+- User explicitly approved removing only the **Solid Colour / Ek Rang Chunein** choice from the two Diary editor menus: **Note ka Cover Photo** and **Tafseel ki Photo**.
+- Those two menus retain **Choose Image** and **Gradient Colour**. The separate generic **Photo** menu is unchanged. No image data, saved colours, note content, PIN/locks, recovery, reminders, app identity or signing identity are changed.
+- Implementation is scoped by the existing `kind` argument in `attachDiaryColourChooser`: Cover and Detail append only Choose Image + Gradient Colour; other kinds retain all three choices.
+- Snapshot branch: `backup/before-photo-color-name-button-removal-2026-11-16`. Feature branch: `fix/remove-photo-color-name-buttons-2026-11-16`.
+- Source/mirror equality, syntax, PR merge, Web Update publication, signed APK build/publication, and both delivery-route checks are pending. Do not tell the user to update until all required checks pass. Physical phone test remains pending.
