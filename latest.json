@@ -4,7 +4,7 @@
   "versionCode": 179,
   "versionName": "1.0.180",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.180.apk",
-  "sha256": "cf576c6f46f42dd4d86c9b75e6d3ba8a0a2bb18e0f164aecf23dfc606c8548bd",
+  "sha256": "006d6003dab54a43d19d5f3bd527fa5386bcd016e7ce2f57fe067778c3dbe172",
   "releaseNotes": "My Diary 1.0.180: Diary PIN Forgot PIN recovery now requires the saved Favourite Name before setting a new PIN. Pattern, Fingerprint, Note Lock, saved data, reminders, package identity and signing identity are preserved.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 266,
