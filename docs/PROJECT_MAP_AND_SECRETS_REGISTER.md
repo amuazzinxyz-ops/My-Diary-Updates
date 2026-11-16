@@ -1,11 +1,13 @@
-# Note Lock wrong-PIN feedback inside the same PIN box — Web Update 255 / APK 1.0.174 planned (2026-11-16)
+# Note Lock wrong-PIN feedback inside the same PIN box — Web Update 255 / APK 1.0.174 published (2026-11-16)
 
 - User requested a narrowly scoped fix in **Note → 🔓 Tala Band Karein**: when the entered PIN is wrong, do not show a browser address/autofill suggestion or a separate alert. Show the existing localized wrong-PIN message inside the same PIN input box.
-- Exact change is limited to the Note Lock PIN modal and its Turn Off Lock validation. A wrong PIN leaves the lock enabled; the user can retry in the same box. PIN entry disables browser autofill hints and the error is displayed as the PIN field placeholder.
-- Pre-edit backup branch: `backup/before-note-lock-inline-error-2026-11-16`. Feature branch: `fix/note-lock-wrong-pin-inline-2026-11-16`. Main base commit: `eef14608a7b005a44c30c7bcd56dabd66b7d4273`.
-- No PIN values/hashes, recovery codes, saved notes, photos, documents, reminders, events, app package/signing identity or unrelated features are intentionally changed.
-- Planned release: Web Update 255 and signed APK 1.0.174 / versionCode 173. Static validation, PR review, publisher, signed APK/certificate/SHA-256 and live-feed checks are pending. Do not tell the user to update until all checks pass.
-- Physical phone test remains pending and must not be claimed.
+- Exact change is limited to the Note Lock PIN modal and its Turn Off Lock validation. A wrong PIN leaves the lock enabled; the same PIN box stays open for another attempt. PIN entry disables browser autofill hints, and the localized error is shown as the PIN field placeholder.
+- Pre-edit backup branch: `backup/before-note-lock-inline-error-2026-11-16`. Feature branch: `fix/note-lock-wrong-pin-inline-2026-11-16`. Main base commit: `eef14608a7b005a44c30c7bcd56dabd66b7d4273`. PR #95 merged as `c6e6fc8b59959642781905e4116349bb46c0b8ec`.
+- No PIN values/hashes, recovery codes, saved notes, photos, documents, reminders, events, app package/signing identity or unrelated features were intentionally changed.
+- Source and mirror are byte-identical, Git blob SHA `102dd39ffde573197ea964c75400e414528a1e4c`. Web publisher run `43822121181` succeeded and published Web Update 255; live web SHA-256 `81db6f930f9fce1f4ac6413f2178d4420d81e5787ae7ac06acfcd16064460d67`.
+- APK build run `43822121032` completed successfully. Signed APK 1.0.174 / versionCode 173 is published at `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.174.apk`, size 2,028,950 bytes, SHA-256 `4941dca48b201168ef49c128a399b7a1d0d98b6212567bab90ceec20bd993973`. Independently downloaded signed workflow artifact hashes to the same SHA-256. The release signing-certificate continuity and APK signature verification steps passed.
+- Live `latest.json` confirms APK 1.0.174/code 173 and Web Update 255 with the matching APK/web checksums. Check for Update release is ready. Physical phone test remains pending; do not claim device-side testing.
+
 
 ---
 
