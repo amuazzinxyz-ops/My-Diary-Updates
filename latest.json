@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 270,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "207f45fb3dff2f06a2bb1c7fb93717f60790a59eb7b2fb518954c8946d7a0e14",
+  "webSha256": "b497773607e87e2c5b07608188999d0e882694a52f2eb462b811ec9326ea2783",
   "webReleaseNotes": "My Diary Web Update 270: Backup now detects IndexedDB open/read blocks and timeouts, displays whether My Documents or My Memories storage is being opened, and reports the actual read error instead of remaining indefinitely on the generic preparing message. Sequential file reading and combined Notes, Documents and Memories backup remain supported."
 }
