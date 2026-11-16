@@ -1,3 +1,16 @@
+# Note Restore database helper scope correction — Web Update 271 refresh — 2026-11-16
+
+- User reported the combined Note Backup/Restore still did not work after Web Update 271. Re-inspection found that PR #113 fixed the export reader scope, but `restoreDiaryFeatureBackup()` still called `openMeFeatureDb()` directly even though that helper is local to `makeOverlay()`. This caused a ReferenceError when restoring a backup containing My Documents or My Memories.
+- Created pre-edit snapshot branch: `backup/before-restore-helper-scope-fix-2026-11-16`; feature branch: `fix/restore-helper-scope-bridge-2026-11-16`.
+- Minimal fix: route restore through the existing outer-scope `diaryOpenMeFeatureDbForBackup` reference and return a clear initialization error if it is unavailable. No data schema, saved data, PIN/locks, reminders, app package or signing identity changed.
+- PR #114 merged to main as `23d94a0fb1a336362df6184e6e2462b76905b711`.
+- `web-source/index.html` and `diary-web/index.html` verified identical at Git blob SHA `2c0811d9effd641787fc0554de580f8987ced03a`.
+- Web publisher run `43887870677` completed successfully. `latest.json` still identifies Web Update 271 and advertises web SHA-256 `ad03900657bb63efc46d8808fcb66e7079fe1aeb481b909cf97a0f8f90fc89f1`; APK feed remains package `com.personal.diaryapp`, version `1.0.181 / 180`.
+- Android APK workflow `43887870778` was still in progress at this entry. Do not claim a new APK was published unless the workflow and signed APK/feed checks pass. This fix is intended for the web backup/restore path.
+- **Device test remains pending:** user must Check for Update, create a backup containing at least one Note, one My Documents file and one My Memories image, then restore it and confirm all three remain available and open. No claim of device-side success until user confirms.
+
+---
+
 # Note Backup IndexedDB stall diagnostic repair — Web Update 270 — 2026-11-16
 
 - User confirmed Web Update 269 still left the Backup status at `Backup taiyaar ho raha hai…`. Do not describe Update 269 as a successful fix.
