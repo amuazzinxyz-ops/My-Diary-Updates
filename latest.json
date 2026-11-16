@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 272,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "b9b86e4c697b22b83cf2884883c63bf08e1f00102cbc1aff6eb307953211dce3",
+  "webSha256": "343e8d46ddee84b981d50409a177df1a83b3d47670dcc8269eaee43e0ee34674",
   "webReleaseNotes": "My Diary Web Update 272: Note Backup and Restore progress, completion and error messages now appear in a raised 3D popup card with an × close control. Existing saved data and app identity are preserved."
 }
