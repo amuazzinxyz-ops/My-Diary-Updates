@@ -7,8 +7,8 @@
   "sha256": "11211098cc351fa3b75f87922fdaa65f2535ddfb9f73f97499f1f2d2ab51f41d",
   "releaseNotes": "My Diary 1.0.171: Diary Lock not-set message appears in the same centered in-app popup box, not in a separate status area or browser alert. Matching signed APK and Check for Update feed; existing documents, saved images, notes, PIN, reminders and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 249,
+  "webVersion": 250,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "cc29b2c5c2688b5105d5544c41192ec7bd1e439167fd3b42c6e53d7dcc0fd86a",
-  "webReleaseNotes": "Web Update 249: Tareekh/Calendar Hijri day and month labels follow the selected app language: Roman English, English, Hindi, Urdu, Arabic, Bengali, Gujarati, Marathi, Tamil and Telugu. Full Hijri month names are shown where supported. Existing calendar events, notes and saved data are preserved."
+  "webSha256": "13dbccd3b369b6674a75bfc06e48ccaa1a75a62c98c239952ba80d999addd26c",
+  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
