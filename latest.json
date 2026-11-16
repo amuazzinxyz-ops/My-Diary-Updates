@@ -10,5 +10,5 @@
   "webVersion": 249,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "cc29b2c5c2688b5105d5544c41192ec7bd1e439167fd3b42c6e53d7dcc0fd86a",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "Web Update 249: Tareekh/Calendar Hijri day and month labels follow the selected app language: Roman English, English, Hindi, Urdu, Arabic, Bengali, Gujarati, Marathi, Tamil and Telugu. Full Hijri month names are shown where supported. Existing calendar events, notes and saved data are preserved."
 }
