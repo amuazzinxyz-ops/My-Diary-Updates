@@ -1,3 +1,18 @@
+# Optional Diary Pattern Lock — Web Update 258 / APK 1.0.177 published (2026-11-16)
+
+- User requested Pattern Lock inside the existing **Me → Set Diary Lock** screen. Added a third optional **Pattern Lock** switch; Diary Lock (PIN) and Enable Fingerprint remain separate optional methods.
+- Pattern setup uses a 3×3 dot grid. The user draws the pattern twice to confirm; visible connecting lines show the path. When enabled, Pattern is the default Diary unlock method. **Use PIN instead** remains available, along with the existing Forgot PIN recovery and native fingerprint unlock.
+- Turning Pattern off removes only the saved pattern. Turning Diary Lock off also clears the pattern. Forgot-PIN recovery clears the old pattern so the user can regain access and configure a new one. Existing Diary PIN setup/recovery, native fingerprint bridge, Note Lock, saved notes, photos, documents, reminders, app package and signing identity are preserved.
+- Exact pre-edit backup branch: `backup/before-diary-pattern-lock-2026-11-16`. Feature PR #98 merged to main as `a213b8a86b26fc978ecf2041e0726da42e506b6c`.
+- Build workflow was advanced safely from the existing published baseline APK 1.0.176 / versionCode 175 to APK 1.0.177 / versionCode 176. Added a build-time JavaScript syntax check (Node `--check`) and Pattern Lock implementation/translation guards. All workflow steps passed, including source checks, debug build, signed Release build, established signing-certificate continuity verification, publication and artifact uploads.
+- APK workflow run #257 (ID `43849339500`) completed successfully. Signed APK `1.0.177` / versionCode `176` is published at `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.177.apk`. Size: 2,035,252 bytes. SHA-256: `432f48f716ece49e45147a8cbf5a4c47c406c834cd549f91e77040a9a0038cd0`. APK Git blob SHA: `660a1827eaf6fc4b7642a9e0ed7b7696f7df57f0`. Stable `My-Diary.apk` has the same blob SHA and size.
+- Independently downloaded signed workflow artifact `My-Diary-1.0.177-signed-test-candidate` (artifact ID `14215763598`) and verified its extracted APK SHA-256 matches the live update feed exactly. The signing fingerprint continuity check passed.
+- Web publisher run #263 (ID `43849339427`) completed successfully and published **Web Update 258**. `web-source/index.html` and `diary-web/index.html` are byte-identical, Git blob SHA `3c51fc685356f1840476a3e5800666c7c7e95be0`, 428,536 bytes. Live web SHA-256: `f572a3238f08b03f801d42a573f407b49d9a97d58b05faf2393689562671ce8c`.
+- Live `latest.json` advertises package `com.personal.diaryapp`, APK 1.0.177/code 176 with the matching APK checksum, and Web Update 258 with the matching web checksum.
+- **Physical phone test is pending.** User must install/check the update and test: draw/confirm pattern twice; lock and unlock using Pattern; switch to PIN fallback; verify fingerprint fallback if enabled; turn Pattern off and verify PIN still works; confirm Note Lock is unchanged. Do not claim device-side PASS until the user confirms.
+
+---
+
 # Note Lock wrong-PIN popup beside the PIN box — Web Update 256 / APK 1.0.175 published (2026-11-16)
 
 - User clarified the desired appearance: for Note → 🔓 Tala Band Karein, a wrong PIN should show a clear, styled pop-up immediately below the same PIN box, matching the Diary Lock message card style. The error is not placed in the PIN placeholder, and no browser address/autofill suggestion or separate browser alert is shown.
