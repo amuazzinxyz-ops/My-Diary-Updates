@@ -1,3 +1,14 @@
+# Forgot PIN: show the correct PIN prompt after Favourite Name — 2026-11-16
+
+- User reported that after entering the correct Favourite Name during Forgot PIN, the next PIN field still displayed the Favourite Name prompt. User wants the next field to clearly ask for the new PIN.
+- Fixed only the Diary unlock/recovery dialog stage placeholders: after Favourite Name verifies, the field now says `4 ankon ka PIN daalein` (localized through the existing `pinPrompt` translation); when confirming, it says `PIN dobara daalein`; on mismatch/storage retry it returns to the PIN-entry prompt. The heading continues to identify the current stage.
+- Wrong Favourite Name still retains the Favourite Name prompt and existing verification/error behavior. No PIN/recovery logic, Favourite Name hash, Pattern/Fingerprint, Note Lock, saved notes/photos/documents, reminders, package identity or signing identity was intentionally changed.
+- Exact pre-edit source/register backup branch: `backup/before-forgot-pin-placeholder-2026-11-16`. Working branch: `fix/forgot-pin-new-pin-placeholder-2026-11-16`. Source edit commit: `87c8b2a2a69077453da6012d550a4a23adcf74a7`. PR and publication verification pending.
+- The preceding PIN-field-fit Web Update 264 is live. APK workflow run #264 (`43870906130`) completed successfully after build-guard repair; APK feed remains 1.0.180 / versionCode 179 with SHA-256 `c667b6734e17de6bd33ea488a749e0facb5c4726b711e5a76108ca16d3cf4baa`.
+- Physical phone verification of this prompt correction is pending; do not claim device-side PASS until the user tests it.
+
+---
+
 # Diary PIN input text fits inside the box — Web Update 264 (2026-11-16)
 
 - User requested that text shown inside PIN entry boxes fit the box, remain readable, and not be clipped.
