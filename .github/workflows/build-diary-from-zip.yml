@@ -1,4 +1,4 @@
-# Approved release build: publish signed Diary 1.0.180/178 with Pattern Lock and matching Check for Update feed.
+# Approved release build: publish signed Diary 1.0.180/179 with Pattern Lock and matching Check for Update feed.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -394,7 +394,7 @@ jobs:
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary release versionName=1.0.180, versionCode=178")
+          print("Set Diary release versionName=1.0.180, versionCode=179")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -416,7 +416,7 @@ jobs:
           name = one(r'versionName\s*=\s*"([^"]+)"', "versionName")
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
-          if code != 178 or name != "1.0.180":
+          if code != 179 or name != "1.0.180":
               raise SystemExit(f"BLOCKED: expected approved APK version 1.0.180/178, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
           if feed_version not in ((178, "1.0.179"), (179, "1.0.180")):  
@@ -517,7 +517,7 @@ jobs:
           test -s "$APK"
           SHA256="$(sha256sum "$APK" | awk '{print $1}')"
           cp "$APK" /tmp/My-Diary-verified.apk
-          printf '1.0.180\n178\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.180\n179\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -f -B diary-publish-main origin/main
           python3 - <<'PY'
