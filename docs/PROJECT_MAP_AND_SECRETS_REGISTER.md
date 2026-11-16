@@ -1,13 +1,14 @@
-# Diary PIN input text fits inside the box — 2026-11-16
+# Diary PIN input text fits inside the box — Web Update 264 (2026-11-16)
 
 - User requested that text shown inside PIN entry boxes fit the box, remain readable, and not be clipped.
-- Scoped the CSS/field adjustment to Diary master PIN setup, Diary Lock Off PIN verification, and Diary unlock/recovery PIN input. Placeholder text now uses a responsive smaller font with normal letter spacing; the input is constrained to its parent width with border-box sizing; entered PIN digits remain centered and spaced.
+- Scoped the adjustment to Diary master PIN setup, Diary Lock Off PIN verification, and Diary unlock/recovery PIN input. Placeholder text now uses a responsive smaller font with normal letter spacing; the input is constrained to its parent width with border-box sizing; entered PIN digits remain centered and spaced.
 - No PIN/recovery logic, Favourite Name verification, Pattern/Fingerprint behavior, Note Lock, notes/photos/documents/reminders, app package identity, or signing identity was intentionally changed.
-- Exact pre-edit backup branch: `backup/before-diary-pin-input-fit-2026-11-16`. Working branch: `fix/diary-pin-input-fit-2026-11-16`. PR #105: https://github.com/amuazzinxyz-ops/My-Diary-Updates/pull/105
-- Source change commit: `1a99774a32cde4ca64d7a1f9e44ccc99f9a1cfff`; changed only the three Diary master PIN input fields and added scoped placeholder/input CSS. PR review/merge and web publisher verification are pending.
-- Physical phone test is pending. Do not claim the text is confirmed on-device until the user checks the updated app and confirms.
+- Exact pre-edit source/register backup branch: `backup/before-diary-pin-input-fit-2026-11-16`. Feature PR #105 merged successfully to main as `428805a71113d0b697bed8e751d7e569cb8924ce`. Web publisher run #270 (`43870467554`) succeeded and published **Web Update 264**.
+- `web-source/index.html` and `diary-web/index.html` are byte-identical, Git blob SHA `603f546c3d6b724ea1cd3b37a98dc836185b0fb4`, 435,721 characters. Live `latest.json` advertises webVersion 264 and web SHA-256 `3c4e833ca4ae4785a381afcfd98065875cc53452e3308c58d47c30f97c28b50e`.
+- APK workflow run #264 (`43870467567`) safely stopped at the build-time HTML injection guard before APK compilation/publication. The guard expected an older PIN-input string even though the current source already includes the equivalent protected `diary-master-pin` field with numeric input and autofill protections. The web update remains live; no APK change or APK publication is claimed.
+- Build-only repair is being made in `scripts/add_diary_app_actions.py` so the guard recognizes the current protected PIN input without replacing or changing it. Pre-repair backup branch: `backup/before-diary-pin-build-guard-repair-2026-11-16`; repair PR and subsequent APK build verification pending.
+- Physical phone test is pending. Do not claim the text is confirmed on-device until the user checks Web Update 264 and confirms.
 
----
 
 # Diary PIN setup and Forgot PIN text readability — Web Update 263 / APK 1.0.180 (2026-11-16)
 
