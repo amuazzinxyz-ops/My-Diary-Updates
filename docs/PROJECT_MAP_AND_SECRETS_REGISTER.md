@@ -1,13 +1,24 @@
-# Me menu: hide Calendar view only — Web Update 253 / APK 1.0.173 planned (2026-11-16)
+# Note Lock wrong-PIN feedback inside the same PIN box — Web Update 255 / APK 1.0.174 planned (2026-11-16)
 
-- User clarified the requested item is option 1: the separate **Calendar** view button in the Me menu. The **📅 Personal Calendar** feature must remain visible and functional.
-- This change is based on the current main source (Web Update 252 / APK 1.0.172), not the older Web248 source. Existing current features and fixes are retained.
-- Backup branch before editing: `backup/before-remove-calendar-from-me-2026-11-16`. Working branch: `fix/remove-calendar-view-entry-web253-2026-11-16`. Current main base commit: `2153b16aea9e8fe12ac470986c3c2d51849ee70c`.
-- Exact UI change: the one Me-menu append statement for `diaryCalendarBtn` and `diaryCalendarPanel` is removed. The calendar view's supporting code is left dormant, not deleted. The separate `Personal Calendar` Me feature (`meFeatureTypes` item with `key:'personalCalendar'`) remains untouched.
-- Calendar storage, saved calendar records, reminders, events, Diary notes/photos/documents, PIN/recovery, app package/signing identity and other Me features are not deleted or migrated.
-- Source and mirror are byte-identical after the edit; blob SHA `066ccc04f265393aafed9f5bc7ea852820cee851`. Build workflow is advanced to APK 1.0.173 / versionCode 172; it accepts only current feed 1.0.172/171 or the exact new 1.0.173/172 release.
-- Static validation and source/mirror/feed/build checks are pending final PR review. Do not tell the user to update until the web publisher, signed APK build, signing-certificate continuity, APK SHA-256, live latest.json, and mirror checks all pass.
+- User requested a narrowly scoped fix in **Note → 🔓 Tala Band Karein**: when the entered PIN is wrong, do not show a browser address/autofill suggestion or a separate alert. Show the existing localized wrong-PIN message inside the same PIN input box.
+- Exact change is limited to the Note Lock PIN modal and its Turn Off Lock validation. A wrong PIN leaves the lock enabled; the user can retry in the same box. PIN entry disables browser autofill hints and the error is displayed as the PIN field placeholder.
+- Pre-edit backup branch: `backup/before-note-lock-inline-error-2026-11-16`. Feature branch: `fix/note-lock-wrong-pin-inline-2026-11-16`. Main base commit: `eef14608a7b005a44c30c7bcd56dabd66b7d4273`.
+- No PIN values/hashes, recovery codes, saved notes, photos, documents, reminders, events, app package/signing identity or unrelated features are intentionally changed.
+- Planned release: Web Update 255 and signed APK 1.0.174 / versionCode 173. Static validation, PR review, publisher, signed APK/certificate/SHA-256 and live-feed checks are pending. Do not tell the user to update until all checks pass.
 - Physical phone test remains pending and must not be claimed.
+
+---
+
+# Me menu: hide Calendar view only — Web Update 254 / APK 1.0.173 published (2026-11-16)
+
+- User clarified the requested item was option 1: the separate **Calendar** view button in the Me menu. The **📅 Personal Calendar** feature remains visible and functional.
+- This change was based on the current main source (Web Update 252 / APK 1.0.172), not the older Web248 source. Existing current features and fixes were retained.
+- Backup branch: `backup/before-remove-calendar-from-me-2026-11-16`. Working branch: `fix/remove-calendar-view-entry-web253-2026-11-16`.
+- Exact UI change: only the Me-menu append statement for `diaryCalendarBtn` and `diaryCalendarPanel` was removed. Calendar supporting code remains dormant, not deleted. The separate `Personal Calendar` Me feature (`meFeatureTypes` item with `key:'personalCalendar'`) remains untouched.
+- Calendar storage, saved calendar records, reminders, events, Diary notes/photos/documents, PIN/recovery, app package/signing identity and other Me features were not deleted or migrated.
+- Final source and mirror are byte-identical, Git blob SHA `dd672331fcf13c1119cd0a492007abe06338dafc`. Web publisher run `43818616878` succeeded and published Web Update 254; live web SHA-256 is `460c93221dd9804807afe159388651de00ae59a1a4f39b801ae3e2ecc3d19e31`.
+- APK build run `43818616851` succeeded. Signed APK 1.0.173 / versionCode 172 was published; live feed SHA-256 is `af87a21c24d24762f25622fad7d7bd75014d855ad343bbaca2c00d1950d3711b`. Signing and release verification steps passed.
+- Phone-side Check for Update/display testing remains pending; do not claim device-side testing. Preserve all existing saved data and app/signing identity.
 
 ---
 

@@ -1,4 +1,4 @@
-# Approved release build: publish signed Diary 1.0.173/172 with matching Check for Update feed.
+# Approved release build: publish signed Diary 1.0.174/173 with matching Check for Update feed.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -112,7 +112,7 @@ jobs:
           source=Path("web-source/index.html")
           actual=hashlib.sha256(source.read_bytes()).hexdigest()
           meta["webSha256"]=actual
-          meta["webReleaseNotes"]="Diary Lock not-set feedback appears inside the app without a browser alert or website address. Existing PIN, saved data and other features are preserved."
+          meta["webReleaseNotes"]="Note Lock wrong-PIN feedback appears inside the same PIN box without a separate alert or address/autofill suggestion. Existing Note PINs, recovery data and saved records are preserved."
           Path("latest.json").write_text(json.dumps(meta,indent=2)+"\n",encoding="utf-8")
           expected=meta.get("webSha256","").lower()
           if len(expected)!=64 or actual!=expected:
@@ -173,6 +173,15 @@ jobs:
               raise SystemExit("BLOCKED: reminder restore receiver lacks boot/update actions")
           kotlin = Path("diary-project/app/src/main/java/com/muazzin/diary/MainActivity.kt").read_text(encoding="utf-8")
           generated_html = Path("diary-project/app/src/main/assets/index.html").read_text(encoding="utf-8")
+          if "function askFourDigitPinAutomatically(title,validator)" not in generated_html:
+              raise SystemExit("BLOCKED: Note Lock PIN modal must support inline PIN validation")
+          if "input.placeholder=t('codeWrong')" not in generated_html:
+              raise SystemExit("BLOCKED: wrong Note Lock PIN feedback must appear inside the PIN box")
+          if "askFourDigitPinAutomatically(t('pinPrompt'),matchesPin)" not in generated_html:
+              raise SystemExit("BLOCKED: Turn Off Lock must validate the PIN inside the same PIN box")
+          lock_off = generated_html.split("function turnLockOff(n){", 1)[1].split("function requestUnlock(n)", 1)[0]
+          if "window.alert(t('codeWrong'))" in lock_off:
+              raise SystemExit("BLOCKED: wrong Note Lock PIN must not use a separate browser alert")
           if "inner class DiaryNativeActions" not in kotlin or "private inner class DiaryNativeActions" in kotlin:
               raise SystemExit("BLOCKED: JavaScript bridge class must be publicly accessible to Android WebView")
           if 'webView.addJavascriptInterface(DiaryNativeActions(), "DiaryAppActions")' not in kotlin:
@@ -320,7 +329,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved Diary release version 1.0.173 (versionCode 172)
+      - name: Set approved Diary release version 1.0.174 (versionCode 173)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
@@ -328,12 +337,12 @@ jobs:
           from pathlib import Path
           p = Path("app/build.gradle.kts")
           s = p.read_text(encoding="utf-8")
-          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 172', s, count=1)
-          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.173"', s, count=1)
+          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 173', s, count=1)
+          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.174"', s, count=1)
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary release versionName=1.0.173, versionCode=172")
+          print("Set Diary release versionName=1.0.174, versionCode=173")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -355,10 +364,10 @@ jobs:
           name = one(r'versionName\s*=\s*"([^"]+)"', "versionName")
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
-          if code != 172 or name != "1.0.173":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.173/172, found {name}/{code}")
+          if code != 173 or name != "1.0.174":
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.174/173, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if feed_version not in ((171, "1.0.172"), (172, "1.0.173")):  
+          if feed_version not in ((172, "1.0.173"), (173, "1.0.174")):  
               raise SystemExit(f"BLOCKED: update feed is neither the installed baseline nor the already-published exact repair release: {feed_version}")
           print(f"PASS: package={package}, repair release={name}/{code}; feed state is approved: {feed_version}")
           PY
@@ -447,7 +456,7 @@ jobs:
           echo "Release APK certificate matches the previously supplied SHA-256 fingerprint."
           rm -f app/diary-release.jks
 
-      - name: Publish verified Diary update 1.0.173 after release verification PASS
+      - name: Publish verified Diary update 1.0.174 after release verification PASS
         if: env.DIARY_RELEASE_READY == 'true'
         shell: bash
         run: |
@@ -456,7 +465,7 @@ jobs:
           test -s "$APK"
           SHA256="$(sha256sum "$APK" | awk '{print $1}')"
           cp "$APK" /tmp/My-Diary-verified.apk
-          printf '1.0.173\n172\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.174\n173\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -f -B diary-publish-main origin/main
           python3 - <<'PY'
@@ -464,25 +473,25 @@ jobs:
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in ((171, "1.0.172"), (172, "1.0.173")): 
+          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in ((172, "1.0.173"), (173, "1.0.174")): 
               raise SystemExit(f"BLOCKED: live main feed is neither the installed baseline nor the exact repair release being republished: {feed_version}")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
           meta["packageName"] = "com.personal.diaryapp"
           meta["versionName"] = lines[0]
           meta["versionCode"] = int(lines[1])
-          meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.173.apk"
+          meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.174.apk"
           meta["sha256"] = lines[2]
-          meta["releaseNotes"] = "My Diary 1.0.173: The Calendar view entry has been removed from the Me menu only; Personal Calendar and saved calendar data are unchanged. Matching signed APK and Check for Update feed; existing calendar events, notes, documents, reminders and app identity are preserved."
+          meta["releaseNotes"] = "My Diary 1.0.174: The Calendar view entry remains removed from the Me menu only; Personal Calendar and saved calendar data are unchanged. Note Lock wrong-PIN feedback now appears inside the same PIN box without a separate alert or address/autofill suggestion. Existing PIN/recovery data and all saved notes, photos, documents, reminders and app identity are preserved."
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           cp /tmp/My-Diary-verified.apk My-Diary.apk
-          cp /tmp/My-Diary-verified.apk My-Diary-1.0.173.apk
+          cp /tmp/My-Diary-verified.apk My-Diary-1.0.174.apk
           python3 -m json.tool latest.json >/dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add My-Diary.apk My-Diary-1.0.173.apk latest.json
-          git commit -m "Publish My Diary update 1.0.173"
+          git add My-Diary.apk My-Diary-1.0.174.apk latest.json
+          git commit -m "Publish My Diary update 1.0.174"
           git push origin HEAD:main
       - name: Upload unsigned Release APK for private owner-side signing
         if: env.DIARY_RELEASE_READY != 'true'
@@ -497,7 +506,7 @@ jobs:
         if: env.DIARY_RELEASE_READY == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: My-Diary-1.0.173-signed-test-candidate
+          name: My-Diary-1.0.174-signed-test-candidate
           path: diary-project/app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
           retention-days: 30
@@ -513,7 +522,7 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: My-Diary-1.0.173-debug-test-candidate
+          name: My-Diary-1.0.174-debug-test-candidate
           path: diary-project/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
