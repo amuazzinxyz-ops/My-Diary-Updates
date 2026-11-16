@@ -1,3 +1,16 @@
+# Diary Lock three-method unlock and Forgot PIN Pattern preservation — phone verification PASS (2026-11-16)
+
+- User explicitly confirmed that the latest Diary Lock work has been tested on their Android phone and all requested behavior is now working correctly.
+- Verified behavior covered by this confirmation: **Diary PIN Tala** and **Set Diary Lock** both lead to the shared lock settings; after locking, **Pattern, PIN and Fingerprint** are all available together; using **Forgot PIN** no longer removes the saved Pattern/Fingerprint settings. The user reports all are working correctly.
+- This closes the previously pending physical-phone verification for the three-method Diary unlock flow and the Forgot PIN Pattern-preservation correction. Mark as **user-reported phone PASS**; no remote access to the phone was performed.
+- Live `latest.json` was re-read: package `com.personal.diaryapp`, APK **1.0.179 / versionCode 178**, APK SHA-256 `fe526e02f28e8d0726b4b6a2e676af04e03f758eeeec0b950802d9c1c078d4c0`; Web Update **261**, web SHA-256 `d2af5ea393889ca808b368e4ade9ddbd55a61ce741787cd4cbacfbd2876bdb4a`.
+- Published web source and `diary-web/index.html` mirror were re-fetched and have matching Git blob SHA `5f09d742bb9f27469aa1f113889c87db7eea0f4d`. The live feed advertises the same Web Update 261 checksum. The published APK URL in the live feed is `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.179.apk`.
+- This is a **register-only** update after the user's device confirmation. No app source, APK, mirror, `latest.json`, release version, local notes/photos/documents, PIN/recovery records, reminders, package identity or signing identity was changed.
+- Exact pre-edit register snapshot is preserved on branch `backup/before-diary-lock-phone-pass-register-2026-11-16`, created from main commit `2baf6ede9e9c7339535a09f460134d38a4313bf5`.
+- User confirmation is the evidence for phone-side behavior; repository metadata and source/mirror equality were independently rechecked. Do not extend this PASS to unrelated app features that the user did not test.
+
+---
+
 # Diary PIN Tala and Set Diary Lock use the same unlock settings — Web Update 260 / APK 1.0.178 (2026-11-16)
 
 - User reported that the three unlock methods appeared after **Me → 🔐 Set Diary Lock**, but not after using **Me → 🔐 Diary PIN Tala**. Fixed the PIN setup/change path so its successful save opens the existing shared Diary Lock Settings. The Set Diary Lock path remains unchanged. Users can configure Pattern and Fingerprint there while PIN remains available as the third method; no method switch is required on the unlock screen.
