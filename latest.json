@@ -4,7 +4,7 @@
   "versionCode": 182,
   "versionName": "1.0.183",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.183.apk",
-  "sha256": "6d71b4ac55693d2adb3141ea0f4be72ec0c1bdf1592be5ea1832e44d4ea6fd75",
+  "sha256": "b7f61ec4baf27510a13700e4d293d5b28beb7e093ece29eba6f7121315120b48",
   "releaseNotes": "My Diary 1.0.183: Note Backup and Restore messages are back in the original in-section status display. Backup data and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 274,
