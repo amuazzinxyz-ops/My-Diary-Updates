@@ -1,4 +1,4 @@
-# Approved release build: publish signed Diary 1.0.175/173 with matching Check for Update feed.
+# Approved release build: publish signed Diary 1.0.175/174 with matching Check for Update feed.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -467,7 +467,7 @@ jobs:
           test -s "$APK"
           SHA256="$(sha256sum "$APK" | awk '{print $1}')"
           cp "$APK" /tmp/My-Diary-verified.apk
-          printf '1.0.175\n173\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.175\n174\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -f -B diary-publish-main origin/main
           python3 - <<'PY'
