@@ -4,11 +4,11 @@
   "versionCode": 185,
   "versionName": "1.0.186",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.186.apk",
-  "sha256": "3f556914a97df9559363dcea50ba51691bed2976b7d0c92adc2805b3027b7390",
+  "sha256": "aff03c9f0236860d118c5d634dd4cd7755e47db70a12824022ad7329a8707967",
   "releaseNotes": "My Diary 1.0.186: Added Daily repeat only to Smart Reminder. Existing reminder settings and saved Diary data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 277,
+  "webVersion": 276,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "790c21df692bfa9ed57ecc8eb4aed569cc3597b57d2191b02979d28c5398d50b",
-  "webReleaseNotes": "My Diary Web Update 277: Added encrypted Private Locker in the Me menu. Existing Diary features and saved data remain unchanged."
+  "webReleaseNotes": "My Diary Web Update 276: Added Daily repeat only to Smart Reminder. Personal Calendar and all other Diary features remain unchanged."
 }
