@@ -4,7 +4,7 @@
   "versionCode": 180,
   "versionName": "1.0.181",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.181.apk",
-  "sha256": "933640aa6559f36c1eb527cc03a067a3425b5df93f3fac7f9c782421f07341a8",
+  "sha256": "0ffbc685979855a5190a324f1a91009056a6a57b64c95c04604c510037a5826b",
   "releaseNotes": "My Diary 1.0.181: Note Lock PIN prompts are larger, bold and raised for readability. Note Lock verification and recovery logic, saved data and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 268,
