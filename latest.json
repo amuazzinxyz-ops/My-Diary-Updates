@@ -7,8 +7,8 @@
   "sha256": "a3c29b2673bd484228b63f74ecdd1f8df194bdb4c757957648c458fc4817bb93",
   "releaseNotes": "My Diary 1.0.171: Diary Lock not-set message appears in the same centered in-app popup box, not in a separate status area or browser alert. Matching signed APK and Check for Update feed; existing documents, saved images, notes, PIN, reminders and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 248,
+  "webVersion": 249,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "13dbccd3b369b6674a75bfc06e48ccaa1a75a62c98c239952ba80d999addd26c",
-  "webReleaseNotes": "Diary Lock: when '🔓 Diary Lock Band Karein' is tapped while no PIN lock is set, 'Diary Lock is not set.' now appears in the same centered in-app popup box (with a close button), not in a separate lower status area or browser alert. The matching APK embeds this update."
+  "webSha256": "cc29b2c5c2688b5105d5544c41192ec7bd1e439167fd3b42c6e53d7dcc0fd86a",
+  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }

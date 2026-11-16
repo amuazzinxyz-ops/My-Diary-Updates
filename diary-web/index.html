@@ -1370,8 +1370,9 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   calendarGrid.append(calendarTop,calendarHeading,calendarDays,calendarNotes);
   calendarPanel.appendChild(calendarGrid);
   function calendarDateKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
-  function calendarHijriLabel(date){
-   try{return new Intl.DateTimeFormat('en-u-ca-islamic-umalqura',{day:'numeric',month:'short'}).format(date);}catch(e){try{return new Intl.DateTimeFormat('en-u-ca-islamic',{day:'numeric',month:'short'}).format(date);}catch(e2){return '';}}
+  function calendarHijriLabel(date,locale){
+   locale=locale||'en';
+   try{return new Intl.DateTimeFormat(locale+'-u-ca-islamic-umalqura',{day:'numeric',month:'long'}).format(date);}catch(e){try{return new Intl.DateTimeFormat(locale+'-u-ca-islamic',{day:'numeric',month:'long'}).format(date);}catch(e2){try{return new Intl.DateTimeFormat(locale,{day:'numeric',month:'long'}).format(date);}catch(e3){return '';}}}
   }
   var calendarRenderToken=0;
   function calendarRender(){
@@ -1402,7 +1403,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      var date=new Date(year,month,day),key=calendarDateKey(date),has=!!byDay[key],dayEvents=byEventDay[key]||[],isSelected=key===calendarDateKey(calendarSelected),isToday=key===calendarDateKey(new Date());
      var dayBtn=el('button',{type:'button',class:'diary-calendar-day'+(isSelected?' selected':'')+(isToday?' today':'')+(has||dayEvents.length?' has-event':'')});
      dayBtn.appendChild(el('span',{class:'diary-calendar-day-number'},new Intl.NumberFormat(activeLocale).format(day)));
-     var hijri=calendarHijriLabel(date);if(hijri)dayBtn.appendChild(el('small',{class:'diary-calendar-hijri'},hijri));
+     var hijri=calendarHijriLabel(date,activeLocale);if(hijri)dayBtn.appendChild(el('small',{class:'diary-calendar-hijri'},hijri));
      if(dayEvents.length)dayBtn.appendChild(el('span',{class:'diary-calendar-event-dot'},'•'));
      dayBtn.setAttribute('aria-label',date.toLocaleDateString(activeLocale)+(has?t('calendarNotesCount').replace('{count}',new Intl.NumberFormat(activeLocale).format(byDay[key].length)):'')+(dayEvents.length?' • '+dayEvents.length+' events':''));
      dayBtn.addEventListener('click',function(selectedDate){return function(e){e.preventDefault();e.stopPropagation();calendarSelected=selectedDate;calendarRender();};}(date));
@@ -1410,7 +1411,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     }
     calendarNotes.replaceChildren();
     var selectedKey=calendarDateKey(calendarSelected),selectedNotes=byDay[selectedKey]||[],selectedEvents=byEventDay[selectedKey]||[];
-    calendarNotes.appendChild(el('div',{class:'diary-calendar-date-title'},calendarSelected.toLocaleDateString(activeLocale,{weekday:'long',day:'numeric',month:'long',year:'numeric'})+' • '+calendarHijriLabel(calendarSelected)));
+    calendarNotes.appendChild(el('div',{class:'diary-calendar-date-title'},calendarSelected.toLocaleDateString(activeLocale,{weekday:'long',day:'numeric',month:'long',year:'numeric'})+' • '+calendarHijriLabel(calendarSelected,activeLocale)));
     selectedEvents.forEach(function(event){
      var eventItem=el('button',{type:'button',class:'diary-calendar-note diary-calendar-event'},'📅 '+(event.title||'Personal Calendar')+(event.time?' • '+event.time:''));
      eventItem.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();calendarPanel.hidden=true;calendarBtn.setAttribute('aria-expanded','false');openMeFeature('calendar');});
