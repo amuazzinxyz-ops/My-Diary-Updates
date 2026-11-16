@@ -1,3 +1,16 @@
+# Remove Calendar from Me menu — Web Update 253 / APK 1.0.173 planned (2026-11-16)
+
+- User asked to remove Calendar from the Me Button while keeping the existing night baseline and making only this new change.
+- Exact pre-edit backup branch: `backup/before-remove-calendar-from-me-2026-11-16`, created from main commit `2153b16aea9e8fe12ac470986c3c2d51849ee70c`. Feature branch: `fix/remove-calendar-from-me-web253-2026-11-16`.
+- Started from the exact Web Update 248 HTML at commit `6550cecb769a40240a47ddefb2ad3cfc57d74994` (source/mirror blob `e1bd3baded0490d460353b988290f0f0e9813335`), retaining the requested Diary Lock same-popup/no-website-address behavior.
+- Minimal UI change: stopped appending `#diaryCalendarBtn` and `#diaryCalendarPanel` to the Me panel. The Calendar interface is no longer shown in Me. Calendar IndexedDB storage, records, event/reminder logic and all existing saved calendar data are retained; no data deletion or migration is performed.
+- Source and mirror are byte-identical on the feature branch, blob SHA `d17e730e0b629fcdbc88a57a0f424e404cf1b653`. The Android build workflow is advanced to signed APK 1.0.173 / versionCode 172 and accepts only the live 1.0.172/171 baseline or the exact 1.0.173/172 repair release.
+- Static source checks confirm the calendar append is absent, calendar data-storage code remains, Diary Lock popup behavior remains, and required My Memories search/download guard markers remain.
+- PR merge, Web Update 253 publisher run, signed APK build, signing-certificate continuity, APK SHA-256, published APK URL, live latest.json and mirror verification are pending. Do not tell the user to update until both APK and Check for Update routes are verified. Physical phone test remains pending.
+- Preserve all Diary notes, photos, documents, calendar records, reminders, PIN/recovery data, package identity and signing identity. No Muazzin project files are involved.
+
+---
+
 # Personal Calendar shows Gregorian dates only — Web Update 252 and APK 1.0.172 published (2026-11-16)
 
 - User clarified that the 📆 Tareekh/Personal Calendar must show only the original Gregorian date; no Hijri date should appear inside day cells or beside the selected date.
