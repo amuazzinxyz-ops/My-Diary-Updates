@@ -112,7 +112,7 @@ jobs:
           source=Path("web-source/index.html")
           actual=hashlib.sha256(source.read_bytes()).hexdigest()
           meta["webSha256"]=actual
-          meta["webReleaseNotes"]="Note Lock wrong-PIN feedback now appears in a clear pop-up beside the PIN box, styled like the Diary Lock message. The same PIN box remains available for retry; existing Note PINs, recovery data and saved records are preserved."
+          meta["webReleaseNotes"]="Added the removable Diary Lock Settings screen in Me with Diary Lock and Enable Fingerprint switches. The existing Diary PIN and recovery remain available; native fingerprint unlock is an optional route. Note Lock and saved data are unchanged."
           Path("latest.json").write_text(json.dumps(meta,indent=2)+"\n",encoding="utf-8")
           expected=meta.get("webSha256","").lower()
           if len(expected)!=64 or actual!=expected:
