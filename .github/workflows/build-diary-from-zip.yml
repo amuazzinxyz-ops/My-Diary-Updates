@@ -1,4 +1,4 @@
-# Approved release build: publish signed Diary 1.0.176/175 with matching Check for Update feed.
+# Approved release build: publish signed Diary 1.0.177/176 with Pattern Lock and matching Check for Update feed.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -142,6 +142,26 @@ jobs:
           Path("/tmp/diary-module.js").write_text(module, encoding="utf-8")
           PY
           node --check /tmp/diary-module.js
+          python3 - <<'PY'
+          from pathlib import Path
+          html = Path("diary-project/app/src/main/assets/index.html").read_text(encoding="utf-8")
+          required = (
+              "var DIARY_MASTER_PATTERN_KEY='diary_diary_master_pattern_v1';",
+              "function validDiaryPattern(value)",
+              "function makeDiaryPatternGrid(onComplete,onShort)",
+              "function configureDiaryPattern()",
+              "var patternRow=makeRow(t('patternSwitch'),t('patternSwitchHint'),'diaryPatternSettingToggle');",
+              "patternUsePin",
+              "localStorage.removeItem(DIARY_MASTER_PATTERN_KEY);",
+          )
+          missing = [item for item in required if item not in html]
+          if missing:
+              raise SystemExit("BLOCKED: Diary Pattern Lock implementation is incomplete: " + ", ".join(missing))
+          for required_translation in ("patternSwitch:", "patternWrong:", "patternUsePin:"):
+              if html.count(required_translation) < 3:
+                  raise SystemExit("BLOCKED: Pattern Lock translations are incomplete: " + required_translation)
+          print("PASS: optional Pattern Lock setup, 3x3 grid, PIN fallback and recovery preservation markers verified")
+          PY
           python3 scripts/add_diary_app_actions.py
           python3 - <<'PY'
           from pathlib import Path
@@ -344,7 +364,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved Diary release version 1.0.176 (versionCode 175)
+      - name: Set approved Diary release version 1.0.177 (versionCode 176)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
@@ -352,12 +372,12 @@ jobs:
           from pathlib import Path
           p = Path("app/build.gradle.kts")
           s = p.read_text(encoding="utf-8")
-          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 175', s, count=1)
-          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.176"', s, count=1)
+          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 176', s, count=1)
+          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.177"', s, count=1)
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary release versionName=1.0.176, versionCode=175")
+          print("Set Diary release versionName=1.0.177, versionCode=176")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -379,10 +399,10 @@ jobs:
           name = one(r'versionName\s*=\s*"([^"]+)"', "versionName")
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
-          if code != 175 or name != "1.0.176":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.176/175, found {name}/{code}")
+          if code != 176 or name != "1.0.177":
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.177/176, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if feed_version not in ((174, "1.0.175"), (175, "1.0.176")):  
+          if feed_version not in ((175, "1.0.176"), (176, "1.0.177")):  
               raise SystemExit(f"BLOCKED: update feed is neither the installed baseline nor the already-published exact repair release: {feed_version}")
           print(f"PASS: package={package}, repair release={name}/{code}; feed state is approved: {feed_version}")
           PY
@@ -471,7 +491,7 @@ jobs:
           echo "Release APK certificate matches the previously supplied SHA-256 fingerprint."
           rm -f app/diary-release.jks
 
-      - name: Publish verified Diary update 1.0.176 after release verification PASS
+      - name: Publish verified Diary update 1.0.177 after release verification PASS
         if: env.DIARY_RELEASE_READY == 'true'
         shell: bash
         run: |
@@ -480,7 +500,7 @@ jobs:
           test -s "$APK"
           SHA256="$(sha256sum "$APK" | awk '{print $1}')"
           cp "$APK" /tmp/My-Diary-verified.apk
-          printf '1.0.176\n175\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.177\n176\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -f -B diary-publish-main origin/main
           python3 - <<'PY'
@@ -488,25 +508,25 @@ jobs:
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in ((174, "1.0.175"), (175, "1.0.176")): 
+          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in ((175, "1.0.176"), (176, "1.0.177")): 
               raise SystemExit(f"BLOCKED: live main feed is neither the installed baseline nor the exact repair release being republished: {feed_version}")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
           meta["packageName"] = "com.personal.diaryapp"
           meta["versionName"] = lines[0]
           meta["versionCode"] = int(lines[1])
-          meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.176.apk"
+          meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.177.apk"
           meta["sha256"] = lines[2]
-          meta["releaseNotes"] = "My Diary 1.0.176: Added a removable Diary Lock Settings screen in Me with Diary Lock and Enable Fingerprint switches. The existing Diary PIN setup, unlock and recovery are reused; native Android fingerprint authentication is an optional unlock path. Existing Note Lock, saved notes, photos, documents, reminders and app identity are preserved."
+          meta["releaseNotes"] = "My Diary 1.0.177: Added optional 3×3 Pattern Lock to the existing Me → Set Diary Lock screen. Pattern is drawn and confirmed twice; the existing PIN fallback, Forgot PIN recovery and optional fingerprint unlock remain available. Existing Note Lock, saved notes, photos, documents, reminders, package identity and signing identity are preserved."
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           cp /tmp/My-Diary-verified.apk My-Diary.apk
-          cp /tmp/My-Diary-verified.apk My-Diary-1.0.176.apk
+          cp /tmp/My-Diary-verified.apk My-Diary-1.0.177.apk
           python3 -m json.tool latest.json >/dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add My-Diary.apk My-Diary-1.0.176.apk latest.json
-          git commit -m "Publish My Diary update 1.0.176"
+          git add My-Diary.apk My-Diary-1.0.177.apk latest.json
+          git commit -m "Publish My Diary update 1.0.177"
           git push origin HEAD:main
       - name: Upload unsigned Release APK for private owner-side signing
         if: env.DIARY_RELEASE_READY != 'true'
@@ -521,7 +541,7 @@ jobs:
         if: env.DIARY_RELEASE_READY == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: My-Diary-1.0.176-signed-test-candidate
+          name: My-Diary-1.0.177-signed-test-candidate
           path: diary-project/app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
           retention-days: 30
@@ -537,7 +557,7 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: My-Diary-1.0.176-debug-test-candidate
+          name: My-Diary-1.0.177-debug-test-candidate
           path: diary-project/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
