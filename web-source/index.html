@@ -813,6 +813,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  var DIARY_RECOVERY_NAME_HASH_KEY='diary_diary_recovery_name_hash_v1';
  function normalizeDiaryFavouriteName(value){return String(value||'').trim().replace(/\s+/g,' ').toUpperCase();}
  function diaryRecoveryPending(){try{return localStorage.getItem('diaryDiaryMustChooseNewPinAfterRecovery')==='1'||sessionStorage.getItem('diaryDiaryMustChooseNewPinAfterRecovery')==='1';}catch(e){return false;}}
+ function diaryHasFavouriteName(){try{return !!(localStorage.getItem(DIARY_RECOVERY_NAME_SALT_KEY)&&localStorage.getItem(DIARY_RECOVERY_NAME_HASH_KEY));}catch(e){return false;}}
  function saveDiaryFavouriteName(value){var normalized=normalizeDiaryFavouriteName(value);if(!normalized)return Promise.reject(new Error('empty recovery name'));if(!window.crypto||!crypto.getRandomValues||!crypto.subtle)return Promise.reject(new Error('crypto unavailable'));var bytes=new Uint8Array(16);crypto.getRandomValues(bytes);var salt=Array.from(bytes).map(function(b){return b.toString(16).padStart(2,'0')}).join('');return pinDigest(normalized,salt).then(function(hash){return {salt:salt,hash:hash};});}
  function verifyDiaryFavouriteName(value){var normalized=normalizeDiaryFavouriteName(value),salt=localStorage.getItem(DIARY_RECOVERY_NAME_SALT_KEY)||'',saved=localStorage.getItem(DIARY_RECOVERY_NAME_HASH_KEY)||'';if(!normalized||!salt||!saved)return Promise.resolve(false);return pinDigest(normalized,salt).then(function(hash){return hash===saved;});}
  var TRASH_KEY='diary_personal_notes_trash_v1';
@@ -2311,6 +2312,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    input.placeholder=nameStage?t('favouriteNamePrompt'):t('pinPrompt');saveName.hidden=!nameStage;input.focus();
   }
   function finish(){
+   saveName.disabled=true;
    saveDiaryFavouriteName(input.value).then(function(record){
     try{
      localStorage.setItem(DIARY_RECOVERY_NAME_SALT_KEY,record.salt);
@@ -2320,7 +2322,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      var st=document.getElementById('diaryMyNotesStatus');if(st)st.textContent=t('diaryPinSet');
      if(showSettingsAfterSave)openDiaryLockSettings();
     }catch(e){window.alert(t('storageUnavailable'));input.value='';lastSubmitted='';input.focus();}
-   }).catch(function(){window.alert(t('pinUnavailable'));input.value='';lastSubmitted='';input.focus();});
+   }).catch(function(){saveName.disabled=false;window.alert(t('pinUnavailable'));input.value='';lastSubmitted='';input.focus();});
   }
   function submitPin(){
    if(stage==='recoveryName'){
@@ -2391,7 +2393,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  function forgotDiaryPin(onDone){
   var current=localStorage.getItem(DIARY_MASTER_PIN_KEY)||'';
   if(!current){window.alert(t('diaryNoLock'));return;}
-  if(!localStorage.getItem(DIARY_RECOVERY_NAME_SALT_KEY)||!localStorage.getItem(DIARY_RECOVERY_NAME_HASH_KEY)){
+  if(!diaryHasFavouriteName()){
    showDiaryErrorMessage(t('favouriteNameRequired'));return;
   }
   var pin=String(Math.floor(Math.random()*10000)).padStart(4,'0');
@@ -2433,6 +2435,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     var current=localStorage.getItem(DIARY_MASTER_PIN_KEY)||'';
     if(value!==current||!current){recoveryStatus.textContent=t('diaryPinWrong');focusPin();return;}
     if(diaryRecoveryPending()){
+     if(!diaryHasFavouriteName()){recoveryStatus.textContent=t('favouriteNameRequired');focusPin();return;}
      recoveryStage='recoveryName';heading.textContent=t('favouriteNameTitle');input.type='text';input.inputMode='text';input.maxLength=80;input.style.letterSpacing='normal';input.placeholder=t('favouriteNamePrompt');recoveryNameSubmit.hidden=false;recoveryStatus.textContent='';focusPin();return;
     }
     if(shade.parentNode)shade.parentNode.removeChild(shade);openDiaryPanel();return;
@@ -2448,7 +2451,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   input.addEventListener('input',function(){if(recoveryStage==='recoveryName')return;input.value=String(input.value||'').replace(/\\D/g,'').slice(0,4);if(input.value.length===4)submitPinStage();});
   input.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();submitPinStage();}});
   var patternSaved='',patternEnabled=false;
-  try{patternSaved=localStorage.getItem(DIARY_MASTER_PATTERN_KEY)||'';patternEnabled=validDiaryPattern(patternSaved)&&!diaryRecoveryPending();}catch(e){}
+  try{patternSaved=localStorage.getItem(DIARY_MASTER_PATTERN_KEY)||'';patternEnabled=validDiaryPattern(patternSaved)&&(!diaryRecoveryPending()||!diaryHasFavouriteName());}catch(e){}
   var patternPanel=null,patternStatus=null,pinArea=el('div');
   if(patternEnabled){
    heading.textContent=t('patternEnter');
@@ -2464,7 +2467,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   forgot.addEventListener('click',function(){forgotDiaryPin(function(){showDiaryUnlock();});});
   recoveryNameSubmit.addEventListener('click',submitPinStage);
   var fingerprintBtn=null,fingerprintEnabled=false;
-  try{fingerprintEnabled=localStorage.getItem(DIARY_FINGERPRINT_ENABLED_KEY)==='1'&&!diaryRecoveryPending()&&!!(window.DiaryAppActions&&typeof DiaryAppActions.canUseFingerprint==='function'&&DiaryAppActions.canUseFingerprint());}catch(e){}
+  try{fingerprintEnabled=localStorage.getItem(DIARY_FINGERPRINT_ENABLED_KEY)==='1'&&(!diaryRecoveryPending()||!diaryHasFavouriteName())&&!!(window.DiaryAppActions&&typeof DiaryAppActions.canUseFingerprint==='function'&&DiaryAppActions.canUseFingerprint());}catch(e){}
   if(fingerprintEnabled){fingerprintBtn=el('button',{type:'button',id:'diaryDiaryFingerprintUnlockBtn'},t('fingerprintUnlock'));fingerprintBtn.addEventListener('click',function(){recoveryStatus.textContent='';try{DiaryAppActions.authenticateFingerprint();}catch(e){recoveryStatus.textContent=t('fingerprintFailed');}});}
   if(patternPanel)box.appendChild(patternPanel);
   box.appendChild(pinArea);box.appendChild(recoveryNameSubmit);box.appendChild(recoveryStatus);if(fingerprintBtn)box.appendChild(fingerprintBtn);box.appendChild(forgot);
