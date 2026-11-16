@@ -3580,3 +3580,14 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Source/mirror equality, JavaScript syntax, PR merge, Web Update checksum/version publication, signed APK build/publication, and final dual-route verification are pending. Do not tell the user to update until both APK and Check for Update delivery routes pass all checks. Physical phone testing remains pending until user confirmation.
 
 - Release workflow was advanced from the already-published 1.0.181/180 to the next signed APK **1.0.182 / versionCode 181**; feed guards accept only the installed 1.0.181/180 baseline or the exact new 1.0.182/181 release. APK and web release notes now describe this popup change. This prevents re-publishing the old APK version as an in-place update.
+
+
+### Release verification — Note Backup/Restore raised popup (2026-11-16)
+
+- PR #115 merged to main as `f519c2e20ed9387b4a3246d056fbe87891dc8b6b`. Pre-edit snapshot branch: `backup/before-note-backup-status-popup-3d-2026-11-16`.
+- `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `76d5f3faf13ce1efadb414493ee345b48f5cb83f` (448,226 UTF-8 bytes). The signed APK build independently computed the same web SHA-256 `b9b86e4c697b22b83cf2884883c63bf08e1f00102cbc1aff6eb307953211dce3`.
+- Web publisher run `43891963869` completed successfully. Feed-only version advancement commit set **Web Update 272**; follow-up web publisher run `43892108675` completed successfully without changing the intended version. Live `latest.json` advertises Web Update 272 and the exact web SHA-256 above.
+- Android build run `43891964063` completed successfully. The build embedded the exact published HTML, built debug and signed Release APKs, passed the signing certificate continuity check, and published APK **1.0.182 / versionCode 181**. Certificate SHA-256 fingerprint verified in workflow logs: `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A`.
+- Signed artifact `My-Diary-1.0.182-signed-test-candidate` was independently downloaded and inspected. Extracted APK size 2,039,904 bytes; SHA-256 `ddf0c895e7a81a13bdf241b57166cadb5bcd4b92ce61184378b39d7509853509`, matching live `latest.json`. Its Git blob SHA `bf52a571d278ca95155a55f7a035d53462553ba5` and size match both published paths `My-Diary-1.0.182.apk` and `My-Diary.apk`.
+- Live feed confirms package `com.personal.diaryapp`, versionName `1.0.182`, versionCode `181`, direct APK URL `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.182.apk`, matching APK SHA-256, Web Update 272, and matching web SHA-256. Both direct APK and in-app Check for Update routes are published and verified.
+- Repository/build/publication verification: PASS. Physical phone visual test of Backup and Restore popup and actual combined backup/restore remains pending user confirmation. No phone-side PASS is claimed.
