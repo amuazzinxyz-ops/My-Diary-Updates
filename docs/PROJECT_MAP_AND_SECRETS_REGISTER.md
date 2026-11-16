@@ -1,3 +1,15 @@
+# Tareekh Hijri labels restored to English-only — Web Update 250 published (2026-11-16)
+
+- User clarified that Hijri date labels should remain as they were originally: English only, with no Urdu/localized Hijri month names.
+- Created exact pre-edit backup branch: `backup/before-calendar-hijri-english-only-2026-11-16`.
+- Restored the original pre-Web-249 formatter in `web-source/index.html`: English locale `en-u-ca-islamic-umalqura`, numeric day and short English month name; fallback to English Islamic calendar. Both day-cell labels and selected-date heading use the same English-only formatter. Gregorian date, month headings, weekday names and other app language translations remain controlled by the selected app language.
+- Source commit: `07344e9a111039aa9eaaf470663b3e46df8392d8`. The restored source Git blob is `e1bd3baded0490d460353b988290f0f0e9813335`, exactly matching the pre-localization source blob.
+- Web publish run `43811264412` completed successfully. Published Web Update 250. Source and mirror `web-source/index.html` and `diary-web/index.html` are byte-identical; both blob SHA `e1bd3baded0490d460353b988290f0f0e9813335`. Live feed advertises web SHA-256 `13dbccd3b369b6674a75bfc06e48ccaa1a75a62c98c239952ba80d999addd26c`.
+- APK workflow was also triggered by the source-file push; it is not part of this requested change. No APK version or signing identity was intentionally changed. User-side phone display verification remains pending.
+- No saved notes, photos, calendar events, recurrence, PIN/recovery, reminders, app identity or other Diary features were edited.
+
+---
+
 # Calendar Hijri labels localized for all app languages — Web Update 249 published (2026-11-16)
 
 - User asked to make the Tareekh/Calendar Hijri date display follow every supported app language.
