@@ -1,4 +1,4 @@
-# Approved release build: publish signed Diary 1.0.187/186 with Private Locker writing, recovery, Pattern and Keystore fingerprint support.
+# Approved release build: publish signed Diary 1.0.187/186 with Private Locker writing, recovery, Pattern and Keystore fingerprint support. Retry after correcting the native guard tuple.
 name: Build Diary APK from uploaded project ZIP
 
 on:
