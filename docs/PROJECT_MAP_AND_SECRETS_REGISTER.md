@@ -1,3 +1,16 @@
+# Smart Reminder Daily repeat — release pending (2026-11-16)
+
+- User narrowed the request to **⏰ Smart Reminder only**. Personal Calendar was not changed; its existing repeat options and scheduling behavior remain untouched.
+- Added an optional Daily repeat choice to Smart Reminder, saves/restores the repeat setting while editing, labels recurring reminders, and routes daily scheduling through a dedicated native bridge method. The native scheduler retains the original local clock time, re-arms for the next day, and preserves recurrence through reboot/app replacement and Snooze.
+- PR #120 merged to main as `bc8e3fb0d5ad772e3064d8f1b5e49027f9b1409e`. Web source and mirror are byte-identical at Git blob SHA `9978500c11a1be5c6b8f6bdc8b0411d99ca28dac`.
+- During final native-flow review, found the full-screen lock-screen activity also needed to forward the daily-repeat flag and anchor time into its Snooze/Done broadcast. Fixed this in commit `504197db2440527a42c4b0ca74300feecfa6e34f`. This is required so lock-screen Snooze retains daily recurrence. The build workflow was also touched in commit `8ae8a8ed911260a201490d7c38cffa38a29620bd` to trigger the approved release pipeline.
+- Release target: signed APK **1.0.186 / versionCode 185** and Check for Update **Web Update 276**. Live `latest.json` was last checked and still advertises APK **1.0.185 / 184** and Web Update **275**. Therefore the new APK/web release is **not yet verified or published**; do not tell the user to update until signed build, certificate continuity, APK SHA-256, live feed and both delivery routes all pass.
+- Snapshot branch created before the release retry edits: `backup/before-smart-reminder-daily-release-retry-2026-11-16`. This snapshot is a pre-retry checkpoint, not a pre-feature-edit backup.
+- Device testing is pending. Do not claim Daily repeat, ringtone, lock-screen display, Snooze, reboot recovery, or daily re-arming have been confirmed on the user's phone until the user tests and confirms them.
+- Existing one-time Smart Reminder behavior, Personal Calendar, notes, photos, documents, memories, PIN/locks/recovery, package identity and signing identity are intended to remain unchanged.
+
+---
+
 # Note Restore database helper scope correction — Web Update 271 refresh — 2026-11-16
 
 - User reported the combined Note Backup/Restore still did not work after Web Update 271. Re-inspection found that PR #113 fixed the export reader scope, but `restoreDiaryFeatureBackup()` still called `openMeFeatureDb()` directly even though that helper is local to `makeOverlay()`. This caused a ReferenceError when restoring a backup containing My Documents or My Memories.
