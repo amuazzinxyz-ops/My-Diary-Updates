@@ -2312,8 +2312,9 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    input.placeholder=nameStage?t('favouriteNamePrompt'):t('pinPrompt');saveName.hidden=!nameStage;input.focus();
   }
   function finish(){
-   saveName.disabled=true;
-   saveDiaryFavouriteName(input.value).then(function(record){
+   var favouriteAnswer=normalizeDiaryFavouriteName(input.value);if(!favouriteAnswer)return;
+   saveName.disabled=true;input.disabled=true;
+   saveDiaryFavouriteName(favouriteAnswer).then(function(record){
     try{
      localStorage.setItem(DIARY_RECOVERY_NAME_SALT_KEY,record.salt);
      localStorage.setItem(DIARY_RECOVERY_NAME_HASH_KEY,record.hash);
@@ -2321,8 +2322,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      if(shade.parentNode)shade.parentNode.removeChild(shade);
      var st=document.getElementById('diaryMyNotesStatus');if(st)st.textContent=t('diaryPinSet');
      if(showSettingsAfterSave)openDiaryLockSettings();
-    }catch(e){window.alert(t('storageUnavailable'));input.value='';lastSubmitted='';input.focus();}
-   }).catch(function(){saveName.disabled=false;window.alert(t('pinUnavailable'));input.value='';lastSubmitted='';input.focus();});
+    }catch(e){saveName.disabled=false;input.disabled=false;window.alert(t('storageUnavailable'));input.value='';lastSubmitted='';input.focus();}
+   }).catch(function(){saveName.disabled=false;input.disabled=false;window.alert(t('pinUnavailable'));input.value='';lastSubmitted='';input.focus();});
   }
   function submitPin(){
    if(stage==='recoveryName'){
