@@ -130,7 +130,7 @@ jobs:
           recovery=html[recovery_start:recovery_end if recovery_end!=-1 else recovery_start+1000]
           if recovery_start<0 or "localStorage.removeItem(DIARY_MASTER_PATTERN_KEY)" in recovery or "localStorage.setItem(DIARY_MASTER_PIN_KEY,pin)" not in recovery:
               raise SystemExit("BLOCKED: Forgot PIN recovery must replace only the PIN and preserve the saved Pattern")
-          for required in ("function diaryRecoveryPending()", "function saveDiaryFavouriteName(value)", "function verifyDiaryFavouriteName(value)", "DIARY_RECOVERY_NAME_SALT_KEY", "DIARY_RECOVERY_NAME_HASH_KEY", "if(diaryRecoveryPending())", "favouriteNameWrong", "localStorage.setItem('diaryDiaryMustChooseNewPinAfterRecovery','1')"):
+          for required in ("function diaryRecoveryPending()", "function diaryHasFavouriteName()", "function saveDiaryFavouriteName(value)", "function verifyDiaryFavouriteName(value)", "DIARY_RECOVERY_NAME_SALT_KEY", "DIARY_RECOVERY_NAME_HASH_KEY", "if(diaryRecoveryPending())", "favouriteNameWrong", "localStorage.setItem('diaryDiaryMustChooseNewPinAfterRecovery','1')"):
               if required not in html:
                   raise SystemExit("BLOCKED: Diary Favourite Name recovery protection missing: " + required)
           if "function recoverNotePin(n)" not in html or "function pinDigest(pin,salt)" not in html:
@@ -417,7 +417,7 @@ jobs:
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
           if code != 179 or name != "1.0.180":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.180/178, found {name}/{code}")
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.180/179, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
           if feed_version not in ((178, "1.0.179"), (179, "1.0.180")):  
               raise SystemExit(f"BLOCKED: update feed is neither the installed baseline nor the already-published exact repair release: {feed_version}")
