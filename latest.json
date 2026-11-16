@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 269,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "8dedfec3ea1dd91aa7ef87d0e1525d66cbe1f0939a15015bd3c7f1e2734de610",
+  "webSha256": "207f45fb3dff2f06a2bb1c7fb93717f60790a59eb7b2fb518954c8946d7a0e14",
   "webReleaseNotes": "My Diary Web Update 269: Note Backup now reads My Documents and My Memories files one at a time, shows progress and handles file-read errors instead of getting stuck. Combined Notes, Documents and Memories backup and restore remain supported."
 }
