@@ -3591,3 +3591,11 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Signed artifact `My-Diary-1.0.182-signed-test-candidate` was independently downloaded and inspected. Extracted APK size 2,039,904 bytes; SHA-256 `ddf0c895e7a81a13bdf241b57166cadb5bcd4b92ce61184378b39d7509853509`, matching live `latest.json`. Its Git blob SHA `bf52a571d278ca95155a55f7a035d53462553ba5` and size match both published paths `My-Diary-1.0.182.apk` and `My-Diary.apk`.
 - Live feed confirms package `com.personal.diaryapp`, versionName `1.0.182`, versionCode `181`, direct APK URL `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.182.apk`, matching APK SHA-256, Web Update 272, and matching web SHA-256. Both direct APK and in-app Check for Update routes are published and verified.
 - Repository/build/publication verification: PASS. Physical phone visual test of Backup and Restore popup and actual combined backup/restore remains pending user confirmation. No phone-side PASS is claimed.
+
+
+## Revert Note Backup/Restore popup — original in-section messages restored (2026-11-16)
+
+- User asked to remove the recently added global 3D Backup/Restore popup and return to the previous behavior. The popup CSS, overlay creation helper, dismissal state, and all popup references have been removed.
+- Backup and Restore progress, completion, and error messages again write to the existing `diaryMyNotesStatus` element inside the opened Notes panel. The Welcome Screen no longer receives or displays these Backup/Restore messages. Backup/Restore data handling is unchanged.
+- This is a presentation-only revert. Release target: signed APK **1.0.183 / versionCode 182** and Check for Update **Web Update 273**. Do not tell the user to update until source/mirror equality, syntax, build, signing continuity, APK SHA, and both delivery routes are verified.
+- Physical-phone verification remains pending; do not claim device-side PASS until the user confirms.
