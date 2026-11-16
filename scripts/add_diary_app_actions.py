@@ -143,6 +143,7 @@ native = r"""
                         notifyPrivateLockerFingerprintResult(false, mode)
                     }).build()
                 prompt.authenticate(
+                    BiometricPrompt.CryptoObject(cipher),
                     CancellationSignal(),
                     mainExecutor,
                     object : BiometricPrompt.AuthenticationCallback() {
