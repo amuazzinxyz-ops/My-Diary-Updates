@@ -603,25 +603,20 @@ native = r"""
             this@MainActivity.startDiaryReminderSoundPicker(currentUri)
         }
         @JavascriptInterface fun scheduleReminder(id: String, title: String, details: String, atMillis: Long, soundUri: String, snoozeMinutes: Int, snoozeLimit: Int, ringDurationSeconds: Int, ringVolumePercent: Int): Boolean {
+            return scheduleReminderInternal(id, title, details, atMillis, soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, false)
+        }
+        @JavascriptInterface fun scheduleReminderDaily(id: String, title: String, details: String, atMillis: Long, soundUri: String, snoozeMinutes: Int, snoozeLimit: Int, ringDurationSeconds: Int, ringVolumePercent: Int): Boolean {
+            return scheduleReminderInternal(id, title, details, atMillis, soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, true)
+        }
+        private fun scheduleReminderInternal(id: String, title: String, details: String, atMillis: Long, soundUri: String, snoozeMinutes: Int, snoozeLimit: Int, ringDurationSeconds: Int, ringVolumePercent: Int, repeatDaily: Boolean): Boolean {
             if (id.isBlank() || title.isBlank() || atMillis <= System.currentTimeMillis() || snoozeMinutes !in setOf(2, 5, 10, 15, 20, 30) || snoozeLimit !in setOf(0, 3, 5, 10) || ringDurationSeconds !in setOf(10, 20, 30, 60, 120, 300) || ringVolumePercent !in 0..100) return false
-            if (!hasReminderNotificationPermission()) {
-                requestReminderNotificationPermission()
-                return false
-            }
-            if (!hasExactAlarmPermission()) {
-                requestExactAlarmPermission()
-                return false
-            }
-            if (!hasFullScreenIntentPermission()) {
-                requestFullScreenIntentPermission()
-                return false
-            }
+            if (!hasReminderNotificationPermission()) { requestReminderNotificationPermission(); return false }
+            if (!hasExactAlarmPermission()) { requestExactAlarmPermission(); return false }
+            if (!hasFullScreenIntentPermission()) { requestFullScreenIntentPermission(); return false }
             return try {
-                DiaryReminderScheduler.schedule(this@MainActivity, id, title, details, atMillis, soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent)
+                DiaryReminderScheduler.schedule(this@MainActivity, id, title, details, atMillis, soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, 0, repeatDaily, atMillis)
                 true
-            } catch (e: Exception) {
-                false
-            }
+            } catch (e: Exception) { false }
         }
         @JavascriptInterface fun cancelReminder(id: String): Boolean {
             if (id.isBlank()) return false
@@ -784,7 +779,7 @@ private object DiaryReminderScheduler {
     private fun pendingFlags(): Int = PendingIntent.FLAG_UPDATE_CURRENT or
         (if (Build.VERSION.SDK_INT >= 23) PendingIntent.FLAG_IMMUTABLE else 0)
 
-    private fun alarmIntent(context: Context, id: String, title: String, details: String, soundUri: String, snoozeMinutes: Int = 10, snoozeLimit: Int = 3, ringDurationSeconds: Int = 30, ringVolumePercent: Int = 80, snoozeUsed: Int = 0): Intent =
+    private fun alarmIntent(context: Context, id: String, title: String, details: String, soundUri: String, snoozeMinutes: Int = 10, snoozeLimit: Int = 3, ringDurationSeconds: Int = 30, ringVolumePercent: Int = 80, snoozeUsed: Int = 0, repeatDaily: Boolean = false, dailyAnchorAt: Long = 0L): Intent =
         Intent(context, DiaryReminderReceiver::class.java).apply {
             action = ACTION_ALARM
             data = Uri.parse("mydiary-reminder://alarm/" + Uri.encode(id))
@@ -797,6 +792,8 @@ private object DiaryReminderScheduler {
             putExtra("diary_reminder_snooze_used", snoozeUsed)
             putExtra("diary_reminder_ring_duration_seconds", ringDurationSeconds)
             putExtra("diary_reminder_ring_volume_percent", ringVolumePercent)
+            putExtra("diary_reminder_repeat_daily", repeatDaily)
+            putExtra("diary_reminder_daily_anchor_at", if (dailyAnchorAt > 0L) dailyAnchorAt else System.currentTimeMillis())
         }
 
     private fun readItems(context: Context): org.json.JSONArray {
@@ -808,10 +805,10 @@ private object DiaryReminderScheduler {
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putString(ITEMS, items.toString()).apply()
     }
 
-    fun schedule(context: Context, id: String, title: String, details: String, atMillis: Long, soundUri: String, snoozeMinutes: Int = 10, snoozeLimit: Int = 3, ringDurationSeconds: Int = 30, ringVolumePercent: Int = 80, snoozeUsed: Int = 0) {
+    fun schedule(context: Context, id: String, title: String, details: String, atMillis: Long, soundUri: String, snoozeMinutes: Int = 10, snoozeLimit: Int = 3, ringDurationSeconds: Int = 30, ringVolumePercent: Int = 80, snoozeUsed: Int = 0, repeatDaily: Boolean = false, dailyAnchorAt: Long = atMillis) {
         require(id.isNotBlank() && title.isNotBlank() && atMillis > System.currentTimeMillis() && snoozeMinutes in setOf(2, 5, 10, 15, 20, 30) && snoozeLimit in setOf(0, 3, 5, 10) && ringDurationSeconds in setOf(10, 20, 30, 60, 120, 300) && ringVolumePercent in 0..100 && snoozeUsed in 0..snoozeLimit)
         val alarm = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val pending = PendingIntent.getBroadcast(context, requestCode(id), alarmIntent(context, id, title, details, soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, snoozeUsed), pendingFlags())
+        val pending = PendingIntent.getBroadcast(context, requestCode(id), alarmIntent(context, id, title, details, soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, snoozeUsed, repeatDaily, dailyAnchorAt), pendingFlags())
         if (Build.VERSION.SDK_INT >= 31 && !alarm.canScheduleExactAlarms()) {
             throw SecurityException("Exact alarm permission is required for reliable reminders")
         }
@@ -832,8 +829,14 @@ private object DiaryReminderScheduler {
             val item = old.optJSONObject(i) ?: continue
             if (item.optString("id") != id) next.put(item)
         }
-        next.put(org.json.JSONObject().put("id", id).put("title", title).put("details", details).put("at", atMillis).put("soundUri", soundUri).put("snoozeMinutes", snoozeMinutes).put("snoozeLimit", snoozeLimit).put("snoozeUsed", snoozeUsed).put("ringDurationSeconds", ringDurationSeconds).put("ringVolumePercent", ringVolumePercent))
+        next.put(org.json.JSONObject().put("id", id).put("title", title).put("details", details).put("at", atMillis).put("soundUri", soundUri).put("snoozeMinutes", snoozeMinutes).put("snoozeLimit", snoozeLimit).put("snoozeUsed", snoozeUsed).put("ringDurationSeconds", ringDurationSeconds).put("ringVolumePercent", ringVolumePercent).put("repeatDaily", repeatDaily).put("dailyAnchorAt", if (repeatDaily) dailyAnchorAt else 0L))
         writeItems(context, next)
+    }
+
+    fun nextDailyAt(anchorAt: Long, now: Long = System.currentTimeMillis()): Long {
+        val calendar = java.util.Calendar.getInstance().apply { timeInMillis = anchorAt }
+        while (calendar.timeInMillis <= now) calendar.add(java.util.Calendar.DAY_OF_YEAR, 1)
+        return calendar.timeInMillis
     }
 
     fun remove(context: Context, id: String) {
@@ -876,9 +879,12 @@ private object DiaryReminderScheduler {
             val snoozeUsed = item.optInt("snoozeUsed", 0)
             val ringDurationSeconds = item.optInt("ringDurationSeconds", 30)
             val ringVolumePercent = item.optInt("ringVolumePercent", 80)
+            val repeatDaily = item.optBoolean("repeatDaily", false)
+            val dailyAnchorAt = item.optLong("dailyAnchorAt", item.optLong("at"))
             val at = item.optLong("at")
             if (id.isNotBlank() && title.isNotBlank()) {
-                if (at > now) schedule(context, id, title, details, at, soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, snoozeUsed)
+                if (at > now) schedule(context, id, title, details, at, soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, snoozeUsed, repeatDaily, dailyAnchorAt)
+                else if (repeatDaily) schedule(context, id, title, details, nextDailyAt(dailyAnchorAt, now), soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, 0, true, dailyAnchorAt)
                 else if (at > now - 24L * 60L * 60L * 1000L) schedule(context, id, title, details, now + 5000L, soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, snoozeUsed)
                 else remove(context, id)
             }
@@ -973,23 +979,29 @@ class DiaryReminderReceiver : BroadcastReceiver() {
         val snoozeUsed = msg.getIntExtra("diary_reminder_snooze_used", 0).coerceIn(0, snoozeLimit)
         val ringDurationSeconds = msg.getIntExtra("diary_reminder_ring_duration_seconds", 30).coerceIn(10, 300)
         val ringVolumePercent = msg.getIntExtra("diary_reminder_ring_volume_percent", 80).coerceIn(0, 100)
+        val repeatDaily = msg.getBooleanExtra("diary_reminder_repeat_daily", false)
+        val dailyAnchorAt = msg.getLongExtra("diary_reminder_daily_anchor_at", 0L).takeIf { it > 0L } ?: System.currentTimeMillis()
         when (msg.action) {
             DiaryReminderScheduler.ACTION_SNOOZE -> {
                 val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 manager.cancel((id.hashCode() and 0x3fffffff) + 10)
                 DiaryReminderSoundService.stop(context)
-                if (snoozeUsed < snoozeLimit) DiaryReminderScheduler.schedule(context, id, title, details, System.currentTimeMillis() + snoozeMinutes.toLong() * 60L * 1000L, soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, snoozeUsed + 1)
+                if (snoozeUsed < snoozeLimit) DiaryReminderScheduler.schedule(context, id, title, details, System.currentTimeMillis() + snoozeMinutes.toLong() * 60L * 1000L, soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, snoozeUsed + 1, repeatDaily, dailyAnchorAt)
                 return
             }
             DiaryReminderScheduler.ACTION_DONE -> {
                 val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 manager.cancel((id.hashCode() and 0x3fffffff) + 10)
                 DiaryReminderSoundService.stop(context)
-                DiaryReminderScheduler.cancel(context, id)
+                if (!repeatDaily) DiaryReminderScheduler.cancel(context, id)
                 return
             }
         }
-        DiaryReminderScheduler.remove(context, id)
+        if (repeatDaily) {
+            DiaryReminderScheduler.schedule(context, id, title, details, DiaryReminderScheduler.nextDailyAt(dailyAnchorAt), soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, 0, true, dailyAnchorAt)
+        } else {
+            DiaryReminderScheduler.remove(context, id)
+        }
         DiaryReminderScheduler.showNotification(context, id, title, details, soundUri, snoozeMinutes, snoozeLimit, snoozeUsed, ringDurationSeconds, ringVolumePercent)
         DiaryReminderSoundService.start(context, soundUri, ringDurationSeconds, ringVolumePercent)
     }
