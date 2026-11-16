@@ -1,3 +1,18 @@
+# Encrypted Private Locker added to Me button — Web Update 277 (2026-11-16)
+
+- User approved adding **🔐 Private Locker** in the Me button and explicitly instructed not to touch any other working feature.
+- Created a pre-edit snapshot branch: `backup/before-private-locker-2026-11-16`. Feature branch: `feat/private-locker-me-button-2026-11-16`. PR #121 merged to main as `6312f8a13e2bbf50a7a5d4a80b1198a43e6a51c7`.
+- Added one new Me-menu button and a self-contained Private Locker screen. Existing Me features and their button IDs remain present. Private Locker uses a separate IndexedDB database, `diary_private_locker_v1`; it does not use or modify the existing Notes, My Documents, or My Memories database.
+- Locker entries (name, category, details, and optional file data up to 10 MB) are encrypted client-side with AES-GCM 256-bit. The key is derived from a separate 6-digit PIN using PBKDF2-SHA-256 (310,000 iterations) and a random salt. Each encrypted record uses a fresh random 96-bit AES-GCM IV. The PIN and plaintext entries are not saved in the database. The key is held only in page memory and cleared when the Locker is closed.
+- No biometric/fingerprint option was added. There is no PIN recovery flow in this first version; if the user forgets the Private Locker PIN, the encrypted contents cannot be decrypted. This limitation must be clearly explained before phone setup/testing.
+- Source and mirror are byte-identical at Git blob SHA `4fbfcac3cfea40cbdfef6f6b093a246e1e365dad` (459,618 UTF-8 bytes). Both inline JavaScript blocks passed syntax parsing. Existing feature IDs `calendar`, `reminders`, `kharcha`, `documents`, and `memories` remain present.
+- Web publisher run [43924964904](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/43924964904) completed successfully. Manifest-only publisher run [43925180426](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/43925180426) completed successfully. Live `latest.json` now advertises **Web Update 277** and web SHA-256 `56e321d43a8dbf4fdd5ddf51a61dc74612b5d11502e5caaa55eb766c5aca04c3`. APK feed remains **1.0.186 / versionCode 185** with its existing APK hash; this feature itself changes only the web bundle.
+- Android build workflow [43924964839](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/43924964839) was still in progress when this register entry was prepared. Check its final result before describing APK status; do not claim a new APK was published unless the build, signing-certificate continuity, and feed/hash verification all pass.
+- **Phone test pending.** Do not claim the Locker has been tested on the user's phone. User should first see the PIN-loss warning, create a 6-digit PIN, save a test entry and a small file, close/reopen the Locker, unlock, and confirm the data decrypts and opens.
+- No existing notes, photos, documents, memories, Personal Calendar, Smart Reminder, Note Lock, Diary Lock, PIN/recovery flows, package identity, or signing identity were intentionally changed.
+
+---
+
 # Smart Reminder Daily repeat — APK 1.0.186 and Web Update 276 published (2026-11-16)
 
 - User narrowed the request to **⏰ Smart Reminder only**. Personal Calendar was not changed; its existing repeat options and scheduling behavior remain untouched.
