@@ -1,12 +1,13 @@
-# Personal Calendar shows Gregorian dates only — Web Update 251 planned (2026-11-16)
+# Personal Calendar shows Gregorian dates only — Web Update 252 and APK 1.0.172 published (2026-11-16)
 
 - User clarified that the 📆 Tareekh/Personal Calendar must show only the original Gregorian date; no Hijri date should appear inside day cells or beside the selected date.
-- Exact pre-edit backup branch: `backup/before-calendar-gregorian-only-2026-11-16`. Feature branch: `fix/calendar-gregorian-only-2026-11-16`.
-- Minimal source change: removed the Hijri-date formatter, day-cell Hijri sublabels, selected-date Hijri suffix, and the now-unused Hijri-label CSS rule. Kept Gregorian calendar day numbers, month/year heading, weekday labels, selected-date display, events, notes, language formatting, navigation, reminders, and stored calendar data unchanged.
-- Corrected the release workflow's remaining version labels so APK 1.0.172 consistently uses versionCode 171 (including workflow heading, step label, and fail-closed error text); the previous mismatched labels were caught before merge or publication.
-- No APK/web release is claimed yet. Source/mirror validation, PR merge, Web Update 251 publishing, signed APK build/publication, signing continuity, APK/web checksum verification, and live latest.json verification are pending. Do not tell the user to update until both direct APK and in-app Check for Update routes pass the required checks.
+- Exact pre-edit backup branch: `backup/before-calendar-gregorian-only-2026-11-16`. Feature branch: `fix/calendar-gregorian-only-2026-11-16`; PR #92 merged to main as `1a4846276df6a555d68c63413ac4451b27cecf7e`.
+- Minimal source change: removed the Hijri-date formatter, day-cell Hijri sublabels, selected-date Hijri suffix, and the now-unused Hijri-label CSS rule. Kept Gregorian calendar day numbers, month/year heading, weekday labels, selected-date display, events, notes, language formatting, navigation, reminders, and stored calendar data unchanged. Source and published mirror are byte-identical, Git blob SHA `59ecb470e6ac5284ba80237256f9fdc6369f79cf`; no `calendarHijriLabel`, `diary-calendar-hijri`, or `islamic-umalqura` references remain.
+- Corrected the web-release marker placement so the comment is after the closing HTML tag, not inside a JavaScript string. The final source passed the Android build's HTML/hash/feature guard. Web publish run `43813556039` succeeded and published Web Update 252. Live `latest.json` web SHA-256: `c1fcc1255777744b49612b8276492f71c424c6557723eef0ba4431fffd83ca71`; source/mirror match.
+- APK build run `43813160746` succeeded and published signed APK `1.0.172` / versionCode `171`. Live feed confirms package `com.personal.diaryapp`, APK URL `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.172.apk`, SHA-256 `88d80f553e11ffb7475d358b8cb478e89670aed8f58a71dce37fe0d2a029a8df`. Downloaded signed workflow artifact independently hashes to the same SHA-256; APK size 2,028,668 bytes. Both versioned APK and stable `My-Diary.apk` exist with identical Git blob SHA `2d4f2194427a28e3a913901bc1a0a0d9c6d81f9e`.
+- Signing certificate matches the previously supplied SHA-256 fingerprint `23a4e93f3c7911dce18389ea583548700c6ad6a3759707f1cd222d07e2408b5a`; APK Signature Scheme v2 verification passed. The Android build guard confirmed the embedded calendar HTML contains the Gregorian-only change and the online bundle updater remains hash-verified.
+- Live feed now advertises APK 1.0.172/code 171 and Web Update 252. Phone-side display and in-app Check for Update verification remain pending; do not claim device-side testing. Preserve all existing saved data and app/signing identity.
 - No notes, photos, documents, events, reminders, PIN/recovery data, app identity or signing identity were intentionally modified.
-
 ---
 
 # Tareekh Hijri labels restored to English-only — Web Update 250 published (2026-11-16)
