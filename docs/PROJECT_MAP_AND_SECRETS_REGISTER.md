@@ -3599,3 +3599,15 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Backup and Restore progress, completion, and error messages again write to the existing `diaryMyNotesStatus` element inside the opened Notes panel. The Welcome Screen no longer receives or displays these Backup/Restore messages. Backup/Restore data handling is unchanged.
 - This is a presentation-only revert. Release target: signed APK **1.0.183 / versionCode 182** and Check for Update **Web Update 273**. Do not tell the user to update until source/mirror equality, syntax, build, signing continuity, APK SHA, and both delivery routes are verified.
 - Physical-phone verification remains pending; do not claim device-side PASS until the user confirms.
+
+
+### Revert release verification — My Diary 1.0.183 / Web Update 273 (2026-11-16)
+
+- PR #116 merged to main as `dbd2c33dc92db38772f24486a7ce019ab7976fae`. Pre-edit snapshot branch: `backup/before-scoped-backup-popup-fix-2026-11-16`; feature branch: `revert/backup-restore-popup-2026-11-16`.
+- Removed the global Backup/Restore popup CSS, overlay helper, dismiss state, and popup calls. Backup/Restore progress, success, and error messages again update the existing `diaryMyNotesStatus` within the opened Notes panel. No popup-related IDs/helper references remain in the published HTML; Notes/Documents/Memories backup and restore data logic is unchanged.
+- `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `3bbe88e9a7b6fddcdccfc388a79390a34c92bc58` (444,757 UTF-8 bytes). SHA-256: `343e8d46ddee84b981d50409a177df1a83b3d47670dcc8269eaee43e0ee34674`.
+- Web publisher run `43904211137` completed successfully and repaired the published mirror/checksum. The feed's web version was then advanced to **273** with accurate release notes in commit `56d2131047dc9bba4ee5e30307e63630dd04cbc8`.
+- Android build run `43904211135` completed successfully. Build included the exact published HTML; JavaScript syntax and project validation passed. Signed APK **1.0.183 / versionCode 182** was published. Signing certificate continuity check passed against the previously supplied certificate.
+- Signed artifact `My-Diary-1.0.183-signed-test-candidate` (artifact ID `14245480546`) was downloaded and independently inspected. Extracted APK size: 2,039,096 bytes; SHA-256: `6d71b4ac55693d2adb3141ea0f4be72ec0c1bdf1592be5ea1832e44d4ea6fd75`, matching live `latest.json`.
+- Live feed advertises package `com.personal.diaryapp`, versionName `1.0.183`, versionCode `182`, direct APK URL `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.183.apk`, matching APK SHA-256, Web Update 273, and matching web SHA-256. Both APK and Check for Update delivery routes are published.
+- Repository/build/publication verification: PASS. Physical-phone confirmation that the Welcome Screen no longer shows Backup/Restore messages and that the old in-Note status display behaves correctly is still pending.
