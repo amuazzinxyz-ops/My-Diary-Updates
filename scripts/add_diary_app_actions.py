@@ -1006,7 +1006,7 @@ class DiaryReminderReceiver : BroadcastReceiver() {
         } else {
             DiaryReminderScheduler.remove(context, id)
         }
-        DiaryReminderScheduler.showNotification(context, id, title, details, soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, repeatDaily, dailyAnchorAt)
+        DiaryReminderScheduler.showNotification(context, id, title, details, soundUri, snoozeMinutes, snoozeLimit, snoozeUsed, ringDurationSeconds, ringVolumePercent, repeatDaily, dailyAnchorAt)
         DiaryReminderSoundService.start(context, soundUri, ringDurationSeconds, ringVolumePercent)
     }
 }
