@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 268,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "de3db1013e71d856f9cfd9983181b7cc5042c5c6a06d7f75eb77e05efd759632",
+  "webSha256": "8dedfec3ea1dd91aa7ef87d0e1525d66cbe1f0939a15015bd3c7f1e2734de610",
   "webReleaseNotes": "My Diary Web Update 268: Note Backup now includes saved My Documents and My Memories files; Restore brings them back while keeping existing records. Legacy Notes-only backups remain supported."
 }
