@@ -1,3 +1,17 @@
+# Note Backup IndexedDB stall diagnostic repair — Web Update 270 — 2026-11-16
+
+- User confirmed Web Update 269 still left the Backup status at `Backup taiyaar ho raha hai…`. Do not describe Update 269 as a successful fix.
+- Further source inspection found a second unguarded stage before Blob serialization: `openMeFeatureDb()` had no `onblocked` handler or timeout, and `meFeatureAll()` had no timeout or transaction-abort handling. A stalled IndexedDB open/read therefore left the export promise pending at the generic preparing status.
+- PR #112 merged to main as `97a0d28b4abcba117eb8fa576bd66a51bd945005`. Snapshot branch: `backup/before-indexeddb-timeout-fix-2026-11-16`; feature branch: `fix/indexeddb-backup-read-hang-2026-11-16`.
+- Fix adds 15-second guards to IndexedDB open/read, handles blocked/open/request/transaction errors, clears a failed cached DB-open promise for retry, and changes progress text to show whether My Documents or My Memories storage is being opened. Existing sequential Blob reads and combined Notes/Documents/Memories backup format remain.
+- `web-source/index.html` and `diary-web/index.html` verified identical (Git blob SHA `34b9ac031b1bf15b3dc20abcc737aa0563bbd752`). Both inline JS blocks pass syntax parsing.
+- Web publisher run `43884628011` succeeded; manifest then advanced to **Web Update 270**. Manifest publisher run `43884734576` succeeded. Live web SHA-256: `207f45fb3dff2f06a2bb1c7fb93717f60790a59eb7b2fb518954c8946d7a0e14`.
+- Android build workflow `43884628024` was still in progress when this entry was prepared. Check its final result; do not claim APK publication unless signed APK/feed verification passes. Package/version currently shown in feed: `com.personal.diaryapp`, `1.0.181 / 180`.
+- **Important: this is an IndexedDB diagnostic/timeout correction, not yet a device-confirmed successful backup.** After installing Web Update 270, user should tap Backup. It should now show either a more specific stage or an explicit read/open error rather than remaining indefinitely on the generic message. If it still fails, ask the user for the exact displayed message and continue from that stage.
+- No stored records, PIN/lock/recovery, reminders, package identity, signing identity, or Android source were intentionally changed. Physical phone test and actual combined restore test remain pending.
+
+---
+
 # Note Backup preparation hang repair — Web Update 269 — 2026-11-16
 
 - User reported the Note Backup button stayed at `Backup taiyaar ho raha hai…` after combined Notes + My Documents + My Memories backup was introduced.
