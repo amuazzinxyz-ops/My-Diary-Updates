@@ -1574,7 +1574,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   function privateLockerFinishUnlock(raw){privateLockerRawKey=raw;return privateLockerImportMaster(raw).then(function(key){privateLockerKey=key;privateLockerMessage('Private Locker khul gaya.',false);privateLockerShowEntries();});}
   function privateLockerOpen(){
    mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');
-   privateLockerModal.hidden=false;privateLockerContent.replaceChildren();privateLockerGate.replaceChildren();privateLockerKey=null;privateLockerRawKey=null;privateLockerRecords=[];
+   privateLockerModal.hidden=false;window.__privateLockerFingerprintPending=false;privateLockerContent.replaceChildren();privateLockerGate.replaceChildren();privateLockerKey=null;privateLockerRawKey=null;privateLockerRecords=[];
    privateLockerStatus.textContent='Aapki private likhai alag encrypted storage mein rahegi.';
    Promise.all([privateLockerGet('meta','config'),privateLockerAll()]).then(function(result){
     var config=result[0],rows=result[1]||[];
@@ -1737,7 +1737,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    privateLockerRenderList=render;render().catch(function(err){privateLockerMessage(err.message||'Likhai nahi khul saki.',true);});
   }
   var privateLockerRenderList=function(){return Promise.resolve();};
-  function privateLockerCloseNow(){privateLockerKey=null;privateLockerRawKey=null;privateLockerRecords=[];privateLockerContent.replaceChildren();privateLockerGate.replaceChildren();privateLockerModal.hidden=true;privateLockerMessage('Locker band hai.',false);mePanel.hidden=false;meBtn.setAttribute('aria-expanded','true');panel.classList.add('diary-me-menu-open');}
+  function privateLockerCloseNow(){window.__privateLockerFingerprintPending=false;privateLockerKey=null;privateLockerRawKey=null;privateLockerRecords=[];privateLockerContent.replaceChildren();privateLockerGate.replaceChildren();privateLockerModal.hidden=true;privateLockerMessage('Locker band hai.',false);mePanel.hidden=false;meBtn.setAttribute('aria-expanded','true');panel.classList.add('diary-me-menu-open');}
   privateLockerClose.addEventListener('click',privateLockerCloseNow);
   privateLockerButton.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();privateLockerOpen();});
 
