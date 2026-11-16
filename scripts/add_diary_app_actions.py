@@ -172,9 +172,7 @@ native = r"""
                                 notifyPrivateLockerFingerprintResult(false, mode)
                             }
                         }
-                        override fun onAuthenticationFailed() {
-                            notifyPrivateLockerFingerprintResult(false, mode)
-                        }
+                        override fun onAuthenticationFailed() { }
                         override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) {
                             notifyPrivateLockerFingerprintResult(false, mode)
                         }
