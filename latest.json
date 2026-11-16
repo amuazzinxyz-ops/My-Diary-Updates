@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 273,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "343e8d46ddee84b981d50409a177df1a83b3d47670dcc8269eaee43e0ee34674",
+  "webSha256": "8c5d5867d64d7129766f7b53dc5cc83c35a63862ece5b295957f0d7e07a076e1",
   "webReleaseNotes": "My Diary Web Update 273: Note Backup and Restore messages are restored to the original status display inside the Notes panel. No Backup/Restore data handling changed."
 }
