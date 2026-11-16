@@ -1336,7 +1336,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var two=el('input',{type:'color',value:'#8e63c6','aria-label':t('colourTwo')});
   var grad=el('div',{class:'diary-gradient-colour-tools',hidden:'hidden'});
   solid.style.display='none';one.style.display='none';two.style.display='none';
-  grad.append(one,two);if(kind==='Cover'||kind==='Detail')actions.append(choose,gradBtn);else actions.append(choose,solidBtn,gradBtn);menu.append(intro,actions,solid,grad);
+  grad.append(one,two);actions.append(choose,gradBtn);menu.append(intro,actions,solid,grad);
   function redraw(){if(kind==='Cover'||kind==='Detail')renderDiaryImagePreview(kind);else renderDiaryPhotoPreview();}
   function close(){menu.hidden=true;btn.setAttribute('aria-expanded','false');}
   btn.setAttribute('aria-expanded','false');
