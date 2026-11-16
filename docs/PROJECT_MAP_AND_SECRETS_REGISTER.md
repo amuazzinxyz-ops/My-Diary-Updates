@@ -1,3 +1,13 @@
+# Note Lock PIN prompts larger, bold and 3D — 2026-11-16
+
+- User approved applying the same larger, bold, subtle 3D PIN-entry presentation used for Diary PIN prompts to the existing Note Lock.
+- Changed only Note Lock presentation: the modal PIN prompt heading and input now use larger bold text, a gold raised input border/shadow, and responsive bold placeholder text. The inline locked-note PIN field and its prompt are styled to match and remain constrained to the available width.
+- No Note Lock verification, PIN hashing/storage, recovery flow, lock/unlock logic, note content, photos, documents, Diary PIN/Pattern/Fingerprint, reminders, package identity, or signing identity was intentionally changed.
+- Exact pre-edit source and register snapshot: `backup/before-note-lock-pin-3d-2026-11-16`. Working branch: `fix/note-lock-pin-prompt-3d-2026-11-16`. Source and mirror are byte-identical on the working branch. PR merge, Web checksum/version publication, APK 1.0.181/versionCode 180 build/signature/publication, live latest.json verification, and phone-side visual testing remain pending.
+- Permanent dual-delivery rule applies: do not tell the user to update or mark complete until both direct APK and in-app Check for Update routes and all available checks pass. Do not claim phone-side PASS until the user confirms it.
+
+---
+
 # Diary PIN entry prompts larger, bold and subtle 3D — 2026-11-16
 
 - User requested that the text/names shown inside all Diary PIN-entry boxes be slightly larger, bold, and have a subtle 3D effect.
