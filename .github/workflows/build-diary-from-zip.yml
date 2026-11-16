@@ -1,4 +1,4 @@
-# Approved release build: publish signed Diary 1.0.185/184 with the scoped photo-menu correction and matching Check for Update feed.
+# Approved release build: publish signed Diary 1.0.186/185 with Daily repeat limited to Smart Reminder and matching Check for Update feed.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -112,7 +112,7 @@ jobs:
           source=Path("web-source/index.html")
           actual=hashlib.sha256(source.read_bytes()).hexdigest()
           meta["webSha256"]=actual
-          meta["webReleaseNotes"]="Removed only the Solid Colour / Ek Rang Chunein option from Note Cover Photo, Details Photo and Photo Lagayein menus. Choose Image and Gradient Colour remain; saved photos and other Diary data are preserved."
+          meta["webReleaseNotes"]="Added Daily repeat only to Smart Reminder. Existing reminder settings and saved Diary data are preserved."
           Path("latest.json").write_text(json.dumps(meta,indent=2)+"\n",encoding="utf-8")
           expected=meta.get("webSha256","").lower()
           if len(expected)!=64 or actual!=expected:
@@ -141,6 +141,8 @@ jobs:
               raise SystemExit("BLOCKED: ringtone volume is not saved by both reminder forms")
           if html.count("ringVolume:") != 10:
               raise SystemExit("BLOCKED: ringtone-volume label is missing from one or more language dictionaries")
+          if "name:'repeatDaily'" not in html or "record.repeatDaily=repeatDailySelect.value==='daily'" not in html or "scheduleReminderDaily" not in html:
+              raise SystemExit("BLOCKED: Smart Reminder Daily repeat UI/native bridge is incomplete")
           target=Path("diary-project/app/src/main/assets/index.html")
           target.write_text(html,encoding="utf-8")
           print(f"PASS: Android APK source is the exact published Diary HTML ({len(html)} chars; SHA-256 {actual})")
@@ -156,6 +158,14 @@ jobs:
           Path("/tmp/diary-module.js").write_text(module, encoding="utf-8")
           PY
           node --check /tmp/diary-module.js
+          python3 - <<'PY'
+          from pathlib import Path
+          source=Path("scripts/add_diary_app_actions.py").read_text(encoding="utf-8")
+          required=("scheduleReminderDaily","repeatDaily: Boolean = false","dailyAnchorAt: Long = atMillis","nextDailyAt","diary_reminder_repeat_daily","if (!repeatDaily) DiaryReminderScheduler.cancel(context, id)")
+          missing=[x for x in required if x not in source]
+          if missing: raise SystemExit("BLOCKED: native Smart Reminder Daily repeat implementation guard incomplete: "+", ".join(missing))
+          print("PASS: native Smart Reminder Daily repeat implementation guard")
+          PY
           python3 - <<'PY'
           from pathlib import Path
           html = Path("diary-project/app/src/main/assets/index.html").read_text(encoding="utf-8")
@@ -381,7 +391,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved Diary release version 1.0.185 (versionCode 184)
+      - name: Set approved Diary release version 1.0.186 (versionCode 185)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
@@ -389,12 +399,12 @@ jobs:
           from pathlib import Path
           p = Path("app/build.gradle.kts")
           s = p.read_text(encoding="utf-8")
-          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 184', s, count=1)
-          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.185"', s, count=1)
+          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 185', s, count=1)
+          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.186"', s, count=1)
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary release versionName=1.0.185, versionCode=184")
+          print("Set Diary release versionName=1.0.186, versionCode=185")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -416,10 +426,10 @@ jobs:
           name = one(r'versionName\s*=\s*"([^"]+)"', "versionName")
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
-          if code != 184 or name != "1.0.185":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.185/184, found {name}/{code}")
+          if code != 185 or name != "1.0.186":
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.186/185, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if feed_version not in ((183, "1.0.184"), (184, "1.0.185")):  
+          if feed_version not in ((184, "1.0.185"), (185, "1.0.186")):  
               raise SystemExit(f"BLOCKED: update feed is neither the installed baseline nor the already-published exact repair release: {feed_version}")
           print(f"PASS: package={package}, release={name}/{code}; feed state is approved: {feed_version}")
           PY
@@ -508,7 +518,7 @@ jobs:
           echo "Release APK certificate matches the previously supplied SHA-256 fingerprint."
           rm -f app/diary-release.jks
 
-      - name: Publish verified Diary update 1.0.185 after release verification PASS
+      - name: Publish verified Diary update 1.0.186 after release verification PASS
         if: env.DIARY_RELEASE_READY == 'true'
         shell: bash
         run: |
@@ -517,33 +527,36 @@ jobs:
           test -s "$APK"
           SHA256="$(sha256sum "$APK" | awk '{print $1}')"
           cp "$APK" /tmp/My-Diary-verified.apk
-          printf '1.0.185\n184\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.186\n185\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -f -B diary-publish-main origin/main
           python3 - <<'PY'
-          import json
+          import hashlib, json
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in ((182, "1.0.183"), (183, "1.0.184")): 
+          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in ((184, "1.0.185"), (185, "1.0.186")): 
               raise SystemExit(f"BLOCKED: live main feed is neither the installed baseline nor the exact repair release being republished: {feed_version}")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
           meta["packageName"] = "com.personal.diaryapp"
           meta["versionName"] = lines[0]
           meta["versionCode"] = int(lines[1])
-          meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.185.apk"
+          meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.186.apk"
           meta["sha256"] = lines[2]
-          meta["releaseNotes"] = "My Diary 1.0.185: Removed only the Solid Colour / Ek Rang Chunein choice from Note Cover Photo, Details Photo and Photo Lagayein menus. Choose Image and Gradient Colour remain. Saved photos and other Diary data are preserved."
+          meta["releaseNotes"] = "My Diary 1.0.186: Added Daily repeat only to Smart Reminder. Existing reminder settings and saved Diary data are preserved."
+          meta["webVersion"] = 276
+          meta["webSha256"] = hashlib.sha256(Path("web-source/index.html").read_bytes()).hexdigest()
+          meta["webReleaseNotes"] = "My Diary Web Update 276: Added Daily repeat only to Smart Reminder. Personal Calendar and all other Diary features remain unchanged."
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           cp /tmp/My-Diary-verified.apk My-Diary.apk
-          cp /tmp/My-Diary-verified.apk My-Diary-1.0.185.apk
+          cp /tmp/My-Diary-verified.apk My-Diary-1.0.186.apk
           python3 -m json.tool latest.json >/dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add My-Diary.apk My-Diary-1.0.185.apk latest.json
-          git commit -m "Publish My Diary update 1.0.185"
+          git add My-Diary.apk My-Diary-1.0.186.apk latest.json
+          git commit -m "Publish My Diary update 1.0.186"
           git push origin HEAD:main
       - name: Upload unsigned Release APK for private owner-side signing
         if: env.DIARY_RELEASE_READY != 'true'
@@ -558,7 +571,7 @@ jobs:
         if: env.DIARY_RELEASE_READY == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: My-Diary-1.0.185-signed-test-candidate
+          name: My-Diary-1.0.186-signed-test-candidate
           path: diary-project/app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
           retention-days: 30
@@ -574,7 +587,7 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: My-Diary-1.0.185-debug-test-candidate
+          name: My-Diary-1.0.186-debug-test-candidate
           path: diary-project/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
