@@ -112,7 +112,7 @@ jobs:
           source=Path("web-source/index.html")
           actual=hashlib.sha256(source.read_bytes()).hexdigest()
           meta["webSha256"]=actual
-          meta["webReleaseNotes"]="Diary PIN recovery now requires the saved Favourite Name before setting a new PIN. Pattern, Fingerprint, Note Lock and saved data are preserved."
+          meta["webReleaseNotes"]="Note Backup and Restore progress and results now appear in a raised 3D popup with an × close control. Existing saved data and app identity are preserved."
           Path("latest.json").write_text(json.dumps(meta,indent=2)+"\n",encoding="utf-8")
           expected=meta.get("webSha256","").lower()
           if len(expected)!=64 or actual!=expected:
