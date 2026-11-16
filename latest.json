@@ -7,8 +7,8 @@
   "sha256": "af87a21c24d24762f25622fad7d7bd75014d855ad343bbaca2c00d1950d3711b",
   "releaseNotes": "My Diary 1.0.173: The Calendar view entry has been removed from the Me menu only; Personal Calendar and saved calendar data are unchanged. Matching signed APK and Check for Update feed; existing calendar events, notes, documents, reminders and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 254,
+  "webVersion": 255,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "460c93221dd9804807afe159388651de00ae59a1a4f39b801ae3e2ecc3d19e31",
+  "webSha256": "81db6f930f9fce1f4ac6413f2178d4420d81e5787ae7ac06acfcd16064460d67",
   "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
