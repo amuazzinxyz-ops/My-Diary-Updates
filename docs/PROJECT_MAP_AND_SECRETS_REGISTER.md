@@ -1,3 +1,16 @@
+# Diary PIN setup and Forgot PIN text readability — Web Update 263 / APK 1.0.180 (2026-11-16)
+
+- User requested that all text shown while creating/changing the Diary PIN and during Forgot PIN recovery be clearly readable, including headings, instructions, input placeholders, Favourite Name text, wrong-answer messages, and validation/storage errors.
+- Improved only the Diary PIN setup/change dialog and Diary unlock/recovery dialog: larger bold high-contrast headings; white input boxes with thicker gold borders, dark bold text and clearer placeholders; Favourite Name uses left-aligned larger text; inline validation/error messages use a white readable panel with larger bold dark-red text. The setup flow now displays validation/storage messages inside its own dialog instead of small browser alert popups.
+- No PIN/recovery logic, Favourite Name hashing/verification, temporary recovery-code flow, Pattern or Fingerprint settings, Note Lock, notes/photos/documents/reminders, app package identity or signing identity was intentionally changed.
+- Exact pre-edit backup branch: `backup/before-diary-pin-text-clarity-2026-11-16`. Register pre-edit backup branch: `backup/before-diary-pin-text-register-2026-11-16`.
+- PR #104 merged successfully as commit `0424851c35769a06a014aa2da078ebd87749dd7c`. The source and mirror are byte-identical: Git blob SHA `c08dc7b928bfc4de4c97723e9a06b738872177f7`, 435,069 characters.
+- Web publisher run #268 (`43868880341`) succeeded. Because the mirror was already synchronized as part of the approved PR, the publisher repaired/confirmed the checksum without incrementing the version automatically. The live feed was therefore explicitly advanced to **Web Update 263** so installed clients at 262 will detect the change. Web SHA-256: `b0e79b598927fb79d9fc8210066f1cab966562a4b873b009ab42c36dd7be7e21`.
+- APK workflow run #263 (`43868880476`) completed successfully. Project verification, exact HTML injection, translation audit, identity checks, debug build, signed Release configuration, release publication and artifact uploads passed. Published APK remains **1.0.180 / versionCode 179** at `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.180.apk`; live feed APK SHA-256: `61bb8312ad4d08b6e21ed3653f7d663a58d99197800a788839abf60f511fb45a`.
+- Repository/build/publication verification is PASS. **Physical phone test pending**: user should tap **Me → Check for Update**, confirm Web Update 263 is found/applied, then inspect Diary PIN creation/change, Favourite Name input, Forgot PIN recovery and its messages for readability. Also confirm PIN recovery still works and Pattern/Fingerprint/Note Lock remain unchanged. Do not claim phone-side PASS until the user confirms.
+
+---
+
 # Diary PIN Forgot PIN now requires Favourite Name — Web Update 262 / APK 1.0.180 (2026-11-16)
 
 - User-approved recovery flow implemented in Diary Lock only. When first setting a Diary PIN, the user enters the PIN, confirms it, then sets a secret **Favourite Name**. Existing PIN users who have not set one can open **Me → Diary PIN Tala**, verify their current PIN, and add the Favourite Name without changing their current PIN. Changing an existing PIN still requires the current PIN, new PIN, confirmation, and Favourite Name.
