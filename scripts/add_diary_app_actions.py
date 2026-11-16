@@ -47,7 +47,7 @@ if s.count(back_old) != 1:
 s = s.replace(back_old, back_new, 1)
 if "class DiaryNativeActions" in s: raise SystemExit("Already patched")
 if "override fun onActivityResult(" in s: raise SystemExit("Existing onActivityResult found; safe merge required")
-s=s.replace("import android.content.Intent\n","import android.content.Intent\nimport android.media.AudioAttributes\nimport android.media.RingtoneManager\nimport android.media.Ringtone\nimport android.app.Service\nimport android.content.pm.ServiceInfo\nimport android.os.Handler\nimport android.os.Looper\nimport android.os.IBinder\nimport android.app.AlertDialog\nimport android.app.AlarmManager\nimport android.app.Notification\nimport android.app.NotificationChannel\nimport android.app.NotificationManager\nimport android.app.PendingIntent\nimport android.app.ProgressDialog\nimport android.content.BroadcastReceiver\nimport android.content.Context\nimport android.os.Build\nimport android.webkit.JavascriptInterface\nimport android.widget.Toast\nimport java.net.HttpURLConnection\nimport java.net.URL\n",1)
+s=s.replace("import android.content.Intent\n","import android.content.Intent\nimport android.media.AudioAttributes\nimport android.media.RingtoneManager\nimport android.media.Ringtone\nimport android.app.Service\nimport android.content.pm.ServiceInfo\nimport android.os.Handler\nimport android.os.Looper\nimport android.os.IBinder\nimport android.app.AlertDialog\nimport android.app.AlarmManager\nimport android.app.Notification\nimport android.app.NotificationChannel\nimport android.app.NotificationManager\nimport android.app.PendingIntent\nimport android.app.ProgressDialog\nimport android.content.BroadcastReceiver\nimport android.content.Context\nimport android.os.Build\nimport android.content.DialogInterface\nimport android.hardware.biometrics.BiometricPrompt\nimport android.hardware.fingerprint.FingerprintManager\nimport android.os.CancellationSignal\nimport android.webkit.JavascriptInterface\nimport android.widget.Toast\nimport java.net.HttpURLConnection\nimport java.net.URL\n",1)
 s=s.replace("        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {","        webView.addJavascriptInterface(DiaryNativeActions(), \"DiaryAppActions\")\n\n        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {",1)
 webview_client_anchor = "        webView.webViewClient = object : WebViewClientCompat() {"
 if s.count(webview_client_anchor) != 1:
@@ -92,6 +92,64 @@ native = r"""
                 JSONObject(c.inputStream.bufferedReader().use{it.readText()})
             } finally { c.disconnect() }
         }
+        private fun notifyDiaryFingerprintResult(success: Boolean, message: String) {
+            this@MainActivity.runOnUiThread {
+                try {
+                    val js = "window.__diaryFingerprintResult && window.__diaryFingerprintResult(" +
+                        success.toString() + "," + JSONObject.quote(message) + ");"
+                    webView.evaluateJavascript(js, null)
+                } catch (_: Exception) { }
+            }
+        }
+
+        @JavascriptInterface fun canUseFingerprint(): Boolean {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return false
+            return try {
+                val manager = getSystemService(FingerprintManager::class.java) ?: return false
+                manager.isHardwareDetected && manager.hasEnrolledFingerprints()
+            } catch (_: Exception) { false }
+        }
+
+        @JavascriptInterface fun authenticateFingerprint() {
+            runOnUiThread {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+                    notifyDiaryFingerprintResult(false, "unavailable")
+                    return@runOnUiThread
+                }
+                if (!canUseFingerprint()) {
+                    notifyDiaryFingerprintResult(false, "unavailable")
+                    return@runOnUiThread
+                }
+                try {
+                    val prompt = BiometricPrompt.Builder(this@MainActivity)
+                        .setTitle("My Diary")
+                        .setSubtitle("Use your fingerprint to unlock Diary")
+                        .setNegativeButton("Use PIN", mainExecutor, DialogInterface.OnClickListener { _, _ ->
+                            notifyDiaryFingerprintResult(false, "cancelled")
+                        })
+                        .build()
+                    prompt.authenticate(
+                        CancellationSignal(),
+                        mainExecutor,
+                        object : BiometricPrompt.AuthenticationCallback() {
+                            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult?) {
+                                notifyDiaryFingerprintResult(true, "success")
+                            }
+                            override fun onAuthenticationFailed() {
+                                notifyDiaryFingerprintResult(false, "failed")
+                            }
+                            override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) {
+                                notifyDiaryFingerprintResult(false, "cancelled")
+                            }
+                        }
+                    )
+                } catch (error: Exception) {
+                    android.util.Log.e("MyDiaryFingerprint", "Fingerprint prompt could not start", error)
+                    notifyDiaryFingerprintResult(false, "unavailable")
+                }
+            }
+        }
+
         @JavascriptInterface fun saveBackup(content: String, suggestedName: String) {
             if (content.isEmpty()) return
             this@MainActivity.startDiaryBackupSave(content, suggestedName)
@@ -1145,12 +1203,14 @@ permissions = [
     "android.permission.FOREGROUND_SERVICE",
     "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK",
     "android.permission.WAKE_LOCK",
+    "android.permission.USE_BIOMETRIC",
+    "android.permission.USE_FINGERPRINT",
 ]
 missing_permissions = [p for p in permissions if 'android:name="' + p + '"' not in ms]
 if missing_permissions:
     p=ms.find(">", ms.find("<manifest"))
     if p<0: raise SystemExit("Manifest root tag missing")
-    block="\n"+"\\n".join('    <uses-permission android:name="' + p + '" />' for p in missing_permissions)
+    block="\n"+"\n".join('    <uses-permission android:name="' + p + '" />' for p in missing_permissions)
     ms=ms[:p+1]+block+ms[p+1:]
     manifest.write_text(ms,encoding="utf-8")
 

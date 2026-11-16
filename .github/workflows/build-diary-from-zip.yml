@@ -1,4 +1,4 @@
-# Approved release build: publish signed Diary 1.0.175/174 with matching Check for Update feed.
+# Approved release build: publish signed Diary 1.0.176/175 with matching Check for Update feed.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -112,13 +112,13 @@ jobs:
           source=Path("web-source/index.html")
           actual=hashlib.sha256(source.read_bytes()).hexdigest()
           meta["webSha256"]=actual
-          meta["webReleaseNotes"]="Note Lock wrong-PIN feedback now appears in a clear pop-up beside the PIN box, styled like the Diary Lock message. The same PIN box remains available for retry; existing Note PINs, recovery data and saved records are preserved."
+          meta["webReleaseNotes"]="Added the removable Diary Lock Settings screen in Me with Diary Lock and Enable Fingerprint switches. The existing Diary PIN and recovery remain available; native fingerprint unlock is an optional route. Note Lock and saved data are unchanged."
           Path("latest.json").write_text(json.dumps(meta,indent=2)+"\n",encoding="utf-8")
           expected=meta.get("webSha256","").lower()
           if len(expected)!=64 or actual!=expected:
               raise SystemExit(f"BLOCKED: published Diary HTML hash mismatch: {actual}")
           html=source.read_text(encoding="utf-8")
-          required=("diaryMyNotesOverlay","diaryMyNotesPanel","diary_personal_notes_v1","diaryCheckUpdatesBtn","diaryDiaryRefreshBtn","diaryInterfaceColoursBtn","diaryShareAppBtn")
+          required=("diaryMyNotesOverlay","diaryMyNotesPanel","diary_personal_notes_v1","diaryCheckUpdatesBtn","diaryDiaryRefreshBtn","diaryInterfaceColoursBtn","diaryShareAppBtn","diaryLockSettingsBtn","diaryFingerprintSettingToggle","DIARY_FINGERPRINT_ENABLED_KEY")
           missing=[x for x in required if x not in html]
           if missing: raise SystemExit("BLOCKED: published Diary HTML missing required features: "+", ".join(missing))
           if "name:'ringVolumePercent'" not in html or "type:'range'" not in html:
@@ -143,6 +143,19 @@ jobs:
           PY
           node --check /tmp/diary-module.js
           python3 scripts/add_diary_app_actions.py
+          python3 - <<'PY'
+          from pathlib import Path
+          kotlin = Path("diary-project/app/src/main/java/com/muazzin/diary/MainActivity.kt").read_text(encoding="utf-8")
+          manifest = Path("diary-project/app/src/main/AndroidManifest.xml").read_text(encoding="utf-8")
+          required = ("fun canUseFingerprint(): Boolean", "fun authenticateFingerprint()", "BiometricPrompt.Builder", "FingerprintManager")
+          missing = [item for item in required if item not in kotlin]
+          if missing:
+              raise SystemExit("BLOCKED: native fingerprint bridge is incomplete: " + ", ".join(missing))
+          for permission in ("android.permission.USE_BIOMETRIC", "android.permission.USE_FINGERPRINT"):
+              if permission not in manifest:
+                  raise SystemExit("BLOCKED: fingerprint permission missing: " + permission)
+          print("PASS: Android native fingerprint sensor detection and BiometricPrompt bridge present")
+          PY
           python3 - <<'PY'
           import xml.etree.ElementTree as ET
           from pathlib import Path
@@ -331,7 +344,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved Diary release version 1.0.175 (versionCode 174)
+      - name: Set approved Diary release version 1.0.176 (versionCode 175)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
@@ -339,12 +352,12 @@ jobs:
           from pathlib import Path
           p = Path("app/build.gradle.kts")
           s = p.read_text(encoding="utf-8")
-          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 174', s, count=1)
-          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.175"', s, count=1)
+          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 175', s, count=1)
+          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.176"', s, count=1)
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary release versionName=1.0.175, versionCode=174")
+          print("Set Diary release versionName=1.0.176, versionCode=175")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -366,10 +379,10 @@ jobs:
           name = one(r'versionName\s*=\s*"([^"]+)"', "versionName")
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
-          if code != 174 or name != "1.0.175":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.175/174, found {name}/{code}")
+          if code != 175 or name != "1.0.176":
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.176/175, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if feed_version not in ((173, "1.0.174"), (174, "1.0.175")):  
+          if feed_version not in ((174, "1.0.175"), (175, "1.0.176")):  
               raise SystemExit(f"BLOCKED: update feed is neither the installed baseline nor the already-published exact repair release: {feed_version}")
           print(f"PASS: package={package}, repair release={name}/{code}; feed state is approved: {feed_version}")
           PY
@@ -458,7 +471,7 @@ jobs:
           echo "Release APK certificate matches the previously supplied SHA-256 fingerprint."
           rm -f app/diary-release.jks
 
-      - name: Publish verified Diary update 1.0.175 after release verification PASS
+      - name: Publish verified Diary update 1.0.176 after release verification PASS
         if: env.DIARY_RELEASE_READY == 'true'
         shell: bash
         run: |
@@ -467,7 +480,7 @@ jobs:
           test -s "$APK"
           SHA256="$(sha256sum "$APK" | awk '{print $1}')"
           cp "$APK" /tmp/My-Diary-verified.apk
-          printf '1.0.175\n174\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.176\n175\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -f -B diary-publish-main origin/main
           python3 - <<'PY'
@@ -475,25 +488,25 @@ jobs:
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in ((173, "1.0.174"), (174, "1.0.175")): 
+          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in ((174, "1.0.175"), (175, "1.0.176")): 
               raise SystemExit(f"BLOCKED: live main feed is neither the installed baseline nor the exact repair release being republished: {feed_version}")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
           meta["packageName"] = "com.personal.diaryapp"
           meta["versionName"] = lines[0]
           meta["versionCode"] = int(lines[1])
-          meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.175.apk"
+          meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.176.apk"
           meta["sha256"] = lines[2]
-          meta["releaseNotes"] = "My Diary 1.0.175: The Calendar view entry remains removed from the Me menu only; Personal Calendar and saved calendar data are unchanged. Note Lock wrong-PIN feedback now appears in a clear pop-up beside the PIN box, styled like the Diary Lock message. The same PIN box remains available for retry; existing PIN/recovery data and all saved notes, photos, documents, reminders and app identity are preserved."
+          meta["releaseNotes"] = "My Diary 1.0.176: Added a removable Diary Lock Settings screen in Me with Diary Lock and Enable Fingerprint switches. The existing Diary PIN setup, unlock and recovery are reused; native Android fingerprint authentication is an optional unlock path. Existing Note Lock, saved notes, photos, documents, reminders and app identity are preserved."
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           cp /tmp/My-Diary-verified.apk My-Diary.apk
-          cp /tmp/My-Diary-verified.apk My-Diary-1.0.175.apk
+          cp /tmp/My-Diary-verified.apk My-Diary-1.0.176.apk
           python3 -m json.tool latest.json >/dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add My-Diary.apk My-Diary-1.0.175.apk latest.json
-          git commit -m "Publish My Diary update 1.0.175"
+          git add My-Diary.apk My-Diary-1.0.176.apk latest.json
+          git commit -m "Publish My Diary update 1.0.176"
           git push origin HEAD:main
       - name: Upload unsigned Release APK for private owner-side signing
         if: env.DIARY_RELEASE_READY != 'true'
@@ -508,7 +521,7 @@ jobs:
         if: env.DIARY_RELEASE_READY == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: My-Diary-1.0.175-signed-test-candidate
+          name: My-Diary-1.0.176-signed-test-candidate
           path: diary-project/app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
           retention-days: 30
@@ -524,7 +537,7 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: My-Diary-1.0.175-debug-test-candidate
+          name: My-Diary-1.0.176-debug-test-candidate
           path: diary-project/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
