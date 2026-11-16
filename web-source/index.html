@@ -29,7 +29,6 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 #diaryShareAppBtn:active{transform:translateY(2px)!important;box-shadow:0 0 0 transparent!important}
 </style>
 
-
 <style id="diary-close-glyph-centering">
 /* Center only the × glyph; keep the Close button's existing box and placement unchanged. */
 #diaryMyNotesClose {
@@ -41,8 +40,6 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     line-height: 1 !important;
 }
 </style>
-
-
 
 <style id="diary-recently-deleted-mobile-scroll-fix">
 /* Keep the Recently Deleted list and its Restore/Delete Forever controls inside a scrollable Me menu on short mobile screens. */
@@ -1789,7 +1786,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   function meFeatureEscape(value){return String(value==null?'':value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
   function exportMeFeatureReport(kind){
    var reportWindow=window.open('','_blank');if(!reportWindow){meFeatureStatus.textContent='Popup blocked. Allow popups to create the report.';return;}
-   reportWindow.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+meFeatureEscape(mf('reportTitle'))+'</title><style>body{font-family:Arial,sans-serif;padding:20px;color:#222}h1{font-size:22px}button{padding:10px 16px;margin:12px 0}table{border-collapse:collapse;width:100%;font-size:13px}th,td{border:1px solid #999;padding:7px;text-align:left;overflow-wrap:anywhere}th{background:#eee}.totals{font-weight:bold;margin:12px 0}@media print{button{display:none}body{padding:0}}</style></head><body><h1>'+meFeatureEscape(mf('reportTitle'))+' — '+meFeatureEscape(mf(kind==='kharcha'?'kharcha':'personalCalendar'))+'</h1><p>'+new Date().toLocaleString()+'</p><p>Loading…</p><!-- Web Update 251: Personal Calendar uses Gregorian dates only; no Hijri date labels. -->
+   reportWindow.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+meFeatureEscape(mf('reportTitle'))+'</title><style>body{font-family:Arial,sans-serif;padding:20px;color:#222}h1{font-size:22px}button{padding:10px 16px;margin:12px 0}table{border-collapse:collapse;width:100%;font-size:13px}th,td{border:1px solid #999;padding:7px;text-align:left;overflow-wrap:anywhere}th{background:#eee}.totals{font-weight:bold;margin:12px 0}@media print{button{display:none}body{padding:0}}</style></head><body><h1>'+meFeatureEscape(mf('reportTitle'))+' — '+meFeatureEscape(mf(kind==='kharcha'?'kharcha':'personalCalendar'))+'</h1><p>'+new Date().toLocaleString()+'</p><p>Loading…</p>
 </body></html>');
    meFeatureAll(kind).then(function(records){var rows='',totals='';if(kind==='kharcha'){var income=0,expense=0,by={};records.forEach(function(r){income+=r.incomeAmount!==undefined?(Number(r.incomeAmount)||0):(r.flow==='income'?(Number(r.amount)||0):0);expense+=r.expenseAmount!==undefined?(Number(r.expenseAmount)||0):(r.flow!=='income'?(Number(r.amount)||0):0);var c=r.category||mf('categoryOther');by[c]=(by[c]||0)+(r.expenseAmount!==undefined?(Number(r.expenseAmount)||0):(r.flow==='income'?0:(Number(r.amount)||0)));});totals='<p class="totals">'+meFeatureEscape(mf('totalIncome'))+': ₹'+income.toFixed(2)+' | '+meFeatureEscape(mf('totalExpense'))+': ₹'+expense.toFixed(2)+' | '+meFeatureEscape(mf('balance'))+': ₹'+(income-expense).toFixed(2)+'</p><p>'+Object.keys(by).map(function(k){return meFeatureEscape(k)+': ₹'+by[k].toFixed(2);}).join(' | ')+'</p>';rows=records.map(function(r){return '<tr><td>'+meFeatureEscape(r.date)+'</td><td>₹'+Number((r.incomeAmount!==undefined?r.incomeAmount:(r.flow==='income'?r.amount:0))||0).toFixed(2)+'</td><td>₹'+Number((r.expenseAmount!==undefined?r.expenseAmount:(r.flow==='income'?0:r.amount))||0).toFixed(2)+'</td><td>'+meFeatureEscape(r.category)+'</td><td>'+meFeatureEscape(r.details)+'</td></tr>';}).join('');rows='<table><thead><tr><th>Date</th><th>Raqam</th><th>Kharcha</th><th>Category</th><th>Details</th></tr></thead><tbody>'+rows+'</tbody></table>';}else{rows=records.map(function(r){return '<tr><td>'+meFeatureEscape(r.date)+'</td><td>'+meFeatureEscape(r.time||'')+'</td><td>'+meFeatureEscape(r.title)+'</td><td>'+meFeatureEscape(mf(r.type||'event'))+'</td><td>'+meFeatureEscape(r.details||'')+'</td><td>'+meFeatureEscape(r.repeat||'none')+'</td></tr>';}).join('');rows='<table><thead><tr><th>Date</th><th>Time</th><th>Name</th><th>Type</th><th>Details</th><th>Repeat</th></tr></thead><tbody>'+rows+'</tbody></table>';}
     reportWindow.document.open();reportWindow.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+meFeatureEscape(mf('reportTitle'))+'</title><style>body{font-family:Arial,sans-serif;padding:20px;color:#222}h1{font-size:22px}button{padding:10px 16px;margin:12px 0}table{border-collapse:collapse;width:100%;font-size:13px}th,td{border:1px solid #999;padding:7px;text-align:left;overflow-wrap:anywhere}th{background:#eee}.totals{font-weight:bold;margin:12px 0}@media print{button{display:none}body{padding:0}}</style></head><body><h1>'+meFeatureEscape(mf('reportTitle'))+' — '+meFeatureEscape(mf(kind==='kharcha'?'kharcha':'personalCalendar'))+'</h1><p>'+new Date().toLocaleString()+'</p>'+totals+rows+'<button onclick="window.print()">'+meFeatureEscape(mf('printSave'))+'</button></body></html>');reportWindow.document.close();}).catch(function(){reportWindow.close();meFeatureStatus.textContent=mf('failed');});
@@ -3027,7 +3024,6 @@ window.addEventListener('load',function(){
 });
 </script>
 
-
 <style id="diary-me-refresh-gold-3d">
 #diaryDiaryMePanel #diaryDiaryRefreshBtn{
  border:2px solid #d4af37!important;
@@ -3037,7 +3033,6 @@ window.addEventListener('load',function(){
  font-weight:1000!important;
 }
 </style>
-
 
 <style id="diary-me-check-updates-style">
 #diaryDiaryMePanel #diaryCheckUpdatesBtn{
@@ -3050,7 +3045,6 @@ window.addEventListener('load',function(){
 }
 </style>
 
-
 <style id="v136-me-refresh-equal-size">
 /* Match Refresh button dimensions to the existing Font Size and Trash buttons. */
 #diaryDiaryMePanel #diaryDiaryRefreshBtn{
@@ -3062,7 +3056,6 @@ window.addEventListener('load',function(){
  white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;
 }
 </style>
-
 
 <style id="diary-interface-colours-themes">
 #diaryInterfaceColoursPanel{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:6px 0;margin:0 0 7px;width:100%;box-sizing:border-box}
@@ -3112,12 +3105,10 @@ body[data-diary-interface-theme]:not([data-diary-interface-theme="blue"]):not([d
 body[data-diary-interface-theme]:not([data-diary-interface-theme="blue"]):not([data-diary-interface-theme="green"]):not([data-diary-interface-theme="rose"]) #diaryMyNotesActions button,body[data-diary-interface-theme]:not([data-diary-interface-theme="blue"]):not([data-diary-interface-theme="green"]):not([data-diary-interface-theme="rose"]) #diaryMyNotesBackup button,body[data-diary-interface-theme]:not([data-diary-interface-theme="blue"]):not([data-diary-interface-theme="green"]):not([data-diary-interface-theme="rose"]) #diaryMyNotesPin,body[data-diary-interface-theme]:not([data-diary-interface-theme="blue"]):not([data-diary-interface-theme="green"]):not([data-diary-interface-theme="rose"]) #diaryDiaryMePanel button{background:linear-gradient(145deg,#fff,var(--diary-theme-button))!important;border-color:var(--diary-theme-border)!important;color:#243247!important}
 </style>
 
-
 <style id="diary-me-all-buttons-40px">
 /* Keep every control added inside the Me menu at the user's confirmed 40px height. */
 #diaryDiaryMePanel button,#diaryDiaryMePanel [role="button"],#diaryDiaryMePanel input[type="button"],#diaryDiaryMePanel input[type="submit"],#diaryDiaryMePanel input[type="reset"]{height:40px!important;min-height:40px!important;max-height:40px!important;box-sizing:border-box!important}
 </style>
-
 
 <style id="diary-custom-colour-label-visibility-fix">
 /* Make the custom colour picker label clearly readable in every selected theme. */
@@ -3279,7 +3270,6 @@ body[data-diary-interface-theme]:not([data-diary-interface-theme="blue"]):not([d
 #diaryDiaryMePanel #diaryCalendarPanel .diary-calendar-note{display:block!important;width:100%!important;height:auto!important;min-height:40px!important;max-height:none!important;margin:5px 0!important;padding:8px!important;text-align:left!important;white-space:normal!important;font-size:13px!important;font-weight:800!important}
 </style>
 
-
 <style id="diary-entry-button-bold-3d">
 /* Bold raised lettering for the Diary entry button in every selected language. */
 #diaryMyNotesEntry #diaryMyNotesEntryTitle{
@@ -3383,7 +3373,6 @@ body[data-diary-interface-theme]:not([data-diary-interface-theme="blue"]):not([d
 }
 </style>
 
-
 <style id="diary-four-me-features-style">
 #diaryDiaryMePanel .diary-me-feature-btn{display:flex!important;align-items:center!important;justify-content:flex-start!important;width:100%!important;min-height:44px!important;height:auto!important;padding:9px 11px!important;border:2px solid #7540b8!important;border-radius:11px!important;background:linear-gradient(145deg,#fff,#eadcff)!important;color:#35145f!important;font-size:16px!important;font-weight:1000!important;text-align:left!important;white-space:normal!important;box-shadow:inset 0 1px 0 #fff,0 3px 0 #4e247f,0 5px 8px #39204b22!important}
 #diaryDiaryMePanel .diary-me-feature-btn:active{transform:translateY(2px)!important;box-shadow:inset 0 1px 0 #fff,0 1px 0 #4e247f!important}
@@ -3416,7 +3405,6 @@ body[data-diary-interface-theme]:not([data-diary-interface-theme="blue"]):not([d
 .diary-me-feature-totals{padding:10px!important;border:1px solid #d4af37!important;border-radius:10px!important;background:#fff7d9!important;color:#513d0a!important;font-size:13px!important;font-weight:900!important;line-height:1.6!important}
 .diary-me-feature-empty{text-align:center!important;padding:16px!important;color:#756781!important;font-weight:800!important}
 </style>
-
 
 <style id="diary-language-selector-me-menu">
 /* Keep the language selector off the welcome screen; show the same control inside Me. */
@@ -3491,7 +3479,6 @@ body{background:radial-gradient(ellipse at 50% 12%,#fff 0%,#f5edff 42%,#e8dcf8 1
 @media(max-width:420px){.diary-home{margin-top:clamp(28px,10vh,78px)!important;padding:0 10px!important}#diaryMyNotesEntry{min-height:140px!important;padding:18px 10px 16px!important}#diaryMyNotesEntryTitle{font-size:22px!important}#diaryMyNotesEntrySub{font-size:12px!important}}
 </style>
 
-
 <style id="diary-welcome-card-double-size-232">
 /* Double the welcome tap card's visual footprint while keeping it within the phone width. */
 #diaryMyNotesEntry{
@@ -3546,5 +3533,6 @@ body{background:radial-gradient(ellipse at 50% 12%,#fff 0%,#f5edff 42%,#e8dcf8 1
 
 </body>
 </html>
+<!-- Web Update 251: Personal Calendar uses Gregorian dates only; no Hijri date labels. -->
 <!-- SHA-256 release verification refresh 2026-11-12 -->
 <!-- My Diary release trigger: ringtone volume and timed screen wake, APK 1.0.146 -->
