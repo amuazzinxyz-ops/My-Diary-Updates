@@ -7,8 +7,8 @@
   "sha256": "4941dca48b201168ef49c128a399b7a1d0d98b6212567bab90ceec20bd993973",
   "releaseNotes": "My Diary 1.0.174: The Calendar view entry remains removed from the Me menu only; Personal Calendar and saved calendar data are unchanged. Note Lock wrong-PIN feedback now appears inside the same PIN box without a separate alert or address/autofill suggestion. Existing PIN/recovery data and all saved notes, photos, documents, reminders and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 255,
+  "webVersion": 256,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "81db6f930f9fce1f4ac6413f2178d4420d81e5787ae7ac06acfcd16064460d67",
+  "webSha256": "b63677a757a7dcb1d2fac39b97013c5e06457534262b4c04dfcd211baf49bf64",
   "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
