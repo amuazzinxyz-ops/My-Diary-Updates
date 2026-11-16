@@ -1,3 +1,13 @@
+# Note Lock wrong-PIN popup beside the PIN box — Web Update 256 / APK 1.0.175 planned (2026-11-16)
+
+- User clarified the desired appearance: for Note → 🔓 Tala Band Karein, a wrong PIN should show a clear, styled pop-up immediately beside/below the same PIN box, matching the Diary Lock message card style. Do not put the error text in the PIN placeholder and do not show a browser address/autofill suggestion or a separate browser alert.
+- The pop-up is attached inside the same PIN modal, directly under the PIN input. It displays the localized wrong-PIN message and a close button; after closing it, the same PIN field is available for another attempt. A wrong PIN never disables or removes the Note Lock.
+- Exact source scope: only the shared four-digit PIN modal's wrong-validation feedback display. PIN validation, stored PIN/hash, recovery flow, and successful unlock/turn-off behavior remain as before.
+- Pre-edit backup branch: `backup/before-note-lock-nearby-popup-2026-11-16`. Working branch: `fix/note-lock-nearby-error-popup-2026-11-16`. Base is current main after verified 1.0.174 / Web Update 255 release. Static source checks pass; PR review, publisher, signed APK 1.0.175 / versionCode 174, certificate/SHA-256 and live feed verification are pending.
+- No PIN values/hashes, recovery codes, saved notes, photos, documents, reminders, events, app package/signing identity or unrelated features are intentionally changed. Do not ask user to update until web and signed APK release verification both pass. Physical phone test remains pending.
+
+---
+
 # Note Lock wrong-PIN feedback inside the same PIN box — Web Update 255 / APK 1.0.174 published (2026-11-16)
 
 - User requested a narrowly scoped fix in **Note → 🔓 Tala Band Karein**: when the entered PIN is wrong, do not show a browser address/autofill suggestion or a separate alert. Show the existing localized wrong-PIN message inside the same PIN input box.
