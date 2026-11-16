@@ -1,3 +1,16 @@
+# Private Locker first-time PIN setup repair — Web Update 279 / APK 1.0.186 (2026-11-17)
+
+- User clarified that they had **never created a Private Locker PIN**; the first open nevertheless showed a PIN-entry screen and then an encrypted-data-format error. Scope was explicitly limited to this Private Locker setup problem; no other Diary function was to be changed.
+- Read the project map and live update feed before editing. Live baseline was APK 1.0.186 / versionCode 185 and Web Update 278. Created pre-edit snapshot branch `backup/before-private-locker-first-run-fix-2026-11-17`; working branch `fix/private-locker-first-run-config-2026-11-17`.
+- Source inspection found the gate treated **any** `meta/config` object as proof that a PIN was configured. The new Private Locker-only logic validates the stored salt/verifier structure before showing the unlock form. If the config is absent or incomplete and there are no encrypted entries, it shows the new 6-digit PIN setup flow. If encrypted entries exist while config is invalid/missing, it blocks replacement and preserves the entries. The save path repeats the entry check before writing config. It does not delete or reset any existing Locker record.
+- PR #123 merged to main as `34885161c79ab3d0b7e1f830b3b430f8f4627846`. Only `web-source/index.html` and `diary-web/index.html` were changed; no Notes, Documents, Memories, Reminder, Note Lock, Diary Lock, or other function was intentionally changed.
+- The Android workflow [43930488884](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/43930488884) completed successfully. Project verification, exact HTML injection, JavaScript `node --check`, debug build, signed Release build, and publication steps passed. APK remains **1.0.186 / versionCode 185**; live signed APK SHA-256 is `c354518f86bd525107f43341aa5d5b9cb98a8364ac058a7f256e64119b7010ea`.
+- Source and mirror are byte-identical at Git blob SHA `d40dc8d7d2a64240183d923954f58bc50b1428e5`. Live update manifest now advertises **Web Update 279**, web SHA-256 `cafc2a8d95ebe83a4e83d842b3eec9d46cc5da5b9f1a5d9fca24a1d37480452f`, and the verified APK hash above. Manifest-only PR #124 merged as `41384726cd5786b1e47cf519d1e05b0fe458da6f`; no source or other feature changed in that PR.
+- Web publisher run [43930957934](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/43930957934) was triggered by the manifest update; confirm its final status before treating all publishing checks as complete.
+- **Phone test pending.** User must run Check for Update, open Private Locker and confirm the first-time screen allows creation of a new 6-digit PIN, then close/reopen and unlock. Do not claim device-side success until user confirms. Do not ask them to clear app data or reset any saved content. If the app reports an existing encrypted-entry/config warning, preserve data and ask for the exact text.
+
+---
+
 # Private Locker PIN base64 decoding compatibility fix — Web Update 278 / APK 1.0.186 (2026-11-16)
 
 - User reported that entering the six-digit Private Locker PIN produced: `Failed to execute 'atob' on 'Window': The string to be decoded is not correctly encoded.`
