@@ -7,8 +7,8 @@
   "sha256": "6d71b4ac55693d2adb3141ea0f4be72ec0c1bdf1592be5ea1832e44d4ea6fd75",
   "releaseNotes": "My Diary 1.0.183: Note Backup and Restore messages are back in the original in-section status display. Backup data and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 273,
+  "webVersion": 274,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "8c5d5867d64d7129766f7b53dc5cc83c35a63862ece5b295957f0d7e07a076e1",
-  "webReleaseNotes": "My Diary Web Update 273: Note Backup and Restore messages are restored to the original status display inside the Notes panel. No Backup/Restore data handling changed."
+  "webReleaseNotes": "My Diary Web Update 274: Removed only the Solid Colour / Ek Rang Chunein choice from Note ka Cover Photo and Tafseel ki Photo. Choose Image and Gradient Colour remain; the separate Photo menu is unchanged."
 }
