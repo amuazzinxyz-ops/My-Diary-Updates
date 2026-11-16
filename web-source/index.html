@@ -2666,7 +2666,14 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    var heading=document.createElement('strong');heading.textContent=title;heading.style.cssText='display:block;font-size:17px;margin:0 30px 14px 0;';
    var input=document.createElement('input');input.type='password';input.name='diary-note-lock-pin';input.inputMode='numeric';input.autocomplete='off';input.maxLength=4;input.placeholder=t('pinPlaceholder');input.setAttribute('autocapitalize','off');input.setAttribute('autocorrect','off');input.setAttribute('spellcheck','false');input.setAttribute('aria-autocomplete','none');input.setAttribute('data-form-type','other');input.style.cssText='display:block;width:100%;height:50px;box-sizing:border-box;border:2px solid #bba5dc;border-radius:10px;text-align:center;font-size:24px;font-weight:800;letter-spacing:9px;color:#39235b;background:#faf7ff;';
    var close=document.createElement('button');close.type='button';close.textContent='×';close.setAttribute('aria-label',t('closeLabel'));close.style.cssText='position:absolute;top:8px;right:8px;width:32px;height:32px;border:0;border-radius:50%;background:#eee5fa;color:#4b267c;font-size:24px;font-weight:900;';
+   var errorPopup=document.createElement('div');errorPopup.style.cssText='display:none;width:100%;box-sizing:border-box;margin-top:12px;padding:12px 12px 10px;border-radius:12px;text-align:center;background:linear-gradient(145deg,#fff,#f0e8ff);border:2px solid #8c62c5;box-shadow:0 6px 18px rgba(0,0,0,.16);color:#39235b;';
+   errorPopup.setAttribute('role','alert');
+   var errorText=document.createElement('strong');errorText.style.cssText='display:block;font-size:16px;font-weight:900;margin:0 0 9px;';
+   var errorClose=document.createElement('button');errorClose.type='button';errorClose.textContent=t('closeLabel');errorClose.style.cssText='min-width:92px;padding:8px 18px;border:0;border-radius:9px;background:#5a3288;color:#fff;font-weight:900;';
+   errorPopup.appendChild(errorText);errorPopup.appendChild(errorClose);
    var finished=false,checking=false;
+   function hideInlineError(){errorPopup.style.display='none';errorText.textContent='';}
+   function showInlineError(message){errorText.textContent=message;errorPopup.style.display='block';}
    function finish(value){if(finished)return;finished=true;if(shade.parentNode)shade.parentNode.removeChild(shade);resolve(value);}
    function submitPin(value){
     if(finished||checking)return;
@@ -2675,20 +2682,21 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     Promise.resolve().then(function(){return validator(value);}).then(function(ok){
      checking=false;input.disabled=false;
      if(ok){finish(value);return;}
-     input.value='';input.placeholder=t('codeWrong');input.setAttribute('aria-label',t('codeWrong'));input.style.borderColor='#c0392b';input.focus();
+     input.value='';input.style.borderColor='#c0392b';showInlineError(t('codeWrong'));
     }).catch(function(){
-     checking=false;input.disabled=false;input.value='';input.placeholder=t('codeVerifyError');input.setAttribute('aria-label',t('codeVerifyError'));input.style.borderColor='#c0392b';input.focus();
+     checking=false;input.disabled=false;input.value='';input.style.borderColor='#c0392b';showInlineError(t('codeVerifyError'));
     });
    }
    close.addEventListener('click',function(){finish(null);});
+   errorClose.addEventListener('click',function(){hideInlineError();input.style.borderColor='#bba5dc';input.focus();});
    input.addEventListener('input',function(){
-    var clean=String(input.value||'').replace(/\D/g,'').slice(0,4);
+    var clean=String(input.value||'').replace(/\\D/g,'').slice(0,4);
     if(input.value!==clean)input.value=clean;
-    if(clean.length<4){input.placeholder=t('pinPlaceholder');input.setAttribute('aria-label',title);input.style.borderColor='#bba5dc';}
+    if(clean.length>0){hideInlineError();input.style.borderColor='#bba5dc';}
     if(clean.length===4)submitPin(clean);
    });
    input.addEventListener('keydown',function(e){if(e.key==='Enter'&&input.value.length===4){e.preventDefault();submitPin(input.value);}});
-   box.appendChild(heading);box.appendChild(input);box.appendChild(close);shade.appendChild(box);document.body.appendChild(shade);setTimeout(function(){input.focus();},50);
+   box.appendChild(heading);box.appendChild(input);box.appendChild(errorPopup);box.appendChild(close);shade.appendChild(box);document.body.appendChild(shade);setTimeout(function(){input.focus();},50);
   });
  }
  function setNoteLock(n){
