@@ -1,3 +1,17 @@
+# Note Backup preparation hang repair — Web Update 269 — 2026-11-16
+
+- User reported the Note Backup button stayed at `Backup taiyaar ho raha hai…` after combined Notes + My Documents + My Memories backup was introduced.
+- Compared the combined backup implementation with the pre-change working backup code and inspected the Android native save bridge. The combined export was reading every saved Document and Memory Blob concurrently through nested `Promise.all` / `FileReader` calls before invoking the existing native `DiaryAppActions.saveBackup` bridge. This can create high memory pressure in Android WebView when multiple or large files are present, leaving preparation apparently stuck.
+- Fix: serialize Blob reads one at a time (Documents first, then Memories); add a 90-second per-file read guard with abort/error handling; show stage and per-file progress; call the existing native Save Backup bridge after the complete combined JSON is ready. Combined format and restore logic remain intact.
+- Pre-edit snapshot branch: `backup/before-sequential-note-backup-2026-11-16`. Feature branch: `fix/note-backup-sequential-file-read-2026-11-16`. PR #111 merged as `a51c3ec6345937e38641debd2023d73246dc8b1b`.
+- `web-source/index.html` and `diary-web/index.html` were verified identical (Git blob SHA `9a553cd58a5f583d3d11836e4fe564459c0a896e`). Both inline JavaScript blocks passed syntax parsing.
+- Live manifest advanced to **Web Update 269**, web SHA-256 `8dedfec3ea1dd91aa7ef87d0e1525d66cbe1f0939a15015bd3c7f1e2734de610`. Web publisher run `43880860113` completed successfully for the merged source. Manifest-only publisher run `43881185630` was queued when this entry was written.
+- Android release workflow `43880860317` was still in progress at the time of this entry; it is a workflow side effect of the web-source commit and must be checked for completion. Do not claim a new APK was successfully released unless that workflow reports success and the signed APK/feed are verified.
+- Source, mirror and JavaScript syntax checks: PASS. **Physical phone test is pending.** User should use Check for Update, tap Note Backup, confirm the Android save-location picker opens, save the JSON, then test that it contains Notes, My Documents and My Memories and restore it successfully. Do not claim device-side PASS until user confirms.
+- No user data was changed. No PIN/lock/recovery, reminders, package identity, signing identity, or Android project source was intentionally changed.
+
+---
+
 # Note Backup now includes My Documents and My Memories — Web Update 268 — 2026-11-16
 
 - User asked to check and then extend the existing Note Backup / Restore so saved **My Documents** and **My Memories** are included with Notes.
