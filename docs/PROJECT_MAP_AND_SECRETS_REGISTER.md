@@ -1,3 +1,15 @@
+# Diary unlock screen shows Pattern, PIN and Fingerprint together — Web Update 259 (2026-11-16)
+
+- User clarified that all three enabled unlock methods must be visible together after locking Diary through the existing Diary Lock flow: the 3×3 Pattern grid, PIN entry box, and Fingerprint button. No method should be hidden behind a mode switch.
+- PR #99 merged to main as `e15160868904677567f2f3348ffac3cff64f205b`. Exact pre-edit backup branch: `backup/before-show-all-diary-unlock-methods-2026-11-16`.
+- Minimal change in `web-source/index.html`: keep the configured Pattern grid visible, keep the PIN field visible at the same time with its own label, and keep the existing manual Fingerprint button visible when fingerprint is enabled and the device bridge reports availability. Removed the obsolete Pattern/PIN mode-switch button and its unused CSS. PIN validation and Forgot PIN recovery remain unchanged.
+- Updated `.github/workflows/build-diary-from-zip.yml` guard to require Pattern grid, PIN field and Fingerprint button to be rendered together. The native Kotlin fingerprint bridge, app package/signing identity, Note Lock, notes, photos, documents, reminders and stored data were not changed.
+- Web publisher commit: `42cbaa7f975afb7944b1876c6f58df02b612b0fa`. Web Update **259** is published. `web-source/index.html` and `diary-web/index.html` are byte-identical, Git blob SHA `56d255beb7a8d5b98d78c11fd0697c7804f54114`, 427,838 characters. Live `latest.json` advertises webVersion 259 and web SHA-256 `a88dd78ba3712ca4ac65956d816da49725d0ac89e59398550d9ac94ebbcdccac`.
+- APK feed remains signed My Diary 1.0.177 / versionCode 176 with its previously verified SHA-256 `432f48f716ece49e45147a8cbf5a4c47c406c834cd549f91e77040a9a0038cd0`; this UI-only change is delivered through the hash-verified web bundle update. No new APK build/publication is claimed for this change.
+- **Physical phone test pending.** User must use Me → Check for Update, then lock/unlock Diary and confirm Pattern, PIN and Fingerprint are simultaneously visible and each works. Do not claim device-side PASS until confirmed.
+
+---
+
 # Optional Diary Pattern Lock — Web Update 258 / APK 1.0.177 published (2026-11-16)
 
 - User requested Pattern Lock inside the existing **Me → Set Diary Lock** screen. Added a third optional **Pattern Lock** switch; Diary Lock (PIN) and Enable Fingerprint remain separate optional methods.
