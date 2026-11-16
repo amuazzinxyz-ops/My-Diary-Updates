@@ -7,8 +7,8 @@
   "sha256": "30bc3f1fa1b37b53c3c736acbf5503aca03be20cd94ba9705b693ff9c01d47cc",
   "releaseNotes": "My Diary 1.0.176: Added a removable Diary Lock Settings screen in Me with Diary Lock and Enable Fingerprint switches. The existing Diary PIN setup, unlock and recovery are reused; native Android fingerprint authentication is an optional unlock path. Existing Note Lock, saved notes, photos, documents, reminders and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 256,
+  "webVersion": 257,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "b63677a757a7dcb1d2fac39b97013c5e06457534262b4c04dfcd211baf49bf64",
-  "webReleaseNotes": "My Diary 1.0.176: New removable Diary Lock Settings screen in Me with Diary Lock and Enable Fingerprint switches. Fingerprint unlock requires a supported enrolled sensor; PIN unlock and recovery remain available."
+  "webSha256": "d0bdd0d2970d13e3a01eb52d293e3d96dad4344a27d9107a0ea0cea0cbb9550b",
+  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
