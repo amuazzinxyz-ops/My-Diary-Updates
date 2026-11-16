@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 271,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "ad03900657bb63efc46d8808fcb66e7079fe1aeb481b909cf97a0f8f90fc89f1",
+  "webSha256": "b9b86e4c697b22b83cf2884883c63bf08e1f00102cbc1aff6eb307953211dce3",
   "webReleaseNotes": "My Diary Web Update 271: Fixed combined Notes, My Documents and My Memories backup/restore helper scope. Preserves existing saved data, database schema, locks, reminders and app identity."
 }
