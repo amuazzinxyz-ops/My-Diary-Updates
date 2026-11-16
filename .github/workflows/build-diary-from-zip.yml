@@ -1,4 +1,4 @@
-# Approved release build: publish signed Diary 1.0.182/180 with Pattern Lock and matching Check for Update feed.
+# Approved release build: publish signed Diary 1.0.182/181 with Pattern Lock and matching Check for Update feed.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -394,7 +394,7 @@ jobs:
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary release versionName=1.0.182, versionCode=180")
+          print("Set Diary release versionName=1.0.182, versionCode=181")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -419,9 +419,9 @@ jobs:
           if code != 180 or name != "1.0.182":
               raise SystemExit(f"BLOCKED: expected approved APK version 1.0.182/180, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if feed_version not in ((179, "1.0.180"), (180, "1.0.182")):  
+          if feed_version not in ((180, "1.0.181"), (181, "1.0.182")):  
               raise SystemExit(f"BLOCKED: update feed is neither the installed baseline nor the already-published exact repair release: {feed_version}")
-          print(f"PASS: package={package}, repair release={name}/{code}; feed state is approved: {feed_version}")
+          print(f"PASS: package={package}, release={name}/{code}; feed state is approved: {feed_version}")
           PY
 
       - name: Align Java and Kotlin JVM targets
@@ -525,7 +525,7 @@ jobs:
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in ((179, "1.0.180"), (180, "1.0.182")): 
+          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in ((180, "1.0.181"), (181, "1.0.182")): 
               raise SystemExit(f"BLOCKED: live main feed is neither the installed baseline nor the exact repair release being republished: {feed_version}")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
