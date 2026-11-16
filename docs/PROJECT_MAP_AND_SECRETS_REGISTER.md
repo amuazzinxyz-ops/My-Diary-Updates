@@ -3641,3 +3641,10 @@ The user can simply say what they want in Roman Hindi. No special template, file
 
 
 - **Web feed version correction:** publisher run `43908592983` completed successfully and synchronized the mirror/checksum but did not increment webVersion because source and mirror had already been committed together. This release explicitly advances the feed to **Web Update 275** with the accurate three-menu release note. The earlier APK workflow run `43908592993` correctly failed closed at the release publication guard because APK 1.0.184/183 was already live; it did not publish or overwrite an APK.
+
+
+### Phone test confirmation — My Diary 1.0.185 / Web Update 275 (2026-11-16)
+
+- User confirmed the phone test passed: the **Ek Rang Chunein / Solid Colour** choice is removed as intended from all three menus — **Note ka Cover Photo**, **Tafseel ki Photo**, and **Photo Lagayein**.
+- User-confirmed device result: **PASS** for this specific requested menu change. No broader app-wide phone-test status is implied.
+- Release remains My Diary **1.0.185 / versionCode 184** and Web Update **275**. No further source or release changes were made for this confirmation.
