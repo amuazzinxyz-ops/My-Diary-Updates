@@ -1,4 +1,4 @@
-# Approved release build: publish signed Diary 1.0.172/170 with matching Check for Update feed.
+# Approved release build: publish signed Diary 1.0.172/171 with matching Check for Update feed.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -320,7 +320,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved Diary release version 1.0.172 (versionCode 170)
+      - name: Set approved Diary release version 1.0.172 (versionCode 171)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
@@ -356,7 +356,7 @@ jobs:
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
           if code != 171 or name != "1.0.172":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.172/170, found {name}/{code}")
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.172/171, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
           if feed_version not in ((170, "1.0.171"), (171, "1.0.172")):  
               raise SystemExit(f"BLOCKED: update feed is neither the installed baseline nor the already-published exact repair release: {feed_version}")
