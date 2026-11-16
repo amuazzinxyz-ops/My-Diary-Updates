@@ -3,6 +3,7 @@
 - User clarified that the 📆 Tareekh/Personal Calendar must show only the original Gregorian date; no Hijri date should appear inside day cells or beside the selected date.
 - Exact pre-edit backup branch: `backup/before-calendar-gregorian-only-2026-11-16`. Feature branch: `fix/calendar-gregorian-only-2026-11-16`.
 - Minimal source change: removed the Hijri-date formatter, day-cell Hijri sublabels, selected-date Hijri suffix, and the now-unused Hijri-label CSS rule. Kept Gregorian calendar day numbers, month/year heading, weekday labels, selected-date display, events, notes, language formatting, navigation, reminders, and stored calendar data unchanged.
+- Corrected the release workflow's remaining version labels so APK 1.0.172 consistently uses versionCode 171 (including workflow heading, step label, and fail-closed error text); the previous mismatched labels were caught before merge or publication.
 - No APK/web release is claimed yet. Source/mirror validation, PR merge, Web Update 251 publishing, signed APK build/publication, signing continuity, APK/web checksum verification, and live latest.json verification are pending. Do not tell the user to update until both direct APK and in-app Check for Update routes pass the required checks.
 - No notes, photos, documents, events, reminders, PIN/recovery data, app identity or signing identity were intentionally modified.
 
