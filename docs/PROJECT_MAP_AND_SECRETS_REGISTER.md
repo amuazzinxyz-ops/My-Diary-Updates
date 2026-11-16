@@ -1,12 +1,17 @@
-# Private Locker PIN base64 decoding compatibility fix — 2026-11-16
+# Private Locker PIN base64 decoding compatibility fix — Web Update 278 / APK 1.0.186 (2026-11-16)
 
 - User reported that entering the six-digit Private Locker PIN produced: `Failed to execute 'atob' on 'Window': The string to be decoded is not correctly encoded.`
-- Created a pre-edit snapshot branch: `backup/before-private-locker-base64-fix-2026-11-16`. Working branch: `fix/private-locker-base64-decode-2026-11-16`.
-- Updated only the Private Locker base64 decoder in `web-source/index.html` and `diary-web/index.html`: it now accepts standard and URL-safe Base64, whitespace and missing padding, plus already-byte-based values; it validates malformed values and shows a safe, specific error instead of exposing the browser `atob` exception.
-- No encrypted database records, PIN, salt, verifier, entries, photos, documents, or other app features are changed or reset. Do not clear app data or reset Private Locker as a troubleshooting step.
-- Source/mirror equality, JavaScript syntax, PR merge, Web Update publication/checksum, APK build and dual-route verification are pending. Do not tell the user to update until required publication checks pass. Physical-phone testing remains pending.
+- Created a pre-edit snapshot branch: `backup/before-private-locker-base64-fix-2026-11-16`. Working branch: `fix/private-locker-base64-decode-2026-11-16`. PR #122 merged to main as `ba578b4cf9ae06fa0ae62b5dd9f269a9bd53c70c`.
+- Changed only the Private Locker base64 decoder in `web-source/index.html` and `diary-web/index.html`. It accepts standard/URL-safe Base64, whitespace and missing padding, and byte-based values; malformed data now gets a safe specific message rather than the browser `atob` exception.
+- Existing encrypted database records, PIN, salt, verifier, entries, photos and documents are not reset, rewritten or migrated. User was explicitly told not to clear app data or reset Private Locker. No other Diary feature was intentionally changed.
+- Source and mirror are byte-identical at Git blob SHA `935f2fff7182f1b598c3041016d64b4961e921fb`. Android workflow's exact HTML injection and `node --check` passed. Live web SHA-256 is `790c21df692bfa9ed57ecc8eb4aed569cc3597b57d2191b02979d28c5398d50b`.
+- Web publisher run [43927697853](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/43927697853) completed successfully. Live Check for Update is **Web Update 278** with matching web SHA-256.
+- Android build workflow [43927166691](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/43927166691) completed successfully. Debug build, exact HTML inclusion, signed Release build, signing checks and publication passed. APK remains **1.0.186 / versionCode 185**. Live APK SHA-256 is `aff03c9f0236860d118c5d634dd4cd7755e47db70a12824022ad7329a8707967`; downloaded signed candidate artifact `14255803533` was independently extracted and its APK SHA-256 matched exactly (2,044,164 bytes).
+- Live `latest.json` confirms package `com.personal.diaryapp`, APK 1.0.186/code 185 and Web Update 278 with the exact hashes above. Direct APK and in-app Check for Update routes are published.
+- **Phone test pending.** Do not claim that the Locker now unlocks successfully on the user's device until the user tests the existing six-digit PIN and confirms any saved Locker entries/files still open. If the same error or a new format warning appears, ask for the exact message; do not ask the user to reset or clear data.
 
 ---
+
 
 # Encrypted Private Locker added to Me button — Web Update 277 (2026-11-16)
 
