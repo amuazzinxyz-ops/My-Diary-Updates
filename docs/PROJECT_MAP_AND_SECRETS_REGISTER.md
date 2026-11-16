@@ -3628,3 +3628,13 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - The generic Photo menu now presents only **Choose Image** and **Gradient Colour**, matching the two earlier editor menus (Note ka Cover Photo and Tafseel ki Photo). The existing image-selection and gradient-colour handlers remain; only the Solid Colour choice is omitted from the visible menu.
 - Snapshot branch: `backup/before-photo-menu-solid-colour-removal-2026-11-16`. Feature branch: `fix/remove-photo-menu-solid-colour-2026-11-16`.
 - This follow-up does not alter photo attachment/storage, existing saved images, cover/detail behaviour, note content, PIN/locks/recovery, reminders, package identity or signing identity. Release checks and dual APK + Check for Update publication are pending; do not tell the user to update until both delivery routes and signing/checksum verification pass. Physical phone test remains pending.
+
+
+# My Diary 1.0.185 / Web Update 275 — remove Solid Colour from all three photo menus (release in progress, 2026-11-16)
+
+- User explicitly expanded the earlier request to remove **Ek Rang Chunein / Solid Colour** from the generic **Photo Lagayein** menu in addition to **Note ka Cover Photo** and **Tafseel ki Photo**. All three menus now expose only **Choose Image** and **Gradient Colour**; no other photo attachment behaviour was changed.
+- PR #118 merged as `f85e82cb2f0149f61a7074d7d5bd2ac582bcb89c`. Pre-edit snapshot for the source change: `backup/before-photo-menu-solid-colour-removal-2026-11-16`; follow-up snapshot before release-pipeline advancement: `backup/before-photo-menu-1-0-185-release-2026-11-16`.
+- The web publisher completed successfully as run `43908592983`; verify the live feed advertises Web Update 275 and the source/mirror SHA-256 before marking web delivery complete.
+- The previous photo-menu release **1.0.184 / versionCode 183** had already been published for Cover + Detail only. The generic Photo follow-up therefore requires **1.0.185 / versionCode 184**. The APK workflow and release notes are advanced accordingly, with feed guards accepting only installed baseline 1.0.184/183 or exact new 1.0.185/184.
+- Signed APK build run `43908592993` was triggered from the earlier static 1.0.184 workflow and must fail closed against the now-published 1.0.184 feed; do not treat it as the new release. The corrected 1.0.185 workflow release, signing continuity, artifact SHA-256 and live feed publication are pending.
+- No saved photos, notes, documents, memories, PIN/locks/recovery, reminders, package identity or signing identity are changed. Physical phone test remains pending; do not claim device-side PASS until user confirms.
