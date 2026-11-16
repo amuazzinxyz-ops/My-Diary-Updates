@@ -1,3 +1,16 @@
+# Note Backup now includes My Documents and My Memories — Web Update 268 — 2026-11-16
+
+- User asked to check and then extend the existing Note Backup / Restore so saved **My Documents** and **My Memories** are included with Notes.
+- Source inspection confirmed Notes are stored separately from My Documents/My Memories: Notes use the Diary local storage key, while both file collections are records in IndexedDB database `diary_me_features_v1` / object store `records`, with the actual file contents in each record's `fileBlob`.
+- Implemented a combined version-2 JSON backup containing Notes plus all My Documents and My Memories records. Each saved document/image Blob is serialized as a data URL so the actual file bytes travel with the backup. Restore converts those data URLs back to Blobs and puts records into the existing IndexedDB store. Existing records are preserved; duplicate IDs are skipped. Legacy Notes-only JSON backups remain supported. No other Me feature collections are added.
+- Pre-edit snapshot branch: `backup/before-notes-documents-memories-backup-restore-2026-11-16`. Feature branch: `feat/combined-notes-documents-memories-backup-2026-11-16`. PR #110 merged as `75ebc2503e1347f2e708dc939bc5f86047cdce25`.
+- `web-source/index.html` and `diary-web/index.html` were re-fetched after merge and are byte-identical, Git blob SHA `b7b1b6a7cc54a13433e9b2c52b8672dbaf9a289a` (495,264 UTF-8 bytes). Both inline JavaScript script blocks passed a JavaScript syntax parse check.
+- Live `latest.json` was advanced to **Web Update 268** and now advertises web SHA-256 `de3db1013e71d856f9cfd9983181b7cc5042c5c6a06d7f75eb77e05efd759632`. APK feed remains signed **1.0.181 / versionCode 180**; no APK, package identity, or signing identity was changed because this is a web-only HTML feature.
+- Repository/source/mirror/feed verification: PASS. **Physical phone backup-and-restore test is pending.** User must create a backup containing at least one note, one document and one memory image, then restore it and confirm all three are present and open correctly. Do not claim device-side PASS until the user confirms.
+- Preserve all existing notes, documents, memories, PIN/recovery data, reminders, app identity and signing identity. Do not overwrite existing records during restore.
+
+---
+
 # Note Lock PIN prompts larger, bold and 3D — 2026-11-16
 
 - User approved applying the same larger, bold, subtle 3D PIN-entry presentation used for Diary PIN prompts to the existing Note Lock.
