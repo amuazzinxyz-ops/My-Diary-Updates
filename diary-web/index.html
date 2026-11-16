@@ -1594,7 +1594,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    wrap.append(pin,confirmPin,recovery,save);privateLockerGate.appendChild(wrap);
    save.addEventListener('click',function(){
     var p=pin.value,n=privateLockerNormalizeRecovery(recovery.value);
-    if(!/^\\d{6}$/.test(p)){privateLockerMessage('6 digit PIN zaroori hai.',true);return;}
+    if(!/^[0-9]{6}$/.test(p)){privateLockerMessage('6 digit PIN zaroori hai.',true);return;}
     if(confirmPin.value!==p){privateLockerMessage('Dono PIN ek jaise nahi hain.',true);return;}
     if(n.length<2){privateLockerMessage('Forgot PIN ke liye Favourite Name likhein.',true);return;}
     save.disabled=true;
