@@ -333,7 +333,7 @@ jobs:
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary release versionName=1.0.172, versionCode=170")
+          print("Set Diary release versionName=1.0.172, versionCode=171")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -481,7 +481,7 @@ jobs:
           python3 -m json.tool latest.json >/dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add My-Diary.apk My-Diary-1.0.171.apk latest.json
+          git add My-Diary.apk My-Diary-1.0.172.apk latest.json
           git commit -m "Publish My Diary update 1.0.172"
           git push origin HEAD:main
       - name: Upload unsigned Release APK for private owner-side signing
