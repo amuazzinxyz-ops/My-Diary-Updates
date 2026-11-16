@@ -1,3 +1,15 @@
+# Diary PIN Tala and Set Diary Lock use the same unlock settings — Web Update 260 / APK 1.0.178 (2026-11-16)
+
+- User reported that the three unlock methods appeared after **Me → 🔐 Set Diary Lock**, but not after using **Me → 🔐 Diary PIN Tala**. Fixed the PIN setup/change path so its successful save opens the existing shared Diary Lock Settings. The Set Diary Lock path remains unchanged. Users can configure Pattern and Fingerprint there while PIN remains available as the third method; no method switch is required on the unlock screen.
+- PR #100 merged to main as `54b09f33d5650efc585ddfacf806088cc4ec00d9`. Exact pre-edit backup branch: `backup/before-diary-pin-tala-settings-2026-11-16`.
+- Only `web-source/index.html` routing and the approved APK build workflow/release metadata were changed. Existing PIN validation/recovery, Pattern storage, fingerprint bridge, Note Lock, saved notes/photos/documents, reminders, package identity and signing identity were preserved.
+- APK workflow run **#259** (ID `43853662512`) completed successfully. Source validation, JavaScript syntax check, debug build, signed Release build, signing-certificate continuity check, APK publication and artifact uploads all passed. Signed APK **1.0.178 / versionCode 177** is published at `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.178.apk`. Live `latest.json` SHA-256: `5fd2df8d71a1d30c11f19970b047a8ccb8979d803923c162a393895e080eb92b`. Signing certificate SHA-256 fingerprint matched the previously supplied release certificate: `23a4e93f3c7911dce18389ea583548700c6ad6a3759707f1cd222d07e2408b5a`.
+- Web publisher run **#265** (ID `43853662417`) completed successfully and published **Web Update 260**. Source and mirror are byte-identical, Git blob SHA `f8831197c45dcf564bcfe575f079b97a864709fd`, 427,912 characters. Live web SHA-256: `fa7faa9e81716ca9d48cacd4e038b551e9940c2aa189c9e7a3db6762cd53162e`.
+- Live `latest.json` now advertises My Diary 1.0.178/code 177 and Web Update 260 with the published checksums.
+- **Physical phone test pending.** User should use Me → Check for Update, then test both entry paths: Diary PIN Tala → set/change PIN → shared settings; Set Diary Lock → same settings; enable Pattern and Fingerprint as desired; lock Diary and verify Pattern, PIN and Fingerprint are simultaneously available. Confirm Note Lock and Forgot PIN recovery remain unchanged. Do not claim device-side PASS until user confirms.
+
+---
+
 # Diary unlock screen shows Pattern, PIN and Fingerprint together — Web Update 259 (2026-11-16)
 
 - User clarified that all three enabled unlock methods must be visible together after locking Diary through the existing Diary Lock flow: the 3×3 Pattern grid, PIN entry box, and Fingerprint button. No method should be hidden behind a mode switch.
