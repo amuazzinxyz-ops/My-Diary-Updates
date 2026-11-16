@@ -404,7 +404,7 @@ jobs:
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary release versionName=1.0.186, versionCode=184")
+          print("Set Diary release versionName=1.0.186, versionCode=185")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -427,9 +427,9 @@ jobs:
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
           if code != 185 or name != "1.0.186":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.186/184, found {name}/{code}")
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.186/185, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if feed_version not in ((183, "1.0.184"), (184, "1.0.186")):  
+          if feed_version not in ((184, "1.0.185"), (185, "1.0.186")):  
               raise SystemExit(f"BLOCKED: update feed is neither the installed baseline nor the already-published exact repair release: {feed_version}")
           print(f"PASS: package={package}, release={name}/{code}; feed state is approved: {feed_version}")
           PY
@@ -527,15 +527,15 @@ jobs:
           test -s "$APK"
           SHA256="$(sha256sum "$APK" | awk '{print $1}')"
           cp "$APK" /tmp/My-Diary-verified.apk
-          printf '1.0.186\n184\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.186\n185\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -f -B diary-publish-main origin/main
           python3 - <<'PY'
-          import json
+          import hashlib, json
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in ((183, "1.0.184"), (184, "1.0.185")): 
+          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in ((184, "1.0.185"), (185, "1.0.186")): 
               raise SystemExit(f"BLOCKED: live main feed is neither the installed baseline nor the exact repair release being republished: {feed_version}")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
@@ -545,6 +545,9 @@ jobs:
           meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.186.apk"
           meta["sha256"] = lines[2]
           meta["releaseNotes"] = "My Diary 1.0.186: Added Daily repeat only to Smart Reminder. Existing reminder settings and saved Diary data are preserved."
+          meta["webVersion"] = 276
+          meta["webSha256"] = hashlib.sha256(Path("web-source/index.html").read_bytes()).hexdigest()
+          meta["webReleaseNotes"] = "My Diary Web Update 276: Added Daily repeat only to Smart Reminder. Personal Calendar and all other Diary features remain unchanged."
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           cp /tmp/My-Diary-verified.apk My-Diary.apk
