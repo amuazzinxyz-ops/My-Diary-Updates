@@ -7,8 +7,8 @@
   "sha256": "432f48f716ece49e45147a8cbf5a4c47c406c834cd549f91e77040a9a0038cd0",
   "releaseNotes": "My Diary 1.0.177: Added optional 3×3 Pattern Lock to the existing Me → Set Diary Lock screen. Pattern is drawn and confirmed twice; the existing PIN fallback, Forgot PIN recovery and optional fingerprint unlock remain available. Existing Note Lock, saved notes, photos, documents, reminders, package identity and signing identity are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 258,
+  "webVersion": 259,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "f572a3238f08b03f801d42a573f407b49d9a97d58b05faf2393689562671ce8c",
+  "webSha256": "a88dd78ba3712ca4ac65956d816da49725d0ac89e59398550d9ac94ebbcdccac",
   "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
