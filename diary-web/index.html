@@ -1695,6 +1695,19 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    var tools=el('div',{style:'display:flex;gap:9px;flex-wrap:wrap;margin:0 0 12px;'});
    var patternBtn=el('button',{type:'button',style:'min-height:42px;padding:8px 12px;border:1px solid #9470bb;border-radius:11px;background:linear-gradient(145deg,#f4eaff,#ddc8f2);font-weight:900;color:#43245f;box-shadow:0 3px 0 #c4addb;'},'🔷 Pattern Set Karein');
    patternBtn.addEventListener('click',privateLockerSetupPattern);tools.appendChild(patternBtn);
+   privateLockerGet('meta','config').then(function(cfg){
+    if(cfg&&cfg.pattern){
+     patternBtn.textContent='🔷 Pattern Badlein';
+     var removePattern=el('button',{type:'button',style:'min-height:42px;padding:8px 12px;border:1px solid #c7a2a2;border-radius:11px;background:linear-gradient(145deg,#fff0f0,#f5dada);font-weight:900;color:#7a2222;'},'Pattern Hataayein');
+     removePattern.addEventListener('click',function(){if(!confirm('Pattern lock hata dein?'))return;cfg.pattern=null;privateLockerPut('meta',cfg).then(function(){privateLockerMessage('Pattern hata diya gaya.',false);privateLockerShowEntries();}).catch(function(e){privateLockerMessage(e.message||'Pattern nahi hata.',true);});});
+     tools.appendChild(removePattern);
+    }
+    if(cfg&&cfg.fingerprint){
+     var removeFp=el('button',{type:'button',style:'min-height:42px;padding:8px 12px;border:1px solid #c7a2a2;border-radius:11px;background:linear-gradient(145deg,#fff0f0,#f5dada);font-weight:900;color:#7a2222;'},'Fingerprint Hataayein');
+     removeFp.addEventListener('click',function(){try{if(window.DiaryAppActions&&typeof DiaryAppActions.disablePrivateLockerFingerprint==='function')DiaryAppActions.disablePrivateLockerFingerprint();}catch(e){}cfg.fingerprint=false;privateLockerPut('meta',cfg).then(function(){privateLockerMessage('Fingerprint lock hata diya gaya.',false);privateLockerShowEntries();}).catch(function(e){privateLockerMessage(e.message||'Fingerprint nahi hata.',true);});});
+     tools.appendChild(removeFp);
+    }
+   }).catch(function(){});
    if(window.DiaryAppActions&&typeof DiaryAppActions.enablePrivateLockerFingerprint==='function'&&typeof DiaryAppActions.canUsePrivateLockerBiometric==='function'&&DiaryAppActions.canUsePrivateLockerBiometric()){
     var fpBtn=el('button',{type:'button',style:'min-height:42px;padding:8px 12px;border:1px solid #9470bb;border-radius:11px;background:linear-gradient(145deg,#f4eaff,#ddc8f2);font-weight:900;color:#43245f;box-shadow:0 3px 0 #c4addb;'},'👆 Fingerprint Set Karein');
     fpBtn.addEventListener('click',function(){if(!privateLockerRawKey){privateLockerMessage('Locker key available nahi hai.',true);return;}window.__privateLockerFingerprintPending=true;try{DiaryAppActions.enablePrivateLockerFingerprint(privateLockerB64(privateLockerRawKey));}catch(e){window.__privateLockerFingerprintPending=false;privateLockerMessage('Fingerprint setup shuru nahi ho saka.',true);}});
