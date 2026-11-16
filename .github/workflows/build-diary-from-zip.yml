@@ -1,4 +1,5 @@
 # Approved release build: publish signed Diary 1.0.188/187 with Private Locker removed; preserve all other Diary features.
+# Release rebuild trigger after Private Locker removal merge; no workflow behavior changed.
 name: Build Diary APK from uploaded project ZIP
 
 on:
