@@ -1375,6 +1375,19 @@ for index, (old, new) in enumerate(pin_replacements):
         # The current published Diary has its own recovery-code flow; this legacy
         # window.prompt anchor belongs only to older HTML and is not required.
         print("PASS: legacy recovery prompt anchor is not used by the current Diary HTML.")
+    elif index == 2 and all(marker in html for marker in (
+        "name:'diary-master-pin'",
+        "inputmode:'numeric'",
+        "pattern:'[0-9]*'",
+        "maxlength:'4'",
+        "autocomplete:'new-password'",
+        "'data-lpignore':'true'",
+        "'data-1p-ignore':'true'",
+        "diary-master-pin-entry",
+    )):
+        # The current Diary HTML already defines its master PIN input with the
+        # autofill protections inline. Accept this updated form without replacing it.
+        print("PASS: current Diary master PIN input already has numeric/autofill protections.")
     else:
         raise SystemExit(f"Expected existing or already-updated Diary PIN input anchor: {old[:90]}")
 close_alignment_style = """
