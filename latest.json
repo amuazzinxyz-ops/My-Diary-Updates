@@ -7,8 +7,8 @@
   "sha256": "88d80f553e11ffb7475d358b8cb478e89670aed8f58a71dce37fe0d2a029a8df",
   "releaseNotes": "My Diary 1.0.172: Personal Calendar displays Gregorian dates only; Hijri dates are removed from calendar day cells and selected-date heading. Matching signed APK and Check for Update feed; existing calendar events, notes, documents, reminders and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 250,
+  "webVersion": 251,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "d6063a3660ed897ea80d55e57521605843ed52858e44022216637900e11dc1b4",
+  "webSha256": "4675b8e22e82564e4e03dc7b4e5237f380bec88ff2d682425e19569549452e8b",
   "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
