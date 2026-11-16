@@ -7,8 +7,8 @@
   "sha256": "0ffbc685979855a5190a324f1a91009056a6a57b64c95c04604c510037a5826b",
   "releaseNotes": "My Diary 1.0.181: Note Lock PIN prompts are larger, bold and raised for readability. Note Lock verification and recovery logic, saved data and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 269,
+  "webVersion": 270,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "207f45fb3dff2f06a2bb1c7fb93717f60790a59eb7b2fb518954c8946d7a0e14",
-  "webReleaseNotes": "My Diary Web Update 269: Note Backup now reads My Documents and My Memories files one at a time, shows progress and handles file-read errors instead of getting stuck. Combined Notes, Documents and Memories backup and restore remain supported."
+  "webReleaseNotes": "My Diary Web Update 270: Backup now detects IndexedDB open/read blocks and timeouts, displays whether My Documents or My Memories storage is being opened, and reports the actual read error instead of remaining indefinitely on the generic preparing message. Sequential file reading and combined Notes, Documents and Memories backup remain supported."
 }
