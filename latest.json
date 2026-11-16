@@ -7,8 +7,8 @@
   "sha256": "5fd2df8d71a1d30c11f19970b047a8ccb8979d803923c162a393895e080eb92b",
   "releaseNotes": "My Diary 1.0.178: Diary PIN Tala now opens the same Diary Lock Settings after PIN setup/change, so Pattern, PIN and Fingerprint options can be configured through either entry path. Existing Note Lock, PIN recovery, saved data, reminders, package identity and signing identity are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 260,
+  "webVersion": 261,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "fa7faa9e81716ca9d48cacd4e038b551e9940c2aa189c9e7a3db6762cd53162e",
+  "webSha256": "d2af5ea393889ca808b368e4ade9ddbd55a61ce741787cd4cbacfbd2876bdb4a",
   "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
