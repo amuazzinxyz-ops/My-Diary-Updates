@@ -1524,6 +1524,111 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    button.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();openMeFeature(item.id);});
    mePanel.appendChild(button);meFeatureButtons[item.id]=button;
   });
+
+  /* Private Locker: separate encrypted database; does not use or alter Notes/Diary locks. */
+  var privateLockerButton=el('button',{type:'button',class:'diary-me-feature-btn',id:'diaryPrivateLockerBtn'},'🔐 Private Locker');
+  mePanel.appendChild(privateLockerButton);
+  var privateLockerModal=el('section',{id:'diaryPrivateLockerModal',hidden:'hidden','aria-modal':'true','role':'dialog'});
+  privateLockerModal.style.cssText='position:fixed;inset:0;z-index:100000;background:#f7f2ff;overflow:auto;padding:calc(14px + env(safe-area-inset-top,0px)) 12px calc(24px + env(safe-area-inset-bottom,0px));';
+  var privateLockerCard=el('div',{style:'max-width:620px;margin:0 auto;background:#fff;border:2px solid #d4af37;border-radius:18px;padding:16px;box-shadow:0 4px 0 #9b7415,0 10px 24px #35204b22;'});
+  var privateLockerHead=el('div',{style:'display:flex;align-items:center;justify-content:space-between;gap:8px;'});
+  var privateLockerTitle=el('strong',{},'🔐 Private Locker');
+  var privateLockerClose=el('button',{type:'button'},'✕');
+  privateLockerHead.append(privateLockerTitle,privateLockerClose);
+  var privateLockerStatus=el('p',{style:'font-size:13px;color:#604b78;'});
+  var privateLockerGate=el('div',{});
+  var privateLockerContent=el('div',{});
+  privateLockerCard.append(privateLockerHead,privateLockerStatus,privateLockerGate,privateLockerContent);
+  privateLockerModal.appendChild(privateLockerCard);ov.appendChild(privateLockerModal);
+  var privateLockerDbPromise=null,privateLockerKey=null,privateLockerRecords=[];
+  function privateLockerDb(){
+   if(privateLockerDbPromise)return privateLockerDbPromise;
+   privateLockerDbPromise=new Promise(function(resolve,reject){
+    var req=indexedDB.open('diary_private_locker_v1',1);
+    req.onupgradeneeded=function(){var db=req.result;if(!db.objectStoreNames.contains('entries'))db.createObjectStore('entries',{keyPath:'id'});if(!db.objectStoreNames.contains('meta'))db.createObjectStore('meta',{keyPath:'id'});};
+    req.onsuccess=function(){var db=req.result;db.onversionchange=function(){db.close();};resolve(db);};
+    req.onerror=function(){privateLockerDbPromise=null;reject(req.error||new Error('Private Locker storage open failed'));};
+    req.onblocked=function(){privateLockerDbPromise=null;reject(new Error('Private Locker storage is busy. Close other Diary tabs and retry.'));};
+   }).catch(function(e){privateLockerDbPromise=null;throw e;});
+   return privateLockerDbPromise;
+  }
+  function privateLockerTx(store,mode,action){
+   return privateLockerDb().then(function(db){return new Promise(function(resolve,reject){var tx=db.transaction(store,mode),os=tx.objectStore(store),result;try{result=action(os);}catch(e){reject(e);return;}tx.oncomplete=function(){resolve(result&&result.result!==undefined?result.result:result);};tx.onerror=function(){reject(tx.error||new Error('Private Locker storage error'));};tx.onabort=function(){reject(tx.error||new Error('Private Locker storage aborted'));};});});
+  }
+  function privateLockerGet(store,id){return privateLockerTx(store,'readonly',function(os){return os.get(id);});}
+  function privateLockerAll(){return privateLockerTx('entries','readonly',function(os){return os.getAll();}).then(function(x){return x||[];});}
+  function privateLockerPut(store,value){return privateLockerTx(store,'readwrite',function(os){return os.put(value);});}
+  function privateLockerDelete(id){return privateLockerTx('entries','readwrite',function(os){return os.delete(id);});}
+  function privateLockerRandom(n){var b=new Uint8Array(n);crypto.getRandomValues(b);return b;}
+  function privateLockerB64(bytes){var s='';for(var i=0;i<bytes.length;i++)s+=String.fromCharCode(bytes[i]);return btoa(s);}
+  function privateLockerUnB64(value){return Uint8Array.from(atob(value),function(c){return c.charCodeAt(0);});}
+  function privateLockerDerive(pin,salt){return crypto.subtle.importKey('raw',new TextEncoder().encode(pin),'PBKDF2',false,['deriveKey']).then(function(base){return crypto.subtle.deriveKey({name:'PBKDF2',salt:salt,iterations:310000,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);});}
+  function privateLockerEncrypt(key,value){var iv=privateLockerRandom(12),data=new TextEncoder().encode(JSON.stringify(value));return crypto.subtle.encrypt({name:'AES-GCM',iv:iv},key,data).then(function(cipher){return {iv:privateLockerB64(iv),cipher:privateLockerB64(new Uint8Array(cipher))};});}
+  function privateLockerDecrypt(key,record){return crypto.subtle.decrypt({name:'AES-GCM',iv:privateLockerUnB64(record.iv)},key,privateLockerUnB64(record.cipher)).then(function(data){return JSON.parse(new TextDecoder().decode(data));});}
+  function privateLockerMessage(msg,bad){privateLockerStatus.textContent=msg;privateLockerStatus.style.color=bad?'#a11':'#17633c';}
+  function privateLockerOpen(){
+   mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');
+   privateLockerModal.hidden=false;privateLockerContent.replaceChildren();privateLockerGate.replaceChildren();privateLockerKey=null;privateLockerRecords=[];
+   privateLockerStatus.textContent='Aapki private jaankari alag encrypted storage mein rahegi.';
+   privateLockerGet('meta','config').then(function(config){
+    if(config){privateLockerGate.appendChild(privateLockerPinForm(false));}
+    else{privateLockerGate.appendChild(privateLockerPinForm(true));}
+   }).catch(function(e){privateLockerMessage('Private Locker nahi khul saka: '+(e.message||e),true);});
+  }
+  function privateLockerPinForm(isNew){
+   var wrap=el('div',{style:'display:grid;gap:10px;margin-top:12px;'});
+   var label=el('label',{},isNew?'Naya 6 digit Private Locker PIN banayein':'Apna Private Locker PIN daalein');
+   var pin=el('input',{type:'password',inputmode:'numeric',maxlength:'6',autocomplete:'off',placeholder:'6 digit PIN',style:'width:100%;height:48px;border:2px solid #c8b2df;border-radius:10px;padding:8px;text-align:center;font-size:22px;font-weight:800;letter-spacing:6px;'});
+   label.appendChild(pin);wrap.appendChild(label);
+   var confirm=null;if(isNew){var cLabel=el('label',{},'PIN dobara daalein');confirm=el('input',{type:'password',inputmode:'numeric',maxlength:'6',autocomplete:'off',placeholder:'PIN confirm karein',style:pin.style.cssText});cLabel.appendChild(confirm);wrap.appendChild(cLabel);}
+   var go=el('button',{type:'button',style:'min-height:46px;border:2px solid #b18b32;border-radius:10px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;color:#3d2b08;'},isNew?'🔐 Locker Set Karein':'🔓 Unlock Karein');
+   go.addEventListener('click',function(){
+    var value=pin.value;
+    if(!/^\d{6}$/.test(value)){privateLockerMessage('6 digit PIN zaroori hai.',true);return;}
+    if(isNew&&confirm.value!==value){privateLockerMessage('Dono PIN ek jaise nahi hain.',true);return;}
+    go.disabled=true;
+    privateLockerGet('meta','config').then(function(config){
+     if(isNew){
+      if(config)throw new Error('Locker pehle se set hai. Dobara kholein.');
+      var salt=privateLockerRandom(16);
+      return privateLockerDerive(value,salt).then(function(key){return privateLockerEncrypt(key,{check:'MY_DIARY_PRIVATE_LOCKER_V1'}).then(function(verifier){return privateLockerPut('meta',{id:'config',salt:privateLockerB64(salt),verifier:verifier}).then(function(){privateLockerKey=key;privateLockerMessage('Private Locker PIN set ho gaya. Aapka data encryption ke saath save hoga.',false);privateLockerShowEntries();});});});
+     }
+     if(!config)throw new Error('Private Locker abhi set nahi hai.');
+     return privateLockerDerive(value,privateLockerUnB64(config.salt)).then(function(key){return privateLockerDecrypt(key,config.verifier).then(function(check){if(!check||check.check!=='MY_DIARY_PRIVATE_LOCKER_V1')throw new Error('PIN galat hai.');privateLockerKey=key;privateLockerMessage('Locker unlock ho gaya.',false);privateLockerShowEntries();});});
+    }).catch(function(e){privateLockerMessage(e.message==='The operation failed for an operation-specific reason.'?'PIN galat hai.':(e.message||'Locker nahi khul saka.'),true);}).finally(function(){go.disabled=false;});
+   });
+   wrap.appendChild(go);return wrap;
+  }
+  function privateLockerShowEntries(){
+   privateLockerGate.replaceChildren();
+   var lock=el('button',{type:'button'},'🔒 Locker Band Karein');
+   lock.addEventListener('click',privateLockerCloseNow);privateLockerGate.appendChild(lock);
+   privateLockerContent.replaceChildren();
+   var form=el('form',{style:'display:grid;gap:9px;margin:14px 0;padding:12px;border:1px solid #d8c6eb;border-radius:12px;background:#fcfaff;'});
+   var heading=el('strong',{},'＋ Nayi Private Jaankari');
+   var name=el('input',{name:'name',required:'required',maxlength:'100',placeholder:'Naam (misal: Bank details)',style:'min-height:42px;padding:8px;border:1px solid #c7b4dd;border-radius:8px;'});
+   var type=el('select',{name:'type',style:'min-height:42px;padding:8px;border:1px solid #c7b4dd;border-radius:8px;'});
+   [['personal','Personal Details'],['number','Important Numbers'],['password','Passwords'],['document','Documents'],['photo','Private Photos'],['other','Other Information']].forEach(function(x){type.appendChild(el('option',{value:x[0]},x[1]));});
+   var details=el('textarea',{name:'details',rows:'4',maxlength:'12000',placeholder:'Private tafseel likhein…',style:'width:100%;padding:9px;border:1px solid #c7b4dd;border-radius:8px;resize:vertical;'});
+   var file=el('input',{name:'file',type:'file',accept:'image/*,.pdf,.txt,.doc,.docx'});
+   var save=el('button',{type:'submit',style:'min-height:44px;border:2px solid #b18b32;border-radius:10px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;'},'💾 Encrypted Save Karein');
+   form.append(heading,name,type,details,el('label',{},'Private Photo / Document (optional)'),file,save);
+   form.addEventListener('submit',function(e){e.preventDefault();if(!privateLockerKey)return;save.disabled=true;
+    var selected=file.files&&file.files[0];if(selected&&selected.size>10*1024*1024){privateLockerMessage('10 MB se chhoti file chunein.',true);save.disabled=false;return;}
+    var read=selected?new Promise(function(resolve,reject){var reader=new FileReader();reader.onload=function(){resolve(String(reader.result));};reader.onerror=function(){reject(new Error('File read nahi ho saki.'));};reader.readAsDataURL(selected);}):Promise.resolve('');
+    read.then(function(dataUrl){var record={id:'pl_'+Date.now()+'_'+privateLockerB64(privateLockerRandom(6)),name:name.value.trim(),type:type.value,details:details.value,fileName:selected?selected.name:'',fileType:selected?selected.type:'',fileData:dataUrl,created:Date.now()};return privateLockerEncrypt(privateLockerKey,record).then(function(encrypted){return privateLockerPut('entries',{id:record.id,iv:encrypted.iv,cipher:encrypted.cipher,created:record.created});});}).then(function(){form.reset();privateLockerMessage('Private entry encrypted hokar save ho gayi.',false);return privateLockerRenderList();}).catch(function(err){privateLockerMessage(err.message||'Save nahi hua.',true);}).finally(function(){save.disabled=false;});
+   });
+   privateLockerContent.appendChild(form);
+   var list=el('div',{style:'display:grid;gap:9px;'});
+   privateLockerContent.appendChild(list);
+   function render(){list.replaceChildren();return privateLockerAll().then(function(rows){return Promise.all(rows.map(function(row){return privateLockerDecrypt(privateLockerKey,row);}));}).then(function(records){privateLockerRecords=records;records.sort(function(a,b){return b.created-a.created;});if(!records.length){list.appendChild(el('p',{},'Abhi koi private entry save nahi hai.'));return;}records.forEach(function(record){var card=el('article',{style:'border:1px solid #d8c6eb;border-radius:11px;padding:11px;background:#fff;'});var top=el('div',{style:'display:flex;justify-content:space-between;align-items:center;gap:8px;'});top.append(el('strong',{},record.name),el('small',{},record.type));var body=el('p',{style:'white-space:pre-wrap;overflow-wrap:anywhere;'},record.details||'');card.append(top,body);if(record.fileData){var link=el('a',{href:record.fileData,download:record.fileName||'private-file'},'📎 '+(record.fileName||'Private file kholein'));link.style.cssText='display:inline-block;margin:6px 0;font-weight:800;';card.appendChild(link);}var del=el('button',{type:'button'},'🗑️ Hataayein');del.addEventListener('click',function(){if(!confirm('Is private entry ko hataa dein?'))return;privateLockerDelete(record.id).then(render).catch(function(err){privateLockerMessage(err.message,true);});});card.appendChild(del);list.appendChild(card);});});}
+   privateLockerRenderList=render;render().catch(function(err){privateLockerMessage(err.message||'Entries nahi khul sakin.',true);});
+  }
+  var privateLockerRenderList=function(){return Promise.resolve();};
+  function privateLockerCloseNow(){privateLockerKey=null;privateLockerRecords=[];privateLockerContent.replaceChildren();privateLockerGate.replaceChildren();privateLockerModal.hidden=true;privateLockerMessage('Locker band hai.',false);mePanel.hidden=false;meBtn.setAttribute('aria-expanded','true');panel.classList.add('diary-me-menu-open');}
+  privateLockerClose.addEventListener('click',privateLockerCloseNow);
+  privateLockerButton.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();privateLockerOpen();});
+
   var meFeatureDbPromise=null,meFeatureObjectUrls=[];
   function openMeFeatureDb(){
    if(!window.indexedDB)return Promise.reject(new Error('IndexedDB unavailable'));
