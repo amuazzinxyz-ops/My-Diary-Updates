@@ -145,7 +145,7 @@ native = r"""
                 prompt.authenticate(
                     CancellationSignal(),
                     mainExecutor,
-                    BiometricPrompt.AuthenticationCallback() {
+                    object : BiometricPrompt.AuthenticationCallback() {
                         override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult?) {
                             try {
                                 val authenticatedCipher = result?.cryptoObject?.cipher
