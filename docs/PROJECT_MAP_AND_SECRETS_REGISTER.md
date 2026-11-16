@@ -1,3 +1,13 @@
+# Private Locker PIN base64 decoding compatibility fix — 2026-11-16
+
+- User reported that entering the six-digit Private Locker PIN produced: `Failed to execute 'atob' on 'Window': The string to be decoded is not correctly encoded.`
+- Created a pre-edit snapshot branch: `backup/before-private-locker-base64-fix-2026-11-16`. Working branch: `fix/private-locker-base64-decode-2026-11-16`.
+- Updated only the Private Locker base64 decoder in `web-source/index.html` and `diary-web/index.html`: it now accepts standard and URL-safe Base64, whitespace and missing padding, plus already-byte-based values; it validates malformed values and shows a safe, specific error instead of exposing the browser `atob` exception.
+- No encrypted database records, PIN, salt, verifier, entries, photos, documents, or other app features are changed or reset. Do not clear app data or reset Private Locker as a troubleshooting step.
+- Source/mirror equality, JavaScript syntax, PR merge, Web Update publication/checksum, APK build and dual-route verification are pending. Do not tell the user to update until required publication checks pass. Physical-phone testing remains pending.
+
+---
+
 # Encrypted Private Locker added to Me button — Web Update 277 (2026-11-16)
 
 - User approved adding **🔐 Private Locker** in the Me button and explicitly instructed not to touch any other working feature.
