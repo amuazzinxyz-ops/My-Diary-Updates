@@ -1,10 +1,13 @@
-# Note Lock wrong-PIN popup beside the PIN box — Web Update 256 / APK 1.0.175 planned (2026-11-16)
+# Note Lock wrong-PIN popup beside the PIN box — Web Update 256 / APK 1.0.175 published (2026-11-16)
 
-- User clarified the desired appearance: for Note → 🔓 Tala Band Karein, a wrong PIN should show a clear, styled pop-up immediately beside/below the same PIN box, matching the Diary Lock message card style. Do not put the error text in the PIN placeholder and do not show a browser address/autofill suggestion or a separate browser alert.
+- User clarified the desired appearance: for Note → 🔓 Tala Band Karein, a wrong PIN should show a clear, styled pop-up immediately below the same PIN box, matching the Diary Lock message card style. The error is not placed in the PIN placeholder, and no browser address/autofill suggestion or separate browser alert is shown.
 - The pop-up is attached inside the same PIN modal, directly under the PIN input. It displays the localized wrong-PIN message and a close button; after closing it, the same PIN field is available for another attempt. A wrong PIN never disables or removes the Note Lock.
 - Exact source scope: only the shared four-digit PIN modal's wrong-validation feedback display. PIN validation, stored PIN/hash, recovery flow, and successful unlock/turn-off behavior remain as before.
-- Pre-edit backup branch: `backup/before-note-lock-nearby-popup-2026-11-16`. Working branch: `fix/note-lock-nearby-error-popup-2026-11-16`. Base is current main after verified 1.0.174 / Web Update 255 release. Static source checks pass; PR review, publisher, signed APK 1.0.175 / versionCode 174, certificate/SHA-256 and live feed verification are pending.
-- No PIN values/hashes, recovery codes, saved notes, photos, documents, reminders, events, app package/signing identity or unrelated features are intentionally changed. Do not ask user to update until web and signed APK release verification both pass. Physical phone test remains pending.
+- Pre-edit backup branch: `backup/before-note-lock-nearby-popup-2026-11-16`. Working branch: `fix/note-lock-nearby-error-popup-2026-11-16`. PR #96 merged as `727f39505592624fbb946fc9eb01124f71731590`.
+- Web publisher run `43823479697` succeeded and published Web Update 256. Source and mirror are byte-identical, Git blob SHA `a614cf530967e7980ca37b08597c0b11af6d8e14`; live web SHA-256 `b63677a757a7dcb1d2fac39b97013c5e06457534262b4c04dfcd211baf49bf64`.
+- APK build run `43823479626` completed successfully. Signed APK 1.0.175 / versionCode 174 is published at `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.175.apk`, size 2,029,100 bytes, SHA-256 `12b807e493c4d9cfcf5fb76619305db61841550ff8c50f94c0b2a5caa94f2932`. Independently downloaded signed workflow artifact has the same SHA-256; JAR signature verification succeeded. The build ran `apksigner verify --verbose --print-certs` and required the previously supplied signing-certificate fingerprint `23a4e93f3c7911dce18389ea583548700c6ad6a3759707f1cd222d07e2408b5a`; that release verification step passed.
+- Live `latest.json` confirms APK 1.0.175/code 174 and Web Update 256 with the matching APK/web checksums. Check for Update release is ready. Physical phone test remains pending; do not claim device-side testing.
+
 
 ---
 
