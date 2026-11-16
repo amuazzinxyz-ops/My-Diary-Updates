@@ -1,0 +1,14 @@
+{
+  "appName": "My Diary",
+  "packageName": "com.personal.diaryapp",
+  "versionCode": 184,
+  "versionName": "1.0.185",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.185.apk",
+  "sha256": "5288f3199401b8799e8aa03e7e9eaf346df27223b8c37a327fc25839470916a1",
+  "releaseNotes": "My Diary 1.0.185: Removed only the Solid Colour / Ek Rang Chunein choice from Note Cover Photo, Details Photo and Photo Lagayein menus. Choose Image and Gradient Colour remain. Saved photos and other Diary data are preserved.",
+  "minimumSupportedVersionCode": 1,
+  "webVersion": 275,
+  "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
+  "webSha256": "2d8f6fdd4aaa7b163ebcd8da2984444a62b6f439999e15a58667cd2476958e34",
+  "webReleaseNotes": "My Diary Web Update 275: Removed only the Solid Colour / Ek Rang Chunein option from Note Cover Photo, Details Photo and Photo Lagayein menus. Choose Image and Gradient Colour remain; saved photos and other Diary data are preserved."
+}
