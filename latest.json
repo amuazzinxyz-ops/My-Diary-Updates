@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 277,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "56e321d43a8dbf4fdd5ddf51a61dc74612b5d11502e5caaa55eb766c5aca04c3",
+  "webSha256": "790c21df692bfa9ed57ecc8eb4aed569cc3597b57d2191b02979d28c5398d50b",
   "webReleaseNotes": "My Diary Web Update 277: Added encrypted Private Locker in the Me menu. Existing Diary features and saved data remain unchanged."
 }
