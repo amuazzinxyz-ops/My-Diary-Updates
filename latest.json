@@ -7,8 +7,8 @@
   "sha256": "61bb8312ad4d08b6e21ed3653f7d663a58d99197800a788839abf60f511fb45a",
   "releaseNotes": "My Diary 1.0.180: Diary PIN Forgot PIN recovery now requires the saved Favourite Name before setting a new PIN. Pattern, Fingerprint, Note Lock, saved data, reminders, package identity and signing identity are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 263,
+  "webVersion": 264,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "b0e79b598927fb79d9fc8210066f1cab966562a4b873b009ab42c36dd7be7e21",
-  "webReleaseNotes": "My Diary: Diary PIN setup and Forgot PIN recovery dialogs now show clearer, larger headings, input boxes and validation messages. PIN/recovery behavior and saved data are preserved."
+  "webSha256": "3c4e833ca4ae4785a381afcfd98065875cc53452e3308c58d47c30f97c28b50e",
+  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
