@@ -1,4 +1,4 @@
-# Approved release build: publish signed Diary 1.0.186/184 with the scoped photo-menu correction and matching Check for Update feed.
+# Approved release build: publish signed Diary 1.0.186/185 with Daily repeat limited to Smart Reminder and matching Check for Update feed.
 name: Build Diary APK from uploaded project ZIP
 
 on:
