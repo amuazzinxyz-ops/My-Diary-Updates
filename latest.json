@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 279,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "cafc2a8d95ebe83a4e83d842b3eec9d46cc5da5b9f1a5d9fca24a1d37480452f",
+  "webSha256": "f41a6b22298946037dd88ac4d1d8c1067481a581a4f967ce709dde87a562dae8",
   "webReleaseNotes": "My Diary Web Update 279: Private Locker first-time PIN setup safely repaired. Existing encrypted entries are preserved; no other Diary feature is changed."
 }
