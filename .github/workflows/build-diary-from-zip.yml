@@ -331,7 +331,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved Diary release version 1.0.175 (versionCode 173)
+      - name: Set approved Diary release version 1.0.175 (versionCode 174)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
