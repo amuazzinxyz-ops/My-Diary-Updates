@@ -168,7 +168,7 @@ jobs:
               "patternPanel.appendChild(patternGrid);patternPanel.appendChild(patternStatus);",
               "pinArea.appendChild(el('div',{class:'diary-pattern-hint'},t('diaryPinEnter')));",
               "if(patternPanel)box.appendChild(patternPanel);",
-              "box.appendChild(pinArea);box.appendChild(recoveryStatus);if(fingerprintBtn)box.appendChild(fingerprintBtn);",
+              "box.appendChild(pinArea);box.appendChild(recoveryNameSubmit);box.appendChild(recoveryStatus);if(fingerprintBtn)box.appendChild(fingerprintBtn);",
               "localStorage.removeItem(DIARY_MASTER_PATTERN_KEY);",
           )
           missing = [item for item in required if item not in html]
