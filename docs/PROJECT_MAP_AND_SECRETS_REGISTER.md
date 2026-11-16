@@ -8,6 +8,7 @@
 - If a legacy v1 Locker configuration has no encrypted entries, the empty Locker can be initialized with the new v2 setup. If any encrypted rows exist with a legacy/incomplete config, the app blocks replacement and leaves those rows untouched; do not clear/reset app data.
 - Source and mirror are byte-identical at Git blob SHA `72df5db06d0bf8297f70b87f3c19fee542aa285b`. Both inline JavaScript blocks passed a V8 syntax parse (2/2). Compared the Diary Lock functions `configureDiaryPattern`, `forgotDiaryPin`, `showDiaryUnlock`, and `openDiaryLockSettings` against main; all four sections are byte-identical.
 - Native injection script adds the Private Locker-only Android Keystore biometric bridge; its Kotlin/Android build has not yet been run. Therefore no merge, web publish, APK build, or phone-test claim is authorized until the native generator, Kotlin compile, full release workflow, source/mirror, APK signing/hash, and live feed checks all pass. Keep PR #125 in Draft until verified.
+- The release workflow was updated to publish the native change as APK **1.0.187 / versionCode 186** and Web Update **280**, rather than reusing 1.0.186/185 or downgrading the live Web Update 279 feed. It now checks source/mirror byte identity and requires the new Private Locker biometric bridge markers before build. The workflow has not been run yet.
 - The user currently expects this work to continue. No Diary Lock code or behavior has been intentionally changed.
 
 ---
