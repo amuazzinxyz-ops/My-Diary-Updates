@@ -7,8 +7,8 @@
   "sha256": "6b84da1e545e0ec89108d0b74a4c7da03e823b03b375cf2c5f1aaa36d7c0b87d",
   "releaseNotes": "My Diary 1.0.181: Note Lock PIN prompts are larger, bold and raised for readability. Note Lock verification and recovery logic, saved data and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 266,
+  "webVersion": 267,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "39929fbfa9587bd445ab3fb5330170b2079c6665d38d06ee0dac187ba53d2281",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "My Diary Web Update 267: Note Lock PIN prompts are larger, bold and raised for readability. Note Lock verification and recovery remain unchanged."
 }
