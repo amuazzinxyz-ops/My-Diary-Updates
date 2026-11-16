@@ -926,6 +926,8 @@ private object DiaryReminderScheduler {
             putExtra("diary_reminder_snooze_used", snoozeUsed)
             putExtra("diary_reminder_ring_duration_seconds", ringDurationSeconds)
             putExtra("diary_reminder_ring_volume_percent", ringVolumePercent)
+            putExtra("diary_reminder_repeat_daily", repeatDaily)
+            putExtra("diary_reminder_daily_anchor_at", dailyAnchorAt)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_USER_ACTION)
         }
         val wakePending = PendingIntent.getActivity(context, code + 4, wakeIntent, pendingFlags())
@@ -1150,6 +1152,8 @@ class DiaryReminderWakeActivity : android.app.Activity() {
             putExtra("diary_reminder_snooze_used", intent?.getIntExtra("diary_reminder_snooze_used", 0) ?: 0)
             putExtra("diary_reminder_ring_duration_seconds", intent?.getIntExtra("diary_reminder_ring_duration_seconds", 30) ?: 30)
             putExtra("diary_reminder_ring_volume_percent", intent?.getIntExtra("diary_reminder_ring_volume_percent", 80) ?: 80)
+            putExtra("diary_reminder_repeat_daily", intent?.getBooleanExtra("diary_reminder_repeat_daily", false) ?: false)
+            putExtra("diary_reminder_daily_anchor_at", intent?.getLongExtra("diary_reminder_daily_anchor_at", 0L) ?: 0L)
         }
         sendBroadcast(actionIntent)
     }
