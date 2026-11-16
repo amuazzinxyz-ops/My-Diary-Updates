@@ -7,8 +7,8 @@
   "sha256": "6d96ac4725903da2b8e3047a305faba7ee2b1768909b50906cc099753d4ee5eb",
   "releaseNotes": "My Diary 1.0.186: Added Daily repeat only to Smart Reminder. Existing reminder settings and saved Diary data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 276,
+  "webVersion": 277,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "56e321d43a8dbf4fdd5ddf51a61dc74612b5d11502e5caaa55eb766c5aca04c3",
-  "webReleaseNotes": "My Diary Web Update 276: Added Daily repeat only to Smart Reminder. Personal Calendar and all other Diary features remain unchanged."
+  "webReleaseNotes": "My Diary Web Update 277: Added encrypted Private Locker in the Me menu. Existing Diary features and saved data remain unchanged."
 }
