@@ -4,7 +4,7 @@
   "versionCode": 176,
   "versionName": "1.0.177",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.177.apk",
-  "sha256": "432f48f716ece49e45147a8cbf5a4c47c406c834cd549f91e77040a9a0038cd0",
+  "sha256": "dcbd99683cd30e053bf147829bcbd3fd2b7f14887235c743a57374892b181cbd",
   "releaseNotes": "My Diary 1.0.177: Added optional 3×3 Pattern Lock to the existing Me → Set Diary Lock screen. Pattern is drawn and confirmed twice; the existing PIN fallback, Forgot PIN recovery and optional fingerprint unlock remain available. Existing Note Lock, saved notes, photos, documents, reminders, package identity and signing identity are preserved.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 259,
