@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 278,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "790c21df692bfa9ed57ecc8eb4aed569cc3597b57d2191b02979d28c5398d50b",
+  "webSha256": "cafc2a8d95ebe83a4e83d842b3eec9d46cc5da5b9f1a5d9fca24a1d37480452f",
   "webReleaseNotes": "My Diary Web Update 278: Fixed Private Locker PIN Base64 decoding compatibility. Existing encrypted Locker data and all other Diary features remain unchanged."
 }
