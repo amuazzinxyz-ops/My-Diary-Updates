@@ -1,3 +1,16 @@
+# Calendar Hijri labels localized for all app languages — Web Update 249 published (2026-11-16)
+
+- User asked to make the Tareekh/Calendar Hijri date display follow every supported app language.
+- Exact pre-edit backup branch: `backup/before-calendar-hijri-all-language-fix-2026-11-16`, created from main before editing.
+- Minimal source change in `web-source/index.html`: `calendarHijriLabel(date, locale)` now uses the active calendar locale with the Islamic Umm al-Qura calendar and full month names; it falls back to the locale's generic Islamic calendar and then Gregorian locale formatting if needed. Both each calendar day and the selected-date heading pass the active locale.
+- Supported locale mapping retained: Roman English `en-IN`, English `en`, Hindi `hi-IN`, Urdu `ur-PK`, Arabic `ar`, Bengali `bn-BD`, Gujarati `gu-IN`, Marathi `mr-IN`, Tamil `ta-IN`, Telugu `te-IN`.
+- Source commit: `c87c811894e5be3f6bd6d30f99b6e1fcde553140`. GitHub Actions web publish run `43810757619` completed successfully.
+- Published Web Update 249. Source and mirror `web-source/index.html` / `diary-web/index.html` are byte-identical, both Git blob SHA `a7c8b01c1f1c29b35436f536f124ce3a0fcbf38f`, 406,813 characters. Live feed SHA-256: `cc29b2c5c2688b5105d5544c41192ec7bd1e439167fd3b42c6e53d7dcc0fd86a`.
+- Live APK feed remains 1.0.171 / versionCode 170; this is a web-only update, no APK was published or changed. User-side phone display verification is still pending.
+- No calendar event recurrence, saved notes, records, PIN/recovery, reminders, photos, app package, or signing identity was changed.
+
+---
+
 # Check-for-Update version mismatch — signed test candidate built (2026-11-15)
 
 - User reported the installed Diary app says it is already newer than the update channel. Live feed baseline at investigation was APK 1.0.163 / versionCode 162, while the user's installed test candidate was reported as 1.0.166 / code 165. This is expected when a higher-version test APK is installed but the production feed remains older.
