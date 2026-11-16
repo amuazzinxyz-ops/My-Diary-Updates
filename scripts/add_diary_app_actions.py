@@ -1210,7 +1210,7 @@ missing_permissions = [p for p in permissions if 'android:name="' + p + '"' not 
 if missing_permissions:
     p=ms.find(">", ms.find("<manifest"))
     if p<0: raise SystemExit("Manifest root tag missing")
-    block="\n"+"\\n".join('    <uses-permission android:name="' + p + '" />' for p in missing_permissions)
+    block="\n"+"\n".join('    <uses-permission android:name="' + p + '" />' for p in missing_permissions)
     ms=ms[:p+1]+block+ms[p+1:]
     manifest.write_text(ms,encoding="utf-8")
 
