@@ -7,8 +7,8 @@
   "sha256": "d125f4ea3e2e12a34dc9b2da25e4e3a4edce9d2f155a2ef8d7304c38ba603de2",
   "releaseNotes": "My Diary 1.0.184: Removed the Solid Colour / Ek Rang Chunein option only from Cover Photo and Detail Photo menus. Other photo choices and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 274,
+  "webVersion": 275,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "2d8f6fdd4aaa7b163ebcd8da2984444a62b6f439999e15a58667cd2476958e34",
-  "webReleaseNotes": "My Diary Web Update 274: Removed only the Solid Colour / Ek Rang Chunein choice from Note ka Cover Photo and Tafseel ki Photo. Choose Image and Gradient Colour remain; the separate Photo menu is unchanged."
+  "webReleaseNotes": "My Diary Web Update 275: Removed only the Solid Colour / Ek Rang Chunein option from Note Cover Photo, Details Photo and Photo Lagayein menus. Choose Image and Gradient Colour remain; saved photos and other Diary data are preserved."
 }
