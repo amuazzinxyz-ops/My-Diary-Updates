@@ -1,3 +1,16 @@
+# Me menu: hide Calendar view only — Web Update 253 / APK 1.0.173 planned (2026-11-16)
+
+- User clarified the requested item is option 1: the separate **Calendar** view button in the Me menu. The **📅 Personal Calendar** feature must remain visible and functional.
+- This change is based on the current main source (Web Update 252 / APK 1.0.172), not the older Web248 source. Existing current features and fixes are retained.
+- Backup branch before editing: `backup/before-remove-calendar-from-me-2026-11-16`. Working branch: `fix/remove-calendar-view-entry-web253-2026-11-16`. Current main base commit: `2153b16aea9e8fe12ac470986c3c2d51849ee70c`.
+- Exact UI change: the one Me-menu append statement for `diaryCalendarBtn` and `diaryCalendarPanel` is removed. The calendar view's supporting code is left dormant, not deleted. The separate `Personal Calendar` Me feature (`meFeatureTypes` item with `key:'personalCalendar'`) remains untouched.
+- Calendar storage, saved calendar records, reminders, events, Diary notes/photos/documents, PIN/recovery, app package/signing identity and other Me features are not deleted or migrated.
+- Source and mirror are byte-identical after the edit; blob SHA `066ccc04f265393aafed9f5bc7ea852820cee851`. Build workflow is advanced to APK 1.0.173 / versionCode 172; it accepts only current feed 1.0.172/171 or the exact new 1.0.173/172 release.
+- Static validation and source/mirror/feed/build checks are pending final PR review. Do not tell the user to update until the web publisher, signed APK build, signing-certificate continuity, APK SHA-256, live latest.json, and mirror checks all pass.
+- Physical phone test remains pending and must not be claimed.
+
+---
+
 # Personal Calendar shows Gregorian dates only — Web Update 252 and APK 1.0.172 published (2026-11-16)
 
 - User clarified that the 📆 Tareekh/Personal Calendar must show only the original Gregorian date; no Hijri date should appear inside day cells or beside the selected date.
