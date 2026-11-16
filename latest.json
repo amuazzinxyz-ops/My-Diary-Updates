@@ -7,8 +7,8 @@
   "sha256": "6d71b4ac55693d2adb3141ea0f4be72ec0c1bdf1592be5ea1832e44d4ea6fd75",
   "releaseNotes": "My Diary 1.0.183: Note Backup and Restore messages are back in the original in-section status display. Backup data and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 272,
+  "webVersion": 273,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "343e8d46ddee84b981d50409a177df1a83b3d47670dcc8269eaee43e0ee34674",
-  "webReleaseNotes": "My Diary Web Update 272: Note Backup and Restore progress, completion and error messages now appear in a raised 3D popup card with an × close control. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "My Diary Web Update 273: Note Backup and Restore messages are restored to the original status display inside the Notes panel. No Backup/Restore data handling changed."
 }
