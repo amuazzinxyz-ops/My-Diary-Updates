@@ -811,7 +811,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  var DIARY_MASTER_PATTERN_KEY='diary_diary_master_pattern_v1';
  var DIARY_RECOVERY_NAME_SALT_KEY='diary_diary_recovery_name_salt_v1';
  var DIARY_RECOVERY_NAME_HASH_KEY='diary_diary_recovery_name_hash_v1';
- function normalizeDiaryFavouriteName(value){return String(value||'').trim().replace(/\\s+/g,' ').toUpperCase();}
+ function normalizeDiaryFavouriteName(value){return String(value||'').trim().replace(/\s+/g,' ').toUpperCase();}
  function diaryRecoveryPending(){try{return localStorage.getItem('diaryDiaryMustChooseNewPinAfterRecovery')==='1'||sessionStorage.getItem('diaryDiaryMustChooseNewPinAfterRecovery')==='1';}catch(e){return false;}}
  function saveDiaryFavouriteName(value){var normalized=normalizeDiaryFavouriteName(value);if(!normalized)return Promise.reject(new Error('empty recovery name'));if(!window.crypto||!crypto.getRandomValues||!crypto.subtle)return Promise.reject(new Error('crypto unavailable'));var bytes=new Uint8Array(16);crypto.getRandomValues(bytes);var salt=Array.from(bytes).map(function(b){return b.toString(16).padStart(2,'0')}).join('');return pinDigest(normalized,salt).then(function(hash){return {salt:salt,hash:hash};});}
  function verifyDiaryFavouriteName(value){var normalized=normalizeDiaryFavouriteName(value),salt=localStorage.getItem(DIARY_RECOVERY_NAME_SALT_KEY)||'',saved=localStorage.getItem(DIARY_RECOVERY_NAME_HASH_KEY)||'';if(!normalized||!salt||!saved)return Promise.resolve(false);return pinDigest(normalized,salt).then(function(hash){return hash===saved;});}
