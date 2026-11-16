@@ -3620,3 +3620,11 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Implementation is scoped by the existing `kind` argument in `attachDiaryColourChooser`: Cover and Detail append only Choose Image + Gradient Colour; other kinds retain all three choices.
 - Snapshot branch: `backup/before-photo-color-name-button-removal-2026-11-16`. Feature branch: `fix/remove-photo-color-name-buttons-2026-11-16`.
 - Source/mirror equality, syntax, PR merge, Web Update publication, signed APK build/publication, and both delivery-route checks are pending. Do not tell the user to update until all required checks pass. Physical phone test remains pending.
+
+
+# Remove “Ek Rang Chunein” from Photo Lagayein menu — release pending (2026-11-16)
+
+- User expanded the earlier photo-menu request and explicitly asked to remove the **Solid Colour / Ek Rang Chunein** option from the separate generic **🖼️ Photo Lagayein** menu as well.
+- The generic Photo menu now presents only **Choose Image** and **Gradient Colour**, matching the two earlier editor menus (Note ka Cover Photo and Tafseel ki Photo). The existing image-selection and gradient-colour handlers remain; only the Solid Colour choice is omitted from the visible menu.
+- Snapshot branch: `backup/before-photo-menu-solid-colour-removal-2026-11-16`. Feature branch: `fix/remove-photo-menu-solid-colour-2026-11-16`.
+- This follow-up does not alter photo attachment/storage, existing saved images, cover/detail behaviour, note content, PIN/locks/recovery, reminders, package identity or signing identity. Release checks and dual APK + Check for Update publication are pending; do not tell the user to update until both delivery routes and signing/checksum verification pass. Physical phone test remains pending.
