@@ -4,7 +4,7 @@
   "versionCode": 170,
   "versionName": "1.0.171",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.171.apk",
-  "sha256": "11211098cc351fa3b75f87922fdaa65f2535ddfb9f73f97499f1f2d2ab51f41d",
+  "sha256": "8f7db5312f585631f7dbbcebd2c8d873d4301f84e87f175d0f6b164eefd4e4db",
   "releaseNotes": "My Diary 1.0.171: Diary Lock not-set message appears in the same centered in-app popup box, not in a separate status area or browser alert. Matching signed APK and Check for Update feed; existing documents, saved images, notes, PIN, reminders and app identity are preserved.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 250,
