@@ -795,8 +795,10 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 <style id="diary-pattern-lock-style">
 .diary-pattern-panel{margin:8px auto 12px;text-align:center}
 .diary-pattern-hint{font-size:13px;line-height:1.4;font-weight:800;color:#654b83;margin:7px 0}
-.diary-pattern-grid{width:min(252px,100%);margin:12px auto 8px;display:grid;grid-template-columns:repeat(3,1fr);gap:13px;touch-action:none;user-select:none;-webkit-user-select:none}
-.diary-pattern-dot{width:54px;height:54px;justify-self:center;align-self:center;border:3px solid #9273b5;border-radius:50%;background:linear-gradient(145deg,#fff,#eee5ff);box-shadow:inset 0 2px 0 #fff,0 3px 0 #c6b2df;touch-action:none;padding:0;outline:none}
+.diary-pattern-grid{position:relative;width:min(252px,100%);margin:12px auto 8px;display:grid;grid-template-columns:repeat(3,1fr);gap:13px;touch-action:none;user-select:none;-webkit-user-select:none}
+.diary-pattern-lines{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:0}
+.diary-pattern-lines polyline{fill:none;stroke:#16856b;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.diary-pattern-dot{position:relative;z-index:1;width:54px;height:54px;justify-self:center;align-self:center;border:3px solid #9273b5;border-radius:50%;background:linear-gradient(145deg,#fff,#eee5ff);box-shadow:inset 0 2px 0 #fff,0 3px 0 #c6b2df;touch-action:none;padding:0;outline:none}
 .diary-pattern-dot.diary-pattern-active{background:linear-gradient(145deg,#b6f1d8,#16856b);border-color:#277d68;box-shadow:inset 0 2px 0 #e9fff5,0 3px 0 #075846;transform:scale(1.06)}
 .diary-pattern-status{min-height:20px;margin:6px 0;color:#b42318;font-size:13px;font-weight:900;text-align:center}
 #diaryDiaryPatternModeBtn{display:block;width:100%;padding:10px 12px;margin:7px 0;border:2px solid #8b5acb;border-radius:10px;background:linear-gradient(145deg,#c4a2ff,#7540c2);color:#fff;font-weight:900;box-shadow:0 3px 0 #54258f}
@@ -2186,9 +2188,12 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  }
  function makeDiaryPatternGrid(onComplete,onShort){
   var wrap=el('div',{class:'diary-pattern-grid','aria-label':'3 by 3 pattern grid'});
+  var svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('class','diary-pattern-lines');svg.setAttribute('viewBox','0 0 100 100');svg.setAttribute('aria-hidden','true');
+  var line=document.createElementNS('http://www.w3.org/2000/svg','polyline');svg.appendChild(line);wrap.appendChild(svg);
   var dots=[],sequence=[],drawing=false,pointerId=null;
-  function clear(){dots.forEach(function(dot){dot.classList.remove('diary-pattern-active');});sequence=[];drawing=false;pointerId=null;}
-  function add(id){if(id<1||id>9||sequence.indexOf(id)!==-1)return;sequence.push(id);dots[id-1].classList.add('diary-pattern-active');}
+  function redraw(){var points=sequence.map(function(id){var n=id-1;return (16.67+(n%3)*33.33)+','+(16.67+Math.floor(n/3)*33.33);}).join(' ');line.setAttribute('points',points);}
+  function clear(){dots.forEach(function(dot){dot.classList.remove('diary-pattern-active');});sequence=[];redraw();drawing=false;pointerId=null;}
+  function add(id){if(id<1||id>9||sequence.indexOf(id)!==-1)return;sequence.push(id);dots[id-1].classList.add('diary-pattern-active');redraw();}
   function addAt(x,y){var target=document.elementFromPoint(x,y),dot=target&&target.closest?target.closest('[data-pattern-dot]'):null;if(dot&&wrap.contains(dot))add(Number(dot.getAttribute('data-pattern-dot')));}
   for(var i=1;i<=9;i++){var dot=el('button',{type:'button',class:'diary-pattern-dot','data-pattern-dot':String(i),'aria-label':'Dot '+i});dots.push(dot);wrap.appendChild(dot);}
   wrap.addEventListener('pointerdown',function(e){var target=e.target&&e.target.closest?e.target.closest('[data-pattern-dot]'):null;if(!target||!wrap.contains(target))return;e.preventDefault();clear();drawing=true;pointerId=e.pointerId;try{wrap.setPointerCapture(e.pointerId);}catch(err){}add(Number(target.getAttribute('data-pattern-dot')));});
