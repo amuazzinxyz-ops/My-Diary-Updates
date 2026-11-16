@@ -1,9 +1,19 @@
+# Diary PIN entry prompts larger, bold and subtle 3D — 2026-11-16
+
+- User requested that the text/names shown inside all Diary PIN-entry boxes be slightly larger, bold, and have a subtle 3D effect.
+- Changed only the shared `.diary-master-pin-entry` presentation rules used by Diary PIN setup, Diary Lock Off verification, and Diary unlock/Forgot PIN recovery. Placeholder prompts now use a responsive 13–17px bold font with a subtle text shadow; PIN-entry boxes/digits get a raised gold-edge shadow and bold text treatment while retaining centered input and the existing responsive fit behavior.
+- No PIN/recovery logic, Favourite Name verification, Pattern/Fingerprint behavior, Note Lock, saved notes/photos/documents, reminders, app identity or signing identity was changed.
+- Exact pre-edit source and register snapshot: `backup/before-diary-pin-prompt-3d-2026-11-16`. Working branch: `fix/diary-pin-prompt-3d-2026-11-16`. Source edit commit: `fe9e77b777147bab944f83a95d07814dc4c8e194`.
+- PR merge, source/mirror equality, web checksum/version publication, APK build/publication, and phone-side visual testing remain pending. Do not tell the user to update until publication verification is complete; do not claim device PASS until the user tests it.
+
+---
+
 # Forgot PIN: show the correct PIN prompt after Favourite Name — 2026-11-16
 
 - User reported that after entering the correct Favourite Name during Forgot PIN, the next PIN field still displayed the Favourite Name prompt. User wants the next field to clearly ask for the new PIN.
 - Fixed only the Diary unlock/recovery dialog stage placeholders: after Favourite Name verifies, the field now says `4 ankon ka PIN daalein` (localized through the existing `pinPrompt` translation); when confirming, it says `PIN dobara daalein`; on mismatch/storage retry it returns to the PIN-entry prompt. The heading continues to identify the current stage.
 - Wrong Favourite Name still retains the Favourite Name prompt and existing verification/error behavior. No PIN/recovery logic, Favourite Name hash, Pattern/Fingerprint, Note Lock, saved notes/photos/documents, reminders, package identity or signing identity was intentionally changed.
-- Exact pre-edit source/register backup branch: `backup/before-forgot-pin-placeholder-2026-11-16`. Working branch: `fix/forgot-pin-new-pin-placeholder-2026-11-16`. Source edit commit: `87c8b2a2a69077453da6012d550a4a23adcf74a7`. PR and publication verification pending.
+- Exact pre-edit source/register backup branch: `backup/before-forgot-pin-placeholder-2026-11-16`. Working branch: `fix/forgot-pin-new-pin-placeholder-2026-11-16`. Source edit commit: `87c8b2a2a69077453da6012d550a4a23adcf74a7`. PR #107 merged as `63766e6d534468bf7fc06c73b2cea004ef793289`; Web Update 265 is live with SHA-256 `61cd433d77a1b718f68aebf2e49e202b20cba370fb9ee5e3d48538202f1c0244`. APK build run `43872194753` status must be verified separately.
 - The preceding PIN-field-fit Web Update 264 is live. APK workflow run #264 (`43870906130`) completed successfully after build-guard repair; APK feed remains 1.0.180 / versionCode 179 with SHA-256 `c667b6734e17de6bd33ea488a749e0facb5c4726b711e5a76108ca16d3cf4baa`.
 - Physical phone verification of this prompt correction is pending; do not claim device-side PASS until the user tests it.
 
