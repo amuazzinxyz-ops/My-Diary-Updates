@@ -1,3 +1,14 @@
+# Diary PIN input text fits inside the box — 2026-11-16
+
+- User requested that text shown inside PIN entry boxes fit the box, remain readable, and not be clipped.
+- Scoped the CSS/field adjustment to Diary master PIN setup, Diary Lock Off PIN verification, and Diary unlock/recovery PIN input. Placeholder text now uses a responsive smaller font with normal letter spacing; the input is constrained to its parent width with border-box sizing; entered PIN digits remain centered and spaced.
+- No PIN/recovery logic, Favourite Name verification, Pattern/Fingerprint behavior, Note Lock, notes/photos/documents/reminders, app package identity, or signing identity was intentionally changed.
+- Exact pre-edit backup branch: `backup/before-diary-pin-input-fit-2026-11-16`. Working branch: `fix/diary-pin-input-fit-2026-11-16`. PR #105: https://github.com/amuazzinxyz-ops/My-Diary-Updates/pull/105
+- Source change commit: `1a99774a32cde4ca64d7a1f9e44ccc99f9a1cfff`; changed only the three Diary master PIN input fields and added scoped placeholder/input CSS. PR review/merge and web publisher verification are pending.
+- Physical phone test is pending. Do not claim the text is confirmed on-device until the user checks the updated app and confirms.
+
+---
+
 # Diary PIN setup and Forgot PIN text readability — Web Update 263 / APK 1.0.180 (2026-11-16)
 
 - User requested that all text shown while creating/changing the Diary PIN and during Forgot PIN recovery be clearly readable, including headings, instructions, input placeholders, Favourite Name text, wrong-answer messages, and validation/storage errors.
