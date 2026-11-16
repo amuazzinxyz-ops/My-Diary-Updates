@@ -2313,9 +2313,9 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   function finish(){
    saveDiaryFavouriteName(input.value).then(function(record){
     try{
-     localStorage.setItem(DIARY_MASTER_PIN_KEY,newPin);
      localStorage.setItem(DIARY_RECOVERY_NAME_SALT_KEY,record.salt);
      localStorage.setItem(DIARY_RECOVERY_NAME_HASH_KEY,record.hash);
+     localStorage.setItem(DIARY_MASTER_PIN_KEY,newPin);
      if(shade.parentNode)shade.parentNode.removeChild(shade);
      var st=document.getElementById('diaryMyNotesStatus');if(st)st.textContent=t('diaryPinSet');
      if(showSettingsAfterSave)openDiaryLockSettings();
