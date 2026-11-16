@@ -891,7 +891,7 @@ private object DiaryReminderScheduler {
         }
     }
 
-    fun showNotification(context: Context, id: String, title: String, details: String, soundUri: String, snoozeMinutes: Int, snoozeLimit: Int, snoozeUsed: Int, ringDurationSeconds: Int, ringVolumePercent: Int) {
+    fun showNotification(context: Context, id: String, title: String, details: String, soundUri: String, snoozeMinutes: Int, snoozeLimit: Int, snoozeUsed: Int, ringDurationSeconds: Int, ringVolumePercent: Int, repeatDaily: Boolean, dailyAnchorAt: Long) {
         if (Build.VERSION.SDK_INT >= 33 &&
             context.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) return
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -941,7 +941,9 @@ private object DiaryReminderScheduler {
                 putExtra("diary_reminder_snooze_limit", snoozeLimit)
                 putExtra("diary_reminder_snooze_used", snoozeUsed)
                 putExtra("diary_reminder_ring_duration_seconds", ringDurationSeconds)
-            putExtra("diary_reminder_ring_volume_percent", ringVolumePercent)
+                putExtra("diary_reminder_ring_volume_percent", ringVolumePercent)
+                putExtra("diary_reminder_repeat_daily", repeatDaily)
+                putExtra("diary_reminder_daily_anchor_at", dailyAnchorAt)
             }
             return PendingIntent.getBroadcast(context, code + if (action == ACTION_SNOOZE) 2 else 3, actionIntent, pendingFlags())
         }
@@ -1002,7 +1004,7 @@ class DiaryReminderReceiver : BroadcastReceiver() {
         } else {
             DiaryReminderScheduler.remove(context, id)
         }
-        DiaryReminderScheduler.showNotification(context, id, title, details, soundUri, snoozeMinutes, snoozeLimit, snoozeUsed, ringDurationSeconds, ringVolumePercent)
+        DiaryReminderScheduler.showNotification(context, id, title, details, soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, repeatDaily, dailyAnchorAt)
         DiaryReminderSoundService.start(context, soundUri, ringDurationSeconds, ringVolumePercent)
     }
 }
