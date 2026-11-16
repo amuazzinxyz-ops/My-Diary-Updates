@@ -1,3 +1,17 @@
+# Private Locker — writing-only editor, search, Diary Lock-style recovery and biometric work (DRAFT / NOT PUBLISHED — 2026-11-17)
+
+- User asked that Private Locker become a simple private writing area (no document/photo attachments or categories), allow saved text to be edited later, provide a My Documents-style search bar, auto-open after a correct PIN or Pattern (no Unlock button), include Forgot PIN recovery using a Favourite Name, and support fingerprint unlock with raised 3D styling. User explicitly instructed that Diary Lock itself must remain untouched.
+- Work is isolated on branch `feat/private-locker-diary-lock-match-2026-11-17`; pre-edit snapshot branch is `backup/before-private-locker-diary-lock-match-2026-11-17`. Draft PR #125 is open. This work is not merged or published.
+- Private Locker UI now has only a title and text editor, encrypted save, edit-in-place, search across title and body (multiword matching), and 3D styling. The former category and document/photo attachment controls are removed from the new Locker UI.
+- New version-2 Locker crypto design creates a random 256-bit master key. Text records are encrypted with that master key; the master key is separately wrapped with a PBKDF2-SHA-256-derived key for the six-digit PIN and Favourite Name recovery answer. Pattern setup/unlock uses a separate wrapper. Correct PIN auto-opens on six digits; correct Pattern auto-opens. Forgot PIN unwraps using Favourite Name, then requires confirming a new six-digit PIN while retaining the recovery wrapper.
+- Fingerprint integration is isolated from Diary Lock: Android Keystore AES-GCM key requires per-use biometric authentication and wraps the random Locker master key; a separate JavaScript callback `window.__privateLockerFingerprintResult` handles only Private Locker. Existing Diary fingerprint callback and bridge behavior remain unchanged. Fingerprint control is exposed only when Android API 28+ has an enrolled fingerprint and the native bridge is present.
+- If a legacy v1 Locker configuration has no encrypted entries, the empty Locker can be initialized with the new v2 setup. If any encrypted rows exist with a legacy/incomplete config, the app blocks replacement and leaves those rows untouched; do not clear/reset app data.
+- Source and mirror are byte-identical at Git blob SHA `72df5db06d0bf8297f70b87f3c19fee542aa285b`. Both inline JavaScript blocks passed a V8 syntax parse (2/2). Compared the Diary Lock functions `configureDiaryPattern`, `forgotDiaryPin`, `showDiaryUnlock`, and `openDiaryLockSettings` against main; all four sections are byte-identical.
+- Native injection script adds the Private Locker-only Android Keystore biometric bridge; its Kotlin/Android build has not yet been run. Therefore no merge, web publish, APK build, or phone-test claim is authorized until the native generator, Kotlin compile, full release workflow, source/mirror, APK signing/hash, and live feed checks all pass. Keep PR #125 in Draft until verified.
+- The user currently expects this work to continue. No Diary Lock code or behavior has been intentionally changed.
+
+---
+
 # Private Locker first-time PIN setup repair — Web Update 279 / APK 1.0.186 (2026-11-17)
 
 - User clarified that they had **never created a Private Locker PIN**; the first open nevertheless showed a PIN-entry screen and then an encrypted-data-format error. Scope was explicitly limited to this Private Locker setup problem; no other Diary function was to be changed.
