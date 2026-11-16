@@ -2410,7 +2410,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   input.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();submitPinStage();}});
   var patternSaved='',patternEnabled=false;
   try{patternSaved=localStorage.getItem(DIARY_MASTER_PATTERN_KEY)||'';patternEnabled=validDiaryPattern(patternSaved)&&sessionStorage.getItem('diaryDiaryMustChooseNewPinAfterRecovery')!=='1';}catch(e){}
-  var patternPanel=null,patternStatus=null,pinArea=el('div'),modeBtn=null,usingPattern=patternEnabled;
+  var patternPanel=null,patternStatus=null,pinArea=el('div');
   if(patternEnabled){
    heading.textContent=t('patternEnter');
    patternPanel=el('div',{class:'diary-pattern-panel'});
@@ -2418,9 +2418,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    patternStatus=el('div',{class:'diary-pattern-status','aria-live':'polite'});
    var patternGrid=makeDiaryPatternGrid(function(value){if(value===patternSaved){if(shade.parentNode)shade.parentNode.removeChild(shade);openDiaryPanel();}else patternStatus.textContent=t('patternWrong');},function(){patternStatus.textContent=t('patternNeedDots');});
    patternPanel.appendChild(patternGrid);patternPanel.appendChild(patternStatus);
-   pinArea.style.display='none';
-   modeBtn=el('button',{type:'button',id:'diaryDiaryPatternModeBtn'},t('patternUsePin'));
-   modeBtn.addEventListener('click',function(){usingPattern=!usingPattern;patternPanel.style.display=usingPattern?'':'none';pinArea.style.display=usingPattern?'none':'';heading.textContent=usingPattern?t('patternEnter'):t('diaryPinEnter');modeBtn.textContent=usingPattern?t('patternUsePin'):t('patternUsePattern');if(!usingPattern)focusPin();});
+   pinArea.appendChild(el('div',{class:'diary-pattern-hint'},t('diaryPinEnter')));
   }
   pinArea.appendChild(input);
   var forgot=el('button',{type:'button'},t('diaryForgotPin'));forgot.style.cssText='width:100%;padding:10px;margin:7px 0 0;border:2px solid #8b5acb;border-radius:10px;background:linear-gradient(145deg,#c4a2ff,#7540c2);color:#fff;font-weight:900;box-shadow:0 3px 0 #54258f;';
@@ -2429,7 +2427,6 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   try{fingerprintEnabled=localStorage.getItem(DIARY_FINGERPRINT_ENABLED_KEY)==='1'&&sessionStorage.getItem('diaryDiaryMustChooseNewPinAfterRecovery')!=='1'&&!!(window.DiaryAppActions&&typeof DiaryAppActions.canUseFingerprint==='function'&&DiaryAppActions.canUseFingerprint());}catch(e){}
   if(fingerprintEnabled){fingerprintBtn=el('button',{type:'button',id:'diaryDiaryFingerprintUnlockBtn'},t('fingerprintUnlock'));fingerprintBtn.addEventListener('click',function(){recoveryStatus.textContent='';try{DiaryAppActions.authenticateFingerprint();}catch(e){recoveryStatus.textContent=t('fingerprintFailed');}});}
   if(patternPanel)box.appendChild(patternPanel);
-  if(modeBtn)box.appendChild(modeBtn);
   box.appendChild(pinArea);box.appendChild(recoveryStatus);if(fingerprintBtn)box.appendChild(fingerprintBtn);box.appendChild(forgot);
   shade.appendChild(box);document.body.appendChild(shade);if(!patternEnabled)setTimeout(function(){input.focus();},50);
  }
