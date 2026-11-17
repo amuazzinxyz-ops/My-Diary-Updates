@@ -1,3 +1,15 @@
+# Private Locker Favourite Name centered and sharpened — Web Update 313 (2026-11-18)
+
+- User asked that the Favourite Name box text be centered, sized to the box, and clearer rather than blurry.
+- Inspected the actual Private Locker CSS and dynamic input creation. Found the earlier 14px placeholder rule was not enough: a broad Private Locker 3D text rule was still applying a multi-layer text shadow, and the recovery flow explicitly set text alignment to left.
+- Created pre-edit backup branch: `backup/before-private-locker-favourite-name-center-crisp-2026-11-18`. Working branch: `fix/private-locker-favourite-name-center-crisp-2026-11-18`.
+- Replaced only the Favourite Name text-input presentation rule: typed name remains bold 17px, centered, dark and with no text shadow; placeholder is bold 15px, centered, fully opaque, no letter spacing and no text shadow, kept on one line. Existing field dimensions and PIN/password styling are unchanged.
+- Only `web-source/index.html` changed. PR #170 merged as `ccfe2d90ecb47ba6627026418a289ce771cb7d21`. Static diff: 16 additions, 2 deletions, one file only. No PIN logic, recovery logic, encryption, saved data, Diary Lock, Note Lock or unrelated features changed.
+- Publisher workflow run `44157570967` (run #365) completed successfully. Published as **Web Update 313**. Source and `diary-web/index.html` mirror match at Git blob SHA `c3bd19ebcf025b14e22c662a5b5e0119c73cd18f`. Live `latest.json` advertises webVersion `313` and SHA-256 `a4c01e685b529282e05b552a8ae8377a6df5bbcd3b930ca7799179561d167f6a`. APK remains `1.0.189 / versionCode 188`; this was a web-only CSS change and no APK rebuild/release is claimed.
+- Phone-side visual confirmation remains pending. Ask the user to install/check Web Update 313 and confirm the Favourite Name prompt and typed text are centered and crisp.
+
+---
+
 # Private Locker Favourite Name prompt fit — Web Update 312 (2026-11-18)
 
 - User reported that text in the **Favourite Name** box was being clipped. Inspected the exact Private Locker setup and recovery fields. The fields are text inputs, distinct from the PIN/password inputs, so the existing PIN placeholder rules did not govern their prompts.
