@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 286,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "PENDING",
+  "webSha256": "fb8f7db2d4cd6fb3f15fef5afd5724a22e404ee323d1442e1582b73d52a339ca",
   "webReleaseNotes": "My Diary Web Update 286: Private Locker now has PIN-confirmed Lock Off and Lock On controls. Existing saved writing and PIN data are retained; Diary Lock and Note Lock unchanged."
 }
