@@ -5,7 +5,8 @@
 - Created pre-edit backup branch: `backup/before-diary-lock-pin-final-fit-review-2026-11-18`. Working branch: `fix/diary-lock-pin-final-fit-review-2026-11-18`.
 - Corrected all three routes so the actual box styles are applied first and the placeholder fitter runs afterward. Standardized the three PIN fields to a 60px minimum height with 10px vertical padding, preserving their existing border treatments and 22px typed-PIN digit styling. The fitter still measures actual rendered width/height, padding, borders and placeholder font, reserves 3px on both horizontal sides, and caps short/medium/long prompts at 24/19/17px subject to actual fit.
 - Only the three Diary Lock PIN prompt fields in `web-source/index.html` were changed. PIN logic, PIN values, recovery, Pattern, Fingerprint, Note Lock, Private Locker, notes and all other features remain untouched. Static diff is limited to 3 lines changed (three field initializers). Phone visual confirmation remains pending; do not claim no clipping on-device until user checks.
-- Publication details to be added after PR merge and publisher verification.
+- PR #168 merged to `main` as `e7c8ec532bf5430fe78d2c3582448f0c4a43e0c7`. The corrected source blob on main is `f754b50f28a0e45062fa548bc373ea0a9914cc9a`.
+- Post-merge check: `web-source/index.html` contains the corrected styles, but `diary-web/index.html` is still at the previous blob `3a72117b20580d650d3c8db0c91b9812cdbc7112`, and `latest.json` still advertises Web Update 310 / old bundle SHA-256 `8de49cc0cfb71931aefff248f506cee959267ab98c2060f6ee272d34be559d64`. Therefore the code correction is merged but **not yet published**. Do not tell the user to Check for Updates until mirror synchronization, feed checksum/version publication, and verification are complete.
 
 ---
 
