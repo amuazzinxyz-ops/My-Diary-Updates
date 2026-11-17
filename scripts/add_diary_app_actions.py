@@ -910,6 +910,7 @@ reminder_native = r"""
 private object DiaryReminderScheduler {
     private const val PREFS = "diary_reminders_native_v1"
     private const val ITEMS = "items"
+    private const val AUTO_ITEMS = "auto_items"
     const val ACTION_ALARM = "com.personal.diaryapp.action.REMINDER_ALARM"
     const val ACTION_SNOOZE = "com.personal.diaryapp.action.REMINDER_SNOOZE"
     const val ACTION_AUTO_SNOOZE = "com.personal.diaryapp.action.REMINDER_AUTO_SNOOZE"
@@ -944,6 +945,15 @@ private object DiaryReminderScheduler {
 
     private fun writeItems(context: Context, items: org.json.JSONArray) {
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putString(ITEMS, items.toString()).apply()
+    }
+
+    private fun readAutoItems(context: Context): org.json.JSONArray {
+        val raw = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString(AUTO_ITEMS, "[]") ?: "[]"
+        return try { org.json.JSONArray(raw) } catch (_: Exception) { org.json.JSONArray() }
+    }
+
+    private fun writeAutoItems(context: Context, items: org.json.JSONArray) {
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putString(AUTO_ITEMS, items.toString()).apply()
     }
 
     fun schedule(context: Context, id: String, title: String, details: String, atMillis: Long, soundUri: String, snoozeMinutes: Int = 10, snoozeLimit: Int = 3, ringDurationSeconds: Int = 30, ringVolumePercent: Int = 80, snoozeUsed: Int = 0, repeatDaily: Boolean = false, dailyAnchorAt: Long = atMillis) {
@@ -1033,6 +1043,19 @@ private object DiaryReminderScheduler {
         showIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val showPending = PendingIntent.getActivity(context, requestCode(id) + 300000000, showIntent, pendingFlags())
         alarm.setAlarmClock(AlarmManager.AlarmClockInfo(atMillis, showPending), pending)
+        val old = readAutoItems(context)
+        val next = org.json.JSONArray()
+        for (i in 0 until old.length()) {
+            val item = old.optJSONObject(i) ?: continue
+            if (item.optString("id") != id) next.put(item)
+        }
+        next.put(org.json.JSONObject()
+            .put("id", id).put("title", title).put("details", details).put("soundUri", soundUri)
+            .put("at", atMillis).put("snoozeMinutes", snoozeMinutes).put("snoozeLimit", snoozeLimit)
+            .put("snoozeUsed", snoozeUsed).put("ringDurationSeconds", ringDurationSeconds)
+            .put("ringVolumePercent", ringVolumePercent).put("repeatDaily", repeatDaily)
+            .put("dailyAnchorAt", dailyAnchorAt))
+        writeAutoItems(context, next)
     }
 
     fun cancelAutoSnooze(context: Context, id: String) {
@@ -1044,6 +1067,13 @@ private object DiaryReminderScheduler {
         val pending = PendingIntent.getBroadcast(context, requestCode(id) + 200000000, intent, pendingFlags())
         alarm.cancel(pending)
         pending.cancel()
+        val old = readAutoItems(context)
+        val next = org.json.JSONArray()
+        for (i in 0 until old.length()) {
+            val item = old.optJSONObject(i) ?: continue
+            if (item.optString("id") != id) next.put(item)
+        }
+        writeAutoItems(context, next)
     }
 
     fun restore(context: Context) {
@@ -1072,6 +1102,27 @@ private object DiaryReminderScheduler {
                 else if (repeatDaily) schedule(context, id, title, details, nextDailyAt(dailyAnchorAt, now), soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, 0, true, dailyAnchorAt)
                 else if (at > now - 24L * 60L * 60L * 1000L) schedule(context, id, title, details, now + 5000L, soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, snoozeUsed)
                 else remove(context, id)
+            }
+        }
+        val autoItems = readAutoItems(context)
+        autoItems.length().let { count ->
+            for (i in 0 until count) {
+                val item = autoItems.optJSONObject(i) ?: continue
+                val id = item.optString("id")
+                val title = item.optString("title")
+                val at = item.optLong("at")
+                if (id.isBlank() || title.isBlank()) continue
+                val soundUri = item.optString("soundUri")
+                val snoozeMinutes = item.optInt("snoozeMinutes", 10)
+                val snoozeLimit = item.optInt("snoozeLimit", 3)
+                val snoozeUsed = item.optInt("snoozeUsed", 0)
+                val ringDurationSeconds = item.optInt("ringDurationSeconds", 30)
+                val ringVolumePercent = item.optInt("ringVolumePercent", 80)
+                val repeatDaily = item.optBoolean("repeatDaily", false)
+                val dailyAnchorAt = item.optLong("dailyAnchorAt", at)
+                val restoreAt = if (at > now) at else if (at > now - 24L * 60L * 60L * 1000L) now + 5000L else 0L
+                if (restoreAt > 0L) scheduleAutoSnooze(context, id, title, item.optString("details"), soundUri, restoreAt, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, snoozeUsed, repeatDaily, dailyAnchorAt)
+                else cancelAutoSnooze(context, id)
             }
         }
     }
