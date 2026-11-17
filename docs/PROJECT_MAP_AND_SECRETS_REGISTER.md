@@ -4,7 +4,7 @@
 - Added presentation-only CSS scoped to `#diaryPrivateLockerModal input[type="password"]` and its placeholder. PIN entry text is now 20px with controlled spacing; long placeholder text uses a responsive 11–14px size with normal letter spacing. Each PIN field has a gold border, soft gradient, inset highlight, and raised lower shadow. The selector covers the existing PIN boxes across setup, confirmation, unlock, recovery, and Lock On flows; changing the field from password to Favourite Name text keeps that non-PIN field unaffected.
 - Only the existing Private Locker visual stylesheet in `web-source/index.html` changed. No PIN/security handlers, validation, encryption, saved records, Diary Lock, Note Lock, or other features changed.
 - Backup branch: `backup/before-private-locker-pin-box-fit-3d-2026-11-17`. Working branch: `style/private-locker-pin-box-fit-3d-2026-11-17`.
-- Source/mirror synchronization, PR merge, web publisher run, and phone-side visual confirmation are pending. Do not claim the update is published or device-tested until those checks complete.
+- PR #159 merged as `1b8141906c22a96920fa83ff166b5f0b962bae4e`. Web publisher synchronized source and mirror byte-for-byte at Git blob SHA `525e19164fd78f2926f7c2403d9ea3c434a8ef27` and published **Web Update 284**. Live `latest.json` advertises web SHA-256 `13089a499116feb8b4a03e90baacf67ea4e9fdeb63937b8f011e92251284d3e4`, matching the published bundle. APK identity/version remains unchanged. Physical-phone visual confirmation is pending; do not claim device-side PASS until the user checks the PIN boxes.
 
 ---
 
