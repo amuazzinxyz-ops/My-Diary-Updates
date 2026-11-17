@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 283,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "edf1a0a5c1eee5cd222912532714574d1202132253e88d9bfa67c8cd7415b4b3",
+  "webSha256": "8f6ecbb1e97ccc25317b583e4ffae171ffaa4c274dd64e1553cf32e826f445b4",
   "webReleaseNotes": "My Diary Web Update 283: Private Locker restored with text-only encrypted writing, search/editing and four-digit Diary-style PIN, Pattern, Favourite Name recovery and separate fingerprint. Diary Lock unchanged."
 }
