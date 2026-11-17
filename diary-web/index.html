@@ -1665,7 +1665,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    }
    addPinControl(config.pattern?'🔷 Pattern Badlein':'🔷 Pattern Set Karein','pattern','purple',false);
    var canFingerprint=window.DiaryAppActions&&typeof DiaryAppActions.enablePrivateLockerFingerprint==='function'&&typeof DiaryAppActions.canUsePrivateLockerBiometric==='function'&&DiaryAppActions.canUsePrivateLockerBiometric();
-   addPinControl('👆 Fingerprint Set Karein','fingerprint','purple',!canFingerprint);
+   addPinControl(config.fingerprint?'👆 Fingerprint Pehle Se Set Hai':'👆 Fingerprint Set Karein','fingerprint','purple',!!config.fingerprint||!canFingerprint);
    addPinControl('Pattern Hataayein','removePattern','red',!config.pattern);
    addPinControl('Fingerprint Hataayein','removeFingerprint','red',!config.fingerprint);
    addPinControl(config.lockDisabled?'🔐 Lock On Karein':'🔓 Lock Off Karein',config.lockDisabled?'lockOn':'lockOff','gold',false);
@@ -1705,7 +1705,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    var status=el('div',{style:'min-height:22px;color:#a11;font-weight:800;'});
    var first='';
    var grid=makeDiaryPatternGrid(function(value){if(!first){first=value;heading.textContent='Wahi Pattern dobara banayein';status.textContent='';return;}if(value!==first){first='';heading.textContent='Naya Pattern banayein';status.textContent='Pattern match nahi hua. Dobara banayein.';return;}privateLockerWrapMaster(privateLockerRawKey,value).then(function(pattern){return privateLockerGet('meta','config').then(function(config){config.pattern=pattern;return privateLockerPut('meta',config);});}).then(function(){privateLockerMessage('Pattern set ho gaya. Ab Locker PIN ya Pattern se khulega.',false);if(!privateLockerCompleteExternalAction())privateLockerShowEntries();}).catch(function(e){status.textContent=e.message||'Pattern save nahi hua.';});},function(){status.textContent='Kam se kam 4 dots chunein.';});
-   var cancel=el('button',{type:'button'},'Radd Karein');cancel.addEventListener('click',function(){if(!privateLockerCompleteExternalAction())privateLockerShowEntries();});
+   var cancel=el('button',{type:'button'},'Radd Karein');cancel.addEventListener('click',privateLockerCancelExternalAction);
    wrap.append(heading,grid,status,cancel);privateLockerContent.replaceChildren(wrap);
   }
   window.__privateLockerFingerprintPending=false;
@@ -1725,7 +1725,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    var actions=el('div',{style:'display:flex;gap:9px;flex-wrap:wrap;'});
    var confirmOff=el('button',{type:'button',style:'min-height:42px;padding:8px 13px;border:2px solid #b18b32;border-radius:11px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;color:#3d2b08;'},'🔓 Lock Off Confirm Karein');
    var cancel=el('button',{type:'button',style:'min-height:42px;padding:8px 13px;border:1px solid #b9a4d0;border-radius:10px;background:#f2eafb;font-weight:800;color:#43245f;'},'Radd Karein');
-   cancel.addEventListener('click',function(){if(!privateLockerCompleteExternalAction())privateLockerShowEntries();});
+   cancel.addEventListener('click',privateLockerCancelExternalAction);
    confirmOff.addEventListener('click',function(){
     if(!privateLockerRawKey){status.textContent='PIN verify dobara karein.';return;}
     confirmOff.disabled=true;
@@ -1743,7 +1743,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   }
     function privateLockerTurnLockOn(config){
    var next=Object.assign({},config);next.lockDisabled=false;delete next.unlockedKey;
-   privateLockerPut('meta',next).then(function(){privateLockerRawKey=null;privateLockerKey=null;privateLockerRecords=[];privateLockerContent.replaceChildren();if(!privateLockerCompleteExternalAction()){privateLockerGate.replaceChildren(privateLockerPinForm(next));privateLockerMessage('Locker lock dobara ON ho gaya. Ab PIN se khulega.',false);}}).catch(function(e){privateLockerMessage(e.message||'Lock ON nahi ho saka.',true);});
+   return privateLockerPut('meta',next).then(function(){privateLockerRawKey=null;privateLockerKey=null;privateLockerRecords=[];privateLockerContent.replaceChildren();if(!privateLockerCompleteExternalAction()){privateLockerGate.replaceChildren(privateLockerPinForm(next));privateLockerMessage('Locker lock dobara ON ho gaya. Ab PIN se khulega.',false);}}).catch(function(e){privateLockerMessage(e.message||'Lock ON nahi ho saka.',true);throw e;});
   }
   function privateLockerShowEntries(){
    privateLockerGate.replaceChildren();   privateLockerContent.replaceChildren();
@@ -1766,7 +1766,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     if(!config||!config.lockDisabled)return;
     var lockTools=el('div',{style:'display:flex;gap:9px;flex-wrap:wrap;margin:0 0 12px;'});
     var lockOn=el('button',{type:'button',style:'min-height:42px;padding:8px 13px;border:2px solid #b18b32;border-radius:11px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;color:#3d2b08;box-shadow:0 3px 0 #b18b32;'},'🔐 Lock On Karein');
-    lockOn.addEventListener('click',function(){lockOn.disabled=true;privateLockerTurnLockOn(config);});
+    lockOn.addEventListener('click',function(){lockOn.disabled=true;privateLockerTurnLockOn(config).catch(function(){lockOn.disabled=false;});});
     lockTools.appendChild(lockOn);
     privateLockerContent.insertBefore(lockTools,searchWrap);
    }).catch(function(e){privateLockerMessage(e.message||'Lock setting nahi khuli.',true);});
@@ -1805,6 +1805,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    privateLockerRenderList=render;render().catch(function(err){privateLockerMessage(err.message||'Likhai nahi khul saki.',true);});
   }
   var privateLockerRenderList=function(){return Promise.resolve();};
+  function privateLockerCancelExternalAction(){privateLockerExternalAction=null;privateLockerMessage('Kaam radd kar diya gaya.',false);privateLockerShowEntries();}
   function privateLockerCompleteExternalAction(){
    if(!privateLockerExternalAction)return false;
    privateLockerExternalAction=null;privateLockerCloseNow();return true;
@@ -1818,15 +1819,16 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    }
    if(action==='removePattern'){
     if(!config||!config.pattern){privateLockerCompleteExternalAction();return true;}
-    if(!confirm('Pattern lock hata dein?')){privateLockerCompleteExternalAction();return true;}
+    if(!confirm('Pattern lock hata dein?')){privateLockerCancelExternalAction();return true;}
     config.pattern=null;privateLockerPut('meta',config).then(function(){privateLockerMessage('Pattern hata diya gaya.',false);privateLockerCompleteExternalAction();}).catch(function(e){privateLockerMessage(e.message||'Pattern nahi hata.',true);});return true;
    }
    if(action==='removeFingerprint'){
-    if(window.DiaryAppActions&&typeof DiaryAppActions.disablePrivateLockerFingerprint==='function'){try{DiaryAppActions.disablePrivateLockerFingerprint();}catch(e){}}
+    if(!confirm('Fingerprint lock hata dein?')){privateLockerCancelExternalAction();return true;}
+    if(window.DiaryAppActions&&typeof DiaryAppActions.disablePrivateLockerFingerprint==='function'){try{DiaryAppActions.disablePrivateLockerFingerprint();}catch(e){privateLockerMessage('Fingerprint key remove nahi ho saka.',true);return true;}}
     config.fingerprint=false;privateLockerPut('meta',config).then(function(){privateLockerMessage('Fingerprint lock hata diya gaya.',false);privateLockerCompleteExternalAction();}).catch(function(e){privateLockerMessage(e.message||'Fingerprint nahi hata.',true);});return true;
    }
    if(action==='lockOff'){privateLockerAskLockOff();return true;}
-   if(action==='lockOn'){privateLockerTurnLockOn(config);return true;}
+   if(action==='lockOn'){privateLockerTurnLockOn(config).catch(function(){});return true;}
    return false;
   }
   function privateLockerCloseNow(){window.__privateLockerFingerprintPending=false;privateLockerExternalAction=null;privateLockerKey=null;privateLockerRawKey=null;privateLockerRecords=[];privateLockerContent.replaceChildren();privateLockerGate.replaceChildren();privateLockerModal.hidden=true;privateLockerMessage('Locker band hai.',false);mePanel.hidden=false;meBtn.setAttribute('aria-expanded','true');panel.classList.add('diary-me-menu-open');}
