@@ -1,14 +1,13 @@
-# Private Locker Pattern and fingerprint buttons moved beside PIN setup — implementation branch (2026-11-17)
+# Private Locker Pattern and fingerprint buttons moved beside PIN setup — Web Update 284 (2026-11-17)
 
 - User approved moving **🔷 Pattern Set Karein** and **👆 Fingerprint Set Karein** out of the Private Locker writing/editor tools row and placing them with the lock setup controls.
-- On first-time setup, both controls are shown on the same screen as the new four-digit PIN, PIN confirmation, and Favourite Name fields. Selecting either validates those fields, creates the primary PIN/recovery wrappers, and then starts the requested Pattern or Android fingerprint setup. The ordinary **Locker Set Karein** action remains unchanged.
-- For an already-configured Locker, the controls are in the authenticated lock gate above the writing editor, not inside the writing tools row. Pattern/fingerprint enrollment still requires the successfully unlocked master key; no enrollment is performed before authentication.
-- No encrypted entries, PINs, recovery data, IndexedDB records, Android Keystore entries, Diary Lock, Note Lock, writing/search/editing behavior, or app identity are intentionally changed.
-- Verified main baseline commit: `af5bc74f49b9f737a28ecb07e9402b1a45340b81`. Pre-edit snapshot branch: `backup/before-private-locker-lock-buttons-move-2026-11-17`. Working branch: `fix/private-locker-lock-buttons-near-gate-2026-11-17`.
-- Source edit blob SHA: `4ee279d6d84ca5b64a665483e1ac1f91513e4dee`. The source-only PR is intended to let the verified web publisher sync `diary-web/index.html`, advance Web Update 283 to 284, and publish the matching SHA-256. APK remains 1.0.189 / versionCode 188; this is a web-only UI relocation.
-- V8 inline JavaScript syntax check passed. Static checks passed for both setup buttons, pending-method clearing before PIN validation, method enrollment only after primary PIN setup/unlock, removal from editor tools, and retention in the authenticated gate; Diary Lock anchors remain present. PR review/merge, publisher run, live manifest/hash verification, and phone testing remain pending. Do not tell the user to update until publication checks pass. Do not claim phone-side success.
+- First-time setup shows both controls on the same screen as the new four-digit PIN, PIN confirmation, and Favourite Name fields. Selecting either validates those fields, creates the primary PIN/recovery wrappers, and then starts the requested Pattern or Android fingerprint setup. The ordinary **Locker Set Karein** action remains available.
+- For an already-configured Locker, the controls are in the authenticated lock gate above the writing editor, not inside the writing tools row. Enrollment still requires the successfully unlocked master key.
+- No encrypted entries, PINs, recovery data, IndexedDB records, Android Keystore entries, Diary Lock, Note Lock, writing/search/editing behavior, or app identity were intentionally changed.
+- Verified main baseline commit: `af5bc74f49b9f737a28ecb07e9402b1a45340b81`. Pre-edit snapshot branch: `backup/before-private-locker-lock-buttons-move-2026-11-17`. PR **#133** merged as `bf479c6108cad2e88cb76a8ee3474db479754344`.
+- V8 inline JavaScript syntax and static checks passed. Source and `diary-web/index.html` mirror are byte-identical at Git blob SHA `4ee279d6d84ca5b64a665483e1ac1f91513e4dee`. Web publisher run **44060440587** completed successfully; Web Update **284** is live with web SHA-256 `32a2a820dc288d977e04512f4a7820be4e4537f8279d0dbb211397d05693cac7`. APK remains **1.0.189 / versionCode 188**; no APK change is required for this web-only relocation.
+- Physical phone testing remains pending. Do not claim device-side success until the user confirms.
 
----
 
 # Private Locker restored with four-digit Diary-style lock — implementation branch (2026-11-17)
 
