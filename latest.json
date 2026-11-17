@@ -1,14 +1,14 @@
 {
   "appName": "My Diary",
   "packageName": "com.personal.diaryapp",
-  "versionCode": 187,
-  "versionName": "1.0.188",
-  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.188.apk",
-  "sha256": "90f7575564d3267d49d93734179034828a8ded6ddb75e6ffa2f57ea9424118ab",
-  "releaseNotes": "My Diary 1.0.188: Private Locker removed. Other Diary features and existing locks are retained.",
+  "versionCode": 186,
+  "versionName": "1.0.189",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.189.apk",
+  "sha256": "157ce84fda2c72bb424752d535de6516bdd0358df2c3c7ebe7d0bce23117518a",
+  "releaseNotes": "My Diary My Diary 1.0.189: Private Locker writing-only, encrypted search/editing, four-digit Diary-style PIN, Pattern, Favourite Name recovery and separate Android Keystore fingerprint. Diary Lock remains unchanged.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 282,
+  "webVersion": 283,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "6a4bd3ff7703db8294e6cf1c334047590a4e361baa2a8764f8b42be9a1be612b",
-  "webReleaseNotes": "My Diary Web Update 282: Note Lock wrong-PIN message now appears inside the PIN box; no browser address is shown."
+  "webSha256": "4787ec923691c2ad51287114938f959c1181f7aa35d24e9e92d89af049cd141b",
+  "webReleaseNotes": "My Diary Web Update 283: Private Locker restored with text-only encrypted writing, search/editing and four-digit Diary-style PIN, Pattern, Favourite Name recovery and separate fingerprint. Diary Lock unchanged."
 }
