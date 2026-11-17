@@ -1,3 +1,13 @@
+# Private Locker Lock On moved to the Locker security gate — release pending (2026-11-17)
+
+- User clarified that **🔐 Lock On Karein must not appear inside the unlocked Locker writing/search screen**. It must be in the security-control area where the Lock Off control is shown, outside the writing/search content.
+- Corrected the Lock OFF opening flow: instead of silently entering the writing screen, opening a Lock-OFF Locker now shows a separate **🔐 Locker Security** gate. It offers **🔐 Lock On Karein** and **🔓 Locker Kholein**. The latter preserves the existing ability to use the Locker while protection is OFF; Lock On reuses the existing authenticated re-lock handler and returns to the PIN gate.
+- Removed the old Lock On control injection from `privateLockerShowEntries()`. The writing form, search, encrypted records, PIN/recovery data, Diary Lock, and Note Lock are not intentionally changed.
+- Backup branch: `backup/before-private-locker-lockon-gate-placement-2026-11-17`. Working branch: `fix/private-locker-lockon-at-security-gate-2026-11-17`.
+- Source/mirror static checks passed for the expected route and absence of the old in-writing-area insertion. Source and mirror were updated to the same blob SHA. JavaScript syntax, PR review/merge, Web Update manifest publication, and final live verification remain pending. Do not tell the user to update until those checks pass. Physical-phone testing remains pending.
+
+---
+
 # Private Locker Lock On moved out of writing area — Web Update 295 published (2026-11-17)
 
 - User correctly objected that the Lock On button had been placed inside the Private Locker writing/search area. The button is now removed from privateLockerContent and placed in the separate privateLockerGate security area above the writing area, under “🔐 Locker Security”. It appears only while Lock is OFF and reuses the existing privateLockerTurnLockOn(config) handler. It is not part of the note title/text form or search controls.

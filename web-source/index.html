@@ -1573,13 +1573,24 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   function privateLockerConfigValid(config){try{return !!(config&&config.version===2&&config.pin&&config.recovery&&config.pin.salt&&config.pin.iv&&config.pin.cipher&&config.recovery.salt&&config.recovery.iv&&config.recovery.cipher);}catch(e){return false;}}
   function privateLockerNormalizeRecovery(value){return String(value||'').trim().replace(/\s+/g,' ').toLocaleUpperCase();}
   function privateLockerFinishUnlock(raw){privateLockerRawKey=raw;return privateLockerImportMaster(raw).then(function(key){privateLockerKey=key;return privateLockerGet('meta','config').then(function(config){if(config&&Number(config.pinDigits)!==4){privateLockerPinUpgradeForm(raw,config);return;}if(privateLockerExternalAction){privateLockerRunExternalAction(config);return;}privateLockerMessage(config&&config.lockDisabled?'Lock OFF hai. Private Locker bina PIN khul gaya.':'Private Locker khul gaya.',false);privateLockerShowEntries();});});}
+  function privateLockerShowLockOffGate(unlocked,config){
+   privateLockerContent.replaceChildren();privateLockerGate.replaceChildren();
+   var tools=el('section',{style:'display:grid;gap:10px;margin:12px 0;padding:13px;border:1px solid #d8c6eb;border-radius:14px;background:linear-gradient(145deg,#fff,#faf7ff);'});
+   tools.appendChild(el('strong',{},'🔐 Locker Security'));
+   var lockOn=el('button',{type:'button',style:'min-height:44px;padding:9px 14px;border:2px solid #b18b32;border-radius:11px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;color:#3d2b08;box-shadow:0 3px 0 #b18b32;'},'🔐 Lock On Karein');
+   lockOn.addEventListener('click',function(){lockOn.disabled=true;privateLockerTurnLockOn(config).catch(function(){lockOn.disabled=false;});});
+   var open=el('button',{type:'button',style:'min-height:44px;padding:9px 14px;border:1.5px solid #b9a4d0;border-radius:11px;background:#f2eafb;font-weight:900;color:#43245f;'},'🔓 Locker Kholein');
+   open.addEventListener('click',function(){open.disabled=true;privateLockerFinishUnlock(unlocked).catch(function(e){open.disabled=false;privateLockerMessage(e.message||'Locker nahi khula.',true);});});
+   tools.append(lockOn,open);privateLockerGate.appendChild(tools);
+   privateLockerMessage('Lock OFF hai. Yahan se Lock On karein ya Locker kholein.',false);
+  }
   function privateLockerOpen(){
    mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');
    privateLockerModal.hidden=false;window.__privateLockerFingerprintPending=false;privateLockerContent.replaceChildren();privateLockerGate.replaceChildren();privateLockerKey=null;privateLockerRawKey=null;privateLockerRecords=[];
    privateLockerStatus.textContent='Aapki private likhai alag encrypted storage mein rahegi.';
    Promise.all([privateLockerGet('meta','config'),privateLockerAll()]).then(function(result){
     var config=result[0],rows=result[1]||[];
-    if(privateLockerConfigValid(config)){if(config.lockDisabled&&config.unlockedKey){var unlocked=privateLockerUnB64(config.unlockedKey);if(unlocked.length!==32)throw new Error('Lock OFF key format sahi nahi hai. Saved data surakshit hai.');return privateLockerFinishUnlock(unlocked);}privateLockerGate.appendChild(privateLockerPinForm(config));return;}
+    if(privateLockerConfigValid(config)){if(config.lockDisabled&&config.unlockedKey){var unlocked=privateLockerUnB64(config.unlockedKey);if(unlocked.length!==32)throw new Error('Lock OFF key format sahi nahi hai. Saved data surakshit hai.');privateLockerShowLockOffGate(unlocked,config);return;}privateLockerGate.appendChild(privateLockerPinForm(config));return;}
     if(rows.length){privateLockerMessage('Purani encrypted entries mili hain. Unka data surakshit rakha gaya hai; naya lock setup nahi kiya gaya. Data reset na karein.',true);return;}
     if(config)privateLockerMessage('Locker mein abhi koi entry nahi hai. Naya secure PIN aur recovery setup banayein.',false);
     privateLockerGate.appendChild(privateLockerSetupForm());
@@ -1762,15 +1773,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    searchWrap.append(searchHeading,search);
    var list=el('div',{style:'display:grid;gap:10px;'});
    privateLockerContent.append(searchWrap,form,list);
-   privateLockerGet('meta','config').then(function(config){
-    if(!config||!config.lockDisabled)return;
-    var lockTools=el('section',{style:'display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:0 0 12px;padding:10px 12px;border:1px solid #d8c6eb;border-radius:13px;background:linear-gradient(145deg,#fff,#faf7ff);'});
-    lockTools.appendChild(el('strong',{},'🔐 Locker Security'));
-    var lockOn=el('button',{type:'button',style:'min-height:42px;padding:8px 13px;border:2px solid #b18b32;border-radius:11px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;color:#3d2b08;box-shadow:0 3px 0 #b18b32;'},'🔐 Lock On Karein');
-    lockOn.addEventListener('click',function(){lockOn.disabled=true;privateLockerTurnLockOn(config).catch(function(){lockOn.disabled=false;});});
-    lockTools.appendChild(lockOn);
-    privateLockerGate.appendChild(lockTools);
-   }).catch(function(e){privateLockerMessage(e.message||'Lock setting nahi khuli.',true);});
+
    var allRecords=[];
    function render(){
     list.replaceChildren();
