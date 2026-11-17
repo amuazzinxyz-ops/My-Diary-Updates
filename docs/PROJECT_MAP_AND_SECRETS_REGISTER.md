@@ -1,3 +1,12 @@
+# Check for Update version corrected to Web Update 306 (2026-11-17)
+
+- User reported that **Check for Update** did not detect the previously announced update. Inspection found that live `latest.json` had regressed to **webVersion 288**, even though the Master Register records later releases through **Web Update 305**. A device already at 305 would correctly see 288 as older and would not offer an update.
+- Created pre-edit backup branch: `backup/before-check-for-update-version-correction-2026-11-17`.
+- Corrected only the update-feed version marker to **306**. Retained APK **1.0.189 / versionCode 188**, its URL and SHA-256, and the existing HTML bundle URL and SHA-256 (`3e3994514fbc6003fcda889e313a9fad700878d0045e4a96048a02d1efd2a242`). The HTML bundle itself was not changed; no notes, calendar/reminder data, PINs, locks, photos, or app features were edited.
+- Feed commit: `a23dec28d97aef450fe1538a04d31cc0e665e02f`. Web publisher / live raw-feed verification and in-app phone test are pending. Do not claim the update has appeared on the user's phone until confirmed.
+
+---
+
 # Smart Reminder and Personal Calendar — Android 14+ full-screen permission fallback (2026-11-17)
 
 - User asked to restore the previous screen-off reminder behavior for both **Smart Reminder** and **Personal Calendar**, with no unrelated changes.
