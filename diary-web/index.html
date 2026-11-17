@@ -1764,11 +1764,12 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    privateLockerContent.append(searchWrap,form,list);
    privateLockerGet('meta','config').then(function(config){
     if(!config||!config.lockDisabled)return;
-    var lockTools=el('div',{style:'display:flex;gap:9px;flex-wrap:wrap;margin:0 0 12px;'});
+    var lockTools=el('section',{style:'display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:0 0 12px;padding:10px 12px;border:1px solid #d8c6eb;border-radius:13px;background:linear-gradient(145deg,#fff,#faf7ff);'});
+    lockTools.appendChild(el('strong',{},'🔐 Locker Security'));
     var lockOn=el('button',{type:'button',style:'min-height:42px;padding:8px 13px;border:2px solid #b18b32;border-radius:11px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;color:#3d2b08;box-shadow:0 3px 0 #b18b32;'},'🔐 Lock On Karein');
     lockOn.addEventListener('click',function(){lockOn.disabled=true;privateLockerTurnLockOn(config).catch(function(){lockOn.disabled=false;});});
     lockTools.appendChild(lockOn);
-    privateLockerContent.insertBefore(lockTools,searchWrap);
+    privateLockerGate.appendChild(lockTools);
    }).catch(function(e){privateLockerMessage(e.message||'Lock setting nahi khuli.',true);});
    var allRecords=[];
    function render(){
