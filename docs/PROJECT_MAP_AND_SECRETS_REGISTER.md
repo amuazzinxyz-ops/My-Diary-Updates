@@ -6,7 +6,7 @@
   - Correct PIN saves `lockDisabled=true` and the existing unlocked master-key value, then opens the writing/search screen automatically.
   - Incorrect PIN displays the exact local message “PIN galat hai.”, clears the entered digits, and keeps the Lock Off action available for retry. Lock remains ON.
 - Existing encrypted entries, master key, PIN/recovery wrappers, Pattern/Fingerprint settings, Diary Lock, Note Lock, and other app features were not intentionally modified.
-- Backup branch: `backup/before-private-lockoff-pin-auto-open-2026-11-17`. Working branch: `fix/private-lockoff-pin-auto-open-2026-11-17`. Changes are in review; do not call this live until merged and manifest/source verification passes.
+- Backup branch: `backup/before-private-lockoff-pin-auto-open-2026-11-17`. Working branch: `fix/private-lockoff-pin-auto-open-2026-11-17`. PR #150 merged as `1319d12d5afd06bf3fae4b1227d9b324a74df301`.
 - Source and mirror have identical Git blob SHA `8442c091345ed49ba669e2515ff6b74af9e990e9`; independently computed source SHA-256 is `ce0f679c4ab023e7e9e773280191ec2b649c47f6e67d136f17b15d9bb44aee4a`. Both inline JavaScript blocks passed V8 syntax parsing (2/2). Static checks passed for auto-submit, wrong-PIN message, Lock Off persistence, and automatic entry into Locker.
 - Device testing remains pending.
 
