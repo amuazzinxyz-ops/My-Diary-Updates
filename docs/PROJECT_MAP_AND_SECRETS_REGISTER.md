@@ -1,3 +1,15 @@
+# Private Locker Lock Off no longer asks for PIN twice — Web Update 292 published (2026-11-17)
+
+- Root cause: the Lock Off action asked for the current PIN a second time after the PIN-screen control flow had already verified it.
+- Minimal fix: after selecting Lock Off and pressing PIN Verify Karke Kaam Karein, a separate Lock Off Confirm Karein / Radd Karein card appears. Confirm reuses the already authenticated Private Locker key to set lockDisabled=true and retain the unlocked key. Saved encrypted entries remain intact. Lock On and the other four control handlers are unchanged.
+- Backup branch: backup/before-private-locker-lockoff-double-pin-fix-2026-11-17. Working branch: fix/private-locker-lockoff-confirm-after-pin-2026-11-17. PR #145 merged as 8ccac0cb7201319ad6fac33b8dfa88d14d52f17b.
+- Only privateLockerAskLockOff() changed in web-source/index.html and diary-web/index.html. Source and mirror are byte-identical at Git blob SHA 728a7a429070be9b6d9fb0c17a19ddf0175c93ed. Both inline JavaScript blocks passed V8 syntax parsing (2/2); PR diff is limited to the Lock Off confirmation flow.
+- Published as Web Update 292. latest.json reports webVersion 292 and web SHA-256 5fd2f05adb1862224019be7134ba416b8760515e27146dfc32bf121078ad1249, matching source and mirror.
+- The automatic APK workflow also republished the existing version during this web-only change. Both original APK blobs were restored (Git blob SHA d37ec3842b6e9868209d24ec8fb935b43ac0e98f), and latest.json restored to the original APK SHA-256 07d922d24b7ec1db1bea55681711408924d8c8a5888822bdaaebaf57a54e7baa. APK remains 1.0.189 / versionCode 188; no new APK release is intended.
+- Physical-phone testing remains pending. Do not claim device-side confirmation until the user installs Web Update 292 and tests Lock Off / Lock On.
+
+---
+
 # Private Locker PIN-screen controls enabled — Web Update 291 published (2026-11-17)
 
 - Root cause: the shared `el()` helper applies attributes with `setAttribute`; passing `disabled: null` still creates a `disabled="null"` HTML attribute. As a result, every PIN-screen control button was disabled, including Pattern setup and Lock Off.
