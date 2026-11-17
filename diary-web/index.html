@@ -1591,7 +1591,15 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    var confirmPin=el('input',{type:'password',inputmode:'numeric',maxlength:'4',autocomplete:'off',placeholder:'PIN dobara daalein',style:pin.style.cssText});
    var recovery=el('input',{type:'text',maxlength:'80',autocomplete:'off',placeholder:'Favourite naam (PIN bhoolne par)',style:'width:100%;height:48px;box-sizing:border-box;border:2px solid #c8b2df;border-radius:12px;padding:10px;font-size:17px;font-weight:800;'});
    var save=el('button',{type:'button',style:'min-height:46px;border:2px solid #b18b32;border-radius:12px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;color:#3d2b08;'},'🔐 Locker Set Karein');
-   wrap.append(pin,confirmPin,recovery,save);privateLockerGate.appendChild(wrap);
+   var requestedMethod=null;
+   var methodRow=el('div',{style:'display:flex;gap:9px;flex-wrap:wrap;margin:2px 0 4px;'});
+   var patternSetup=el('button',{type:'button',style:'min-height:42px;padding:8px 12px;border:1px solid #9470bb;border-radius:11px;background:linear-gradient(145deg,#f4eaff,#ddc8f2);font-weight:900;color:#43245f;box-shadow:0 3px 0 #c4addb;'},'🔷 Pattern Set Karein');
+   patternSetup.addEventListener('click',function(){requestedMethod='pattern';save.click();});methodRow.appendChild(patternSetup);
+   if(window.DiaryAppActions&&typeof DiaryAppActions.enablePrivateLockerFingerprint==='function'&&typeof DiaryAppActions.canUsePrivateLockerBiometric==='function'&&DiaryAppActions.canUsePrivateLockerBiometric()){
+    var fingerprintSetup=el('button',{type:'button',style:'min-height:42px;padding:8px 12px;border:1px solid #9470bb;border-radius:11px;background:linear-gradient(145deg,#f4eaff,#ddc8f2);font-weight:900;color:#43245f;box-shadow:0 3px 0 #c4addb;'},'👆 Fingerprint Set Karein');
+    fingerprintSetup.addEventListener('click',function(){requestedMethod='fingerprint';save.click();});methodRow.appendChild(fingerprintSetup);
+   }
+   wrap.append(pin,confirmPin,recovery,methodRow,save);privateLockerGate.appendChild(wrap);
    save.addEventListener('click',function(){
     var p=pin.value,n=privateLockerNormalizeRecovery(recovery.value);
     if(!/^[0-9]{4}$/.test(p)){privateLockerMessage('4 digit PIN zaroori hai.',true);return;}
@@ -1603,7 +1611,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      var raw=privateLockerRandom(32);
      return Promise.all([privateLockerWrapMaster(raw,p),privateLockerWrapMaster(raw,n)]).then(function(w){
       var config={id:'config',version:2,pin:w[0],pinDigits:4,recovery:w[1],pattern:null,fingerprint:false,created:Date.now()};
-      return privateLockerPut('meta',config).then(function(){return privateLockerFinishUnlock(raw);});
+      return privateLockerPut('meta',config).then(function(){return privateLockerFinishUnlock(raw);}).then(function(){var method=requestedMethod;requestedMethod=null;if(method==='pattern'){privateLockerSetupPattern();return;}if(method==='fingerprint'){if(!window.DiaryAppActions||typeof DiaryAppActions.enablePrivateLockerFingerprint!=='function')throw new Error('Fingerprint facility available nahi hai.');window.__privateLockerFingerprintPending=true;try{DiaryAppActions.enablePrivateLockerFingerprint(privateLockerB64(privateLockerRawKey));}catch(e){window.__privateLockerFingerprintPending=false;throw e;}}});
      });
     }).catch(function(e){privateLockerMessage(e.message||'Locker setup nahi ho saka.',true);}).finally(function(){save.disabled=false;});
    });
