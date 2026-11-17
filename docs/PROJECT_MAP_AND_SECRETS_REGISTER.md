@@ -1,3 +1,15 @@
+# Note Lock wrong-PIN address display fix — Web Update 282 (2026-11-17)
+
+- User reported that entering an incorrect PIN in Note Lock showed the intended wrong-PIN message together with a browser/page address. Scope was limited to the Note Lock wrong-PIN display; Diary Lock and all other features were not to be touched.
+- Read the Master Register and verified live baseline before editing: APK **1.0.188 / versionCode 187**, Web Update **281**. Main commit before work: `aa926acd4ce0f827628bcd2bb189ff46cc6f6df6`.
+- Created pre-edit snapshot branch `backup/before-note-lock-wrong-pin-address-fix-2026-11-17` and working branch `fix/note-lock-wrong-pin-inline-error-2026-11-17`.
+- In both `web-source/index.html` and `diary-web/index.html`, replaced the Note Lock wrong-PIN browser alert with an inline error message directly below the PIN field. The message clears when the user starts entering the PIN again. The legacy Note Lock prompt path now uses the in-app PIN dialog and its inline wrong-PIN message rather than browser prompt/alert. PIN verification and stored PIN/recovery data formats were not changed.
+- PR **#130** merged to main as `1df95a36c51a479263ba23f4acb9826a1e0bdf37`. Only the two HTML files changed; source and mirror are byte-identical at Git blob SHA `6fcd66e1ab915c00d86f6388f2a8f017649f5aab`.
+- Web publisher commit `71f299f61fbe7346ed181f7efb7192a14a529ee1` updated the live web bundle SHA-256 to `781badc278cc9c54ad8b584a7da6cf7584631527260e3d1b8279f282f899e781`. Live `latest.json` was then advanced to **Web Update 282** with that same verified bundle hash. APK remains **1.0.188 / versionCode 187**; no new APK was built or published for this web-only change.
+- Source/mirror equality, changed-file scope, absence of Note Lock wrong-PIN browser alerts/prompts in the affected paths, and live manifest version/hash were re-fetched and verified after merge. Physical-phone testing is **pending**; do not claim the address is gone on the user's device until confirmed.
+
+---
+
 # Remove Private Locker only — release pending (2026-11-17)
 
 - User requested removing **Private Locker only** from My Diary. Scope: remove its Me-menu button, dedicated screen, PIN/Pattern/Favourite Name recovery, encrypted search/editor logic, and Private Locker-only Android fingerprint bridge. Do not alter Diary Lock, Note Lock, Diary fingerprint, Notes, My Documents, My Memories, reminders, or other Me features.
