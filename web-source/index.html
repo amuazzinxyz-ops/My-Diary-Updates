@@ -1725,26 +1725,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    privateLockerPut('meta',next).then(function(){privateLockerRawKey=null;privateLockerKey=null;privateLockerRecords=[];privateLockerContent.replaceChildren();if(!privateLockerCompleteExternalAction()){privateLockerGate.replaceChildren(privateLockerPinForm(next));privateLockerMessage('Locker lock dobara ON ho gaya. Ab PIN se khulega.',false);}}).catch(function(e){privateLockerMessage(e.message||'Lock ON nahi ho saka.',true);});
   }
   function privateLockerShowEntries(){
-   privateLockerGate.replaceChildren();
-   var patternBtn=el('button',{type:'button',style:'min-height:42px;padding:8px 12px;border:1px solid #9470bb;border-radius:11px;background:linear-gradient(145deg,#f4eaff,#ddc8f2);font-weight:900;color:#43245f;box-shadow:0 3px 0 #c4addb;'},'🔷 Pattern Set Karein');
-   patternBtn.addEventListener('click',privateLockerSetupPattern);tools.appendChild(patternBtn);
-   privateLockerGet('meta','config').then(function(cfg){
-    if(cfg&&cfg.pattern){
-     patternBtn.textContent='🔷 Pattern Badlein';
-     var removePattern=el('button',{type:'button',style:'min-height:42px;padding:8px 12px;border:1px solid #c7a2a2;border-radius:11px;background:linear-gradient(145deg,#fff0f0,#f5dada);font-weight:900;color:#7a2222;'},'Pattern Hataayein');
-     removePattern.addEventListener('click',function(){if(!confirm('Pattern lock hata dein?'))return;cfg.pattern=null;privateLockerPut('meta',cfg).then(function(){privateLockerMessage('Pattern hata diya gaya.',false);privateLockerShowEntries();}).catch(function(e){privateLockerMessage(e.message||'Pattern nahi hata.',true);});});
-     tools.appendChild(removePattern);
-    }
-    if(cfg&&cfg.fingerprint){
-     var removeFp=el('button',{type:'button',style:'min-height:42px;padding:8px 12px;border:1px solid #c7a2a2;border-radius:11px;background:linear-gradient(145deg,#fff0f0,#f5dada);font-weight:900;color:#7a2222;'},'Fingerprint Hataayein');
-     removeFp.addEventListener('click',function(){try{if(window.DiaryAppActions&&typeof DiaryAppActions.disablePrivateLockerFingerprint==='function')DiaryAppActions.disablePrivateLockerFingerprint();}catch(e){}cfg.fingerprint=false;privateLockerPut('meta',cfg).then(function(){privateLockerMessage('Fingerprint lock hata diya gaya.',false);privateLockerShowEntries();}).catch(function(e){privateLockerMessage(e.message||'Fingerprint nahi hata.',true);});});
-     tools.appendChild(removeFp);
-    }
-    var lockToggle=el('button',{type:'button',style:'min-height:42px;padding:8px 12px;border:2px solid #b18b32;border-radius:11px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;color:#3d2b08;box-shadow:0 3px 0 #b18b32;'},cfg&&cfg.lockDisabled?'🔐 Lock On Karein':'🔓 Lock Off Karein');
-    lockToggle.addEventListener('click',function(){if(cfg&&cfg.lockDisabled){privateLockerTurnLockOn(cfg);return;}privateLockerAskLockOff();});
-    tools.appendChild(lockToggle);
-   }).catch(function(){});
-   privateLockerContent.replaceChildren();
+   privateLockerGate.replaceChildren();   privateLockerContent.replaceChildren();
    var form=el('form',{style:'display:grid;gap:10px;margin:14px 0;padding:14px;border:1px solid #d8c6eb;border-radius:16px;background:linear-gradient(145deg,#fff,#f7f1ff);box-shadow:inset 0 2px 0 #fff,0 4px 0 #e3d6f0,0 9px 18px #35145f18;'});
    var heading=el('strong',{style:'font-size:17px;font-weight:900;color:#35145f;text-shadow:0 1px #fff,0 2px 2px #35145f30;'},'＋ Private Likhai');
    var name=el('input',{name:'name',maxlength:'100',placeholder:'Note ka naam (optional)',style:'min-height:48px;padding:10px 12px;border:1.5px solid #c7b4dd;border-radius:12px;font-size:16px;font-weight:800;box-shadow:inset 0 2px 4px #35145f14,0 3px 0 #e4d8ee;'});
