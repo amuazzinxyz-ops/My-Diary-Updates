@@ -1,11 +1,12 @@
-# Private Locker PIN-screen controls enabled — merged, web publication pending (2026-11-17)
+# Private Locker PIN-screen controls enabled — Web Update 291 published (2026-11-17)
 
 - Root cause: the shared `el()` helper applies attributes with `setAttribute`; passing `disabled: null` still creates a `disabled="null"` HTML attribute. As a result, every PIN-screen control button was disabled, including Pattern setup and Lock Off.
 - Minimal fix: create each control button without a `disabled` attribute, then set the DOM boolean property `button.disabled = !!disabled`. Only controls intentionally unavailable by current configuration/platform remain disabled. No action handlers, PIN verification, Locker data, Diary Lock, Note Lock, or other features are changed.
 - Backup branch: `backup/before-private-locker-buttons-enable-fix-2026-11-17`. Working branch: `fix/private-locker-buttons-enabled-2026-11-17`.
 - PR #144 merged to main as `1765364368e6e35b66bea6a661d06ac0920fc7b4`.
 - Main source and mirror are byte-identical at Git blob SHA `8e2c495e121451f99d3c09112d86350c0e361d93`; both inline JavaScript blocks passed V8 syntax parsing. Static inspection confirms the erroneous disabled-attribute expression is gone and the boolean `button.disabled` property is used.
-- Web publication and live manifest checksum/version synchronization are pending; the current `latest.json` must not be treated as updated for this fix. Physical-phone test remains pending.
+- Published as **Web Update 291**. `latest.json` now reports `webVersion: 291` and web SHA-256 `9289907a3218d191f21f5950d27f41f8ec670124eb0b95dbbab47df84e799265`, matching the updated `web-source/index.html`. The source and `diary-web/index.html` mirror are byte-identical.
+- APK remains `1.0.189 / versionCode 188`; no APK was rebuilt or changed. Physical-phone testing remains pending.
 
 ---
 
