@@ -3247,19 +3247,37 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  function applyNotePinPlaceholderSize(input){
   if(!input)return;
   var label=String(input.placeholder||'').trim();
+  if(!label)return;
   var count=Array.from(label).length;
-  var size=count<=15?34:(count<=24?23:20);
-  try{
+  var target=count<=15?34:(count<=24?23:20);
+  function fit(){
+   if(!input.isConnected)return;
+   var rect=input.getBoundingClientRect();
+   var css=window.getComputedStyle(input);
+   var available=rect.width-
+    (parseFloat(css.paddingLeft)||0)-(parseFloat(css.paddingRight)||0)-
+    (parseFloat(css.borderLeftWidth)||0)-(parseFloat(css.borderRightWidth)||0)-6;
+   if(!(available>0))return;
    var canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');
-   if(ctx&&label){
-    ctx.font='900 '+size+'px Arial, "Noto Sans", sans-serif';
-    var measuredWidth=input.clientWidth||Math.min(300,Math.max(180,(document.documentElement.clientWidth||360)-64));
-    var available=Math.max(150,measuredWidth-30);
-    var measured=ctx.measureText(label).width;
-    if(measured>available)size=Math.max(18,Math.floor(size*available/measured));
+   if(!ctx)return;
+   var family=css.fontFamily||'Arial, sans-serif';
+   var weight=css.fontWeight||'900';
+   var low=8,high=target,best=8;
+   while(low<=high){
+    var mid=Math.floor((low+high)/2);
+    ctx.font=weight+' '+mid+'px '+family;
+    if(ctx.measureText(label).width<=available){
+     best=mid;low=mid+1;
+    }else high=mid-1;
    }
-  }catch(e){}
-  input.style.setProperty('--note-pin-placeholder-size',size+'px');
+   input.style.setProperty('--note-pin-placeholder-size',best+'px');
+  }
+  fit();
+  if(typeof ResizeObserver!=='undefined'&&!input.__notePinFitObserver){
+   input.__notePinFitObserver=new ResizeObserver(fit);
+   input.__notePinFitObserver.observe(input);
+  }
+  if(typeof requestAnimationFrame==='function')requestAnimationFrame(fit);
  }
  function showNotePinInlineError(input,message){
   if(!input||!input.parentNode)return;
@@ -4125,7 +4143,7 @@ input[name="diary-note-lock-pin"],#diaryMyNotesList input[name="diary-note-pin"]
   text-shadow:0 1px 0 rgba(255,255,255,.85),0 2px 0 rgba(80,55,105,.18)!important;
 }
 input[name="diary-note-lock-pin"]::placeholder,#diaryMyNotesList input[name="diary-note-pin"]::placeholder{
-  font-size:var(--note-pin-placeholder-size,clamp(13px,3.9vw,17px))!important;line-height:1.2!important;letter-spacing:0!important;
+  font-size:var(--note-pin-placeholder-size,16px)!important;line-height:1.15!important;letter-spacing:0!important;
   font-weight:900!important;opacity:1!important;color:#514467!important;text-align:center!important;
   white-space:nowrap!important;text-shadow:0 1px 0 #fff,0 2px 0 rgba(105,75,145,.24)!important;
 }

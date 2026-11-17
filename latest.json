@@ -7,8 +7,8 @@
   "sha256": "fb250b75d4a58b981600e6ce1528e7d529d7df06ab87fb58daf9ecaeff3404cd",
   "releaseNotes": "My Diary 1.0.189: Smart Reminder and Personal Calendar alarm scheduling now continues when full-screen UI permission is unavailable; Android may still restrict full-screen wake display. Existing Private Locker and Diary Lock features are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 307,
+  "webVersion": 308,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "8559c009e959b4757961dd4dfba7d28dbab1cf46d1b5fb0dd16b20c341ed3075",
-  "webReleaseNotes": "My Diary Web Update 307: Note Lock PIN placeholder text is enlarged according to prompt length; short prompts are doubled where they fit, longer prompts are moderately enlarged and sized to the available mobile width to prevent clipping. Only Note PIN prompt appearance changed; PIN entry, validation, recovery, and saved notes remain unchanged."
+  "webSha256": "e2dbd4e33597b98128c2e96493ad24060261b6884ab151f70275d3a2a0d256d0",
+  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
