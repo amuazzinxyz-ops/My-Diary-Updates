@@ -1105,8 +1105,7 @@ private object DiaryReminderScheduler {
             }
         }
         val autoItems = readAutoItems(context)
-        autoItems.length().let { count ->
-            for (i in 0 until count) {
+        for (i in 0 until autoItems.length()) {
                 val item = autoItems.optJSONObject(i) ?: continue
                 val id = item.optString("id")
                 val title = item.optString("title")
@@ -1123,7 +1122,6 @@ private object DiaryReminderScheduler {
                 val restoreAt = if (at > now) at else if (at > now - 24L * 60L * 60L * 1000L) now + 5000L else 0L
                 if (restoreAt > 0L) scheduleAutoSnooze(context, id, title, item.optString("details"), soundUri, restoreAt, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, snoozeUsed, repeatDaily, dailyAnchorAt)
                 else cancelAutoSnooze(context, id)
-            }
         }
     }
 
