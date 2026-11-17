@@ -197,13 +197,27 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 #diaryPrivateLockerModal input[placeholder="Apna purana Favourite Name likhein"]::placeholder{
   font-size:clamp(16px,4.6vw,17px)!important;
 }
-/* Favourite Name is a text field (not a PIN field): fit its full prompt while keeping typed names comfortably readable. */
+/* Favourite Name fields: centered, crisp text; placeholder stays on one line and fits the box. */
+#diaryPrivateLockerModal input[type="text"]{
+  box-sizing:border-box!important;
+  max-width:100%!important;
+  text-align:center!important;
+  color:#241a31!important;
+  font-size:17px!important;
+  font-weight:800!important;
+  text-shadow:none!important;
+}
 #diaryPrivateLockerModal input[type="text"]::placeholder{
-  font-size:14px!important;
+  font-size:15px!important;
+  font-weight:800!important;
   line-height:1.2!important;
   letter-spacing:0!important;
+  text-align:center!important;
   white-space:nowrap!important;
   text-overflow:clip!important;
+  opacity:1!important;
+  color:#514467!important;
+  text-shadow:none!important;
 }
 </style>
 </head>
