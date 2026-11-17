@@ -8,7 +8,7 @@
 - Changed only the Private Locker block in `web-source/index.html` and the identical `diary-web/index.html` mirror, plus this register entry. No Diary Lock, Note Lock, My Documents, Diary editor, or other feature logic was changed.
 - Backup branch: `backup/before-private-locker-full-button-audit-2026-11-17`. Working branch: `fix/private-locker-full-button-audit-2026-11-17`.
 - Verification: source and mirror have identical Git blob SHA `f2d14c4a0491eea73b59e24cc8668dbd50f482cb`; both inline JavaScript blocks pass V8 syntax parsing (2/2); static wiring checks pass for modal open/close, setup, PIN, Pattern, Fingerprint, remove controls, Lock On/Off, recovery, save/edit/delete, and search. Phone/browser interaction testing remains pending; do not claim physical-device confirmation.
-- No APK, updater manifest, or non-Locker feature was changed.
+- Published as **Web Update 298** by advancing only the web updater version/release note. The existing updater SHA-256 already matched the current main source and was retained. APK version 1.0.189 / versionCode 188 and all non-Locker features remain unchanged.
 
 ---
 
