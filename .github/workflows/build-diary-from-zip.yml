@@ -317,7 +317,7 @@ jobs:
                   raise SystemExit("BLOCKED: custom reminder sound support is missing: " + required)
           if "pickReminderSound(currentUri: String)" not in kotlin:
               raise SystemExit("BLOCKED: reminder sound picker bridge is missing")
-          for required in ("const val ACTION_AUTO_SNOOZE", "fun scheduleAutoSnooze(", "fun cancelAutoSnooze(", "DiaryReminderScheduler.scheduleAutoSnooze(", "DiaryReminderScheduler.ACTION_AUTO_SNOOZE ->", "DiaryReminderScheduler.cancelAutoSnooze(context, id)"):
+          for required in ("const val ACTION_AUTO_SNOOZE", "AUTO_ITEMS = \"auto_items\"", "fun scheduleAutoSnooze(", "fun cancelAutoSnooze(", "fun readAutoItems(", "val autoItems = readAutoItems(context)", "DiaryReminderScheduler.scheduleAutoSnooze(", "DiaryReminderScheduler.ACTION_AUTO_SNOOZE ->", "DiaryReminderScheduler.cancelAutoSnooze(context, id)"):
               if required not in kotlin:
                   raise SystemExit("BLOCKED: unanswered-alarm automatic repeat is incomplete: " + required)
           print("PASS: AlarmClock scheduler, unanswered-alarm auto-repeat, standard notification tap, wake-only activity, per-reminder ringtone/file selection, sound persistence, manifest receivers and permissions verified")
