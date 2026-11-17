@@ -10,7 +10,7 @@
 - No encrypted entries, PIN/recovery records, Diary Lock, Note Lock, or native Android source were changed. Existing encrypted Save/Edit/Delete/Search paths were inspected and left untouched.
 - Backup branch: backup/before-private-locker-controls-audit-fix-2026-11-17. Working branch: fix/private-locker-controls-safe-state-2026-11-17. PR #147 merged to main.
 - Source and mirror are byte-identical at Git blob SHA 69dae108b684ac4922e1bf3f627a94361154df04. Both inline JavaScript blocks passed V8 syntax parsing (2/2).
-- Published as Web Update 294. latest.json advertises webVersion 294 and web SHA-256 f53b183bd19bf4c1b91d0c4a5e69deab04f24afdf31ae53df80c1e9d98b71254. APK metadata remains 1.0.189 / versionCode 188 with original SHA-256 07d922d24b7ec1db1bea55681711408924d8c8a5888822bdaaebaf57a54e7baa.
+- Published as Web Update 294. latest.json advertises webVersion 294 and web SHA-256 f53b183bd19bf4c1b91d0c4a5e69deab04f24afdf31ae53df80c1e9d98b71254. The APK workflow also completed successfully and packaged this exact latest HTML into My-Diary-1.0.189.apk / My-Diary.apk. APK version remains 1.0.189 / versionCode 188; the newly published APK SHA-256 is 084c63eaff3ebf4d34d4acbdbcbe4ded98770c44bcef99da4e61053058cd8e15. latest.json was re-checked and restored to webVersion 294 after the APK workflow overwrote that metadata with an older webVersion.
 - Physical phone testing remains pending. Fingerprint prompts require a compatible Android build/device with enrolled fingerprint; web-only browser cannot test native biometric callbacks. Do not claim device-side confirmation until the user installs Web Update 294 and tests all controls.
 
 ---
