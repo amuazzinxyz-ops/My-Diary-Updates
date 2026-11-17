@@ -547,7 +547,7 @@ jobs:
           meta["versionCode"] = int(lines[1])
           meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.189.apk"
           meta["sha256"] = lines[2]
-          meta["releaseNotes"] = "My Diary My Diary 1.0.189: Private Locker writing-only, encrypted search/editing, four-digit Diary-style PIN, Pattern, Favourite Name recovery and separate Android Keystore fingerprint. Diary Lock remains unchanged."
+          meta["releaseNotes"] = "My Diary 1.0.189: Private Locker writing-only, encrypted search/editing, four-digit Diary-style PIN, Pattern, Favourite Name recovery and separate Android Keystore fingerprint. Diary Lock remains unchanged."
           meta["webVersion"] = 283
           meta["webSha256"] = hashlib.sha256(Path("web-source/index.html").read_bytes()).hexdigest()
           meta["webReleaseNotes"] = "My Diary Web Update 283: Private Locker restored with text-only encrypted writing, search/editing and four-digit Diary-style PIN, Pattern, Favourite Name recovery and separate fingerprint. Diary Lock unchanged."
