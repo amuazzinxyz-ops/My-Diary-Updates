@@ -1,3 +1,15 @@
+# Private Locker Lock Off / Lock On controls restored outside writing area — Web Update 288 (2026-11-17)
+
+- User corrected the previous placement: the Pattern/Fingerprint/Lock Off/Lock On controls belong outside the Private Locker search and writing content, in the Locker gate area above them. Web Update 287 had mounted the controls row inside `privateLockerContent`, directly under Search; that did not follow the user's stated placement.
+- Corrected only the mount location in `privateLockerShowEntries()`: the existing `tools` row is now appended to `privateLockerGate`, while `privateLockerContent` receives only `searchWrap`, `form`, and `list`. The controls therefore appear above Search and outside the writing area.
+- Existing Lock Off current-PIN confirmation, Lock On re-gating, Pattern/Fingerprint setup/removal handlers, and the Private Locker header **✕** remain unchanged. No Locker PIN, recovery wrapper, encrypted entry, IndexedDB record, or saved writing data was intentionally changed. Diary Lock and Note Lock are untouched.
+- Pre-edit main commit: `55f69971a59802f991d64c90967ae66fec094a46`. Snapshot branch: `backup/before-private-locker-controls-relocation-2026-11-17`. Working branch: `fix/private-locker-controls-outside-content-2026-11-17`. PR **#138** merged to main as `55f69971a59802f991d64c90967ae66fec094a46`.
+- Main source and `diary-web/index.html` mirror are byte-identical at Git blob SHA `1e0ce72209647edbebc38d00967cd71921c08f0d`. Both inline JavaScript blocks passed V8 syntax parsing (2/2). PR diff contains only the two HTML delivery files and the one intended mount-location correction.
+- Web publisher synchronized the source/mirror checksum. Verified manifest SHA-256: `9e74626c3dd091b8e5206d6034b4a8ce5e55a32473f523a785c52076d40fc761`. Feed is advanced to **Web Update 288** with release notes describing the corrected placement. APK remains **1.0.189 / versionCode 188** with its existing SHA-256 `1243d93bc6fd5f7af707425bfd8b8ba05c20e0b4c3817de76e527a0a363b7f1c`; no APK rebuild or publication was performed for this web-only change.
+- Physical-phone testing is still pending. Do not claim the buttons are confirmed on the user's device until the user runs Check for Update and verifies they appear above Search, outside the writing content, and that Lock Off / Lock On still work.
+
+---
+
 # Private Locker Lock Off / Lock On buttons made visible — Web Update 287 (2026-11-17)
 
 - User reported that neither **🔓 Lock Off Karein** nor **🔐 Lock On Karein** appeared in the actual Private Locker screen, although the previous Web Update 286 entry said they had been added. Re-read this Master Register and verified live main, `latest.json`, the actual source and mirror before editing.
