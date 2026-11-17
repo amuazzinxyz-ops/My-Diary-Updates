@@ -1,3 +1,14 @@
+# Private Locker text made bold with raised 3D effect — Web Update 304 published (2026-11-17)
+
+- User requested that all text inside **Private Locker** be bold with a raised 3D effect, including prompts/headings, button labels, PIN/recovery messages, input text/placeholders, and the writing typed and later displayed in saved entries.
+- Added one presentation-only stylesheet scoped exclusively to `#diaryPrivateLockerModal`. It applies `font-weight:900` and a subtle raised text shadow to all Locker descendants, with explicit input/textarea and placeholder coverage. No layout, event handlers, PIN/recovery logic, encryption, IndexedDB, saved data, Diary Lock, Note Lock, or other Diary features were changed.
+- Backup branch: `backup/before-private-locker-text-bold-3d-2026-11-17`. Working branch: `style/private-locker-all-text-bold-3d-2026-11-17`. PR #157 merged as `1b75e511c8ab3d98cbd532e77cfd636884d2cd23`.
+- Web publisher run `44113360621` completed successfully. Published as **Web Update 304**. Source and mirror are byte-identical at Git blob SHA `32ada1e0177df7a35fed7bef8a131a4d84d49d76`. Live `latest.json` advertises web SHA-256 `b407db93523ba64d0a38d023e7e61b05b1071fb51edb113c3044a470b5311852`.
+- Automatic APK workflow run `44113360633` stopped safely at the exact-latest-HTML pre-build guard while the publisher was synchronizing the mirror. It did not reach APK build, signing, or publication. Existing APK remains **1.0.189 / versionCode 188**, SHA-256 `1f627d94f744a70949fcaefcacb0269f90a36fbc10360368de60f4d3773cb133`.
+- Repository and web publication checks: PASS. Physical-phone visual test remains pending; do not claim device-side PASS until the user confirms that typed and saved Private Locker text appears bold and raised.
+
+---
+
 # Private Locker Lock On and PIN recovery use one input box — Web Update 303 published (2026-11-17)
 
 - User clarified that **🔐 Lock On Karein** and **PIN Bhool Gaye?** should each use exactly one input box, reused for each step, rather than showing separate PIN/name fields or separate step forms.
