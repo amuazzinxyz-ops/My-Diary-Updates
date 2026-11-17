@@ -1504,7 +1504,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    {id:'reminders',key:'smartReminder'},
    {id:'kharcha',key:'kharcha'},
    {id:'documents',key:'documents'},
-   {id:'memories',key:'memories'}
+   {id:'memories',key:'memories'},
+   {id:'locker',key:'privateLocker'}
   ];
   var meFeatureButtons={};
   var meKharchaCategories=[{value:'food',key:'categoryFood'},{value:'travel',key:'categoryTravel'},{value:'shopping',key:'categoryShopping'},{value:'bills',key:'categoryBills'},{value:'home',key:'categoryHome'},{value:'health',key:'categoryHealth'},{value:'education',key:'categoryEducation'},{value:'other',key:'categoryOther'}];
@@ -1628,6 +1629,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   function meFeatureForm(kind){
    var form=mfEl('form',{class:'diary-me-feature-form'});
    var title,date,amount,expenseAmount,category,details,file,type,time,noteSelect,soundInput,soundButton,soundLabel,repeatSelect,calendarReminder,snoozeControls,repeatDailySelect;
+   var lockerBody=null;
    if(kind==='calendar'){
     title=mfField(form,mf('title'),'text','title',true);date=mfField(form,mf('date'),'date','date',true);
     time=mfField(form,t('calendarTime'),'time','time',false);time.value='09:00';
@@ -1684,6 +1686,12 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     category=mfField(form,mf('category'),'text','category',false);category.setAttribute('list','diaryMeKharchaCategories');var categoryList=mfEl('datalist',{id:'diaryMeKharchaCategories'});meKharchaCategories.forEach(function(item){categoryList.appendChild(mfEl('option',{value:mf(item.key)}));});form.appendChild(categoryList);details=mfField(form,mf('details'),'text','details',false);
    }else if(kind==='documents'){
     title=mfField(form,mf('title'),'text','title',true);file=mfField(form,mf('file'),'file','file',true);file.accept='*/*';
+   }else if(kind==='locker'){
+    title=mfField(form,'Note ka naam (optional)','text','title',false);
+    var lockerWrap=mfEl('label',{class:'diary-me-feature-field'});lockerWrap.appendChild(mfEl('span',{},'Yahan apni baat likhein…'));
+    lockerBody=mfEl('textarea',{name:'details',rows:'7',placeholder:'Yahan apni baat likhein…',required:'required'});
+    lockerBody.style.cssText='display:block;width:100%;min-height:180px;box-sizing:border-box;padding:13px;border:2px solid #bda5df;border-radius:12px;background:#fff;color:#241638;font-size:16px;font-weight:600;line-height:1.55;resize:vertical;';
+    lockerWrap.appendChild(lockerBody);form.appendChild(lockerWrap);details=lockerBody;
    }else{
     title=mfField(form,mf('title'),'text','title',true);date=mfField(form,mf('date'),'date','date',true);details=mfField(form,mf('details'),'text','details',false);file=mfField(form,mf('photo'),'file','photo',false);
    }
@@ -1715,7 +1723,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      if(!(record.repeatDaily&&typeof bridge.scheduleReminderDaily==='function'?bridge.scheduleReminderDaily(record.id,record.title,record.details||'',triggerAt,record.soundUri||'',record.snoozeMinutes,record.snoozeLimit,record.ringDurationSeconds,record.ringVolumePercent):(!record.repeatDaily&&bridge.scheduleReminder(record.id,record.title,record.details||'',triggerAt,record.soundUri||'',record.snoozeMinutes,record.snoozeLimit,record.ringDurationSeconds,record.ringVolumePercent)))){meFeatureStatus.textContent=mf('reminderFailed');return;}
     }
     if(kind==='kharcha'){record.incomeAmount=Number(amount.value);record.expenseAmount=Number(expenseAmount.value);record.amount=record.expenseAmount;record.flow='expense';record.category=category.value.trim();record.details=details.value.trim();}
-    if(kind==='memories')record.details=details.value.trim();
+    if(kind==='memories'||kind==='locker')record.details=details.value.trim();
+    if(kind==='locker'&&!record.details){meFeatureStatus.textContent='Pehle kuch likhein.';return;}
     if(f){record.fileBlob=f;record.fileName=f.name;record.fileType=f.type||'application/octet-stream';}
     if(kind==='kharcha'&&(!Number.isFinite(record.incomeAmount)||record.incomeAmount<=0||!Number.isFinite(record.expenseAmount)||record.expenseAmount<0)){meFeatureStatus.textContent=mf('failed');return;}
     meFeatureStatus.textContent='…';
@@ -1837,7 +1846,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   }
   function meFeatureTools(kind){
    var wrap=mfEl('div',{class:'diary-me-feature-tools'}),search=mfEl('input',{type:'search',class:'diary-me-feature-search','aria-label':mf('search'),placeholder:mf('searchPlaceholder')});
-   meFeatureSearchInput=search;search.addEventListener('input',function(){renderMeFeatureList(kind);});if(kind==='memories'||kind==='documents'){wrap.style.display='block';wrap.style.width='100%';wrap.style.margin='0 0 12px';wrap.style.position='sticky';wrap.style.top='56px';wrap.style.zIndex='20';wrap.style.boxSizing='border-box';var searchHeading=mfEl('strong',{class:'diary-memories-search-heading'},kind==='documents'?'🔎 My Documents — Search Documents':'🔎 My Memories — Search Saved Images');searchHeading.style.display='block';searchHeading.style.margin='0 0 7px';searchHeading.style.fontSize='15px';searchHeading.style.fontWeight='900';searchHeading.style.color='#35145f';search.style.display='block';search.style.width='100%';search.style.minHeight='52px';search.style.boxSizing='border-box';search.style.margin='0';search.style.fontSize='16px';search.placeholder=kind==='documents'?(language()==='hindi'?'दस्तावेज़ का नाम लिखें — 2–3 शब्द भी चलेंगे':language()==='english'?'Search document name — 2–3 words work':'Document ka naam likhein — 2–3 words bhi chalega'):(language()==='hindi'?'तस्वीर का नाम लिखें — 2–3 शब्द भी चलेंगे':language()==='english'?'Search saved image name — 2–3 words work':'Image ka naam likhein — 2–3 words bhi chalega');search.setAttribute('aria-label',kind==='documents'?'My Documents Search':'My Memories Search');wrap.appendChild(searchHeading);}wrap.appendChild(search);
+   meFeatureSearchInput=search;search.addEventListener('input',function(){renderMeFeatureList(kind);});if(kind==='memories'||kind==='documents'||kind==='locker'){wrap.style.display='block';wrap.style.width='100%';wrap.style.margin='0 0 12px';wrap.style.position='sticky';wrap.style.top='56px';wrap.style.zIndex='20';wrap.style.boxSizing='border-box';var searchHeading=mfEl('strong',{class:'diary-memories-search-heading'},kind==='documents'?'🔎 My Documents — Search Documents':kind==='locker'?'🔎 Private Locker — Search Notes':'🔎 My Memories — Search Saved Images');searchHeading.style.display='block';searchHeading.style.margin='0 0 7px';searchHeading.style.fontSize='15px';searchHeading.style.fontWeight='900';searchHeading.style.color='#35145f';search.style.display='block';search.style.width='100%';search.style.minHeight='52px';search.style.boxSizing='border-box';search.style.margin='0';search.style.fontSize='16px';search.placeholder=kind==='documents'?(language()==='hindi'?'दस्तावेज़ का नाम लिखें — 2–3 शब्द भी चलेंगे':language()==='english'?'Search document name — 2–3 words work':'Document ka naam likhein — 2–3 words bhi chalega'):kind==='locker'?(language()==='hindi'?'लिखे हुए नोट का नाम या शब्द खोजें':language()==='english'?'Search note title or text':'Note ka naam ya likhe hue lafz search karein'):(language()==='hindi'?'तस्वीर का नाम लिखें — 2–3 शब्द भी चलेंगे':language()==='english'?'Search saved image name — 2–3 words work':'Image ka naam likhein — 2–3 words bhi chalega');search.setAttribute('aria-label',kind==='documents'?'My Documents Search':kind==='locker'?'Private Locker Search':'My Memories Search');wrap.appendChild(searchHeading);}wrap.appendChild(search);
    meFeatureCategoryFilter=null;
    if(kind==='kharcha'){var filter=mfEl('select',{class:'diary-me-feature-category-filter','aria-label':mf('allCategories')});filter.appendChild(mfEl('option',{value:''},mf('allCategories')));meKharchaCategories.forEach(function(item){filter.appendChild(mfEl('option',{value:mf(item.key)},mf(item.key)));});meFeatureCategoryFilter=filter;filter.addEventListener('change',function(){renderMeFeatureList(kind);});wrap.appendChild(filter);}
    if(kind==='kharcha'||kind==='calendar'){var report=mfEl('button',{type:'button',class:'diary-me-feature-report'},mf('report'));report.addEventListener('click',function(){exportMeFeatureReport(kind);});wrap.appendChild(report);}
@@ -1894,7 +1903,12 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
       edit.addEventListener('click',function(){var form=meFeatureContent.querySelector('.diary-me-feature-form');if(!form)return;form._editingRecord=record;form.querySelector('[name="date"]').value=record.date||meFeatureToday();form.querySelector('[name="amount"]').value=record.incomeAmount!==undefined?record.incomeAmount:(record.flow==='income'?record.amount:0);form.querySelector('[name="expenseAmount"]').value=record.expenseAmount!==undefined?record.expenseAmount:(record.flow==='income'?0:record.amount||0);form.querySelector('[name="category"]').value=record.category||'';form.querySelector('[name="details"]').value=record.details||'';form.querySelector('button[type="submit"]').textContent=mf('save');meFeatureStatus.textContent='';form.scrollIntoView({behavior:'smooth',block:'start'});});
       card.appendChild(edit);
      }
-     if(kind==='memories'&&record.details)card.appendChild(mfEl('p',{},record.details));
+     if((kind==='memories'||kind==='locker')&&record.details)card.appendChild(mfEl('p',{},record.details));
+     if(kind==='locker'){
+      var lockerEdit=mfEl('button',{type:'button',class:'diary-me-feature-edit'},'✏️ Edit');
+      lockerEdit.addEventListener('click',function(){var editForm=meFeatureContent.querySelector('.diary-me-feature-form');if(!editForm)return;editForm._editingRecord=record;var nameInput=editForm.querySelector('[name="title"]'),bodyInput=editForm.querySelector('[name="details"]');if(nameInput)nameInput.value=record.title||'';if(bodyInput)bodyInput.value=record.details||'';var saveButton=editForm.querySelector('button[type="submit"]');if(saveButton)saveButton.textContent='💾 Save Karein';meFeatureStatus.textContent='';editForm.scrollIntoView({behavior:'smooth',block:'start'});});
+      card.appendChild(lockerEdit);
+     }
      if(record.fileBlob){
      if(kind==='documents'){
        var documentImagePreview=null;
@@ -1976,7 +1990,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    meFeatureTitle.textContent=mf(meFeatureTypes.filter(function(x){return x.id===kind;})[0].key);
    meFeatureBack.textContent=mf('back');meFeatureLock.hidden=true;meFeatureManage.hidden=!meFeatureProtected(kind);meFeatureContent.replaceChildren();meFeatureStatus.textContent='';
    meFeatureSearchInput=null;meFeatureCategoryFilter=null;
-   if(kind==='memories'||kind==='documents'){meFeatureContent.appendChild(meFeatureTools(kind));meFeatureContent.appendChild(meFeatureForm(kind));}else{meFeatureContent.appendChild(meFeatureForm(kind));meFeatureContent.appendChild(meFeatureTools(kind));}meFeatureContent.append(meFeatureStatus,meFeatureList);
+   if(kind==='memories'||kind==='documents'||kind==='locker'){meFeatureContent.appendChild(meFeatureTools(kind));meFeatureContent.appendChild(meFeatureForm(kind));}else{meFeatureContent.appendChild(meFeatureForm(kind));meFeatureContent.appendChild(meFeatureTools(kind));}meFeatureContent.append(meFeatureStatus,meFeatureList);
    meFeatureModal.hidden=false;meFeatureModal.scrollTop=0;meFeatureContent.scrollTop=0;mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');window.requestAnimationFrame(function(){meFeatureModal.scrollTop=0;meFeatureContent.scrollTop=0;});
    renderMeFeatureList(kind);
   }
