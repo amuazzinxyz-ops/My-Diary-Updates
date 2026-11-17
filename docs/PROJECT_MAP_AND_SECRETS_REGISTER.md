@@ -1,3 +1,15 @@
+# Private Locker Favourite, Important Pin and Date Wise Diary — implementation prepared (2026-11-17)
+
+- User approved three additions inside **Private Locker** only: Favourite Notes, Important Notes Pin, and Date Wise Diary.
+- Added encrypted-record metadata flags `favourite` and `pinned`; existing notes without these fields remain valid and default to false. Editing an existing note preserves both flags. Favourite and Pin controls re-encrypt and update only the selected note record.
+- Added a view filter for All Notes / Favourite / Important Pin, a date picker for Date Wise Diary, and a visible saved-date label on each note. Sorting places pinned notes first, then favourites, then newest notes.
+- Existing search, save/edit/delete, encrypted IndexedDB storage, PIN/recovery, Pattern/Fingerprint, Lock On/Off, Diary Lock and Note Lock code were not intentionally changed. No existing note data is migrated or reset.
+- Backup branch: `backup/before-private-locker-favourite-pin-date-2026-11-17`. Feature branch: `feature/private-locker-favourite-pin-date-2026-11-17`.
+- Live baseline check found `latest.json` still advertised webVersion 283 while this register's preceding entry recorded Web Update 286; the source and mirror were byte-identical at blob SHA `5338fe01acdb5409f9a51ca9555c67f558102444`, and the advertised SHA-256 matched the current source. On the feature branch, `latest.json` baseline was reconciled to webVersion 286 so the web publisher can assign the next update number without regression.
+- Implementation is prepared on the feature branch. Source/mirror publication, JavaScript syntax/build workflow, and physical-phone interaction testing are pending. Do not claim the features are live or phone-tested until the publisher and checks complete.
+
+---
+
 # Private Locker PIN prompt text enlarged without clipping — visual-only update (2026-11-17)
 
 - User clarified that the earlier PIN-box prompt text had become too small. Short prompts such as “Naya 4 digit PIN” and “PIN dobara daalein” are now enlarged to a responsive 20–22px; medium prompts use 17–18px; the longest PIN prompts use a responsive 14–16px so they remain inside the box.
