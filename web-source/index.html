@@ -1838,7 +1838,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    var action=privateLockerExternalAction;if(!action)return false;
    if(action==='pattern'){privateLockerGate.replaceChildren();privateLockerSetupPattern();return true;}
    if(action==='fingerprint'){
-    privateLockerGate.replaceChildren();
+    privateLockerGate.replaceChildren();privateLockerMessage('Phone ka fingerprint prompt khul raha hai. Screen par aane wali tasdeeq poori karein.',false);
     if(window.DiaryAppActions&&typeof DiaryAppActions.enablePrivateLockerFingerprint==='function'){
      window.__privateLockerFingerprintPending=true;try{DiaryAppActions.enablePrivateLockerFingerprint(privateLockerB64(privateLockerRawKey));}catch(e){window.__privateLockerFingerprintPending=false;privateLockerMessage('Fingerprint setup shuru nahi ho saka.',true);}return true;
     }
