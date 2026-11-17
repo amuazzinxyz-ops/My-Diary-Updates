@@ -4,11 +4,11 @@
   "versionCode": 188,
   "versionName": "1.0.189",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.189.apk",
-  "sha256": "084c63eaff3ebf4d34d4acbdbcbe4ded98770c44bcef99da4e61053058cd8e15",
+  "sha256": "55bc96003d7fbc8970d31dc93beb8d1fc924bb740986a920ed6196c409eb451f",
   "releaseNotes": "My Diary 1.0.189: Private Locker writing-only, encrypted search/editing, four-digit Diary-style PIN, Pattern, Favourite Name recovery and separate Android Keystore fingerprint. Diary Lock remains unchanged.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 296,
+  "webVersion": 283,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "4afe5cb2b795bdcc6609d333552d73e7fb0bee51fb1a7b8ae9416a4915add168",
-  "webReleaseNotes": "My Diary Web Update 296: When Private Locker Lock is OFF, show a separate Locker Security gate with Lock On Karein and Locker Kholein. Lock On is outside the writing/search area and restores the PIN gate; Locker Kholein keeps Lock OFF access available. Saved encrypted writing and PIN/recovery data, Diary Lock and Note Lock are unchanged."
+  "webReleaseNotes": "My Diary Web Update 283: Private Locker restored with text-only encrypted writing, search/editing and four-digit Diary-style PIN, Pattern, Favourite Name recovery and separate fingerprint. Diary Lock unchanged."
 }
