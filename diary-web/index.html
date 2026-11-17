@@ -1680,14 +1680,14 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    label.appendChild(pin);wrap.appendChild(label);
    var status=el('div',{style:'min-height:22px;font-weight:800;color:#a11;'});
    var verifyAction=el('button',{type:'button',hidden:'hidden',style:'min-height:44px;padding:8px 14px;border:2px solid #b18b32;border-radius:11px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;color:#3d2b08;'},'🔐 PIN Verify Karke Kaam Karein');
-   var busy=false;
+   var busy=false,explicitPinConfirmation=false;
    function submitPin(){
     if(busy||(pin.value.length!==4&&pin.value.length!==6))return;
     busy=true;var value=pin.value;pin.disabled=true;verifyAction.disabled=true;
     var pinInvalid=false;privateLockerUnwrapMaster(value,config.pin).then(function(raw){return privateLockerFinishUnlock(raw);},function(){pinInvalid=true;status.textContent='PIN galat hai.';pin.value='';}).catch(function(e){status.textContent=e&&e.message?e.message:'Locker nahi khul saka.';}).finally(function(){busy=false;pin.disabled=false;verifyAction.disabled=false;if(pinInvalid)pin.focus();});
    }
    verifyAction.addEventListener('click',submitPin);
-   pin.addEventListener('input',function(){pin.value=String(pin.value||'').replace(/[^0-9]/g,'').slice(0,6);var expectedDigits=Number(config.pinDigits)===6?6:4;if(pin.value.length===expectedDigits)submitPin();});wrap.appendChild(status);
+   pin.addEventListener('input',function(){pin.value=String(pin.value||'').replace(/[^0-9]/g,'').slice(0,6);var expectedDigits=Number(config.pinDigits)===6?6:4;if(pin.value.length===expectedDigits&&!explicitPinConfirmation)submitPin();});wrap.appendChild(status);
    if(config.pattern){
     var patternTitle=el('strong',{},'Ya Pattern se kholein');
     var patternStatus=el('div',{style:'min-height:20px;color:#a11;font-weight:800;'});
@@ -1704,7 +1704,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    function addPinControl(label,action,kind,disabled){
     var styles=kind==='gold'?'min-height:42px;padding:8px 12px;border:2px solid #b18b32;border-radius:11px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;color:#3d2b08;box-shadow:0 3px 0 #b18b32;':kind==='red'?'min-height:42px;padding:8px 12px;border:1px solid #c7a2a2;border-radius:11px;background:linear-gradient(145deg,#fff0f0,#f5dada);font-weight:900;color:#7a2222;':'min-height:42px;padding:8px 12px;border:1px solid #9470bb;border-radius:11px;background:linear-gradient(145deg,#f4eaff,#ddc8f2);font-weight:900;color:#43245f;box-shadow:0 3px 0 #c4addb;';
     var button=el('button',{type:'button',style:styles},label);button.disabled=!!disabled;
-    button.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();privateLockerExternalAction=action;verifyAction.hidden=true;pin.value='';pin.disabled=false;verifyAction.disabled=false;pin.focus();privateLockerMessage(action==='lockOff'?'PIN daalein. Sahi PIN par Lock OFF hokar Locker khul jayega.':'PIN daalein. Sahi PIN ke baad yeh kaam khud shuru hoga.',false);});
+    button.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();privateLockerExternalAction=action;explicitPinConfirmation=action==='lockOff';verifyAction.hidden=!explicitPinConfirmation;verifyAction.textContent=explicitPinConfirmation?'🔓 PIN Verify Karke Lock Off Karein':'🔐 PIN Verify Karke Kaam Karein';pin.value='';pin.disabled=false;verifyAction.disabled=false;pin.focus();privateLockerMessage(explicitPinConfirmation?'Lock OFF karne ke liye PIN daalein, phir Verify button dabayein.':'PIN daalein. Sahi PIN ke baad yeh kaam khud shuru hoga.',false);});
     controls.appendChild(button);
    }
    addPinControl(config.pattern?'🔷 Pattern Badlein':'🔷 Pattern Set Karein','pattern','purple',false);
