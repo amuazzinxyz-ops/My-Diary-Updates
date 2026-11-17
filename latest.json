@@ -7,8 +7,8 @@
   "sha256": "90f7575564d3267d49d93734179034828a8ded6ddb75e6ffa2f57ea9424118ab",
   "releaseNotes": "My Diary 1.0.188: Private Locker removed. Other Diary features and existing locks are retained.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 281,
+  "webVersion": 282,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "781badc278cc9c54ad8b584a7da6cf7584631527260e3d1b8279f282f899e781",
-  "webReleaseNotes": "My Diary Web Update 281: Private Locker removed; other Diary features and existing locks are retained."
+  "webReleaseNotes": "My Diary Web Update 282: Note Lock wrong-PIN message now appears inside the PIN box; no browser address is shown."
 }
