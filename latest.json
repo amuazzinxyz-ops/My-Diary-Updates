@@ -10,5 +10,5 @@
   "webVersion": 284,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "32a2a820dc288d977e04512f4a7820be4e4537f8279d0dbb211397d05693cac7",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "My Diary Web Update 284: Private Locker Pattern and Fingerprint setup buttons are beside PIN setup and outside the writing tools row. Diary Lock and Note Lock unchanged."
 }
