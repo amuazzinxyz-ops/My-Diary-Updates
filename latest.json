@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 291,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "9289907a3218d191f21f5950d27f41f8ec670124eb0b95dbbab47df84e799265",
+  "webSha256": "5fd2f05adb1862224019be7134ba416b8760515e27146dfc32bf121078ad1249",
   "webReleaseNotes": "My Diary Web Update 291: Fixed Private Locker PIN-screen control buttons so Pattern setup/change and Lock Off respond to taps; Pattern/Fingerprint removal and Fingerprint setup are enabled only when their prerequisites are available. Existing PIN verification, encrypted Locker data, Diary Lock and Note Lock remain unchanged."
 }
