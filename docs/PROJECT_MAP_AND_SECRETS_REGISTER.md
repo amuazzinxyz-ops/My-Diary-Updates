@@ -1,3 +1,13 @@
+# Private Locker PIN recovery now requires a new Favourite Name — fix pending publication (2026-11-17)
+
+- User clarified that the existing **PIN Bhool Gaye?** flow correctly verifies the old Favourite Name and accepts/validates a new 4-digit PIN, but it did not ask for a replacement Favourite Name at the end.
+- Updated only the recovery flow in `web-source/index.html`: after the old Favourite Name is verified and the new PIN is entered twice, a separate final step now requires a **new Favourite Name**. The PIN wrapper and new recovery-name wrapper are both created from the same existing Locker master key and saved together in one updated config; the previous Favourite Name is therefore replaced for future recovery. No config is written until both new values are valid and both wrappers are ready.
+- Existing encrypted Locker entries, master key, Pattern/Fingerprint settings, Lock On/Off state, Diary Lock, Note Lock, and all other app features are preserved.
+- Backup branch: `backup/before-private-locker-new-recovery-name-2026-11-17`. Working branch: `fix/private-locker-recovery-new-favourite-name-2026-11-17`.
+- Source change commit on working branch: `7b3c0ea525f601bbc258e69b304d5e7096d95d2b`. PR, source/mirror verification, JavaScript syntax checks, Web Update publication, and phone testing are pending. Do not claim this change is published or device-tested until all checks pass.
+
+---
+
 # Private Locker Lock On requires a new PIN and Favourite Name — repair (2026-11-17)
 
 - User reported that tapping **Lock On Karein** immediately re-enabled the old lock without asking to create a PIN or enter the Private Name/Favourite Name. User confirmed the intended flow: new 4-digit PIN, PIN confirmation, and Favourite Name before Lock ON.
