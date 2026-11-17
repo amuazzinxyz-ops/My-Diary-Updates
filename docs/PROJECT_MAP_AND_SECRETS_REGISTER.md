@@ -1,3 +1,17 @@
+# Private Locker Pattern and Fingerprint controls — repair (2026-11-17)
+
+- User reported that Pattern Set, Fingerprint Set, Pattern Remove, and Fingerprint Remove did not proceed after entering the Locker PIN. The previous static-only review did not prove the buttons worked; correction is limited to Private Locker.
+- Root causes found in the Private Locker flow:
+  - PIN entry for these actions did not auto-run the selected action; it exposed a second Verify button. The PIN input now verifies automatically at the configured 4- or 6-digit length, matching the Lock Off flow.
+  - Pattern setup left the PIN gate visible and rendered the pattern grid separately below it. The gate is now cleared before the grid is shown, and the grid is scrolled into view.
+  - Fingerprint Set was enabled only when the Android WebView native bridge existed. In Chrome/web builds this made the button unavailable. Native Android biometric support is retained; secure web builds now also attempt a WebAuthn platform-authenticator PRF flow. The Private Locker master key is wrapped with a key derived from the authenticator PRF; if the browser/device does not support PRF, the user receives an explicit message and PIN remains available. No plaintext master key is stored for this fallback.
+  - Fingerprint unlock now supports the saved WebAuthn credential; Fingerprint Remove clears only the Private Locker fingerprint metadata and preserves encrypted entries/PIN/recovery.
+- Changed only the Private Locker code in `web-source/index.html` and the identical `diary-web/index.html` mirror, plus this register entry. Diary Lock, Note Lock, My Documents, Diary editor, and other features are not changed.
+- Backup branch: `backup/before-private-locker-pattern-fingerprint-fix-2026-11-17`. Working branch: `fix/private-locker-pattern-fingerprint-2026-11-17`.
+- Verification to complete before publishing: source/mirror byte equality, inline JavaScript syntax, Private Locker action wiring, and PR diff scope. Physical biometric prompt / Pattern touch testing on the user's phone remains pending; do not claim it has been device-tested.
+
+---
+
 # Private Locker full button audit — two edge-case fixes (2026-11-17)
 
 - User requested that **only Private Locker buttons** be audited and corrected; all other Diary features must remain untouched.
