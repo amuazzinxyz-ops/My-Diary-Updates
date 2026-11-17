@@ -1793,7 +1793,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    var search=el('input',{type:'search',placeholder:'Naam ya likhai ke alfaaz dhoondein…','aria-label':'Private Locker Search',style:'display:block;width:100%;min-height:52px;box-sizing:border-box;padding:12px 14px;border:1.5px solid #c7b4dd;border-radius:15px;background:#fff;font-size:16px;font-weight:700;box-shadow:inset 0 2px 4px #35145f14,0 4px 0 #e4d8ee,0 7px 12px #35145f12;'});
    searchWrap.append(searchHeading,search);
    var list=el('div',{style:'display:grid;gap:10px;'});
-   privateLockerContent.append(searchWrap,tools,form,list);
+   privateLockerGate.appendChild(tools);
+   privateLockerContent.append(searchWrap,form,list);
    var allRecords=[];
    function render(){
     list.replaceChildren();
