@@ -6,6 +6,7 @@
 - No encrypted entries, PINs, recovery data, IndexedDB records, Android Keystore entries, Diary Lock, Note Lock, writing/search/editing behavior, or app identity were intentionally changed.
 - Verified main baseline commit: `af5bc74f49b9f737a28ecb07e9402b1a45340b81`. Pre-edit snapshot branch: `backup/before-private-locker-lock-buttons-move-2026-11-17`. PR **#133** merged as `bf479c6108cad2e88cb76a8ee3474db479754344`.
 - V8 inline JavaScript syntax and static checks passed. Source and `diary-web/index.html` mirror are byte-identical at Git blob SHA `4ee279d6d84ca5b64a665483e1ac1f91513e4dee`. Web publisher run **44060440587** completed successfully; Web Update **284** is live with web SHA-256 `32a2a820dc288d977e04512f4a7820be4e4537f8279d0dbb211397d05693cac7`. APK remains **1.0.189 / versionCode 188**; no APK change is required for this web-only relocation.
+- APK workflow run **44060440753** failed closed at the source/mirror equality guard because it checked out the main commit while the separate web publisher was concurrently syncing the mirror. No Android build or APK publication occurred; the existing APK 1.0.189 / code 188 and its checksum were not changed. This is a web-only relocation, so no APK rebuild is required. The source/mirror equality was verified after publisher completion.
 - Physical phone testing remains pending. Do not claim device-side success until the user confirms.
 
 
