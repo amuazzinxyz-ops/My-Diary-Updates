@@ -1,3 +1,14 @@
+# Note Lock PIN prompt text enlarged without clipping — Web Update 307 (2026-11-18)
+
+- User requested that short text shown in the **Note PIN boxes** be made double-sized, while longer prompt text should be enlarged moderately and never be cut off.
+- Added a presentation-only helper for both existing Note Lock PIN prompt routes. Short placeholders target 34px; medium/long placeholders target 23px/20px, with canvas text-width measurement and mobile viewport fitting to reduce the size only when needed to keep the full prompt visible. The existing placeholder styling now reads that per-input size.
+- Only `web-source/index.html` changed. No typed PIN digit sizing, PIN validation, unlock/recovery handlers, encryption, saved notes, Diary Lock, Private Locker, or other features were changed.
+- Backup branch: `backup/before-note-pin-placeholder-text-size-2026-11-18`. Working branch: `style/note-pin-placeholder-text-size-2026-11-18`. PR #164 merged as `84a1d1d47ed962b1c4a546e50d7614d90e4644c3`.
+- Web publisher run `44149994876` completed successfully. Published as **Web Update 307**. Source and mirror are byte-identical at Git blob SHA `444edae0500a1602e36b0c11378a930baf5567ee`; published bundle SHA-256 is `8559c009e959b4757961dd4dfba7d28dbab1cf46d1b5fb0dd16b20c341ed3075`. Live `latest.json` advertises Web Update 307 and the matching checksum. APK remains `1.0.189 / versionCode 188`; no APK release is claimed for this visual-only change.
+- Static source and publication checks: PASS. Physical-phone visual confirmation remains pending; do not claim device-side PASS until the user checks short and long Note PIN prompts on the phone.
+
+---
+
 # Check for Update version corrected to Web Update 306 (2026-11-17)
 
 - User reported that **Check for Update** did not detect the previously announced update. Inspection found that live `latest.json` had regressed to **webVersion 288**, even though the Master Register records later releases through **Web Update 305**. A device already at 305 would correctly see 288 as older and would not offer an update.
