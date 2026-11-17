@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 281,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "e41dccfd3ed91a1cca6b2d147bffb40d87a72e775d0ef601c43db7b216b1a289",
+  "webSha256": "781badc278cc9c54ad8b584a7da6cf7584631527260e3d1b8279f282f899e781",
   "webReleaseNotes": "My Diary Web Update 281: Private Locker removed; other Diary features and existing locks are retained."
 }
