@@ -10,5 +10,5 @@
   "webVersion": 308,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "e2dbd4e33597b98128c2e96493ad24060261b6884ab151f70275d3a2a0d256d0",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "My Diary Web Update 308: Note PIN prompt text now fits the actual PIN box width, with exactly 3px clear space on each inner side. The largest size that fits is selected for short, medium and long prompts; the fit recalculates after the box is displayed or resized. No PIN entry or saved data behavior changed."
 }
