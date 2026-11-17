@@ -1,3 +1,16 @@
+# Private Locker Lock Off restored to automatic PIN verification — Web Update 285 (2026-11-17)
+
+- User clarified that the original Lock Off flow was correct: tap **Lock Off Karein**, enter the existing PIN, and a correct PIN should automatically verify and turn Lock OFF. No separate Verify button should appear.
+- Corrected only the Private Locker control handler in `web-source/index.html`: Lock Off no longer enables explicit PIN confirmation; the existing configured 4-/6-digit input auto-submit remains active, and the existing successful-unlock path still calls `privateLockerRunExternalAction(config)` → `privateLockerTurnLockOff(config)`. Wrong PIN behavior remains unchanged.
+- The requested PIN-box visual treatment was already present in the current source and was deliberately left untouched: PIN text is 20px with readable responsive placeholder text; the PIN boxes retain their gold raised 3D border/shadow. No CSS or other feature was changed in this correction.
+- Backup branch: `backup/before-private-lockoff-auto-pin-restore-2026-11-17`. Working branch: `fix/restore-private-lockoff-auto-pin-2026-11-17`. PR #160 merged as `d5a96932f593d116f3a9e41be458fb71d77f3f84`.
+- Static checks: automatic submit remains enabled for the configured PIN length; Lock Off hides the extra Verify button; correct PIN still reaches the existing Lock Off handler. Source and mirror are byte-identical at Git blob SHA `f15582a3032f836ad3e1c8c242db06bef6f7432a`.
+- Web publisher run `44122191476` completed successfully. Published as **Web Update 285**. Live `latest.json` advertises web SHA-256 `dc3f994422db34a075fdab08cdb3e3752b8150f5aff86bd624afbddcec6f62a0`, matching the source bundle.
+- APK workflow run `44122190215` stopped safely at the source/mirror equality guard because it started before mirror synchronization; it did not reach APK build, signing, or publication. Existing APK remains **1.0.189 / versionCode 188**; no APK update is claimed.
+- Physical-phone testing remains pending. Ask the user to install/check Web Update 285 and confirm that entering the correct PIN after tapping Lock Off turns the lock off automatically, and that the PIN text fits clearly inside the 3D boxes.
+
+---
+
 # Private Locker PIN boxes made readable with raised 3D effect — visual-only update (2026-11-17)
 
 - User requested that every PIN box inside Private Locker use slightly smaller, readable entered text so digits/words do not clip, while retaining comfortable legibility, and that the boxes have a raised 3D effect.
