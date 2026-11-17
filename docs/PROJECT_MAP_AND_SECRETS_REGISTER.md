@@ -1,3 +1,13 @@
+# Note PIN prompt exact box fit with 3px side gaps — Web Update 308 (2026-11-18)
+
+- User clarified that simply enlarging the Note PIN prompt text caused it to shift/clip at the left and right. Required fit: match the real PIN box's inner width, leave exactly 3px clear space on each side, and show the entire prompt on one line.
+- Replaced the earlier estimated-width sizing with actual `getBoundingClientRect()` width minus computed padding, border and 6px total side gap. A canvas measurement and binary search selects the largest font up to the short/medium/long target (34/23/20px) that fits. A `ResizeObserver` and post-layout animation-frame measurement recalculate once detached modal inputs are attached and if the box resizes.
+- Only `web-source/index.html` changed in PR #165, merged as `05fe9199a020ee99212fcb787debe787fa1fb5b5`. Backup branch: `backup/before-note-pin-exact-fit-3px-2026-11-18`.
+- Publisher run `44151054153` completed successfully. Published **Web Update 308**. Source/mirror Git blob SHA: `bebfaad27a9222e3858441638748e7d8d2495537` (identical). Published SHA-256: `e2dbd4e33597b98128c2e96493ad24060261b6884ab151f70275d3a2a0d256d0`. Live feed now advertises Web Update 308.
+- No typed PIN behavior, PIN validation/recovery, saved notes, locks, or other features changed. Static publication checks PASS. Actual Android phone visual confirmation remains pending; user should verify that the full placeholder text has a visible 3px gap on both sides.
+
+---
+
 # Note Lock PIN prompt text enlarged without clipping — Web Update 307 (2026-11-18)
 
 - User requested that short text shown in the **Note PIN boxes** be made double-sized, while longer prompt text should be enlarged moderately and never be cut off.
