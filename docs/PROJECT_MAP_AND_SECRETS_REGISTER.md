@@ -1,3 +1,17 @@
+# Private Locker Lock On requires a new PIN and Favourite Name — repair (2026-11-17)
+
+- User reported that tapping **Lock On Karein** immediately re-enabled the old lock without asking to create a PIN or enter the Private Name/Favourite Name. User confirmed the intended flow: new 4-digit PIN, PIN confirmation, and Favourite Name before Lock ON.
+- Corrected only the Private Locker Lock-OFF security-gate action in `web-source/index.html` and the identical `diary-web/index.html` mirror:
+  - Lock On now opens a dedicated setup form; it does not switch protection ON immediately.
+  - Requires a new four-digit PIN, matching confirmation, and a non-empty Favourite Name for PIN recovery.
+  - Re-wraps the existing Private Locker master key with the new PIN and Favourite Name, then turns Lock ON and returns to the PIN gate.
+  - Preserves existing encrypted entries, Pattern configuration, Fingerprint configuration, and other Locker metadata. It does not reset or replace the master key.
+  - Cancel returns to the Lock-OFF security gate without changing the stored lock state.
+- Backup branch: `backup/before-private-locker-lockon-new-pin-recovery-2026-11-17`. Working branch: `fix/private-locker-lockon-new-pin-recovery-2026-11-17`.
+- Source and mirror were identical before editing (Git blob SHA `110f4040efe63ef46c1a3fcc81d7959b114fa6bb`). Verification and publication are pending; do not claim phone testing.
+
+---
+
 # Private Locker Pattern and Fingerprint controls — repair (2026-11-17)
 
 - User reported that Pattern Set, Fingerprint Set, Pattern Remove, and Fingerprint Remove did not proceed after entering the Locker PIN. The previous static-only review did not prove the buttons worked; correction is limited to Private Locker.
