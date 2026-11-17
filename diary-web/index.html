@@ -1702,45 +1702,43 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   }
   function privateLockerRecoveryForm(config){
    privateLockerGate.replaceChildren();
-   var wrap=el('div',{style:'display:grid;gap:10px;margin-top:12px;'});
-   wrap.appendChild(el('strong',{},'Favourite Name se PIN recover karein'));
-   var name=el('input',{type:'text',maxlength:'80',autocomplete:'off',placeholder:'Apna Favourite Name likhein',style:'width:100%;height:48px;box-sizing:border-box;border:2px solid #c8b2df;border-radius:12px;padding:10px;font-size:17px;font-weight:800;'});
-   var go=el('button',{type:'button',style:'min-height:44px;border:2px solid #b18b32;border-radius:10px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;'},'Aage');
+   var wrap=el('div',{style:'display:grid;gap:10px;margin-top:12px;padding:13px;border:1px solid #d8c6eb;border-radius:14px;background:linear-gradient(145deg,#fff,#faf7ff);'});
+   var heading=el('strong',{},'Favourite Name se PIN recover karein');
+   var help=el('p',{style:'margin:0;color:#604b78;font-weight:700;'},'Ek hi box mein purana Favourite Name verify hoga, phir naya PIN, dobara PIN aur naya Favourite Name likhenge.');
+   var entry=el('input',{type:'text',maxlength:'80',autocomplete:'off',placeholder:'Apna purana Favourite Name likhein',style:'width:100%;height:48px;box-sizing:border-box;border:2px solid #c8b2df;border-radius:12px;padding:10px;font-size:17px;font-weight:800;'});
+   var status=el('div',{style:'min-height:22px;font-weight:800;color:#a11;'});
+   var go=el('button',{type:'button',style:'min-height:44px;border:2px solid #b18b32;border-radius:10px;background:linear-gradient(145deg,#fff4bd,#e5c76e);font-weight:900;'},'Aage');
    var back=el('button',{type:'button',style:'min-height:40px;border:1px solid #b9a4d0;border-radius:10px;background:#f2eafb;font-weight:800;'},'Wapas');
+   var stage=0,raw=null,pinValue='',busy=false;
+   function showStage(next){
+    stage=next;entry.value='';status.textContent='';status.style.color='#a11';
+    if(stage===0){heading.textContent='Favourite Name se PIN recover karein';entry.type='text';entry.inputMode='text';entry.maxLength=80;entry.placeholder='Apna purana Favourite Name likhein';entry.style.textAlign='left';entry.style.letterSpacing='normal';go.textContent='Aage';}
+    else if(stage===1){heading.textContent='Pehla kaam: Naya 4 digit PIN';entry.type='password';entry.inputMode='numeric';entry.maxLength=4;entry.placeholder='Naya 4 digit PIN';entry.style.textAlign='center';entry.style.letterSpacing='6px';go.textContent='Aage';}
+    else if(stage===2){heading.textContent='Doosra kaam: PIN dobara';entry.type='password';entry.inputMode='numeric';entry.maxLength=4;entry.placeholder='Wahi PIN dobara daalein';entry.style.textAlign='center';entry.style.letterSpacing='6px';go.textContent='Aage';}
+    else{heading.textContent='Teesra kaam: Naya Favourite Name';entry.type='text';entry.inputMode='text';entry.maxLength=80;entry.placeholder='Apna naya Favourite Name likhein';entry.style.textAlign='left';entry.style.letterSpacing='normal';go.textContent='Naya PIN aur Favourite Name Save Karein';}
+    entry.focus();
+   }
+   entry.addEventListener('input',function(){if(stage===1||stage===2)entry.value=String(entry.value||'').replace(/[^0-9]/g,'').slice(0,4);});
    back.addEventListener('click',function(){privateLockerGate.replaceChildren(privateLockerPinForm(config));});
    go.addEventListener('click',function(){
-    var recovery=privateLockerNormalizeRecovery(name.value);if(!recovery){privateLockerMessage('Favourite Name likhein.',true);return;}
-    go.disabled=true;
-    privateLockerUnwrapMaster(recovery,config.recovery).then(function(raw){
-     var fresh=el('div',{style:'display:grid;gap:10px;margin-top:10px;'});
-     fresh.appendChild(el('strong',{},'Naya 4 digit PIN banayein'));
-     var a=el('input',{type:'password',inputmode:'numeric',maxlength:'4',autocomplete:'off',placeholder:'Naya 4 digit PIN',style:'width:100%;height:48px;box-sizing:border-box;text-align:center;font-size:22px;letter-spacing:6px;border:2px solid #c8b2df;border-radius:10px;'});
-     var b=el('input',{type:'password',inputmode:'numeric',maxlength:'4',autocomplete:'off',placeholder:'PIN dobara daalein',style:a.style.cssText});
-     var save=el('button',{type:'button',style:'min-height:44px;border:2px solid #b18b32;border-radius:10px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;'},'Aage');
-     fresh.append(a,b,save);privateLockerGate.replaceChildren(fresh);
-     save.addEventListener('click',function(){
-      if(!/^[0-9]{4}$/.test(a.value)||a.value!==b.value){privateLockerMessage('Dono 4 digit PIN ek jaise daalein.',true);return;}
-      save.disabled=true;
-      var pinValue=a.value;
-      var recoveryStep=el('div',{style:'display:grid;gap:10px;margin-top:10px;'});
-      recoveryStep.appendChild(el('strong',{},'Ab naya Favourite Name daalein'));
-      recoveryStep.appendChild(el('p',{style:'margin:0;color:#604b78;font-weight:700;'},'Yahi naam agli baar PIN bhoolne par PIN recover karne ke kaam aayega.'));
-      var newName=el('input',{type:'text',maxlength:'80',autocomplete:'off',placeholder:'Naya Favourite Name',style:'width:100%;height:48px;box-sizing:border-box;border:2px solid #c8b2df;border-radius:12px;padding:10px;font-size:17px;font-weight:800;'});
-      var finish=el('button',{type:'button',style:'min-height:44px;border:2px solid #b18b32;border-radius:10px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;'},'Naya PIN aur Favourite Name Save Karein');
-      recoveryStep.append(newName,finish);privateLockerGate.replaceChildren(recoveryStep);
-      finish.addEventListener('click',function(){
-       var newRecovery=privateLockerNormalizeRecovery(newName.value);
-       if(!newRecovery){privateLockerMessage('Naya Favourite Name likhein.',true);return;}
-       finish.disabled=true;
-       Promise.all([privateLockerWrapMaster(raw,pinValue),privateLockerWrapMaster(raw,newRecovery)]).then(function(wrapped){
-        var next=Object.assign({},config,{pin:wrapped[0],recovery:wrapped[1],pinDigits:4,updated:Date.now()});
-        return privateLockerPut('meta',next).then(function(){return privateLockerFinishUnlock(raw);});
-       }).catch(function(e){privateLockerMessage(e.message||'Naya PIN aur Favourite Name save nahi hua.',true);}).finally(function(){finish.disabled=false;});
-      });
-     });
-    }).catch(function(){privateLockerMessage('Favourite Name galat hai.',true);}).finally(function(){go.disabled=false;});
+    if(busy)return;
+    if(stage===0){
+     var recovery=privateLockerNormalizeRecovery(entry.value);if(!recovery){status.textContent='Purana Favourite Name likhein.';entry.focus();return;}
+     busy=true;go.disabled=true;status.style.color='#604b78';status.textContent='Favourite Name verify ho raha hai…';
+     privateLockerUnwrapMaster(recovery,config.recovery).then(function(unwrapped){raw=unwrapped;showStage(1);}).catch(function(){status.style.color='#a11';status.textContent='Favourite Name galat hai. Dobara likhein.';entry.value='';entry.focus();}).finally(function(){busy=false;go.disabled=false;});
+     return;
+    }
+    if(stage===1){if(!/^[0-9]{4}$/.test(entry.value)){status.textContent='Naya 4 digit PIN zaroori hai.';entry.focus();return;}pinValue=entry.value;showStage(2);return;}
+    if(stage===2){if(entry.value!==pinValue){status.textContent='Dono PIN ek jaise nahi hain. Dobara PIN likhein.';entry.value='';entry.focus();return;}showStage(3);return;}
+    var newRecovery=privateLockerNormalizeRecovery(entry.value);
+    if(!newRecovery){status.textContent='Naya Favourite Name likhein.';entry.focus();return;}
+    busy=true;go.disabled=true;back.disabled=true;status.style.color='#17633c';status.textContent='Naya PIN aur Favourite Name mehfooz kiya ja raha hai…';
+    Promise.all([privateLockerWrapMaster(raw,pinValue),privateLockerWrapMaster(raw,newRecovery)]).then(function(wrapped){
+     var next=Object.assign({},config,{pin:wrapped[0],recovery:wrapped[1],pinDigits:4,updated:Date.now()});
+     return privateLockerPut('meta',next).then(function(){return privateLockerFinishUnlock(raw);});
+    }).catch(function(e){status.style.color='#a11';status.textContent=e&&e.message?e.message:'Naya PIN aur Favourite Name save nahi hua. Purana data surakshit hai.';busy=false;go.disabled=false;back.disabled=false;});
    });
-   wrap.append(name,go,back);privateLockerGate.appendChild(wrap);
+   wrap.append(heading,help,entry,status,go,back);privateLockerGate.appendChild(wrap);entry.focus();
   }
   function privateLockerSetupPattern(){
    if(!privateLockerRawKey){privateLockerMessage('PIN verify dobara karein.',true);return;}
@@ -1797,31 +1795,39 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    catch(e){privateLockerMessage(e.message||'Locker ki secure key nahi mili.',true);return Promise.resolve(false);}
    privateLockerGate.replaceChildren();privateLockerContent.replaceChildren();
    var wrap=el('div',{style:'display:grid;gap:10px;margin-top:12px;padding:14px;border:1px solid #d8c6eb;border-radius:14px;background:linear-gradient(145deg,#fff,#faf7ff);'});
-   wrap.appendChild(el('strong',{},'🔐 Private Locker ka naya PIN banayein'));
-   wrap.appendChild(el('p',{style:'margin:0;color:#604b78;font-weight:700;'},'Lock ON karne ke liye naya PIN aur Favourite Name zaroori hai. Aapki purani private likhai aur security settings surakshit rahengi.'));
-   var pin=el('input',{type:'password',inputmode:'numeric',maxlength:'4',autocomplete:'off',placeholder:'Naya 4 digit PIN',style:'width:100%;height:50px;box-sizing:border-box;border:2px solid #c8b2df;border-radius:12px;padding:8px;text-align:center;font-size:22px;font-weight:900;letter-spacing:6px;'});
-   var confirmPin=el('input',{type:'password',inputmode:'numeric',maxlength:'4',autocomplete:'off',placeholder:'PIN dobara daalein',style:pin.style.cssText});
-   var recovery=el('input',{type:'text',maxlength:'80',autocomplete:'off',placeholder:'Favourite Name (PIN bhoolne par)',style:'width:100%;height:48px;box-sizing:border-box;border:2px solid #c8b2df;border-radius:12px;padding:10px;font-size:17px;font-weight:800;'});
+   var heading=el('strong',{},'🔐 Private Locker ka naya PIN banayein');
+   var help=el('p',{style:'margin:0;color:#604b78;font-weight:700;'},'Ek hi box mein pehle PIN, phir wahi PIN dobara, aur aakhir mein Favourite Name likhein.');
+   var entry=el('input',{type:'password',inputmode:'numeric',maxlength:'4',autocomplete:'off',placeholder:'Naya 4 digit PIN',style:'width:100%;height:50px;box-sizing:border-box;border:2px solid #c8b2df;border-radius:12px;padding:8px;text-align:center;font-size:22px;font-weight:900;letter-spacing:6px;'});
    var status=el('div',{style:'min-height:22px;font-weight:800;color:#a11;'});
-   var save=el('button',{type:'button',style:'min-height:46px;border:2px solid #b18b32;border-radius:12px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;color:#3d2b08;'},'🔐 Naya PIN Set Karke Lock ON Karein');
+   var save=el('button',{type:'button',style:'min-height:46px;border:2px solid #b18b32;border-radius:12px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;color:#3d2b08;'},'Aage');
    var cancel=el('button',{type:'button',style:'min-height:42px;border:1px solid #b9a4d0;border-radius:10px;background:#f2eafb;font-weight:800;color:#43245f;'},'✖ Radd Karein');
+   var stage=0,pinValue='',busy=false;
+   function showStage(next){
+    stage=next;entry.value='';status.textContent='';status.style.color='#a11';
+    if(stage===0){heading.textContent='🔐 Pehla kaam: Naya PIN';entry.type='password';entry.inputMode='numeric';entry.maxLength=4;entry.placeholder='Naya 4 digit PIN';entry.style.textAlign='center';entry.style.letterSpacing='6px';save.textContent='Aage';}
+    else if(stage===1){heading.textContent='🔐 Doosra kaam: PIN dobara';entry.type='password';entry.inputMode='numeric';entry.maxLength=4;entry.placeholder='Wahi PIN dobara daalein';entry.style.textAlign='center';entry.style.letterSpacing='6px';save.textContent='Aage';}
+    else{heading.textContent='⭐ Teesra kaam: Favourite Name';entry.type='text';entry.inputMode='text';entry.maxLength=80;entry.placeholder='Apna Favourite Name likhein';entry.style.textAlign='left';entry.style.letterSpacing='normal';save.textContent='🔐 Lock ON Karein';}
+    entry.focus();
+   }
+   entry.addEventListener('input',function(){if(stage<2)entry.value=String(entry.value||'').replace(/[^0-9]/g,'').slice(0,4);});
    cancel.addEventListener('click',function(){privateLockerShowLockOffGate(raw,config);});
    save.addEventListener('click',function(){
-    var p=String(pin.value||''),p2=String(confirmPin.value||''),name=privateLockerNormalizeRecovery(recovery.value);
-    if(!/^[0-9]{4}$/.test(p)){status.textContent='Naya 4 digit PIN zaroori hai.';pin.focus();return;}
-    if(p2!==p){status.textContent='Dono PIN ek jaise nahi hain.';confirmPin.focus();return;}
-    if(!name){status.textContent='PIN recovery ke liye Favourite Name likhein.';recovery.focus();return;}
-    save.disabled=true;cancel.disabled=true;status.style.color='#17633c';status.textContent='Naya PIN aur Favourite Name mehfooz kiya ja raha hai…';
-    Promise.all([privateLockerWrapMaster(raw,p),privateLockerWrapMaster(raw,name)]).then(function(w){
+    if(busy)return;
+    if(stage===0){if(!/^[0-9]{4}$/.test(entry.value)){status.textContent='Naya 4 digit PIN zaroori hai.';entry.focus();return;}pinValue=entry.value;showStage(1);return;}
+    if(stage===1){if(entry.value!==pinValue){status.textContent='Dono PIN ek jaise nahi hain. Dobara PIN likhein.';entry.value='';entry.focus();return;}showStage(2);return;}
+    var name=privateLockerNormalizeRecovery(entry.value);
+    if(!name){status.textContent='PIN recovery ke liye Favourite Name likhein.';entry.focus();return;}
+    busy=true;save.disabled=true;cancel.disabled=true;status.style.color='#17633c';status.textContent='Naya PIN aur Favourite Name mehfooz kiya ja raha hai…';
+    Promise.all([privateLockerWrapMaster(raw,pinValue),privateLockerWrapMaster(raw,name)]).then(function(w){
      var next=Object.assign({},config);next.pin=w[0];next.pinDigits=4;next.recovery=w[1];next.lockDisabled=false;delete next.unlockedKey;
      return privateLockerPut('meta',next).then(function(){
       privateLockerRawKey=null;privateLockerKey=null;privateLockerRecords=[];privateLockerExternalAction=null;privateLockerContent.replaceChildren();
       privateLockerGate.replaceChildren(privateLockerPinForm(next));
       privateLockerMessage('Naya PIN aur Favourite Name save ho gaya. Private Locker ka Lock ON hai.',false);
      });
-    }).catch(function(e){status.style.color='#a11';status.textContent=e&&e.message?e.message:'Naya PIN save nahi ho saka. Purana Locker data surakshit hai.';save.disabled=false;cancel.disabled=false;});
+    }).catch(function(e){status.style.color='#a11';status.textContent=e&&e.message?e.message:'Naya PIN save nahi ho saka. Purana Locker data surakshit hai.';busy=false;save.disabled=false;cancel.disabled=false;});
    });
-   wrap.append(pin,confirmPin,recovery,status,save,cancel);privateLockerGate.appendChild(wrap);pin.focus();
+   wrap.append(heading,help,entry,status,save,cancel);privateLockerGate.appendChild(wrap);entry.focus();
    return Promise.resolve(true);
   }
   function privateLockerShowEntries(){
