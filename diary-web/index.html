@@ -1571,14 +1571,14 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   function privateLockerMessage(msg,bad){privateLockerStatus.textContent=msg;privateLockerStatus.style.color=bad?'#a11':'#17633c';}
   function privateLockerConfigValid(config){try{return !!(config&&config.version===2&&config.pin&&config.recovery&&config.pin.salt&&config.pin.iv&&config.pin.cipher&&config.recovery.salt&&config.recovery.iv&&config.recovery.cipher);}catch(e){return false;}}
   function privateLockerNormalizeRecovery(value){return String(value||'').trim().replace(/\s+/g,' ').toLocaleUpperCase();}
-  function privateLockerFinishUnlock(raw){privateLockerRawKey=raw;return privateLockerImportMaster(raw).then(function(key){privateLockerKey=key;return privateLockerGet('meta','config').then(function(config){if(config&&Number(config.pinDigits)!==4){privateLockerPinUpgradeForm(raw,config);return;}privateLockerMessage('Private Locker khul gaya.',false);privateLockerShowEntries();});});}
+  function privateLockerFinishUnlock(raw){privateLockerRawKey=raw;return privateLockerImportMaster(raw).then(function(key){privateLockerKey=key;return privateLockerGet('meta','config').then(function(config){if(config&&Number(config.pinDigits)!==4){privateLockerPinUpgradeForm(raw,config);return;}privateLockerMessage(config&&config.lockDisabled?'Lock OFF hai. Private Locker bina PIN khul gaya.':'Private Locker khul gaya.',false);privateLockerShowEntries();});});}
   function privateLockerOpen(){
    mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');
    privateLockerModal.hidden=false;window.__privateLockerFingerprintPending=false;privateLockerContent.replaceChildren();privateLockerGate.replaceChildren();privateLockerKey=null;privateLockerRawKey=null;privateLockerRecords=[];
    privateLockerStatus.textContent='Aapki private likhai alag encrypted storage mein rahegi.';
    Promise.all([privateLockerGet('meta','config'),privateLockerAll()]).then(function(result){
     var config=result[0],rows=result[1]||[];
-    if(privateLockerConfigValid(config)){privateLockerGate.appendChild(privateLockerPinForm(config));return;}
+    if(privateLockerConfigValid(config)){if(config.lockDisabled&&config.unlockedKey){var unlocked=privateLockerUnB64(config.unlockedKey);if(unlocked.length!==32)throw new Error('Lock OFF key format sahi nahi hai. Saved data surakshit hai.');return privateLockerFinishUnlock(unlocked);}privateLockerGate.appendChild(privateLockerPinForm(config));return;}
     if(rows.length){privateLockerMessage('Purani encrypted entries mili hain. Unka data surakshit rakha gaya hai; naya lock setup nahi kiya gaya. Data reset na karein.',true);return;}
     if(config)privateLockerMessage('Locker mein abhi koi entry nahi hai. Naya secure PIN aur recovery setup banayein.',false);
     privateLockerGate.appendChild(privateLockerSetupForm());
@@ -1730,10 +1730,29 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    if(mode==='unlock'){try{privateLockerFinishUnlock(privateLockerUnB64(keyB64)).catch(function(e){privateLockerMessage(e.message||'Fingerprint unlock nahi hua.',true);});}catch(e){privateLockerMessage('Fingerprint key format sahi nahi hai.',true);}return;}
    if(mode==='enabled'){privateLockerGet('meta','config').then(function(config){config.fingerprint=true;return privateLockerPut('meta',config);}).then(function(){privateLockerMessage('Fingerprint lock set ho gaya.',false);privateLockerShowEntries();}).catch(function(e){privateLockerMessage(e.message||'Fingerprint setting save nahi hui.',true);});}
   };
+  function privateLockerAskLockOff(){
+   privateLockerGet('meta','config').then(function(config){
+    if(!config||!privateLockerConfigValid(config))throw new Error('Locker PIN setting nahi mili.');
+    privateLockerGate.replaceChildren();
+    var wrap=el('div',{style:'display:grid;gap:10px;margin:10px 0;padding:13px;border:1px solid #d8c6eb;border-radius:14px;background:#faf7ff;'});
+    wrap.appendChild(el('strong',{},'🔓 Private Locker Lock Off Karein'));
+    wrap.appendChild(el('p',{style:'margin:0;color:#604b78;font-weight:700;'},'Apna abhi wala Locker PIN daalein. Lock OFF hone par Locker bina PIN khulega. Aapki saved likhai delete nahi hogi.'));
+    var pin=el('input',{type:'password',inputmode:'numeric',maxlength:'6',autocomplete:'off',placeholder:'Current Locker PIN',style:'width:100%;height:50px;box-sizing:border-box;border:2px solid #c8b2df;border-radius:12px;padding:8px;text-align:center;font-size:22px;font-weight:900;letter-spacing:6px;'});
+    var status=el('div',{style:'min-height:20px;color:#a11;font-weight:800;'});
+    var actions=el('div',{style:'display:flex;gap:9px;flex-wrap:wrap;'});
+    var confirm=el('button',{type:'button',style:'min-height:42px;padding:8px 13px;border:2px solid #b18b32;border-radius:11px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;color:#3d2b08;'},'PIN Verify Karke Lock Off Karein');
+    var cancel=el('button',{type:'button',style:'min-height:42px;padding:8px 13px;border:1px solid #b9a4d0;border-radius:10px;background:#f2eafb;font-weight:800;color:#43245f;'},'Radd Karein');
+    cancel.addEventListener('click',privateLockerShowEntries);
+    confirm.addEventListener('click',function(){var value=String(pin.value||'').replace(/[^0-9]/g,'');if(value.length!==4&&value.length!==6){status.textContent='Apna current 4 ya 6 digit PIN daalein.';return;}confirm.disabled=true;privateLockerUnwrapMaster(value,config.pin).then(function(raw){if(privateLockerB64(raw)!==privateLockerB64(privateLockerRawKey))throw new Error('PIN verify nahi hua.');config.lockDisabled=true;config.unlockedKey=privateLockerB64(raw);return privateLockerPut('meta',config).then(function(){return privateLockerFinishUnlock(raw);});}).catch(function(e){status.textContent=e&&e.message?e.message:'PIN verify nahi hua.';pin.value='';pin.focus();}).finally(function(){confirm.disabled=false;});});
+    actions.append(confirm,cancel);wrap.append(pin,status,actions);privateLockerGate.appendChild(wrap);pin.focus();
+   }).catch(function(e){privateLockerMessage(e.message||'Lock Off nahi ho saka.',true);});
+  }
+  function privateLockerTurnLockOn(config){
+   var next=Object.assign({},config);next.lockDisabled=false;delete next.unlockedKey;
+   privateLockerPut('meta',next).then(function(){privateLockerRawKey=null;privateLockerKey=null;privateLockerRecords=[];privateLockerContent.replaceChildren();privateLockerGate.replaceChildren(privateLockerPinForm(next));privateLockerMessage('Locker lock dobara ON ho gaya. Ab PIN se khulega.',false);}).catch(function(e){privateLockerMessage(e.message||'Lock ON nahi ho saka.',true);});
+  }
   function privateLockerShowEntries(){
    privateLockerGate.replaceChildren();
-   var lock=el('button',{type:'button',style:'min-height:44px;padding:9px 14px;border:2px solid #b18b32;border-radius:12px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;color:#3d2b08;box-shadow:inset 0 2px 0 #fff9,0 4px 0 #b18b32,0 7px 12px #0002;'},'🔒 Locker Band Karein');
-   lock.addEventListener('click',privateLockerCloseNow);privateLockerGate.appendChild(lock);
    var tools=el('div',{style:'display:flex;gap:9px;flex-wrap:wrap;margin:10px 0 12px;'});
    var patternBtn=el('button',{type:'button',style:'min-height:42px;padding:8px 12px;border:1px solid #9470bb;border-radius:11px;background:linear-gradient(145deg,#f4eaff,#ddc8f2);font-weight:900;color:#43245f;box-shadow:0 3px 0 #c4addb;'},'🔷 Pattern Set Karein');
    patternBtn.addEventListener('click',privateLockerSetupPattern);tools.appendChild(patternBtn);
@@ -1749,6 +1768,9 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      removeFp.addEventListener('click',function(){try{if(window.DiaryAppActions&&typeof DiaryAppActions.disablePrivateLockerFingerprint==='function')DiaryAppActions.disablePrivateLockerFingerprint();}catch(e){}cfg.fingerprint=false;privateLockerPut('meta',cfg).then(function(){privateLockerMessage('Fingerprint lock hata diya gaya.',false);privateLockerShowEntries();}).catch(function(e){privateLockerMessage(e.message||'Fingerprint nahi hata.',true);});});
      tools.appendChild(removeFp);
     }
+    var lockToggle=el('button',{type:'button',style:'min-height:42px;padding:8px 12px;border:2px solid #b18b32;border-radius:11px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;color:#3d2b08;box-shadow:0 3px 0 #b18b32;'},cfg&&cfg.lockDisabled?'🔐 Lock On Karein':'🔓 Lock Off Karein');
+    lockToggle.addEventListener('click',function(){if(cfg&&cfg.lockDisabled){privateLockerTurnLockOn(cfg);return;}privateLockerAskLockOff();});
+    tools.appendChild(lockToggle);
    }).catch(function(){});
    if(window.DiaryAppActions&&typeof DiaryAppActions.enablePrivateLockerFingerprint==='function'&&typeof DiaryAppActions.canUsePrivateLockerBiometric==='function'&&DiaryAppActions.canUsePrivateLockerBiometric()){
     var fpBtn=el('button',{type:'button',style:'min-height:42px;padding:8px 12px;border:1px solid #9470bb;border-radius:11px;background:linear-gradient(145deg,#f4eaff,#ddc8f2);font-weight:900;color:#43245f;box-shadow:0 3px 0 #c4addb;'},'👆 Fingerprint Set Karein');
