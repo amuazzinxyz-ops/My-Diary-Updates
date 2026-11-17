@@ -1,9 +1,10 @@
-# Note PIN placeholder balanced to actual box size — correction prepared (2026-11-18)
+# Note PIN placeholder balanced to actual box size — Web Update 309 (2026-11-18)
 
 - User reported that Web Update 308 still made the Note PIN placeholder much too large. The earlier 34/23/20px targets were too aggressive for the actual 54px PIN field.
-- Created pre-edit backup branch: `backup/before-note-pin-balanced-box-sizing-2026-11-18`. Working branch: `fix/note-pin-balanced-box-sizing-2026-11-18`.
-- Changed only the presentation helper in `web-source/index.html`: short/medium/long placeholder targets are now 24/19/17px, capped again by the actual rendered inner height. Width is measured from the actual input box after padding/borders, preserving 3px clear space on each side; canvas measurement uses the placeholder's computed font family/weight. ResizeObserver and post-layout remeasurement remain.
-- Typed PIN entry, validation, recovery, encryption, notes, locks, and all other app features are untouched. Web publication and live feed/checksum verification are pending. Do not claim the user's phone display is verified until the user checks it.
+- Created pre-edit backup branch: `backup/before-note-pin-balanced-box-sizing-2026-11-18`. Working branch: `fix/note-pin-balanced-box-sizing-2026-11-18`. PR #166 merged as `9c7d3a52035bf5dd35bd3a08b742064013a528de`.
+- Changed only the presentation helper in `web-source/index.html`: short/medium/long placeholder targets are now 24/19/17px, capped by the actual rendered inner height. Width is measured from the actual input box after padding/borders, preserving 3px clear space on each side; canvas measurement uses the placeholder's computed font family/weight. ResizeObserver and post-layout remeasurement remain.
+- Publisher run `44152560190` completed successfully and published **Web Update 309**. Source and `diary-web/index.html` mirror are byte-identical at Git blob SHA `2813cbf9c743f4dbd0aeddc266248e449e95a107`. Live `latest.json` advertises webVersion `309` and bundle SHA-256 `d8cbd41d3d5437e29baeb01240da8b790931b86905ec0d0d15e2e78b5517871d`.
+- Typed PIN entry, validation, recovery, encryption, notes, locks, and all other app features are untouched. Android phone visual confirmation remains pending; do not claim device-side PASS until the user checks it.
 
 ---
 
