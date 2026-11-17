@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 293,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "844e6bee162dde7fa428b31bb225d0f06b4301c6e8ceac43130d9f605b2c82ce",
+  "webSha256": "f53b183bd19bf4c1b91d0c4a5e69deab04f24afdf31ae53df80c1e9d98b71254",
   "webReleaseNotes": "My Diary Web Update 293: Private Locker Lock Off now asks for confirmation after the PIN is verified, without asking for the PIN twice. When Lock OFF is active, a Lock On Karein button is available inside the unlocked Locker so PIN protection can be restored. Saved encrypted entries remain preserved."
 }
