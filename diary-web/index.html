@@ -1643,8 +1643,28 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    var pin=el('input',{type:'password',inputmode:'numeric',maxlength:'6',autocomplete:'off',placeholder:'4 digit PIN (purana 6 digit PIN bhi chalega)',style:'width:100%;height:50px;box-sizing:border-box;border:2px solid #c8b2df;border-radius:12px;padding:8px;text-align:center;font-size:22px;font-weight:900;letter-spacing:6px;'});
    label.appendChild(pin);wrap.appendChild(label);
    var status=el('div',{style:'min-height:22px;font-weight:800;color:#a11;'});
-   var busy=false;
-   function submitPin(){if(busy||(pin.value.length!==4&&pin.value.length!==6))return;busy=true;var value=pin.value;pin.disabled=true;privateLockerUnwrapMaster(value,config.pin).then(privateLockerFinishUnlock).catch(function(){status.textContent='PIN galat hai.';pin.value='';pin.focus();}).finally(function(){busy=false;pin.disabled=false;});}
+   var busy=false,pendingMethod=null;
+   function startRequestedMethod(method){
+    pendingMethod=method;status.textContent='PIN daalein. Verify hone ke baad '+(method==='pattern'?'Pattern':'Fingerprint')+' setup khulega.';
+    pin.focus();if(pin.value.length===4||pin.value.length===6)submitPin();
+   }
+   function submitPin(){
+    if(busy||(pin.value.length!==4&&pin.value.length!==6))return;
+    busy=true;var value=pin.value,method=pendingMethod;pin.disabled=true;
+    privateLockerUnwrapMaster(value,config.pin).then(function(raw){
+     if(!method)return privateLockerFinishUnlock(raw);
+     return privateLockerFinishUnlock(raw).then(function(){
+      if(Number(config.pinDigits)!==4){status.textContent='Pehle PIN upgrade poora karein, phir Pattern/Fingerprint set karein.';pendingMethod=null;return;}
+      pendingMethod=null;
+      if(method==='pattern'){privateLockerSetupPattern();return;}
+      if(method==='fingerprint'){
+       if(!window.DiaryAppActions||typeof DiaryAppActions.enablePrivateLockerFingerprint!=='function')throw new Error('Fingerprint facility available nahi hai.');
+       window.__privateLockerFingerprintPending=true;
+       DiaryAppActions.enablePrivateLockerFingerprint(privateLockerB64(privateLockerRawKey));
+      }
+     });
+    }).catch(function(e){status.textContent=e&&e.message?e.message:'PIN galat hai.';pin.value='';pin.focus();}).finally(function(){busy=false;pin.disabled=false;});
+   }
    pin.addEventListener('input',function(){pin.value=String(pin.value||'').replace(/[^0-9]/g,'').slice(0,6);submitPin();});wrap.appendChild(status);
    if(config.pattern){
     var patternTitle=el('strong',{},'Ya Pattern se kholein');
@@ -1657,6 +1677,14 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     fp.addEventListener('click',function(){window.__privateLockerFingerprintPending=true;try{DiaryAppActions.authenticatePrivateLockerFingerprint();}catch(e){window.__privateLockerFingerprintPending=false;privateLockerMessage('Fingerprint abhi available nahi hai.',true);}});
     wrap.appendChild(fp);
    }
+   var setupRow=el('div',{style:'display:flex;gap:9px;flex-wrap:wrap;margin:2px 0;'});
+   var patternSetup=el('button',{type:'button',style:'min-height:42px;padding:8px 12px;border:1px solid #9470bb;border-radius:11px;background:linear-gradient(145deg,#f4eaff,#ddc8f2);font-weight:900;color:#43245f;box-shadow:0 3px 0 #c4addb;'},config.pattern?'🔷 Pattern Badlein':'🔷 Pattern Set Karein');
+   patternSetup.addEventListener('click',function(){startRequestedMethod('pattern');});setupRow.appendChild(patternSetup);
+   if(window.DiaryAppActions&&typeof DiaryAppActions.enablePrivateLockerFingerprint==='function'&&typeof DiaryAppActions.canUsePrivateLockerBiometric==='function'&&DiaryAppActions.canUsePrivateLockerBiometric()){
+    var fingerprintSetup=el('button',{type:'button',style:'min-height:42px;padding:8px 12px;border:1px solid #9470bb;border-radius:11px;background:linear-gradient(145deg,#f4eaff,#ddc8f2);font-weight:900;color:#43245f;box-shadow:0 3px 0 #c4addb;'},config.fingerprint?'👆 Fingerprint Badlein':'👆 Fingerprint Set Karein');
+    fingerprintSetup.addEventListener('click',function(){startRequestedMethod('fingerprint');});setupRow.appendChild(fingerprintSetup);
+   }
+   wrap.appendChild(setupRow);
    var forgot=el('button',{type:'button',style:'min-height:42px;border:1px solid #b9a4d0;border-radius:10px;background:#f2eafb;font-weight:900;color:#43245f;'},'PIN Bhool Gaye?');
    forgot.addEventListener('click',function(){privateLockerRecoveryForm(config);});
    wrap.appendChild(forgot);pin.focus();return wrap;
