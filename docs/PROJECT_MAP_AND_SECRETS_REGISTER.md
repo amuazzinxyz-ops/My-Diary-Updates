@@ -1,3 +1,14 @@
+# Private Locker controls moved outside the Locker screen — Web Update 289 (2026-11-17)
+
+- User's explicit correction: the five related controls must be together outside the entire Private Locker screen, under the Private Locker button in the Me menu: Pattern setup/change, Fingerprint setup/change, Pattern removal, Fingerprint removal, and Lock Off/On.
+- The controls are rendered together in the Me menu. Selecting any control opens Private Locker authentication first, then performs the selected action. The controls are no longer rendered inside the Locker gate or writing/search screen.
+- Only the Private Locker control placement and its action dispatch were changed. Existing Locker PIN confirmation, encrypted writing/search, and saved Locker data were intended to remain unchanged. Diary Lock and Note Lock were not intentionally changed.
+- Backup branch: `backup/before-private-locker-controls-outside-me-2026-11-17`. Working branch: `fix/private-locker-controls-me-menu-2026-11-17`. PR **#141** merged to main as `bad225812ce5a2080aa26cdf6f58b20dd012cd43`.
+- Main source and mirror are byte-identical at Git blob SHA `0dd8d934c1d1718deb1fdcce53b4758ff7c139e8`. The live update feed reports **Web Update 289**; APK remains **1.0.189 / versionCode 188** (no APK rebuild).
+- Phone testing remains pending. Do not claim the user's phone has confirmed the new placement until the user checks it.
+
+---
+
 # Private Locker Lock Off / Lock On controls restored outside writing area — Web Update 288 (2026-11-17)
 
 - User corrected the previous placement: the Pattern/Fingerprint/Lock Off/Lock On controls belong outside the Private Locker search and writing content, in the Locker gate area above them. Web Update 287 had mounted the controls row inside `privateLockerContent`, directly under Search; that did not follow the user's stated placement.
