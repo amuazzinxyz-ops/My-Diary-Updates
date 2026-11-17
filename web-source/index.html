@@ -1601,6 +1601,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    }
    wrap.append(pin,confirmPin,recovery,methodRow,save);privateLockerGate.appendChild(wrap);
    save.addEventListener('click',function(){
+    var methodToSet=requestedMethod;requestedMethod=null;
     var p=pin.value,n=privateLockerNormalizeRecovery(recovery.value);
     if(!/^[0-9]{4}$/.test(p)){privateLockerMessage('4 digit PIN zaroori hai.',true);return;}
     if(confirmPin.value!==p){privateLockerMessage('Dono PIN ek jaise nahi hain.',true);return;}
@@ -1611,7 +1612,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      var raw=privateLockerRandom(32);
      return Promise.all([privateLockerWrapMaster(raw,p),privateLockerWrapMaster(raw,n)]).then(function(w){
       var config={id:'config',version:2,pin:w[0],pinDigits:4,recovery:w[1],pattern:null,fingerprint:false,created:Date.now()};
-      return privateLockerPut('meta',config).then(function(){return privateLockerFinishUnlock(raw);}).then(function(){var method=requestedMethod;requestedMethod=null;if(method==='pattern'){privateLockerSetupPattern();return;}if(method==='fingerprint'){if(!window.DiaryAppActions||typeof DiaryAppActions.enablePrivateLockerFingerprint!=='function')throw new Error('Fingerprint facility available nahi hai.');window.__privateLockerFingerprintPending=true;try{DiaryAppActions.enablePrivateLockerFingerprint(privateLockerB64(privateLockerRawKey));}catch(e){window.__privateLockerFingerprintPending=false;throw e;}}});
+      return privateLockerPut('meta',config).then(function(){return privateLockerFinishUnlock(raw);}).then(function(){var method=methodToSet;if(method==='pattern'){privateLockerSetupPattern();return;}if(method==='fingerprint'){if(!window.DiaryAppActions||typeof DiaryAppActions.enablePrivateLockerFingerprint!=='function')throw new Error('Fingerprint facility available nahi hai.');window.__privateLockerFingerprintPending=true;try{DiaryAppActions.enablePrivateLockerFingerprint(privateLockerB64(privateLockerRawKey));}catch(e){window.__privateLockerFingerprintPending=false;throw e;}}});
      });
     }).catch(function(e){privateLockerMessage(e.message||'Locker setup nahi ho saka.',true);}).finally(function(){save.disabled=false;});
    });
