@@ -1,3 +1,15 @@
+# Smart Reminder and Personal Calendar — Android 14+ full-screen permission fallback (2026-11-17)
+
+- User asked to restore the previous screen-off reminder behavior for both **Smart Reminder** and **Personal Calendar**, with no unrelated changes.
+- Read this Master Register and verified live main baseline: APK **1.0.189 / versionCode 188**, Web Update **287**. Main baseline commit: `8e549b93e6a43bdc7a37a728821052397a6fd5f2`.
+- Created exact pre-edit backup branch: `backup/before-smart-reminder-calendar-screenoff-repair-2026-11-17`. Working branch: `fix/reminder-calendar-screenoff-permission-fallback-2026-11-17`.
+- Shared native root cause addressed in PR #163: `scheduleReminderInternal()` returned `false` before scheduling whenever Android 14+ denied the optional full-screen-intent UI permission. That gate prevented **both** features from scheduling any alarm, even though exact-alarm permission and notification permission were available.
+- Minimal native-only correction: removed only the full-screen-intent permission early-return. Exact-alarm and notification permission checks remain mandatory. Existing `AlarmManager.AlarmClockInfo`, notification/full-screen wake activity, foreground ringtone service, screen wake lock, Snooze/Done, daily repeat, reboot restoration and sound selection remain unchanged. If Android grants full-screen intent, the existing wake activity is still used; if not, the alarm and foreground ringtone/screen-wake service can still run with the notification fallback.
+- PR #163 merged to main as `0cec30a3a6b79125dcfb7929078200599a8f8cdd`. Only `scripts/add_diary_app_actions.py` changed (4 added comment lines, 1 removed gate line). No HTML, Personal Calendar records, Smart Reminder records, notes, photos, PINs, locks, or app data were changed.
+- Post-merge checks: native source re-fetched; the blocking full-screen-intent early-return is absent. Web source was not changed; `latest.json` remains Web Update 287 / APK 1.0.189 until a verified APK build publishes a new version. APK build, signer continuity, SHA-256/feed publication and device-side screen-off test are **pending**. Do not tell the user to update or claim ALL OK until build/release checks pass. Do not claim phone-side PASS until user tests both features with the screen off.
+
+---
+
 # Private Locker Favourite, Important Pin and Date Wise Diary — implementation prepared (2026-11-17)
 
 - User approved three additions inside **Private Locker** only: Favourite Notes, Important Notes Pin, and Date Wise Diary.
