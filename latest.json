@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 297,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "ce0f679c4ab023e7e9e773280191ec2b649c47f6e67d136f17b15d9bb44aee4a",
+  "webSha256": "8034d141a4d44df5d6347dc3f49829da1fb492e240466dbb90123bf0089291b5",
   "webReleaseNotes": "My Diary Web Update 297: Private Locker Lock Off now automatically verifies the entered PIN; correct PIN turns Lock OFF and opens the Locker, while an incorrect PIN shows 'PIN galat hai.' beside the PIN field. Existing encrypted entries and Diary Lock/Note Lock remain unchanged."
 }
