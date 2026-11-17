@@ -10,5 +10,5 @@
   "webVersion": 307,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "8559c009e959b4757961dd4dfba7d28dbab1cf46d1b5fb0dd16b20c341ed3075",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "My Diary Web Update 307: Note Lock PIN placeholder text is enlarged according to prompt length; short prompts are doubled where they fit, longer prompts are moderately enlarged and sized to the available mobile width to prevent clipping. Only Note PIN prompt appearance changed; PIN entry, validation, recovery, and saved notes remain unchanged."
 }
