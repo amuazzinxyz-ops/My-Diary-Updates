@@ -1,10 +1,10 @@
-# Private Locker PIN recovery now requires a new Favourite Name — fix pending publication (2026-11-17)
+# Private Locker PIN recovery now requires a new Favourite Name — Web Update 301 published (2026-11-17)
 
 - User clarified that the existing **PIN Bhool Gaye?** flow correctly verifies the old Favourite Name and accepts/validates a new 4-digit PIN, but it did not ask for a replacement Favourite Name at the end.
 - Updated only the recovery flow in `web-source/index.html`: after the old Favourite Name is verified and the new PIN is entered twice, a separate final step now requires a **new Favourite Name**. The PIN wrapper and new recovery-name wrapper are both created from the same existing Locker master key and saved together in one updated config; the previous Favourite Name is therefore replaced for future recovery. No config is written until both new values are valid and both wrappers are ready.
 - Existing encrypted Locker entries, master key, Pattern/Fingerprint settings, Lock On/Off state, Diary Lock, Note Lock, and all other app features are preserved.
 - Backup branch: `backup/before-private-locker-new-recovery-name-2026-11-17`. Working branch: `fix/private-locker-recovery-new-favourite-name-2026-11-17`.
-- Source change commit on working branch: `7b3c0ea525f601bbc258e69b304d5e7096d95d2b`. PR, source/mirror verification, JavaScript syntax checks, Web Update publication, and phone testing are pending. Do not claim this change is published or device-tested until all checks pass.
+- Source change commit on working branch: `7b3c0ea525f601bbc258e69b304d5e7096d95d2b`. PR #154 merged as `fffa90c7d4be55e35f560e88c2024abdcada47c2`. Web publisher run `44105391986` completed successfully. Main source and mirror are byte-identical at Git blob SHA `2f4f141a05600b4d9d2e94e1a50a7ac698706a7f`. Published as **Web Update 301**; live `latest.json` advertises web SHA-256 `7ca2590174777541174f41e9aa3bf427b684e99bcf4448c38cf71f8a4ac6b474`. Static flow checks confirm old Favourite Name verification, new PIN confirmation, mandatory new Favourite Name, and atomic saving of the new PIN and recovery wrappers. APK workflow run `44105391940` is still in progress; no new APK is claimed. Physical-phone testing remains pending.
 
 ---
 
