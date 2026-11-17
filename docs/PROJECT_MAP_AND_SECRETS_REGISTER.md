@@ -4105,3 +4105,10 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Signed APK workflow run `44140100242` completed successfully. Signed APK **1.0.189 / versionCode 188** uploaded; SHA-256 `fb250b75d4a58b981600e6ce1528e7d529d7df06ab87fb58daf9ecaeff3404cd`. The downloaded signed APK artifact was independently SHA-256 checked and matched the feed.
 - Source and mirror remain byte-identical at Git blob SHA `4af15d4a610f72403652df15e9488dabc6c0c3ab`. The APK workflow temporarily overwrote the web metadata with an older value; restored `latest.json` to the pre-build published **Web Update 287** metadata and verified the APK and web SHA fields afterward. Feed correction commit: `0177a306082e81e24c0c1a4fb62e852ac3000570`.
 - No reminder/calendar data, saved notes, Diary Lock, Note Lock, Private Locker, PINs, photos, or unrelated web features were edited by this change. Physical screen-off test with ringtone/notification/wake display is still pending user confirmation; do not claim device-side PASS until tested on the phone.
+
+
+# Check for Update Web Update 288 — published (2026-11-17)
+
+- User pointed out that **Check for Update** had not been advanced with the Smart Reminder / Personal Calendar alarm repair. Corrected the update feed to **Web Update 288** while retaining the exact current HTML SHA-256 `3e3994514fbc6003fcda889e313a9fad700878d0045e4a96048a02d1efd2a242`; source and mirror HTML were already byte-identical, so no unrelated HTML code was changed.
+- Feed commit: `1d6c1f301dfd1eef6e4b6dbe8159fd7c89484c39`. APK remains **1.0.189 / versionCode 188**, SHA-256 `fb250b75d4a58b981600e6ce1528e7d529d7df06ab87fb58daf9ecaeff3404cd`.
+- This advances the Check for Update web-version marker and notes the native alarm fix. The actual Android alarm scheduling fix is in the signed APK; a web refresh alone cannot replace native APK code. Phone-side screen-off test remains pending.
