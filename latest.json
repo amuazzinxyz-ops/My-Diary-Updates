@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 294,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "f53b183bd19bf4c1b91d0c4a5e69deab04f24afdf31ae53df80c1e9d98b71254",
+  "webSha256": "2792739d2159efaeea68ec35c1107756fd3c2f77c2e76a41f6705663aded3f12",
   "webReleaseNotes": "My Diary Web Update 294: Private Locker control audit. Fingerprint Set is protected from accidental replacement when already configured; Lock On can be retried after a save error; Fingerprint removal and Lock Off/Pattern cancel actions have safer confirmation and return behavior. Saved encrypted entries and PIN data are preserved."
 }
