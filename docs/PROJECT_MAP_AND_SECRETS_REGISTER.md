@@ -1,3 +1,14 @@
+# Private Locker Lock On moved out of writing area — Web Update 295 published (2026-11-17)
+
+- User correctly objected that the Lock On button had been placed inside the Private Locker writing/search area. The button is now removed from privateLockerContent and placed in the separate privateLockerGate security area above the writing area, under “🔐 Locker Security”. It appears only while Lock is OFF and reuses the existing privateLockerTurnLockOn(config) handler. It is not part of the note title/text form or search controls.
+- PR #148 merged as bdbf073c420b60172c3f84dd190cb7945a2c1eaa. Backup branch: backup/before-move-private-locker-lockon-2026-11-17. Working branch: fix/move-private-locker-lockon-outside-writing-area-2026-11-17.
+- Only the Lock On control placement changed in web-source/index.html and diary-web/index.html. Source and mirror are byte-identical at Git blob SHA f313a82f599b3315b754b2bf9da3ed73dd4ec5a1. Both inline JavaScript blocks passed V8 syntax parsing (2/2). Verified the old privateLockerContent.insertBefore(lockTools,searchWrap) placement is gone and privateLockerGate.appendChild(lockTools) is used instead.
+- Published as Web Update 295. latest.json advertises webVersion 295 and web SHA-256 2792739d2159efaeea68ec35c1107756fd3c2f77c2e76a41f6705663aded3f12, matching the source HTML. Release notes state the exact placement correction.
+- A repository push also triggered the APK workflow, which republished an APK during this web-only change. Restored the exact original APK blob from the pre-change main commit (Git blob SHA 37aa10bafbeb698dd52db313b968cc1583735052) in both My-Diary-1.0.189.apk and My-Diary.apk; latest.json APK SHA-256 restored to 084c63eaff3ebf4d34d4acbdbcbe4ded98770c44bcef99da4e61053058cd8e15. APK remains 1.0.189 / versionCode 188; no new APK release is intended.
+- No encrypted Locker entries, PIN/recovery data, Diary Lock, Note Lock, or saved notes were modified. Physical-phone testing remains pending.
+
+---
+
 # Private Locker controls audited and hardened — Web Update 294 published (2026-11-17)
 
 - User requested a full check of all Private Locker buttons and correction of any behavior that should work differently.
