@@ -4027,3 +4027,12 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - PR #155 merged as `972073b3a0b3c8450fbc82a0bc247c03accc5844`. Web publisher run `44107256741` succeeded and published **Web Update 302**. Source and mirror are byte-identical at Git blob SHA `84c242a79039d77723b132476a6dd224c082ecb1`; live `latest.json` advertises web SHA-256 `67fdb09cbcfce6962c42ede125aae1f610ac99f8adf87de11354db9ef6480844`.
 - APK workflow run `44107256784` safely stopped at its pre-build source/mirror equality guard because it started before the web publisher synchronized the mirror. It did not reach Gradle, sign, or publish. Existing APK remains **1.0.189 / versionCode 188**, SHA-256 `1f627d94f744a70949fcaefcacb0269f90a36fbc10360368de60f4d3773cb133`. The web update is published; APK has not been rebuilt for this web-only fix.
 - Static event-flow verification confirms the × handler stops propagation before running the existing close/reset function. Physical-phone testing remains pending; do not claim device-side PASS until the user confirms that × closes only Private Locker and leaves Me open.
+
+
+# Private Locker Lock Off now requires an explicit PIN verification tap — fix (2026-11-17)
+
+- User reported that tapping **🔓 Lock Off Karein** on the Private Locker PIN screen turned Lock OFF without asking for the PIN. The PIN screen already had automatic PIN submission; browser/password-manager autofill could therefore submit a filled value immediately after the action was selected.
+- Changed only the Private Locker PIN action form in `web-source/index.html`: selecting **Lock Off** now disables automatic submission for that action and explicitly displays **🔓 PIN Verify Karke Lock Off Karein**. The user must enter the PIN and tap that verification button; only a successfully unwrapped Locker master key can reach the existing Lock-Off persistence function. Other security actions retain their existing auto-verification behavior.
+- Existing encrypted entries, PIN/recovery wrappers, master key, Pattern/Fingerprint settings, Lock On flow, Diary Lock, Note Lock, and all unrelated features are unchanged.
+- Backup branch: `backup/before-private-lockoff-explicit-pin-2026-11-17`. Working branch: `fix/private-lockoff-require-explicit-pin-2026-11-17`.
+- Source and mirror synchronization, syntax checks, PR review/merge, Web Update publication and live checksum verification are pending. Physical phone testing remains pending; do not claim device-side PASS until the user confirms that Lock Off requires the PIN and explicit Verify tap.
