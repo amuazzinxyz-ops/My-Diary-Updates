@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 298,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "bbbb9fe28bee5123910cae8b09e4ad67fb3741f368b146a6aa9540e112504819",
+  "webSha256": "b97710ea5af1c0a6c555f098b613fc18a65ba2e66c3546762e5f3ab0ca974fa3",
   "webReleaseNotes": "My Diary Web Update 298: Private Locker buttons audited. Fixed legacy six-digit PIN auto-entry and deleting the note currently open in Edit. Other Diary features unchanged."
 }
