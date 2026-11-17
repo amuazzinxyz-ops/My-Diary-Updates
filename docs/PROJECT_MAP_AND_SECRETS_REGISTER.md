@@ -1,3 +1,13 @@
+# Check for Update APK download HTTP 404 — root cause fixed (2026-11-18)
+
+- User reported the Android **Check for Update** flow repeatedly failed with **HTTP 404**. Checked the live update feed and the actual repository file tree rather than assuming a network issue.
+- Confirmed the feed advertised `My-Diary-1.0.190.apk`, but that exact path did not exist in the repository. The signed 1.0.190 APK was present at the stable `My-Diary.apk` path instead. Independently downloaded the signed test-candidate artifact and verified its APK SHA-256 `9f35d969da8031ad7b6925748c97b2e5ba9e8b0e97f0500eaabf244f6c5599e5`; its Git blob SHA `fc92bec722edd3e2f15189a9a1f432c892c222e4` exactly matches the existing `My-Diary.apk` repository blob (2,058,374 bytes). Thus the checksum and APK were correct; only the advertised URL was wrong.
+- Created backup branch `backup/before-check-for-update-apk-url-fix-2026-11-18` and working branch `fix/check-for-update-apk-url-404-2026-11-18`.
+- Corrected the live feed URL to the verified existing `My-Diary.apk` path while retaining version **1.0.190 / versionCode 189** and the matching SHA-256. Corrected the Android build publisher so future releases advertise the same stable path and also stage the versioned APK artifact that the workflow already copies; corrected the stale publish commit message.
+- Scope is limited to `latest.json`, the APK publication section of `.github/workflows/build-diary-from-zip.yml`, and this register. No Diary HTML, notes, saved data, PINs, locks, reminders, or app behaviour changed. Repository merge and live-feed/download verification remain pending; do not claim the phone-side update is fixed until publication and an on-device retry are confirmed.
+
+---
+
 # Signed Release Gradle retry recovery — build #337 running (2026-11-18)
 
 - The signed Release Gradle command in the APK workflow did not advance during run #336 after Debug APK succeeded. The signed Release step had no retry wrapper, unlike the debug build.
