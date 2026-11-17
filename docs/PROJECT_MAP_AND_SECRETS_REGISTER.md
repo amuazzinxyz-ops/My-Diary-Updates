@@ -1,12 +1,13 @@
-# Private Locker Lock On moved to the Locker security gate — release pending (2026-11-17)
+# Private Locker Lock On placed at the security gate — Web Update 296 published (2026-11-17)
 
-- User clarified that **🔐 Lock On Karein must not appear inside the unlocked Locker writing/search screen**. It must be in the security-control area where the Lock Off control is shown, outside the writing/search content.
-- Corrected the Lock OFF opening flow: instead of silently entering the writing screen, opening a Lock-OFF Locker now shows a separate **🔐 Locker Security** gate. It offers **🔐 Lock On Karein** and **🔓 Locker Kholein**. The latter preserves the existing ability to use the Locker while protection is OFF; Lock On reuses the existing authenticated re-lock handler and returns to the PIN gate.
-- Removed the old Lock On control injection from `privateLockerShowEntries()`. The writing form, search, encrypted records, PIN/recovery data, Diary Lock, and Note Lock are not intentionally changed.
-- Backup branch: `backup/before-private-locker-lockon-gate-placement-2026-11-17`. Working branch: `fix/private-locker-lockon-at-security-gate-2026-11-17`.
-- Source/mirror static checks passed for the expected route and absence of the old in-writing-area insertion. Source and mirror were updated to the same blob SHA. JavaScript syntax, PR review/merge, Web Update manifest publication, and final live verification remain pending. Do not tell the user to update until those checks pass. Physical-phone testing remains pending.
+- User clarified that **🔐 Lock On Karein must not appear inside the unlocked Private Locker writing/search screen**. It must be in the separate security-control gate where the Lock Off controls belong.
+- Corrected the Lock OFF opening flow: opening a Lock-OFF Locker now first shows a separate **🔐 Locker Security** gate with **🔐 Lock On Karein** and **🔓 Locker Kholein**. Lock On reuses the existing re-lock handler and returns to the PIN gate; Locker Kholein preserves access to saved writing while protection remains OFF.
+- Removed the old Lock On insertion from `privateLockerShowEntries()`. The writing form and Search are clear of Lock On. No encrypted Locker entries, PIN/recovery data, Diary Lock, or Note Lock were changed intentionally.
+- Backup branch: `backup/before-private-locker-lockon-gate-placement-2026-11-17`. Working branch: `fix/private-locker-lockon-at-security-gate-2026-11-17`. PR #149 merged as `173d67dab589be40a7b496d92fbfbfb45332a453`.
+- Main source and mirror are byte-identical at Git blob SHA `3f9df3a83aaa1decdf6331d5aab796b8b8a196c0`. Both inline JavaScript blocks passed V8 syntax parsing (2/2). Static checks confirm the old Lock On insertion is gone and Lock OFF now routes to the security gate.
+- Published as **Web Update 296**. Independently computed UTF-8 SHA-256 `4afe5cb2b795bdcc6609d333552d73e7fb0bee51fb1a7b8ae9416a4915add168` matches live `latest.json`. APK remains **1.0.189 / versionCode 188**; both APK paths retain original Git blob SHA `37aa10bafbeb698dd52db313b968cc1583735052` and manifest SHA-256 `084c63eaff3ebf4d34d4acbdbcbe4ded98770c44bcef99da4e61053058cd8e15`.
+- Repository/source/mirror/manifest verification: PASS. Physical-phone testing remains pending; do not claim device-side confirmation until user installs Web Update 296 and verifies Lock On, Locker Kholein, and Lock OFF behavior.
 
----
 
 # Private Locker Lock On moved out of writing area — Web Update 295 published (2026-11-17)
 
