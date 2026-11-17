@@ -912,6 +912,7 @@ private object DiaryReminderScheduler {
     private const val ITEMS = "items"
     const val ACTION_ALARM = "com.personal.diaryapp.action.REMINDER_ALARM"
     const val ACTION_SNOOZE = "com.personal.diaryapp.action.REMINDER_SNOOZE"
+    const val ACTION_AUTO_SNOOZE = "com.personal.diaryapp.action.REMINDER_AUTO_SNOOZE"
     const val ACTION_DONE = "com.personal.diaryapp.action.REMINDER_DONE"
     private const val CHANNEL_ID = "diary_reminders"
 
@@ -998,7 +999,51 @@ private object DiaryReminderScheduler {
         )
         alarm.cancel(pending)
         pending.cancel()
+        cancelAutoSnooze(context, id)
         remove(context, id)
+    }
+
+    private fun autoSnoozeIntent(context: Context, id: String, title: String, details: String, soundUri: String, snoozeMinutes: Int, snoozeLimit: Int, ringDurationSeconds: Int, ringVolumePercent: Int, snoozeUsed: Int, repeatDaily: Boolean, dailyAnchorAt: Long): Intent =
+        Intent(context, DiaryReminderReceiver::class.java).apply {
+            action = ACTION_AUTO_SNOOZE
+            data = Uri.parse("mydiary-reminder://auto-snooze/" + Uri.encode(id))
+            putExtra("diary_reminder_id", id)
+            putExtra("diary_reminder_title", title)
+            putExtra("diary_reminder_details", details)
+            putExtra("diary_reminder_sound_uri", soundUri)
+            putExtra("diary_reminder_snooze_minutes", snoozeMinutes)
+            putExtra("diary_reminder_snooze_limit", snoozeLimit)
+            putExtra("diary_reminder_snooze_used", snoozeUsed)
+            putExtra("diary_reminder_ring_duration_seconds", ringDurationSeconds)
+            putExtra("diary_reminder_ring_volume_percent", ringVolumePercent)
+            putExtra("diary_reminder_repeat_daily", repeatDaily)
+            putExtra("diary_reminder_daily_anchor_at", dailyAnchorAt)
+        }
+
+    fun scheduleAutoSnooze(context: Context, id: String, title: String, details: String, soundUri: String, atMillis: Long, snoozeMinutes: Int, snoozeLimit: Int, ringDurationSeconds: Int, ringVolumePercent: Int, snoozeUsed: Int, repeatDaily: Boolean, dailyAnchorAt: Long) {
+        if (atMillis <= System.currentTimeMillis()) return
+        val alarm = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val pending = PendingIntent.getBroadcast(
+            context, requestCode(id) + 200000000,
+            autoSnoozeIntent(context, id, title, details, soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, snoozeUsed, repeatDaily, dailyAnchorAt),
+            pendingFlags()
+        )
+        val showIntent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+            ?: Intent(context, MainActivity::class.java)
+        showIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val showPending = PendingIntent.getActivity(context, requestCode(id) + 300000000, showIntent, pendingFlags())
+        alarm.setAlarmClock(AlarmManager.AlarmClockInfo(atMillis, showPending), pending)
+    }
+
+    fun cancelAutoSnooze(context: Context, id: String) {
+        val alarm = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, DiaryReminderReceiver::class.java).apply {
+            action = ACTION_AUTO_SNOOZE
+            data = Uri.parse("mydiary-reminder://auto-snooze/" + Uri.encode(id))
+        }
+        val pending = PendingIntent.getBroadcast(context, requestCode(id) + 200000000, intent, pendingFlags())
+        alarm.cancel(pending)
+        pending.cancel()
     }
 
     fun restore(context: Context) {
@@ -1127,13 +1172,22 @@ class DiaryReminderReceiver : BroadcastReceiver() {
         val dailyAnchorAt = msg.getLongExtra("diary_reminder_daily_anchor_at", 0L).takeIf { it > 0L } ?: System.currentTimeMillis()
         when (msg.action) {
             DiaryReminderScheduler.ACTION_SNOOZE -> {
+                DiaryReminderScheduler.cancelAutoSnooze(context, id)
                 val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 manager.cancel((id.hashCode() and 0x3fffffff) + 10)
                 DiaryReminderSoundService.stop(context)
                 if (snoozeUsed < snoozeLimit) DiaryReminderScheduler.schedule(context, id, title, details, System.currentTimeMillis() + snoozeMinutes.toLong() * 60L * 1000L, soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, snoozeUsed + 1, repeatDaily, dailyAnchorAt)
                 return
             }
+            DiaryReminderScheduler.ACTION_AUTO_SNOOZE -> {
+                val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                manager.cancel((id.hashCode() and 0x3fffffff) + 10)
+                DiaryReminderSoundService.stop(context)
+                DiaryReminderScheduler.schedule(context, id, title, details, System.currentTimeMillis() + snoozeMinutes.toLong() * 60L * 1000L, soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, snoozeUsed, repeatDaily, dailyAnchorAt)
+                return
+            }
             DiaryReminderScheduler.ACTION_DONE -> {
+                DiaryReminderScheduler.cancelAutoSnooze(context, id)
                 val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 manager.cancel((id.hashCode() and 0x3fffffff) + 10)
                 DiaryReminderSoundService.stop(context)
@@ -1148,6 +1202,14 @@ class DiaryReminderReceiver : BroadcastReceiver() {
         }
         DiaryReminderScheduler.showNotification(context, id, title, details, soundUri, snoozeMinutes, snoozeLimit, snoozeUsed, ringDurationSeconds, ringVolumePercent, repeatDaily, dailyAnchorAt)
         DiaryReminderSoundService.start(context, soundUri, ringDurationSeconds, ringVolumePercent)
+        // If the user does not press Done or Snooze, automatically repeat at the saved Snooze interval.
+        // This fallback is independent of the manual Snooze limit and is cancelled by either action.
+        DiaryReminderScheduler.scheduleAutoSnooze(
+            context, id, title, details, soundUri,
+            System.currentTimeMillis() + snoozeMinutes.toLong() * 60L * 1000L,
+            snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, snoozeUsed,
+            repeatDaily, dailyAnchorAt
+        )
     }
 }
 
