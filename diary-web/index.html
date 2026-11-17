@@ -2777,16 +2777,22 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    });
   }).catch(function(){window.alert(t('pinUnavailable'));});
  }
+ function showNotePinInlineError(input,message){
+  if(!input||!input.parentNode)return;
+  var status=input.parentNode.querySelector('[data-note-pin-error]');
+  if(!status){status=document.createElement('div');status.setAttribute('data-note-pin-error','');status.setAttribute('role','alert');status.style.cssText='display:block;margin:7px 0 2px;padding:9px 11px;border:1px solid #c65b5b;border-radius:9px;background:#fff0f0;color:#8b2020;font-size:14px;font-weight:900;text-align:center;';input.insertAdjacentElement('afterend',status);}
+  status.textContent=String(message||'');
+ }
  function unlockWithEnteredPin(n,input){
   var pin=String(input.value||'').trim();if(!validPin(pin)){window.alert(t('pinNeed'));input.dataset.autoSubmitted='0';input.focus();return;}
   var latest=read().find(function(x){return x.id===n.id});if(!latest||!latest.pinLock)return;
   if(typeof latest.pinLock.pinValue==='string'){
-   if(pin!==latest.pinLock.pinValue){window.alert(t('pinWrong'));input.value='';input.dataset.autoSubmitted='0';input.focus();return;}
+   if(pin!==latest.pinLock.pinValue){input.value='';input.dataset.autoSubmitted='0';showNotePinInlineError(input,t('pinWrong'));input.focus();return;}
    unlockedNotes[n.id]=true;expandedNoteId=n.id;startUnlockTimer(latest);renderList();return;
   }
   pinDigest(pin,latest.pinLock.salt).then(function(hash){
    var current=read().find(function(x){return x.id===n.id});if(!current||!current.pinLock)return;
-   if(hash!==current.pinLock.hash){window.alert(t('pinWrong'));input.value='';input.dataset.autoSubmitted='0';input.focus();return;}
+   if(hash!==current.pinLock.hash){input.value='';input.dataset.autoSubmitted='0';showNotePinInlineError(input,t('pinWrong'));input.focus();return;}
    unlockedNotes[n.id]=true;expandedNoteId=n.id;startUnlockTimer(current);renderList();
   }).catch(function(){window.alert(t('pinUnavailable'));input.dataset.autoSubmitted='0';input.value='';input.focus();});
  }
@@ -2876,20 +2882,18 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   });
  }
  function requestUnlock(n){
-  var pin=window.prompt(t('pinPrompt'));if(pin===null)return;
-  pin=String(pin).trim();if(!validPin(pin)){window.alert(t('pinNeed'));return;}
   var latest=read().find(function(x){return x.id===n.id});if(!latest||!latest.pinLock)return;
-  if(typeof latest.pinLock.pinValue==='string'){
-   if(pin!==latest.pinLock.pinValue){window.alert(t('pinWrong'));return;}
-   unlockedNotes[n.id]=true;expandedNoteId=n.id;startUnlockTimer(latest);renderList();return;
+  function matchesPin(pin){
+   if(typeof latest.pinLock.pinValue==='string')return pin===latest.pinLock.pinValue;
+   return pinDigest(pin,latest.pinLock.salt).then(function(hash){return hash===latest.pinLock.hash;});
   }
-  pinDigest(pin,latest.pinLock.salt).then(function(hash){
+  askFourDigitPinAutomatically(t('pinPrompt'),matchesPin,t('pinWrong')).then(function(pin){
+   if(pin===null)return;
    var current=read().find(function(x){return x.id===n.id});if(!current||!current.pinLock)return;
-   if(hash!==current.pinLock.hash){window.alert(t('pinWrong'));return;}
    unlockedNotes[n.id]=true;expandedNoteId=n.id;startUnlockTimer(current);renderList();
-  }).catch(function(){window.alert(t('pinUnavailable'));});
+  }).catch(function(){showDiaryErrorMessage(t('pinUnavailable'));});
  }
- function askFourDigitPinAutomatically(title,validator){
+ function askFourDigitPinAutomatically(title,validator,wrongMessage){
   return new Promise(function(resolve){
    var shade=document.createElement('div');shade.style.cssText='position:fixed;inset:0;z-index:2147483647;background:rgba(0,0,0,.68);display:flex;align-items:center;justify-content:center;padding:20px;';
    var box=document.createElement('div');box.style.cssText='position:relative;width:min(340px,100%);background:#fff;color:#2e2044;border:2px solid #8c62c5;border-radius:16px;padding:20px;box-shadow:0 12px 36px rgba(0,0,0,.35);text-align:center;';
@@ -2912,7 +2916,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     Promise.resolve().then(function(){return validator(value);}).then(function(ok){
      checking=false;input.disabled=false;
      if(ok){finish(value);return;}
-     input.value='';input.style.borderColor='#c0392b';showInlineError(t('codeWrong'));
+     input.value='';input.style.borderColor='#c0392b';showInlineError(wrongMessage||t('codeWrong'));
     }).catch(function(){
      checking=false;input.disabled=false;input.value='';input.style.borderColor='#c0392b';showInlineError(t('codeVerifyError'));
     });
@@ -3117,6 +3121,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
       e.stopPropagation();
       var clean=String(pinInput.value||'').replace(/\D/g,'').slice(0,4);
       if(pinInput.value!==clean)pinInput.value=clean;
+      var pinError=pinInput.parentNode.querySelector('[data-note-pin-error]');if(pinError&&clean.length>0)pinError.remove();
       if(clean.length===4&&pinInput.dataset.autoSubmitted!=='1'){
        pinInput.dataset.autoSubmitted='1';
        unlockWithEnteredPin(n,pinInput);
