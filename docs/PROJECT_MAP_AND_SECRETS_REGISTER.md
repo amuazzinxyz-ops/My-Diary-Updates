@@ -1,3 +1,14 @@
+# Private Locker control actions fixed — Web Update 290 (2026-11-17)
+
+- User confirmed the PIN-screen placement is now correct, but the five controls did not perform their actions.
+- Fixed the action flow: selecting a control reveals an explicit **PIN Verify Karke Kaam Karein** button. Enter the Locker PIN and press it; the existing PIN verification then calls the selected action. Ordinary Locker PIN auto-unlock remains unchanged when no control is selected.
+- Kept all five controls in the PIN-entry screen. No intended changes to encrypted writing/search, saved Locker data, Diary Lock, or Note Lock.
+- Backup branch: `backup/before-private-locker-control-action-fix-2026-11-17`. Working branch: `fix/private-locker-control-pin-confirm-2026-11-17`. PR **#143** merged as `aae37aaa7b098b31c354ecaf13b69698559bd6a1`.
+- Source and mirror were updated together; Web Update **290** published in `latest.json`. Manifest web SHA-256: `20aff0b7a8b038069c266563d221762b2785ccf71949adba8fdc962d9d5d9e3f`. APK remains `1.0.189 / versionCode 188`.
+- Static checks only; physical-device testing remains pending.
+
+---
+
 # Private Locker controls moved onto the PIN screen — publication pending (2026-11-17)
 
 - User's correction overrides Web Update 289 placement: the five controls must appear together on the **Private Locker PIN-entry screen**, after tapping the Private Locker button. They must not appear in the Me menu and must not be placed in the unlocked writing/search area.
