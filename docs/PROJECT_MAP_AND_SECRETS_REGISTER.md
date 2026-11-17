@@ -1,3 +1,15 @@
+# Private Locker controls moved onto the PIN screen — publication pending (2026-11-17)
+
+- User's correction overrides Web Update 289 placement: the five controls must appear together on the **Private Locker PIN-entry screen**, after tapping the Private Locker button. They must not appear in the Me menu and must not be placed in the unlocked writing/search area.
+- Moved Pattern Set/Badlein, Fingerprint Set, Pattern Hataayein, Fingerprint Hataayein, and Lock Off/On controls into the PIN form. Selecting a control marks the requested action; the existing PIN verification runs first, then the existing authenticated action dispatcher performs it.
+- Removed the five-control panel from Me menu. Existing PIN/Pattern/Fingerprint unlock controls and Forgot PIN remain. No encrypted entries or Locker PIN/recovery data were intentionally changed; Diary Lock and Note Lock were not intentionally changed.
+- Snapshot branch: `backup/before-private-locker-pin-screen-controls-2026-11-17`. Working branch: `fix/private-locker-controls-on-pin-screen-2026-11-17`. PR **#142** merged to main as `6d8fb3d4d0d40c684da1422b965ece59b43b6bb3`.
+- Main `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `2fe846d0449de1b4a926a3b70e9789113f0cf99a`. Static source checks confirm the Me-menu panel and renderer are removed and all five controls are present in the PIN form.
+- **Not yet published to Check for Update:** live `latest.json` still reports Web Update **283** and its older web checksum. Do not tell the user to update yet. Web publisher/checksum synchronization and a new webVersion feed entry are pending. APK remains **1.0.189 / versionCode 188** and was not changed.
+- Physical-phone testing is pending. Do not claim device-side confirmation.
+
+---
+
 # Private Locker controls moved outside the Locker screen — Web Update 289 (2026-11-17)
 
 - User's explicit correction: the five related controls must be together outside the entire Private Locker screen, under the Private Locker button in the Me menu: Pattern setup/change, Fingerprint setup/change, Pattern removal, Fingerprint removal, and Lock Off/On.
