@@ -1681,7 +1681,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    privateLockerContent.replaceChildren();
    var form=el('form',{style:'display:grid;gap:10px;margin:14px 0;padding:14px;border:1px solid #d8c6eb;border-radius:16px;background:linear-gradient(145deg,#fff,#f7f1ff);box-shadow:inset 0 2px 0 #fff,0 4px 0 #e3d6f0,0 9px 18px #35145f18;'});
    var heading=el('strong',{style:'font-size:17px;font-weight:900;color:#35145f;text-shadow:0 1px #fff,0 2px 2px #35145f30;'},'＋ Private Likhai');
-   var name=el('input',{name:'name',required:'required',maxlength:'100',placeholder:'Naam / Title likhein',style:'min-height:48px;padding:10px 12px;border:1.5px solid #c7b4dd;border-radius:12px;font-size:16px;font-weight:800;box-shadow:inset 0 2px 4px #35145f14,0 3px 0 #e4d8ee;'});
+   var name=el('input',{name:'name',maxlength:'100',placeholder:'Note ka naam (optional)',style:'min-height:48px;padding:10px 12px;border:1.5px solid #c7b4dd;border-radius:12px;font-size:16px;font-weight:800;box-shadow:inset 0 2px 4px #35145f14,0 3px 0 #e4d8ee;'});
    var details=el('textarea',{name:'details',required:'required',rows:'5',maxlength:'20000',placeholder:'Yahan apni private baat likhein…',style:'width:100%;min-height:135px;box-sizing:border-box;padding:11px;border:1.5px solid #c7b4dd;border-radius:12px;font-size:15px;line-height:1.55;resize:vertical;box-shadow:inset 0 2px 4px #35145f14,0 3px 0 #e4d8ee;'});
    var save=el('button',{type:'submit',style:'min-height:46px;border:2px solid #b18b32;border-radius:12px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;color:#3d2b08;box-shadow:inset 0 2px 0 #fff9,0 4px 0 #b18b32,0 7px 12px #0002;'},'💾 Mehfooz Save Karein');
    var editingId=null;
@@ -1714,7 +1714,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     tools.appendChild(fpBtn);
    }
    var list=el('div',{style:'display:grid;gap:10px;'});
-   privateLockerContent.append(form,tools,searchWrap,list);
+   privateLockerContent.append(searchWrap,form,tools,list);
    var allRecords=[];
    function render(){
     list.replaceChildren();
@@ -1739,7 +1739,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    search.addEventListener('input',function(){render().catch(function(err){privateLockerMessage(err.message||'Search nahi ho saki.',true);});});
    form.addEventListener('submit',function(e){
     e.preventDefault();if(!privateLockerKey)return;
-    var title=name.value.trim(),text=details.value.trim();if(!title||!text){privateLockerMessage('Naam aur likhai dono bharein.',true);return;}
+    var title=name.value.trim(),text=details.value.trim();if(!text){privateLockerMessage('Pehle kuch likhein.',true);return;}
     save.disabled=true;
     var record=editingId?allRecords.find(function(x){return x.id===editingId;}):null;
     var payload={id:editingId||( 'pl_'+Date.now()+'_'+privateLockerB64(privateLockerRandom(6))),name:title,details:text,created:record?record.created:Date.now()};
