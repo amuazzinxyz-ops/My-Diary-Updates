@@ -4,7 +4,7 @@
   "versionCode": 188,
   "versionName": "1.0.189",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.189.apk",
-  "sha256": "09e09e4fcabeb0ff51e864c8e54ff7db90dfdcb358291d46b58c2b9b6951361e",
+  "sha256": "512e0323457e5b66b6f396c4bab163e6ab7b313260e918b4fef3631b495cac89",
   "releaseNotes": "My Diary 1.0.189: Private Locker writing-only, encrypted search/editing, four-digit Diary-style PIN, Pattern, Favourite Name recovery and separate Android Keystore fingerprint. Diary Lock remains unchanged.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 283,
