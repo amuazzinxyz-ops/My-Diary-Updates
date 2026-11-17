@@ -749,7 +749,10 @@ native = r"""
             if (id.isBlank() || title.isBlank() || atMillis <= System.currentTimeMillis() || snoozeMinutes !in setOf(2, 5, 10, 15, 20, 30) || snoozeLimit !in setOf(0, 3, 5, 10) || ringDurationSeconds !in setOf(10, 20, 30, 60, 120, 300) || ringVolumePercent !in 0..100) return false
             if (!hasReminderNotificationPermission()) { requestReminderNotificationPermission(); return false }
             if (!hasExactAlarmPermission()) { requestExactAlarmPermission(); return false }
-            if (!hasFullScreenIntentPermission()) { requestFullScreenIntentPermission(); return false }
+            // Android 14+ may deny full-screen intents to apps that are not default alarm/calling apps.
+            // Do not block the actual alarm: AlarmClock + the foreground ringtone service and screen wake lock
+            // must still run when full-screen UI permission is unavailable. Android will show the notification;
+            // when full-screen permission is granted, the existing wake activity is used unchanged.
             return try {
                 DiaryReminderScheduler.schedule(this@MainActivity, id, title, details, atMillis, soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, 0, repeatDaily, atMillis)
                 true
