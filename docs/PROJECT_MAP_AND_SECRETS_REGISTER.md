@@ -1,3 +1,17 @@
+# Unanswered Smart Reminder and Personal Calendar alarm auto-repeat — code merged, APK build pending (2026-11-18)
+
+- User requested that unanswered alarms automatically ring again using the configured Dubara/Snooze interval until the user chooses Done or Dubara. Manual Dubara continues to use the saved interval and existing manual snooze limit; Done cancels the automatic fallback.
+- PR #171 merged the native Android auto-repeat implementation, including persistence/restoration of pending fallback alarms across device restarts and cancellation when the user acts.
+- PR #172 merged a narrow safety fix: editing/replacing a reminder cancels its old pending automatic fallback before scheduling the new reminder.
+- PR #173 merged build recovery safeguards: Gradle debug and release tasks retry up to three times after transient failures; a newer build can replace a stalled pre-publication run.
+- Backup branches: `backup/before-unanswered-reminder-auto-repeat-2026-11-18`, `backup/before-reminder-edit-clears-auto-repeat-2026-11-18`, and `backup/before-gradle-retry-recovery-2026-11-18`.
+- APK workflow #334 (run `44162183553`) failed at debug build after a Maven Central HTTP 429. Workflow #335 (run `44162965892`) passed debug build but was cancelled during release configuration when recovery run #336 superseded it.
+- Workflow #336 (run `44163380545`) is the current retry build. Its latest observed state is in progress during checkout; no signed APK or new release has been verified.
+- Live `latest.json` remains **1.0.189 / versionCode 188**, Web Update **313**. `web-source/index.html` and `diary-web/index.html` match at blob SHA `c3bd19ebcf025b14e22c662a5b5e0119c73cd18f`.
+- Do not publish or provide a 1.0.190 download until the workflow completes all release/signature/checksum/feed validation steps. Phone-side alarm testing remains pending; do not claim it is confirmed on-device.
+
+---
+
 # Private Locker Favourite Name centered and sharpened — Web Update 313 (2026-11-18)
 
 - User asked that the Favourite Name box text be centered, sized to the box, and clearer rather than blurry.
