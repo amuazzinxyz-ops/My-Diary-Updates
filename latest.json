@@ -4,11 +4,11 @@
   "versionCode": 188,
   "versionName": "1.0.189",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.189.apk",
-  "sha256": "ebf7cf8cb3c8c5a2494df9249c2840307fec217406a4ebf2d213fec560514b82",
+  "sha256": "07d922d24b7ec1db1bea55681711408924d8c8a5888822bdaaebaf57a54e7baa",
   "releaseNotes": "My Diary 1.0.189: Private Locker writing-only, encrypted search/editing, four-digit Diary-style PIN, Pattern, Favourite Name recovery and separate Android Keystore fingerprint. Diary Lock remains unchanged.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 290,
+  "webVersion": 283,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "20aff0b7a8b038069c266563d221762b2785ccf71949adba8fdc962d9d5d9e3f",
-  "webReleaseNotes": "My Diary Web Update 290: Private Locker controls remain on the PIN screen. Select a control, enter the Locker PIN, then tap PIN Verify Karke Kaam Karein to run the selected action. Other Diary and Note locks unchanged."
+  "webReleaseNotes": "My Diary Web Update 283: Private Locker restored with text-only encrypted writing, search/editing and four-digit Diary-style PIN, Pattern, Favourite Name recovery and separate fingerprint. Diary Lock unchanged."
 }
