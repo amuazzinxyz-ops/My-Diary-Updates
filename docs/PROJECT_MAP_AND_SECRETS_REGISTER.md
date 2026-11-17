@@ -3994,3 +3994,11 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - User confirmed the phone test passed: the **Ek Rang Chunein / Solid Colour** choice is removed as intended from all three menus — **Note ka Cover Photo**, **Tafseel ki Photo**, and **Photo Lagayein**.
 - User-confirmed device result: **PASS** for this specific requested menu change. No broader app-wide phone-test status is implied.
 - Release remains My Diary **1.0.185 / versionCode 184** and Web Update **275**. No further source or release changes were made for this confirmation.
+
+
+# Private Locker × closes only the Locker, not the Me panel — fix pending publication (2026-11-17)
+
+- User tested the Private Locker × button and reported that it also closed the **Me** panel. Source inspection identified the event-order bug: the close handler correctly reopens Me, but the click then bubbles to the Diary overlay's outside-click listener, which immediately hides Me again.
+- Minimal fix in `web-source/index.html`: stop propagation on the Private Locker × click before calling the existing `privateLockerCloseNow()`. This keeps the Locker close/reset behavior and leaves Me open. No other Private Locker controls, encrypted entries, PIN/recovery wrappers, Pattern/Fingerprint settings, Diary Lock, Note Lock, or unrelated features are changed.
+- Backup branch: `backup/before-private-locker-close-me-panel-fix-2026-11-17`. Working branch: `fix/private-locker-close-only-me-panel-2026-11-17`. Base main commit: `6d46bc8cef476f4379d8ce0a764de171ae6df9eb`.
+- Source change commit: `bae6e1f88a938c6501b1bbdd6d2b1f49875ab21a`. Web publication, source/mirror synchronization, live checksum/version verification, and phone testing are pending. Do not claim device testing or tell the user to update until publication checks pass.
