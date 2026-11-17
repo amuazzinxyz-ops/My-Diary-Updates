@@ -1,3 +1,14 @@
+# Private Locker Favourite Name prompt fit — Web Update 312 (2026-11-18)
+
+- User reported that text in the **Favourite Name** box was being clipped. Inspected the exact Private Locker setup and recovery fields. The fields are text inputs, distinct from the PIN/password inputs, so the existing PIN placeholder rules did not govern their prompts.
+- Created pre-edit backup branch: `backup/before-private-locker-favourite-name-fit-2026-11-18`. Working branch: `fix/private-locker-favourite-name-fit-2026-11-18`.
+- Added one narrowly scoped CSS rule for `#diaryPrivateLockerModal input[type="text"]::placeholder`: 14px placeholder text, 1.2 line-height, no letter spacing, and a single unbroken line. The typed Favourite Name text remains at its existing 17px size.
+- Only `web-source/index.html` changed. PR #169 merged as `18ce542a8683db711aa3e281f010fd55cc54c8bd`. Static diff: 8 additions, 0 deletions, one file only. No PIN validation, recovery logic, encryption, saved Private Locker records, Favourite/Pin note features, Diary Lock, Note Lock, or other app features were changed.
+- Web publisher run `44156184855` (run #364) completed successfully. Published as **Web Update 312**. Source and `diary-web/index.html` mirror are byte-identical at Git blob SHA `d465bf08e6c271c79b057ae351fe000ed43769a1`. Live `latest.json` advertises webVersion `312` and web SHA-256 `f309d85ff221939202d16ee7e2384d866c44f4b2d55eb005bbb07107657ad8ea`. APK remains `1.0.189 / versionCode 188`; no APK was built or published for this CSS-only change.
+- The automatically triggered APK workflow run `44156184929` failed at the pre-build step **Use the exact latest published Diary HTML in Android APK**; all build/sign/publish steps were skipped. No APK artifact or APK version change is claimed. Phone-side visual confirmation remains pending; do not claim the prompt is confirmed unclipped on the user's Android phone until the user checks Web Update 312.
+
+---
+
 # Diary Lock PIN boxes re-measured after final sizing review — pending publication (2026-11-18)
 
 - User asked for another careful review so longer PIN prompt text must never be cut off.
