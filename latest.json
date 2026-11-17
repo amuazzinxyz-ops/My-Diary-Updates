@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 295,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "2792739d2159efaeea68ec35c1107756fd3c2f77c2e76a41f6705663aded3f12",
+  "webSha256": "4afe5cb2b795bdcc6609d333552d73e7fb0bee51fb1a7b8ae9416a4915add168",
   "webReleaseNotes": "My Diary Web Update 295: Private Locker Lock On button moved out of the writing and search area into a separate Locker Security section above it. It appears only while Lock is OFF and reuses the existing Lock On confirmation flow. Saved encrypted writing, PIN/recovery data, Diary Lock and Note Lock are unchanged."
 }
