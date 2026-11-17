@@ -1,10 +1,11 @@
-# Diary Lock PIN prompt actual-box fitting — implementation prepared (2026-11-18)
+# Diary Lock PIN prompt actual-box fitting — Web Update 310 (2026-11-18)
 
 - User asked to apply the same measured box/text sizing discipline used for Note PIN to Diary Lock.
-- Created pre-edit backup branch: `backup/before-diary-lock-pin-box-fit-2026-11-18`. Working branch: `fix/diary-lock-pin-box-fit-2026-11-18`.
+- Created pre-edit backup branch: `backup/before-diary-lock-pin-box-fit-2026-11-18`. Working branch: `fix/diary-lock-pin-box-fit-2026-11-18`. PR #167 merged as `884085ab569d4d6cf4a6f9d9859fa54beed1c705`.
 - Source inspection found Diary Lock PIN placeholders hard-coded to a viewport clamp of 13–17px, even though its PIN inputs render at roughly 54px high. Three PIN entry routes exist: initial PIN setup, PIN entry to turn Diary Lock off, and regular Diary unlock/recovery flow.
 - Replaced only the Diary Lock PIN placeholder sizing rule and added a measured fit helper for all three routes. It reads the rendered input's actual width/height, padding and borders; keeps 3px clear space on both sides; chooses the largest fitting size with short/medium/long targets 24/19/17px; and recalculates after DOM insertion and resize.
-- Typed PIN digit size, PIN validation, recovery, Pattern/Fingerprint behavior, stored PINs, notes, Note Lock, Private Locker and other features are unchanged. Publication and phone visual confirmation are pending.
+- Publisher run `44153682085` completed successfully and published **Web Update 310**. Source and `diary-web/index.html` mirror match at Git blob SHA `3a72117b20580d650d3c8db0c91b9812cdbc7112`. Live `latest.json` advertises webVersion `310` and bundle SHA-256 `8de49cc0cfb71931aefff248f506cee959267ab98c2060f6ee272d34be559d64`.
+- Typed PIN digit size, PIN validation, recovery, Pattern/Fingerprint behavior, stored PINs, notes, Note Lock, Private Locker and other features are unchanged. Android phone visual confirmation remains pending.
 
 ---
 
