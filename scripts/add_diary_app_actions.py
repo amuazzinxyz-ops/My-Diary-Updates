@@ -754,6 +754,8 @@ native = r"""
             // must still run when full-screen UI permission is unavailable. Android will show the notification;
             // when full-screen permission is granted, the existing wake activity is used unchanged.
             return try {
+                // Editing or replacing a reminder must discard any pending auto-repeat from its previous schedule.
+                DiaryReminderScheduler.cancelAutoSnooze(this@MainActivity, id)
                 DiaryReminderScheduler.schedule(this@MainActivity, id, title, details, atMillis, soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, 0, repeatDaily, atMillis)
                 true
             } catch (e: Exception) { false }
