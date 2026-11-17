@@ -10,5 +10,5 @@
   "webVersion": 287,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "3e3994514fbc6003fcda889e313a9fad700878d0045e4a96048a02d1efd2a242",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "My Diary Web Update 287: Private Locker now supports Favourite Notes, Important Pin and Date Wise Diary. Favourite/Pin flags are encrypted with each note; search, editing, existing notes and lock/security settings are preserved."
 }
