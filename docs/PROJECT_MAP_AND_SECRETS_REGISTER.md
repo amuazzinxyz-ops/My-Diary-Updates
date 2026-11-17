@@ -1,3 +1,14 @@
+# Diary Lock PIN boxes re-measured after final sizing review — pending publication (2026-11-18)
+
+- User asked for another careful review so longer PIN prompt text must never be cut off.
+- Found a real ordering issue in Web Update 310: all three Diary Lock PIN routes called the measurement helper before assigning the input's inline width/height/padding/border. The helper therefore initially measured an unstyled/default box; later observer callbacks were not a reliable substitute for measuring only after the final style was applied.
+- Created pre-edit backup branch: `backup/before-diary-lock-pin-final-fit-review-2026-11-18`. Working branch: `fix/diary-lock-pin-final-fit-review-2026-11-18`.
+- Corrected all three routes so the actual box styles are applied first and the placeholder fitter runs afterward. Standardized the three PIN fields to a 60px minimum height with 10px vertical padding, preserving their existing border treatments and 22px typed-PIN digit styling. The fitter still measures actual rendered width/height, padding, borders and placeholder font, reserves 3px on both horizontal sides, and caps short/medium/long prompts at 24/19/17px subject to actual fit.
+- Only the three Diary Lock PIN prompt fields in `web-source/index.html` were changed. PIN logic, PIN values, recovery, Pattern, Fingerprint, Note Lock, Private Locker, notes and all other features remain untouched. Static diff is limited to 3 lines changed (three field initializers). Phone visual confirmation remains pending; do not claim no clipping on-device until user checks.
+- Publication details to be added after PR merge and publisher verification.
+
+---
+
 # Diary Lock PIN prompt actual-box fitting — Web Update 310 (2026-11-18)
 
 - User asked to apply the same measured box/text sizing discipline used for Note PIN to Diary Lock.
