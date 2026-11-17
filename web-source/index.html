@@ -731,7 +731,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 #diaryMyNotesSearch{border:2px solid #d4af37!important;box-shadow:inset 0 2px 4px rgba(70,48,0,.10),0 3px 0 #9b7415,0 6px 10px rgba(70,48,0,.16)!important}
 </style>
 <style id="diary-lock-same-as-note-lock-style">
-.diary-master-pin-entry::placeholder{font-size:clamp(13px,3.9vw,17px)!important;line-height:1.3!important;letter-spacing:0!important;font-weight:900!important;opacity:1!important;color:#514467!important;text-align:center!important;white-space:nowrap!important;text-shadow:0 1px 0 #fff,0 2px 0 rgba(105,75,145,.24)!important;}
+.diary-master-pin-entry::placeholder{font-size:var(--diary-master-pin-placeholder-size,16px)!important;line-height:1.15!important;letter-spacing:0!important;font-weight:900!important;opacity:1!important;color:#514467!important;text-align:center!important;white-space:nowrap!important;text-shadow:0 1px 0 #fff,0 2px 0 rgba(105,75,145,.24)!important;}
 .diary-master-pin-entry{overflow:hidden;text-overflow:clip;border:3px solid #d4af37!important;border-radius:12px!important;box-shadow:inset 0 2px 4px rgba(45,30,65,.12),0 4px 0 #9b7415,0 7px 12px rgba(70,48,0,.18)!important;font-weight:900!important;text-shadow:0 1px 0 rgba(255,255,255,.75),0 2px 0 rgba(85,55,125,.16)!important;}
 
 #diaryDiaryUnlockShade button:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(80,40,130,.5)!important}
@@ -2780,6 +2780,46 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   card.appendChild(heading);card.appendChild(lockRow.row);card.appendChild(fingerprintRow.row);card.appendChild(patternRow.row);card.appendChild(status);card.appendChild(close);
   shade.appendChild(card);document.body.appendChild(shade);observer.observe(document.body,{childList:true,subtree:true});sync();
  }
+ function applyDiaryMasterPinPlaceholderSize(input){
+  if(!input)return;
+  var label=String(input.placeholder||'').trim();
+  if(!label)return;
+  var count=Array.from(label).length;
+  var target=count<=15?24:(count<=24?19:17);
+  function fit(){
+   if(!input.isConnected)return;
+   var rect=input.getBoundingClientRect();
+   if(!(rect.width>0&&rect.height>0))return;
+   var css=window.getComputedStyle(input);
+   var available=rect.width-
+    (parseFloat(css.paddingLeft)||0)-(parseFloat(css.paddingRight)||0)-
+    (parseFloat(css.borderLeftWidth)||0)-(parseFloat(css.borderRightWidth)||0)-6;
+   var innerHeight=rect.height-
+    (parseFloat(css.paddingTop)||0)-(parseFloat(css.paddingBottom)||0)-
+    (parseFloat(css.borderTopWidth)||0)-(parseFloat(css.borderBottomWidth)||0);
+   var heightLimit=Math.max(10,Math.floor((innerHeight-4)/1.15));
+   if(!(available>0))return;
+   var canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');
+   if(!ctx)return;
+   var placeholderCss=window.getComputedStyle(input,'::placeholder');
+   var family=(placeholderCss&&placeholderCss.fontFamily)||css.fontFamily||'Arial, sans-serif';
+   var weight=(placeholderCss&&placeholderCss.fontWeight)||'900';
+   var low=8,high=Math.min(target,heightLimit),best=8;
+   while(low<=high){
+    var mid=Math.floor((low+high)/2);
+    ctx.font=weight+' '+mid+'px '+family;
+    if(ctx.measureText(label).width<=available){best=mid;low=mid+1;}
+    else high=mid-1;
+   }
+   input.style.setProperty('--diary-master-pin-placeholder-size',best+'px');
+  }
+  fit();
+  if(typeof ResizeObserver!=='undefined'&&!input.__diaryMasterPinFitObserver){
+   input.__diaryMasterPinFitObserver=new ResizeObserver(fit);
+   input.__diaryMasterPinFitObserver.observe(input);
+  }
+  if(typeof requestAnimationFrame==='function')requestAnimationFrame(fit);
+ }
  function configureDiaryPin(showSettingsAfterSave){
   var current=localStorage.getItem(DIARY_MASTER_PIN_KEY)||'',newPin='',lastSubmitted='';
   var oldShade=document.getElementById('diaryDiaryPinSetupShade');if(oldShade&&oldShade.parentNode)oldShade.parentNode.removeChild(oldShade);
@@ -2789,7 +2829,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var heading=el('strong');heading.style.cssText='display:block;font-size:22px;line-height:1.4;font-weight:900;color:#321653;margin-bottom:16px;overflow-wrap:anywhere;';
   var input=el('input',{type:'password',name:'diary-pin-setup',inputmode:'numeric',pattern:'[0-9]*',maxlength:'4',autocomplete:'off',autocapitalize:'off',autocorrect:'off',spellcheck:'false','aria-autocomplete':'none','data-lpignore':'true','data-1p-ignore':'true'});
   input.setAttribute('enterkeyhint','done');input.setAttribute('autocomplete','off');
-  input.classList.add('diary-master-pin-entry');input.placeholder=t('pinPrompt');input.style.cssText='display:block;width:100%;max-width:100%;min-width:0;min-height:54px;box-sizing:border-box;padding:12px 8px;border:3px solid #b58a19;border-radius:11px;background:#fff;color:#171027;font-size:22px;font-weight:800;letter-spacing:6px;text-align:center;line-height:1.3;outline:none;box-shadow:inset 0 1px 3px rgba(0,0,0,.12);';
+  input.classList.add('diary-master-pin-entry');input.placeholder=t('pinPrompt');applyDiaryMasterPinPlaceholderSize(input);input.style.cssText='display:block;width:100%;max-width:100%;min-width:0;min-height:54px;box-sizing:border-box;padding:12px 8px;border:3px solid #b58a19;border-radius:11px;background:#fff;color:#171027;font-size:22px;font-weight:800;letter-spacing:6px;text-align:center;line-height:1.3;outline:none;box-shadow:inset 0 1px 3px rgba(0,0,0,.12);';
   var setupStatus=el('div',{id:'diaryDiaryPinSetupStatus','role':'status','aria-live':'polite'});setupStatus.style.cssText='display:block;min-height:24px;margin:10px 0 2px;padding:7px 9px;border-radius:8px;background:#fff;color:#7b1c1c;font-size:16px;line-height:1.45;font-weight:800;overflow-wrap:anywhere;';
   var saveName=el('button',{type:'button'},t('favouriteNameSave'));saveName.style.cssText='width:100%;padding:11px;margin-top:10px;border:1px solid #8b5acb;border-radius:10px;background:linear-gradient(145deg,#c4a2ff,#7540c2);color:#fff;font-weight:900;box-shadow:0 3px 0 #54258f;';saveName.hidden=true;
   var cancel=el('button',{type:'button'},t('closeLabel'));cancel.style.cssText='width:100%;padding:9px;margin-top:12px;border:1px solid #8b5acb;border-radius:10px;background:#eee5ff;color:#4b287e;font-weight:800;';
@@ -2868,7 +2908,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var box=el('section');box.style.cssText='width:min(340px,100%);box-sizing:border-box;padding:22px 18px;border-radius:18px;text-align:center;background:linear-gradient(145deg,#fff,#f0e8ff);border:3px solid #d4af37;box-shadow:inset 0 2px 0 #fff,0 5px 0 #9b7415,0 14px 35px rgba(0,0,0,.4);';
   var heading=el('strong',null,t('diaryPinEnter'));heading.style.cssText='display:block;font-size:22px;line-height:1.4;font-weight:900;color:#321653;margin-bottom:16px;overflow-wrap:anywhere;';
   var input=el('input',{type:'password',name:'diary-lock-off-pin',inputmode:'numeric',pattern:'[0-9]*',maxlength:'4',autocomplete:'new-password',autocapitalize:'off',autocorrect:'off',spellcheck:'false','aria-autocomplete':'none','data-lpignore':'true','data-1p-ignore':'true'});
-  input.classList.add('diary-master-pin-entry');input.placeholder=t('pinPrompt');input.style.cssText='display:block;width:100%;max-width:100%;min-width:0;box-sizing:border-box;padding:12px 8px;border:2px solid #d4af37;border-radius:10px;font-size:22px;font-weight:800;letter-spacing:6px;line-height:1.3;text-align:center;';
+  input.classList.add('diary-master-pin-entry');input.placeholder=t('pinPrompt');applyDiaryMasterPinPlaceholderSize(input);input.style.cssText='display:block;width:100%;max-width:100%;min-width:0;box-sizing:border-box;padding:12px 8px;border:2px solid #d4af37;border-radius:10px;font-size:22px;font-weight:800;letter-spacing:6px;line-height:1.3;text-align:center;';
   var pinStatus=el('div');pinStatus.style.cssText='min-height:20px;margin:8px 0 0;color:#b42318;font-size:14px;font-weight:900;';
   function submitPin(){
    if(String(input.value||'').length!==4)return;
@@ -2905,7 +2945,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   shade.style.cssText='position:fixed;inset:0;z-index:2147483646;background:rgba(20,10,35,.86);display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;';
   var box=el('section');box.style.cssText='width:min(340px,100%);box-sizing:border-box;padding:22px 18px;border-radius:18px;text-align:center;background:linear-gradient(145deg,#fff,#f0e8ff);border:3px solid #d4af37;box-shadow:inset 0 2px 0 #fff,0 5px 0 #9b7415,0 14px 35px rgba(0,0,0,.4);';
   var heading=el('strong',null,t('diaryPinEnter'));heading.style.cssText='display:block;font-size:19px;font-weight:900;color:#4b287e;margin-bottom:14px;';
-  var input=el('input',{type:'password',name:'diary-master-pin',inputmode:'numeric',pattern:'[0-9]*',maxlength:'4',autocomplete:'new-password',autocapitalize:'off',autocorrect:'off',spellcheck:'false','aria-autocomplete':'none','data-lpignore':'true','data-1p-ignore':'true'});input.classList.add('diary-master-pin-entry');input.placeholder=t('pinPrompt');input.style.cssText='display:block;width:100%;max-width:100%;min-width:0;min-height:54px;box-sizing:border-box;padding:12px 8px;border:3px solid #b58a19;border-radius:11px;background:#fff;color:#171027;font-size:22px;font-weight:800;letter-spacing:6px;line-height:1.3;text-align:center;margin-bottom:12px;outline:none;box-shadow:inset 0 1px 3px rgba(0,0,0,.12);';
+  var input=el('input',{type:'password',name:'diary-master-pin',inputmode:'numeric',pattern:'[0-9]*',maxlength:'4',autocomplete:'new-password',autocapitalize:'off',autocorrect:'off',spellcheck:'false','aria-autocomplete':'none','data-lpignore':'true','data-1p-ignore':'true'});input.classList.add('diary-master-pin-entry');input.placeholder=t('pinPrompt');applyDiaryMasterPinPlaceholderSize(input);input.style.cssText='display:block;width:100%;max-width:100%;min-width:0;min-height:54px;box-sizing:border-box;padding:12px 8px;border:3px solid #b58a19;border-radius:11px;background:#fff;color:#171027;font-size:22px;font-weight:800;letter-spacing:6px;line-height:1.3;text-align:center;margin-bottom:12px;outline:none;box-shadow:inset 0 1px 3px rgba(0,0,0,.12);';
   var recoveryStage='unlock',recoveryFirstPin='';
   var recoveryNameSubmit=el('button',{type:'button'},t('favouriteNameSave'));recoveryNameSubmit.style.cssText='width:100%;padding:10px;margin:7px 0 0;border:2px solid #8b5acb;border-radius:10px;background:linear-gradient(145deg,#c4a2ff,#7540c2);color:#fff;font-weight:900;box-shadow:0 3px 0 #54258f;';recoveryNameSubmit.hidden=true;
   var recoveryStatus=el('div',{id:'diaryDiaryUnlockFingerprintStatus'});recoveryStatus.style.cssText='display:block;min-height:28px;margin:8px 0;padding:8px 10px;border-radius:8px;background:#fff;color:#8b1717;font-size:16px;line-height:1.45;font-weight:900;overflow-wrap:anywhere;text-align:left;';
