@@ -1,3 +1,15 @@
+# Private Locker Lock On available while Lock is OFF — Web Update 293 published (2026-11-17)
+
+- Source inspection found that the existing Lock On control was only on the PIN-entry screen, but Lock OFF automatically bypasses that screen and opens the unlocked Locker. This made it impossible to turn PIN protection back ON from the Lock OFF state.
+- Minimal fix: when the unlocked Private Locker detects config.lockDisabled=true, it now shows one gold 🔐 Lock On Karein button above Search. Tapping it calls the existing privateLockerTurnLockOn(config) flow, clears the locally retained unlocked key, and restores the normal PIN gate. The button is hidden when Lock is already ON. No saved entries, PIN/recovery wrappers, Diary Lock, or Note Lock are changed.
+- Backup branch: backup/before-private-locker-lockon-access-fix-2026-11-17. Working branch: fix/private-locker-lockon-access-when-off-2026-11-17. PR #146 merged as 831c5a282a97cf36eb2569a40dd56ebad8311de9.
+- Only one insertion in privateLockerShowEntries() was added to web-source/index.html and diary-web/index.html. Source and mirror are byte-identical at Git blob SHA 59486f03f2b9ecf57f4fb569d22448374c9282a2. Both inline JavaScript blocks passed V8 syntax parsing (2/2); PR diff contains only the conditional Lock On button.
+- Web Update 293 is published. latest.json advertises webVersion 293 and web SHA-256 844e6bee162dde7fa428b31bb225d0f06b4301c6e8ceac43130d9f605b2c82ce, matching the published source/mirror.
+- The automatic APK workflow again republished the existing APK version after this web-only push. Both original APK files were restored to Git blob SHA d37ec3842b6e9868209d24ec8fb935b43ac0e98f, and latest.json advertises the original APK SHA-256 07d922d24b7ec1db1bea55681711408924d8c8a5888822bdaaebaf57a54e7baa. APK remains 1.0.189 / versionCode 188; no new APK release is intended.
+- Physical-phone testing remains pending. Ask the user to install Web Update 293 and test: PIN verification for setup/removal, Lock OFF confirmation, and the new Lock On Karein button restoring the PIN gate. Do not claim phone-side confirmation.
+
+---
+
 # Private Locker Lock Off no longer asks for PIN twice — Web Update 292 published (2026-11-17)
 
 - Root cause: the Lock Off action asked for the current PIN a second time after the PIN-screen control flow had already verified it.
