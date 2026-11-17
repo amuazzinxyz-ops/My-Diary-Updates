@@ -1907,37 +1907,51 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    var searchHeading=el('strong',{style:'display:block;margin:0 0 7px;font-size:15px;font-weight:900;color:#35145f;'},'🔎 Private Locker — Search');
    var search=el('input',{type:'search',placeholder:'Naam ya likhai ke alfaaz dhoondein…','aria-label':'Private Locker Search',style:'display:block;width:100%;min-height:52px;box-sizing:border-box;padding:12px 14px;border:1.5px solid #c7b4dd;border-radius:15px;background:#fff;font-size:16px;font-weight:700;box-shadow:inset 0 2px 4px #35145f14,0 4px 0 #e4d8ee,0 7px 12px #35145f12;'});
    searchWrap.append(searchHeading,search);
+   var filterWrap=el('div',{style:'display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 12px;'});
+   var viewFilter=el('select',{ 'aria-label':'Private Locker notes filter',style:'min-height:44px;min-width:0;padding:8px;border:1.5px solid #c7b4dd;border-radius:11px;background:#fff;font-size:14px;font-weight:900;color:#43245f;'});
+   [['all','📚 Sabhi Notes'],['favourite','⭐ Favourite'],['pinned','📌 Important Pin']].forEach(function(item){viewFilter.appendChild(el('option',{value:item[0]},item[1]));});
+   var dateFilter=el('input',{type:'date','aria-label':'Date Wise Diary filter',style:'min-height:44px;min-width:0;width:100%;box-sizing:border-box;padding:7px;border:1.5px solid #c7b4dd;border-radius:11px;background:#fff;font-size:14px;font-weight:800;color:#43245f;'});
+   var dateLabel=el('label',{style:'grid-column:1/-1;font-size:12px;font-weight:900;color:#62477b;'},'📅 Date Wise Diary — date chunein');
+   filterWrap.append(viewFilter,dateFilter,dateLabel);
    var list=el('div',{style:'display:grid;gap:10px;'});
-   privateLockerContent.append(searchWrap,form,list);
+   privateLockerContent.append(searchWrap,filterWrap,form,list);
 
+   function privateLockerDateKey(timestamp){var d=new Date(Number(timestamp)||0);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
    var allRecords=[];
    function render(){
     list.replaceChildren();
     return privateLockerAll().then(function(rows){return Promise.all((rows||[]).map(function(row){return privateLockerDecrypt(privateLockerKey,row);}));}).then(function(records){
-     allRecords=records;privateLockerRecords=records;records.sort(function(a,b){return b.created-a.created;});
-     var q=search.value.trim().toLocaleLowerCase(),words=q.split(/\s+/).filter(Boolean);
-     var shown=records.filter(function(record){var hay=(String(record.name||'')+' '+String(record.details||'')).toLocaleLowerCase();return !words.length||words.every(function(word){return hay.indexOf(word)>=0;});});
+     allRecords=records;privateLockerRecords=records;
+     records.sort(function(a,b){return (Number(!!b.pinned)-Number(!!a.pinned))||(Number(!!b.favourite)-Number(!!a.favourite))||((Number(b.created)||0)-(Number(a.created)||0));});
+     var q=search.value.trim().toLocaleLowerCase(),words=q.split(/\s+/).filter(Boolean),mode=viewFilter.value,chosenDate=dateFilter.value;
+     var shown=records.filter(function(record){var hay=(String(record.name||'')+' '+String(record.details||'')).toLocaleLowerCase();var textMatch=!words.length||words.every(function(word){return hay.indexOf(word)>=0;});var viewMatch=mode==='favourite'?!!record.favourite:(mode==='pinned'?!!record.pinned:true);var dateMatch=!chosenDate||privateLockerDateKey(record.created)===chosenDate;return textMatch&&viewMatch&&dateMatch;});
      if(!shown.length){list.appendChild(el('p',{style:'padding:14px;border:1px dashed #c7b4dd;border-radius:12px;color:#62477b;font-weight:700;'},records.length?'Is search mein koi likhai nahi mili.':'Abhi koi private likhai save nahi hai.'));return;}
      shown.forEach(function(record){
       var card=el('article',{style:'border:1px solid #d8c6eb;border-radius:14px;padding:13px;background:linear-gradient(145deg,#fff,#faf7ff);box-shadow:inset 0 2px 0 #fff,0 3px 0 #e4d8ee,0 7px 14px #35145f14;'});
-      var title=el('strong',{style:'display:block;font-size:16px;font-weight:900;color:#35145f;overflow-wrap:anywhere;text-shadow:0 1px #fff,0 2px 2px #35145f22;'},record.name||'Bina naam ki likhai');
+      var title=el('strong',{style:'display:block;font-size:16px;font-weight:900;color:#35145f;overflow-wrap:anywhere;text-shadow:0 1px #fff,0 2px 2px #35145f22;'},(record.pinned?'📌 ':'')+(record.favourite?'⭐ ':'')+(record.name||'Bina naam ki likhai'));
+      var dateText=new Date(Number(record.created)||Date.now()).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+      var dateBadge=el('small',{style:'display:block;margin-top:5px;color:#725d88;font-size:12px;font-weight:900;'},'📅 '+dateText);
       var body=el('p',{style:'margin:8px 0;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.55;color:#292035;'},record.details||'');
       var actions=el('div',{style:'display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;'});
+      function flagButton(label,field){var active=!!record[field];var b=el('button',{type:'button',style:'min-height:38px;padding:7px 10px;border:1.5px solid #9470bb;border-radius:10px;background:'+(active?'linear-gradient(145deg,#f7e8b0,#e8cf79)':'linear-gradient(145deg,#f4eaff,#ddc8f2)')+';font-weight:900;color:#43245f;box-shadow:0 2px 0 #c4addb;'},(field==='favourite'?(active?'⭐ Favourite':'☆ Favourite'):(active?'📌 Pinned':'📌 Pin Karein')));b.addEventListener('click',function(){b.disabled=true;var updated=Object.assign({},record);updated[field]=!active;privateLockerEncrypt(privateLockerKey,updated).then(function(encrypted){return privateLockerPut('entries',{id:updated.id,iv:encrypted.iv,cipher:encrypted.cipher,created:updated.created});}).then(function(){return render();}).catch(function(err){privateLockerMessage(err.message||'Note update nahi hua.',true);b.disabled=false;});});return b;}
+      var favourite=flagButton('Favourite','favourite'),pin=flagButton('Pin','pinned');
       var edit=el('button',{type:'button',style:'min-height:40px;padding:8px 13px;border:1px solid #9470bb;border-radius:10px;background:linear-gradient(145deg,#f4eaff,#ddc8f2);font-weight:900;color:#43245f;box-shadow:0 3px 0 #c4addb;'},'✏️ Edit Karein');
       edit.addEventListener('click',function(){editingId=record.id;name.value=record.name||'';details.value=record.details||'';cancel.hidden=false;save.textContent='💾 Tabdeeli Save Karein';form.scrollIntoView({behavior:'smooth',block:'start'});name.focus();});
       var del=el('button',{type:'button',style:'min-height:40px;padding:8px 13px;border:1px solid #d6a4a4;border-radius:10px;background:linear-gradient(145deg,#fff0f0,#f5dada);font-weight:900;color:#7a2222;'},'🗑️ Hataayein');
       del.addEventListener('click',function(){if(!confirm('Is private likhai ko hataa dein?'))return;privateLockerDelete(record.id).then(function(){if(editingId===record.id){editingId=null;form.reset();cancel.hidden=true;save.textContent='💾 Mehfooz Save Karein';}return render();}).catch(function(err){privateLockerMessage(err.message,true);});});
-      actions.append(edit,del);card.append(title,body,actions);list.appendChild(card);
+      actions.append(favourite,pin,edit,del);card.append(title,dateBadge,body,actions);list.appendChild(card);
      });
     });
    }
    search.addEventListener('input',function(){render().catch(function(err){privateLockerMessage(err.message||'Search nahi ho saki.',true);});});
+   viewFilter.addEventListener('change',function(){render().catch(function(err){privateLockerMessage(err.message||'Filter nahi lag saka.',true);});});
+   dateFilter.addEventListener('change',function(){render().catch(function(err){privateLockerMessage(err.message||'Date filter nahi lag saka.',true);});});
    form.addEventListener('submit',function(e){
     e.preventDefault();if(!privateLockerKey)return;
     var title=name.value.trim(),text=details.value.trim();if(!text){privateLockerMessage('Pehle kuch likhein.',true);return;}
     save.disabled=true;
     var record=editingId?allRecords.find(function(x){return x.id===editingId;}):null;
-    var payload={id:editingId||( 'pl_'+Date.now()+'_'+privateLockerB64(privateLockerRandom(6))),name:title,details:text,created:record?record.created:Date.now()};
+    var payload={id:editingId||( 'pl_'+Date.now()+'_'+privateLockerB64(privateLockerRandom(6))),name:title,details:text,created:record?record.created:Date.now(),favourite:record?!!record.favourite:false,pinned:record?!!record.pinned:false};
     privateLockerEncrypt(privateLockerKey,payload).then(function(encrypted){return privateLockerPut('entries',{id:payload.id,iv:encrypted.iv,cipher:encrypted.cipher,created:payload.created});}).then(function(){
      editingId=null;form.reset();cancel.hidden=true;save.textContent='💾 Mehfooz Save Karein';privateLockerMessage('Private likhai encrypted hokar save ho gayi.',false);return render();
     }).catch(function(err){privateLockerMessage(err.message||'Save nahi hua.',true);}).finally(function(){save.disabled=false;});
