@@ -10,5 +10,5 @@
   "webVersion": 287,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "2f79ea9c5039cf3fd43d6567d908ab0cf72458f0c0879410806936b0609fd7ee",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "My Diary Web Update 287: Fixed Private Locker Lock Off / Lock On buttons not appearing by mounting the existing Pattern/Fingerprint controls row below Private Locker search. Existing PIN confirmation and Lock On gate are retained. Diary Lock and Note Lock unchanged."
 }
