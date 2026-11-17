@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 292,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "5fd2f05adb1862224019be7134ba416b8760515e27146dfc32bf121078ad1249",
+  "webSha256": "844e6bee162dde7fa428b31bb225d0f06b4301c6e8ceac43130d9f605b2c82ce",
   "webReleaseNotes": "My Diary Web Update 292: Private Locker Lock Off now uses the PIN already verified on the control screen, then asks for a separate Lock Off confirmation. No second PIN prompt. Saved Locker entries remain preserved; Lock On and other controls remain unchanged."
 }
