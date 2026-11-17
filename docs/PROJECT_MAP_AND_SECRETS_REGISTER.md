@@ -1,3 +1,13 @@
+# Diary Lock PIN prompt actual-box fitting — implementation prepared (2026-11-18)
+
+- User asked to apply the same measured box/text sizing discipline used for Note PIN to Diary Lock.
+- Created pre-edit backup branch: `backup/before-diary-lock-pin-box-fit-2026-11-18`. Working branch: `fix/diary-lock-pin-box-fit-2026-11-18`.
+- Source inspection found Diary Lock PIN placeholders hard-coded to a viewport clamp of 13–17px, even though its PIN inputs render at roughly 54px high. Three PIN entry routes exist: initial PIN setup, PIN entry to turn Diary Lock off, and regular Diary unlock/recovery flow.
+- Replaced only the Diary Lock PIN placeholder sizing rule and added a measured fit helper for all three routes. It reads the rendered input's actual width/height, padding and borders; keeps 3px clear space on both sides; chooses the largest fitting size with short/medium/long targets 24/19/17px; and recalculates after DOM insertion and resize.
+- Typed PIN digit size, PIN validation, recovery, Pattern/Fingerprint behavior, stored PINs, notes, Note Lock, Private Locker and other features are unchanged. Publication and phone visual confirmation are pending.
+
+---
+
 # Note PIN placeholder balanced to actual box size — Web Update 309 (2026-11-18)
 
 - User reported that Web Update 308 still made the Note PIN placeholder much too large. The earlier 34/23/20px targets were too aggressive for the actual 54px PIN field.
