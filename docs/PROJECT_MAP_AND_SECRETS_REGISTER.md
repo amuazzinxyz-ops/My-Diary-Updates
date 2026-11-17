@@ -1,3 +1,14 @@
+# Signed Release Gradle retry recovery — build #337 running (2026-11-18)
+
+- The signed Release Gradle command in the APK workflow did not advance during run #336 after Debug APK succeeded. The signed Release step had no retry wrapper, unlike the debug build.
+- Created backup branch `backup/before-signed-release-gradle-retry-2026-11-18` and working branch `fix/signed-release-gradle-retry-2026-11-18`.
+- PR #175 merged as `1b334321f55bd3ce8b12a70a08641f1d00058d5c`. The signed Release Gradle task now retries up to three times after transient dependency/build failures. This is a workflow-only change; Android app source and Web Update 313 are unchanged.
+- Created register backup branch `backup/before-signed-release-retry-register-2026-11-18`.
+- New APK workflow run #337 (`44164281065`) has started and is currently in progress at checkout. Run #336 (`44163380545`) has not published an APK.
+- Live feed remains **1.0.189 / versionCode 188**, Web Update **313**. Do not provide a 1.0.190 link until signed APK, certificate fingerprint, checksum, and live feed are all verified. Phone-side alarm testing remains pending.
+
+---
+
 # Unanswered Smart Reminder and Personal Calendar alarm auto-repeat — code merged, APK build pending (2026-11-18)
 
 - User requested that unanswered alarms automatically ring again using the configured Dubara/Snooze interval until the user chooses Done or Dubara. Manual Dubara continues to use the saved interval and existing manual snooze limit; Done cancels the automatic fallback.
