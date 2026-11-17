@@ -1811,7 +1811,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      privateLockerExternalButtons.appendChild(button);
     }
     add(cfg.pattern?'🔷 Pattern Badlein':'🔷 Pattern Set Karein','pattern','purple');
-    if(window.DiaryAppActions&&typeof DiaryAppActions.enablePrivateLockerFingerprint==='function'&&typeof DiaryAppActions.canUsePrivateLockerBiometric==='function'&&DiaryAppActions.canUsePrivateLockerBiometric())add(cfg.fingerprint?'👆 Fingerprint Badlein':'👆 Fingerprint Set Karein','fingerprint','purple');
+    if(window.DiaryAppActions&&typeof DiaryAppActions.enablePrivateLockerFingerprint==='function'&&typeof DiaryAppActions.canUsePrivateLockerBiometric==='function'&&DiaryAppActions.canUsePrivateLockerBiometric())add('👆 Fingerprint Set Karein','fingerprint','purple');
     if(cfg.pattern)add('Pattern Hataayein','removePattern','red');
     if(cfg.fingerprint)add('Fingerprint Hataayein','removeFingerprint','red');
     add(cfg.lockDisabled?'🔐 Lock On Karein':'🔓 Lock Off Karein',cfg.lockDisabled?'lockOn':'lockOff','gold');
