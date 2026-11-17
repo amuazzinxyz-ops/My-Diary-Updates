@@ -1,3 +1,12 @@
+# Private Locker Pattern and fingerprint setup on existing PIN screen — fix in review (2026-11-17)
+
+- User clarified that the existing Locker already has a PIN; its current screen showed only **PIN Bhool Gaye?**, while Pattern/Fingerprint setup controls were missing. The prior update had only placed setup controls on first-time PIN creation, which did not solve this existing-Locker case.
+- On the existing Locker PIN screen, added **🔷 Pattern Set Karein / Pattern Badlein** and, when the Android fingerprint bridge is available, **👆 Fingerprint Set Karein / Fingerprint Badlein** above **PIN Bhool Gaye?**. Selecting a setup method asks for the existing Locker PIN, verifies it against the existing encrypted PIN wrapper, and only then begins the chosen setup. Normal four-digit PIN auto-unlock, configured Pattern/Fingerprint unlock, and Forgot PIN recovery remain.
+- The change is limited to `privateLockerPinForm(config)` in `web-source/index.html` and the matching `diary-web/index.html` mirror. No existing PIN, recovery wrapper, encrypted entry, IndexedDB record, Android Keystore entry, Diary Lock, Note Lock, or unrelated feature was intentionally changed.
+- Pre-edit snapshot branch: `backup/before-private-locker-pin-screen-method-buttons-2026-11-17`. Working branch: `fix/private-locker-pin-screen-method-buttons-2026-11-17`. Main baseline: `d246399ca72f09ccf6e9e94666a45c5bd8c51c16`. Source update commit: `aeb909af503dc373241e663adbdba67a029fbc5e`; mirror sync commit: `ea9aa3b0d489e51c64435caccece0d2467d91291`. Source/mirror blob SHA after sync: `576cc5f90b3ba052062b9952b5ab7ec55d3d3375`.
+- **Not yet syntax-tested, PR-reviewed/merged, published, or phone-tested.** Do not tell the user to update until the release checks and live manifest/hash verification pass. This is a web-only UI/flow change; no APK rebuild is planned unless repository validation requires it.
+ 
+---
 # Private Locker Pattern and fingerprint buttons moved beside PIN setup — Web Update 284 (2026-11-17)
 
 - User approved moving **🔷 Pattern Set Karein** and **👆 Fingerprint Set Karein** out of the Private Locker writing/editor tools row and placing them with the lock setup controls.
