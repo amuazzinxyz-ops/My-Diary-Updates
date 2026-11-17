@@ -1,3 +1,12 @@
+# Private Locker PIN-screen controls enabled — fix in progress (2026-11-17)
+
+- Root cause: the shared `el()` helper applies attributes with `setAttribute`; passing `disabled: null` still creates a `disabled="null"` HTML attribute. As a result, every PIN-screen control button was disabled, including Pattern setup and Lock Off.
+- Minimal fix: create each control button without a `disabled` attribute, then set the DOM boolean property `button.disabled = !!disabled`. Only controls intentionally unavailable by current configuration/platform remain disabled. No action handlers, PIN verification, Locker data, Diary Lock, Note Lock, or other features are changed.
+- Backup branch: `backup/before-private-locker-buttons-enable-fix-2026-11-17`. Working branch: `fix/private-locker-buttons-enabled-2026-11-17`.
+- Source/mirror update, syntax/static verification, PR merge, web publication and live manifest verification are pending. Physical-phone test remains pending.
+
+---
+
 # Private Locker control actions fixed — Web Update 290 (2026-11-17)
 
 - User confirmed the PIN-screen placement is now correct, but the five controls did not perform their actions.
