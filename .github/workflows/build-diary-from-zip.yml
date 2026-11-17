@@ -535,7 +535,19 @@ jobs:
           """
           p.write_text(s, encoding="utf-8")
           PY
-          gradle --no-daemon :app:assembleRelease
+          gradle_with_retry() {
+            local attempt=1
+            until gradle --no-daemon "$@"; do
+              if [ "$attempt" -ge 3 ]; then
+                echo "Signed Release Gradle build failed after 3 attempts."
+                return 1
+              fi
+              attempt=$((attempt + 1))
+              echo "Signed Release Gradle dependency/build attempt failed; retrying ($attempt/3) after a short wait."
+              sleep $((attempt * 20))
+            done
+          }
+          gradle_with_retry :app:assembleRelease
           jarsigner -verify -verbose -certs app/build/outputs/apk/release/app-release.apk
           APK_SIGNER="$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -1)"
           test -n "$APK_SIGNER"
