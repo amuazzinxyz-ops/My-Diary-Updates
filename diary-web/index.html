@@ -1635,13 +1635,15 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    var pin=el('input',{type:'password',inputmode:'numeric',maxlength:'6',autocomplete:'off',placeholder:'4 digit PIN (purana 6 digit PIN bhi chalega)',style:'width:100%;height:50px;box-sizing:border-box;border:2px solid #c8b2df;border-radius:12px;padding:8px;text-align:center;font-size:22px;font-weight:900;letter-spacing:6px;'});
    label.appendChild(pin);wrap.appendChild(label);
    var status=el('div',{style:'min-height:22px;font-weight:800;color:#a11;'});
+   var verifyAction=el('button',{type:'button',hidden:'hidden',style:'min-height:44px;padding:8px 14px;border:2px solid #b18b32;border-radius:11px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;color:#3d2b08;'},'🔐 PIN Verify Karke Kaam Karein');
    var busy=false;
    function submitPin(){
     if(busy||(pin.value.length!==4&&pin.value.length!==6))return;
-    busy=true;var value=pin.value;pin.disabled=true;
-    privateLockerUnwrapMaster(value,config.pin).then(privateLockerFinishUnlock).catch(function(e){status.textContent=e&&e.message?e.message:'PIN galat hai.';pin.value='';pin.focus();}).finally(function(){busy=false;pin.disabled=false;});
+    busy=true;var value=pin.value;pin.disabled=true;verifyAction.disabled=true;
+    privateLockerUnwrapMaster(value,config.pin).then(privateLockerFinishUnlock).catch(function(e){status.textContent=e&&e.message?e.message:'PIN galat hai.';pin.value='';pin.focus();}).finally(function(){busy=false;pin.disabled=false;verifyAction.disabled=false;});
    }
-   pin.addEventListener('input',function(){pin.value=String(pin.value||'').replace(/[^0-9]/g,'').slice(0,6);submitPin();});wrap.appendChild(status);
+   verifyAction.addEventListener('click',submitPin);
+   pin.addEventListener('input',function(){pin.value=String(pin.value||'').replace(/[^0-9]/g,'').slice(0,6);if(privateLockerExternalAction){verifyAction.hidden=false;return;}submitPin();});wrap.appendChild(status);
    if(config.pattern){
     var patternTitle=el('strong',{},'Ya Pattern se kholein');
     var patternStatus=el('div',{style:'min-height:20px;color:#a11;font-weight:800;'});
@@ -1658,7 +1660,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    function addPinControl(label,action,kind,disabled){
     var styles=kind==='gold'?'min-height:42px;padding:8px 12px;border:2px solid #b18b32;border-radius:11px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;color:#3d2b08;box-shadow:0 3px 0 #b18b32;':kind==='red'?'min-height:42px;padding:8px 12px;border:1px solid #c7a2a2;border-radius:11px;background:linear-gradient(145deg,#fff0f0,#f5dada);font-weight:900;color:#7a2222;':'min-height:42px;padding:8px 12px;border:1px solid #9470bb;border-radius:11px;background:linear-gradient(145deg,#f4eaff,#ddc8f2);font-weight:900;color:#43245f;box-shadow:0 3px 0 #c4addb;';
     var button=el('button',{type:'button',disabled:disabled?'disabled':null,style:styles},label);
-    button.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();privateLockerExternalAction=action;pin.focus();privateLockerMessage('Ab apna Private Locker PIN daalein. PIN verify hone ke baad chuna hua kaam hoga.',false);});
+    button.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();privateLockerExternalAction=action;verifyAction.hidden=false;pin.value='';pin.disabled=false;verifyAction.disabled=false;pin.focus();privateLockerMessage('Ab apna Private Locker PIN daalein, phir PIN Verify Karke Kaam Karein dabayein.',false);});
     controls.appendChild(button);
    }
    addPinControl(config.pattern?'🔷 Pattern Badlein':'🔷 Pattern Set Karein','pattern','purple',false);
@@ -1667,7 +1669,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    addPinControl('Pattern Hataayein','removePattern','red',!config.pattern);
    addPinControl('Fingerprint Hataayein','removeFingerprint','red',!config.fingerprint);
    addPinControl(config.lockDisabled?'🔐 Lock On Karein':'🔓 Lock Off Karein',config.lockDisabled?'lockOn':'lockOff','gold',false);
-   wrap.appendChild(controls);
+   wrap.append(controls,verifyAction);
    var forgot=el('button',{type:'button',style:'min-height:42px;border:1px solid #b9a4d0;border-radius:10px;background:#f2eafb;font-weight:900;color:#43245f;'},'PIN Bhool Gaye?');
    forgot.addEventListener('click',function(){privateLockerRecoveryForm(config);});
    wrap.appendChild(forgot);pin.focus();return wrap;
