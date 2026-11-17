@@ -4,7 +4,7 @@
   "versionCode": 189,
   "versionName": "1.0.190",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
-  "sha256": "9f35d969da8031ad7b6925748c97b2e5ba9e8b0e97f0500eaabf244f6c5599e5",
+  "sha256": "8d3f6764a7b3c9e80261e6ab92b894ffb7a5c6629edf381b4aefebb25efb70a7",
   "releaseNotes": "My Diary 1.0.190: Smart Reminder and Personal Calendar automatically repeat at the saved Snooze interval when no action is selected. Done cancels the automatic repeat; manual Snooze remains available. Existing daily repeat, ringtone, saved data and unrelated features are preserved.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 313,
