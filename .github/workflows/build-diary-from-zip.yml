@@ -18,7 +18,8 @@ permissions:
 
 concurrency:
   group: my-diary-release-main
-  cancel-in-progress: false
+  # A newer verified build may replace a stalled pre-publication build.
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -462,13 +463,38 @@ jobs:
 
       - name: Build debug APK
         working-directory: diary-project
-        run: gradle --no-daemon :app:assembleDebug
+        run: |
+          gradle_with_retry() {
+            local attempt=1
+            until gradle --no-daemon "$@"; do
+              if [ "$attempt" -ge 3 ]; then
+                echo "Gradle failed after 3 attempts."
+                return 1
+              fi
+              attempt=$((attempt + 1))
+              echo "Gradle dependency/build attempt failed; retrying ($attempt/3) after a short wait."
+              sleep $((attempt * 20))
+            done
+          }
+          gradle_with_retry :app:assembleDebug
 
       - name: Build unsigned Release APK for private owner-side signing
         if: env.DIARY_RELEASE_READY != 'true'
         working-directory: diary-project
         run: |
-          gradle --no-daemon :app:assembleRelease
+          gradle_with_retry() {
+            local attempt=1
+            until gradle --no-daemon "$@"; do
+              if [ "$attempt" -ge 3 ]; then
+                echo "Gradle failed after 3 attempts."
+                return 1
+              fi
+              attempt=$((attempt + 1))
+              echo "Gradle dependency/build attempt failed; retrying ($attempt/3) after a short wait."
+              sleep $((attempt * 20))
+            done
+          }
+          gradle_with_retry :app:assembleRelease
           test -s app/build/outputs/apk/release/app-release-unsigned.apk
 
       - name: Configure signed Release build
