@@ -1654,7 +1654,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     var pinInvalid=false;privateLockerUnwrapMaster(value,config.pin).then(function(raw){return privateLockerFinishUnlock(raw);},function(){pinInvalid=true;status.textContent='PIN galat hai.';pin.value='';}).catch(function(e){status.textContent=e&&e.message?e.message:'Locker nahi khul saka.';}).finally(function(){busy=false;pin.disabled=false;verifyAction.disabled=false;if(pinInvalid)pin.focus();});
    }
    verifyAction.addEventListener('click',submitPin);
-   pin.addEventListener('input',function(){pin.value=String(pin.value||'').replace(/[^0-9]/g,'').slice(0,6);if(privateLockerExternalAction==='lockOff'){if(pin.value.length===4||pin.value.length===6)submitPin();return;}if(privateLockerExternalAction){verifyAction.hidden=false;return;}submitPin();});wrap.appendChild(status);
+   pin.addEventListener('input',function(){pin.value=String(pin.value||'').replace(/[^0-9]/g,'').slice(0,6);var expectedDigits=Number(config.pinDigits)===6?6:4;if(privateLockerExternalAction==='lockOff'){if(pin.value.length===expectedDigits)submitPin();return;}if(privateLockerExternalAction){verifyAction.hidden=false;return;}if(pin.value.length===expectedDigits)submitPin();});wrap.appendChild(status);
    if(config.pattern){
     var patternTitle=el('strong',{},'Ya Pattern se kholein');
     var patternStatus=el('div',{style:'min-height:20px;color:#a11;font-weight:800;'});
@@ -1795,7 +1795,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
       var edit=el('button',{type:'button',style:'min-height:40px;padding:8px 13px;border:1px solid #9470bb;border-radius:10px;background:linear-gradient(145deg,#f4eaff,#ddc8f2);font-weight:900;color:#43245f;box-shadow:0 3px 0 #c4addb;'},'✏️ Edit Karein');
       edit.addEventListener('click',function(){editingId=record.id;name.value=record.name||'';details.value=record.details||'';cancel.hidden=false;save.textContent='💾 Tabdeeli Save Karein';form.scrollIntoView({behavior:'smooth',block:'start'});name.focus();});
       var del=el('button',{type:'button',style:'min-height:40px;padding:8px 13px;border:1px solid #d6a4a4;border-radius:10px;background:linear-gradient(145deg,#fff0f0,#f5dada);font-weight:900;color:#7a2222;'},'🗑️ Hataayein');
-      del.addEventListener('click',function(){if(!confirm('Is private likhai ko hataa dein?'))return;privateLockerDelete(record.id).then(render).catch(function(err){privateLockerMessage(err.message,true);});});
+      del.addEventListener('click',function(){if(!confirm('Is private likhai ko hataa dein?'))return;privateLockerDelete(record.id).then(function(){if(editingId===record.id){editingId=null;form.reset();cancel.hidden=true;save.textContent='💾 Mehfooz Save Karein';}return render();}).catch(function(err){privateLockerMessage(err.message,true);});});
       actions.append(edit,del);card.append(title,body,actions);list.appendChild(card);
      });
     });
