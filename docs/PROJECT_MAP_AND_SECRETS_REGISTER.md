@@ -1,3 +1,17 @@
+# Private Locker full button audit — two edge-case fixes (2026-11-17)
+
+- User requested that **only Private Locker buttons** be audited and corrected; all other Diary features must remain untouched.
+- Audited the Private Locker modal, lock/setup/PIN/recovery controls, Pattern/Fingerprint controls, Lock On/Off routes, Lock-OFF security gate, encrypted writing Save/Edit/Delete, and Search. Existing button handlers were reviewed for their intended route and failure/cancel handling.
+- Found and fixed two Private Locker-only edge cases:
+  - Legacy six-digit PIN: the PIN field advertised support for an old six-digit PIN but auto-submitted as soon as digit four was entered, clearing the field before digits five and six could be typed. Auto-submit now uses the configured PIN length (4 or 6), including the Lock Off action.
+  - Delete while editing: deleting the same entry currently loaded in the editor could leave a stale edit ID and allow a later Save to recreate that deleted entry. Successful deletion now clears that matching edit form before refreshing the list.
+- Changed only the Private Locker block in `web-source/index.html` and the identical `diary-web/index.html` mirror, plus this register entry. No Diary Lock, Note Lock, My Documents, Diary editor, or other feature logic was changed.
+- Backup branch: `backup/before-private-locker-full-button-audit-2026-11-17`. Working branch: `fix/private-locker-full-button-audit-2026-11-17`.
+- Verification: source and mirror have identical Git blob SHA `f2d14c4a0491eea73b59e24cc8668dbd50f482cb`; both inline JavaScript blocks pass V8 syntax parsing (2/2); static wiring checks pass for modal open/close, setup, PIN, Pattern, Fingerprint, remove controls, Lock On/Off, recovery, save/edit/delete, and search. Phone/browser interaction testing remains pending; do not claim physical-device confirmation.
+- No APK, updater manifest, or non-Locker feature was changed.
+
+---
+
 # Private Locker Lock Off PIN auto-opens Locker — Web Update 297 (2026-11-17)
 
 - User requested: after tapping **🔓 Lock Off Karein**, entering the correct PIN should automatically turn Lock OFF and open the Locker; a wrong PIN must show **“PIN galat hai.”** beside the PIN field.
