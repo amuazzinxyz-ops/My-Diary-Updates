@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 282,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "781badc278cc9c54ad8b584a7da6cf7584631527260e3d1b8279f282f899e781",
+  "webSha256": "6a4bd3ff7703db8294e6cf1c334047590a4e361baa2a8764f8b42be9a1be612b",
   "webReleaseNotes": "My Diary Web Update 282: Note Lock wrong-PIN message now appears inside the PIN box; no browser address is shown."
 }
