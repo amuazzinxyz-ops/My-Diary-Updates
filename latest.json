@@ -7,8 +7,8 @@
   "sha256": "1f627d94f744a70949fcaefcacb0269f90a36fbc10360368de60f4d3773cb133",
   "releaseNotes": "My Diary 1.0.189: Private Locker writing-only, encrypted search/editing, four-digit Diary-style PIN, Pattern, Favourite Name recovery and separate Android Keystore fingerprint. Diary Lock remains unchanged.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 300,
+  "webVersion": 301,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "90344e7b4672ac303ade7dbae8da71d92419db9a082c4ad08d75c2470a40d248",
+  "webSha256": "7ca2590174777541174f41e9aa3bf427b684e99bcf4448c38cf71f8a4ac6b474",
   "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
