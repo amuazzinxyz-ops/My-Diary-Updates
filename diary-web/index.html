@@ -3249,20 +3249,28 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var label=String(input.placeholder||'').trim();
   if(!label)return;
   var count=Array.from(label).length;
-  var target=count<=15?34:(count<=24?23:20);
+  /* Balanced targets are deliberately tied to the real 54px PIN box:
+     short prompts are clearly larger, longer prompts moderately larger. */
+  var target=count<=15?24:(count<=24?19:17);
   function fit(){
    if(!input.isConnected)return;
    var rect=input.getBoundingClientRect();
+   if(!(rect.width>0&&rect.height>0))return;
    var css=window.getComputedStyle(input);
-   var available=rect.width-
-    (parseFloat(css.paddingLeft)||0)-(parseFloat(css.paddingRight)||0)-
-    (parseFloat(css.borderLeftWidth)||0)-(parseFloat(css.borderRightWidth)||0)-6;
+   var borderX=(parseFloat(css.borderLeftWidth)||0)+(parseFloat(css.borderRightWidth)||0);
+   var paddingX=(parseFloat(css.paddingLeft)||0)+(parseFloat(css.paddingRight)||0);
+   /* Keep exactly 3px of clear inner space at both ends. */
+   var available=rect.width-borderX-paddingX-6;
+   var borderY=(parseFloat(css.borderTopWidth)||0)+(parseFloat(css.borderBottomWidth)||0);
+   var innerHeight=rect.height-borderY-(parseFloat(css.paddingTop)||0)-(parseFloat(css.paddingBottom)||0);
+   var heightLimit=Math.max(10,Math.floor((innerHeight-4)/1.15));
    if(!(available>0))return;
    var canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');
    if(!ctx)return;
-   var family=css.fontFamily||'Arial, sans-serif';
-   var weight=css.fontWeight||'900';
-   var low=8,high=target,best=8;
+   var placeholderCss=window.getComputedStyle(input,'::placeholder');
+   var family=(placeholderCss&&placeholderCss.fontFamily)||css.fontFamily||'Arial, sans-serif';
+   var weight=(placeholderCss&&placeholderCss.fontWeight)||'900';
+   var high=Math.min(target,heightLimit),low=8,best=8;
    while(low<=high){
     var mid=Math.floor((low+high)/2);
     ctx.font=weight+' '+mid+'px '+family;
