@@ -1231,6 +1231,7 @@ class DiaryReminderReceiver : BroadcastReceiver() {
                 return
             }
             DiaryReminderScheduler.ACTION_AUTO_SNOOZE -> {
+                DiaryReminderScheduler.cancelAutoSnooze(context, id)
                 val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 manager.cancel((id.hashCode() and 0x3fffffff) + 10)
                 DiaryReminderSoundService.stop(context)
