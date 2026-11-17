@@ -3996,9 +3996,11 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Release remains My Diary **1.0.185 / versionCode 184** and Web Update **275**. No further source or release changes were made for this confirmation.
 
 
-# Private Locker × closes only the Locker, not the Me panel — fix pending publication (2026-11-17)
+# Private Locker × closes only the Locker, not the Me panel — Web Update 302 published (2026-11-17)
 
 - User tested the Private Locker × button and reported that it also closed the **Me** panel. Source inspection identified the event-order bug: the close handler correctly reopens Me, but the click then bubbles to the Diary overlay's outside-click listener, which immediately hides Me again.
 - Minimal fix in `web-source/index.html`: stop propagation on the Private Locker × click before calling the existing `privateLockerCloseNow()`. This keeps the Locker close/reset behavior and leaves Me open. No other Private Locker controls, encrypted entries, PIN/recovery wrappers, Pattern/Fingerprint settings, Diary Lock, Note Lock, or unrelated features are changed.
 - Backup branch: `backup/before-private-locker-close-me-panel-fix-2026-11-17`. Working branch: `fix/private-locker-close-only-me-panel-2026-11-17`. Base main commit: `6d46bc8cef476f4379d8ce0a764de171ae6df9eb`.
-- Source change commit: `bae6e1f88a938c6501b1bbdd6d2b1f49875ab21a`. Web publication, source/mirror synchronization, live checksum/version verification, and phone testing are pending. Do not claim device testing or tell the user to update until publication checks pass.
+- PR #155 merged as `972073b3a0b3c8450fbc82a0bc247c03accc5844`. Web publisher run `44107256741` succeeded and published **Web Update 302**. Source and mirror are byte-identical at Git blob SHA `84c242a79039d77723b132476a6dd224c082ecb1`; live `latest.json` advertises web SHA-256 `67fdb09cbcfce6962c42ede125aae1f610ac99f8adf87de11354db9ef6480844`.
+- APK workflow run `44107256784` safely stopped at its pre-build source/mirror equality guard because it started before the web publisher synchronized the mirror. It did not reach Gradle, sign, or publish. Existing APK remains **1.0.189 / versionCode 188**, SHA-256 `1f627d94f744a70949fcaefcacb0269f90a36fbc10360368de60f4d3773cb133`. The web update is published; APK has not been rebuilt for this web-only fix.
+- Static event-flow verification confirms the × handler stops propagation before running the existing close/reset function. Physical-phone testing remains pending; do not claim device-side PASS until the user confirms that × closes only Private Locker and leaves Me open.
