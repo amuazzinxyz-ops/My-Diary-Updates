@@ -92,6 +92,143 @@ native = r"""
                 JSONObject(c.inputStream.bufferedReader().use{it.readText()})
             } finally { c.disconnect() }
         }
+        private val privateLockerBiometricAlias = "my_diary_private_locker_biometric_v1"
+        private fun notifyPrivateLockerFingerprintResult(success: Boolean, mode: String, keyB64: String = "") {
+            this@MainActivity.runOnUiThread {
+                try {
+                    val js = "window.__privateLockerFingerprintResult && window.__privateLockerFingerprintResult(" +
+                        success.toString() + "," + JSONObject.quote(mode) + "," + JSONObject.quote(keyB64) + ");"
+                    webView.evaluateJavascript(js, null)
+                } catch (_: Exception) { }
+            }
+        }
+
+        @JavascriptInterface fun canUsePrivateLockerBiometric(): Boolean {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) return false
+            return canUseFingerprint()
+        }
+
+        private fun privateLockerBiometricKey(create: Boolean): java.security.Key {
+            val store = KeyStore.getInstance("AndroidKeyStore")
+            store.load(null)
+            if (create) {
+                if (store.containsAlias(privateLockerBiometricAlias)) store.deleteEntry(privateLockerBiometricAlias)
+                val generator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
+                val spec = KeyGenParameterSpec.Builder(
+                    privateLockerBiometricAlias,
+                    KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
+                ).setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+                    .setRandomizedEncryptionRequired(true)
+                    .setUserAuthenticationRequired(true)
+                    .setUserAuthenticationValidityDurationSeconds(-1)
+                    .setInvalidatedByBiometricEnrollment(true)
+                    .build()
+                return generator.apply { init(spec) }.generateKey()
+            }
+            return store.getKey(privateLockerBiometricAlias, null)
+                ?: throw IllegalStateException("Fingerprint key not found")
+        }
+
+        private fun privateLockerPrompt(cipher: Cipher, mode: String, keyB64: String = "") {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P || !canUsePrivateLockerBiometric()) {
+                notifyPrivateLockerFingerprintResult(false, mode)
+                return
+            }
+            try {
+                val prompt = BiometricPrompt.Builder(this@MainActivity)
+                    .setTitle("Private Locker")
+                    .setSubtitle(if (mode == "enable") "Fingerprint lock enable karein" else "Fingerprint se Private Locker kholein")
+                    .setNegativeButton("Use PIN", mainExecutor, DialogInterface.OnClickListener { _, _ ->
+                        notifyPrivateLockerFingerprintResult(false, mode)
+                    }).build()
+                prompt.authenticate(
+                    BiometricPrompt.CryptoObject(cipher),
+                    CancellationSignal(),
+                    mainExecutor,
+                    object : BiometricPrompt.AuthenticationCallback() {
+                        override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult?) {
+                            try {
+                                val authenticatedCipher = result?.cryptoObject?.cipher
+                                    ?: throw IllegalStateException("Biometric cipher unavailable")
+                                if (mode == "enable") {
+                                    val raw = android.util.Base64.decode(keyB64, android.util.Base64.NO_WRAP)
+                                    if (raw.size != 32) throw IllegalArgumentException("Invalid Locker key")
+                                    val encrypted = authenticatedCipher.doFinal(raw)
+                                    val prefs = getSharedPreferences("private_locker_biometric", Context.MODE_PRIVATE)
+                                    prefs.edit()
+                                        .putString("iv", android.util.Base64.encodeToString(authenticatedCipher.iv, android.util.Base64.NO_WRAP))
+                                        .putString("cipher", android.util.Base64.encodeToString(encrypted, android.util.Base64.NO_WRAP))
+                                        .apply()
+                                    notifyPrivateLockerFingerprintResult(true, "enabled")
+                                } else {
+                                    val prefs = getSharedPreferences("private_locker_biometric", Context.MODE_PRIVATE)
+                                    val encrypted = android.util.Base64.decode(prefs.getString("cipher", "") ?: "", android.util.Base64.NO_WRAP)
+                                    val raw = authenticatedCipher.doFinal(encrypted)
+                                    notifyPrivateLockerFingerprintResult(true, "unlock", android.util.Base64.encodeToString(raw, android.util.Base64.NO_WRAP))
+                                }
+                            } catch (error: Exception) {
+                                android.util.Log.e("PrivateLockerBiometric", "Fingerprint key operation failed", error)
+                                notifyPrivateLockerFingerprintResult(false, mode)
+                            }
+                        }
+                        override fun onAuthenticationFailed() { }
+                        override fun onAuthenticationError(errorCode: Int, errString: CharSequence?) {
+                            notifyPrivateLockerFingerprintResult(false, mode)
+                        }
+                    }
+                )
+            } catch (error: Exception) {
+                android.util.Log.e("PrivateLockerBiometric", "Fingerprint prompt failed", error)
+                notifyPrivateLockerFingerprintResult(false, mode)
+            }
+        }
+
+        @JavascriptInterface fun enablePrivateLockerFingerprint(masterKeyB64: String) {
+            runOnUiThread {
+                try {
+                    val raw = android.util.Base64.decode(masterKeyB64, android.util.Base64.NO_WRAP)
+                    if (raw.size != 32) throw IllegalArgumentException("Invalid Locker key")
+                    val key = privateLockerBiometricKey(true)
+                    val cipher = Cipher.getInstance("AES/GCM/NoPadding")
+                    cipher.init(Cipher.ENCRYPT_MODE, key)
+                    privateLockerPrompt(cipher, "enable", masterKeyB64)
+                } catch (error: Exception) {
+                    android.util.Log.e("PrivateLockerBiometric", "Could not prepare fingerprint key", error)
+                    notifyPrivateLockerFingerprintResult(false, "enable")
+                }
+            }
+        }
+
+        @JavascriptInterface fun authenticatePrivateLockerFingerprint() {
+            runOnUiThread {
+                try {
+                    val prefs = getSharedPreferences("private_locker_biometric", Context.MODE_PRIVATE)
+                    val ivText = prefs.getString("iv", null) ?: throw IllegalStateException("Fingerprint is not configured")
+                    val cipherText = prefs.getString("cipher", null) ?: throw IllegalStateException("Fingerprint is not configured")
+                    val key = privateLockerBiometricKey(false)
+                    val cipher = Cipher.getInstance("AES/GCM/NoPadding")
+                    val iv = android.util.Base64.decode(ivText, android.util.Base64.NO_WRAP)
+                    cipher.init(Cipher.DECRYPT_MODE, key, GCMParameterSpec(128, iv))
+                    privateLockerPrompt(cipher, "unlock")
+                } catch (error: Exception) {
+                    android.util.Log.e("PrivateLockerBiometric", "Could not prepare fingerprint unlock", error)
+                    notifyPrivateLockerFingerprintResult(false, "unlock")
+                }
+            }
+        }
+
+        @JavascriptInterface fun disablePrivateLockerFingerprint() {
+            try {
+                val store = KeyStore.getInstance("AndroidKeyStore")
+                store.load(null)
+                if (store.containsAlias(privateLockerBiometricAlias)) store.deleteEntry(privateLockerBiometricAlias)
+                getSharedPreferences("private_locker_biometric", Context.MODE_PRIVATE).edit().clear().apply()
+            } catch (error: Exception) {
+                android.util.Log.e("PrivateLockerBiometric", "Could not remove fingerprint key", error)
+            }
+        }
+
         private fun notifyDiaryFingerprintResult(success: Boolean, message: String) {
             this@MainActivity.runOnUiThread {
                 try {
