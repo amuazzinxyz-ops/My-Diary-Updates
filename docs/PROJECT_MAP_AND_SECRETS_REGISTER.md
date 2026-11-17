@@ -1,3 +1,15 @@
+# Private Locker Lock On and PIN recovery use one input box — Web Update 303 published (2026-11-17)
+
+- User clarified that **🔐 Lock On Karein** and **PIN Bhool Gaye?** should each use exactly one input box, reused for each step, rather than showing separate PIN/name fields or separate step forms.
+- **Lock On Karein:** the same field changes through new 4-digit PIN → confirm the same PIN → Favourite Name. The final action wraps the existing Locker master key with the new PIN and recovery name, then turns Lock ON.
+- **PIN Bhool Gaye?:** the same field first verifies the existing Favourite Name, then changes through new 4-digit PIN → confirm PIN → replacement Favourite Name. Both new wrappers are created from the same existing Locker master key and saved together; the previous Favourite Name is replaced for future recovery.
+- Only the Private Locker functions `privateLockerTurnLockOn(config)` and `privateLockerRecoveryForm(config)` in `web-source/index.html` changed. The backup branch is `backup/before-private-locker-single-input-flow-2026-11-17`; working branch `fix/private-locker-single-input-flow-2026-11-17`. PR #156 merged as `e69d3fec9cb3acf531abcf8c598e989f26797508`.
+- Web publisher run `44109971551` completed successfully and published **Web Update 303**. Source and mirror are byte-identical at Git blob SHA `1f77a0100c268029f2e22e5e7ce100295d522b5a`. Live `latest.json` advertises web SHA-256 `3a78ad1e0c053bdfd2294c52d461d272d5c8b74a485ad8e98c16653246984675`.
+- The automatic APK workflow run `44109971712` stopped safely at the pre-build source/mirror equality guard during the publisher race. It did not reach Gradle build, signing, or APK publication. Existing APK remains **1.0.189 / versionCode 188**, SHA-256 `1f627d94f744a70949fcaefcacb0269f90a36fbc10360368de60f4d3773cb133`.
+- Static flow inspection confirms one input element is reused in each flow and the PIN/recovery wrappers still use the existing Locker master key. Physical-phone testing remains pending; do not claim device-side PASS until the user tests both flows.
+
+---
+
 # Private Locker PIN recovery now requires a new Favourite Name — Web Update 301 published (2026-11-17)
 
 - User clarified that the existing **PIN Bhool Gaye?** flow correctly verifies the old Favourite Name and accepts/validates a new 4-digit PIN, but it did not ask for a replacement Favourite Name at the end.
