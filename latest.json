@@ -4,11 +4,11 @@
   "versionCode": 188,
   "versionName": "1.0.189",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.189.apk",
-  "sha256": "2efc77a7dc68311c3bedc6677de0ee213d9e742e9c76d213869b30165e914553",
+  "sha256": "084c63eaff3ebf4d34d4acbdbcbe4ded98770c44bcef99da4e61053058cd8e15",
   "releaseNotes": "My Diary 1.0.189: Private Locker writing-only, encrypted search/editing, four-digit Diary-style PIN, Pattern, Favourite Name recovery and separate Android Keystore fingerprint. Diary Lock remains unchanged.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 283,
+  "webVersion": 295,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "2792739d2159efaeea68ec35c1107756fd3c2f77c2e76a41f6705663aded3f12",
-  "webReleaseNotes": "My Diary Web Update 283: Private Locker restored with text-only encrypted writing, search/editing and four-digit Diary-style PIN, Pattern, Favourite Name recovery and separate fingerprint. Diary Lock unchanged."
+  "webReleaseNotes": "My Diary Web Update 295: Private Locker Lock On button moved out of the writing and search area into a separate Locker Security section above it. It appears only while Lock is OFF and reuses the existing Lock On confirmation flow. Saved encrypted writing, PIN/recovery data, Diary Lock and Note Lock are unchanged."
 }
