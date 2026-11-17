@@ -1,3 +1,13 @@
+# Private Locker PIN boxes made readable with raised 3D effect — visual-only update (2026-11-17)
+
+- User requested that every PIN box inside Private Locker use slightly smaller, readable entered text so digits/words do not clip, while retaining comfortable legibility, and that the boxes have a raised 3D effect.
+- Added presentation-only CSS scoped to `#diaryPrivateLockerModal input[type="password"]` and its placeholder. PIN entry text is now 20px with controlled spacing; long placeholder text uses a responsive 11–14px size with normal letter spacing. Each PIN field has a gold border, soft gradient, inset highlight, and raised lower shadow. The selector covers the existing PIN boxes across setup, confirmation, unlock, recovery, and Lock On flows; changing the field from password to Favourite Name text keeps that non-PIN field unaffected.
+- Only the existing Private Locker visual stylesheet in `web-source/index.html` changed. No PIN/security handlers, validation, encryption, saved records, Diary Lock, Note Lock, or other features changed.
+- Backup branch: `backup/before-private-locker-pin-box-fit-3d-2026-11-17`. Working branch: `style/private-locker-pin-box-fit-3d-2026-11-17`.
+- Source/mirror synchronization, PR merge, web publisher run, and phone-side visual confirmation are pending. Do not claim the update is published or device-tested until those checks complete.
+
+---
+
 # Private Locker text made bold with raised 3D effect — Web Update 304 published (2026-11-17)
 
 - User requested that all text inside **Private Locker** be bold with a raised 3D effect, including prompts/headings, button labels, PIN/recovery messages, input text/placeholders, and the writing typed and later displayed in saved entries.
