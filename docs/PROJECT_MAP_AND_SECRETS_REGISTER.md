@@ -1,3 +1,12 @@
+# Private Locker PIN prompt text enlarged without clipping — visual-only update (2026-11-17)
+
+- User clarified that the earlier PIN-box prompt text had become too small. Short prompts such as “Naya 4 digit PIN” and “PIN dobara daalein” are now enlarged to a responsive 20–22px; medium prompts use 17–18px; the longest PIN prompts use a responsive 14–16px so they remain inside the box.
+- Only placeholder font sizing in the existing Private Locker PIN input stylesheet changed. The typed PIN digit size (20px), 3D gold box border/shadow, PIN auto-verification including automatic Lock Off, validation, encryption, recovery, stored data, Diary Lock, Note Lock, and all unrelated features remain unchanged.
+- Backup branch: `backup/before-private-locker-placeholder-readable-sizing-2026-11-17`. Working branch: `style/private-locker-placeholder-readable-sizing-2026-11-17`.
+- Source and mirror are synchronized on the working branch at Git blob SHA `5338fe01acdb5409f9a51ca9555c67f558102444` after mirror update. Publication/version/checksum and phone-fit confirmation remain pending; do not claim Web Update publication or physical-device verification until confirmed.
+
+---
+
 # Private Locker Lock Off restored to automatic PIN verification — Web Update 285 (2026-11-17)
 
 - User clarified that the original Lock Off flow was correct: tap **Lock Off Karein**, enter the existing PIN, and a correct PIN should automatically verify and turn Lock OFF. No separate Verify button should appear.
