@@ -1,3 +1,20 @@
+# Private Locker controls audited and hardened — Web Update 294 published (2026-11-17)
+
+- User requested a full check of all Private Locker buttons and correction of any behavior that should work differently.
+- Audited the complete Private Locker PIN/control flow and unlocked Locker actions: Pattern Set/Badlein/Remove; Fingerprint Set/Remove and native Android biometric callbacks; Lock Off confirmation; Lock On from the unlocked view; PIN verification/recovery; encrypted note Save/Edit/Delete/Search; modal close behavior.
+- Fixes in PR #147 (merged as 13bc5bd512b63400ba54073dab1efb3a7960f9e5):
+  - Fingerprint Set now shows “Fingerprint Pehle Se Set Hai” and is disabled when already configured. The Android setup routine replaces its Keystore alias before the biometric prompt; preventing repeated setup avoids accidentally invalidating an existing fingerprint if the prompt is cancelled.
+  - Lock On now returns a promise; if saving the lock state fails, the unlocked-view Lock On button becomes active again so the user can retry.
+  - Fingerprint removal now asks for confirmation.
+  - Cancelling Pattern setup, Pattern removal confirmation, or Lock Off confirmation returns to the unlocked Locker instead of unexpectedly closing the whole Locker.
+- No encrypted entries, PIN/recovery records, Diary Lock, Note Lock, or native Android source were changed. Existing encrypted Save/Edit/Delete/Search paths were inspected and left untouched.
+- Backup branch: backup/before-private-locker-controls-audit-fix-2026-11-17. Working branch: fix/private-locker-controls-safe-state-2026-11-17. PR #147 merged to main.
+- Source and mirror are byte-identical at Git blob SHA 69dae108b684ac4922e1bf3f627a94361154df04. Both inline JavaScript blocks passed V8 syntax parsing (2/2).
+- Published as Web Update 294. latest.json advertises webVersion 294 and web SHA-256 f53b183bd19bf4c1b91d0c4a5e69deab04f24afdf31ae53df80c1e9d98b71254. APK metadata remains 1.0.189 / versionCode 188 with original SHA-256 07d922d24b7ec1db1bea55681711408924d8c8a5888822bdaaebaf57a54e7baa.
+- Physical phone testing remains pending. Fingerprint prompts require a compatible Android build/device with enrolled fingerprint; web-only browser cannot test native biometric callbacks. Do not claim device-side confirmation until the user installs Web Update 294 and tests all controls.
+
+---
+
 # Private Locker Lock On available while Lock is OFF — Web Update 293 published (2026-11-17)
 
 - Source inspection found that the existing Lock On control was only on the PIN-entry screen, but Lock OFF automatically bypasses that screen and opens the unlocked Locker. This made it impossible to turn PIN protection back ON from the Lock OFF state.
