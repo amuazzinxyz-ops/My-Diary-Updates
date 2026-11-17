@@ -8,7 +8,7 @@
   - Preserves existing encrypted entries, Pattern configuration, Fingerprint configuration, and other Locker metadata. It does not reset or replace the master key.
   - Cancel returns to the Lock-OFF security gate without changing the stored lock state.
 - Backup branch: `backup/before-private-locker-lockon-new-pin-recovery-2026-11-17`. Working branch: `fix/private-locker-lockon-new-pin-recovery-2026-11-17`.
-- Pre-edit source and mirror were identical (Git blob SHA `110f4040efe63ef46c1a3fcc81d7959b114fa6bb`). JavaScript syntax and static flow checks pass. Web publication/checksum synchronization and phone interaction testing remain pending; do not claim phone testing.
+- Pre-edit source and mirror were identical (Git blob SHA `110f4040efe63ef46c1a3fcc81d7959b114fa6bb`). JavaScript syntax and static flow checks pass. Published successfully as Web Update 300. The web publish workflow completed successfully; live `latest.json` advertises webVersion 300 and SHA-256 `90344e7b4672ac303ade7dbae8da71d92419db9a082c4ad08d75c2470a40d248`. Main source and mirror are byte-identical at Git blob SHA `d201105f510473e034d146b6d999668e8273014b`. The automatic APK workflow started concurrently and failed its pre-build source/mirror check because it ran before the web publisher synchronized the mirror; it did not reach APK build or publish. Existing APK remains version 1.0.189 / versionCode 188 with manifest SHA-256 `1f627d94f744a70949fcaefcacb0269f90a36fbc10360368de60f4d3773cb133`. Physical-phone interaction testing remains pending; do not claim phone testing.
 
 ---
 
