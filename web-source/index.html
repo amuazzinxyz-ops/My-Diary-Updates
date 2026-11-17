@@ -1593,7 +1593,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    var tools=el('section',{style:'display:grid;gap:10px;margin:12px 0;padding:13px;border:1px solid #d8c6eb;border-radius:14px;background:linear-gradient(145deg,#fff,#faf7ff);'});
    tools.appendChild(el('strong',{},'🔐 Locker Security'));
    var lockOn=el('button',{type:'button',style:'min-height:44px;padding:9px 14px;border:2px solid #b18b32;border-radius:11px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;color:#3d2b08;box-shadow:0 3px 0 #b18b32;'},'🔐 Lock On Karein');
-   lockOn.addEventListener('click',function(){lockOn.disabled=true;privateLockerTurnLockOn(config).catch(function(){lockOn.disabled=false;});});
+   lockOn.addEventListener('click',function(){privateLockerTurnLockOn(config);});
    var open=el('button',{type:'button',style:'min-height:44px;padding:9px 14px;border:1.5px solid #b9a4d0;border-radius:11px;background:#f2eafb;font-weight:900;color:#43245f;'},'🔓 Locker Kholein');
    open.addEventListener('click',function(){open.disabled=true;privateLockerFinishUnlock(unlocked).catch(function(e){open.disabled=false;privateLockerMessage(e.message||'Locker nahi khula.',true);});});
    tools.append(lockOn,open);privateLockerGate.appendChild(tools);
@@ -1772,9 +1772,38 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    });
    actions.append(confirmOff,cancel);wrap.append(status,actions);privateLockerGate.appendChild(wrap);
   }
-    function privateLockerTurnLockOn(config){
-   var next=Object.assign({},config);next.lockDisabled=false;delete next.unlockedKey;
-   return privateLockerPut('meta',next).then(function(){privateLockerRawKey=null;privateLockerKey=null;privateLockerRecords=[];privateLockerContent.replaceChildren();if(!privateLockerCompleteExternalAction()){privateLockerGate.replaceChildren(privateLockerPinForm(next));privateLockerMessage('Locker lock dobara ON ho gaya. Ab PIN se khulega.',false);}}).catch(function(e){privateLockerMessage(e.message||'Lock ON nahi ho saka.',true);throw e;});
+  function privateLockerTurnLockOn(config){
+   var raw;
+   try{raw=config&&config.unlockedKey?privateLockerUnB64(config.unlockedKey):privateLockerRawKey;if(!raw||raw.length!==32)throw new Error('Locker ki secure key nahi mili. Data surakshit hai; Locker dobara kholein.');}
+   catch(e){privateLockerMessage(e.message||'Locker ki secure key nahi mili.',true);return Promise.resolve(false);}
+   privateLockerGate.replaceChildren();privateLockerContent.replaceChildren();
+   var wrap=el('div',{style:'display:grid;gap:10px;margin-top:12px;padding:14px;border:1px solid #d8c6eb;border-radius:14px;background:linear-gradient(145deg,#fff,#faf7ff);'});
+   wrap.appendChild(el('strong',{},'🔐 Private Locker ka naya PIN banayein'));
+   wrap.appendChild(el('p',{style:'margin:0;color:#604b78;font-weight:700;'},'Lock ON karne ke liye naya PIN aur Favourite Name zaroori hai. Aapki purani private likhai aur security settings surakshit rahengi.'));
+   var pin=el('input',{type:'password',inputmode:'numeric',maxlength:'4',autocomplete:'off',placeholder:'Naya 4 digit PIN',style:'width:100%;height:50px;box-sizing:border-box;border:2px solid #c8b2df;border-radius:12px;padding:8px;text-align:center;font-size:22px;font-weight:900;letter-spacing:6px;'});
+   var confirmPin=el('input',{type:'password',inputmode:'numeric',maxlength:'4',autocomplete:'off',placeholder:'PIN dobara daalein',style:pin.style.cssText});
+   var recovery=el('input',{type:'text',maxlength:'80',autocomplete:'off',placeholder:'Favourite Name (PIN bhoolne par)',style:'width:100%;height:48px;box-sizing:border-box;border:2px solid #c8b2df;border-radius:12px;padding:10px;font-size:17px;font-weight:800;'});
+   var status=el('div',{style:'min-height:22px;font-weight:800;color:#a11;'});
+   var save=el('button',{type:'button',style:'min-height:46px;border:2px solid #b18b32;border-radius:12px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;color:#3d2b08;'},'🔐 Naya PIN Set Karke Lock ON Karein');
+   var cancel=el('button',{type:'button',style:'min-height:42px;border:1px solid #b9a4d0;border-radius:10px;background:#f2eafb;font-weight:800;color:#43245f;'},'✖ Radd Karein');
+   cancel.addEventListener('click',function(){privateLockerShowLockOffGate(raw,config);});
+   save.addEventListener('click',function(){
+    var p=String(pin.value||''),p2=String(confirmPin.value||''),name=privateLockerNormalizeRecovery(recovery.value);
+    if(!/^[0-9]{4}$/.test(p)){status.textContent='Naya 4 digit PIN zaroori hai.';pin.focus();return;}
+    if(p2!==p){status.textContent='Dono PIN ek jaise nahi hain.';confirmPin.focus();return;}
+    if(!name){status.textContent='PIN recovery ke liye Favourite Name likhein.';recovery.focus();return;}
+    save.disabled=true;cancel.disabled=true;status.style.color='#17633c';status.textContent='Naya PIN aur Favourite Name mehfooz kiya ja raha hai…';
+    Promise.all([privateLockerWrapMaster(raw,p),privateLockerWrapMaster(raw,name)]).then(function(w){
+     var next=Object.assign({},config);next.pin=w[0];next.pinDigits=4;next.recovery=w[1];next.lockDisabled=false;delete next.unlockedKey;
+     return privateLockerPut('meta',next).then(function(){
+      privateLockerRawKey=null;privateLockerKey=null;privateLockerRecords=[];privateLockerExternalAction=null;privateLockerContent.replaceChildren();
+      privateLockerGate.replaceChildren(privateLockerPinForm(next));
+      privateLockerMessage('Naya PIN aur Favourite Name save ho gaya. Private Locker ka Lock ON hai.',false);
+     });
+    }).catch(function(e){status.style.color='#a11';status.textContent=e&&e.message?e.message:'Naya PIN save nahi ho saka. Purana Locker data surakshit hai.';save.disabled=false;cancel.disabled=false;});
+   });
+   wrap.append(pin,confirmPin,recovery,status,save,cancel);privateLockerGate.appendChild(wrap);pin.focus();
+   return Promise.resolve(true);
   }
   function privateLockerShowEntries(){
    privateLockerGate.replaceChildren();   privateLockerContent.replaceChildren();
