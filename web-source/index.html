@@ -1528,6 +1528,12 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   /* Private Locker: separate encrypted database; does not use or alter Notes/Diary locks. */
   var privateLockerButton=el('button',{type:'button',class:'diary-me-feature-btn',id:'diaryPrivateLockerBtn'},'🔐 Private Locker');
   mePanel.appendChild(privateLockerButton);
+  var privateLockerExternalAction=null;
+  var privateLockerExternalTools=el('section',{id:'diaryPrivateLockerExternalTools',hidden:'hidden',style:'margin:10px 0 12px;padding:12px;border:1px solid #d8c6eb;border-radius:14px;background:linear-gradient(145deg,#fff,#faf7ff);'});
+  var privateLockerExternalTitle=el('strong',{},'🔐 Private Locker Controls');
+  var privateLockerExternalButtons=el('div',{style:'display:flex;gap:9px;flex-wrap:wrap;margin-top:9px;'});
+  privateLockerExternalTools.append(privateLockerExternalTitle,privateLockerExternalButtons);
+  mePanel.appendChild(privateLockerExternalTools);
   var privateLockerModal=el('section',{id:'diaryPrivateLockerModal',hidden:'hidden','aria-modal':'true','role':'dialog'});
   privateLockerModal.style.cssText='position:fixed;inset:0;z-index:100000;background:#f7f2ff;overflow:auto;padding:calc(14px + env(safe-area-inset-top,0px)) 12px calc(24px + env(safe-area-inset-bottom,0px));';
   var privateLockerCard=el('div',{style:'max-width:620px;margin:0 auto;background:#fff;border:2px solid #d4af37;border-radius:18px;padding:16px;box-shadow:0 4px 0 #9b7415,0 10px 24px #35204b22;'});
@@ -1571,7 +1577,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   function privateLockerMessage(msg,bad){privateLockerStatus.textContent=msg;privateLockerStatus.style.color=bad?'#a11':'#17633c';}
   function privateLockerConfigValid(config){try{return !!(config&&config.version===2&&config.pin&&config.recovery&&config.pin.salt&&config.pin.iv&&config.pin.cipher&&config.recovery.salt&&config.recovery.iv&&config.recovery.cipher);}catch(e){return false;}}
   function privateLockerNormalizeRecovery(value){return String(value||'').trim().replace(/\s+/g,' ').toLocaleUpperCase();}
-  function privateLockerFinishUnlock(raw){privateLockerRawKey=raw;return privateLockerImportMaster(raw).then(function(key){privateLockerKey=key;return privateLockerGet('meta','config').then(function(config){if(config&&Number(config.pinDigits)!==4){privateLockerPinUpgradeForm(raw,config);return;}privateLockerMessage(config&&config.lockDisabled?'Lock OFF hai. Private Locker bina PIN khul gaya.':'Private Locker khul gaya.',false);privateLockerShowEntries();});});}
+  function privateLockerFinishUnlock(raw){privateLockerRawKey=raw;return privateLockerImportMaster(raw).then(function(key){privateLockerKey=key;return privateLockerGet('meta','config').then(function(config){if(config&&Number(config.pinDigits)!==4){privateLockerPinUpgradeForm(raw,config);return;}if(privateLockerExternalAction){privateLockerRunExternalAction(config);return;}privateLockerMessage(config&&config.lockDisabled?'Lock OFF hai. Private Locker bina PIN khul gaya.':'Private Locker khul gaya.',false);privateLockerShowEntries();});});}
   function privateLockerOpen(){
    mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');
    privateLockerModal.hidden=false;window.__privateLockerFingerprintPending=false;privateLockerContent.replaceChildren();privateLockerGate.replaceChildren();privateLockerKey=null;privateLockerRawKey=null;privateLockerRecords=[];
@@ -1719,8 +1725,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    var heading=el('strong',{},'Diary Lock jaisa Pattern banayein');
    var status=el('div',{style:'min-height:22px;color:#a11;font-weight:800;'});
    var first='';
-   var grid=makeDiaryPatternGrid(function(value){if(!first){first=value;heading.textContent='Wahi Pattern dobara banayein';status.textContent='';return;}if(value!==first){first='';heading.textContent='Naya Pattern banayein';status.textContent='Pattern match nahi hua. Dobara banayein.';return;}privateLockerWrapMaster(privateLockerRawKey,value).then(function(pattern){return privateLockerGet('meta','config').then(function(config){config.pattern=pattern;return privateLockerPut('meta',config);});}).then(function(){privateLockerMessage('Pattern set ho gaya. Ab Locker PIN ya Pattern se khulega.',false);privateLockerShowEntries();}).catch(function(e){status.textContent=e.message||'Pattern save nahi hua.';});},function(){status.textContent='Kam se kam 4 dots chunein.';});
-   var cancel=el('button',{type:'button'},'Radd Karein');cancel.addEventListener('click',privateLockerShowEntries);
+   var grid=makeDiaryPatternGrid(function(value){if(!first){first=value;heading.textContent='Wahi Pattern dobara banayein';status.textContent='';return;}if(value!==first){first='';heading.textContent='Naya Pattern banayein';status.textContent='Pattern match nahi hua. Dobara banayein.';return;}privateLockerWrapMaster(privateLockerRawKey,value).then(function(pattern){return privateLockerGet('meta','config').then(function(config){config.pattern=pattern;return privateLockerPut('meta',config);});}).then(function(){privateLockerMessage('Pattern set ho gaya. Ab Locker PIN ya Pattern se khulega.',false);if(!privateLockerCompleteExternalAction())privateLockerShowEntries();}).catch(function(e){status.textContent=e.message||'Pattern save nahi hua.';});},function(){status.textContent='Kam se kam 4 dots chunein.';});
+   var cancel=el('button',{type:'button'},'Radd Karein');cancel.addEventListener('click',function(){if(!privateLockerCompleteExternalAction())privateLockerShowEntries();});
    wrap.append(heading,grid,status,cancel);privateLockerContent.replaceChildren(wrap);
   }
   window.__privateLockerFingerprintPending=false;
@@ -1728,7 +1734,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    if(!window.__privateLockerFingerprintPending)return;window.__privateLockerFingerprintPending=false;
    if(!success){privateLockerMessage('Fingerprint verify nahi hua. PIN se khol sakte hain.',true);return;}
    if(mode==='unlock'){try{privateLockerFinishUnlock(privateLockerUnB64(keyB64)).catch(function(e){privateLockerMessage(e.message||'Fingerprint unlock nahi hua.',true);});}catch(e){privateLockerMessage('Fingerprint key format sahi nahi hai.',true);}return;}
-   if(mode==='enabled'){privateLockerGet('meta','config').then(function(config){config.fingerprint=true;return privateLockerPut('meta',config);}).then(function(){privateLockerMessage('Fingerprint lock set ho gaya.',false);privateLockerShowEntries();}).catch(function(e){privateLockerMessage(e.message||'Fingerprint setting save nahi hui.',true);});}
+   if(mode==='enabled'){privateLockerGet('meta','config').then(function(config){config.fingerprint=true;return privateLockerPut('meta',config);}).then(function(){privateLockerMessage('Fingerprint lock set ho gaya.',false);if(!privateLockerCompleteExternalAction())privateLockerShowEntries();}).catch(function(e){privateLockerMessage(e.message||'Fingerprint setting save nahi hui.',true);});}
   };
   function privateLockerAskLockOff(){
    privateLockerGet('meta','config').then(function(config){
@@ -1742,18 +1748,17 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     var actions=el('div',{style:'display:flex;gap:9px;flex-wrap:wrap;'});
     var confirm=el('button',{type:'button',style:'min-height:42px;padding:8px 13px;border:2px solid #b18b32;border-radius:11px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;color:#3d2b08;'},'PIN Verify Karke Lock Off Karein');
     var cancel=el('button',{type:'button',style:'min-height:42px;padding:8px 13px;border:1px solid #b9a4d0;border-radius:10px;background:#f2eafb;font-weight:800;color:#43245f;'},'Radd Karein');
-    cancel.addEventListener('click',privateLockerShowEntries);
-    confirm.addEventListener('click',function(){var value=String(pin.value||'').replace(/[^0-9]/g,'');if(value.length!==4&&value.length!==6){status.textContent='Apna current 4 ya 6 digit PIN daalein.';return;}confirm.disabled=true;privateLockerUnwrapMaster(value,config.pin).then(function(raw){if(privateLockerB64(raw)!==privateLockerB64(privateLockerRawKey))throw new Error('PIN verify nahi hua.');config.lockDisabled=true;config.unlockedKey=privateLockerB64(raw);return privateLockerPut('meta',config).then(function(){return privateLockerFinishUnlock(raw);});}).catch(function(e){status.textContent=e&&e.message?e.message:'PIN verify nahi hua.';pin.value='';pin.focus();}).finally(function(){confirm.disabled=false;});});
+    cancel.addEventListener('click',function(){if(!privateLockerCompleteExternalAction())privateLockerShowEntries();});
+    confirm.addEventListener('click',function(){var value=String(pin.value||'').replace(/[^0-9]/g,'');if(value.length!==4&&value.length!==6){status.textContent='Apna current 4 ya 6 digit PIN daalein.';return;}confirm.disabled=true;privateLockerUnwrapMaster(value,config.pin).then(function(raw){if(privateLockerB64(raw)!==privateLockerB64(privateLockerRawKey))throw new Error('PIN verify nahi hua.');config.lockDisabled=true;config.unlockedKey=privateLockerB64(raw);return privateLockerPut('meta',config).then(function(){if(!privateLockerCompleteExternalAction())return privateLockerFinishUnlock(raw);});}).catch(function(e){status.textContent=e&&e.message?e.message:'PIN verify nahi hua.';pin.value='';pin.focus();}).finally(function(){confirm.disabled=false;});});
     actions.append(confirm,cancel);wrap.append(pin,status,actions);privateLockerGate.appendChild(wrap);pin.focus();
    }).catch(function(e){privateLockerMessage(e.message||'Lock Off nahi ho saka.',true);});
   }
   function privateLockerTurnLockOn(config){
    var next=Object.assign({},config);next.lockDisabled=false;delete next.unlockedKey;
-   privateLockerPut('meta',next).then(function(){privateLockerRawKey=null;privateLockerKey=null;privateLockerRecords=[];privateLockerContent.replaceChildren();privateLockerGate.replaceChildren(privateLockerPinForm(next));privateLockerMessage('Locker lock dobara ON ho gaya. Ab PIN se khulega.',false);}).catch(function(e){privateLockerMessage(e.message||'Lock ON nahi ho saka.',true);});
+   privateLockerPut('meta',next).then(function(){privateLockerRawKey=null;privateLockerKey=null;privateLockerRecords=[];privateLockerContent.replaceChildren();if(!privateLockerCompleteExternalAction()){privateLockerGate.replaceChildren(privateLockerPinForm(next));privateLockerMessage('Locker lock dobara ON ho gaya. Ab PIN se khulega.',false);}}).catch(function(e){privateLockerMessage(e.message||'Lock ON nahi ho saka.',true);});
   }
   function privateLockerShowEntries(){
    privateLockerGate.replaceChildren();
-   var tools=el('div',{style:'display:flex;gap:9px;flex-wrap:wrap;margin:10px 0 12px;'});
    var patternBtn=el('button',{type:'button',style:'min-height:42px;padding:8px 12px;border:1px solid #9470bb;border-radius:11px;background:linear-gradient(145deg,#f4eaff,#ddc8f2);font-weight:900;color:#43245f;box-shadow:0 3px 0 #c4addb;'},'🔷 Pattern Set Karein');
    patternBtn.addEventListener('click',privateLockerSetupPattern);tools.appendChild(patternBtn);
    privateLockerGet('meta','config').then(function(cfg){
@@ -1772,12 +1777,6 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     lockToggle.addEventListener('click',function(){if(cfg&&cfg.lockDisabled){privateLockerTurnLockOn(cfg);return;}privateLockerAskLockOff();});
     tools.appendChild(lockToggle);
    }).catch(function(){});
-   if(window.DiaryAppActions&&typeof DiaryAppActions.enablePrivateLockerFingerprint==='function'&&typeof DiaryAppActions.canUsePrivateLockerBiometric==='function'&&DiaryAppActions.canUsePrivateLockerBiometric()){
-    var fpBtn=el('button',{type:'button',style:'min-height:42px;padding:8px 12px;border:1px solid #9470bb;border-radius:11px;background:linear-gradient(145deg,#f4eaff,#ddc8f2);font-weight:900;color:#43245f;box-shadow:0 3px 0 #c4addb;'},'👆 Fingerprint Set Karein');
-    fpBtn.addEventListener('click',function(){if(!privateLockerRawKey){privateLockerMessage('Locker key available nahi hai.',true);return;}window.__privateLockerFingerprintPending=true;try{DiaryAppActions.enablePrivateLockerFingerprint(privateLockerB64(privateLockerRawKey));}catch(e){window.__privateLockerFingerprintPending=false;privateLockerMessage('Fingerprint setup shuru nahi ho saka.',true);}});
-    tools.appendChild(fpBtn);
-   }
-
    privateLockerContent.replaceChildren();
    var form=el('form',{style:'display:grid;gap:10px;margin:14px 0;padding:14px;border:1px solid #d8c6eb;border-radius:16px;background:linear-gradient(145deg,#fff,#f7f1ff);box-shadow:inset 0 2px 0 #fff,0 4px 0 #e3d6f0,0 9px 18px #35145f18;'});
    var heading=el('strong',{style:'font-size:17px;font-weight:900;color:#35145f;text-shadow:0 1px #fff,0 2px 2px #35145f30;'},'＋ Private Likhai');
@@ -1793,7 +1792,6 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    var search=el('input',{type:'search',placeholder:'Naam ya likhai ke alfaaz dhoondein…','aria-label':'Private Locker Search',style:'display:block;width:100%;min-height:52px;box-sizing:border-box;padding:12px 14px;border:1.5px solid #c7b4dd;border-radius:15px;background:#fff;font-size:16px;font-weight:700;box-shadow:inset 0 2px 4px #35145f14,0 4px 0 #e4d8ee,0 7px 12px #35145f12;'});
    searchWrap.append(searchHeading,search);
    var list=el('div',{style:'display:grid;gap:10px;'});
-   privateLockerGate.appendChild(tools);
    privateLockerContent.append(searchWrap,form,list);
    var allRecords=[];
    function render(){
@@ -1830,7 +1828,49 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    privateLockerRenderList=render;render().catch(function(err){privateLockerMessage(err.message||'Likhai nahi khul saki.',true);});
   }
   var privateLockerRenderList=function(){return Promise.resolve();};
-  function privateLockerCloseNow(){window.__privateLockerFingerprintPending=false;privateLockerKey=null;privateLockerRawKey=null;privateLockerRecords=[];privateLockerContent.replaceChildren();privateLockerGate.replaceChildren();privateLockerModal.hidden=true;privateLockerMessage('Locker band hai.',false);mePanel.hidden=false;meBtn.setAttribute('aria-expanded','true');panel.classList.add('diary-me-menu-open');}
+  function privateLockerCompleteExternalAction(){
+   if(!privateLockerExternalAction)return false;
+   privateLockerExternalAction=null;privateLockerCloseNow();return true;
+  }
+  function privateLockerRunExternalAction(config){
+   var action=privateLockerExternalAction;if(!action)return false;
+   if(action==='pattern'){privateLockerSetupPattern();return true;}
+   if(action==='fingerprint'){
+    if(!window.DiaryAppActions||typeof DiaryAppActions.enablePrivateLockerFingerprint!=='function'){privateLockerMessage('Fingerprint facility available nahi hai.',true);return true;}
+    window.__privateLockerFingerprintPending=true;try{DiaryAppActions.enablePrivateLockerFingerprint(privateLockerB64(privateLockerRawKey));}catch(e){window.__privateLockerFingerprintPending=false;privateLockerMessage('Fingerprint setup shuru nahi ho saka.',true);}return true;
+   }
+   if(action==='removePattern'){
+    if(!config||!config.pattern){privateLockerCompleteExternalAction();return true;}
+    if(!confirm('Pattern lock hata dein?')){privateLockerCompleteExternalAction();return true;}
+    config.pattern=null;privateLockerPut('meta',config).then(function(){privateLockerMessage('Pattern hata diya gaya.',false);privateLockerCompleteExternalAction();}).catch(function(e){privateLockerMessage(e.message||'Pattern nahi hata.',true);});return true;
+   }
+   if(action==='removeFingerprint'){
+    if(window.DiaryAppActions&&typeof DiaryAppActions.disablePrivateLockerFingerprint==='function'){try{DiaryAppActions.disablePrivateLockerFingerprint();}catch(e){}}
+    config.fingerprint=false;privateLockerPut('meta',config).then(function(){privateLockerMessage('Fingerprint lock hata diya gaya.',false);privateLockerCompleteExternalAction();}).catch(function(e){privateLockerMessage(e.message||'Fingerprint nahi hata.',true);});return true;
+   }
+   if(action==='lockOff'){privateLockerAskLockOff();return true;}
+   if(action==='lockOn'){privateLockerTurnLockOn(config);return true;}
+   return false;
+  }
+  function privateLockerRenderExternalControls(){
+   privateLockerExternalButtons.replaceChildren();privateLockerExternalTools.hidden=true;
+   privateLockerGet('meta','config').then(function(cfg){
+    if(!privateLockerConfigValid(cfg))return;
+    function add(label,action,kind){
+     var styles=kind==='gold'?'min-height:42px;padding:8px 12px;border:2px solid #b18b32;border-radius:11px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;color:#3d2b08;box-shadow:0 3px 0 #b18b32;':kind==='red'?'min-height:42px;padding:8px 12px;border:1px solid #c7a2a2;border-radius:11px;background:linear-gradient(145deg,#fff0f0,#f5dada);font-weight:900;color:#7a2222;':'min-height:42px;padding:8px 12px;border:1px solid #9470bb;border-radius:11px;background:linear-gradient(145deg,#f4eaff,#ddc8f2);font-weight:900;color:#43245f;box-shadow:0 3px 0 #c4addb;';
+     var button=el('button',{type:'button',style:styles},label);
+     button.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();privateLockerExternalAction=action;privateLockerOpen();});
+     privateLockerExternalButtons.appendChild(button);
+    }
+    add(cfg.pattern?'🔷 Pattern Badlein':'🔷 Pattern Set Karein','pattern','purple');
+    if(window.DiaryAppActions&&typeof DiaryAppActions.enablePrivateLockerFingerprint==='function'&&typeof DiaryAppActions.canUsePrivateLockerBiometric==='function'&&DiaryAppActions.canUsePrivateLockerBiometric())add(cfg.fingerprint?'👆 Fingerprint Badlein':'👆 Fingerprint Set Karein','fingerprint','purple');
+    if(cfg.pattern)add('Pattern Hataayein','removePattern','red');
+    if(cfg.fingerprint)add('Fingerprint Hataayein','removeFingerprint','red');
+    add(cfg.lockDisabled?'🔐 Lock On Karein':'🔓 Lock Off Karein',cfg.lockDisabled?'lockOn':'lockOff','gold');
+    privateLockerExternalTools.hidden=false;
+   }).catch(function(){privateLockerExternalButtons.replaceChildren();privateLockerExternalTools.hidden=true;});
+  }
+  function privateLockerCloseNow(){window.__privateLockerFingerprintPending=false;privateLockerExternalAction=null;privateLockerKey=null;privateLockerRawKey=null;privateLockerRecords=[];privateLockerContent.replaceChildren();privateLockerGate.replaceChildren();privateLockerModal.hidden=true;privateLockerMessage('Locker band hai.',false);mePanel.hidden=false;meBtn.setAttribute('aria-expanded','true');panel.classList.add('diary-me-menu-open');privateLockerRenderExternalControls();}
   privateLockerClose.addEventListener('click',privateLockerCloseNow);
   privateLockerButton.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();privateLockerOpen();});
 
@@ -2397,7 +2437,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   diaryLockSettingsBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();openDiaryLockSettings();});
   fontLabel.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var opening=fontSliderBox.hidden;fontSliderBox.hidden=!opening;fontLabel.setAttribute('aria-expanded',opening?'true':'false');});
   meWrap.appendChild(meBtn);meWrap.appendChild(mePanel);head.appendChild(meWrap);
-  meBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var opening=mePanel.hidden;mePanel.hidden=!opening;meBtn.setAttribute('aria-expanded',opening?'true':'false');panel.classList.toggle('diary-me-menu-open',opening);if(opening)mePanel.scrollTop=0;});
+  meBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var opening=mePanel.hidden;mePanel.hidden=!opening;meBtn.setAttribute('aria-expanded',opening?'true':'false');panel.classList.toggle('diary-me-menu-open',opening);if(opening){mePanel.scrollTop=0;privateLockerRenderExternalControls();}});
   function updateDiaryFontFromSlider(e){if(e)e.stopPropagation();var chosen=Math.max(12,Math.min(24,parseInt(fontSlider.value,10)||14));localStorage.setItem(DIARY_FONT_KEY,String(chosen));applyDiaryFont();}
   fontSlider.addEventListener('input',updateDiaryFontFromSlider);
   fontSlider.addEventListener('change',updateDiaryFontFromSlider);
