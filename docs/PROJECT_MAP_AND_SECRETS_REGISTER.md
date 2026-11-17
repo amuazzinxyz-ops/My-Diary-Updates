@@ -8,7 +8,7 @@
   - Fingerprint unlock now supports the saved WebAuthn credential; Fingerprint Remove clears only the Private Locker fingerprint metadata and preserves encrypted entries/PIN/recovery.
 - Changed only the Private Locker code in `web-source/index.html` and the identical `diary-web/index.html` mirror, plus this register entry. Diary Lock, Note Lock, My Documents, Diary editor, and other features are not changed.
 - Backup branch: `backup/before-private-locker-pattern-fingerprint-fix-2026-11-17`. Working branch: `fix/private-locker-pattern-fingerprint-2026-11-17`.
-- Verification to complete before publishing: source/mirror byte equality, inline JavaScript syntax, Private Locker action wiring, and PR diff scope. Physical biometric prompt / Pattern touch testing on the user's phone remains pending; do not claim it has been device-tested.
+- Published as **Web Update 299**. `latest.json` now advertises the current source SHA-256 `b97710ea5af1c0a6c555f098b613fc18a65ba2e66c3546762e5f3ab0ca974fa3`; source and mirror are byte-identical. APK package version remains 1.0.189 / versionCode 188; this PR did not change APK code. Physical biometric prompt / Pattern touch testing on the user's phone remains pending; do not claim it has been device-tested.
 
 ---
 
