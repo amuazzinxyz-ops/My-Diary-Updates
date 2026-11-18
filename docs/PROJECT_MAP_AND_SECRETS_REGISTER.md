@@ -1,3 +1,16 @@
+# Custom weekday names visibility fix — Web Update 322 (2026-11-18)
+
+- User reported that the weekday names inside the **Custom** selector were not clear/readable on mobile.
+- PR #201 merged the styling-only correction: two columns on narrow/mobile screens, three columns on wider screens, 15px extra-bold weekday labels, larger 20px checkboxes, separate high-contrast selectable cards with 44px minimum height.
+- Applied the same exact CSS block to both `web-source/index.html` and `diary-web/index.html`. Verified the files are byte-identical after merge (Git blob SHA `924b766097b294b1a6fb69f647e846d820e1a12b`).
+- Published **Web Update 322** in `latest.json`; source SHA-256: `a36405b56ad40bbf6b2e895c7b50a408cd08523b369dd2a51d7843d0d54b1ca6`. APK remains **1.0.194 / versionCode 193**; no APK rebuild was needed for this CSS-only adjustment.
+- Scope was limited to the weekday-control style block and web update metadata. No repeat logic, saved records, calendar/reminder scheduling, alarms, snooze behavior, PINs, locks, notes, photos or unrelated features were changed.
+- Backup branch: `backup/before-custom-weekday-visibility-2026-11-18`; register backup branch: `backup/before-custom-weekday-visibility-register-2026-11-18`.
+- **Physical-phone visual verification remains pending.** CI/source checks and published metadata do not prove the weekday names look correct on the user's device.
+- No MUAZZIN project files were changed.
+
+---
+
 # Personal Calendar + Smart Reminder — Custom weekday repeat released (2026-11-18)
 
 - Added a **Custom** repeat choice to both **📅 Personal Calendar** and **⏰ Smart Reminder**. Users can select the weekdays Monday through Sunday; the chosen days are saved with the entry and restored when editing it.
