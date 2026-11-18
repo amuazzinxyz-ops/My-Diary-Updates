@@ -7,8 +7,8 @@
   "sha256": "4580fe55c1ccbeb4943a592a9eda017a58a83756f84d2fd1fed8586279f9cee8",
   "releaseNotes": "My Diary 1.0.194: Personal Calendar and Smart Reminder support Custom weekday recurrence. All previous repeat options for each section, saved entries, snooze timing and limits, ringtone, notifications and unrelated features are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 325,
+  "webVersion": 326,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "9044dda18c5da0158ae5e44bf08f16b02f76cd2bf7eccf6cab1cdaf8cab3b9ac",
-  "webReleaseNotes": "My Diary web update 325: All text inside Personal Calendar and Smart Reminder is bold, including labels, saved/user-entered text, and text entered in new or edited entries. Other Diary sections and app behavior remain unchanged."
+  "webSha256": "258f0894a0e5ea1280a4e1eed8d9fe9be5b4c420793dc7d7b427826adfba2416",
+  "webReleaseNotes": "My Diary web update 326: Personal Calendar and Smart Reminder saved entries no longer display the event-time reminder label or reminder sound/snooze settings. Existing and future saved entries are covered; automatic event-time reminders and all reminder settings remain active."
 }
