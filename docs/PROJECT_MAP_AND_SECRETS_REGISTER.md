@@ -1,3 +1,15 @@
+# Personal Calendar + Smart Reminder saved Name buttons fit the text — Web Update 335 (2026-11-18)
+
+- User approved applying the same name 3D badge to **📅 Personal Calendar** that was already present in **⏰ Smart Reminder**, with each badge sized to its own text.
+- Both saved-entry renderers now display the title/name in the existing gold 3D badge. The badge uses content-fit width, remains constrained to the card width, and wraps long names instead of causing horizontal overflow. Existing date, event-type, time, reminder-status and details rows retain their existing positions and styles.
+- This is a presentation-only change: no saved entries or stored values are rewritten. Calendar/Reminder add, edit, search, bulk selection/deletion, recurrence/custom weekdays, alarms, ringtone, snooze, notifications, notes/photos, PINs/locks, native Android code and unrelated features are preserved.
+- Backup branch: `backup/before-calendar-name-3d-badge-2026-11-18`. Feature branch: `fix/calendar-name-3d-badge-fit-content-2026-11-18`.
+- Baseline main commit: `f36c23142ed9e8688f4eb32302c49f0b72113b4f`. Source and mirror were byte-identical before editing at blob SHA `2819019629c9317b8efacda29d87238e4ca20f8f`.
+- Static verification required: both Calendar and Reminder use the name badge class; badge width fits its text and is capped at card width; long names wrap; date/type/time/reminder badges and details remain; source/mirror remain identical. Physical Android phone visual testing is pending user confirmation.
+- Intended web release: **Web Update 335**. APK remains **1.0.194 / versionCode 193**; no APK change is intended.
+
+---
+
 # Smart Reminder saved Name, Date + Time as three 3D badges — Web Update 334 (2026-11-18)
 
 - User pointed out that the Smart Reminder entry name was still plain text and asked to make it a button too. The saved-entry name is now its own raised gold 3D badge above the separate date and time badges. The three badges are arranged name first, then date and time below.
