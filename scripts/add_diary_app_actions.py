@@ -1122,7 +1122,7 @@ private object DiaryReminderScheduler {
                 val repeatDaily = item.optBoolean("repeatDaily", false)
                 val dailyAnchorAt = item.optLong("dailyAnchorAt", at)
                 val restoreAt = if (at > now) at else if (at > now - 24L * 60L * 60L * 1000L) now + 5000L else 0L
-                if (restoreAt > 0L) scheduleAutoSnooze(context, id, title, item.optString("details"), soundUri, restoreAt, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, snoozeUsed, repeatDaily, dailyAnchorAt)
+                if (restoreAt > 0L && snoozeUsed < snoozeLimit) scheduleAutoSnooze(context, id, title, item.optString("details"), soundUri, restoreAt, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, snoozeUsed, repeatDaily, dailyAnchorAt)
                 else cancelAutoSnooze(context, id)
         }
     }
@@ -1235,7 +1235,11 @@ class DiaryReminderReceiver : BroadcastReceiver() {
                 val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 manager.cancel((id.hashCode() and 0x3fffffff) + 10)
                 DiaryReminderSoundService.stop(context)
-                DiaryReminderScheduler.schedule(context, id, title, details, System.currentTimeMillis() + snoozeMinutes.toLong() * 60L * 1000L, soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, snoozeUsed, repeatDaily, dailyAnchorAt)
+                // Count unanswered automatic repeats against the same user-selected repeat limit.
+                // The selected Snooze interval remains the delay before each next alarm.
+                if (snoozeUsed < snoozeLimit) {
+                    DiaryReminderScheduler.schedule(context, id, title, details, System.currentTimeMillis() + snoozeMinutes.toLong() * 60L * 1000L, soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, snoozeUsed + 1, repeatDaily, dailyAnchorAt)
+                }
                 return
             }
             DiaryReminderScheduler.ACTION_DONE -> {
@@ -1254,14 +1258,16 @@ class DiaryReminderReceiver : BroadcastReceiver() {
         }
         DiaryReminderScheduler.showNotification(context, id, title, details, soundUri, snoozeMinutes, snoozeLimit, snoozeUsed, ringDurationSeconds, ringVolumePercent, repeatDaily, dailyAnchorAt)
         DiaryReminderSoundService.start(context, soundUri, ringDurationSeconds, ringVolumePercent)
-        // If the user does not press Done or Snooze, automatically repeat at the saved Snooze interval.
-        // This fallback is independent of the manual Snooze limit and is cancelled by either action.
-        DiaryReminderScheduler.scheduleAutoSnooze(
-            context, id, title, details, soundUri,
-            System.currentTimeMillis() + snoozeMinutes.toLong() * 60L * 1000L,
-            snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, snoozeUsed,
-            repeatDaily, dailyAnchorAt
-        )
+        // If the user does not press Done or Snooze, automatically repeat at the saved
+        // Snooze interval, but never exceed the same configured repeat limit.
+        if (snoozeUsed < snoozeLimit) {
+            DiaryReminderScheduler.scheduleAutoSnooze(
+                context, id, title, details, soundUri,
+                System.currentTimeMillis() + snoozeMinutes.toLong() * 60L * 1000L,
+                snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, snoozeUsed,
+                repeatDaily, dailyAnchorAt
+            )
+        }
     }
 }
 
