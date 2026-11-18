@@ -1,3 +1,17 @@
+# Personal Calendar + Smart Reminder search moved above Name — Web Update 319 published (2026-11-18)
+
+- User approved moving the existing **Smart Search** field in both **📅 Personal Calendar** and **⏰ Smart Reminder** to immediately above the **Name** field.
+- Changed only the form assembly in `web-source/index.html`: the existing search input is moved into a small search panel at the top of the existing Calendar/Reminder form. Its placeholder, input listener and saved-entry filtering remain the same. No duplicate search control is created.
+- The existing Edit-mode rule still hides the form while bulk selection is active; the search therefore hides with the form and returns above Name when Edit mode ends. Other feature search/tool placement is unchanged.
+- Preserved all form fields, saved entries, automatic Calendar reminders, Smart Reminder scheduling, alarm IDs, Snooze/repeat settings, bulk selection/deletion, PINs, locks, notes, photos, native Android code and unrelated screens.
+- Backup branch: `backup/before-searchbar-move-calendar-reminder-2026-11-18`. Working branch: `fix/move-calendar-reminder-searchbar-above-name-2026-11-18`. Base main commit: `71d62d05ccdbf4a86aeb687792550012d9dd62e1`.
+- PR #193 merged as `379bc26af4a544b6885bfb7f08a39ba9f01d060e`. Exact reviewed diff: one file only (`web-source/index.html`), one insertion and one deletion in the form assembly.
+- Published **Web Update 319**. `web-source/index.html` and `diary-web/index.html` were re-fetched and verified byte-identical at Git blob SHA `18bd4b2f056a1ed956d193aae86cd9d7f703c9ad`. Live `latest.json` advertises web SHA-256 `4367839475b33d3ffada14eb466dd73d1734dde46464db26995920e2fd587722` and Web Update 319.
+- APK remains **1.0.193 / versionCode 192**, SHA-256 `b21819e3af1a8a4338218ce70604b4bbd056888df3e23633c5b3d05a8e881dd4`; this is a web-only change and no APK/native release was made.
+- Repository/feed/mirror verification: PASS. Physical-phone visual testing in both screens remains pending; do not claim device-side PASS until the user confirms.
+
+---
+
 # Personal Calendar PDF Report button removed — Web Update 318 published (2026-11-18)
 
 - User requested removal of the **PDF Report** button from **📅 Personal Calendar** because it is not needed.
