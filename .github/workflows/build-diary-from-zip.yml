@@ -165,7 +165,7 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           source=Path("scripts/add_diary_app_actions.py").read_text(encoding="utf-8")
-          required=("scheduleReminderDaily","repeatDaily: Boolean = false","dailyAnchorAt: Long = atMillis","nextDailyAt","diary_reminder_repeat_daily","if (!repeatDaily) DiaryReminderScheduler.cancel(context, id)","privateLockerBiometricAlias","BiometricPrompt.CryptoObject(cipher)","enablePrivateLockerFingerprint","authenticatePrivateLockerFingerprint","privateLockerBiometricKey","notifyPrivateLockerFingerprintResult")
+          required=("scheduleReminderDaily","repeatDaily: Boolean = false","dailyAnchorAt: Long = atMillis","nextDailyAt","diary_reminder_repeat_daily","if (!repeatDaily) DiaryReminderScheduler.cancel(context, id)","snoozeUsed < snoozeLimit","snoozeUsed + 1, repeatDaily, dailyAnchorAt","System.currentTimeMillis() + snoozeMinutes.toLong() * 60L * 1000L","if (restoreAt > 0L && snoozeUsed < snoozeLimit)","privateLockerBiometricAlias","BiometricPrompt.CryptoObject(cipher)","enablePrivateLockerFingerprint","authenticatePrivateLockerFingerprint","privateLockerBiometricKey","notifyPrivateLockerFingerprintResult")
           missing=[x for x in required if x not in source]
           if missing: raise SystemExit("BLOCKED: native Smart Reminder Daily repeat implementation guard incomplete: "+", ".join(missing))
           print("PASS: native Smart Reminder Daily repeat implementation guard")
