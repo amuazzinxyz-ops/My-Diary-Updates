@@ -4337,3 +4337,15 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - The push-triggered APK workflow run `44255496839` stopped at its source/mirror guard step before Gradle build, signing or upload; all subsequent APK steps were skipped. The web publisher then completed and source/mirror equality was re-verified. No APK artifact or APK metadata was changed by that run.
 - Register-entry backup branch: `backup/before-edit-menu-register-entry-2026-11-18`; register documentation branch: `docs/edit-menu-toggle-register-entry-2026-11-18`.
 - Physical phone testing remains pending. Do not claim device-side PASS until the user confirms that tapping ⋮ again in both features restores the normal list position and does not delete entries.
+
+
+---
+
+# Personal Calendar event reminders automatic — Web Update 317 published (2026-11-18)
+
+- User requested removal of the **“Event ke waqt yaad dilayein”** checkbox and its label while keeping event-time reminders active automatically.
+- Updated only the Personal Calendar form/save/edit path in `web-source/index.html`: removed the checkbox and its edit-state reference; every newly saved or edited Calendar event now sets `record.remind = true` and uses the existing `calendarScheduleAlarms(record)` scheduler.
+- Smart Reminder is untouched. Existing Calendar entries are not migrated automatically; an old entry becomes reminder-enabled when it is edited and saved. Existing sound, snooze interval/limit, ring duration/volume, repeat selection and alarm cancellation paths remain in place.
+- Backup branch: `backup/before-calendar-auto-reminder-2026-11-18`. Working branch: `fix/calendar-reminder-auto-on-2026-11-18`. PR #191 merged as `638b921ffca7aa198d609d5cb06f77f1db8c7cc0`.
+- Web publish workflow run #372 completed successfully. Published **Web Update 317**; `latest.json` reports web SHA-256 `b1503b0105fb9b77f0d214fbbc881ef876ca817824dac8f98dc7c993ef288fc8`. Verified `web-source/index.html` and `diary-web/index.html` are byte-identical (blob SHA `910b3c892a97c211224cd2d9d90646e5d1581cbd`).
+- No APK/native Android release was made. Physical-phone alarm testing remains pending; do not claim device-side PASS until the user tests a new Calendar event.
