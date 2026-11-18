@@ -222,8 +222,11 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 </style>
 <style id="diary-custom-repeat-weekdays">
 /* Make every weekday a clear, full-width tap target on small Android screens. */
-.diary-me-repeat-days-wrap{margin-top:8px;padding:10px;border:1px solid #c8b6e8;border-radius:12px;background:linear-gradient(145deg,#fff,#f6f0ff);box-sizing:border-box}
-.diary-me-repeat-days-title{display:block;font-size:15px;line-height:1.35;font-weight:900;margin-bottom:10px;color:#43256b}
+.diary-me-repeat-days-wrap{margin-top:4px;padding:9px;border:1px solid #c8b6e8;border-radius:12px;background:linear-gradient(145deg,#fff,#f6f0ff);box-sizing:border-box}
+.diary-me-repeat-days-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.diary-me-repeat-days-title{display:block;font-size:15px;line-height:1.35;font-weight:900;color:#43256b;margin:0}
+.diary-me-repeat-days-close{flex:0 0 32px;width:32px;height:32px;border:1px solid #b69bd8;border-radius:9px;background:#fff;color:#48256f;font-size:22px;line-height:1;font-weight:900;padding:0}
+.diary-me-repeat-days-edit{display:block;width:100%;margin-top:6px;min-height:38px;border:1px solid #b69bd8;border-radius:9px;background:#f4edff;color:#43256b;font-size:14px;font-weight:900;padding:7px 10px}
 .diary-me-repeat-days{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .diary-me-repeat-day{display:flex;align-items:center;gap:8px;min-width:0;min-height:44px;padding:7px 9px;box-sizing:border-box;border:1px solid #cbb9e3;border-radius:9px;background:#fff;color:#2e2140;font-size:15px;line-height:1.25;font-weight:900;white-space:normal;overflow-wrap:anywhere}
 .diary-me-repeat-day input{width:20px;height:20px;accent-color:#7542a5;flex:0 0 20px;margin:0}
@@ -2131,14 +2134,22 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   }
   function mfRepeatDaysControl(parent){
    var wrap=mfEl('div',{class:'diary-me-repeat-days-wrap',hidden:'hidden'});
-   wrap.appendChild(mfEl('span',{class:'diary-me-repeat-days-title'},'Custom — apne din chunein'));
+   var head=mfEl('div',{class:'diary-me-repeat-days-head'});
+   head.appendChild(mfEl('span',{class:'diary-me-repeat-days-title'},'Custom — apne din chunein'));
+   var close=mfEl('button',{type:'button',class:'diary-me-repeat-days-close','aria-label':'Band Karein'},'×');
+   head.appendChild(close);wrap.appendChild(head);
    var grid=mfEl('div',{class:'diary-me-repeat-days'}),checks={};
+   var edit=mfEl('button',{type:'button',class:'diary-me-repeat-days-edit',hidden:'hidden'},'✎ Custom din badlein');
    [{v:2,l:'Monday'},{v:3,l:'Tuesday'},{v:4,l:'Wednesday'},{v:5,l:'Thursday'},{v:6,l:'Friday'},{v:7,l:'Saturday'},{v:1,l:'Sunday'}].forEach(function(day){
     var label=mfEl('label',{class:'diary-me-repeat-day'}),input=mfEl('input',{type:'checkbox',name:'repeatCustomDay',value:String(day.v)});
-    checks[day.v]=input;label.appendChild(input);label.appendChild(mfEl('span',{},day.l));grid.appendChild(label);
+    checks[day.v]=input;input.addEventListener('change',function(){api.show(false,true);});
+    label.appendChild(input);label.appendChild(mfEl('span',{},day.l));grid.appendChild(label);
    });
-   wrap.appendChild(grid);parent.appendChild(wrap);
-   return {wrap:wrap,show:function(value){wrap.hidden=!value;},get:function(){return Object.keys(checks).filter(function(k){return checks[k].checked;}).map(Number);},set:function(values){values=(values||[]).map(Number);Object.keys(checks).forEach(function(k){checks[k].checked=values.indexOf(Number(k))>=0;});}};
+   wrap.appendChild(grid);parent.appendChild(wrap);parent.appendChild(edit);
+   var api={wrap:wrap,show:function(value,enabled){wrap.hidden=!value;edit.hidden=!!value||enabled===false;} ,get:function(){return Object.keys(checks).filter(function(k){return checks[k].checked;}).map(Number);},set:function(values){values=(values||[]).map(Number);Object.keys(checks).forEach(function(k){checks[k].checked=values.indexOf(Number(k))>=0;});}};
+   close.addEventListener('click',function(){api.show(false,true);});
+   edit.addEventListener('click',function(){api.show(true,true);});
+   return api;
   }
   function mfAlignDateToRepeatDays(dateValue,timeValue,days){
    var d=new Date(String(dateValue)+'T'+String(timeValue||'09:00'));
@@ -2238,7 +2249,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     type=mfEl('select',{name:'type'});[['birthday','birthday'],['anniversary','anniversary'],['event','event']].forEach(function(x){type.appendChild(mfEl('option',{value:x[0]},mf(x[1])));});typeWrap.appendChild(type);form.appendChild(typeWrap);
     var repeatWrap=mfEl('label',{class:'diary-me-feature-field'});repeatWrap.appendChild(mfEl('span',{},t('calendarRepeat')));
     repeatSelect=mfEl('select',{name:'repeat'});[['none','repeatNone'],['daily','repeatDaily'],['weekly','repeatWeekly'],['monthly','repeatMonthly'],['yearly','repeatYearly']].forEach(function(x){repeatSelect.appendChild(mfEl('option',{value:x[0]},t(x[1])));});if(window.DiaryAppActions&&typeof window.DiaryAppActions.scheduleReminderCustom==='function')repeatSelect.appendChild(mfEl('option',{value:'custom'},'Custom'));repeatWrap.appendChild(repeatSelect);form.appendChild(repeatWrap);
-    var calendarRepeatDays=mfRepeatDaysControl(form);repeatSelect.addEventListener('change',function(){calendarRepeatDays.show(repeatSelect.value==='custom');});
+    var calendarRepeatDays=mfRepeatDaysControl(form);repeatSelect.addEventListener('change',function(){calendarRepeatDays.show(repeatSelect.value==='custom',repeatSelect.value==='custom');});
     /* Calendar events now always schedule their event-time reminder; the former per-event checkbox is removed. */
     var calendarSoundWrap=mfEl('div',{class:'diary-me-feature-field'});calendarSoundWrap.appendChild(mfEl('span',{},mf('reminderSound')));
     soundInput=mfEl('input',{type:'hidden',name:'reminderSoundUri'});soundLabel=mfEl('small',{class:'diary-me-feature-sound-label'},mf('reminderSoundDefault'));
@@ -2256,7 +2267,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     details=mfField(form,mf('reminderDetails'),'text','details',false);
     var dailyRepeatWrap=mfEl('label',{class:'diary-me-feature-field'});dailyRepeatWrap.appendChild(mfEl('span',{},t('calendarRepeat')));
     repeatDailySelect=mfEl('select',{name:'repeatDaily'});repeatDailySelect.appendChild(mfEl('option',{value:'none'},t('repeatNone')));repeatDailySelect.appendChild(mfEl('option',{value:'daily'},t('repeatDaily')));if(window.DiaryAppActions&&typeof window.DiaryAppActions.scheduleReminderCustom==='function')repeatDailySelect.appendChild(mfEl('option',{value:'custom'},'Custom'));dailyRepeatWrap.appendChild(repeatDailySelect);form.appendChild(dailyRepeatWrap);
-    var reminderRepeatDays=mfRepeatDaysControl(form);repeatDailySelect.addEventListener('change',function(){reminderRepeatDays.show(repeatDailySelect.value==='custom');});
+    var reminderRepeatDays=mfRepeatDaysControl(form);repeatDailySelect.addEventListener('change',function(){reminderRepeatDays.show(repeatDailySelect.value==='custom',repeatDailySelect.value==='custom');});
     var noteWrap=mfEl('label',{class:'diary-me-feature-field'});noteWrap.appendChild(mfEl('span',{},mf('reminderRelatedNote')));
     noteSelect=mfEl('select',{name:'linkedNote'});noteSelect.appendChild(mfEl('option',{value:''},mf('reminderNoNote')));
     (read()||[]).forEach(function(n){noteSelect.appendChild(mfEl('option',{value:n.id},(n.title||mf('untitled')).trim()||mf('untitled')));});
