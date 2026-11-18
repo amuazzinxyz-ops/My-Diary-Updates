@@ -9,7 +9,7 @@
 - Only `web-source/index.html` changed for implementation: 132 additions, 22 deletions. Backup branch: `backup/before-world-clock-smart-features-2026-11-19`. Feature branch: `feature/world-clock-favourites-day-night-meeting-sun-2026-11-19`. PR #237 merged as `78efa3f3e3c5b40aba2210c0746ef26e8a084012`.
 - Static verification passed: World Clock block compiles; all five feature handlers/calculations, saved city/favourite state, city search/add/remove and timer cleanup are present. IDs in the World Clock block are unique. Existing Personal Calendar scheduler and Smart Reminder code remain present. Diff contains only `web-source/index.html`.
 - Web publisher run `44371498006` completed successfully and published **Web Update 339**. Source and published mirror are byte-identical at Git blob SHA `9453775e039943dd6c71ae2daa8ab01c29084849` (554,296 bytes). Publisher SHA-256: `c9e45b70cce2807abafcc10fa2c4b540213deecff8da02f849897174c59dd889`.
-- APK workflow `44371497852` was automatically triggered; its final outcome is being checked separately. APK metadata at Web Update 339 remains **1.0.194 / versionCode 193**, SHA-256 `51c3a68b6febf3a7e5f9aabbb997e5c32dad9c42bd53d45f17d8b128d88dd434`. Do not claim an APK update unless the workflow and published metadata confirm it.
+- APK workflow `44371497852` completed with failure at **Use the exact latest published Diary HTML in Android APK**; 15 subsequent build/release steps were skipped. No APK was built or published. APK metadata remains **1.0.194 / versionCode 193**, SHA-256 `51c3a68b6febf3a7e5f9aabbb997e5c32dad9c42bd53d45f17d8b128d88dd434`. This task is a web-only update; do not describe the APK as updated.
 - Physical Android phone testing remains pending user confirmation.
 
 ---
