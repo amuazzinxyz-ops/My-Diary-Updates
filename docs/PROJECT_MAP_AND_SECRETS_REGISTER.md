@@ -1,3 +1,17 @@
+# Personal Calendar + Smart Reminder — Custom weekday repeat released (2026-11-18)
+
+- Added a **Custom** repeat choice to both **📅 Personal Calendar** and **⏰ Smart Reminder**. Users can select the weekdays Monday through Sunday; the chosen days are saved with the entry and restored when editing it.
+- Calendar keeps its previous None, Daily, Weekly, Monthly and Yearly choices. Smart Reminder keeps its previous None and Daily choices. Custom recurrence is only offered when the installed native Android bridge supports `scheduleReminderCustom`, so older APKs retain their existing options instead of showing a non-working control.
+- Native Custom weekday scheduling is carried through alarm rescheduling/restoration, manual Snooze and unanswered repeat handling, and reboot restoration. Existing saved records and unrelated Diary features were not intentionally changed.
+- PR #196 merged the Custom weekday implementation. PR #197 added the safety gate preventing the Custom web UI from being advertised to APKs without the matching native scheduler.
+- Release: **My Diary 1.0.194 / versionCode 193** and **Web Update 321**. APK release workflow run **44300687581** completed with conclusion **success**. Published APK SHA-256: `8658fb0065dc0d05ac9cd9ba0ff19bebd1091845ad68ea3c31ccb3a3f41fb0f7`. Published web bundle SHA-256: `f56fb658f96bb705bb8aa13f18ebfc4770d45f7b3025cd67b25e159ebce73f4d`.
+- Verified on main: `web-source/index.html` and `diary-web/index.html` are byte-identical (Git blob SHA `7fceaaff45158895c70357c3a6c8f2a468a4a6f9`).
+- Backup branch for this register update: `backup/before-custom-repeat-register-2026-11-18`. Documentation branch: `docs/custom-repeat-calendar-reminder-release-2026-11-18`.
+- **Physical-phone testing of Custom weekday repeat is pending user confirmation.** The successful CI/release build is not a claim that the new repeat behavior has passed on the user's phone.
+- No MUAZZIN project files were changed.
+
+---
+
 # Personal Calendar + Smart Reminder search results placement — Web Update 320 phone test confirmed (2026-11-18)
 
 - User confirmed physical-phone testing is complete and the requested behavior works correctly in both **📅 Personal Calendar** and **⏰ Smart Reminder**: matching search results appear immediately below the Search Bar.
