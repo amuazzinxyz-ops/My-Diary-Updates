@@ -1,10 +1,11 @@
-# My Diary Note Search — show results directly below the search bar (Web Update pending, 2026-11-19)
+# My Diary Note Search — results directly below the search bar (Web Update 344, 2026-11-19)
 
 - Corrected the earlier misunderstanding: user wants the matching Note search results list itself moved immediately below the Note search bar, exactly like Personal Calendar and Smart Reminder move their filtered result list directly below their search panel while a query is entered.
 - During a Note search, the existing filtered notes list is temporarily moved immediately after the search input and shown there. When the search is cleared, the list returns to its original position after the All Notes control and its previous visibility is restored.
 - Reverted the previous extra relevance sorting so the original pinned/favourite and updated-time order remains unchanged. Search matching, category filter, note cards/actions, editor, saved notes, multi-select, Note Lock, and other Diary features remain unchanged.
-- Backup branch: `backup/before-note-search-below-bar-2026-11-19`. Working branch: `fix/note-search-results-below-bar-2026-11-19`.
-- Web-only layout/DOM placement change; APK/native code and saved note data are not modified. Physical Android phone testing remains pending user confirmation.
+- Backup branch: `backup/before-note-search-below-bar-2026-11-19`. Working branch: `fix/note-search-results-below-bar-2026-11-19`. PR #244 merged as `e20b598c7d1ea7fd0b4ec24e8dd3fc7bfabe6333`.
+- Published as **Web Update 344**. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `7ff3c73b8b64b1f6c2a0b2eeb45b5d0c9bbd4f5c`; `latest.json` web SHA-256 is `99d0e4755f83c834cf213c20bd88498f54f72b62343e40e9e42cfe4698980a29`.
+- Web-only layout/DOM placement change; APK remains **My Diary 1.0.194 / versionCode 193** and APK/native code and saved note data are not modified. Physical Android phone testing remains pending user confirmation.
 
 ---
 
