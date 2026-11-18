@@ -1,3 +1,13 @@
+# Personal Calendar + Smart Reminder Edit actions pinned at the top — publication pending (2026-11-18)
+
+- User clarified that immediately after tapping **Edit**, the selected-count, **Delete Selected**, and **Done** controls must be visible at the top rather than below the entry form/tools.
+- Moved the existing bulk-action bar to a direct child immediately below the feature header and made it sticky while scrolling. The same existing controls, checkbox selection, delete behavior, reminder cancellation and calendar alarm cancellation are retained; this is a layout-only change.
+- No saved records, alarms, reminder settings, forms, PINs, locks, photos, native Android code or unrelated screens are changed.
+- Backup branch: `backup/before-calendar-reminder-bulkbar-top-2026-11-18`. Working branch: `fix/calendar-reminder-bulkbar-top-2026-11-18`.
+- Source change is prepared; PR merge, web publisher sync/version increment, final SHA verification and post-publication checks remain pending. Physical-phone testing is pending.
+
+---
+
 # Personal Calendar + Smart Reminder Edit mode and multi-select delete — implementation pending publication (2026-11-18)
 
 - User requested an **Edit** option in the upper-right three-dot menu on both **📅 Personal Calendar** and **⏰ Smart Reminder**, so saved entries can be selected with checkboxes and deleted together.
@@ -5,7 +15,7 @@
 - Bulk deletion uses the existing Diary feature IndexedDB records. For Smart Reminder, each deleted record's native reminder is cancelled through the existing `DiaryAppActions.cancelReminder`; for Personal Calendar, the record's scheduled alarm IDs are cancelled through the existing `calendarCancelAlarms`. Existing per-record edit/delete actions remain available outside selection mode.
 - Preserved the existing add/edit forms, reminder settings, alarm scheduling, calendar repeat rules, saved record schema, notes, PINs, locks, photos and all unrelated screens. No native Android scheduler code or user data is changed.
 - Backup branch: `backup/before-calendar-reminder-bulk-delete-menu-2026-11-18`. Working branch: `feat/calendar-reminder-edit-select-delete-2026-11-18`. Base main commit: `c836df7b2d7c5b763b8882c036d21fb461b24181`.
-- Source/mirror synchronization, JavaScript/build checks, PR merge, Check for Update web publication and final feed SHA verification are pending. Physical-phone testing is also pending; do not claim device-side PASS until the user tests both screens.
+- Initial implementation merged in PR #183. The first publisher run repaired the checksum but left `webVersion` at 313 because source and mirror were already identical; the follow-up top-bar change will deliberately let the publisher sync the mirror and increment the web version. Physical-phone testing is still pending.
 
 ---
 
