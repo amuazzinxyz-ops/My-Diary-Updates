@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 330,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "2b5d412b1fa41c20e1d87da7dd228564383e6c3af3d2704a441c5659e15ed322",
+  "webSha256": "518bf0ee024af2d377540775ff0789e298c8fc122c7646bfafb7f30659abffd6",
   "webReleaseNotes": "Personal Calendar adds Upcoming Events filters for the next 7 or 30 days, plus Reminder ON/OFF badges on saved entries. Birthday, Anniversary and Important Day retain their separate pink, gold and purple badges. Existing entries and reminder scheduling are preserved."
 }
