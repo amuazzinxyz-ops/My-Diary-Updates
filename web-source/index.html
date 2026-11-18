@@ -2411,6 +2411,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    meFeatureContent.append(form,meFeatureStatus);
   }
   function showMeFeaturePin(kind){
+   meFeatureModal.classList.toggle('diary-me-feature-bold-text',kind==='calendar'||kind==='reminders');
    var config=meFeaturePinConfig(kind),form=mfEl('form',{class:'diary-me-feature-form diary-me-feature-pin-form'});
    meFeatureBulkEdit=false;meFeatureSelectedIds.clear();meFeatureMenu.hidden=true;meFeatureMenuButton.hidden=true;meFeatureBulkBar.hidden=true;
    meFeatureTitle.textContent=mf(meFeatureTypes.filter(function(x){return x.id===kind;})[0].key);meFeatureManage.hidden=true;meFeatureLock.hidden=true;meFeatureContent.replaceChildren();meFeatureStatus.textContent='';
@@ -2598,6 +2599,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var currentMeFeatureKind=null;
   function showMeFeaturePage(kind){
    currentMeFeatureKind=kind;
+   meFeatureModal.classList.toggle('diary-me-feature-bold-text',kind==='calendar'||kind==='reminders');
    if(kind==='calendar')meFeatureAll('calendar').then(function(records){records.forEach(function(record){if(record.remind&&record.repeat&&record.repeat!=='none'&&calendarScheduleAlarms(record))meFeaturePut(record);});});
 
    meFeatureTitle.textContent=mf(meFeatureTypes.filter(function(x){return x.id===kind;})[0].key);
@@ -2609,6 +2611,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    renderMeFeatureList(kind);
   }
   function closeMeFeature(){
+   meFeatureModal.classList.remove('diary-me-feature-bold-text');
    currentMeFeatureKind=null;meFeatureBulkEdit=false;meFeatureSelectedIds.clear();meFeatureMenu.hidden=true;meFeatureMenuButton.hidden=true;meFeatureBulkBar.hidden=true;++meFeatureRenderToken;clearMeFeatureUrls();meFeatureLock.hidden=true;meFeatureModal.hidden=true;meFeatureContent.replaceChildren();mePanel.hidden=false;mePanel.scrollTop=0;meBtn.setAttribute('aria-expanded','true');panel.classList.add('diary-me-menu-open');
   }
   meFeatureManage.addEventListener('click',function(){if(currentMeFeatureKind)showMeFeaturePinManager(currentMeFeatureKind);});
@@ -4406,6 +4409,19 @@ input[name="diary-note-lock-pin"]::placeholder,#diaryMyNotesList input[name="dia
 .diary-me-feature-pin-note{margin:0!important;color:#795b17!important;font-size:12px!important;font-weight:700!important;line-height:1.5!important}
 .diary-me-feature-totals{padding:10px!important;border:1px solid #d4af37!important;border-radius:10px!important;background:#fff7d9!important;color:#513d0a!important;font-size:13px!important;font-weight:900!important;line-height:1.6!important}
 .diary-me-feature-empty{text-align:center!important;padding:16px!important;color:#756781!important;font-weight:800!important}
+</style>
+
+<style id="calendar-reminder-all-text-bold">
+/* Bold every visible label, saved/user-entered text and future input text only in Personal Calendar and Smart Reminder. */
+#diaryMeFeatureModal.diary-me-feature-bold-text,
+#diaryMeFeatureModal.diary-me-feature-bold-text * {
+  font-weight:900!important;
+}
+#diaryMeFeatureModal.diary-me-feature-bold-text input::placeholder,
+#diaryMeFeatureModal.diary-me-feature-bold-text textarea::placeholder {
+  font-weight:900!important;
+  opacity:1!important;
+}
 </style>
 
 <style id="diary-language-selector-me-menu">
