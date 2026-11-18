@@ -2073,7 +2073,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    var bridge=window.DiaryAppActions;if(!bridge||typeof bridge.scheduleReminder!=='function')return false;
    if(typeof bridge.hasReminderNotificationPermission==='function'&&!bridge.hasReminderNotificationPermission()){if(typeof bridge.requestReminderNotificationPermission==='function')bridge.requestReminderNotificationPermission();return false;}
    if(typeof bridge.hasExactAlarmPermission==='function'&&!bridge.hasExactAlarmPermission()){if(typeof bridge.requestExactAlarmPermission==='function')bridge.requestExactAlarmPermission();return false;}
-   if(typeof bridge.hasFullScreenIntentPermission==='function'&&!bridge.hasFullScreenIntentPermission()){if(typeof bridge.requestFullScreenIntentPermission==='function')bridge.requestFullScreenIntentPermission();return false;}
+   // Full-screen intent access is optional on Android 14+: the native scheduler
+   // still delivers the exact alarm, notification and ringtone when access is denied.
    var times=calendarReminderOccurrences(record),ids=[],oldIds=(record.reminderIds||[]).slice();
    if(!times.length)return false;
    for(var i=0;i<times.length;i++){
