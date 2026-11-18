@@ -1,3 +1,15 @@
+# Personal Calendar PDF Report button removed — Web Update 318 published (2026-11-18)
+
+- User requested removal of the **PDF Report** button from **📅 Personal Calendar** because it is not needed.
+- Changed only the report-button condition in `web-source/index.html`: the report button is now created for **My Kharcha** only, not Personal Calendar. The My Kharcha report/export remains available. The existing Calendar report helper remains untouched; no Calendar records, event forms, automatic reminder scheduling, alarm settings, Smart Reminder, or other features were changed.
+- Backup branch: `backup/before-remove-calendar-pdf-report-2026-11-18`. Working branch: `fix/remove-personal-calendar-pdf-report-2026-11-18`. Base main commit: `5dd4be0a1fa3306deadb60bca643943c2a0c8aee`.
+- PR #192 merged as `88a96f5d4b92accd9637a8e49e79f9b7f9df7851`. Exact diff: one condition line changed in one file (1 insertion, 1 deletion).
+- Web publisher workflow run `44268386537` completed successfully. Published **Web Update 318**; `latest.json` advertises web SHA-256 `fa6ade8952b13b45f96f1c2769463683e3a9dddecb891756a947c333c3ef0dac`.
+- Verified `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `8cae2b71de06abe190481814921d699ff2513c9f`. Static checks confirm the Calendar report-button condition is absent and the My Kharcha report button remains.
+- This is a web-only release; no APK/native code or APK version was changed. Physical-phone visual confirmation that the Calendar button is gone remains pending; do not claim device-side testing.
+
+---
+
 # Permanent My Diary work-safety procedure (user-confirmed, 2026-11-18)
 
 This procedure applies to every future My Diary task. Follow it before making changes; it reduces avoidable mistakes but does not guarantee that software can never contain a defect.
