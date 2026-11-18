@@ -1610,7 +1610,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   meFeatureBulkBar.append(meFeatureBulkSummary,meFeatureBulkDelete);meFeatureBulkBar.hidden=true;
   meFeatureMenuButton.hidden=true;
   meFeatureMenuButton.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var opening=meFeatureMenu.hidden;meFeatureMenu.hidden=!opening;meFeatureMenuButton.setAttribute('aria-expanded',opening?'true':'false');});
-  meFeatureMenuEdit.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();meFeatureBulkEdit=!meFeatureBulkEdit;if(!meFeatureBulkEdit)meFeatureSelectedIds.clear();meFeatureMenu.hidden=true;meFeatureMenuButton.setAttribute('aria-expanded','false');updateMeFeatureBulkUI();if(currentMeFeatureKind)renderMeFeatureList(currentMeFeatureKind);});
+  meFeatureMenuEdit.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();meFeatureBulkEdit=!meFeatureBulkEdit;if(!meFeatureBulkEdit)meFeatureSelectedIds.clear();meFeatureMenu.hidden=true;meFeatureMenuButton.setAttribute('aria-expanded','false');if(meFeatureBulkEdit&&meFeatureSearchInput)meFeatureSearchInput.value='';updateMeFeatureBulkUI();if(currentMeFeatureKind)renderMeFeatureList(currentMeFeatureKind);meFeatureModal.scrollTop=0;meFeatureContent.scrollTop=0;});
   meFeatureLock.hidden=true;meFeatureHead.append(meFeatureBack,meFeatureTitle,meFeatureManage,meFeatureLock,meFeatureMenuButton,meFeatureMenu);
   var meFeatureContent=el('div',{id:'diaryMeFeatureContent'});
   meFeatureModal.append(meFeatureHead,meFeatureBulkBar,meFeatureContent);
@@ -2073,6 +2073,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   function updateMeFeatureBulkUI(){
    var enabled=!!(meFeatureBulkEdit&&(currentMeFeatureKind==='calendar'||currentMeFeatureKind==='reminders'));
    meFeatureModal.classList.toggle('diary-me-feature-bulk-edit',enabled);
+   if(enabled){if(meFeatureList.parentNode===meFeatureContent)meFeatureContent.insertBefore(meFeatureList,meFeatureContent.firstChild);}else if(meFeatureList.parentNode===meFeatureContent){meFeatureContent.append(meFeatureStatus,meFeatureList);}
    meFeatureMenuButton.hidden=!(currentMeFeatureKind==='calendar'||currentMeFeatureKind==='reminders');
    meFeatureMenuButton.setAttribute('aria-expanded',meFeatureMenu.hidden?'false':'true');
    meFeatureMenuEdit.textContent=meFeatureBulkEdit?meFeatureBulkText('done'):mf('edit');
@@ -4297,6 +4298,8 @@ input[name="diary-note-lock-pin"]::placeholder,#diaryMyNotesList input[name="dia
 .diary-me-feature-menu-edit{display:block!important;width:100%!important;min-height:42px!important;padding:8px 12px!important;border:1px solid #cbb9df!important;border-radius:8px!important;background:#f5edff!important;color:#35145f!important;font-weight:1000!important;text-align:left!important}
 .diary-me-feature-bulk-bar[hidden]{display:none!important}
 .diary-me-feature-bulk-bar{position:sticky!important;top:0!important;z-index:60!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;padding:9px 10px!important;border:2px solid #d4af37!important;border-radius:11px!important;background:#fff7d9!important;color:#513d0a!important}
+#diaryMeFeatureModal.diary-me-feature-bulk-edit #diaryMeFeatureContent>.diary-me-feature-form,#diaryMeFeatureModal.diary-me-feature-bulk-edit #diaryMeFeatureContent>.diary-me-feature-tools{display:none!important}
+#diaryMeFeatureModal.diary-me-feature-bulk-edit #diaryMeFeatureList{margin-top:0!important;padding-top:4px!important}
 .diary-me-feature-bulk-bar strong{font-size:14px!important;font-weight:1000!important}
 .diary-me-feature-bulk-delete{min-height:38px!important;padding:7px 10px!important;border:2px solid #c77!important;border-radius:9px!important;background:linear-gradient(145deg,#fff,#f6e8e8)!important;color:#7d2424!important;font-weight:1000!important}
 .diary-me-feature-bulk-delete:disabled{opacity:.45!important}
