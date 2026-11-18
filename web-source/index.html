@@ -2508,7 +2508,11 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
       card.appendChild(reminderEdit);
      }
      if(kind==='calendar'){
-      card.appendChild(mfEl('p',{},mf(record.type||'event')+(record.time?' • '+record.time:'')));
+      var calendarBadges=mfEl('div',{class:'diary-calendar-badge-row'});
+      var calendarTypeClass=record.type==='birthday'?' diary-calendar-type-birthday':(record.type==='anniversary'?' diary-calendar-type-anniversary':' diary-calendar-type-event');
+      calendarBadges.appendChild(mfEl('span',{class:'diary-calendar-badge diary-calendar-type-badge'+calendarTypeClass},mf(record.type||'event')));
+      if(record.time)calendarBadges.appendChild(mfEl('span',{class:'diary-calendar-badge diary-calendar-time-badge'},'⏰ '+record.time));
+      card.appendChild(calendarBadges);
       if(record.details)card.appendChild(mfEl('p',{},record.details));
       if(record.repeat&&record.repeat!=='none')card.appendChild(mfEl('small',{},t('calendarRepeat')+': '+t('repeat'+record.repeat.charAt(0).toUpperCase()+record.repeat.slice(1))));
       // Reminder settings remain saved and active, but are intentionally not shown on saved Calendar entries.
@@ -4567,6 +4571,17 @@ body{background:radial-gradient(ellipse at 50% 12%,#fff 0%,#f5edff 42%,#e8dcf8 1
   #diaryMyNotesEntryTitle{font-size:36px!important}
   #diaryMyNotesEntrySub{font-size:18px!important}
 }
+</style>
+
+
+<style id="calendar-entry-type-time-badges">
+/* Separate, readable pill badges for Calendar event type and time. */
+#diaryMeFeatureModal .diary-me-feature-card .diary-calendar-badge-row{display:flex!important;flex-wrap:wrap!important;align-items:center!important;gap:8px!important;margin:1px 0 2px!important}
+#diaryMeFeatureModal .diary-me-feature-card .diary-calendar-badge{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:32px!important;box-sizing:border-box!important;padding:5px 12px!important;border:2px solid #9a7a28!important;border-radius:999px!important;background:linear-gradient(145deg,#fff8d9,#f0d98b)!important;color:#000!important;font-size:14px!important;font-weight:1000!important;line-height:1.25!important;white-space:nowrap!important;box-shadow:inset 0 1px 0 #fff,0 2px 0 #b08a32!important}
+#diaryMeFeatureModal .diary-me-feature-card .diary-calendar-type-birthday{border-color:#bd7890!important;background:linear-gradient(145deg,#fff0f5,#f5cfdd)!important}
+#diaryMeFeatureModal .diary-me-feature-card .diary-calendar-type-anniversary{border-color:#b58b28!important;background:linear-gradient(145deg,#fff9df,#f0df9f)!important}
+#diaryMeFeatureModal .diary-me-feature-card .diary-calendar-type-event{border-color:#8c72b4!important;background:linear-gradient(145deg,#f5efff,#ded0f3)!important}
+#diaryMeFeatureModal .diary-me-feature-card .diary-calendar-time-badge{border-color:#6d91ad!important;background:linear-gradient(145deg,#eff8ff,#cfe3f3)!important}
 </style>
 
 </body>
