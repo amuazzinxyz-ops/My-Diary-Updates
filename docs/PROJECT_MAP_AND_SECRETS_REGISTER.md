@@ -1,3 +1,17 @@
+# Smart Reminder saved Name, Date + Time as three 3D badges — Web Update 334 (2026-11-18)
+
+- User pointed out that the Smart Reminder entry name was still plain text and asked to make it a button too. The saved-entry name is now its own raised gold 3D badge above the separate date and time badges. The three badges are arranged name first, then date and time below.
+- Reused the existing Calendar gold 3D badge styling for the name. Added only a Smart Reminder name-badge wrapping rule so long titles wrap inside the badge instead of creating horizontal overflow. Existing date badge (gold), time badge (blue), and DD-MM-YYYY date display are retained.
+- Personal Calendar saved-entry heading, renderer, and styling are unchanged. Only the Smart Reminder saved-entry name presentation changed in addition to retaining the previously completed date/time badges.
+- Preservation: no saved entries or stored values were rewritten. Edit inputs, reminder details, recurrence/custom weekdays, alarm scheduling, reminder time, ringtone, snooze, notifications, notes/photos, PINs/locks, native Android code and unrelated features remain unchanged.
+- Implementation backup: `backup/before-smart-reminder-name-3d-badge-2026-11-18`. Feature branch: `fix/smart-reminder-name-3d-badge-2026-11-18`. PR #226 merged as `2b119307c98bc3f596b73684c54ba60549dabc68`.
+- Source and mirror are byte-identical at Git blob SHA `2819019629c9317b8efacda29d87238e4ca20f8f`. Publisher commit `1b1535d9d3cd127efa842a3477209e1419500002` recorded HTML SHA-256 `2996d26895974a53cf78b012b19ada78b837efb15a857da6febf247ac3fc1fd5` in the feed.
+- This release advances the web feed to **Web Update 334**. APK fields are preserved exactly from the existing feed: **1.0.194 / versionCode 193**; no APK version change is part of this web-only task.
+- Static verification: Smart Reminder title uses the 3D badge class; long-name wrapping rule is present; date/time badges and their styles remain; reminder details and non-reminder Calendar heading remain intact; source and mirror match. **Physical Android phone visual testing is pending user confirmation.**
+- Metadata backup branch: `backup/before-smart-reminder-name-badge-release-metadata-2026-11-18`.
+
+---
+
 # Smart Reminder saved Date + Time shown as separate 3D badges — Web Update 333 (2026-11-18)
 
 - User approved matching the **⏰ Smart Reminder** saved-entry Date and Time buttons to the existing raised 3D badge styling in **📅 Personal Calendar**. The reminder title stays above; underneath, the date and time are separate badges. Date uses the existing DD-MM-YYYY display formatter; time uses the existing saved `record.time` value.
