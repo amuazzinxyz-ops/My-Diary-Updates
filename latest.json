@@ -7,8 +7,8 @@
   "sha256": "51c3a68b6febf3a7e5f9aabbb997e5c32dad9c42bd53d45f17d8b128d88dd434",
   "releaseNotes": "My Diary 1.0.194 remains unchanged. Web Update 337 adds a removable World Clock to the Diary Me menu with live city times and add/remove controls. Existing Diary features and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 337,
+  "webVersion": 338,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "dc16836b934b762e2cc43dafd96a261915a3b9e7217b564ab305e8987b4fb444",
-  "webReleaseNotes": "World Clock added to the Diary Me menu with live times for Mumbai, Dubai, London, New York and Tokyo. Users can add or remove optional cities. Existing Diary features and saved data remain unchanged."
+  "webSha256": "8b698ad3eae1f7481e9006c4f144c0f92df6ff614b604653ff478109e4e9cacc",
+  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
