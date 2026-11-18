@@ -66,6 +66,26 @@ jobs:
           node --version
           node --check /tmp/diary-module.js || { echo "JavaScript syntax check failed"; wc -c /tmp/diary-module.js; head -c 1000 /tmp/diary-module.js; exit 1; }
 
+      - name: Align Java and Kotlin JVM targets
+        working-directory: diary-project
+        run: |
+          cat >> app/build.gradle.kts <<'GRADLE'
+
+          android {
+              compileOptions {
+                  sourceCompatibility = JavaVersion.VERSION_17
+                  targetCompatibility = JavaVersion.VERSION_17
+              }
+          }
+          tasks.withType<JavaCompile>().configureEach {
+              sourceCompatibility = JavaVersion.VERSION_17.toString()
+              targetCompatibility = JavaVersion.VERSION_17.toString()
+          }
+          tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+              kotlinOptions.jvmTarget = "17"
+          }
+          GRADLE
+
       - name: Compile Android debug APK
         working-directory: diary-project
         run: gradle --no-daemon assembleDebug
