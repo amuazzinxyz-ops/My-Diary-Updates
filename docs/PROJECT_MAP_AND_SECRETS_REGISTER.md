@@ -4411,3 +4411,14 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Backup branch: `backup/before-calendar-auto-reminder-2026-11-18`. Working branch: `fix/calendar-reminder-auto-on-2026-11-18`. PR #191 merged as `638b921ffca7aa198d609d5cb06f77f1db8c7cc0`.
 - Web publish workflow run #372 completed successfully. Published **Web Update 317**; `latest.json` reports web SHA-256 `b1503b0105fb9b77f0d214fbbc881ef876ca817824dac8f98dc7c993ef288fc8`. Verified `web-source/index.html` and `diary-web/index.html` are byte-identical (blob SHA `910b3c892a97c211224cd2d9d90646e5d1581cbd`).
 - No APK/native Android release was made. Physical-phone alarm testing remains pending; do not claim device-side PASS until the user tests a new Calendar event.
+
+
+---
+
+# Custom weekday picker closes after selection — Web Update 323 (2026-11-18)
+
+- User reported that the **Custom** weekday picker opened too low and remained open after selecting a day. Corrected the shared control used by **Personal Calendar** and **Smart Reminder**: tightened its top spacing, added a visible **×** close button, and made selecting or deselecting a weekday close the picker immediately. Added a compact **“Custom din badlein”** control to reopen it; already-selected weekdays remain checked so users can choose multiple days one at a time.
+- Backup branch: `backup/before-custom-panel-close-position-2026-11-18`. Work branch: `fix/custom-weekday-panel-auto-close-2026-11-18`. PR #203 merged as `27f555e6fbc2759b4a8d75dc82958ba3774652b9`.
+- Only `web-source/index.html` and its required identical mirror `diary-web/index.html` were changed. Exact main-branch verification: both files are byte-identical, Git blob SHA `01f104be46927405315592cf7c65ab4b37cf1fe3`, 525,779 bytes. No recurrence scheduler, saved Calendar/Reminder entries, APK/native code, PINs, locks, notes, photos, or unrelated features were changed.
+- Web publisher workflow run `44311786468` (run #382) completed successfully. Published **Web Update 323**; `latest.json` advertises web SHA-256 `bedec7af5e9ada4230a387cb7543d99280423bc0be77a2940f504e615e41434a`. APK remains **1.0.194 / versionCode 193**; no APK rebuild is required for this web-only UI change.
+- Physical-phone testing is still pending. Do not claim device-side PASS until the user confirms that selecting a weekday closes the panel and reopening it preserves the previous selections in both features.
