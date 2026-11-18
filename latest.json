@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 322,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "a36405b56ad40bbf6b2e895c7b50a408cd08523b369dd2a51d7843d0d54b1ca6",
+  "webSha256": "bedec7af5e9ada4230a387cb7543d99280423bc0be77a2940f504e615e41434a",
   "webReleaseNotes": "My Diary web update 322: Custom weekday names are larger, bold and arranged in clear tap-friendly boxes on mobile in Personal Calendar and Smart Reminder. Existing saved data, recurrence logic and app identity are preserved."
 }
