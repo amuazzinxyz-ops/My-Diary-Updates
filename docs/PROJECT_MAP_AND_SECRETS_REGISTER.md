@@ -1,3 +1,16 @@
+# Personal Calendar event type and time badges — Web Update 329 (2026-11-18)
+
+- User requested that saved **📅 Personal Calendar** entries display the selected event type and time as separate button-shaped badges. Implemented a compact pill badge for **Birthday**, **Anniversary**, and **Important Day / Zaroori Din**, plus a separate **⏰ time** badge when the entry has a time. The date remains on its existing line; title, details, repeat information and Edit control remain in their existing positions.
+- Changed only the Calendar saved-entry renderer and its narrowly scoped CSS in `web-source/index.html`. The new badges are not interactive controls. Smart Reminder rendering is untouched.
+- Existing saved records are read from the same fields; no data migration or record rewrite was performed. Calendar date/time values, automatic event reminders, alarm scheduling, repeat rules, ringtone, snooze, notifications, search, bulk edit/delete, PIN/locks, Diary notes/photos, native Android code, app identity and signing identity were not intentionally changed. No MUAZZIN project files were changed.
+- Backup branch: `backup/before-calendar-type-time-badges-2026-11-18`. Feature branch: `fix/calendar-type-time-entry-badges-2026-11-18`. Base commit: `19b4dfaded882dfc2f5e9db1fd08f0999862ab40`. PR #212 merged as `ae73b42b6bea09455e3c772c0dd9caff644002c1`.
+- Static verification: both inline JavaScript blocks compile successfully (2/2); checks confirm the type/time badges and all three event-type classes are present. Source and mirror are byte-identical at Git blob SHA `9618e4ce5f3d4d2100b72a1250001f656682890c`. Web publisher commit: `644adc17227edcf67830450d634f88a3bb416ceb`; mirror sync commit: `77f153e5f5d505e94ca973f6b1e403573e8db86a`.
+- Published **Web Update 329**. `latest.json` advertises web SHA-256 `8633d1d2cc300b0974529ef1f0c536054385132c001ff834f9d8b1598dad8d70`, independently recomputed from the source HTML and verified against the feed. Release-note text identifies the new badges.
+- APK remains **1.0.194 / versionCode 193**, feed SHA-256 `64b41c3632a9e06764277d9b408d479e18e778469cc6ddc13241b5530fe61f6f`; no APK rebuild or APK release was made for this web-only change.
+- Physical-phone visual testing remains pending user confirmation. Do not claim device-side PASS until the user checks an existing and a new Calendar entry on their Android phone.
+
+---
+
 # Personal Calendar + Smart Reminder — dark-black saved and newly entered text (Web Update 328, 2026-11-18)
 
 - User requested that the text already written inside entries in **📅 Personal Calendar** and **⏰ Smart Reminder** be dark black, and that text entered in future/new or edited entries also appear dark black.
