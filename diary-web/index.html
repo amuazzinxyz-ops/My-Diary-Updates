@@ -1494,9 +1494,9 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   mePanel.appendChild(refreshDiaryBtn);
   /* Optional, self-contained World Clock tool. Removing this block and its button leaves all existing Me tools untouched. */
   var worldClockCopy={
-   roman:{button:'🌍 World Clock',title:'🌍 World Clock',search:'Shehar ka naam likhein (jaise Paris, Cairo, Seoul)',hint:'Duniya ke available time-zone shehar dhoondhne ke liye naam likhein',remove:'Hataayein',close:'Band Karein',favourite:'Favourite',day:'Din',night:'Raat',ahead:'aage',behind:'peeche',meeting:'Meeting Time Planner',source:'Mumbai ka time',target:'Doosra shehar',date:'Tareekh',time:'Waqt',converted:'Wahan ka waqt',sunrise:'Suraj niklega',sunset:'Suraj doobega',sunUnavailable:'Sunrise/Sunset data is shehar ke liye available nahi',approx:'(andazan)'},
-   english:{button:'🌍 World Clock',title:'🌍 World Clock',search:'Search city (e.g. Paris, Cairo, Seoul)',hint:'Search available world time-zone cities by name',remove:'Remove',close:'Close',favourite:'Favourite',day:'Day',night:'Night',ahead:'ahead',behind:'behind',meeting:'Meeting Time Planner',source:'Mumbai time',target:'Other city',date:'Date',time:'Time',converted:'Local time there',sunrise:'Sunrise',sunset:'Sunset',sunUnavailable:'Sunrise/Sunset data unavailable for this city',approx:'(approx.)'},
-   hindi:{button:'🌍 विश्व घड़ी',title:'🌍 विश्व घड़ी',search:'शहर का नाम लिखें (जैसे पेरिस, काहिरा, सियोल)',hint:'दुनिया के उपलब्ध टाइम-ज़ोन शहर खोजने के लिए नाम लिखें',remove:'हटाएँ',close:'बंद करें',favourite:'पसंदीदा',day:'दिन',night:'रात',ahead:'आगे',behind:'पीछे',meeting:'मीटिंग समय प्लानर',source:'मुंबई का समय',target:'दूसरा शहर',date:'तारीख',time:'समय',converted:'वहाँ का समय',sunrise:'सूर्योदय',sunset:'सूर्यास्त',sunUnavailable:'इस शहर का सूर्योदय/सूर्यास्त डेटा उपलब्ध नहीं',approx:'(अनुमानित)'}
+   roman:{button:'🌍 World Clock',title:'🌍 World Clock',search:'Shehar ka naam likhein (jaise Paris, Cairo, Seoul)',hint:'Duniya ke available time-zone shehar dhoondhne ke liye naam likhein',remove:'Hataayein',close:'Band Karein',favourite:'Favourite',day:'Din',night:'Raat',ahead:'aage',behind:'peeche',sunrise:'Suraj niklega',sunset:'Suraj doobega',sunUnavailable:'Sunrise/Sunset data is shehar ke liye available nahi',approx:'(andazan)'},
+   english:{button:'🌍 World Clock',title:'🌍 World Clock',search:'Search city (e.g. Paris, Cairo, Seoul)',hint:'Search available world time-zone cities by name',remove:'Remove',close:'Close',favourite:'Favourite',day:'Day',night:'Night',ahead:'ahead',behind:'behind',sunrise:'Sunrise',sunset:'Sunset',sunUnavailable:'Sunrise/Sunset data unavailable for this city',approx:'(approx.)'},
+   hindi:{button:'🌍 विश्व घड़ी',title:'🌍 विश्व घड़ी',search:'शहर का नाम लिखें (जैसे पेरिस, काहिरा, सियोल)',hint:'दुनिया के उपलब्ध टाइम-ज़ोन शहर खोजने के लिए नाम लिखें',remove:'हटाएँ',close:'बंद करें',favourite:'पसंदीदा',day:'दिन',night:'रात',ahead:'आगे',behind:'पीछे',sunrise:'सूर्योदय',sunset:'सूर्यास्त',sunUnavailable:'इस शहर का सूर्योदय/सूर्यास्त डेटा उपलब्ध नहीं',approx:'(अनुमानित)'}
   };
   function worldClockText(key){var lang=language();return (worldClockCopy[lang]&&worldClockCopy[lang][key])||worldClockCopy.roman[key];}
   var worldClockBtn=el('button',{id:'diaryWorldClockBtn',type:'button',class:'diary-me-feature-btn'},worldClockText('button'));
@@ -1531,35 +1531,13 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   worldClockHead.append(worldClockTitle,worldClockClose);
   var worldClockRows=el('div',{id:'diaryWorldClockRows'});
   worldClockRows.style.cssText='display:flex;flex-direction:column;gap:8px;';
-  var worldClockPlanner=el('div',{id:'diaryWorldClockPlanner'});
-  worldClockPlanner.style.cssText='display:flex;flex-direction:column;gap:8px;margin-top:12px;padding:11px;border:2px solid #d4af37;border-radius:12px;background:linear-gradient(145deg,#fff,#f5efff);box-shadow:inset 0 1px 0 #fff,0 2px 0 #d8c7ea;';
-  var worldClockPlannerTitle=el('strong',{},'🗓️ '+worldClockText('meeting'));
-  worldClockPlannerTitle.style.cssText='font-size:15px;font-weight:1000;color:#35145f;';
-  var worldClockPlannerFields=el('div',{style:'display:grid;grid-template-columns:1fr 1fr;gap:7px;'});
-  var worldClockPlannerDate=el('input',{type:'date','aria-label':'Meeting date'});
-  var worldClockPlannerTime=el('input',{type:'time','aria-label':'Meeting time',value:'17:00'});
-  var worldClockPlannerTarget=el('select',{id:'diaryWorldClockMeetingTarget','aria-label':'Meeting city'});
-  [worldClockPlannerDate,worldClockPlannerTime,worldClockPlannerTarget].forEach(function(control){control.style.cssText='width:100%;min-width:0;min-height:40px;box-sizing:border-box;padding:7px;border:1px solid #9b7ac5;border-radius:8px;background:#fff;color:#35145f;font-size:13px;font-weight:800;';});
-  var worldClockPlannerDateLabel=el('label',{},worldClockText('date'));
-  var worldClockPlannerTimeLabel=el('label',{},worldClockText('time'));
-  var worldClockPlannerResult=el('div',{id:'diaryWorldClockMeetingResult'});
-  worldClockPlannerResult.style.cssText='padding:8px;border-radius:8px;background:#eee5fb;color:#35145f;font-size:13px;font-weight:900;';
-  var worldClockPlannerDateWrap=el('div',{style:'display:flex;flex-direction:column;gap:4px;'});
-  var worldClockPlannerTimeWrap=el('div',{style:'display:flex;flex-direction:column;gap:4px;'});
-  worldClockPlannerDateWrap.append(worldClockPlannerDateLabel,worldClockPlannerDate);
-  worldClockPlannerTimeWrap.append(worldClockPlannerTimeLabel,worldClockPlannerTime);
-  worldClockPlannerFields.append(worldClockPlannerDateWrap,worldClockPlannerTimeWrap);
-  var worldClockPlannerTargetWrap=el('div',{style:'display:flex;flex-direction:column;gap:4px;'});
-  var worldClockPlannerTargetLabel=el('label',{},worldClockText('target'));
-  worldClockPlannerTargetWrap.append(worldClockPlannerTargetLabel,worldClockPlannerTarget);
-  worldClockPlanner.append(worldClockPlannerTitle,worldClockPlannerFields,worldClockPlannerTargetWrap,worldClockPlannerResult);
   var worldClockControls=el('div',{style:'display:flex;flex-direction:column;gap:7px;margin-top:12px;'});
   var worldClockSearch=el('input',{id:'diaryWorldClockSearch',type:'search','aria-label':'Search world cities',placeholder:worldClockText('search')});
   worldClockSearch.style.cssText='width:100%;box-sizing:border-box;min-height:44px;padding:9px 11px;border:2px solid #9b7ac5;border-radius:10px;background:#fff;color:#241a31;font-size:15px;font-weight:800;';
   var worldClockResults=el('div',{id:'diaryWorldClockResults'});
   worldClockResults.style.cssText='display:flex;flex-direction:column;gap:5px;max-height:190px;overflow:auto;padding:2px;';
   worldClockControls.append(worldClockSearch,worldClockResults);
-  worldClockCard.append(worldClockHead,worldClockRows,worldClockPlanner,worldClockControls);
+  worldClockCard.append(worldClockHead,worldClockRows,worldClockControls);
   worldClockModal.appendChild(worldClockCard);
   ov.appendChild(worldClockModal);
   function worldClockNormalizeSearch(value){
@@ -1616,7 +1594,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     var city=item.city;
     var addCity=el('button',{type:'button',class:'diary-world-clock-city-option'},'＋ '+city.name);
     addCity.style.cssText='width:100%;min-height:38px;padding:7px 9px;text-align:left;border:1px solid #cbb9df;border-radius:8px;background:linear-gradient(145deg,#fff,#f5efff);color:#35145f;font-size:13px;font-weight:900;';
-    addCity.addEventListener('click',function(){if(worldClockCities.some(function(saved){return saved.zone===city.zone;}))return;worldClockCities.push({name:city.name,zone:city.zone});saveWorldClockCities();worldClockSearch.value='';refreshWorldClockPlanner();refreshWorldClockOptions();renderWorldClock();});
+    addCity.addEventListener('click',function(){if(worldClockCities.some(function(saved){return saved.zone===city.zone;}))return;worldClockCities.push({name:city.name,zone:city.zone});saveWorldClockCities();worldClockSearch.value='';refreshWorldClockOptions();renderWorldClock();});
     worldClockResults.appendChild(addCity);
    });
   }
@@ -1674,33 +1652,6 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    var date=new Date(Date.UTC(2020,0,1,Math.floor(minutes/60),minutes%60));
    return new Intl.DateTimeFormat(locale,{hour:'2-digit',minute:'2-digit',hour12:true,timeZone:'UTC'}).format(date);
   }
-  var worldClockPlannerOptionsSignature='';
-  function refreshWorldClockPlanner(){
-   var previous=worldClockPlannerTarget.value;
-   var optionsSignature=worldClockCities.map(function(city){return city.zone+'='+city.name;}).join('|');
-   if(optionsSignature!==worldClockPlannerOptionsSignature){
-    worldClockPlannerTarget.replaceChildren();
-    worldClockCities.forEach(function(city){var option=el('option',{value:city.zone},city.name);worldClockPlannerTarget.appendChild(option);});
-    worldClockPlannerOptionsSignature=optionsSignature;
-   }
-   worldClockPlannerTarget.value=worldClockCities.some(function(city){return city.zone===previous;})?previous:(worldClockCities.find(function(city){return city.zone!=='Asia/Kolkata';})||worldClockCities[0]).zone;
-   var today=worldClockDateParts(new Date(),'Asia/Kolkata');
-   if(!worldClockPlannerDate.value)worldClockPlannerDate.value=String(today.year)+'-'+String(today.month).padStart(2,'0')+'-'+String(today.day).padStart(2,'0');
-   worldClockPlannerTitle.textContent='🗓️ '+worldClockText('meeting');
-   worldClockPlannerDateLabel.textContent=worldClockText('date');worldClockPlannerTimeLabel.textContent=worldClockText('time');worldClockPlannerTargetLabel.textContent=worldClockText('target');
-   updateWorldClockMeeting();
-  }
-  function updateWorldClockMeeting(){
-   var dateValue=worldClockPlannerDate.value,timeValue=worldClockPlannerTime.value,zone=worldClockPlannerTarget.value;
-   if(!dateValue||!timeValue||!zone){worldClockPlannerResult.textContent='—';return;}
-   var d=dateValue.split('-').map(Number),t=timeValue.split(':').map(Number),utc=Date.UTC(d[0],d[1]-1,d[2],t[0],t[1])-330*60000,targetDate=new Date(utc);
-   try{
-    var targetTime=new Intl.DateTimeFormat(language()==='hindi'?'hi-IN':language()==='english'?'en':'en-IN',{weekday:'long',day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true,timeZone:zone}).format(targetDate);
-    var city=worldClockCities.find(function(item){return item.zone===zone;});
-    worldClockPlannerResult.textContent=worldClockText('converted')+' · '+(city?city.name:zone)+': '+targetTime;
-   }catch(err){worldClockPlannerResult.textContent='—';}
-  }
-  worldClockPlannerDate.addEventListener('change',updateWorldClockMeeting);worldClockPlannerTime.addEventListener('change',updateWorldClockMeeting);worldClockPlannerTarget.addEventListener('change',updateWorldClockMeeting);
   function renderWorldClock(){
    var localeMap={roman:'en-IN',english:'en',hindi:'hi-IN',urdu:'ur-PK',arabic:'ar',bengali:'bn-BD',gujarati:'gu-IN',marathi:'mr-IN',tamil:'ta-IN',telugu:'te-IN'};
    var activeLocale=localeMap[language()]||'en-IN',now=new Date();
@@ -1731,15 +1682,15 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     favourite.addEventListener('click',function(){if(worldClockFavouriteZones.has(city.zone))worldClockFavouriteZones.delete(city.zone);else worldClockFavouriteZones.add(city.zone);saveWorldClockFavourites();renderWorldClock();});
     var remove=el('button',{type:'button','aria-label':worldClockText('remove')+' '+city.name},'−');
     remove.style.cssText='width:34px;height:36px;border:2px solid #c77;border-radius:9px;background:linear-gradient(145deg,#fff,#f6e8e8);color:#7d2424;font-size:22px;font-weight:1000;box-shadow:0 2px 0 #b77;';
-    remove.addEventListener('click',function(){if(worldClockCities.length<=1)return;worldClockCities.splice(worldClockCities.indexOf(city),1);saveWorldClockCities();worldClockFavouriteZones.delete(city.zone);saveWorldClockFavourites();refreshWorldClockPlanner();refreshWorldClockOptions();renderWorldClock();});
+    remove.addEventListener('click',function(){if(worldClockCities.length<=1)return;worldClockCities.splice(worldClockCities.indexOf(city),1);saveWorldClockCities();worldClockFavouriteZones.delete(city.zone);saveWorldClockFavourites();refreshWorldClockOptions();renderWorldClock();});
     actions.append(favourite,remove);row.append(info,actions);worldClockRows.appendChild(row);
    });
-   refreshWorldClockPlanner();
+   
   }
     worldClockBtn.addEventListener('click',function(e){
    e.preventDefault();e.stopPropagation();
    worldClockBtn.textContent=worldClockText('button');
-   worldClockSearch.value='';refreshWorldClockPlanner();refreshWorldClockOptions();renderWorldClock();
+   worldClockSearch.value='';refreshWorldClockOptions();renderWorldClock();
    worldClockModal.hidden=false;worldClockModal.style.display='flex';
    if(worldClockTimer)clearInterval(worldClockTimer);
    worldClockTimer=setInterval(function(){
