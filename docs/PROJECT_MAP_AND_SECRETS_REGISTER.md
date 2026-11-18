@@ -1,3 +1,13 @@
+# My Diary Note Search — show results directly below the search bar (Web Update pending, 2026-11-19)
+
+- Corrected the earlier misunderstanding: user wants the matching Note search results list itself moved immediately below the Note search bar, exactly like Personal Calendar and Smart Reminder move their filtered result list directly below their search panel while a query is entered.
+- During a Note search, the existing filtered notes list is temporarily moved immediately after the search input and shown there. When the search is cleared, the list returns to its original position after the All Notes control and its previous visibility is restored.
+- Reverted the previous extra relevance sorting so the original pinned/favourite and updated-time order remains unchanged. Search matching, category filter, note cards/actions, editor, saved notes, multi-select, Note Lock, and other Diary features remain unchanged.
+- Backup branch: `backup/before-note-search-below-bar-2026-11-19`. Working branch: `fix/note-search-results-below-bar-2026-11-19`.
+- Web-only layout/DOM placement change; APK/native code and saved note data are not modified. Physical Android phone testing remains pending user confirmation.
+
+---
+
 # My Diary Notes — best matching search result first (Web Update 343, 2026-11-19)
 
 - User asked that when searching for a note name or note text, the matching note should appear at the top immediately below the Note search bar; everything else should remain as it is.
