@@ -1231,14 +1231,27 @@ class DiaryReminderReceiver : BroadcastReceiver() {
                 return
             }
             DiaryReminderScheduler.ACTION_AUTO_SNOOZE -> {
+                // This event IS the next repeat: ring now instead of scheduling another
+                // ACTION_ALARM (which would add a second Snooze interval).
                 DiaryReminderScheduler.cancelAutoSnooze(context, id)
                 val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 manager.cancel((id.hashCode() and 0x3fffffff) + 10)
                 DiaryReminderSoundService.stop(context)
-                // Count unanswered automatic repeats against the same user-selected repeat limit.
-                // The selected Snooze interval remains the delay before each next alarm.
-                if (snoozeUsed < snoozeLimit) {
-                    DiaryReminderScheduler.schedule(context, id, title, details, System.currentTimeMillis() + snoozeMinutes.toLong() * 60L * 1000L, soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, snoozeUsed + 1, repeatDaily, dailyAnchorAt)
+                val nextSnoozeUsed = (snoozeUsed + 1).coerceAtMost(snoozeLimit)
+                if (repeatDaily) {
+                    DiaryReminderScheduler.schedule(context, id, title, details, DiaryReminderScheduler.nextDailyAt(dailyAnchorAt), soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, 0, true, dailyAnchorAt)
+                } else {
+                    DiaryReminderScheduler.remove(context, id)
+                }
+                DiaryReminderScheduler.showNotification(context, id, title, details, soundUri, snoozeMinutes, snoozeLimit, nextSnoozeUsed, ringDurationSeconds, ringVolumePercent, repeatDaily, dailyAnchorAt)
+                DiaryReminderSoundService.start(context, soundUri, ringDurationSeconds, ringVolumePercent)
+                if (nextSnoozeUsed < snoozeLimit) {
+                    DiaryReminderScheduler.scheduleAutoSnooze(
+                        context, id, title, details, soundUri,
+                        System.currentTimeMillis() + snoozeMinutes.toLong() * 60L * 1000L,
+                        snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, nextSnoozeUsed,
+                        repeatDaily, dailyAnchorAt
+                    )
                 }
                 return
             }
