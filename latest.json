@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 321,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "f56fb658f96bb705bb8aa13f18ebfc4770d45f7b3025cd67b25e159ebce73f4d",
+  "webSha256": "a36405b56ad40bbf6b2e895c7b50a408cd08523b369dd2a51d7843d0d54b1ca6",
   "webReleaseNotes": "My Diary web update 321: Custom weekday repeat for Personal Calendar and Smart Reminder. Older APKs without the native weekday scheduler keep their existing repeat choices. Saved data and app identity are preserved."
 }
