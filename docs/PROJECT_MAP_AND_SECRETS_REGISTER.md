@@ -1,3 +1,16 @@
+# Smart Reminder saved Date + Time shown as separate 3D badges — Web Update 333 (2026-11-18)
+
+- User approved matching the **⏰ Smart Reminder** saved-entry Date and Time buttons to the existing raised 3D badge styling in **📅 Personal Calendar**. The reminder title stays above; underneath, the date and time are separate badges. Date uses the existing DD-MM-YYYY display formatter; time uses the existing saved `record.time` value.
+- Reused the existing Calendar badge CSS/classes only. The Personal Calendar renderer and its styling were not changed. The previous single plain-text combined date/time line in Smart Reminder was replaced by a date badge and a time badge.
+- Preservation: no saved entries or stored date/time values were rewritten. Reminder edit inputs, recurrence/custom weekdays, alarm scheduling, reminder time, ringtone, snooze, notifications, notes/photos, PINs/locks, native Android code and unrelated Diary features were not intentionally changed.
+- Implementation backup branch: `backup/before-smart-reminder-date-time-3d-badges-2026-11-18`. Feature branch: `fix/smart-reminder-date-time-3d-badges-2026-11-18`. PR #224 merged as `940ada628bc8efb7a9d03acb996b6b4d66ef3ad0`.
+- Only `web-source/index.html` and `diary-web/index.html` changed for the feature. After publisher sync, both files are byte-identical at Git blob SHA `008496c75cc189f1f308a82b515d9785dcc82be7`. Publisher commit `8e1234c59e8baab6c12a8145d70d1f4176e517fd` independently recorded HTML SHA-256 `e2589c917c393a92cd328cb0be9aa6b97598cb621e35807a4064221f23f32a5c` in `latest.json`.
+- This release metadata advances the web feed to **Web Update 333**. APK fields remain as in the current feed: **1.0.194 / versionCode 193**, APK SHA-256 `8a20c8d51938f06067f1a9715f5bae6b382d9bbdcc0c38668e31ef8146396b80`; no APK version change is part of this web-only UI task.
+- Static verification: the new reminder date and time badge elements are present; both source and mirror match; the previous combined date/time renderer is absent; the Calendar badge CSS remains present; date formatter, original edit date field, and reminder details rendering remain present. **Physical Android phone testing is pending user confirmation**; do not claim device-side visual PASS until the user checks saved Smart Reminder entries.
+- Metadata backup branch: `backup/before-smart-reminder-date-time-register-2026-11-18`.
+
+---
+
 # Personal Calendar + Smart Reminder — saved-entry dates displayed DD-MM-YYYY (Web Update 332, 2026-11-18)
 
 - User asked why dates inside saved entries in both **📅 Personal Calendar** and **⏰ Smart Reminder** appeared in ISO order (for example, `2026-11-19`), and approved changing the visible order to **DD-MM-YYYY** (for example, `19-11-2026`).
