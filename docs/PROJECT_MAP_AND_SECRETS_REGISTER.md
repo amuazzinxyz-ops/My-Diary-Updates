@@ -4422,3 +4422,12 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Only `web-source/index.html` and its required identical mirror `diary-web/index.html` were changed. Exact main-branch verification: both files are byte-identical, Git blob SHA `01f104be46927405315592cf7c65ab4b37cf1fe3`, 525,779 bytes. No recurrence scheduler, saved Calendar/Reminder entries, APK/native code, PINs, locks, notes, photos, or unrelated features were changed.
 - Web publisher workflow run `44311786468` (run #382) completed successfully. Published **Web Update 323**; `latest.json` advertises web SHA-256 `bedec7af5e9ada4230a387cb7543d99280423bc0be77a2940f504e615e41434a`. APK remains **1.0.194 / versionCode 193**; no APK rebuild is required for this web-only UI change.
 - Physical-phone testing is still pending. Do not claim device-side PASS until the user confirms that selecting a weekday closes the panel and reopening it preserves the previous selections in both features.
+
+
+# Personal Calendar + Smart Reminder Custom weekday picker remains open for multi-select — correction (2026-11-18)
+
+- User clarified that the **Custom weekday picker must remain open after selecting or deselecting a day**, because multiple weekdays need to be selected in one visit. The earlier Web Update 323 auto-close-on-selection behaviour was incorrect for this multi-select use case.
+- Corrected only the shared `mfRepeatDaysControl` weekday checkbox handler: selecting/deselecting a weekday no longer closes the panel. The existing visible **×** remains the explicit close control; after closing, the existing **✎ Custom din badlein** control reopens the picker with prior selections checked.
+- Applies identically to **Personal Calendar** and **Smart Reminder** because both use the same shared control. No recurrence calculation, saved entries, reminder scheduling, alarm settings, PINs, locks, notes, photos, native APK code, or unrelated UI was changed.
+- Snapshot branch: `backup/before-custom-weekday-multiselect-2026-11-18`. Working branch: `fix/custom-weekday-multiselect-stay-open-2026-11-18`.
+- Only `web-source/index.html` and its required identical mirror `diary-web/index.html` are intended to change. Source/mirror equality, static checks, PR merge, Web Update feed publication and SHA-256 verification are pending; do not claim publication until verified. Physical-phone testing remains pending.

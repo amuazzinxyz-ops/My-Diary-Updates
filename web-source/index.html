@@ -2143,7 +2143,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    var edit=mfEl('button',{type:'button',class:'diary-me-repeat-days-edit',hidden:'hidden'},'✎ Custom din badlein');
    [{v:2,l:'Monday'},{v:3,l:'Tuesday'},{v:4,l:'Wednesday'},{v:5,l:'Thursday'},{v:6,l:'Friday'},{v:7,l:'Saturday'},{v:1,l:'Sunday'}].forEach(function(day){
     var label=mfEl('label',{class:'diary-me-repeat-day'}),input=mfEl('input',{type:'checkbox',name:'repeatCustomDay',value:String(day.v)});
-    checks[day.v]=input;input.addEventListener('change',function(){api.show(false,true);});
+    checks[day.v]=input;
     label.appendChild(input);label.appendChild(mfEl('span',{},day.l));grid.appendChild(label);
    });
    wrap.appendChild(grid);parent.appendChild(wrap);parent.appendChild(edit);
