@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 334,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "2996d26895974a53cf78b012b19ada78b837efb15a857da6febf247ac3fc1fd5",
+  "webSha256": "d5f7c9dcc5e459e07662ab25fd019f95b1fb20b7f5ac40a7b15865cd4cab1fe6",
   "webReleaseNotes": "Smart Reminder saved entries now show the name in its own gold 3D badge above separate Date and Time 3D badges, matching Personal Calendar badge styling. Long names wrap within the name badge. Date remains DD-MM-YYYY. Saved values and reminder behaviour remain unchanged."
 }
