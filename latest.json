@@ -4,7 +4,7 @@
   "versionCode": 193,
   "versionName": "1.0.194",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
-  "sha256": "8658fb0065dc0d05ac9cd9ba0ff19bebd1091845ad68ea3c31ccb3a3f41fb0f7",
+  "sha256": "4471c8dc9dfb1b1a7344842468c3afdc4c9e18902f70fa3ae0fdcd421f72fefc",
   "releaseNotes": "My Diary 1.0.194: Personal Calendar and Smart Reminder support Custom weekday recurrence. All previous repeat options for each section, saved entries, snooze timing and limits, ringtone, notifications and unrelated features are preserved.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 322,
