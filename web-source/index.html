@@ -1562,14 +1562,58 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   worldClockCard.append(worldClockHead,worldClockRows,worldClockPlanner,worldClockControls);
   worldClockModal.appendChild(worldClockCard);
   ov.appendChild(worldClockModal);
+  function worldClockNormalizeSearch(value){
+   return String(value||'').normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').toLocaleLowerCase().replace(/[^a-z0-9]+/g,' ').trim().replace(/\\s+/g,' ');
+  }
+  function worldClockEditDistance(a,b){
+   if(a===b)return 0;
+   if(Math.abs(a.length-b.length)>2)return 99;
+   var prev2=null,prev=Array.from({length:b.length+1},function(_,i){return i;});
+   for(var i=1;i<=a.length;i++){
+    var cur=[i],rowMin=i;
+    for(var j=1;j<=b.length;j++){
+     var cost=a.charAt(i-1)===b.charAt(j-1)?0:1;
+     var val=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+cost);
+     if(i>1&&j>1&&a.charAt(i-1)===b.charAt(j-2)&&a.charAt(i-2)===b.charAt(j-1)&&prev2)val=Math.min(val,prev2[j-2]+1);
+     cur[j]=val;if(val<rowMin)rowMin=val;
+    }
+    if(rowMin>2)return 99;
+    prev2=prev;prev=cur;
+   }
+   return prev[b.length];
+  }
+  function worldClockSearchScore(city,query){
+   var name=worldClockNormalizeSearch(city.name),zone=worldClockNormalizeSearch(city.zone),compactQuery=query.replace(/ /g,''),compactName=name.replace(/ /g,''),compactZone=zone.replace(/ /g,'');
+   if(name.indexOf(query)>=0)return 0;
+   if(zone.indexOf(query)>=0)return 1;
+   if(compactName.indexOf(compactQuery)>=0||compactZone.indexOf(compactQuery)>=0)return 2;
+   var queryWords=query.split(' '),candidateWords=(name+' '+zone.replace(/ /g,' ')).split(' '),best=99;
+   queryWords.forEach(function(q){
+    candidateWords.forEach(function(word){
+     if(!word)return;
+     if(word.indexOf(q)===0){best=Math.min(best,3);return;}
+     if(q.length>=3&&word.length>=3){
+      var limit=q.length>=8?2:1;
+      if(Math.abs(q.length-word.length)<=limit)best=Math.min(best,4+worldClockEditDistance(q,word));
+     }
+    });
+   });
+   if(queryWords.length===1&&compactQuery.length>=4){
+    candidateWords.forEach(function(word){if(word.length>=4&&Math.abs(word.length-compactQuery.length)<=2)best=Math.min(best,4+worldClockEditDistance(compactQuery,word));});
+   }
+   return best;
+  }
   function refreshWorldClockOptions(){
    worldClockSearch.placeholder=worldClockText('search');
    worldClockResults.replaceChildren();
-   var query=(worldClockSearch.value||'').trim().toLocaleLowerCase();
+   var query=worldClockNormalizeSearch(worldClockSearch.value);
    if(query.length<2){var hint=el('small',{},worldClockText('hint'));hint.style.cssText='padding:6px 2px;color:#66527b;font-size:12px;font-weight:800;';worldClockResults.appendChild(hint);return;}
-   var matches=worldClockOptions.filter(function(city){return !worldClockCities.some(function(saved){return saved.zone===city.zone;})&&(city.name.toLocaleLowerCase().indexOf(query)>=0||city.zone.toLocaleLowerCase().indexOf(query)>=0);}).slice(0,30);
+   var matches=worldClockOptions.map(function(city){return {city:city,score:worldClockSearchScore(city,query)};})
+    .filter(function(item){return item.score<99&&!worldClockCities.some(function(saved){return saved.zone===item.city.zone;});})
+    .sort(function(a,b){return a.score-b.score||a.city.name.localeCompare(b.city.name);}).slice(0,30);
    if(!matches.length){var empty=el('small',{},'No matching city found');empty.style.cssText='padding:6px 2px;color:#66527b;font-size:12px;font-weight:800;';worldClockResults.appendChild(empty);return;}
-   matches.forEach(function(city){
+   matches.forEach(function(item){
+    var city=item.city;
     var addCity=el('button',{type:'button',class:'diary-world-clock-city-option'},'＋ '+city.name);
     addCity.style.cssText='width:100%;min-height:38px;padding:7px 9px;text-align:left;border:1px solid #cbb9df;border-radius:8px;background:linear-gradient(145deg,#fff,#f5efff);color:#35145f;font-size:13px;font-weight:900;';
     addCity.addEventListener('click',function(){if(worldClockCities.some(function(saved){return saved.zone===city.zone;}))return;worldClockCities.push({name:city.name,zone:city.zone});saveWorldClockCities();worldClockSearch.value='';refreshWorldClockPlanner();refreshWorldClockOptions();renderWorldClock();});
