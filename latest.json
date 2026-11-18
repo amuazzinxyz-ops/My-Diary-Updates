@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 332,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "e1450da7b2323c01421be4c3ee7b253d38ed7b412f16b1768b0f0adf3caf58e5",
+  "webSha256": "e2589c917c393a92cd328cb0be9aa6b97598cb621e35807a4064221f23f32a5c",
   "webReleaseNotes": "Personal Calendar and Smart Reminder: saved entry dates now display as DD-MM-YYYY (day-month-year), for example 19-11-2026. Stored dates, edit values, recurrence calculations and alarm timing remain unchanged."
 }
