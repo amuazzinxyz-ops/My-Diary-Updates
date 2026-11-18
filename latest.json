@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 333,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "e2589c917c393a92cd328cb0be9aa6b97598cb621e35807a4064221f23f32a5c",
+  "webSha256": "2996d26895974a53cf78b012b19ada78b837efb15a857da6febf247ac3fc1fd5",
   "webReleaseNotes": "Smart Reminder saved entries now show the title above two separate 3D badges for the date and time, matching Personal Calendar badge styling. Date display remains DD-MM-YYYY. Saved values and reminder behaviour remain unchanged."
 }
