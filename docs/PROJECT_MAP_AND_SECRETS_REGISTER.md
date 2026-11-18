@@ -1,3 +1,13 @@
+# Personal Calendar + Smart Reminder — saved-entry text made readable (Web Update 327, 2026-11-18)
+
+- User reported that text shown inside both new and previously saved entries looked too small. Scoped the correction to **📅 Personal Calendar** and **⏰ Smart Reminder** saved-entry cards: title **18px**, written/details text **16px**, and secondary entry details **14px**, with clear line-height. The existing bold-text modal scope applies to both old and new entries.
+- This is a display-only CSS adjustment. No entry data, date/time, recurrence, alarm scheduling, reminder settings, sound, snooze, notifications, PIN/locks, notes/photos, native Android code or unrelated Diary screens were changed.
+- Backup branch: `backup/before-calendar-reminder-entry-text-size-2026-11-18`. Working branch: `fix/calendar-reminder-saved-entry-text-size-2026-11-18`. Source/mirror baseline was byte-identical at blob SHA `3c8f5c35678c401d1b17560f0039592590752e35`.
+- Intended release: **Web Update 327**. Source/mirror SHA-256: `c5dde45bfe8739936b6bd14ac0466b5452865dbf9cc7fdd89bd3fb7938e4af22`. APK remains **1.0.194 / versionCode 193**; no APK rebuild is intended for this web-only styling change.
+- Static source/mirror and update-feed verification, publisher status, and physical-phone visual test status will be recorded after PR review/merge. Do not claim phone-side PASS until user confirms.
+
+---
+
 # Personal Calendar + Smart Reminder — hide event reminder settings from saved entries (Web Update 326, 2026-11-18)
 
 - User clarified that the **“Event ke waqt yaad dilayein”** label must not appear inside saved entries in either **📅 Personal Calendar** or **⏰ Smart Reminder**, including entries already saved and all future saved entries.
