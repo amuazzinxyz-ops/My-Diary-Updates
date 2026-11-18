@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 323,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "bedec7af5e9ada4230a387cb7543d99280423bc0be77a2940f504e615e41434a",
+  "webSha256": "77b333ee5e5b928a31d645f1afb2608807a3bddbb68ded23c2e76b448200db99",
   "webReleaseNotes": "My Diary web update 323: In Personal Calendar and Smart Reminder, the Custom weekday picker closes after a weekday is selected, has an × close control, and can be reopened to select additional days. Existing selections and recurrence behavior are preserved."
 }
