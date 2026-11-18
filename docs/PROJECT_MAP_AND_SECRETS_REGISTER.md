@@ -5,6 +5,7 @@
 - This is a web-only display change. No saved data, entry fields, date/time, recurrence, alarm scheduling, ringtone, snooze, notifications, PIN/locks, notes/photos, native Android code or unrelated Diary features were intentionally changed.
 - Backup branch: `backup/before-calendar-reminder-dark-black-text-2026-11-18`. Working branch: `fix/calendar-reminder-dark-black-entry-text-2026-11-18`. PR #209 merged as `8d59b84cd637e88994f7b342735a740a6db5838e`.
 - Publisher workflow run **44325205438** completed successfully. It synchronized `diary-web/index.html` with `web-source/index.html` (both Git blob SHA `5ff172a18db34b9b84ea7d73671b702fd5bb9170`) and published **Web Update 328**. `latest.json` advertises SHA-256 `4cad1df86b85258fa111db6a0f8b7391c1b4727dc391765de3b486e1ad19a12e`.
+- The repository's APK workflow was also auto-triggered by the main-branch push, but its pre-build guard stopped because the publisher had not yet synchronized the web mirror at that moment. No APK build, artifact or APK/feed version change occurred. This was a transient ordering check during the web-only publication; after the publisher completed, source and mirror were verified identical. No APK rebuild is needed for this CSS-only change.
 - Physical-phone visual testing remains pending user confirmation. Do not claim device-side PASS until the user tests both sections.
 - No MUAZZIN project files were changed.
 
