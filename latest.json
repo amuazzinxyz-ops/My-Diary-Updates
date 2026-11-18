@@ -7,8 +7,8 @@
   "sha256": "b21819e3af1a8a4338218ce70604b4bbd056888df3e23633c5b3d05a8e881dd4",
   "releaseNotes": "My Diary 1.0.193: Smart Reminder and Personal Calendar ring unanswered repeats exactly at the selected Snooze interval and stop after the configured repeat limit. Manual Snooze shares the same limit; Done cancels repeats. Existing daily repeat, ringtone, saved data and unrelated features are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 314,
+  "webVersion": 315,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "144f8110217fa625603e12517d648283cec1c94b3c1d89baaea5c335f65c4f7c",
-  "webReleaseNotes": "My Diary Web Update 314: Personal Calendar and Smart Reminder Edit controls (selected count, Delete Selected, Done) appear at the top and stay visible while scrolling. Existing saved data and alarm/reminder behavior are preserved."
+  "webSha256": "006e1489d432b2f9a8a86252e4ecc7fe99e27453dd8e55daa3c01b77b0e23fa4",
+  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
