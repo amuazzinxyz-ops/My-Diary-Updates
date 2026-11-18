@@ -1492,6 +1492,107 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   mePanel.appendChild(checkUpdatesBtn);
   var refreshDiaryBtn=el('button',{id:'diaryDiaryRefreshBtn',type:'button'},t('refresh'));
   mePanel.appendChild(refreshDiaryBtn);
+  /* Optional, self-contained World Clock tool. Removing this block and its button leaves all existing Me tools untouched. */
+  var worldClockCopy={
+   roman:{button:'🌍 World Clock',title:'🌍 World Clock',choose:'Shehar chunein',add:'＋ Shehar Add Karein',remove:'Hataayein',close:'Band Karein'},
+   english:{button:'🌍 World Clock',title:'🌍 World Clock',choose:'Choose a city',add:'＋ Add City',remove:'Remove',close:'Close'},
+   hindi:{button:'🌍 विश्व घड़ी',title:'🌍 विश्व घड़ी',choose:'शहर चुनें',add:'＋ शहर जोड़ें',remove:'हटाएँ',close:'बंद करें'}
+  };
+  function worldClockText(key){var lang=language();return (worldClockCopy[lang]&&worldClockCopy[lang][key])||worldClockCopy.roman[key];}
+  var worldClockBtn=el('button',{id:'diaryWorldClockBtn',type:'button',class:'diary-me-feature-btn'},worldClockText('button'));
+  mePanel.appendChild(worldClockBtn);
+  var worldClockCities=[
+   {name:'Mumbai · India',zone:'Asia/Kolkata'},
+   {name:'Dubai · UAE',zone:'Asia/Dubai'},
+   {name:'London · UK',zone:'Europe/London'},
+   {name:'New York · USA',zone:'America/New_York'},
+   {name:'Tokyo · Japan',zone:'Asia/Tokyo'}
+  ];
+  var worldClockOptions=[
+   {name:'Singapore',zone:'Asia/Singapore'},
+   {name:'Riyadh · Saudi Arabia',zone:'Asia/Riyadh'},
+   {name:'Kuala Lumpur · Malaysia',zone:'Asia/Kuala_Lumpur'},
+   {name:'Sydney · Australia',zone:'Australia/Sydney'},
+   {name:'Paris · France',zone:'Europe/Paris'},
+   {name:'Toronto · Canada',zone:'America/Toronto'},
+   {name:'Istanbul · Türkiye',zone:'Europe/Istanbul'},
+   {name:'Doha · Qatar',zone:'Asia/Qatar'}
+  ];
+  var worldClockTimer=null;
+  var worldClockModal=el('section',{id:'diaryWorldClockModal',hidden:'hidden','aria-modal':'true','role':'dialog','aria-label':'World Clock'});
+  worldClockModal.style.cssText='position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;box-sizing:border-box;padding:calc(14px + env(safe-area-inset-top,0px)) 12px calc(14px + env(safe-area-inset-bottom,0px));background:rgba(20,12,32,.62);overflow:auto;';
+  var worldClockCard=el('div',{id:'diaryWorldClockCard'});
+  worldClockCard.style.cssText='width:min(100%,460px);max-height:100%;overflow:auto;box-sizing:border-box;padding:15px;border:3px solid #d4af37;border-radius:18px;background:linear-gradient(145deg,#fffdf7,#f1e8ff);color:#35145f;box-shadow:inset 0 2px 0 #fff,0 4px 0 #7540b8,0 10px 24px #0005;';
+  var worldClockHead=el('div',{style:'display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;'});
+  var worldClockTitle=el('strong',{id:'diaryWorldClockTitle'},worldClockText('title'));
+  worldClockTitle.style.cssText='font-size:19px;font-weight:1000;';
+  var worldClockClose=el('button',{type:'button',id:'diaryWorldClockClose'},'×');
+  worldClockClose.style.cssText='min-width:40px;min-height:40px;border:2px solid #d4af37;border-radius:10px;background:linear-gradient(145deg,#fff,#eadcff);color:#35145f;font-size:25px;font-weight:1000;box-shadow:0 3px 0 #7540b8;';
+  worldClockHead.append(worldClockTitle,worldClockClose);
+  var worldClockRows=el('div',{id:'diaryWorldClockRows'});
+  worldClockRows.style.cssText='display:flex;flex-direction:column;gap:8px;';
+  var worldClockControls=el('div',{style:'display:flex;gap:7px;align-items:center;margin-top:12px;'});
+  var worldClockSelect=el('select',{id:'diaryWorldClockSelect','aria-label':'Choose a city'});
+  worldClockSelect.style.cssText='flex:1;min-width:0;min-height:42px;padding:7px;border:2px solid #9b7ac5;border-radius:9px;background:#fff;color:#241a31;font-size:15px;font-weight:800;';
+  var worldClockAdd=el('button',{type:'button',id:'diaryWorldClockAdd'},worldClockText('add'));
+  worldClockAdd.style.cssText='min-height:42px;padding:7px 10px;border:2px solid #d4af37;border-radius:9px;background:linear-gradient(145deg,#fff4c8,#e4c36b);color:#382700;font-size:13px;font-weight:1000;box-shadow:0 3px 0 #9b7415;white-space:nowrap;';
+  worldClockControls.append(worldClockSelect,worldClockAdd);
+  worldClockCard.append(worldClockHead,worldClockRows,worldClockControls);
+  worldClockModal.appendChild(worldClockCard);
+  ov.appendChild(worldClockModal);
+  function refreshWorldClockOptions(){
+   worldClockSelect.replaceChildren(el('option',{value:''},worldClockText('choose')));
+   worldClockOptions.forEach(function(city){if(!worldClockCities.some(function(saved){return saved.zone===city.zone;}))worldClockSelect.appendChild(el('option',{value:city.zone},city.name));});
+   worldClockAdd.textContent=worldClockText('add');
+   worldClockAdd.disabled=worldClockSelect.options.length<2;
+   worldClockAdd.style.opacity=worldClockAdd.disabled?'.5':'1';
+  }
+  function renderWorldClock(){
+   var localeMap={roman:'en-IN',english:'en',hindi:'hi-IN',urdu:'ur-PK',arabic:'ar',bengali:'bn-BD',gujarati:'gu-IN',marathi:'mr-IN',tamil:'ta-IN',telugu:'te-IN'};
+   var activeLocale=localeMap[language()]||'en-IN';
+   worldClockTitle.textContent=worldClockText('title');
+   worldClockClose.setAttribute('aria-label',worldClockText('close'));
+   worldClockRows.replaceChildren();
+   worldClockCities.forEach(function(city,index){
+    var now=new Date();
+    var row=el('div',{class:'diary-world-clock-row'});
+    row.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px;border:1px solid #cbb9df;border-left:4px solid #d4af37;border-radius:11px;background:linear-gradient(145deg,#fff,#f5efff);box-shadow:inset 0 1px 0 #fff,0 2px 0 #d8c7ea;';
+    var info=el('div',{style:'min-width:0;flex:1;'});
+    var cityName=el('strong',{},city.name);
+    cityName.style.cssText='display:block;font-size:14px;font-weight:1000;color:#35145f;';
+    var timeText=el('div',{});
+    timeText.style.cssText='font-size:25px;line-height:1.25;font-weight:1000;color:#24133e;font-variant-numeric:tabular-nums;';
+    try{timeText.textContent=new Intl.DateTimeFormat(activeLocale,{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true,timeZone:city.zone}).format(now);}catch(err){timeText.textContent='--:--:--';}
+    var dateText=el('small',{});
+    dateText.style.cssText='font-size:12px;font-weight:800;color:#66527b;';
+    try{dateText.textContent=new Intl.DateTimeFormat(activeLocale,{weekday:'short',day:'2-digit',month:'short',year:'numeric',timeZone:city.zone}).format(now);}catch(err){dateText.textContent='';}
+    info.append(cityName,timeText,dateText);
+    var remove=el('button',{type:'button','aria-label':worldClockText('remove')+' '+city.name},'−');
+    remove.style.cssText='flex:0 0 36px;width:36px;height:36px;border:2px solid #c77;border-radius:9px;background:linear-gradient(145deg,#fff,#f6e8e8);color:#7d2424;font-size:22px;font-weight:1000;box-shadow:0 2px 0 #b77;';
+    remove.addEventListener('click',function(){if(worldClockCities.length<=1)return;worldClockCities.splice(index,1);refreshWorldClockOptions();renderWorldClock();});
+    row.append(info,remove);
+    worldClockRows.appendChild(row);
+   });
+  }
+  worldClockBtn.addEventListener('click',function(e){
+   e.preventDefault();e.stopPropagation();
+   worldClockBtn.textContent=worldClockText('button');
+   refreshWorldClockOptions();renderWorldClock();
+   worldClockModal.hidden=false;
+   if(worldClockTimer)clearInterval(worldClockTimer);
+   worldClockTimer=setInterval(function(){
+    if(worldClockModal.hidden||!ov.classList.contains('open')){clearInterval(worldClockTimer);worldClockTimer=null;return;}
+    renderWorldClock();
+   },1000);
+  });
+  worldClockAdd.addEventListener('click',function(){
+   var zone=worldClockSelect.value;
+   var city=worldClockOptions.find(function(item){return item.zone===zone;});
+   if(!city||worldClockCities.some(function(saved){return saved.zone===zone;}))return;
+   worldClockCities.push({name:city.name,zone:city.zone});
+   refreshWorldClockOptions();renderWorldClock();
+  });
+  worldClockClose.addEventListener('click',function(){worldClockModal.hidden=true;if(worldClockTimer){clearInterval(worldClockTimer);worldClockTimer=null;}});
   /* Calendar View: show saved notes by the day they were first written. */
   var calendarBtn=el('button',{id:'diaryCalendarBtn',type:'button','aria-expanded':'false','aria-controls':'diaryCalendarPanel'},t('calendar'));
   var calendarPanel=el('section',{id:'diaryCalendarPanel',hidden:'hidden','aria-label':t('calendarLabel')});
