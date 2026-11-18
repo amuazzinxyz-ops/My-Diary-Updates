@@ -1,3 +1,15 @@
+# Diary Me menu — removable World Clock added (Web Update 337, 2026-11-18)
+
+- User asked to add a World Clock inside the Diary **Me** button and requested that it be easy to remove if they do not like it.
+- Added a separate **🌍 World Clock** 3D button using the existing Me-feature button style. The clock opens in its own modal and shows live local time/date for Mumbai, Dubai, London, New York and Tokyo. Users can add or remove optional cities from a built-in list (Singapore, Riyadh, Kuala Lumpur, Sydney, Paris, Toronto, Istanbul and Doha).
+- Clock refreshes once per second only while open; its timer is cleared when the clock closes or the Diary overlay is closed. The modal is hidden by default. The feature is isolated behind its own button, DOM IDs and code block so it can be removed without altering existing Me tools.
+- Only `web-source/index.html` changed for implementation: 101 insertions, zero deletions. Backup branch: `backup/before-world-clock-me-button-2026-11-18`. Feature branch: `feature/me-world-clock-2026-11-18`. PR #232 merged as `4be346687152e20594661f0cb51fada0bb7b7b71`.
+- Static verification: isolated World Clock block compiles successfully; one button and one modal ID; add/remove handlers and timer cleanup are present. Existing Calendar scheduler and Smart Reminder code remain present.
+- Web publisher run `44367314835` completed successfully. Published **Web Update 337**. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `b7b40fe2fbc6a7d894ca3111e93a914369bbec84` (538,606 bytes). Publisher-verified web SHA-256: `dc16836b934b762e2cc43dafd96a261915a3b9e7217b564ab305e8987b4fb444`.
+- APK workflow `44367314798` was automatically triggered by the main-branch merge and was still running at the time of this entry. APK release/version must not be claimed changed until that workflow and the live feed are checked. Physical Android phone visual testing remains pending user confirmation.
+
+---
+
 # Personal Calendar saved entries — hide Reminder ON/OFF 3D status badge (Web Update 336, 2026-11-18)
 
 - User requested removing the 3D **Reminder ON/OFF** badge from saved entries in **📅 Personal Calendar**.
