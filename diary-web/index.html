@@ -1613,7 +1613,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   meFeatureMenuEdit.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();meFeatureBulkEdit=!meFeatureBulkEdit;if(!meFeatureBulkEdit)meFeatureSelectedIds.clear();meFeatureMenu.hidden=true;meFeatureMenuButton.setAttribute('aria-expanded','false');updateMeFeatureBulkUI();if(currentMeFeatureKind)renderMeFeatureList(currentMeFeatureKind);});
   meFeatureLock.hidden=true;meFeatureHead.append(meFeatureBack,meFeatureTitle,meFeatureManage,meFeatureLock,meFeatureMenuButton,meFeatureMenu);
   var meFeatureContent=el('div',{id:'diaryMeFeatureContent'});
-  meFeatureModal.append(meFeatureHead,meFeatureBulkBar,meFeatureContent);
+  meFeatureModal.append(meFeatureHead,meFeatureContent);
   ov.appendChild(meFeatureModal);
   meFeatureTypes.forEach(function(item){
    var button=el('button',{type:'button',class:'diary-me-feature-btn','data-me-feature':item.id},mf(item.key));
@@ -2527,7 +2527,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    meFeatureBulkEdit=false;meFeatureSelectedIds.clear();meFeatureMenu.hidden=true;meFeatureMenuButton.setAttribute('aria-expanded','false');
    meFeatureBack.textContent=mf('back');meFeatureLock.hidden=true;meFeatureManage.hidden=!meFeatureProtected(kind);meFeatureContent.replaceChildren();meFeatureStatus.textContent='';
    meFeatureSearchInput=null;meFeatureCategoryFilter=null;
-   if(kind==='memories'||kind==='documents'){meFeatureContent.appendChild(meFeatureTools(kind));meFeatureContent.appendChild(meFeatureForm(kind));}else{meFeatureContent.appendChild(meFeatureForm(kind));meFeatureContent.appendChild(meFeatureTools(kind));}meFeatureContent.append(meFeatureStatus,meFeatureList);updateMeFeatureBulkUI();
+   if(kind==='memories'||kind==='documents'){meFeatureContent.appendChild(meFeatureTools(kind));meFeatureContent.appendChild(meFeatureForm(kind));}else{meFeatureContent.appendChild(meFeatureForm(kind));meFeatureContent.appendChild(meFeatureTools(kind));}meFeatureContent.append(meFeatureBulkBar,meFeatureStatus,meFeatureList);updateMeFeatureBulkUI();
    meFeatureModal.hidden=false;meFeatureModal.scrollTop=0;meFeatureContent.scrollTop=0;mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');window.requestAnimationFrame(function(){meFeatureModal.scrollTop=0;meFeatureContent.scrollTop=0;});
    renderMeFeatureList(kind);
   }
@@ -4296,7 +4296,7 @@ input[name="diary-note-lock-pin"]::placeholder,#diaryMyNotesList input[name="dia
 .diary-me-feature-menu{position:absolute!important;right:0!important;top:46px!important;z-index:50!important;min-width:132px!important;padding:6px!important;border:2px solid #d4af37!important;border-radius:11px!important;background:#fff!important;box-shadow:0 4px 12px #30204433!important}
 .diary-me-feature-menu-edit{display:block!important;width:100%!important;min-height:42px!important;padding:8px 12px!important;border:1px solid #cbb9df!important;border-radius:8px!important;background:#f5edff!important;color:#35145f!important;font-weight:1000!important;text-align:left!important}
 .diary-me-feature-bulk-bar[hidden]{display:none!important}
-.diary-me-feature-bulk-bar{position:sticky!important;top:0!important;z-index:60!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;padding:9px 10px!important;border:2px solid #d4af37!important;border-radius:11px!important;background:#fff7d9!important;color:#513d0a!important}
+.diary-me-feature-bulk-bar{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;padding:9px 10px!important;border:2px solid #d4af37!important;border-radius:11px!important;background:#fff7d9!important;color:#513d0a!important}
 .diary-me-feature-bulk-bar strong{font-size:14px!important;font-weight:1000!important}
 .diary-me-feature-bulk-delete{min-height:38px!important;padding:7px 10px!important;border:2px solid #c77!important;border-radius:9px!important;background:linear-gradient(145deg,#fff,#f6e8e8)!important;color:#7d2424!important;font-weight:1000!important}
 .diary-me-feature-bulk-delete:disabled{opacity:.45!important}
