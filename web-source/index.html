@@ -2520,8 +2520,6 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
       var calendarTypeClass=record.type==='birthday'?' diary-calendar-type-birthday':(record.type==='anniversary'?' diary-calendar-type-anniversary':' diary-calendar-type-event');
       calendarBadges.appendChild(mfEl('span',{class:'diary-calendar-badge diary-calendar-type-badge'+calendarTypeClass},mf(record.type||'event')));
       if(record.time)calendarBadges.appendChild(mfEl('span',{class:'diary-calendar-badge diary-calendar-time-badge'},'⏰ '+record.time));
-      var reminderEnabled=record.remind===true;
-      calendarBadges.appendChild(mfEl('span',{class:'diary-calendar-badge diary-calendar-reminder-badge '+(reminderEnabled?'diary-calendar-reminder-on':'diary-calendar-reminder-off')},reminderEnabled?'🔔 Reminder ON':'🔕 Reminder OFF'));
       card.appendChild(calendarBadges);
       if(record.details)card.appendChild(mfEl('p',{},record.details));
       if(record.repeat&&record.repeat!=='none')card.appendChild(mfEl('small',{},t('calendarRepeat')+': '+t('repeat'+record.repeat.charAt(0).toUpperCase()+record.repeat.slice(1))));
