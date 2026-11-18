@@ -1,12 +1,16 @@
-# Diary World Clock — Meeting Time Planner removed (2026-11-19)
+# Diary World Clock — Meeting Time Planner removed (Web Update 342, 2026-11-19)
 
 - User asked to remove only **Meeting Time Planner** because it was not useful to them.
 - Removed the Meeting Time Planner panel, date/time/city controls, converted-time result, associated event listeners and refresh/conversion functions from the existing World Clock modal. Removed its unused translation labels.
-- Preserved the World Clock button/modal, global city/time-zone search (including typo-tolerant matching), saved city list, city add/remove, Favourite City, live clocks, day/night indication, Mumbai time difference, sunrise/sunset, and the one-second refresh behaviour. No other Me tools, Diary features, saved entries, city/favourite localStorage keys, Calendar, Smart Reminder, PINs/locks, photos, or APK/native code are intentionally changed.
-- Backup branch: `backup/before-meeting-time-planner-removal-2026-11-19`. Working branch: `remove/world-clock-meeting-time-planner-2026-11-19`.
-- Source edit is limited to `web-source/index.html`; publication, source/mirror equality and live feed verification are pending. Physical Android phone testing is pending user confirmation.
+- Preserved the World Clock button/modal, global city/time-zone search (including typo-tolerant matching), saved city list, city add/remove, Favourite City, live clocks, day/night indication, Mumbai time difference, sunrise/sunset, and the one-second refresh behaviour. No other Me tools, Diary features, saved entries, city/favourite localStorage keys, Calendar, Smart Reminder, PINs/locks, photos, or APK/native code were changed.
+- Backup branch: `backup/before-meeting-time-planner-removal-2026-11-19`. Working branch: `remove/world-clock-meeting-time-planner-2026-11-19`. PR #242 merged as `413795b80abf28af9715f3576cb052012f321bec`.
+- Exact feature diff: `web-source/index.html` only (8 additions, 57 deletions); Master Register updated separately. Static checks confirm all Meeting Time Planner code/UI references are absent and World Clock city search, typo-tolerant search, favourites, live clock, day/night, Mumbai time difference, sunrise/sunset and World Clock button remain.
+- Published as **Web Update 342**. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `10fcd9569657bb32850b63c56c3cca11c85fa5a1` (551,360 bytes). Live `latest.json` web SHA-256: `fd20d2f146def6692cba06577bcc57dc04495e45f3bad9aef425df44d14db75b`.
+- APK metadata remains **My Diary 1.0.194 / versionCode 193**, SHA-256 `51c3a68b6febf3a7e5f9aabbb997e5c32dad9c42bd53d45f17d8b128d88dd434`; no APK was rebuilt or published for this web-only removal.
+- Physical Android phone testing remains pending user confirmation. Do not claim device-side PASS until the user confirms the Meeting Time Planner is gone and the other World Clock tools still work.
 
 ---
+
 
 # Diary World Clock — Meeting Time Planner city selection stable (Web Update 341, 2026-11-19)
 
