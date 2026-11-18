@@ -10,5 +10,5 @@
   "webVersion": 319,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "4367839475b33d3ffada14eb466dd73d1734dde46464db26995920e2fd587722",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "My Diary Web Update 319: Smart Search moved above the Name field in Personal Calendar and Smart Reminder. Existing search and saved data preserved."
 }
