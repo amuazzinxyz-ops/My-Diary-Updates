@@ -1,3 +1,15 @@
+# Personal Calendar + Smart Reminder — dark-black saved and newly entered text (Web Update 328, 2026-11-18)
+
+- User requested that the text already written inside entries in **📅 Personal Calendar** and **⏰ Smart Reminder** be dark black, and that text entered in future/new or edited entries also appear dark black.
+- Added narrowly scoped CSS to the Calendar/Reminder modal only: saved-entry card text and descendants use `#000000`; text values in inputs, textareas and selects use `#000000` with a black caret. Existing bold styling and the saved-entry font sizes (title 18px, written text 16px, secondary details 14px) remain in place.
+- This is a web-only display change. No saved data, entry fields, date/time, recurrence, alarm scheduling, ringtone, snooze, notifications, PIN/locks, notes/photos, native Android code or unrelated Diary features were intentionally changed.
+- Backup branch: `backup/before-calendar-reminder-dark-black-text-2026-11-18`. Working branch: `fix/calendar-reminder-dark-black-entry-text-2026-11-18`. PR #209 merged as `8d59b84cd637e88994f7b342735a740a6db5838e`.
+- Publisher workflow run **44325205438** completed successfully. It synchronized `diary-web/index.html` with `web-source/index.html` (both Git blob SHA `5ff172a18db34b9b84ea7d73671b702fd5bb9170`) and published **Web Update 328**. `latest.json` advertises SHA-256 `4cad1df86b85258fa111db6a0f8b7391c1b4727dc391765de3b486e1ad19a12e`.
+- Physical-phone visual testing remains pending user confirmation. Do not claim device-side PASS until the user tests both sections.
+- No MUAZZIN project files were changed.
+
+---
+
 # Personal Calendar + Smart Reminder — saved-entry text made readable (Web Update 327, 2026-11-18)
 
 - User reported that text shown inside both new and previously saved entries looked too small. Scoped the correction to **📅 Personal Calendar** and **⏰ Smart Reminder** saved-entry cards: title **18px**, written/details text **16px**, and secondary entry details **14px**, with clear line-height. The existing bold-text modal scope applies to both old and new entries.
