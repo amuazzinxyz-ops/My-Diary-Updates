@@ -7,8 +7,8 @@
   "sha256": "51c3a68b6febf3a7e5f9aabbb997e5c32dad9c42bd53d45f17d8b128d88dd434",
   "releaseNotes": "My Diary 1.0.194 remains unchanged. Web Update 340 improves World Clock search with typo-tolerant city matching; all World Clock smart tools and existing Diary features remain.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 342,
+  "webVersion": 343,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "fd20d2f146def6692cba06577bcc57dc04495e45f3bad9aef425df44d14db75b",
-  "webReleaseNotes": "Web Update 342 removes only the World Clock Meeting Time Planner. World Clock city search, saved cities, favourites, live clocks, day/night, Mumbai time difference and sunrise/sunset remain."
+  "webSha256": "dbf645c49b4a9f04af3d2fc003d28af758ecd0e2471477e49627db8c45692bd7",
+  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
