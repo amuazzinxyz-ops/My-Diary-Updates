@@ -1520,7 +1520,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   ];
   var worldClockTimer=null;
   var worldClockModal=el('section',{id:'diaryWorldClockModal',hidden:'hidden','aria-modal':'true','role':'dialog','aria-label':'World Clock'});
-  worldClockModal.style.cssText='position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;box-sizing:border-box;padding:calc(14px + env(safe-area-inset-top,0px)) 12px calc(14px + env(safe-area-inset-bottom,0px));background:rgba(20,12,32,.62);overflow:auto;';
+  worldClockModal.style.cssText='position:fixed;inset:0;z-index:2147483647;display:none;align-items:center;justify-content:center;box-sizing:border-box;padding:calc(14px + env(safe-area-inset-top,0px)) 12px calc(14px + env(safe-area-inset-bottom,0px));background:rgba(20,12,32,.62);overflow:auto;';
   var worldClockCard=el('div',{id:'diaryWorldClockCard'});
   worldClockCard.style.cssText='width:min(100%,460px);max-height:100%;overflow:auto;box-sizing:border-box;padding:15px;border:3px solid #d4af37;border-radius:18px;background:linear-gradient(145deg,#fffdf7,#f1e8ff);color:#35145f;box-shadow:inset 0 2px 0 #fff,0 4px 0 #7540b8,0 10px 24px #0005;';
   var worldClockHead=el('div',{style:'display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;'});
@@ -1578,7 +1578,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    e.preventDefault();e.stopPropagation();
    worldClockBtn.textContent=worldClockText('button');
    refreshWorldClockOptions();renderWorldClock();
-   worldClockModal.hidden=false;
+   worldClockModal.hidden=false;worldClockModal.style.display='flex';
    if(worldClockTimer)clearInterval(worldClockTimer);
    worldClockTimer=setInterval(function(){
     if(worldClockModal.hidden||!ov.classList.contains('open')){clearInterval(worldClockTimer);worldClockTimer=null;return;}
@@ -1592,7 +1592,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    worldClockCities.push({name:city.name,zone:city.zone});
    refreshWorldClockOptions();renderWorldClock();
   });
-  worldClockClose.addEventListener('click',function(){worldClockModal.hidden=true;if(worldClockTimer){clearInterval(worldClockTimer);worldClockTimer=null;}});
+  worldClockClose.addEventListener('click',function(){worldClockModal.hidden=true;worldClockModal.style.display='none';if(worldClockTimer){clearInterval(worldClockTimer);worldClockTimer=null;}});
   /* Calendar View: show saved notes by the day they were first written. */
   var calendarBtn=el('button',{id:'diaryCalendarBtn',type:'button','aria-expanded':'false','aria-controls':'diaryCalendarPanel'},t('calendar'));
   var calendarPanel=el('section',{id:'diaryCalendarPanel',hidden:'hidden','aria-label':t('calendarLabel')});
