@@ -1,21 +1,24 @@
-# Personal Calendar + Smart Reminder Edit actions pinned at the top — publication pending (2026-11-18)
+# Personal Calendar + Smart Reminder Edit actions pinned at the top — Web Update 314 published (2026-11-18)
 
 - User clarified that immediately after tapping **Edit**, the selected-count, **Delete Selected**, and **Done** controls must be visible at the top rather than below the entry form/tools.
 - Moved the existing bulk-action bar to a direct child immediately below the feature header and made it sticky while scrolling. The same existing controls, checkbox selection, delete behavior, reminder cancellation and calendar alarm cancellation are retained; this is a layout-only change.
 - No saved records, alarms, reminder settings, forms, PINs, locks, photos, native Android code or unrelated screens are changed.
 - Backup branch: `backup/before-calendar-reminder-bulkbar-top-2026-11-18`. Working branch: `fix/calendar-reminder-bulkbar-top-2026-11-18`.
-- Source change is prepared; PR merge, web publisher sync/version increment, final SHA verification and post-publication checks remain pending. Physical-phone testing is pending.
+- PR #184 merged as commit `1e7ed40e86bb6145d5b4de054b6c8acef6db84ec`; web publish workflow run #369 completed successfully. The Check for Update feed now advertises `webVersion: 314`.
+- Verified `web-source/index.html` and `diary-web/index.html` are byte-identical (Git blob SHA `40b4921742d6e65ac023e385028c1b9083d74cf4`); the feed advertises SHA-256 `144f8110217fa625603e12517d648283cec1c94b3c1d89baaea5c335f65c4f7c`.
+- The separate APK workflow run #345 was triggered by the main-branch push but failed at its pre-build HTML source/mirror equality guard because it checked out the commit before the web publisher synchronized the mirror. It did not build or publish an APK. The already-published APK feed fields remain 1.0.193 / versionCode 192; no native Android files were changed.
+- Physical-phone testing remains pending. Do not claim device-side PASS until the user installs Web Update 314 and tests both screens.
 
 ---
 
-# Personal Calendar + Smart Reminder Edit mode and multi-select delete — implementation pending publication (2026-11-18)
+# Personal Calendar + Smart Reminder Edit mode and multi-select delete — included in Web Update 314 (2026-11-18)
 
 - User requested an **Edit** option in the upper-right three-dot menu on both **📅 Personal Calendar** and **⏰ Smart Reminder**, so saved entries can be selected with checkboxes and deleted together.
 - Added the ⋮ menu only to these two feature screens. Selecting **Edit** enters selection mode, displays a checkbox on each matching saved entry, shows the selected count and a **Delete Selected** action; selecting **Done** exits and clears the selection.
 - Bulk deletion uses the existing Diary feature IndexedDB records. For Smart Reminder, each deleted record's native reminder is cancelled through the existing `DiaryAppActions.cancelReminder`; for Personal Calendar, the record's scheduled alarm IDs are cancelled through the existing `calendarCancelAlarms`. Existing per-record edit/delete actions remain available outside selection mode.
 - Preserved the existing add/edit forms, reminder settings, alarm scheduling, calendar repeat rules, saved record schema, notes, PINs, locks, photos and all unrelated screens. No native Android scheduler code or user data is changed.
 - Backup branch: `backup/before-calendar-reminder-bulk-delete-menu-2026-11-18`. Working branch: `feat/calendar-reminder-edit-select-delete-2026-11-18`. Base main commit: `c836df7b2d7c5b763b8882c036d21fb461b24181`.
-- Initial implementation merged in PR #183. The first publisher run repaired the checksum but left `webVersion` at 313 because source and mirror were already identical; the follow-up top-bar change will deliberately let the publisher sync the mirror and increment the web version. Physical-phone testing is still pending.
+- Initial implementation merged in PR #183 and is now included in Web Update 314 together with the top-bar layout correction. Source/mirror synchronization and feed SHA verification passed. Physical-phone testing remains pending.
 
 ---
 
