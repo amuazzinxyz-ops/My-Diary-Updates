@@ -2479,7 +2479,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    var rule=record.repeat||'none',customDays=(record.repeatCustomDays||[]).map(Number),hour=Number(clock[0])||0,minute=Number(clock[1])||0;
    for(var i=0;i<=windowDays;i++){
     var day=new Date(start);day.setDate(start.getDate()+i);if(day>end)break;
-    var diff=Math.round((day-base)/86400000),months=(day.getFullYear()-base.getFullYear())*12+day.getMonth()-base.getMonth(),matches=false;
+    var diff=Math.round((Date.UTC(day.getFullYear(),day.getMonth(),day.getDate())-Date.UTC(base.getFullYear(),base.getMonth(),base.getDate()))/86400000),months=(day.getFullYear()-base.getFullYear())*12+day.getMonth()-base.getMonth(),matches=false;
     if(rule==='none')matches=diff===0;
     else if(rule==='daily')matches=diff>=0;
     else if(rule==='weekly')matches=diff>=0&&diff%7===0;
