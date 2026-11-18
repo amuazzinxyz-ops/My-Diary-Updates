@@ -1297,7 +1297,7 @@ class DiaryReminderReceiver : BroadcastReceiver() {
         } else {
             DiaryReminderScheduler.remove(context, id)
         }
-        DiaryReminderScheduler.showNotification(context, id, title, details, soundUri, snoozeMinutes, snoozeLimit, snoozeUsed, ringDurationSeconds, ringVolumePercent, repeatDaily, dailyAnchorAt)
+        DiaryReminderScheduler.showNotification(context, id, title, details, soundUri, snoozeMinutes, snoozeLimit, snoozeUsed, ringDurationSeconds, ringVolumePercent, repeatDaily, dailyAnchorAt, customDaysCsv)
         DiaryReminderSoundService.start(context, soundUri, ringDurationSeconds, ringVolumePercent)
         // If the user does not press Done or Snooze, automatically repeat at the saved
         // Snooze interval, but never exceed the same configured repeat limit.
