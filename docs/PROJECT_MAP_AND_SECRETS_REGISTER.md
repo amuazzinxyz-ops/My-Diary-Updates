@@ -1,3 +1,13 @@
+# Diary World Clock — Meeting Time Planner removed (2026-11-19)
+
+- User asked to remove only **Meeting Time Planner** because it was not useful to them.
+- Removed the Meeting Time Planner panel, date/time/city controls, converted-time result, associated event listeners and refresh/conversion functions from the existing World Clock modal. Removed its unused translation labels.
+- Preserved the World Clock button/modal, global city/time-zone search (including typo-tolerant matching), saved city list, city add/remove, Favourite City, live clocks, day/night indication, Mumbai time difference, sunrise/sunset, and the one-second refresh behaviour. No other Me tools, Diary features, saved entries, city/favourite localStorage keys, Calendar, Smart Reminder, PINs/locks, photos, or APK/native code are intentionally changed.
+- Backup branch: `backup/before-meeting-time-planner-removal-2026-11-19`. Working branch: `remove/world-clock-meeting-time-planner-2026-11-19`.
+- Source edit is limited to `web-source/index.html`; publication, source/mirror equality and live feed verification are pending. Physical Android phone testing is pending user confirmation.
+
+---
+
 # Diary World Clock — Meeting Time Planner city selection stable (Web Update 341, 2026-11-19)
 
 - User reported that the Meeting Time Planner city selector blinked while choosing a city. Source inspection found that `renderWorldClock()` calls `refreshWorldClockPlanner()` on the one-second live-clock interval, and that function unconditionally rebuilt the city `<select>` options each time.
