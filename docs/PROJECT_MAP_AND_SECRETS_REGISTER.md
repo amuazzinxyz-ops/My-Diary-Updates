@@ -5,7 +5,7 @@
 - No saved data, entry values, date/time fields, recurrence, alarm/reminder scheduling, ringtone, Snooze, notification behavior, PIN/lock logic, other Diary sections, or native Android code was changed.
 - Backup branch: `backup/before-calendar-reminder-bold-text-2026-11-18`. Working branch: `fix/calendar-reminder-all-text-bold-2026-11-18`. Verified base main commit: `531c70acc42183a012bd0c5fc28bf270318efff3`.
 - Intended web release: **Web Update 325**. Source/mirror content SHA-256: `9044dda18c5da0158ae5e44bf08f16b02f76cd2bf7eccf6cab1cdaf8cab3b9ac`. APK remains **1.0.194 / versionCode 193**; this is a web-only style change and no APK rebuild is intended.
-- Static verification and source/mirror equality are to be recorded after merge/publication. Physical-phone visual testing remains pending user confirmation.
+- PR #205 merged as `939029e4ae0b1e71245cbbe1f8e98d3998e407b7`. Post-merge verification: source and mirror are byte-identical (Git blob SHA `1ed44364959fff6faa8f363bf98379139f9d0629`); independently recomputed source SHA-256 matches `latest.json`: `9044dda18c5da0158ae5e44bf08f16b02f76cd2bf7eccf6cab1cdaf8cab3b9ac`; feed advertises **Web Update 325**. Static checks confirm the bold class is enabled only for Calendar/Reminder (including their PIN screen) and removed on close. No workflow run or combined commit status was returned for the merge commit, and raw-host live fetch was unavailable, so external deployment is not independently verified. Physical-phone visual testing remains pending user confirmation.
 
 ---
 
