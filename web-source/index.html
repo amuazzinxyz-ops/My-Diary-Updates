@@ -1494,9 +1494,9 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   mePanel.appendChild(refreshDiaryBtn);
   /* Optional, self-contained World Clock tool. Removing this block and its button leaves all existing Me tools untouched. */
   var worldClockCopy={
-   roman:{button:'🌍 World Clock',title:'🌍 World Clock',choose:'Shehar chunein',add:'＋ Shehar Add Karein',remove:'Hataayein',close:'Band Karein'},
-   english:{button:'🌍 World Clock',title:'🌍 World Clock',choose:'Choose a city',add:'＋ Add City',remove:'Remove',close:'Close'},
-   hindi:{button:'🌍 विश्व घड़ी',title:'🌍 विश्व घड़ी',choose:'शहर चुनें',add:'＋ शहर जोड़ें',remove:'हटाएँ',close:'बंद करें'}
+   roman:{button:'🌍 World Clock',title:'🌍 World Clock',search:'Shehar ka naam likhein (jaise Paris, Cairo, Seoul)',hint:'Duniya ke available time-zone shehar dhoondhne ke liye naam likhein',remove:'Hataayein',close:'Band Karein'},
+   english:{button:'🌍 World Clock',title:'🌍 World Clock',search:'Search city (e.g. Paris, Cairo, Seoul)',hint:'Search available world time-zone cities by name',remove:'Remove',close:'Close'},
+   hindi:{button:'🌍 विश्व घड़ी',title:'🌍 विश्व घड़ी',search:'शहर का नाम लिखें (जैसे पेरिस, काहिरा, सियोल)',hint:'दुनिया के उपलब्ध टाइम-ज़ोन शहर खोजने के लिए नाम लिखें',remove:'हटाएँ',close:'बंद करें'}
   };
   function worldClockText(key){var lang=language();return (worldClockCopy[lang]&&worldClockCopy[lang][key])||worldClockCopy.roman[key];}
   var worldClockBtn=el('button',{id:'diaryWorldClockBtn',type:'button',class:'diary-me-feature-btn'},worldClockText('button'));
@@ -1508,16 +1508,11 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    {name:'New York · USA',zone:'America/New_York'},
    {name:'Tokyo · Japan',zone:'Asia/Tokyo'}
   ];
-  var worldClockOptions=[
-   {name:'Singapore',zone:'Asia/Singapore'},
-   {name:'Riyadh · Saudi Arabia',zone:'Asia/Riyadh'},
-   {name:'Kuala Lumpur · Malaysia',zone:'Asia/Kuala_Lumpur'},
-   {name:'Sydney · Australia',zone:'Australia/Sydney'},
-   {name:'Paris · France',zone:'Europe/Paris'},
-   {name:'Toronto · Canada',zone:'America/Toronto'},
-   {name:'Istanbul · Türkiye',zone:'Europe/Istanbul'},
-   {name:'Doha · Qatar',zone:'Asia/Qatar'}
-  ];
+  var worldClockFallbackZones=['Africa/Cairo','Africa/Casablanca','Africa/Johannesburg','Africa/Lagos','Africa/Nairobi','Africa/Accra','America/Anchorage','America/Argentina/Buenos_Aires','America/Bogota','America/Chicago','America/Denver','America/Los_Angeles','America/Mexico_City','America/Phoenix','America/Sao_Paulo','America/Toronto','America/Vancouver','America/Winnipeg','Asia/Amman','Asia/Baghdad','Asia/Bahrain','Asia/Bangkok','Asia/Beirut','Asia/Colombo','Asia/Dhaka','Asia/Hong_Kong','Asia/Jakarta','Asia/Jerusalem','Asia/Kabul','Asia/Karachi','Asia/Kathmandu','Asia/Kuala_Lumpur','Asia/Kuwait','Asia/Manila','Asia/Muscat','Asia/Qatar','Asia/Riyadh','Asia/Seoul','Asia/Shanghai','Asia/Singapore','Asia/Taipei','Asia/Tashkent','Asia/Tehran','Asia/Thimphu','Asia/Ulaanbaatar','Asia/Yangon','Asia/Yerevan','Australia/Adelaide','Australia/Brisbane','Australia/Darwin','Australia/Melbourne','Australia/Perth','Australia/Sydney','Europe/Amsterdam','Europe/Athens','Europe/Belgrade','Europe/Berlin','Europe/Brussels','Europe/Budapest','Europe/Copenhagen','Europe/Dublin','Europe/Helsinki','Europe/Istanbul','Europe/Kyiv','Europe/Lisbon','Europe/Madrid','Europe/Moscow','Europe/Oslo','Europe/Paris','Europe/Prague','Europe/Rome','Europe/Stockholm','Europe/Vienna','Europe/Warsaw','Europe/Zurich','Pacific/Auckland','Pacific/Fiji','Pacific/Guam','Pacific/Honolulu','Pacific/Tahiti'];
+  var worldClockZones=[];
+  try{worldClockZones=Intl.supportedValuesOf('timeZone').filter(function(zone){return zone.indexOf('Etc/')!==0&&zone!=='UTC'&&zone!=='GMT';});}catch(err){worldClockZones=worldClockFallbackZones.slice();}
+  if(!worldClockZones.length)worldClockZones=worldClockFallbackZones.slice();
+  var worldClockOptions=worldClockZones.map(function(zone){var parts=zone.split('/');var city=parts[parts.length-1].replace(/_/g,' ');return {name:city+' · '+zone,zone:zone};});
   var worldClockTimer=null;
   var worldClockModal=el('section',{id:'diaryWorldClockModal',hidden:'hidden','aria-modal':'true','role':'dialog','aria-label':'World Clock'});
   worldClockModal.style.cssText='position:fixed;inset:0;z-index:2147483647;display:none;align-items:center;justify-content:center;box-sizing:border-box;padding:calc(14px + env(safe-area-inset-top,0px)) 12px calc(14px + env(safe-area-inset-bottom,0px));background:rgba(20,12,32,.62);overflow:auto;';
@@ -1531,22 +1526,30 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   worldClockHead.append(worldClockTitle,worldClockClose);
   var worldClockRows=el('div',{id:'diaryWorldClockRows'});
   worldClockRows.style.cssText='display:flex;flex-direction:column;gap:8px;';
-  var worldClockControls=el('div',{style:'display:flex;gap:7px;align-items:center;margin-top:12px;'});
-  var worldClockSelect=el('select',{id:'diaryWorldClockSelect','aria-label':'Choose a city'});
-  worldClockSelect.style.cssText='flex:1;min-width:0;min-height:42px;padding:7px;border:2px solid #9b7ac5;border-radius:9px;background:#fff;color:#241a31;font-size:15px;font-weight:800;';
-  var worldClockAdd=el('button',{type:'button',id:'diaryWorldClockAdd'},worldClockText('add'));
-  worldClockAdd.style.cssText='min-height:42px;padding:7px 10px;border:2px solid #d4af37;border-radius:9px;background:linear-gradient(145deg,#fff4c8,#e4c36b);color:#382700;font-size:13px;font-weight:1000;box-shadow:0 3px 0 #9b7415;white-space:nowrap;';
-  worldClockControls.append(worldClockSelect,worldClockAdd);
+  var worldClockControls=el('div',{style:'display:flex;flex-direction:column;gap:7px;margin-top:12px;'});
+  var worldClockSearch=el('input',{id:'diaryWorldClockSearch',type:'search','aria-label':'Search world cities',placeholder:worldClockText('search')});
+  worldClockSearch.style.cssText='width:100%;box-sizing:border-box;min-height:44px;padding:9px 11px;border:2px solid #9b7ac5;border-radius:10px;background:#fff;color:#241a31;font-size:15px;font-weight:800;';
+  var worldClockResults=el('div',{id:'diaryWorldClockResults'});
+  worldClockResults.style.cssText='display:flex;flex-direction:column;gap:5px;max-height:190px;overflow:auto;padding:2px;';
+  worldClockControls.append(worldClockSearch,worldClockResults);
   worldClockCard.append(worldClockHead,worldClockRows,worldClockControls);
   worldClockModal.appendChild(worldClockCard);
   ov.appendChild(worldClockModal);
   function refreshWorldClockOptions(){
-   worldClockSelect.replaceChildren(el('option',{value:''},worldClockText('choose')));
-   worldClockOptions.forEach(function(city){if(!worldClockCities.some(function(saved){return saved.zone===city.zone;}))worldClockSelect.appendChild(el('option',{value:city.zone},city.name));});
-   worldClockAdd.textContent=worldClockText('add');
-   worldClockAdd.disabled=worldClockSelect.options.length<2;
-   worldClockAdd.style.opacity=worldClockAdd.disabled?'.5':'1';
+   worldClockSearch.placeholder=worldClockText('search');
+   worldClockResults.replaceChildren();
+   var query=(worldClockSearch.value||'').trim().toLocaleLowerCase();
+   if(query.length<2){var hint=el('small',{},worldClockText('hint'));hint.style.cssText='padding:6px 2px;color:#66527b;font-size:12px;font-weight:800;';worldClockResults.appendChild(hint);return;}
+   var matches=worldClockOptions.filter(function(city){return !worldClockCities.some(function(saved){return saved.zone===city.zone;})&&(city.name.toLocaleLowerCase().indexOf(query)>=0||city.zone.toLocaleLowerCase().indexOf(query)>=0);}).slice(0,30);
+   if(!matches.length){var empty=el('small',{},'No matching city found');empty.style.cssText='padding:6px 2px;color:#66527b;font-size:12px;font-weight:800;';worldClockResults.appendChild(empty);return;}
+   matches.forEach(function(city){
+    var addCity=el('button',{type:'button',class:'diary-world-clock-city-option'},'＋ '+city.name);
+    addCity.style.cssText='width:100%;min-height:38px;padding:7px 9px;text-align:left;border:1px solid #cbb9df;border-radius:8px;background:linear-gradient(145deg,#fff,#f5efff);color:#35145f;font-size:13px;font-weight:900;';
+    addCity.addEventListener('click',function(){if(worldClockCities.some(function(saved){return saved.zone===city.zone;}))return;worldClockCities.push({name:city.name,zone:city.zone});worldClockSearch.value='';refreshWorldClockOptions();renderWorldClock();});
+    worldClockResults.appendChild(addCity);
+   });
   }
+  worldClockSearch.addEventListener('input',refreshWorldClockOptions);
   function renderWorldClock(){
    var localeMap={roman:'en-IN',english:'en',hindi:'hi-IN',urdu:'ur-PK',arabic:'ar',bengali:'bn-BD',gujarati:'gu-IN',marathi:'mr-IN',tamil:'ta-IN',telugu:'te-IN'};
    var activeLocale=localeMap[language()]||'en-IN';
@@ -1577,20 +1580,13 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   worldClockBtn.addEventListener('click',function(e){
    e.preventDefault();e.stopPropagation();
    worldClockBtn.textContent=worldClockText('button');
-   refreshWorldClockOptions();renderWorldClock();
+   worldClockSearch.value='';refreshWorldClockOptions();renderWorldClock();
    worldClockModal.hidden=false;worldClockModal.style.display='flex';
    if(worldClockTimer)clearInterval(worldClockTimer);
    worldClockTimer=setInterval(function(){
     if(worldClockModal.hidden||!ov.classList.contains('open')){clearInterval(worldClockTimer);worldClockTimer=null;return;}
     renderWorldClock();
    },1000);
-  });
-  worldClockAdd.addEventListener('click',function(){
-   var zone=worldClockSelect.value;
-   var city=worldClockOptions.find(function(item){return item.zone===zone;});
-   if(!city||worldClockCities.some(function(saved){return saved.zone===zone;}))return;
-   worldClockCities.push({name:city.name,zone:city.zone});
-   refreshWorldClockOptions();renderWorldClock();
   });
   worldClockClose.addEventListener('click',function(){worldClockModal.hidden=true;worldClockModal.style.display='none';if(worldClockTimer){clearInterval(worldClockTimer);worldClockTimer=null;}});
   /* Calendar View: show saved notes by the day they were first written. */
