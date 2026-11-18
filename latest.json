@@ -10,5 +10,5 @@
   "webVersion": 329,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "8633d1d2cc300b0974529ef1f0c536054385132c001ff834f9d8b1598dad8d70",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "Personal Calendar now shows Birthday, Anniversary and Important Day as separate badges, with event time in its own clock badge. Existing entries and reminders are preserved."
 }
