@@ -1599,7 +1599,19 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var meFeatureBack=el('button',{type:'button',class:'diary-me-feature-back'},mf('back'));
   var meFeatureLock=el('button',{type:'button',class:'diary-me-feature-lock'},mf('lock'));
   var meFeatureManage=el('button',{type:'button',class:'diary-me-feature-lock'},mf('pinManage'));meFeatureManage.hidden=true;
-  meFeatureLock.hidden=true;meFeatureHead.append(meFeatureBack,meFeatureTitle,meFeatureManage,meFeatureLock);
+  var meFeatureBulkEdit=false,meFeatureSelectedIds=new Set();
+  var meFeatureMenuButton=el('button',{type:'button',class:'diary-me-feature-menu-button','aria-label':'More options','aria-expanded':'false'},'⋮');
+  var meFeatureMenu=el('div',{class:'diary-me-feature-menu',hidden:'hidden'});
+  var meFeatureMenuEdit=el('button',{type:'button',class:'diary-me-feature-menu-edit'},mf('edit'));
+  meFeatureMenu.appendChild(meFeatureMenuEdit);
+  var meFeatureBulkBar=mfEl('div',{class:'diary-me-feature-bulk-bar'});
+  var meFeatureBulkSummary=mfEl('strong',{},'0');
+  var meFeatureBulkDelete=mfEl('button',{type:'button',class:'diary-me-feature-bulk-delete'},'🗑️ Delete Selected');
+  meFeatureBulkBar.append(meFeatureBulkSummary,meFeatureBulkDelete);meFeatureBulkBar.hidden=true;
+  meFeatureMenuButton.hidden=true;
+  meFeatureMenuButton.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var opening=meFeatureMenu.hidden;meFeatureMenu.hidden=!opening;meFeatureMenuButton.setAttribute('aria-expanded',opening?'true':'false');});
+  meFeatureMenuEdit.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();meFeatureBulkEdit=!meFeatureBulkEdit;if(!meFeatureBulkEdit)meFeatureSelectedIds.clear();meFeatureMenu.hidden=true;meFeatureMenuButton.setAttribute('aria-expanded','false');updateMeFeatureBulkUI();if(currentMeFeatureKind)renderMeFeatureList(currentMeFeatureKind);});
+  meFeatureLock.hidden=true;meFeatureHead.append(meFeatureBack,meFeatureTitle,meFeatureManage,meFeatureLock,meFeatureMenuButton,meFeatureMenu);
   var meFeatureContent=el('div',{id:'diaryMeFeatureContent'});
   meFeatureModal.append(meFeatureHead,meFeatureContent);
   ov.appendChild(meFeatureModal);
@@ -2048,6 +2060,46 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   function meFeatureDelete(id){
    return openMeFeatureDb().then(function(db){return new Promise(function(resolve,reject){var tx=db.transaction('records','readwrite');tx.objectStore('records').delete(id);tx.oncomplete=function(){resolve(true);};tx.onerror=function(){reject(tx.error||new Error('Delete failed'));};});});
   }
+  function meFeatureBulkText(key,count){
+   var lang=language();
+   if(key==='select')return lang==='hindi'?'चुनें':'Select';
+   if(key==='delete')return lang==='hindi'?'🗑️ चुनी हुई एंट्री हटाएँ':lang==='english'?'🗑️ Delete Selected':'🗑️ Chuni Hui Entries Delete Karein';
+   if(key==='done')return lang==='hindi'?'हो गया':lang==='english'?'Done':'Ho Gaya';
+   if(key==='selected')return lang==='hindi'?count+' चुनी गईं':lang==='english'?count+' selected':count+' chuni gayi';
+   if(key==='confirm')return lang==='hindi'?'क्या '+count+' चुनी हुई एंट्री हटानी हैं?':lang==='english'?'Delete '+count+' selected entries?':count+' chuni hui entries delete karni hain?';
+   if(key==='deleted')return lang==='hindi'?'चुनी हुई एंट्री हटा दी गईं।':lang==='english'?'Selected entries deleted.':'Chuni hui entries delete ho gayi.';
+   return mf('failed');
+  }
+  function updateMeFeatureBulkUI(){
+   var enabled=!!(meFeatureBulkEdit&&(currentMeFeatureKind==='calendar'||currentMeFeatureKind==='reminders'));
+   meFeatureModal.classList.toggle('diary-me-feature-bulk-edit',enabled);
+   meFeatureMenuButton.hidden=!(currentMeFeatureKind==='calendar'||currentMeFeatureKind==='reminders');
+   meFeatureMenuButton.setAttribute('aria-expanded',meFeatureMenu.hidden?'false':'true');
+   meFeatureMenuEdit.textContent=meFeatureBulkEdit?meFeatureBulkText('done'):mf('edit');
+   meFeatureBulkBar.hidden=!enabled;
+   meFeatureBulkSummary.textContent=meFeatureBulkText('selected',meFeatureSelectedIds.size);
+   meFeatureBulkDelete.textContent=meFeatureBulkText('delete');
+   meFeatureBulkDelete.disabled=!meFeatureSelectedIds.size;
+  }
+  function deleteMeFeatureSelected(){
+   var kind=currentMeFeatureKind;
+   if(!meFeatureBulkEdit||(kind!=='calendar'&&kind!=='reminders'))return;
+   meFeatureAll(kind).then(function(records){
+    var chosen=records.filter(function(record){return meFeatureSelectedIds.has(String(record.id));});
+    if(!chosen.length){updateMeFeatureBulkUI();return;}
+    if(!window.confirm(meFeatureBulkText('confirm',chosen.length)))return;
+    var task=Promise.resolve();
+    chosen.forEach(function(record){
+     task=task.then(function(){return meFeatureDelete(record.id);}).then(function(){
+      meFeatureSelectedIds.delete(String(record.id));updateMeFeatureBulkUI();
+      if(kind==='reminders'&&window.DiaryAppActions&&typeof window.DiaryAppActions.cancelReminder==='function')window.DiaryAppActions.cancelReminder(record.id);
+      if(kind==='calendar')calendarCancelAlarms(record);
+     });
+    });
+    task.then(function(){meFeatureSelectedIds.clear();meFeatureStatus.textContent=meFeatureBulkText('deleted');updateMeFeatureBulkUI();renderMeFeatureList(kind);}).catch(function(){meFeatureStatus.textContent=mf('failed');renderMeFeatureList(kind);});
+   }).catch(function(){meFeatureStatus.textContent=mf('failed');});
+  }
+  meFeatureBulkDelete.addEventListener('click',deleteMeFeatureSelected);
   function meFeatureToday(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
   function calendarReminderOccurrences(record){
    var start=String(record.date||'').split('-').map(Number),clock=String(record.time||'09:00').split(':').map(Number);
@@ -2285,6 +2337,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   }
   function showMeFeaturePin(kind){
    var config=meFeaturePinConfig(kind),form=mfEl('form',{class:'diary-me-feature-form diary-me-feature-pin-form'});
+   meFeatureBulkEdit=false;meFeatureSelectedIds.clear();meFeatureMenu.hidden=true;meFeatureMenuButton.hidden=true;meFeatureBulkBar.hidden=true;
    meFeatureTitle.textContent=mf(meFeatureTypes.filter(function(x){return x.id===kind;})[0].key);meFeatureManage.hidden=true;meFeatureLock.hidden=true;meFeatureContent.replaceChildren();meFeatureStatus.textContent='';
    if(!config){
     form.appendChild(mfEl('strong',{},mf('pinSet')));
@@ -2359,6 +2412,13 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     if(!records.length)meFeatureList.appendChild(mfEl('p',{class:'diary-me-feature-empty'},mf('empty')));
     records.forEach(function(record){
      var card=mfEl('article',{class:'diary-me-feature-card'});
+     if(meFeatureBulkEdit&&(kind==='calendar'||kind==='reminders')){
+      var selectLabel=mfEl('label',{class:'diary-me-feature-select'});
+      var selectBox=mfEl('input',{type:'checkbox'});
+      selectBox.checked=meFeatureSelectedIds.has(String(record.id));
+      selectBox.addEventListener('change',function(){if(selectBox.checked)meFeatureSelectedIds.add(String(record.id));else meFeatureSelectedIds.delete(String(record.id));updateMeFeatureBulkUI();});
+      selectLabel.append(selectBox,mfEl('span',{},meFeatureBulkText('select')));card.appendChild(selectLabel);
+     }
      var heading=mfEl('strong',{},record.title||record.category||record.fileName||mf(record.type||'event'));
      var meta=mfEl('small',{},kind==='reminders'?(String(record.date||'')+' • '+String(record.time||'')):(record.date||''));
      card.append(heading,meta);
@@ -2464,18 +2524,19 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    if(kind==='calendar')meFeatureAll('calendar').then(function(records){records.forEach(function(record){if(record.remind&&record.repeat&&record.repeat!=='none'&&calendarScheduleAlarms(record))meFeaturePut(record);});});
 
    meFeatureTitle.textContent=mf(meFeatureTypes.filter(function(x){return x.id===kind;})[0].key);
+   meFeatureBulkEdit=false;meFeatureSelectedIds.clear();meFeatureMenu.hidden=true;meFeatureMenuButton.setAttribute('aria-expanded','false');
    meFeatureBack.textContent=mf('back');meFeatureLock.hidden=true;meFeatureManage.hidden=!meFeatureProtected(kind);meFeatureContent.replaceChildren();meFeatureStatus.textContent='';
    meFeatureSearchInput=null;meFeatureCategoryFilter=null;
-   if(kind==='memories'||kind==='documents'){meFeatureContent.appendChild(meFeatureTools(kind));meFeatureContent.appendChild(meFeatureForm(kind));}else{meFeatureContent.appendChild(meFeatureForm(kind));meFeatureContent.appendChild(meFeatureTools(kind));}meFeatureContent.append(meFeatureStatus,meFeatureList);
+   if(kind==='memories'||kind==='documents'){meFeatureContent.appendChild(meFeatureTools(kind));meFeatureContent.appendChild(meFeatureForm(kind));}else{meFeatureContent.appendChild(meFeatureForm(kind));meFeatureContent.appendChild(meFeatureTools(kind));}meFeatureContent.append(meFeatureBulkBar,meFeatureStatus,meFeatureList);updateMeFeatureBulkUI();
    meFeatureModal.hidden=false;meFeatureModal.scrollTop=0;meFeatureContent.scrollTop=0;mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');window.requestAnimationFrame(function(){meFeatureModal.scrollTop=0;meFeatureContent.scrollTop=0;});
    renderMeFeatureList(kind);
   }
   function closeMeFeature(){
-   currentMeFeatureKind=null;++meFeatureRenderToken;clearMeFeatureUrls();meFeatureLock.hidden=true;meFeatureModal.hidden=true;meFeatureContent.replaceChildren();mePanel.hidden=false;mePanel.scrollTop=0;meBtn.setAttribute('aria-expanded','true');panel.classList.add('diary-me-menu-open');
+   currentMeFeatureKind=null;meFeatureBulkEdit=false;meFeatureSelectedIds.clear();meFeatureMenu.hidden=true;meFeatureMenuButton.hidden=true;meFeatureBulkBar.hidden=true;++meFeatureRenderToken;clearMeFeatureUrls();meFeatureLock.hidden=true;meFeatureModal.hidden=true;meFeatureContent.replaceChildren();mePanel.hidden=false;mePanel.scrollTop=0;meBtn.setAttribute('aria-expanded','true');panel.classList.add('diary-me-menu-open');
   }
   meFeatureManage.addEventListener('click',function(){if(currentMeFeatureKind)showMeFeaturePinManager(currentMeFeatureKind);});
   meFeatureBack.addEventListener('click',closeMeFeature);meFeatureLock.addEventListener('click',closeMeFeature);
-  meFeatureModal.addEventListener('click',function(e){e.stopPropagation();if(e.target===meFeatureModal)closeMeFeature();});
+  meFeatureModal.addEventListener('click',function(e){e.stopPropagation();if(!meFeatureMenu.hidden&&!meFeatureMenu.contains(e.target)&&e.target!==meFeatureMenuButton){meFeatureMenu.hidden=true;meFeatureMenuButton.setAttribute('aria-expanded','false');}if(e.target===meFeatureModal)closeMeFeature();});
   var interfaceColoursBtn=el('button',{id:'diaryInterfaceColoursBtn',type:'button','aria-expanded':'false','aria-controls':'diaryInterfaceColoursPanel'},t('interfaceColours'));
   var interfaceColoursPanel=el('div',{id:'diaryInterfaceColoursPanel',hidden:'hidden'});
   var originalDiaryColourBtn=el('button',{id:'diaryRestoreOriginalColourBtn',type:'button',class:'diary-interface-original-reset','aria-pressed':'false'},'↩ '+t('themeDefault'));
@@ -4228,8 +4289,20 @@ input[name="diary-note-lock-pin"]::placeholder,#diaryMyNotesList input[name="dia
 #diaryDiaryMePanel .diary-me-feature-btn:active{transform:translateY(2px)!important;box-shadow:inset 0 1px 0 #fff,0 1px 0 #4e247f!important}
 #diaryMeFeatureModal[hidden]{display:none!important}
 #diaryMeFeatureModal{position:fixed!important;inset:0!important;z-index:2147483647!important;display:flex!important;flex-direction:column!important;gap:10px!important;box-sizing:border-box!important;padding:calc(12px + env(safe-area-inset-top,0px)) 12px calc(12px + env(safe-area-inset-bottom,0px))!important;background:linear-gradient(145deg,#fffdf7,#f1e8ff)!important;color:#302044!important;overflow-y:auto!important;overscroll-behavior:contain!important}
-.diary-me-feature-head{display:flex!important;align-items:center!important;gap:8px!important;min-height:44px!important;padding-bottom:8px!important;border-bottom:2px solid #d4af37!important}
+.diary-me-feature-head{position:relative!important;display:flex!important;align-items:center!important;gap:8px!important;min-height:44px!important;padding-bottom:8px!important;border-bottom:2px solid #d4af37!important}
 .diary-me-feature-head strong{flex:1!important;text-align:center!important;font-size:17px!important;font-weight:1000!important}
+.diary-me-feature-menu-button{flex:0 0 38px!important;width:38px!important;min-width:38px!important;height:40px!important;border:2px solid #7540b8!important;border-radius:9px!important;background:linear-gradient(145deg,#fff,#eadcff)!important;color:#35145f!important;font-size:27px!important;font-weight:1000!important;line-height:1!important}
+.diary-me-feature-menu[hidden]{display:none!important}
+.diary-me-feature-menu{position:absolute!important;right:0!important;top:46px!important;z-index:50!important;min-width:132px!important;padding:6px!important;border:2px solid #d4af37!important;border-radius:11px!important;background:#fff!important;box-shadow:0 4px 12px #30204433!important}
+.diary-me-feature-menu-edit{display:block!important;width:100%!important;min-height:42px!important;padding:8px 12px!important;border:1px solid #cbb9df!important;border-radius:8px!important;background:#f5edff!important;color:#35145f!important;font-weight:1000!important;text-align:left!important}
+.diary-me-feature-bulk-bar[hidden]{display:none!important}
+.diary-me-feature-bulk-bar{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;padding:9px 10px!important;border:2px solid #d4af37!important;border-radius:11px!important;background:#fff7d9!important;color:#513d0a!important}
+.diary-me-feature-bulk-bar strong{font-size:14px!important;font-weight:1000!important}
+.diary-me-feature-bulk-delete{min-height:38px!important;padding:7px 10px!important;border:2px solid #c77!important;border-radius:9px!important;background:linear-gradient(145deg,#fff,#f6e8e8)!important;color:#7d2424!important;font-weight:1000!important}
+.diary-me-feature-bulk-delete:disabled{opacity:.45!important}
+.diary-me-feature-select{display:flex!important;align-items:center!important;gap:8px!important;min-height:36px!important;margin:0 0 4px!important;color:#35145f!important;font-size:14px!important;font-weight:1000!important}
+.diary-me-feature-select input{width:21px!important;height:21px!important;accent-color:#7540b8!important}
+.diary-me-feature-bulk-edit .diary-me-feature-card .diary-me-feature-edit,.diary-me-feature-bulk-edit .diary-me-feature-card .diary-me-feature-delete{display:none!important}
 .diary-me-feature-back,.diary-me-feature-close{min-width:42px!important;min-height:40px!important;border:2px solid #7540b8!important;border-radius:9px!important;background:linear-gradient(145deg,#fff,#eadcff)!important;color:#35145f!important;font-weight:900!important}
 .diary-me-feature-close{font-size:25px!important}
 .diary-me-feature-form{display:grid!important;grid-template-columns:1fr!important;gap:9px!important;padding:12px!important;border:2px solid #d4af37!important;border-radius:14px!important;background:#fff!important;box-shadow:0 3px 0 #9b7415!important}
