@@ -7,8 +7,8 @@
   "sha256": "51c3a68b6febf3a7e5f9aabbb997e5c32dad9c42bd53d45f17d8b128d88dd434",
   "releaseNotes": "My Diary 1.0.194 remains unchanged. Web Update 340 improves World Clock search with typo-tolerant city matching; all World Clock smart tools and existing Diary features remain.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 343,
+  "webVersion": 344,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "99d0e4755f83c834cf213c20bd88498f54f72b62343e40e9e42cfe4698980a29",
-  "webReleaseNotes": "Web Update 343 puts the best matching My Diary note first in Note search. Search matching, category filters, note cards, saved notes, PIN locks and all other Diary features remain unchanged."
+  "webReleaseNotes": "Web Update 344 makes Note search results appear immediately below the Note search bar, matching Personal Calendar and Smart Reminder. Clearing search restores the notes list to its original position and visibility. Existing search, note order, saved data, PIN locks and other Diary features remain unchanged."
 }
