@@ -2470,6 +2470,26 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     reportWindow.document.open();reportWindow.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+meFeatureEscape(mf('reportTitle'))+'</title><style>body{font-family:Arial,sans-serif;padding:20px;color:#222}h1{font-size:22px}button{padding:10px 16px;margin:12px 0}table{border-collapse:collapse;width:100%;font-size:13px}th,td{border:1px solid #999;padding:7px;text-align:left;overflow-wrap:anywhere}th{background:#eee}.totals{font-weight:bold;margin:12px 0}@media print{button{display:none}body{padding:0}}</style></head><body><h1>'+meFeatureEscape(mf('reportTitle'))+' — '+meFeatureEscape(mf(kind==='kharcha'?'kharcha':'personalCalendar'))+'</h1><p>'+new Date().toLocaleString()+'</p>'+totals+rows+'<button onclick="window.print()">'+meFeatureEscape(mf('printSave'))+'</button></body></html>');reportWindow.document.close();}).catch(function(){reportWindow.close();meFeatureStatus.textContent=mf('failed');});
   }
   function clearMeFeatureUrls(){meFeatureObjectUrls.forEach(function(u){URL.revokeObjectURL(u);});meFeatureObjectUrls=[];}
+  var calendarUpcomingWindow=0;
+  function calendarUpcomingTimestamp(record,windowDays){
+   var parts=String(record.date||'').split('-').map(Number),clock=String(record.time||'09:00').split(':').map(Number);
+   if(parts.length!==3||!parts[0]||!parts[1]||!parts[2])return null;
+   var base=new Date(parts[0],parts[1]-1,parts[2],0,0,0,0),now=new Date(),today=new Date(now.getFullYear(),now.getMonth(),now.getDate()),start=base>today?base:today;
+   var end=new Date(today);end.setDate(end.getDate()+windowDays);end.setHours(23,59,59,999);
+   var rule=record.repeat||'none',customDays=(record.repeatCustomDays||[]).map(Number),hour=Number(clock[0])||0,minute=Number(clock[1])||0;
+   for(var i=0;i<=windowDays;i++){
+    var day=new Date(start);day.setDate(start.getDate()+i);if(day>end)break;
+    var diff=Math.round((Date.UTC(day.getFullYear(),day.getMonth(),day.getDate())-Date.UTC(base.getFullYear(),base.getMonth(),base.getDate()))/86400000),months=(day.getFullYear()-base.getFullYear())*12+day.getMonth()-base.getMonth(),matches=false;
+    if(rule==='none')matches=diff===0;
+    else if(rule==='daily')matches=diff>=0;
+    else if(rule==='weekly')matches=diff>=0&&diff%7===0;
+    else if(rule==='monthly'){var monthDay=Math.min(base.getDate(),new Date(day.getFullYear(),day.getMonth()+1,0).getDate());matches=months>=0&&day.getDate()===monthDay;}
+    else if(rule==='yearly'){var yearMonth=base.getMonth(),yearDay=Math.min(base.getDate(),new Date(day.getFullYear(),yearMonth+1,0).getDate());matches=day.getFullYear()>=base.getFullYear()&&day.getMonth()===yearMonth&&day.getDate()===yearDay;}
+    else if(rule==='custom')matches=diff>=0&&customDays.indexOf(day.getDay()+1)>=0;
+    if(matches){var at=new Date(day.getFullYear(),day.getMonth(),day.getDate(),hour,minute,0,0);if(at.getTime()>now.getTime()&&at.getTime()<=end.getTime())return at.getTime();}
+   }
+   return null;
+  }
   function renderMeFeatureList(kind){
    var renderToken=++meFeatureRenderToken;
    if((kind==='calendar'||kind==='reminders')&&meFeatureSearchPanel){if((meFeatureSearchInput&&meFeatureSearchInput.value||'').trim())meFeatureSearchPanel.parentNode.insertBefore(meFeatureList,meFeatureSearchPanel.nextSibling);else meFeatureContent.append(meFeatureStatus,meFeatureList);}
@@ -2486,8 +2506,23 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     }
     var query=(meFeatureSearchInput&&meFeatureSearchInput.value||'').trim().toLowerCase(),categoryChoice=meFeatureCategoryFilter&&meFeatureCategoryFilter.value||'',queryWords=query.split(/\s+/).filter(Boolean);
     records=allRecords.filter(function(x){var hay=[x.title,x.category,x.details,x.date,x.time,x.fileName,x.type,x.amount,x.incomeAmount,x.expenseAmount].join(' ').toLowerCase();var queryMatches=!query||((kind==='memories'||kind==='documents')?queryWords.every(function(word){return hay.indexOf(word)>=0;}):hay.indexOf(query)>=0);return queryMatches&&(!categoryChoice||String(x.category||'')===categoryChoice);});
+    var calendarUpcomingTimes={};
+    if(kind==='calendar'&&calendarUpcomingWindow){records=records.filter(function(record){var at=calendarUpcomingTimestamp(record,calendarUpcomingWindow);if(at!==null)calendarUpcomingTimes[String(record.id)]=at;return at!==null;});records.sort(function(a,b){return calendarUpcomingTimes[String(a.id)]-calendarUpcomingTimes[String(b.id)];});}
     if(kind==='documents'&&query){records.sort(function(a,b){function rank(x){var title=String(x.title||'').toLowerCase(),file=String(x.fileName||'').toLowerCase();if(queryWords.every(function(w){return title.indexOf(w)>=0;}))return 0;if(queryWords.every(function(w){return file.indexOf(w)>=0;}))return 1;if(queryWords.every(function(w){return (title+' '+file).indexOf(w)>=0;}))return 2;return 3;}return rank(a)-rank(b);});}
-    if(!records.length)meFeatureList.appendChild(mfEl('p',{class:'diary-me-feature-empty'},mf('empty')));
+    if(kind==='calendar'){
+     var upcomingPanel=mfEl('section',{class:'diary-calendar-upcoming-controls'});
+     var currentLang=language(),upcomingTitle=currentLang==='hindi'?'आने वाले कार्यक्रम':currentLang==='english'?'Upcoming Events':'Aane Wale Events';
+     upcomingPanel.appendChild(mfEl('strong',{},'📅 '+upcomingTitle));
+     var upcomingButtons=mfEl('div',{class:'diary-calendar-upcoming-buttons'});
+     [{days:7,label:currentLang==='hindi'?'7 दिन':currentLang==='english'?'7 Days':'7 Din'},{days:30,label:currentLang==='hindi'?'30 दिन':currentLang==='english'?'30 Days':'30 Din'},{days:0,label:currentLang==='hindi'?'सभी':currentLang==='english'?'All':'Sabhi'}].forEach(function(option){
+      var button=mfEl('button',{type:'button',class:'diary-calendar-upcoming-button','aria-pressed':String(calendarUpcomingWindow===option.days)},option.label);
+      if(calendarUpcomingWindow===option.days)button.classList.add('is-active');
+      button.addEventListener('click',function(){calendarUpcomingWindow=option.days;renderMeFeatureList('calendar');});
+      upcomingButtons.appendChild(button);
+     });
+     upcomingPanel.appendChild(upcomingButtons);meFeatureList.appendChild(upcomingPanel);
+    }
+    if(!records.length)meFeatureList.appendChild(mfEl('p',{class:'diary-me-feature-empty'},kind==='calendar'&&calendarUpcomingWindow?(language()==='hindi'?'चुनी हुई अवधि में कोई कार्यक्रम नहीं है।':language()==='english'?'No upcoming events in this period.':'Chuni Hui Muddat Mein Koi Event Nahi Hai.') : mf('empty')));
     records.forEach(function(record){
      var card=mfEl('article',{class:'diary-me-feature-card'});
      if(meFeatureBulkEdit&&(kind==='calendar'||kind==='reminders')){
@@ -2512,6 +2547,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
       var calendarTypeClass=record.type==='birthday'?' diary-calendar-type-birthday':(record.type==='anniversary'?' diary-calendar-type-anniversary':' diary-calendar-type-event');
       calendarBadges.appendChild(mfEl('span',{class:'diary-calendar-badge diary-calendar-type-badge'+calendarTypeClass},mf(record.type||'event')));
       if(record.time)calendarBadges.appendChild(mfEl('span',{class:'diary-calendar-badge diary-calendar-time-badge'},'⏰ '+record.time));
+      var reminderEnabled=record.remind===true;
+      calendarBadges.appendChild(mfEl('span',{class:'diary-calendar-badge diary-calendar-reminder-badge '+(reminderEnabled?'diary-calendar-reminder-on':'diary-calendar-reminder-off')},reminderEnabled?'🔔 Reminder ON':'🔕 Reminder OFF'));
       card.appendChild(calendarBadges);
       if(record.details)card.appendChild(mfEl('p',{},record.details));
       if(record.repeat&&record.repeat!=='none')card.appendChild(mfEl('small',{},t('calendarRepeat')+': '+t('repeat'+record.repeat.charAt(0).toUpperCase()+record.repeat.slice(1))));
@@ -4582,6 +4619,13 @@ body{background:radial-gradient(ellipse at 50% 12%,#fff 0%,#f5edff 42%,#e8dcf8 1
 #diaryMeFeatureModal .diary-me-feature-card .diary-calendar-type-anniversary{border-color:#b58b28!important;background:linear-gradient(145deg,#fff9df,#f0df9f)!important}
 #diaryMeFeatureModal .diary-me-feature-card .diary-calendar-type-event{border-color:#8c72b4!important;background:linear-gradient(145deg,#f5efff,#ded0f3)!important}
 #diaryMeFeatureModal .diary-me-feature-card .diary-calendar-time-badge{border-color:#6d91ad!important;background:linear-gradient(145deg,#eff8ff,#cfe3f3)!important}
+ #diaryMeFeatureModal .diary-me-feature-card .diary-calendar-reminder-on{border-color:#4b9566!important;background:linear-gradient(145deg,#effff3,#cdebd5)!important}
+ #diaryMeFeatureModal .diary-me-feature-card .diary-calendar-reminder-off{border-color:#b97878!important;background:linear-gradient(145deg,#fff1f1,#f2d0d0)!important}
+ #diaryMeFeatureModal .diary-calendar-upcoming-controls{display:flex!important;flex-direction:column!important;gap:8px!important;padding:10px!important;border:2px solid #d4af37!important;border-radius:12px!important;background:#fffaf0!important;color:#382700!important}
+ #diaryMeFeatureModal .diary-calendar-upcoming-controls>strong{font-size:15px!important;font-weight:1000!important}
+ #diaryMeFeatureModal .diary-calendar-upcoming-buttons{display:flex!important;flex-wrap:wrap!important;gap:8px!important}
+ #diaryMeFeatureModal .diary-calendar-upcoming-button{min-height:38px!important;padding:7px 13px!important;border:2px solid #8c72b4!important;border-radius:999px!important;background:#f5efff!important;color:#35145f!important;font-size:14px!important;font-weight:1000!important}
+ #diaryMeFeatureModal .diary-calendar-upcoming-button.is-active{border-color:#9a7a28!important;background:linear-gradient(145deg,#fff2bd,#e8cb6f)!important;color:#302000!important;box-shadow:inset 0 1px 0 #fff,0 2px 0 #b08a32!important}
 </style>
 
 </body>
