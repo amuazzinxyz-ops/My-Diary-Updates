@@ -2498,7 +2498,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
       selectBox.addEventListener('change',function(){if(selectBox.checked)meFeatureSelectedIds.add(String(record.id));else meFeatureSelectedIds.delete(String(record.id));updateMeFeatureBulkUI();});
       selectLabel.append(selectBox,mfEl('span',{},meFeatureBulkText('select')));card.appendChild(selectLabel);
      }
-     var heading=mfEl('strong',{},record.title||record.category||record.fileName||mf(record.type||'event'));
+     var reminderHeadingText=record.title||record.category||record.fileName||mf(record.type||'event');
+     var heading=kind==='reminders'?mfEl('span',{class:'diary-calendar-badge diary-calendar-name-badge'},reminderHeadingText):mfEl('strong',{},reminderHeadingText);
      var displayDate=meFeatureDisplayDate(record.date);
      card.appendChild(heading);
      if(kind==='reminders'){
@@ -4591,6 +4592,7 @@ body{background:radial-gradient(ellipse at 50% 12%,#fff 0%,#f5edff 42%,#e8dcf8 1
 #diaryMeFeatureModal .diary-me-feature-card .diary-calendar-type-anniversary{border-color:#b58b28!important;background:linear-gradient(145deg,#fff9df,#f0df9f)!important}
 #diaryMeFeatureModal .diary-me-feature-card .diary-calendar-type-event{border-color:#8c72b4!important;background:linear-gradient(145deg,#f5efff,#ded0f3)!important}
 #diaryMeFeatureModal .diary-me-feature-card .diary-calendar-time-badge{border-color:#6d91ad!important;background:linear-gradient(145deg,#eff8ff,#cfe3f3)!important}
+#diaryMeFeatureModal .diary-me-feature-card .diary-calendar-name-badge{white-space:normal!important;max-width:100%!important;overflow-wrap:anywhere!important;justify-content:flex-start!important;text-align:left!important}
  #diaryMeFeatureModal .diary-me-feature-card .diary-calendar-reminder-on{border-color:#4b9566!important;background:linear-gradient(145deg,#effff3,#cdebd5)!important}
  #diaryMeFeatureModal .diary-me-feature-card .diary-calendar-reminder-off{border-color:#b97878!important;background:linear-gradient(145deg,#fff1f1,#f2d0d0)!important}
 </style>
