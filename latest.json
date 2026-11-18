@@ -10,5 +10,5 @@
   "webVersion": 343,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "dbf645c49b4a9f04af3d2fc003d28af758ecd0e2471477e49627db8c45692bd7",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "Web Update 343 puts the best matching My Diary note first in Note search. Search matching, category filters, note cards, saved notes, PIN locks and all other Diary features remain unchanged."
 }
