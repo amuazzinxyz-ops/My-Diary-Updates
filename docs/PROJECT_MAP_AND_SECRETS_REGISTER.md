@@ -1,3 +1,12 @@
+# My Diary Notes — put the best matching search result first (Web Update pending, 2026-11-19)
+
+- User asked that when searching for a note name or note text, the matching note should appear at the top immediately below the Note search bar; everything else should remain as it is.
+- Updated only the existing My Diary note-list sort priority: exact title match first, then title starts-with, title contains, exact body match, body starts-with, and body contains. Existing category filter, search matching/filtering, pin/favourite ordering among equally relevant results, newest-updated ordering, note cards, note actions, saved records and lock behaviour remain unchanged.
+- Backup branch: `backup/before-note-search-top-result-2026-11-19`. Working branch: `fix/note-search-best-match-first-2026-11-19`.
+- This is a web-only, presentation/order change. APK/native code and saved note data are not modified. Physical Android phone testing remains pending user confirmation.
+
+---
+
 # Diary World Clock — Meeting Time Planner removed (Web Update 342, 2026-11-19)
 
 - User asked to remove only **Meeting Time Planner** because it was not useful to them.
