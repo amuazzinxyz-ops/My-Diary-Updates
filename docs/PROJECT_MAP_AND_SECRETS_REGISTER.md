@@ -1,3 +1,15 @@
+# Diary World Clock — typo-tolerant city search (Web Update 340, 2026-11-19)
+
+- User reported that a few city names were not found and asked for search to work even when spelling is slightly incorrect. Implemented normalization and ranked fuzzy matching inside the existing World Clock city search.
+- Search now ignores case, accents and punctuation; supports partial names and joined words such as `Newyork`; allows small spelling errors and adjacent-letter transpositions (e.g. `Londn`, `Pariss`, `Krachi`). Exact and substring matches rank before fuzzy matches. Results remain capped at 30 and already-added cities remain excluded.
+- Existing worldwide time-zone options, city add/remove, saved cities and favourites, live clock, day/night, Mumbai time difference, meeting planner and sunrise/sunset tools remain.
+- Only `web-source/index.html` changed: 47 additions, 3 deletions. Backup branch: `backup/before-world-clock-fuzzy-search-2026-11-19`. Feature branch: `feature/world-clock-fuzzy-city-search-2026-11-19`. PR #239 merged as `5b655294515f42f417a3f9c9f984bce866d827f0`.
+- Static verification passed: World Clock block compiles; normalization, edit-distance matching, ranked results, search input, add/remove, saved cities/favourites and preservation of Calendar scheduler and Smart Reminder code verified. Diff contains only `web-source/index.html`.
+- Web publisher run `44373598780` completed successfully and published **Web Update 340**. Source and mirror are byte-identical at Git blob SHA `fcae648e0b6c7e6f12aa84fb160131855ccde21c` (556,380 bytes). Published web SHA-256: `e22753e7931186c226e81a742b07a3dacf2b7acd72c4e056b99f1cf0596703c4`.
+- APK workflow `44373598609` completed with failure at **Use the exact latest published Diary HTML in Android APK**; 15 later build/release steps were skipped. No APK was built or published. Published APK metadata remains **1.0.194 / versionCode 193**, SHA-256 `51c3a68b6febf3a7e5f9aabbb997e5c32dad9c42bd53d45f17d8b128d88dd434`. This remains a web-only update. Physical phone testing is pending user confirmation.
+
+---
+
 # Diary World Clock — smart city tools added (Web Update 339, 2026-11-19)
 
 - User approved adding five capabilities **inside the existing World Clock modal only**: Favourite City, day/night indicator, time difference from Mumbai, meeting time planner, and sunrise/sunset.

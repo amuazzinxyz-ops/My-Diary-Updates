@@ -5,10 +5,10 @@
   "versionName": "1.0.194",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
   "sha256": "51c3a68b6febf3a7e5f9aabbb997e5c32dad9c42bd53d45f17d8b128d88dd434",
-  "releaseNotes": "My Diary 1.0.194 remains unchanged. Web Update 339 adds Favourite Cities, day/night status, Mumbai time difference, a meeting time converter and sunrise/sunset estimates inside World Clock. Existing Diary features and saved data are preserved.",
+  "releaseNotes": "My Diary 1.0.194 remains unchanged. Web Update 340 improves World Clock search with typo-tolerant city matching; all World Clock smart tools and existing Diary features remain.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 340,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "e22753e7931186c226e81a742b07a3dacf2b7acd72c4e056b99f1cf0596703c4",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "World Clock city search now accepts small spelling mistakes, joined words, accents and partial names, and ranks exact matches first. Example searches include Londn, Pariss, Krachi and Newyork. Favourite cities, day/night, Mumbai time difference, meeting planner, sunrise/sunset, saved cities and add/remove remain."
 }
