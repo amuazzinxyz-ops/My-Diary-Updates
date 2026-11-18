@@ -1,3 +1,17 @@
+# Personal Calendar Upcoming Events and Reminder status — Web Update 330 (2026-11-18)
+
+- User selected three Calendar ideas: distinct event-type colours, Upcoming Events, and Reminder status. The Birthday pink, Anniversary gold and Important Day purple badges were already present from Web Update 329, so their code was preserved without a duplicate styling change.
+- Added a Calendar-only Upcoming Events control with **7 Din**, **30 Din**, and **Sabhi** options. Upcoming results are ordered by the next occurrence. Date matching covers one-time, daily, weekly, monthly, yearly and Custom weekday recurrence; date-difference calculation uses UTC calendar-day values to avoid daylight-saving boundary errors.
+- Added a separate **🔔 Reminder ON / 🔕 Reminder OFF** badge to each saved Calendar entry. The indicator reflects the entry's saved reminder setting (record.remind); it does not claim to inspect Android notification permission or OS alarm delivery.
+- Changed only web-source/index.html and its identical required mirror diary-web/index.html. No saved entries were rewritten or migrated. Existing Calendar form/save/edit and alarm scheduling logic were not changed. Smart Reminder, native Android code, APK identity/signing, Diary notes/photos, PINs/locks and unrelated features were not intentionally changed.
+- Backup branch: backup/before-upcoming-calendar-reminder-status-2026-11-18. Feature branch: feature/calendar-upcoming-events-reminder-status-2026-11-18. Base commit: 140823bb9cd736394e225cf9de6e24757742614e. PR #214 merged as d8ee5661b38e6c1a174b88e8dfe6d33e56fc28e7.
+- Web publisher workflow run 44331410134 completed successfully. Source and mirror are byte-identical at Git blob SHA c3dc57c196a0e875e5faad3e6f89c855a951f708. The publisher-calculated HTML SHA-256 is 2b5d412b1fa41c20e1d87da7dd228564383e6c3af3d2704a441c5659e15ed322.
+- The publisher did not increment webVersion because source and mirror were committed together. PR #215 was merged as f60d5d95ec3a57e7f16cb7875b66773d231aa045, advancing latest.json to Web Update 330 with the publisher-verified SHA-256 and new release notes. APK feed fields were unchanged by PR #215.
+- Main-branch push also automatically triggered APK workflow run 44331410214 even though this is a web-only change. At the time of this register update the APK workflow was still in progress; verify its final conclusion and feed/artifact effects before making any statement that no APK was rebuilt or published. Do not claim an APK update solely from the web publisher run.
+- Static checks confirm source/mirror equality, the 7/30/All controls, support for all existing recurrence kinds including Custom, timezone-safe date matching, and both reminder status styles. CI/browser behaviour and physical-phone visual testing remain pending user confirmation. Do not claim device-side PASS until the user tests the Calendar screen.
+
+---
+
 # Personal Calendar event type and time badges — Web Update 329 (2026-11-18)
 
 - User requested that saved **📅 Personal Calendar** entries display the selected event type and time as separate button-shaped badges. Implemented a compact pill badge for **Birthday**, **Anniversary**, and **Important Day / Zaroori Din**, plus a separate **⏰ time** badge when the entry has a time. The date remains on its existing line; title, details, repeat information and Edit control remain in their existing positions.
