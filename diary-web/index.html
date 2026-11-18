@@ -2091,6 +2091,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     var task=Promise.resolve();
     chosen.forEach(function(record){
      task=task.then(function(){return meFeatureDelete(record.id);}).then(function(){
+      meFeatureSelectedIds.delete(String(record.id));updateMeFeatureBulkUI();
       if(kind==='reminders'&&window.DiaryAppActions&&typeof window.DiaryAppActions.cancelReminder==='function')window.DiaryAppActions.cancelReminder(record.id);
       if(kind==='calendar')calendarCancelAlarms(record);
      });
