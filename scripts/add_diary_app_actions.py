@@ -760,7 +760,7 @@ native = r"""
             return try {
                 // Editing or replacing a reminder must discard any pending auto-repeat from its previous schedule.
                 DiaryReminderScheduler.cancelAutoSnooze(this@MainActivity, id)
-                val firstAt = if (customDaysCsv.isNotBlank()) DiaryReminderScheduler.nextCustomAt(atMillis - 1L, customDaysCsv) else atMillis
+                val firstAt = if (customDaysCsv.isNotBlank()) DiaryReminderScheduler.nextCustomAt(atMillis, customDaysCsv) else atMillis
                 DiaryReminderScheduler.schedule(this@MainActivity, id, title, details, firstAt, soundUri, snoozeMinutes, snoozeLimit, ringDurationSeconds, ringVolumePercent, 0, repeatDaily, atMillis, customDaysCsv)
                 true
             } catch (e: Exception) { false }
