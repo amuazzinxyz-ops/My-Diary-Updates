@@ -1,3 +1,15 @@
+# Diary Me menu — searchable worldwide World Clock cities (Web Update 338, 2026-11-18)
+
+- User noticed the first World Clock release listed only a few cities and asked for the full world's city names. Replaced the small fixed dropdown with a searchable city/time-zone field.
+- Search uses the browser's `Intl.supportedValuesOf('timeZone')` canonical IANA time-zone list when supported, excluding technical `Etc/*`, UTC and GMT entries. Users can search by the city label or time-zone path and tap a result to add it. An 85-zone fallback list is included for browsers without this API. This is the browser's available time-zone city list, not a literal directory of every town on earth; cities sharing a time zone may not all appear separately.
+- Existing live clock rows, add/remove behavior, one-second refresh while open, modal close and timer cleanup are preserved. The feature remains isolated and removable.
+- Only `web-source/index.html` changed for this improvement: 28 insertions, 32 deletions. Backup branch: `backup/before-world-clock-global-city-search-2026-11-18`. Feature branch: `feature/world-clock-global-city-search-2026-11-18`. PR #235 merged as `85c47e9032f42bd7dd40f6fdb7855c4bf52a330e`.
+- Static verification: the isolated World Clock block compiles; searchable field, city/time-zone filter, add/remove handlers and interval cleanup are present. Existing Personal Calendar scheduling and Smart Reminder code remain present.
+- Web publisher run `44368389747` completed successfully and published **Web Update 338**. Source and mirror are byte-identical at Git blob SHA `7d1eda89d17fef6e16585d0c8fbc58ff3d8d5191` (540,938 bytes). Publisher metadata reports web SHA-256 `8b698ad3eae1f7481e9006c4f144c0f92df6ff614b604653ff478109e4e9cacc`.
+- APK workflow `44368389753` failed safely at the pre-build HTML synchronization check while publisher was syncing the mirror. No APK build or release steps ran; APK remains **1.0.194 / versionCode 193**, existing SHA-256 unchanged. This is a web-only change. Physical-device visual testing is pending user confirmation.
+
+---
+
 # Diary Me menu — removable World Clock added (Web Update 337, 2026-11-18)
 
 - User asked to add a World Clock inside the Diary **Me** button and requested that it be easy to remove if they do not like it.
