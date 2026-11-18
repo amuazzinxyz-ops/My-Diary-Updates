@@ -10,5 +10,5 @@
   "webVersion": 314,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "144f8110217fa625603e12517d648283cec1c94b3c1d89baaea5c335f65c4f7c",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "My Diary Web Update 314: Personal Calendar and Smart Reminder Edit controls (selected count, Delete Selected, Done) appear at the top and stay visible while scrolling. Existing saved data and alarm/reminder behavior are preserved."
 }
