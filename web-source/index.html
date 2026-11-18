@@ -2234,7 +2234,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     var typeWrap=mfEl('label',{class:'diary-me-feature-field'});typeWrap.appendChild(mfEl('span',{},mf('type')));
     type=mfEl('select',{name:'type'});[['birthday','birthday'],['anniversary','anniversary'],['event','event']].forEach(function(x){type.appendChild(mfEl('option',{value:x[0]},mf(x[1])));});typeWrap.appendChild(type);form.appendChild(typeWrap);
     var repeatWrap=mfEl('label',{class:'diary-me-feature-field'});repeatWrap.appendChild(mfEl('span',{},t('calendarRepeat')));
-    repeatSelect=mfEl('select',{name:'repeat'});[['none','repeatNone'],['daily','repeatDaily'],['weekly','repeatWeekly'],['monthly','repeatMonthly'],['yearly','repeatYearly'],['custom','custom']].forEach(function(x){repeatSelect.appendChild(mfEl('option',{value:x[0]},x[1]==='custom'?'Custom':t(x[1])));});repeatWrap.appendChild(repeatSelect);form.appendChild(repeatWrap);
+    repeatSelect=mfEl('select',{name:'repeat'});[['none','repeatNone'],['daily','repeatDaily'],['weekly','repeatWeekly'],['monthly','repeatMonthly'],['yearly','repeatYearly']].forEach(function(x){repeatSelect.appendChild(mfEl('option',{value:x[0]},t(x[1])));});if(window.DiaryAppActions&&typeof window.DiaryAppActions.scheduleReminderCustom==='function')repeatSelect.appendChild(mfEl('option',{value:'custom'},'Custom'));repeatWrap.appendChild(repeatSelect);form.appendChild(repeatWrap);
     var calendarRepeatDays=mfRepeatDaysControl(form);repeatSelect.addEventListener('change',function(){calendarRepeatDays.show(repeatSelect.value==='custom');});
     /* Calendar events now always schedule their event-time reminder; the former per-event checkbox is removed. */
     var calendarSoundWrap=mfEl('div',{class:'diary-me-feature-field'});calendarSoundWrap.appendChild(mfEl('span',{},mf('reminderSound')));
@@ -2252,7 +2252,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     time.value=String(defaultReminder.getHours()).padStart(2,'0')+':'+String(defaultReminder.getMinutes()).padStart(2,'0');
     details=mfField(form,mf('reminderDetails'),'text','details',false);
     var dailyRepeatWrap=mfEl('label',{class:'diary-me-feature-field'});dailyRepeatWrap.appendChild(mfEl('span',{},t('calendarRepeat')));
-    repeatDailySelect=mfEl('select',{name:'repeatDaily'});repeatDailySelect.appendChild(mfEl('option',{value:'none'},t('repeatNone')));repeatDailySelect.appendChild(mfEl('option',{value:'daily'},t('repeatDaily')));repeatDailySelect.appendChild(mfEl('option',{value:'custom'},'Custom'));dailyRepeatWrap.appendChild(repeatDailySelect);form.appendChild(dailyRepeatWrap);
+    repeatDailySelect=mfEl('select',{name:'repeatDaily'});repeatDailySelect.appendChild(mfEl('option',{value:'none'},t('repeatNone')));repeatDailySelect.appendChild(mfEl('option',{value:'daily'},t('repeatDaily')));if(window.DiaryAppActions&&typeof window.DiaryAppActions.scheduleReminderCustom==='function')repeatDailySelect.appendChild(mfEl('option',{value:'custom'},'Custom'));dailyRepeatWrap.appendChild(repeatDailySelect);form.appendChild(dailyRepeatWrap);
     var reminderRepeatDays=mfRepeatDaysControl(form);repeatDailySelect.addEventListener('change',function(){reminderRepeatDays.show(repeatDailySelect.value==='custom');});
     var noteWrap=mfEl('label',{class:'diary-me-feature-field'});noteWrap.appendChild(mfEl('span',{},mf('reminderRelatedNote')));
     noteSelect=mfEl('select',{name:'linkedNote'});noteSelect.appendChild(mfEl('option',{value:''},mf('reminderNoNote')));
