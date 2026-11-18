@@ -1001,9 +1001,19 @@ private object DiaryReminderScheduler {
     fun nextCustomAt(anchorAt: Long, customDaysCsv: String, now: Long = System.currentTimeMillis()): Long {
         val selected = customDaysCsv.split(",").mapNotNull { it.toIntOrNull() }.filter { it in 1..7 }.toSet()
         require(selected.isNotEmpty())
-        val calendar = java.util.Calendar.getInstance().apply { timeInMillis = anchorAt }
-        repeat(8) {
-            if (calendar.timeInMillis > now && calendar.get(java.util.Calendar.DAY_OF_WEEK) in selected) return calendar.timeInMillis
+        val anchor = java.util.Calendar.getInstance().apply { timeInMillis = anchorAt }
+        val calendar = java.util.Calendar.getInstance().apply {
+            timeInMillis = if (anchorAt > now) anchorAt else now
+            if (anchorAt <= now) {
+                set(java.util.Calendar.HOUR_OF_DAY, anchor.get(java.util.Calendar.HOUR_OF_DAY))
+                set(java.util.Calendar.MINUTE, anchor.get(java.util.Calendar.MINUTE))
+                set(java.util.Calendar.SECOND, anchor.get(java.util.Calendar.SECOND))
+                set(java.util.Calendar.MILLISECOND, anchor.get(java.util.Calendar.MILLISECOND))
+            }
+        }
+        if (calendar.timeInMillis <= now) calendar.add(java.util.Calendar.DAY_OF_YEAR, 1)
+        repeat(7) {
+            if (calendar.get(java.util.Calendar.DAY_OF_WEEK) in selected) return calendar.timeInMillis
             calendar.add(java.util.Calendar.DAY_OF_YEAR, 1)
         }
         throw IllegalStateException("No next custom reminder day found")
