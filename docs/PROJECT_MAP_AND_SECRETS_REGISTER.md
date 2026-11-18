@@ -6,7 +6,8 @@
 - Backup branch: `backup/before-calendar-name-3d-badge-2026-11-18`. Feature branch: `fix/calendar-name-3d-badge-fit-content-2026-11-18`.
 - Baseline main commit: `f36c23142ed9e8688f4eb32302c49f0b72113b4f`. Source and mirror were byte-identical before editing at blob SHA `2819019629c9317b8efacda29d87238e4ca20f8f`.
 - Static verification required: both Calendar and Reminder use the name badge class; badge width fits its text and is capped at card width; long names wrap; date/type/time/reminder badges and details remain; source/mirror remain identical. Physical Android phone visual testing is pending user confirmation.
-- Intended web release: **Web Update 335**. APK remains **1.0.194 / versionCode 193**; no APK change is intended.
+- Web publisher workflow run **44346716843** completed successfully. It verified and synchronized the HTML mirror and calculated SHA-256 `d5f7c9dcc5e459e07662ab25fd019f95b1fb20b7f5ac40a7b15865cd4cab1fe6`. The publisher repaired the checksum but, because source and mirror were already identical, did not increment the version. Metadata backup branch: `backup/before-calendar-name-badge-release-metadata-2026-11-18`.
+- Release metadata advances **Check for Update to Web Update 335** with the verified SHA-256 and the new release note. APK remains **1.0.194 / versionCode 193**, SHA-256 `49b3c357bfe5ef53f9891f6238884c878797ed5012f19bde37a70aac82b76524`; no APK release is part of this web-only change.
 
 ---
 
