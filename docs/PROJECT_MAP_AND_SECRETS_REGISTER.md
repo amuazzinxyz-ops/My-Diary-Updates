@@ -1,11 +1,14 @@
-# Diary World Clock — Meeting Time Planner city selection stability (implementation merged; publication pending, 2026-11-19)
+# Diary World Clock — Meeting Time Planner city selection stable (Web Update 341, 2026-11-19)
 
 - User reported that the Meeting Time Planner city selector blinked while choosing a city. Source inspection found that `renderWorldClock()` calls `refreshWorldClockPlanner()` on the one-second live-clock interval, and that function unconditionally rebuilt the city `<select>` options each time.
-- Minimal source fix: cache a signature of the saved city list (zone + displayed name) and rebuild the options only when that signature changes. Ordinary one-second refreshes now leave the existing select options in place and preserve the selected city. Date/time conversion and planner result refresh remain in the existing function.
+- Minimal fix: cache a signature of the saved city list (zone + displayed name) and rebuild the options only when that signature changes. Ordinary one-second refreshes leave the existing select options in place and preserve the selected city. Date/time conversion and planner result refresh remain unchanged.
 - Backup branch: `backup/before-world-clock-meeting-city-blink-fix-2026-11-19`. Feature branch: `fix/world-clock-meeting-city-selection-stable-2026-11-19`. PR #241 merged to main as `73e56e9abba2aa6aae9b55f35fa19d5fc93f1119`.
-- Exact commit diff: only `web-source/index.html` changed (7 additions, 2 deletions). No saved city/favourite storage, planner conversion logic, APK/native code, Calendar, Smart Reminder, notes, photos, PINs/locks, or other features were edited.
-- **Release is not yet published.** Post-merge verification found `web-source/index.html` at blob SHA `4dcc8f12229201d84460c081e1b75873303258d3`, while `diary-web/index.html` remains at `fcae648e0b6c7e6f12aa84fb160131855ccde21c`; the mirror is not synchronized. `latest.json` still advertises Web Update 340 and the prior web checksum. No publisher workflow run could be initiated/verified in the available GitHub actions controls. Stop here: do not tell the user to update or claim the fix is live.
-- Static diff review confirms the select rebuild is now conditional on city-list changes; full browser compilation and physical Android testing have not yet been completed. APK metadata remains 1.0.194 / versionCode 193 and unchanged.
+- Exact feature diff: only `web-source/index.html` changed (7 additions, 2 deletions). No saved city/favourite storage, planner conversion logic, APK/native code, Calendar, Smart Reminder, notes, photos, PINs/locks, or other features were edited.
+- Published as **Web Update 341**. Verified `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `4dcc8f12229201d84460c081e1b75873303258d3` (556,653 bytes). Live `latest.json` web SHA-256: `d1769e22885ae2d4708b9eee7f95e122281edb50460a2097a12993033209ee7f`.
+- APK metadata remains **My Diary 1.0.194 / versionCode 193**, SHA-256 `51c3a68b6febf3a7e5f9aabbb997e5c32dad9c42bd53d45f17d8b128d88dd434`; no APK was rebuilt or published for this web-only fix.
+- Static diff review confirms the select options are rebuilt only when the saved city list changes. Full browser/device interaction testing remains pending; do not claim phone-side PASS until the user tests the Meeting Time Planner on their Android phone.
+
+---
 
 ---
 
