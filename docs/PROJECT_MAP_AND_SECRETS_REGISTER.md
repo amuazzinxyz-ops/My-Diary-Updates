@@ -1,3 +1,15 @@
+# Exact Snooze interval timing correction — 1.0.192 / versionCode 191 (2026-11-18)
+
+- Follow-up inspection of the released 1.0.191 receiver found the exact timing defect behind a 2-minute setting behaving like roughly 4 minutes: `ACTION_AUTO_SNOOZE` fired at the selected interval but only scheduled a further `ACTION_ALARM`, rather than ringing at that point. The next audible alarm therefore occurred one additional interval later.
+- Corrected the shared native receiver used by both **Personal Calendar** and **Smart Reminder**. The auto-snooze event now immediately refreshes the notification and starts the alarm sound when its timer fires; it then schedules the next auto event exactly one selected interval later, subject to the configured repeat limit.
+- The same `snoozeUsed` counter is incremented at each unanswered repeat, and no further repeat is scheduled after the configured limit. The initial alarm plus 3× therefore yields three additional rings at the configured interval, then stops.
+- Preserved manual Snooze behavior, Done cancellation, ringtone settings, daily recurrence, exact AlarmClock scheduling, boot restoration, saved reminders and all unrelated app features. No web UI or user data is modified.
+- Backup branch: `backup/before-auto-snooze-ring-timing-fix-2026-11-18`. Working branch: `fix/auto-snooze-ring-at-interval-1-0-192-2026-11-18`.
+- Bumped the signed release to **1.0.192 / versionCode 191** because the app updater only installs a higher versionCode. Build-time guards now verify that the auto event rings immediately and re-schedules the next repeat with the selected interval and limit.
+- Device-side timing/ringtone testing remains required after installing the signed 1.0.192 APK. Do not claim phone-side PASS until the user verifies both features.
+
+---
+
 # APK release version bump for Snooze fix — 1.0.191 / versionCode 190 (2026-11-18)
 
 - The native Snooze/repeat-limit repair is included in the shared scheduler used by Personal Calendar and Smart Reminder.
