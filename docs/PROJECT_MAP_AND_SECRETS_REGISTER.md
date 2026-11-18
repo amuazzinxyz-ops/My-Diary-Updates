@@ -1,3 +1,14 @@
+# Personal Calendar + Smart Reminder Edit mode and multi-select delete — implementation pending publication (2026-11-18)
+
+- User requested an **Edit** option in the upper-right three-dot menu on both **📅 Personal Calendar** and **⏰ Smart Reminder**, so saved entries can be selected with checkboxes and deleted together.
+- Added the ⋮ menu only to these two feature screens. Selecting **Edit** enters selection mode, displays a checkbox on each matching saved entry, shows the selected count and a **Delete Selected** action; selecting **Done** exits and clears the selection.
+- Bulk deletion uses the existing Diary feature IndexedDB records. For Smart Reminder, each deleted record's native reminder is cancelled through the existing `DiaryAppActions.cancelReminder`; for Personal Calendar, the record's scheduled alarm IDs are cancelled through the existing `calendarCancelAlarms`. Existing per-record edit/delete actions remain available outside selection mode.
+- Preserved the existing add/edit forms, reminder settings, alarm scheduling, calendar repeat rules, saved record schema, notes, PINs, locks, photos and all unrelated screens. No native Android scheduler code or user data is changed.
+- Backup branch: `backup/before-calendar-reminder-bulk-delete-menu-2026-11-18`. Working branch: `feat/calendar-reminder-edit-select-delete-2026-11-18`. Base main commit: `c836df7b2d7c5b763b8882c036d21fb461b24181`.
+- Source/mirror synchronization, JavaScript/build checks, PR merge, Check for Update web publication and final feed SHA verification are pending. Physical-phone testing is also pending; do not claim device-side PASS until the user tests both screens.
+
+---
+
 # Exact Snooze interval timing correction — 1.0.192 / versionCode 191 (2026-11-18)
 
 - Follow-up inspection of the released 1.0.191 receiver found the exact timing defect behind a 2-minute setting behaving like roughly 4 minutes: `ACTION_AUTO_SNOOZE` fired at the selected interval but only scheduled a further `ACTION_ALARM`, rather than ringing at that point. The next audible alarm therefore occurred one additional interval later.
