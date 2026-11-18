@@ -4,14 +4,13 @@
 - Updated only `web-source/index.html`: in Edit mode, the existing `meFeatureList` is moved to the first child of the feature content, above the form; the add/edit form and tools/search are hidden; any previous search term is cleared so all saved Calendar/Reminder entries are listed. The screen scroll is reset to the top.
 - Tapping Done restores the existing form, tools and list order. No entry data, alarm/reminder schedules, PINs, locks, notes, photos, native Android code or unrelated features are changed.
 - Backup branch: `backup/before-calendar-reminder-entry-list-top-2026-11-18`. Working branch: `fix/calendar-reminder-entry-list-top-2026-11-18`.
-- Source update is prepared; PR merge, web-only publication, feed SHA/version verification and final post-publish checks remain pending. Physical-phone testing remains pending.
+- PR #186 merged as commit `c7b60fa83086fa11417a0603735de4d28c254a56`; web publish workflow run #370 completed successfully and published **Web Update 315**. Source/mirror byte equality and feed SHA were verified. Physical-phone testing remains pending.
 
 ---
 
 # Personal Calendar + Smart Reminder Edit actions pinned at the top — Web Update 314 published (2026-11-18)
 
-- The first interpretation moved only the selected-count / **Delete Selected** action bar to the top; the user clarified that the **saved entries themselves** must move up beside the Edit controls so they can be ticked immediately.
-- The follow-up implementation now moves the existing saved-entry list to the first position directly under the header/action bar in Edit mode, hides the add/edit form and search/tools while selecting, clears any old search filter so all saved entries appear, and restores the original form/tools/list order when Done is tapped. Existing checkbox selection, bulk deletion, reminder cancellation and calendar alarm cancellation remain unchanged.
+- Moved the selected-count / **Delete Selected** action bar to a direct child immediately below the feature header and made it sticky while scrolling. The existing checkbox selection, delete behavior, reminder cancellation and calendar alarm cancellation were retained; the saved entry list itself was not moved in this first pass.
 - No saved records, alarms, reminder settings, forms, PINs, locks, photos, native Android code or unrelated screens are changed.
 - Backup branch: `backup/before-calendar-reminder-bulkbar-top-2026-11-18`. Working branch: `fix/calendar-reminder-bulkbar-top-2026-11-18`.
 - PR #184 merged as commit `1e7ed40e86bb6145d5b4de054b6c8acef6db84ec`; web publish workflow run #369 completed successfully. The Check for Update feed now advertises `webVersion: 314`.
