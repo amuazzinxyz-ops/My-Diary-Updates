@@ -146,7 +146,7 @@ jobs:
           if html.count("ringVolume:") != 10:
               raise SystemExit("BLOCKED: ringtone-volume label is missing from one or more language dictionaries")
           if "name:'repeatDaily'" not in html or "record.repeatDaily=repeatDailySelect.value==='daily'" not in html or "scheduleReminderDaily" not in html or "record.repeatCustomDays" not in html or "scheduleReminderCustom" not in html or "diary-me-repeat-days-wrap" not in html:
-              raise SystemExit("BLOCKED: Smart Reminder Daily repeat UI/native bridge is incomplete")
+              raise SystemExit("BLOCKED: Smart Reminder repeat UI/native bridge is incomplete")
           target=Path("diary-project/app/src/main/assets/index.html")
           target.write_text(html,encoding="utf-8")
           print(f"PASS: Android APK source is the exact published Diary HTML ({len(html)} chars; SHA-256 {actual})")
@@ -168,8 +168,8 @@ jobs:
           required=("scheduleReminderDaily","repeatDaily: Boolean = false","dailyAnchorAt: Long = atMillis","nextDailyAt","diary_reminder_repeat_daily","if (!repeatDaily && customDaysCsv.isBlank()) DiaryReminderScheduler.cancel(context, id)","snoozeUsed < snoozeLimit","snoozeUsed + 1, repeatDaily, dailyAnchorAt, customDaysCsv","val nextSnoozeUsed = (snoozeUsed + 1).coerceAtMost(snoozeLimit)","DiaryReminderSoundService.start(context, soundUri, ringDurationSeconds, ringVolumePercent)","DiaryReminderScheduler.scheduleAutoSnooze(","System.currentTimeMillis() + snoozeMinutes.toLong() * 60L * 1000L","if (restoreAt > 0L && snoozeUsed < snoozeLimit)","privateLockerBiometricAlias","BiometricPrompt.CryptoObject(cipher)","enablePrivateLockerFingerprint","authenticatePrivateLockerFingerprint","privateLockerBiometricKey","notifyPrivateLockerFingerprintResult")
           required += ("scheduleReminderCustom", "customDaysCsv: String = \"\")", "nextCustomAt", "diary_reminder_custom_days_csv", "if (!repeatDaily && customDaysCsv.isBlank()) DiaryReminderScheduler.cancel(context, id)", "nextCustomAt(dailyAnchorAt, customDaysCsv)")
           missing=[x for x in required if x not in source]
-          if missing: raise SystemExit("BLOCKED: native Smart Reminder Daily repeat implementation guard incomplete: "+", ".join(missing))
-          print("PASS: native Smart Reminder Daily repeat implementation guard")
+          if missing: raise SystemExit("BLOCKED: native Smart Reminder repeat implementation guard incomplete: "+", ".join(missing))
+          print("PASS: native Smart Reminder repeat implementation guard")
           PY
           python3 - <<'PY'
           from pathlib import Path
@@ -589,7 +589,7 @@ jobs:
           meta["versionCode"] = int(lines[1])
           meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk"
           meta["sha256"] = lines[2]
-          meta["releaseNotes"] = "My Diary 1.0.194: Personal Calendar and Smart Reminder support Custom weekday recurrence. Existing None/Daily/Weekly/Monthly/Yearly options, saved entries, snooze timing and limits, ringtone, notifications and unrelated features are preserved."
+          meta["releaseNotes"] = "My Diary 1.0.194: Personal Calendar and Smart Reminder support Custom weekday recurrence. All previous repeat options for each section, saved entries, snooze timing and limits, ringtone, notifications and unrelated features are preserved."
           meta["webSha256"] = hashlib.sha256(Path("web-source/index.html").read_bytes()).hexdigest()
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
