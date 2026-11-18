@@ -221,11 +221,14 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 }
 </style>
 <style id="diary-custom-repeat-weekdays">
-.diary-me-repeat-days-wrap{margin-top:8px;padding:10px;border:1px solid #c8b6e8;border-radius:12px;background:linear-gradient(145deg,#fff,#f6f0ff)}
-.diary-me-repeat-days-title{display:block;font-weight:800;margin-bottom:8px}
-.diary-me-repeat-days{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-.diary-me-repeat-day{display:flex;align-items:center;gap:5px;min-width:0;font-size:13px;font-weight:800}
-.diary-me-repeat-day input{width:17px;height:17px;accent-color:#7542a5;flex:0 0 auto}
+/* Make every weekday a clear, full-width tap target on small Android screens. */
+.diary-me-repeat-days-wrap{margin-top:8px;padding:10px;border:1px solid #c8b6e8;border-radius:12px;background:linear-gradient(145deg,#fff,#f6f0ff);box-sizing:border-box}
+.diary-me-repeat-days-title{display:block;font-size:15px;line-height:1.35;font-weight:900;margin-bottom:10px;color:#43256b}
+.diary-me-repeat-days{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.diary-me-repeat-day{display:flex;align-items:center;gap:8px;min-width:0;min-height:44px;padding:7px 9px;box-sizing:border-box;border:1px solid #cbb9e3;border-radius:9px;background:#fff;color:#2e2140;font-size:15px;line-height:1.25;font-weight:900;white-space:normal;overflow-wrap:anywhere}
+.diary-me-repeat-day input{width:20px;height:20px;accent-color:#7542a5;flex:0 0 20px;margin:0}
+.diary-me-repeat-day:has(input:checked){border:2px solid #7542a5;background:linear-gradient(145deg,#f2e9ff,#e4d4ff);color:#35165d}
+@media(min-width:560px){.diary-me-repeat-days{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .diary-me-repeat-days-wrap[hidden]{display:none!important}
 </style>
 </head>
