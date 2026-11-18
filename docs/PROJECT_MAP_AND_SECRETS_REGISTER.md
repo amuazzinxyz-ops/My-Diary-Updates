@@ -7,7 +7,10 @@
 - Baseline main commit: `f36c23142ed9e8688f4eb32302c49f0b72113b4f`. Source and mirror were byte-identical before editing at blob SHA `2819019629c9317b8efacda29d87238e4ca20f8f`.
 - Static verification required: both Calendar and Reminder use the name badge class; badge width fits its text and is capped at card width; long names wrap; date/type/time/reminder badges and details remain; source/mirror remain identical. Physical Android phone visual testing is pending user confirmation.
 - Web publisher workflow run **44346716843** completed successfully. It verified and synchronized the HTML mirror and calculated SHA-256 `d5f7c9dcc5e459e07662ab25fd019f95b1fb20b7f5ac40a7b15865cd4cab1fe6`. The publisher repaired the checksum but, because source and mirror were already identical, did not increment the version. Metadata backup branch: `backup/before-calendar-name-badge-release-metadata-2026-11-18`.
-- Release metadata advances **Check for Update to Web Update 335** with the verified SHA-256 and the new release note. APK remains **1.0.194 / versionCode 193**, SHA-256 `49b3c357bfe5ef53f9891f6238884c878797ed5012f19bde37a70aac82b76524`; no APK release is part of this web-only change.
+- Release metadata advances **Check for Update to Web Update 335** with verified web SHA-256 `d5f7c9dcc5e459e07662ab25fd019f95b1fb20b7f5ac40a7b15865cd4cab1fe6`.
+- The main-branch push also triggered APK workflow run **44346716675**. It completed successfully and automatically republished the existing **1.0.194 / versionCode 193** APK; the version number did not advance. The signed release certificate matched the previously approved fingerprint (`23a4e93f3c7911dce18389ea583548700c6ad6a3759707f1cd222d07e2408b5a`). The live feed now records APK SHA-256 `51c3a68b6febf3a7e5f9aabbb997e5c32dad9c42bd53d45f17d8b128d88dd434`. This was an automatic same-version rebuild after a web-only change, not a new APK version.
+- The APK build verified it embedded the exact published HTML SHA-256 `d5f7c9dcc5e459e07662ab25fd019f95b1fb20b7f5ac40a7b15865cd4cab1fe6`. No Android source feature was intentionally changed by this task. Physical-phone visual testing remains pending user confirmation.
+- Register correction backup branch: `backup/before-calendar-name-apk-auto-republish-register-2026-11-18`.
 
 ---
 
