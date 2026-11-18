@@ -1,3 +1,16 @@
+# Personal Calendar Upcoming Events section removed — Web Update 331 (2026-11-18)
+
+- User explicitly rejected the **📅 Aane Wale Events** block and asked to remove its **7 Din**, **30 Din**, and **Sabhi** controls. Removed the complete Calendar-only Upcoming Events panel, its filtering/sorting helper, empty-state special case, and dedicated CSS.
+- Restored the ordinary full Calendar entry list and the standard empty-list message. Existing Birthday / Anniversary / Important Day colour badges and **Reminder ON / Reminder OFF** badges remain in place.
+- Only `web-source/index.html` and the identical `diary-web/index.html` mirror changed. No saved Calendar entries were rewritten or deleted. Calendar add/edit/save flows, alarm scheduling, Smart Reminder logic, reminder sound/notification settings, Diary notes/photos, locks/PINs and unrelated features were not changed.
+- Backup branch: `backup/before-removing-upcoming-events-2026-11-18`. Feature branch: `fix/remove-calendar-upcoming-events-2026-11-18`. PR #218 merged as `393603880e1c365abd8fd4d913745f7e0f1d0517`.
+- Web-only publisher run **44334304552** completed successfully. It verified and published the HTML and synced the mirror; source and mirror are byte-identical at Git blob SHA `cced801586407fb0710915bd5a8d5dd74a165bf0`. Publisher-verified HTML SHA-256: `518bf0ee024af2d377540775ff0789e298c8fc122c7646bfafb7f30659abffd6`.
+- As the publisher correctly repaired the checksum without incrementing webVersion (source and mirror were already identical), PR #219 advanced `latest.json` to **Web Update 331**, retaining the verified SHA-256 and recording release notes. APK feed fields were unchanged in PR #219. PR #219 merged as `0a7214c91c4661a5538a4ea3b60b6c22ffceb8c1`.
+- Main push for PR #218 automatically triggered APK workflow run **44334304530**, despite this being a web-only UI removal. At time of this register update it was still in progress. Check its final conclusion and any APK/feed changes before reporting whether a same-version APK was republished. Do not describe it as a new APK version unless versionCode/versionName actually advance.
+- Static checks confirm Upcoming Events labels, filters, helper and CSS are absent; reminder ON/OFF badges remain; event-type badge renderer remains; source and mirror are identical. Physical phone testing remains pending user confirmation.
+
+---
+
 # Personal Calendar Upcoming Events and Reminder status — Web Update 330 (2026-11-18)
 
 - User selected three Calendar ideas: distinct event-type colours, Upcoming Events, and Reminder status. The Birthday pink, Anniversary gold and Important Day purple badges were already present from Web Update 329, so their code was preserved without a duplicate styling change.
