@@ -2163,8 +2163,10 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     var customDays=(record.repeatCustomDays||[]).map(Number).filter(function(x){return x>=1&&x<=7;});
     if(!customDays.length||typeof bridge.scheduleReminderCustom!=='function')return false;
     var customId='cal-'+record.id+'-custom';
-    var customAt=new Date(String(record.date)+'T'+(record.time||'09:00')).getTime();
-    if(!Number.isFinite(customAt)||customAt<=Date.now()||!bridge.scheduleReminderCustom(customId,record.title||'Personal Calendar',record.details||'',customAt,record.soundUri||'',Number(record.snoozeMinutes)||10,Number.isFinite(Number(record.snoozeLimit))?Number(record.snoozeLimit):3,Number(record.ringDurationSeconds)||30,Number.isFinite(Number(record.ringVolumePercent))?Number(record.ringVolumePercent):80,customDays.join(',')))return false;
+    var customStart=mfAlignDateToRepeatDays(record.date,record.time,customDays);
+    if(!customStart)return false;
+    var customAt=customStart.getTime();
+    if(!bridge.scheduleReminderCustom(customId,record.title||'Personal Calendar',record.details||'',customAt,record.soundUri||'',Number(record.snoozeMinutes)||10,Number.isFinite(Number(record.snoozeLimit))?Number(record.snoozeLimit):3,Number(record.ringDurationSeconds)||30,Number.isFinite(Number(record.ringVolumePercent))?Number(record.ringVolumePercent):80,customDays.join(',')))return false;
     ids.push(customId);
     oldIds.forEach(function(oldId){if(ids.indexOf(oldId)<0)bridge.cancelReminder(oldId);});
     record.reminderIds=ids;return true;
