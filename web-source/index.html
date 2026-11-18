@@ -2140,6 +2140,11 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   function mfAlignDateToRepeatDays(dateValue,timeValue,days){
    var d=new Date(String(dateValue)+'T'+String(timeValue||'09:00'));
    if(!Number.isFinite(d.getTime()))return null;
+   if(d.getTime()<=Date.now()){
+    var now=new Date();
+    d.setFullYear(now.getFullYear(),now.getMonth(),now.getDate());
+    if(d.getTime()<=Date.now())d.setDate(d.getDate()+1);
+   }
    for(var i=0;i<7&&days.indexOf(d.getDay()+1)<0;i++)d.setDate(d.getDate()+1);
    return d;
   }
