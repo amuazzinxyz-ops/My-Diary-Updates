@@ -1,0 +1,66 @@
+name: Validate Custom weekday repeat changes
+
+on:
+  push:
+    branches:
+      - feat/custom-repeat-calendar-reminder-2026-11-18
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout task branch
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install Android SDK
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+
+      - name: Extract and verify original Diary Android project
+        run: |
+          mkdir -p diary-project
+          unzip -q "Diary-Android-Project-v13 (6).zip" -d diary-project
+          python3 diary-project/scripts/verify_project.py
+
+      - name: Verify project scripts and generate native reminder bridge
+        run: |
+          python3 -m py_compile scripts/add_diary_app_actions.py
+          python3 scripts/add_diary_app_actions.py
+          python3 -m py_compile scripts/apply_diary_identity.py
+          python3 scripts/apply_diary_identity.py
+
+      - name: Use exact web source and validate JavaScript
+        run: |
+          cmp -s web-source/index.html diary-web/index.html
+          cp web-source/index.html diary-project/app/src/main/assets/index.html
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          html=Path("diary-project/app/src/main/assets/index.html").read_text(encoding="utf-8")
+          scripts=re.findall(r"<script[^>]*>(.*?)</script>",html,re.I|re.S)
+          module=next((x for x in scripts if "function openDiaryPanel" in x),None)
+          if module is None:
+              raise SystemExit("Diary JavaScript module missing")
+          Path("/tmp/diary-module.js").write_text(module,encoding="utf-8")
+          PY
+          node --check /tmp/diary-module.js
+
+      - name: Compile Android debug APK
+        working-directory: diary-project
+        run: gradle --no-daemon assembleDebug
