@@ -1,3 +1,12 @@
+# Personal Calendar + Smart Reminder search results placement — Web Update 320 phone test confirmed (2026-11-18)
+
+- User confirmed physical-phone testing is complete and the requested behavior works correctly in both **📅 Personal Calendar** and **⏰ Smart Reminder**: matching search results appear immediately below the Search Bar.
+- This confirms device-side PASS for this specific search-results placement change only. It does not imply that other pending phone tests have passed.
+- PR #194 was merged and **Web Update 320** was published. This is a web-only change; APK remains **1.0.193 / versionCode 192**.
+- No further code changes were made for this test confirmation. Existing Calendar/Reminder records, forms, scheduling, alarms, PINs, locks, notes, photos and unrelated features remain unchanged.
+
+---
+
 # Personal Calendar + Smart Reminder search moved above Name — Web Update 319 published (2026-11-18)
 
 - User approved moving the existing **Smart Search** field in both **📅 Personal Calendar** and **⏰ Smart Reminder** to immediately above the **Name** field.
