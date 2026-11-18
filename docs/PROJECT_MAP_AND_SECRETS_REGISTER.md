@@ -1,3 +1,25 @@
+# Permanent My Diary work-safety procedure (user-confirmed, 2026-11-18)
+
+This procedure applies to every future My Diary task. Follow it before making changes; it reduces avoidable mistakes but does not guarantee that software can never contain a defect.
+
+1. **Read the register first:** Open this file and review the project map, secrets-handling notes, current release state and relevant recent change history before touching code.
+2. **Verify the live baseline:** Check the default branch, current `latest.json`, published web/APK versions and hashes, and the actual target files. Never assume a remembered version or old Library copy is current.
+3. **Stay in the correct project:** Work only in the My Diary repository and the exact feature/file the user requested. Never modify Muazzin or unrelated projects.
+4. **Back up before editing:** Create a clearly named backup branch from the verified current main commit. Create a separate task branch from that same baseline. Confirm both branches exist before changing files.
+5. **Make the smallest scoped change:** Inspect the relevant implementation and its callers first. Change only what is necessary for the requested behavior. Preserve existing working features, saved records, photos, notes, PINs, locks, reminder/calendar settings, alarm scheduling, app identity and signing identity unless the user explicitly requests a change.
+6. **Protect user data and secrets:** Do not expose, copy into logs, or alter secrets, signing keys, credentials or private user data. Do not run destructive migrations or reset user data as a shortcut.
+7. **Review the exact diff:** Confirm only intended files and lines changed. Check for accidental deletions, duplicate handlers, changed IDs, broken event flow, unintended style spillover and unrelated modifications. If scope is unclear or risk is material, stop and ask the user rather than guessing.
+8. **Verify before merging:** Run the relevant syntax, static, project-specific and build checks. For web releases, verify source/mirror byte equality and the exact published SHA-256/version feed. For APK releases, verify build success, signing-certificate continuity, artifact SHA-256 and both download/update-feed metadata as applicable. A web-only change must not be described as a new APK release.
+9. **Fail closed:** If the register, repository, baseline, backup, required file, build, checksum, mirror, signing check or publication state cannot be verified, do not merge or publish on assumptions. Report the blocker clearly and wait.
+10. **Merge and publish carefully:** Merge only the reviewed task branch after required checks pass. Confirm the resulting commit and actual workflow result. Verify the live feed and deployed artifacts after publication; do not infer success merely from a PR merge or workflow start.
+11. **Record every completed change:** Update this same Master Register with the request, exact files/scope, preserved behavior, backup/work branches, PR/commit, tests, workflow run, published versions and hashes, and any remaining device tests. Verify the register update itself.
+12. **Be honest about phone testing:** Clearly separate repository/build/publication verification from physical-device testing. Never say a feature is fully tested or “ALL OK” until the relevant phone behavior has actually been confirmed by the user or a valid device test.
+13. **Keep communication clear:** Explain what changed and what did not change in concise Roman Hindi when appropriate. If a defect is reported, inspect the actual current code and release first; do not blame the user, repeat an unverified claim, or hide a failed attempt.
+
+**Standing priority:** correctness, data preservation and narrow scope are more important than speed. No unrelated feature is to be touched merely to make a task easier.
+
+---
+
 # Personal Calendar + Smart Reminder — show the saved entries themselves at the top in Edit mode (2026-11-18)
 
 - User clarified that the entries—not just the action bar—must appear immediately below the top Edit controls so each can be checked without scrolling past the add form or tools.
