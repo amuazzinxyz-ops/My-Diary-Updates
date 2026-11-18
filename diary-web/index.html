@@ -2499,8 +2499,14 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
       selectLabel.append(selectBox,mfEl('span',{},meFeatureBulkText('select')));card.appendChild(selectLabel);
      }
      var heading=mfEl('strong',{},record.title||record.category||record.fileName||mf(record.type||'event'));
-     var displayDate=meFeatureDisplayDate(record.date);var meta=mfEl('small',{},kind==='reminders'?(displayDate+' • '+String(record.time||'')):displayDate);
-     card.append(heading,meta);
+     var displayDate=meFeatureDisplayDate(record.date);
+     card.appendChild(heading);
+     if(kind==='reminders'){
+      var reminderDateTimeBadges=mfEl('div',{class:'diary-calendar-badge-row'});
+      reminderDateTimeBadges.appendChild(mfEl('span',{class:'diary-calendar-badge'},'📅 '+displayDate));
+      if(record.time)reminderDateTimeBadges.appendChild(mfEl('span',{class:'diary-calendar-badge diary-calendar-time-badge'},'⏰ '+String(record.time)));
+      card.appendChild(reminderDateTimeBadges);
+     }else card.appendChild(mfEl('small',{},displayDate));
      if(kind==='reminders'&&record.details)card.appendChild(mfEl('p',{},record.details));if(kind==='reminders'&&record.repeatDaily)card.appendChild(mfEl('small',{},t('calendarRepeat')+': '+t('repeatDaily')));if(kind==='reminders'&&record.soundUri)card.appendChild(mfEl('small',{},'🔔 '+(record.soundLabel||mf('reminderSound'))));if(kind==='reminders')card.appendChild(mfEl('small',{},mf('snoozeInterval')+': '+(record.snoozeMinutes||10)+' min • '+mf('snoozeLimit')+': '+(record.snoozeLimit===undefined?3:record.snoozeLimit)+' • '+mf('ringDuration')+': '+((record.ringDurationSeconds||30)>=60?((record.ringDurationSeconds||30)/60)+' min':(record.ringDurationSeconds||30)+' sec')+' • '+mf('ringVolume')+': '+(record.ringVolumePercent===undefined?80:record.ringVolumePercent)+'%'));
      if(kind==='reminders'&&record.noteId){var linkedNote=(read()||[]).filter(function(n){return String(n.id)===String(record.noteId);})[0];if(linkedNote)card.appendChild(mfEl('small',{},mf('reminderRelatedNote')+': '+((linkedNote.title||mf('untitled')).trim()||mf('untitled'))));}
      if(kind==='reminders'){
