@@ -7,8 +7,8 @@
   "sha256": "64b41c3632a9e06764277d9b408d479e18e778469cc6ddc13241b5530fe61f6f",
   "releaseNotes": "My Diary 1.0.194: Personal Calendar and Smart Reminder support Custom weekday recurrence. All previous repeat options for each section, saved entries, snooze timing and limits, ringtone, notifications and unrelated features are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 328,
+  "webVersion": 329,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "4cad1df86b85258fa111db6a0f8b7391c1b4727dc391765de3b486e1ad19a12e",
+  "webSha256": "8633d1d2cc300b0974529ef1f0c536054385132c001ff834f9d8b1598dad8d70",
   "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
