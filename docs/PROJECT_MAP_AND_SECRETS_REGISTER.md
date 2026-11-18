@@ -1,3 +1,14 @@
+# Personal Calendar + Smart Reminder — all text bold (Web Update 325, 2026-11-18)
+
+- User requested that all text inside **📅 Personal Calendar** and **⏰ Smart Reminder** be bold, including interface labels, existing saved/user-entered text, and text entered in new or edited entries.
+- Added a narrowly scoped modal class for these two feature IDs and CSS that applies bold weight to every descendant, including saved entry cards, form labels, input values, dropdown text, PIN-related views, and input placeholders. The class is set only while either target feature is open and removed when the feature closes.
+- No saved data, entry values, date/time fields, recurrence, alarm/reminder scheduling, ringtone, Snooze, notification behavior, PIN/lock logic, other Diary sections, or native Android code was changed.
+- Backup branch: `backup/before-calendar-reminder-bold-text-2026-11-18`. Working branch: `fix/calendar-reminder-all-text-bold-2026-11-18`. Verified base main commit: `531c70acc42183a012bd0c5fc28bf270318efff3`.
+- Intended web release: **Web Update 325**. Source/mirror content SHA-256: `9044dda18c5da0158ae5e44bf08f16b02f76cd2bf7eccf6cab1cdaf8cab3b9ac`. APK remains **1.0.194 / versionCode 193**; this is a web-only style change and no APK rebuild is intended.
+- Static verification and source/mirror equality are to be recorded after merge/publication. Physical-phone visual testing remains pending user confirmation.
+
+---
+
 # Custom weekday names visibility fix — Web Update 322 (2026-11-18)
 
 - User reported that the weekday names inside the **Custom** selector were not clear/readable on mobile.
