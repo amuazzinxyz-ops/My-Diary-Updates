@@ -1,3 +1,15 @@
+# APK release version bump for Snooze fix — 1.0.191 / versionCode 190 (2026-11-18)
+
+- The native Snooze/repeat-limit repair is included in the shared scheduler used by Personal Calendar and Smart Reminder.
+- Verified the updater's native comparison: it downloads and installs the APK only when feed `versionCode` is greater than the installed app's `currentVersion()`. The installed/current published release is **1.0.190 / versionCode 189**, so rebuilding the same version would not deliver the native fix through Check for Update.
+- Created backup branch `backup/before-release-version-bump-snooze-fix-2026-11-18` and working branch `fix/release-version-1-0-191-snooze-limit-2026-11-18`.
+- Advanced the approved signed release to **1.0.191 / versionCode 190** and adjusted the fail-closed feed guard to accept the current 1.0.190/189 feed or the exact new 1.0.191/190 release. Updated release notes and artifact names to describe the configured repeat limit.
+- This is a release-number change only; no user data, reminder settings, web UI, notes, PINs, locks, photos or unrelated features are changed. The prior 1.0.190 APK remains the installed baseline until the new signed release passes all checks and is published.
+- The native build run triggered by the Snooze-fix merge used the old 1.0.190 version; a new push with the bumped version will supersede it under the workflow's existing concurrency policy.
+- Do not claim the fix is available on the phone until the 1.0.191 signed APK and update feed are published and the user installs it.
+
+---
+
 # Snooze interval and repeat limit — Personal Calendar + Smart Reminder (2026-11-18)
 
 - User reported that the selected **Snooze Ka Waqfa** and **Dobara Aane Ki Had** did not appear to behave consistently in both **📅 Personal Calendar** and **⏰ Smart Reminder**.
