@@ -3985,23 +3985,21 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var list=document.getElementById('diaryMyNotesList');if(!list)return;
   list.replaceChildren();
   if(showingTrash){renderTrashList(list);applyDiaryFont();return;}
-  var all=read(),q=(document.getElementById('diaryMyNotesSearch').value||'').trim().toLocaleLowerCase();
+  var searchBox=document.getElementById('diaryMyNotesSearch'),q=(searchBox.value||'').trim().toLocaleLowerCase();
+  if(!showingTrash&&q){
+   if(list.__diarySearchWasVisible===undefined)list.__diarySearchWasVisible=list.style.display!=='none';
+   list.style.display='';
+   if(searchBox.parentNode)searchBox.parentNode.insertBefore(list,searchBox.nextSibling);
+  }else if(!q&&list.__diarySearchWasVisible!==undefined){
+   var allNotesButton=document.getElementById('diaryMyNotesAllNotes');
+   if(allNotesButton&&allNotesButton.parentNode)allNotesButton.parentNode.appendChild(list);
+   list.style.display=list.__diarySearchWasVisible?'':'none';
+   delete list.__diarySearchWasVisible;
+  }
+  var all=read();
   var filterEl=document.getElementById('diaryMyNotesCategoryFilter'),selectedCategory=filterEl?filterEl.value:'all';
   if(selectedCategory!=='all')all=all.filter(function(n){return String(n.category||'general')===selectedCategory;});
   all.sort(function(a,b){
-   if(q){
-    function searchRank(n){
-     var title=String(n.title||'').toLocaleLowerCase(),body=String(n.body||'').toLocaleLowerCase();
-     if(title===q)return 0;
-     if(title.indexOf(q)===0)return 1;
-     if(title.indexOf(q)>=0)return 2;
-     if(body===q)return 3;
-     if(body.indexOf(q)===0)return 4;
-     if(body.indexOf(q)>=0)return 5;
-     return 6;
-    }
-    var ar=searchRank(a),br=searchRank(b);if(ar!==br)return ar-br;
-   }
    var ap=!!(a.pinnedNote||a.favourite||a.pinned),bp=!!(b.pinnedNote||b.favourite||b.pinned);if(ap!==bp)return Number(bp)-Number(ap);
    return (b.updated||0)-(a.updated||0);
   });
