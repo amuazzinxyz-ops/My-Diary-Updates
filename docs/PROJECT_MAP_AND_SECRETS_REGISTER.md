@@ -1,3 +1,14 @@
+# Personal Calendar + Smart Reminder — hide event reminder settings from saved entries (Web Update 326, 2026-11-18)
+
+- User clarified that the **“Event ke waqt yaad dilayein”** label must not appear inside saved entries in either **📅 Personal Calendar** or **⏰ Smart Reminder**, including entries already saved and all future saved entries.
+- Removed only the Calendar saved-entry rendering of the reminder label and its sound/snooze/ring summary. Smart Reminder saved-entry cards did not render that label or settings summary; they remain unchanged. This is a display-only change: existing records and reminder fields are preserved, and automatic Calendar event-time reminders plus Smart Reminder scheduling remain active.
+- No saved records were migrated or deleted; no form controls, alarm scheduling, repeat rules, sound, snooze, ringtone, notifications, PIN/locks, notes, photos, native Android code or unrelated screens were changed.
+- Backup branch: `backup/before-hide-calendar-reminder-entry-settings-2026-11-18`. Working branch: `fix/hide-event-reminder-details-from-entries-2026-11-18`. Source/mirror baseline verified byte-identical at blob SHA `1ed44364959fff6faa8f363bf98379139f9d0629`.
+- Intended web release: **Web Update 326**. Source/mirror SHA-256: `258f0894a0e5ea1280a4e1eed8d9fe9be5b4c420793dc7d7b427826adfba2416`. APK remains **1.0.194 / versionCode 193**; this is a web-only display change.
+- Static verification and publication status will be recorded after the PR is reviewed/merged. Physical-phone testing remains pending user confirmation.
+
+---
+
 # Personal Calendar + Smart Reminder — all text bold (Web Update 325, 2026-11-18)
 
 - User requested that all text inside **📅 Personal Calendar** and **⏰ Smart Reminder** be bold, including interface labels, existing saved/user-entered text, and text entered in new or edited entries.
