@@ -1,3 +1,16 @@
+# Snooze interval and repeat limit — Personal Calendar + Smart Reminder (2026-11-18)
+
+- User reported that the selected **Snooze Ka Waqfa** and **Dobara Aane Ki Had** did not appear to behave consistently in both **📅 Personal Calendar** and **⏰ Smart Reminder**.
+- Inspected the actual web form values and native Android bridge. Both features already pass the selected interval in minutes and repeat limit as separate values to the same shared native reminder scheduler. The interval is scheduled in milliseconds as `snoozeMinutes * 60 * 1000`; the selected 2-minute interval calculation is retained.
+- Found the confirmed defect: unanswered automatic repeats were explicitly independent of the configured repeat limit, and the auto-repeat receiver did not increment the shared repeat counter. This allowed unanswered alarms to continue beyond the selected 3×/5×/10× limit.
+- Minimal fix in `scripts/add_diary_app_actions.py`: automatic unanswered repeats now increment the same `snoozeUsed` counter as manual Snooze; no next automatic repeat is scheduled once the configured limit is reached; reboot restoration also refuses to restore an over-limit auto-repeat. The initial alarm plus 3× therefore means three additional alarms at the selected interval, then stops. The existing Done/manual Snooze actions, sound, notification, exact AlarmClock scheduling, daily recurrence and boot restoration remain in place.
+- This is a shared native scheduler, so the fix applies to both Personal Calendar and Smart Reminder. No web UI, reminder/calendar records, notes, PINs, locks, photos or unrelated features were changed.
+- Backup branch: `backup/before-snooze-repeat-limit-calendar-smart-reminder-2026-11-18`. Working branch: `fix/snooze-repeat-limit-calendar-smart-reminder-2026-11-18`.
+- Added a build-time guard to verify the repeat counter, configured limit, interval conversion and reboot-restoration limit remain present.
+- Phone-side timing/ringtone testing is still required after installing the newly built signed APK; do not claim device-side PASS until the user tests both features.
+
+---
+
 # Check for Update APK download HTTP 404 — root cause fixed (2026-11-18)
 
 - User reported the Android **Check for Update** flow repeatedly failed with **HTTP 404**. Checked the live update feed and the actual repository file tree rather than assuming a network issue.
