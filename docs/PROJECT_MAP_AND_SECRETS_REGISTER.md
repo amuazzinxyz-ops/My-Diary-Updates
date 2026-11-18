@@ -1,7 +1,17 @@
+# Personal Calendar + Smart Reminder — show the saved entries themselves at the top in Edit mode (2026-11-18)
+
+- User clarified that the entries—not just the action bar—must appear immediately below the top Edit controls so each can be checked without scrolling past the add form or tools.
+- Updated only `web-source/index.html`: in Edit mode, the existing `meFeatureList` is moved to the first child of the feature content, above the form; the add/edit form and tools/search are hidden; any previous search term is cleared so all saved Calendar/Reminder entries are listed. The screen scroll is reset to the top.
+- Tapping Done restores the existing form, tools and list order. No entry data, alarm/reminder schedules, PINs, locks, notes, photos, native Android code or unrelated features are changed.
+- Backup branch: `backup/before-calendar-reminder-entry-list-top-2026-11-18`. Working branch: `fix/calendar-reminder-entry-list-top-2026-11-18`.
+- Source update is prepared; PR merge, web-only publication, feed SHA/version verification and final post-publish checks remain pending. Physical-phone testing remains pending.
+
+---
+
 # Personal Calendar + Smart Reminder Edit actions pinned at the top — Web Update 314 published (2026-11-18)
 
-- User clarified that immediately after tapping **Edit**, the selected-count, **Delete Selected**, and **Done** controls must be visible at the top rather than below the entry form/tools.
-- Moved the existing bulk-action bar to a direct child immediately below the feature header and made it sticky while scrolling. The same existing controls, checkbox selection, delete behavior, reminder cancellation and calendar alarm cancellation are retained; this is a layout-only change.
+- The first interpretation moved only the selected-count / **Delete Selected** action bar to the top; the user clarified that the **saved entries themselves** must move up beside the Edit controls so they can be ticked immediately.
+- The follow-up implementation now moves the existing saved-entry list to the first position directly under the header/action bar in Edit mode, hides the add/edit form and search/tools while selecting, clears any old search filter so all saved entries appear, and restores the original form/tools/list order when Done is tapped. Existing checkbox selection, bulk deletion, reminder cancellation and calendar alarm cancellation remain unchanged.
 - No saved records, alarms, reminder settings, forms, PINs, locks, photos, native Android code or unrelated screens are changed.
 - Backup branch: `backup/before-calendar-reminder-bulkbar-top-2026-11-18`. Working branch: `fix/calendar-reminder-bulkbar-top-2026-11-18`.
 - PR #184 merged as commit `1e7ed40e86bb6145d5b4de054b6c8acef6db84ec`; web publish workflow run #369 completed successfully. The Check for Update feed now advertises `webVersion: 314`.
