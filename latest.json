@@ -7,8 +7,8 @@
   "sha256": "49e8534e5379faf6ac743a7674bdecf688d24732fc793f0efdb3ce9456bbc473",
   "releaseNotes": "My Diary 1.0.194: Personal Calendar and Smart Reminder support Custom weekday recurrence. All previous repeat options for each section, saved entries, snooze timing and limits, ringtone, notifications and unrelated features are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 331,
+  "webVersion": 332,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "e1450da7b2323c01421be4c3ee7b253d38ed7b412f16b1768b0f0adf3caf58e5",
-  "webReleaseNotes": "Personal Calendar: removed the Upcoming Events section and its 7 Din, 30 Din and Sabhi buttons at the user's request. Existing Calendar entries, event type colour badges, Reminder ON/OFF badges and reminder scheduling are preserved."
+  "webReleaseNotes": "Personal Calendar and Smart Reminder: saved entry dates now display as DD-MM-YYYY (day-month-year), for example 19-11-2026. Stored dates, edit values, recurrence calculations and alarm timing remain unchanged."
 }
