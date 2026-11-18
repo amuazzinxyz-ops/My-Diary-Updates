@@ -1539,8 +1539,10 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var worldClockPlannerTimeLabel=el('label',{},worldClockText('time'));
   var worldClockPlannerResult=el('div',{id:'diaryWorldClockMeetingResult'});
   worldClockPlannerResult.style.cssText='padding:8px;border-radius:8px;background:#eee5fb;color:#35145f;font-size:13px;font-weight:900;';
-  var worldClockPlannerDateWrap=el('div',{style:'display:flex;flex-direction:column;gap:4px;'},worldClockPlannerDateLabel,worldClockPlannerDate);
-  var worldClockPlannerTimeWrap=el('div',{style:'display:flex;flex-direction:column;gap:4px;'},worldClockPlannerTimeLabel,worldClockPlannerTime);
+  var worldClockPlannerDateWrap=el('div',{style:'display:flex;flex-direction:column;gap:4px;'});
+  var worldClockPlannerTimeWrap=el('div',{style:'display:flex;flex-direction:column;gap:4px;'});
+  worldClockPlannerDateWrap.append(worldClockPlannerDateLabel,worldClockPlannerDate);
+  worldClockPlannerTimeWrap.append(worldClockPlannerTimeLabel,worldClockPlannerTime);
   worldClockPlannerFields.append(worldClockPlannerDateWrap,worldClockPlannerTimeWrap);
   var worldClockPlannerTargetWrap=el('div',{style:'display:flex;flex-direction:column;gap:4px;'});
   var worldClockPlannerTargetLabel=el('label',{},worldClockText('target'));
@@ -1663,7 +1665,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     var details=el('small',{});details.style.cssText='display:block;margin-top:4px;font-size:11px;line-height:1.5;font-weight:900;color:#58436e;';
     try{
      var cityParts=worldClockDateParts(now,city.zone),localHour=Number(new Intl.DateTimeFormat('en-US',{timeZone:city.zone,hour:'2-digit',hourCycle:'h23'}).format(now));
-     var sun=worldClockSunMinutes(now,city.zone),isDay=sun&&sun.rise!==null&&sun.set!==null?((cityParts.hour*60+Number(new Intl.DateTimeFormat('en-US',{timeZone:city.zone,minute:'2-digit'}).format(now)))>=sun.rise&&(cityParts.hour*60+Number(new Intl.DateTimeFormat('en-US',{timeZone:city.zone,minute:'2-digit'}).format(now)))<sun.set):(localHour>=6&&localHour<18);
+     var localMinute=Number(new Intl.DateTimeFormat('en-US',{timeZone:city.zone,minute:'2-digit'}).format(now)),localMinutes=localHour*60+localMinute,sun=worldClockSunMinutes(now,city.zone),isDay=sun&&sun.rise!==null&&sun.set!==null?(localMinutes>=sun.rise&&localMinutes<sun.set):(localHour>=6&&localHour<18);
      var difference=worldClockZoneOffset(now,city.zone)-330,offsetText=difference===0?'same as Mumbai':Math.floor(Math.abs(difference)/60)+'h '+String(Math.abs(difference)%60).padStart(2,'0')+'m '+(difference>0?worldClockText('ahead'):worldClockText('behind'));
      var sunText=sun?worldClockText('sunrise')+' '+worldClockMinuteLabel(sun.rise,activeLocale)+' · '+worldClockText('sunset')+' '+worldClockMinuteLabel(sun.set,activeLocale):worldClockText('sunUnavailable');
      details.textContent=(isDay?'☀️ '+worldClockText('day'):'🌙 '+worldClockText('night'))+(sun?'':' '+worldClockText('approx'))+' · '+offsetText+' ('+worldClockOffsetLabel(difference)+') · '+sunText;
