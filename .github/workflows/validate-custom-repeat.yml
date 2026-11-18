@@ -38,17 +38,20 @@ jobs:
           unzip -q "Diary-Android-Project-v13 (6).zip" -d diary-project
           python3 diary-project/scripts/verify_project.py
 
-      - name: Verify project scripts and generate native reminder bridge
+      - name: Use exact web source in Android project
+        run: |
+          cmp -s web-source/index.html diary-web/index.html
+          cp web-source/index.html diary-project/app/src/main/assets/index.html
+
+      - name: Generate native reminder bridge and verify scripts
         run: |
           python3 -m py_compile scripts/add_diary_app_actions.py
           python3 scripts/add_diary_app_actions.py
           python3 -m py_compile scripts/apply_diary_identity.py
           python3 scripts/apply_diary_identity.py
 
-      - name: Use exact web source and validate JavaScript
+      - name: Validate final JavaScript module
         run: |
-          cmp -s web-source/index.html diary-web/index.html
-          cp web-source/index.html diary-project/app/src/main/assets/index.html
           python3 - <<'PY'
           from pathlib import Path
           import re
@@ -58,8 +61,10 @@ jobs:
           if module is None:
               raise SystemExit("Diary JavaScript module missing")
           Path("/tmp/diary-module.js").write_text(module,encoding="utf-8")
+          print("Extracted JavaScript module bytes:",len(module.encode("utf-8")))
           PY
-          node --check /tmp/diary-module.js
+          node --version
+          node --check /tmp/diary-module.js || { echo "JavaScript syntax check failed"; wc -c /tmp/diary-module.js; head -c 1000 /tmp/diary-module.js; exit 1; }
 
       - name: Compile Android debug APK
         working-directory: diary-project
