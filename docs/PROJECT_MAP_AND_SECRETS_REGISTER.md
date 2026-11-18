@@ -1,9 +1,10 @@
-# My Diary Notes — put the best matching search result first (Web Update pending, 2026-11-19)
+# My Diary Notes — best matching search result first (Web Update 343, 2026-11-19)
 
 - User asked that when searching for a note name or note text, the matching note should appear at the top immediately below the Note search bar; everything else should remain as it is.
 - Updated only the existing My Diary note-list sort priority: exact title match first, then title starts-with, title contains, exact body match, body starts-with, and body contains. Existing category filter, search matching/filtering, pin/favourite ordering among equally relevant results, newest-updated ordering, note cards, note actions, saved records and lock behaviour remain unchanged.
-- Backup branch: `backup/before-note-search-top-result-2026-11-19`. Working branch: `fix/note-search-best-match-first-2026-11-19`.
-- This is a web-only, presentation/order change. APK/native code and saved note data are not modified. Physical Android phone testing remains pending user confirmation.
+- Backup branch: `backup/before-note-search-top-result-2026-11-19`. Working branch: `fix/note-search-best-match-first-2026-11-19`. PR #243 merged as `c9f7b339002da1b7eb50f44b2c789a8e3f19c17b`.
+- Published as **Web Update 343**. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `1ae10ab3f8f2dc3b89412d93de15eeb127e6620d`. Live `latest.json` web SHA-256: `dbf645c49b4a9f04af3d2fc003d28af758ecd0e2471477e49627db8c45692bd7`.
+- APK remains **My Diary 1.0.194 / versionCode 193**; no APK/native code or saved note data was changed. Physical Android phone testing remains pending user confirmation.
 
 ---
 
