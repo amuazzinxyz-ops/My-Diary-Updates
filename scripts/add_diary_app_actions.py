@@ -1148,7 +1148,7 @@ private object DiaryReminderScheduler {
         }
     }
 
-    fun showNotification(context: Context, id: String, title: String, details: String, soundUri: String, snoozeMinutes: Int, snoozeLimit: Int, snoozeUsed: Int, ringDurationSeconds: Int, ringVolumePercent: Int, repeatDaily: Boolean, dailyAnchorAt: Long) {
+    fun showNotification(context: Context, id: String, title: String, details: String, soundUri: String, snoozeMinutes: Int, snoozeLimit: Int, snoozeUsed: Int, ringDurationSeconds: Int, ringVolumePercent: Int, repeatDaily: Boolean, dailyAnchorAt: Long, customDaysCsv: String = "") {
         if (Build.VERSION.SDK_INT >= 33 &&
             context.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) return
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -1184,6 +1184,7 @@ private object DiaryReminderScheduler {
             putExtra("diary_reminder_ring_duration_seconds", ringDurationSeconds)
             putExtra("diary_reminder_ring_volume_percent", ringVolumePercent)
             putExtra("diary_reminder_repeat_daily", repeatDaily)
+            putExtra("diary_reminder_custom_days_csv", customDaysCsv)
             putExtra("diary_reminder_daily_anchor_at", dailyAnchorAt)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_USER_ACTION)
         }
@@ -1202,6 +1203,7 @@ private object DiaryReminderScheduler {
                 putExtra("diary_reminder_ring_duration_seconds", ringDurationSeconds)
                 putExtra("diary_reminder_ring_volume_percent", ringVolumePercent)
                 putExtra("diary_reminder_repeat_daily", repeatDaily)
+                putExtra("diary_reminder_custom_days_csv", customDaysCsv)
                 putExtra("diary_reminder_daily_anchor_at", dailyAnchorAt)
             }
             return PendingIntent.getBroadcast(context, code + if (action == ACTION_SNOOZE) 2 else 3, actionIntent, pendingFlags())
@@ -1267,7 +1269,7 @@ class DiaryReminderReceiver : BroadcastReceiver() {
                 } else {
                     DiaryReminderScheduler.remove(context, id)
                 }
-                DiaryReminderScheduler.showNotification(context, id, title, details, soundUri, snoozeMinutes, snoozeLimit, nextSnoozeUsed, ringDurationSeconds, ringVolumePercent, repeatDaily, dailyAnchorAt)
+                DiaryReminderScheduler.showNotification(context, id, title, details, soundUri, snoozeMinutes, snoozeLimit, nextSnoozeUsed, ringDurationSeconds, ringVolumePercent, repeatDaily, dailyAnchorAt, customDaysCsv)
                 DiaryReminderSoundService.start(context, soundUri, ringDurationSeconds, ringVolumePercent)
                 if (nextSnoozeUsed < snoozeLimit) {
                     DiaryReminderScheduler.scheduleAutoSnooze(
@@ -1452,6 +1454,7 @@ class DiaryReminderWakeActivity : android.app.Activity() {
             putExtra("diary_reminder_ring_duration_seconds", intent?.getIntExtra("diary_reminder_ring_duration_seconds", 30) ?: 30)
             putExtra("diary_reminder_ring_volume_percent", intent?.getIntExtra("diary_reminder_ring_volume_percent", 80) ?: 80)
             putExtra("diary_reminder_repeat_daily", intent?.getBooleanExtra("diary_reminder_repeat_daily", false) ?: false)
+            putExtra("diary_reminder_custom_days_csv", intent?.getStringExtra("diary_reminder_custom_days_csv") ?: "")
             putExtra("diary_reminder_daily_anchor_at", intent?.getLongExtra("diary_reminder_daily_anchor_at", 0L) ?: 0L)
         }
         sendBroadcast(actionIntent)
