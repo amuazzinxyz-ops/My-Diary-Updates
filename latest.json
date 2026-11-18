@@ -10,5 +10,5 @@
   "webVersion": 342,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "fd20d2f146def6692cba06577bcc57dc04495e45f3bad9aef425df44d14db75b",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "Web Update 342 removes only the World Clock Meeting Time Planner. World Clock city search, saved cities, favourites, live clocks, day/night, Mumbai time difference and sunrise/sunset remain."
 }
