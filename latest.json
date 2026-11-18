@@ -5,10 +5,10 @@
   "versionName": "1.0.194",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
   "sha256": "51c3a68b6febf3a7e5f9aabbb997e5c32dad9c42bd53d45f17d8b128d88dd434",
-  "releaseNotes": "My Diary 1.0.194 remains unchanged. Web Update 338 improves the Me menu World Clock with searchable worldwide time-zone cities and add/remove controls. Existing Diary features and saved data are preserved.",
+  "releaseNotes": "My Diary 1.0.194 remains unchanged. Web Update 339 adds Favourite Cities, day/night status, Mumbai time difference, a meeting time converter and sunrise/sunset estimates inside World Clock. Existing Diary features and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 339,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "c9e45b70cce2807abafcc10fa2c4b540213deecff8da02f849897174c59dd889",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "World Clock now includes saved Favourite Cities, day/night status, time difference from Mumbai, a meeting time planner and sunrise/sunset estimates for supported cities. Searchable city list and add/remove controls remain."
 }
