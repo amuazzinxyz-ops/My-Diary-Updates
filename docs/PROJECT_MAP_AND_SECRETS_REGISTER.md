@@ -4,7 +4,7 @@
 - This is a display-only CSS adjustment. No entry data, date/time, recurrence, alarm scheduling, reminder settings, sound, snooze, notifications, PIN/locks, notes/photos, native Android code or unrelated Diary screens were changed.
 - Backup branch: `backup/before-calendar-reminder-entry-text-size-2026-11-18`. Working branch: `fix/calendar-reminder-saved-entry-text-size-2026-11-18`. Source/mirror baseline was byte-identical at blob SHA `3c8f5c35678c401d1b17560f0039592590752e35`.
 - Intended release: **Web Update 327**. Source/mirror SHA-256: `c5dde45bfe8739936b6bd14ac0466b5452865dbf9cc7fdd89bd3fb7938e4af22`. APK remains **1.0.194 / versionCode 193**; no APK rebuild is intended for this web-only styling change.
-- Static source/mirror and update-feed verification, publisher status, and physical-phone visual test status will be recorded after PR review/merge. Do not claim phone-side PASS until user confirms.
+- PR #208 merged as `641656e7d2159b4f5c344b1b9c68a2abac84e8e5`. Web publisher workflow run `44320549493` completed successfully. Re-fetched the live raw `latest.json`: it advertises **Web Update 327** and the expected SHA-256. Source and mirror are byte-identical at Git blob SHA `2cb462ce8f81df9ee1ea612321288ecfac905b1b`. APK build workflow run `44320549506` was still in progress at this check; no new APK version is claimed. Physical-phone visual testing remains pending user confirmation.
 
 ---
 
