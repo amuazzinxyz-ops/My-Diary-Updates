@@ -10,5 +10,5 @@
   "webVersion": 315,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "006e1489d432b2f9a8a86252e4ecc7fe99e27453dd8e55daa3c01b77b0e23fa4",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "My Diary Web Update 315: In Edit mode, Personal Calendar and Smart Reminder show all saved entries immediately below the top controls. The add form and search/tools are hidden while selecting; checkboxes are ready at the top. Done restores the normal screen. Saved data and alarm/reminder behavior are preserved."
 }
