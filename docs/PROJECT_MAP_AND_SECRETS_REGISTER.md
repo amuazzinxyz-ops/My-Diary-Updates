@@ -1,3 +1,15 @@
+# Personal Calendar saved entries — hide Reminder ON/OFF 3D status badge (Web Update 336, 2026-11-18)
+
+- User requested removing the 3D **Reminder ON/OFF** badge from saved entries in **📅 Personal Calendar**.
+- Removed only the two-line status-badge renderer from the Personal Calendar saved-entry display. Existing event-type and time badges, details, repeat display, saved reminder state and the existing `calendarScheduleAlarms(record)` scheduling remain unchanged.
+- **⏰ Smart Reminder** renderer and all other features are untouched. No saved entries or stored values were rewritten; no reminder scheduling, ringtone, snooze, notification, recurrence, PIN/lock, note/photo, or native Android code was changed.
+- Pre-change snapshot branch: `backup/before-calendar-reminder-status-badge-removal-2026-11-18`. Feature branch: `fix/calendar-hide-reminder-status-badge-2026-11-18`. PR #230 merged as `c16c7831752fadccf7d441b26a3244c022a934e3`.
+- Exact feature diff: one file only (`web-source/index.html`), two lines removed, zero additions. Static checks confirm the Reminder ON/OFF badge text is absent while event-type/time badges, details, repeat display, reminder scheduler and Smart Reminder renderer remain present.
+- Web publisher run `44364973948` completed successfully and published **Web Update 336**. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `1fb311486d89f5d7b461ba3e61d46cbd3422c547` (530,566 bytes). Live `latest.json` advertises web SHA-256 `e6d55a31a83e070ce966da6dfa29fb8b08cf7b780aa4ee8dc6487f6bb21a12b5`.
+- APK metadata remains **My Diary 1.0.194 / versionCode 193**; this is a web-only presentation change. Physical Android phone visual testing is pending user confirmation; do not claim device-side PASS until the user confirms the Reminder badge is gone and the other Calendar entry details remain correct.
+
+---
+
 # Personal Calendar + Smart Reminder saved Name buttons fit the text — Web Update 335 (2026-11-18)
 
 - User approved applying the same name 3D badge to **📅 Personal Calendar** that was already present in **⏰ Smart Reminder**, with each badge sized to its own text.

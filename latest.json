@@ -10,5 +10,5 @@
   "webVersion": 336,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "e6d55a31a83e070ce966da6dfa29fb8b08cf7b780aa4ee8dc6487f6bb21a12b5",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "Personal Calendar saved entries no longer show the 3D Reminder ON/OFF status badge. Event type, time, details, repeat display and automatic reminder scheduling remain unchanged. Smart Reminder and saved data are untouched."
 }
