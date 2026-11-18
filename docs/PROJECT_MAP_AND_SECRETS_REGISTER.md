@@ -1,3 +1,15 @@
+# Personal Calendar + Smart Reminder — saved-entry dates displayed DD-MM-YYYY (Web Update 332, 2026-11-18)
+
+- User asked why dates inside saved entries in both **📅 Personal Calendar** and **⏰ Smart Reminder** appeared in ISO order (for example, `2026-11-19`), and approved changing the visible order to **DD-MM-YYYY** (for example, `19-11-2026`).
+- Added one small display formatter for strict `YYYY-MM-DD` values and used it only in the shared saved-entry date line used by both Calendar and Reminder. Other date strings are left as-is.
+- **Storage and behaviour preserved:** stored `record.date`, date input values, Calendar/Reminder recurrence calculations, custom weekday alignment, alarm scheduling, reminder time, snooze, ringtone and notifications remain in their existing format/logic. No saved entries were rewritten; no unrelated features were changed.
+- Backup branch: `backup/before-calendar-reminder-date-display-2026-11-18`. Feature branch: `fix/calendar-reminder-date-display-ddmmyyyy-2026-11-18`. PR #222 merged as `8f76bbf8617ce730d54cece56dba6c9f3f7c1d5f`.
+- Only `web-source/index.html` and its required `diary-web/index.html` mirror changed for the implementation. They are byte-identical at Git blob SHA `611b51d16882fc65ef07fc92a5102826db14eb3a`. The publisher then recorded the matching HTML SHA-256 `e1450da7b2323c01421be4c3ee7b253d38ed7b412f16b1768b0f0adf3caf58e5` in commit `8ba76fdb876ae9b6d984a992d9b4763a4400e011`.
+- PR #223 advances `latest.json` to **Web Update 332** with the verified HTML SHA-256 and the release note for this change. APK feed fields remain `1.0.194 / versionCode 193` and APK SHA-256 `49e8534e5379faf6ac743a7674bdecf688d24732fc793f0efdb3ce9456bbc473`; no new APK version is part of this web-only change.
+- Static checks: formatter appears once; shared saved-entry renderer calls it once for both target sections; sample `2026-11-19` becomes `19-11-2026`; source/mirror equality confirmed; edit form still receives the original ISO date. **Physical-phone testing remains pending user confirmation.** Do not claim device-side PASS until the user checks a saved Calendar entry and a saved Smart Reminder entry.
+
+---
+
 # Personal Calendar Upcoming Events section removed — Web Update 331 (2026-11-18)
 
 - User explicitly rejected the **📅 Aane Wale Events** block and asked to remove its **7 Din**, **30 Din**, and **Sabhi** controls. Removed the complete Calendar-only Upcoming Events panel, its filtering/sorting helper, empty-state special case, and dedicated CSS.
