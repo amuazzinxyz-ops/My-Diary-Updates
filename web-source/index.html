@@ -1508,6 +1508,11 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    {name:'New York · USA',zone:'America/New_York'},
    {name:'Tokyo · Japan',zone:'Asia/Tokyo'}
   ];
+  try{
+   var storedWorldClockCities=JSON.parse(localStorage.getItem('diaryWorldClockCities')||'null');
+   if(Array.isArray(storedWorldClockCities)&&storedWorldClockCities.length)worldClockCities=storedWorldClockCities.filter(function(city){return city&&typeof city.name==='string'&&typeof city.zone==='string';}).slice(0,100);
+  }catch(err){}
+  function saveWorldClockCities(){try{localStorage.setItem('diaryWorldClockCities',JSON.stringify(worldClockCities));}catch(err){}}
   var worldClockFallbackZones=['Africa/Cairo','Africa/Casablanca','Africa/Johannesburg','Africa/Lagos','Africa/Nairobi','Africa/Accra','America/Anchorage','America/Argentina/Buenos_Aires','America/Bogota','America/Chicago','America/Denver','America/Los_Angeles','America/Mexico_City','America/Phoenix','America/Sao_Paulo','America/Toronto','America/Vancouver','America/Winnipeg','Asia/Amman','Asia/Baghdad','Asia/Bahrain','Asia/Bangkok','Asia/Beirut','Asia/Colombo','Asia/Dhaka','Asia/Hong_Kong','Asia/Jakarta','Asia/Jerusalem','Asia/Kabul','Asia/Karachi','Asia/Kathmandu','Asia/Kuala_Lumpur','Asia/Kuwait','Asia/Manila','Asia/Muscat','Asia/Qatar','Asia/Riyadh','Asia/Seoul','Asia/Shanghai','Asia/Singapore','Asia/Taipei','Asia/Tashkent','Asia/Tehran','Asia/Thimphu','Asia/Ulaanbaatar','Asia/Yangon','Asia/Yerevan','Australia/Adelaide','Australia/Brisbane','Australia/Darwin','Australia/Melbourne','Australia/Perth','Australia/Sydney','Europe/Amsterdam','Europe/Athens','Europe/Belgrade','Europe/Berlin','Europe/Brussels','Europe/Budapest','Europe/Copenhagen','Europe/Dublin','Europe/Helsinki','Europe/Istanbul','Europe/Kyiv','Europe/Lisbon','Europe/Madrid','Europe/Moscow','Europe/Oslo','Europe/Paris','Europe/Prague','Europe/Rome','Europe/Stockholm','Europe/Vienna','Europe/Warsaw','Europe/Zurich','Pacific/Auckland','Pacific/Fiji','Pacific/Guam','Pacific/Honolulu','Pacific/Tahiti'];
   var worldClockZones=[];
   try{worldClockZones=Intl.supportedValuesOf('timeZone').filter(function(zone){return zone.indexOf('Etc/')!==0&&zone!=='UTC'&&zone!=='GMT';});}catch(err){worldClockZones=worldClockFallbackZones.slice();}
@@ -1567,7 +1572,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    matches.forEach(function(city){
     var addCity=el('button',{type:'button',class:'diary-world-clock-city-option'},'＋ '+city.name);
     addCity.style.cssText='width:100%;min-height:38px;padding:7px 9px;text-align:left;border:1px solid #cbb9df;border-radius:8px;background:linear-gradient(145deg,#fff,#f5efff);color:#35145f;font-size:13px;font-weight:900;';
-    addCity.addEventListener('click',function(){if(worldClockCities.some(function(saved){return saved.zone===city.zone;}))return;worldClockCities.push({name:city.name,zone:city.zone});worldClockSearch.value='';refreshWorldClockPlanner();refreshWorldClockOptions();renderWorldClock();});
+    addCity.addEventListener('click',function(){if(worldClockCities.some(function(saved){return saved.zone===city.zone;}))return;worldClockCities.push({name:city.name,zone:city.zone});saveWorldClockCities();worldClockSearch.value='';refreshWorldClockPlanner();refreshWorldClockOptions();renderWorldClock();});
     worldClockResults.appendChild(addCity);
    });
   }
@@ -1677,7 +1682,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     favourite.addEventListener('click',function(){if(worldClockFavouriteZones.has(city.zone))worldClockFavouriteZones.delete(city.zone);else worldClockFavouriteZones.add(city.zone);saveWorldClockFavourites();renderWorldClock();});
     var remove=el('button',{type:'button','aria-label':worldClockText('remove')+' '+city.name},'−');
     remove.style.cssText='width:34px;height:36px;border:2px solid #c77;border-radius:9px;background:linear-gradient(145deg,#fff,#f6e8e8);color:#7d2424;font-size:22px;font-weight:1000;box-shadow:0 2px 0 #b77;';
-    remove.addEventListener('click',function(){if(worldClockCities.length<=1)return;worldClockCities.splice(worldClockCities.indexOf(city),1);worldClockFavouriteZones.delete(city.zone);saveWorldClockFavourites();refreshWorldClockPlanner();refreshWorldClockOptions();renderWorldClock();});
+    remove.addEventListener('click',function(){if(worldClockCities.length<=1)return;worldClockCities.splice(worldClockCities.indexOf(city),1);saveWorldClockCities();worldClockFavouriteZones.delete(city.zone);saveWorldClockFavourites();refreshWorldClockPlanner();refreshWorldClockOptions();renderWorldClock();});
     actions.append(favourite,remove);row.append(info,actions);worldClockRows.appendChild(row);
    });
    refreshWorldClockPlanner();
