@@ -7,8 +7,8 @@
   "sha256": "51c3a68b6febf3a7e5f9aabbb997e5c32dad9c42bd53d45f17d8b128d88dd434",
   "releaseNotes": "My Diary 1.0.194 remains unchanged. Web Update 338 improves the Me menu World Clock with searchable worldwide time-zone cities and add/remove controls. Existing Diary features and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 338,
+  "webVersion": 339,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "8b698ad3eae1f7481e9006c4f144c0f92df6ff614b604653ff478109e4e9cacc",
-  "webReleaseNotes": "World Clock in the Diary Me menu now has searchable worldwide time-zone cities. Search by city or time-zone name and tap a result to add it; remove any added city. The live clock and existing Diary features remain unchanged."
+  "webSha256": "c9e45b70cce2807abafcc10fa2c4b540213deecff8da02f849897174c59dd889",
+  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
