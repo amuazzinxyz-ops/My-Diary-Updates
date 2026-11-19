@@ -25,10 +25,15 @@
   }
   function openDatabase(name) {
     return new Promise((resolve, reject) => {
-      const request = indexedDB.open(name);
+      // Known v1 only: abort on upgrade so a missing DB is never silently created.
+      const request = indexedDB.open(name, 1);
       request.onsuccess = () => resolve(request.result);
       request.onerror = () => reject(request.error || new Error("IndexedDB open failed: " + name));
       request.onblocked = () => reject(new Error("IndexedDB is blocked: " + name));
+      request.onupgradeneeded = () => {
+        try { if (request.transaction) request.transaction.abort(); } catch (_) {}
+        reject(new Error("Required Diary database is missing or has an unexpected schema: " + name));
+      };
     });
   }
   async function blobValue(blob) {
@@ -73,6 +78,15 @@
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (DYNAMIC_KEY.test(key)) localStorageData[key] = localStorage.getItem(key);
+    }
+
+    if (typeof indexedDB.databases !== "function") {
+      throw new Error("This Android WebView cannot safely inspect existing Diary databases.");
+    }
+    const existingDatabases = await indexedDB.databases();
+    const existingNames = new Set(existingDatabases.map(item => item.name));
+    for (const dbName of Object.keys(DATABASES)) {
+      if (!existingNames.has(dbName)) throw new Error("Required Diary database is missing: " + dbName);
     }
 
     const indexedDb = {};
