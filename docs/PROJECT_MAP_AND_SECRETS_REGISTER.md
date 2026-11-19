@@ -1,3 +1,17 @@
+# Google Drive Auto Backup — Me-section backup UI build-validated (2026-11-19)
+
+- Pre-edit backup branch for this UI/size-limit milestone: `backup/before-drive-ui-and-limit-2026-11-19`. Before this Register update, its Register blob matched the working branch exactly (`518d40624d492b21ed232be12883a5974182252c`, 854,459 characters).
+- Aligned the WebView snapshot collector's maximum serialized snapshot size to **64 MiB**, matching the native AES-GCM staging API's enforced maximum. This prevents the UI from collecting a snapshot that native encryption would always reject.
+- Added `scripts/drive_backup_src/diary_google_drive_ui.js` and build injector `scripts/add_diary_google_drive_ui.py`. The injector adds a **Google Drive Backup** button to the Diary Me panel, and a passphrase confirmation dialog. It calls the existing snapshot collector, encrypts the snapshot through the native bridge, then starts the Drive upload bridge. UI warns that passphrase is not stored and must be remembered; minimum length 12 characters. Password fields are cleared after encryption/failure. It does not claim unattended/automatic backup.
+- Updated validation workflow to run JavaScript syntax validation and Python compile checks for the new UI/injector and assert the aligned size limit and bridge wiring.
+- Build run **44532978264** on feature commit `d70412e080a5b669338423907321449ee8079d38` completed **success**. Android debug APK build and encrypted-backup crypto tests passed; artifact upload passed; workflow conclusion is success.
+- Artifact **14534962173**, `My-Diary-Google-Drive-feature-debug`, size **5,980,508 bytes**, expires **2026-11-26 13:26:31 UTC**. This is an unsigned debug validation APK only. It has not been installed or tested on a physical phone.
+- Important limitations / no overclaim: UI is injected in the isolated Android build copy and passed build validation, but the actual button interaction, Google consent, snapshot collection against live Diary data, encryption, upload/update/verification, and restore have not been tested on-device. No backup has been uploaded. The Drive upload bridge still requires real-device runtime validation (including PATCH handling and exact remote-file verification).
+- Still not implemented: unattended automatic backup scheduling and retry; encrypted download/decrypt; safe staged restore/merge with validation; Google account revocation/disconnect UX; full key-wrapping/reuse lifecycle; device/second-device acceptance tests; final signed release APK. The existing Android Keystore DEK cache is groundwork only.
+- Continue only on `feature/google-drive-auto-backup-2026-11-19`; do not merge/publish or alter main, published HTML, `latest.json`, production APK, or original Android source. No OAuth consent or Drive upload occurred; no user Diary content was transmitted to Google Drive.
+
+---
+
 # Google Drive Auto Backup — least-privilege Drive authorization/upload bridge build-validated (2026-11-19)
 
 - Created pre-edit Register backup branch `backup/before-drive-auth-build-pass-register-2026-11-19` from feature head `577e6ebedb8948a702f3a9208f827fe15ce0a7eb`. Immediately before this update, fetched the full Register from the working branch and backup branch; both contents and blob SHA matched exactly (`76b36f91eaad1b7b48a16431d07c7c011f16920f`, 851,248 characters).
