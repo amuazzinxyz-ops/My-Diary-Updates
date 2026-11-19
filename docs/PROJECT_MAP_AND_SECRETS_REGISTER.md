@@ -1,3 +1,14 @@
+# Google Drive Auto Backup — collector integration build validated (2026-11-19)
+
+- Fixed the HTML injection condition by placing the collector script before the final document `</body>`; the HTML contains embedded report-template closing tags, so checking for exactly one was invalid. Published HTML remains unchanged.
+- Build-only workflow run **44521443853** on feature commit `bc27096502247b5129d7e30165237420df17a57b` completed **success**. All 14 main steps passed: original source integrity, exact current web HTML copy, Android bridge/identity patching, collector integration checks, HTML/package checks, crypto + snapshot JVM tests, Android debug APK build, and artifact upload.
+- Artifact **14528048155**, `My-Diary-Google-Drive-feature-debug`, size **5,246,379 bytes**, SHA-256 `2c3850befca687e8c030d3afa24094812eb381ad0612ba0b581266798c2e83d4`, expires 2026-11-26 12:13 UTC. This is an unsigned debug validation APK, not a release APK; no phone test yet.
+- Pre-edit Register backup `backup/before-drive-collector-build-pass-register-2026-11-19`; full Register fetched from feature and backup branches and verified byte-for-byte identical (blob `043bf8daa738209a7a9194551a8ca27cc42194e1`) before this entry.
+- Runtime state remains incomplete: collector currently produces a portable snapshot in WebView memory; next integration must stream it safely into native encryption, add Android Keystore key wrapping, Google AuthorizationClient consent, Drive appDataFolder upload/update, retry scheduling, and staged validated restore. No OAuth token is persisted; no user data upload occurred. Manual export/import, reminder request codes, fingerprint and existing locks remain untouched.
+- No main branch merge, published HTML update, signed release, production APK, or phone installation/testing occurred. Continue on feature branch only; never publish without explicit authorization.
+
+---
+
 # Google Drive Auto Backup — collector HTML injection build fix (2026-11-19)
 
 - Build run **44521219049** failed during the combined Android bridge/backup patch step. Exact cause: current published HTML contains three literal `</body>` strings in embedded report templates plus the actual document close; the injection script incorrectly required exactly one. This is not an app or user-data failure.
