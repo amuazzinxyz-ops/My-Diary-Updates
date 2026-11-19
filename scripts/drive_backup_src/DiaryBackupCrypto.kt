@@ -74,7 +74,7 @@ internal object DiaryBackupCrypto {
                 .putInt(PARALLELISM)
                 .put(salt)
                 .put(wrapNonce)
-                .put(wrappedDek)
+                .put(wrapped)
                 .put(payloadNonce)
                 .array()
 
