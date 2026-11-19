@@ -36,6 +36,18 @@ Status: design/audit only; no application code is changed by this document.
 
 Before coding, inspect every persistent key and every IndexedDB record kind at the current Web 362 baseline. Do not assume the list above is exhaustive. Never include access tokens, OAuth credentials, device identifiers, temporary dialogs, or session-only UI state.
 
+
+## Verified Android build integration (source ZIP audit)
+
+- The original Android ZIP is a small WebView shell: `app/build.gradle.kts`, `app/src/main/AndroidManifest.xml`, and `MainActivity.kt`; the GitHub workflow applies the native feature patcher `scripts/add_diary_app_actions.py`, identity patcher `scripts/apply_diary_identity.py`, and online-update patcher after copying the exact published HTML into assets.
+- The original ZIP has package `com.muazzin.diary`; the build patcher changes only `applicationId` to `com.personal.diaryapp` and applies the My Diary label/icon. OAuth registration must therefore use the final applicationId `com.personal.diaryapp`, not the original ZIP package/namespace.
+- The source app already extends `ComponentActivity` and uses `registerForActivityResult` for location permission and file picking. The native patcher also owns an `onActivityResult` multiplexer for the manual JSON save picker and reminder sound pickers. Any Google consent-resolution integration must use a distinct request path and must not steal, reorder, or break those existing request codes/callbacks.
+- Existing JavaScript bridge is `DiaryAppActions`; current manual JSON export calls `saveBackup(content, suggestedName)`, which opens Android `ACTION_CREATE_DOCUMENT`. Keep this method and request code untouched.
+- Google Android API path confirmed against Google's current client-side guide: `AuthorizationClient` with `AuthorizationRequest.builder().setRequestedScopes(listOf(Scope(DriveScopes.DRIVE_APPDATA)))`; if consent is needed, resolve the returned PendingIntent; then use `AuthorizationResult.getAccessToken()` in the HTTP `Authorization: Bearer` header for Drive REST. No web backend, offline access, refresh-token server, or web-client ID is needed for this online client-side flow. The user's Android OAuth client is associated by package/SHA-1; the OAuth ID itself is not a secret and must not be treated as a token.
+- The source ZIP's Gradle setup is Android Gradle Plugin 8.7.3, Kotlin 2.0.21, Gradle 8.9, compile/target SDK 35, min SDK 23. Add only the required Google Play services auth dependency to the build copy; Google's current release notes list `com.google.android.gms:play-services-auth:22.0.0` (Aug 26, 2026) and note legacy Google Sign-In APIs were removed. Use AuthorizationClient, not legacy GoogleSignIn APIs.
+- The workflow is designed to build on branch/manual dispatch but its publish step fetches/checks out main before publishing signed release artifacts. Do not run the existing release workflow as a feature-branch test without first isolating/guarding the publication path. Prefer a dedicated no-publish validation workflow or explicit build-only job before any signed release build.
+- The original Android ZIP was downloaded from the latest failed run's source-preservation artifact and inspected locally. The failed run was blocked by the exact-latest-HTML guard before Android compilation; it is not evidence that the app build itself failed.
+
 ## Encryption and cross-device recovery
 
 - The entire serialized backup is encrypted before any network request. Plain JSON, Note PIN/recovery values, photos, attachments, and old Locker metadata must never be sent to Drive.
