@@ -98,6 +98,7 @@ jobs:
           grep -q 'DiaryBackupKeyStore.cacheDataKey' scripts/add_diary_app_actions.py
           grep -q 'DiaryBackupKeyStore.kt' scripts/add_diary_drive_backup.py
           grep -q 'drive.appdata' scripts/add_diary_google_drive.py
+          grep -q 'play-services-auth:21.2.0' scripts/add_diary_google_drive.py
           grep -q 'uploadEncryptedDiaryBackup' scripts/add_diary_google_drive.py
           ! grep -Eq 'drive.readonly|https://www.googleapis.com/auth/drive([" ])' scripts/add_diary_google_drive.py
           echo "PASS: collector syntax, safe DB inventory, native reminder bridge and encrypted snapshot staging API"
