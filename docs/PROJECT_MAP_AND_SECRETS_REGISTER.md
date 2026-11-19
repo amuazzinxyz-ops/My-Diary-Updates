@@ -1,3 +1,16 @@
+# Google Drive backup key reuse — build passed (2026-11-19)
+
+- Pre-edit backup branch for the next restore/worker milestone: `backup/before-drive-restore-and-worker-2026-11-19`.
+- Completed reusable encryption-key envelope groundwork on the feature branch: first backup creates a random DEK and wraps it with the user's Argon2id-derived passphrase key; the DEK is cached only as Android-Keystore AES-GCM ciphertext; the portable salt/wrap nonce/wrapped-DEK envelope is cached separately; subsequent backups reuse the same DEK with a fresh payload nonce and remain decryptable with the original passphrase.
+- Added a crypto regression test that encrypts two snapshots with the same cached DEK, confirms distinct payload nonces, and decrypts both with the original passphrase.
+- Updated the Me-panel backup UI to request the passphrase only for the first backup on that device; later backups use the locally protected DEK. The passphrase itself is not persisted.
+- Build-only workflow run **44536364018**, feature commit **5f439d6a78965076996818bbf92705a3a9b6dbb9**, completed **success**. All workflow steps passed, including crypto tests, Android debug APK build, and artifact upload.
+- Artifact **14537056827**, `My-Diary-Google-Drive-feature-debug`, size **5,984,540 bytes**, SHA-256 **339072262a9e5f37e6dbfc0b5adbfa407d80dc6c25a387a57a9948e85e04fdab**, expires **2026-11-26 13:50:06 UTC**. Unsigned debug validation APK only; not installed or tested on a physical phone.
+- Remaining blockers: encrypted Drive download + passphrase-verified staged restore and safe atomic application; true background snapshot creation and WorkManager upload/retry with a proven silent Google authorization lifecycle; account disconnect/revocation UX; real-device and second-device acceptance tests; final signed release. WorkManager must not be represented as complete until WebView Diary state can be captured safely and AuthorizationClient can obtain a valid token without UI. No passphrase or OAuth token is persisted.
+- No Google consent/upload was performed in this validation run. No main/published branch, production APK, latest.json, original Android ZIP, or user Diary data was changed. Continue only on the feature branch; do not merge, sign, or publish without explicit permission.
+
+---
+
 # Google Drive upload verification hardening — build passed (2026-11-19)
 
 - Pre-edit backup branch for the verification hardening: `backup/before-drive-auto-scheduler-2026-11-19`.
