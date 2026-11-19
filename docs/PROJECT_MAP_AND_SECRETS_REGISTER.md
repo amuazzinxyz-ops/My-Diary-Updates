@@ -1,3 +1,16 @@
+# Google Drive Auto Backup — safe snapshot and native encryption staging (2026-11-19)
+
+- Snapshot collector hardening:
+  - Collector now checks `indexedDB.databases()` before opening required stores, uses the known v1 DB version, and aborts on `onupgradeneeded`. This prevents a missing database from being silently created during backup. If the WebView cannot enumerate databases, collection fails safely.
+  - Snapshot validator now checks that all inventory keys are strings before exact-set comparison; rejects camelCase variants such as `accessToken`, `refreshToken`, `deviceId`, and `fingerprintKey` in addition to snake_case credentials.
+  - Added JVM tests for non-string inventory keys and camelCase credential fields. Node contract test asserts existing-database checks and no-create open behavior.
+- Native staging API added to the isolated Android build patcher: `DiaryAppActions.encryptDiaryBackupSnapshot(snapshotJson, passphrase, byteLength)`. It parses and validates the canonical snapshot, streams UTF-8 JSON through a bounded pipe into Argon2id/AES-256-GCM encryption, writes only encrypted output to a unique temporary cache file, promotes only after encryption succeeds, and wipes the passphrase char array. The native bridge enforces an initial 64 MiB serialized snapshot cap. It does not alter the existing manual `saveBackup` flow.
+- Latest build-only validation run **44522756603** on commit `f01ad9d3992e24dca327d21de4c471e78d2e116c` is in progress. Verify its final conclusion before treating the new native encryption bridge and hardening tests as build-validated. Previous successful build run **44521443853** remains the confirmed collector-only validation.
+- Pre-edit Register backup: `backup/before-native-encryption-register-2026-11-19`; complete Register fetched from working and backup branches and verified byte-for-byte identical (blob `b318d52ccfa76b5734136d037468a4f121760698`) before this update.
+- Still not implemented: UI for passphrase/Connect/Backup; Google AuthorizationClient consent; Drive appDataFolder create/update/list; background retry; local Keystore-wrapped DEK; encrypted download and staged restore; merge/reconciliation; phone testing. No OAuth token or diary content has been sent to Google Drive. No main branch, published HTML, latest.json, signed APK, production release, or user data changed. Continue on feature branch only.
+
+---
+
 # Google Drive Auto Backup — collector integration build validated (2026-11-19)
 
 - Fixed the HTML injection condition by placing the collector script before the final document `</body>`; the HTML contains embedded report-template closing tags, so checking for exactly one was invalid. Published HTML remains unchanged.
