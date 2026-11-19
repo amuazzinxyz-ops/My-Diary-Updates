@@ -235,6 +235,25 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 @media(min-width:560px){.diary-me-repeat-days{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .diary-me-repeat-days-wrap[hidden]{display:none!important}
 </style>
+
+<style id="diary-home-widget-settings-style">
+#diaryHomeWidgetSettingsBtn{display:flex!important;align-items:center!important;justify-content:flex-start!important;width:100%!important;min-height:40px!important;margin:7px 0 0!important;padding:7px 10px!important;box-sizing:border-box!important;border:2px solid #d4af37!important;border-radius:10px!important;background:linear-gradient(145deg,#c4a2ff,#6330b8)!important;color:#fff!important;font-size:14px!important;font-weight:1000!important;text-align:left!important;box-shadow:inset 0 2px 0 #ffffff88,0 3px 0 #54258f,0 6px 10px #3a19694a!important}
+#diaryHomeWidgetSettingsModal{position:fixed!important;inset:0!important;z-index:100020!important;display:flex!important;flex-direction:column!important;gap:12px!important;overflow:auto!important;box-sizing:border-box!important;padding:calc(18px + env(safe-area-inset-top,0px)) 14px calc(24px + env(safe-area-inset-bottom,0px))!important;background:linear-gradient(145deg,#fffdf8,#eee4ff)!important;color:#2e2044!important}
+#diaryHomeWidgetSettingsModal[hidden]{display:none!important}
+.diary-home-widget-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px;border:2px solid #d4af37;border-radius:14px;background:linear-gradient(145deg,#fff,#f2eaff);box-shadow:0 3px 0 #9b7415}
+.diary-home-widget-head strong{font-size:18px;font-weight:1000;color:#4b267c}
+.diary-home-widget-close{width:38px;min-width:38px;height:38px;border:1px solid #b99bdc;border-radius:10px;background:linear-gradient(145deg,#fff,#eadbff);color:#4b267c;font-size:22px;font-weight:1000}
+#diaryHomeWidgetSettingsModal p{margin:0;font-size:14px;line-height:1.5;font-weight:800}
+.diary-home-widget-options{display:flex;flex-direction:column;gap:9px;padding:12px;border:2px solid #b99bdc;border-radius:14px;background:#fff;box-shadow:0 3px 0 #8e68b8}
+.diary-home-widget-option{display:flex;align-items:center;gap:10px;min-height:42px;padding:7px 9px;border:1px solid #d5c3eb;border-radius:9px;background:#f8f3ff;font-size:15px;font-weight:900}
+.diary-home-widget-option input{width:22px;height:22px;accent-color:#6330b8;flex:0 0 auto}
+.diary-home-widget-size-label{font-size:15px;font-weight:1000;color:#43256b}
+#diaryWidgetSize{width:100%;min-height:42px;border:1px solid #b99bdc;border-radius:9px;padding:7px 10px;background:#fff;color:#2e2044;font-size:15px;font-weight:900}
+.diary-home-widget-action{width:100%;min-height:46px;border:2px solid #d4af37;border-radius:11px;background:linear-gradient(145deg,#c4a2ff,#6330b8);color:#fff;font-size:15px;font-weight:1000;box-shadow:inset 0 2px 0 #ffffff77,0 3px 0 #54258f,0 6px 10px #3a196933}
+.diary-home-widget-pin{background:linear-gradient(145deg,#fff1b9,#d4a72e);color:#382700}
+.diary-home-widget-status{min-height:24px;padding:8px;border-radius:9px;background:#fff;font-size:14px!important;font-weight:900!important;color:#43256b}
+</style>
+
 </head>
 <body>
 <main class="diary-home">
@@ -2913,6 +2932,22 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    }).catch(function(){meFeatureList.replaceChildren(mfEl('p',{class:'diary-me-feature-empty'},mf('failed')));});
   }
   function openMeFeature(kind){if(meFeatureProtected(kind)&&meFeaturePinConfig(kind)){showMeFeaturePin(kind);return;}showMeFeaturePage(kind);}
+
+  window.__diaryOpenWidgetTarget=function(target){
+   try{
+    if(localStorage.getItem(DIARY_MASTER_PIN_KEY)){openOverlay();return;}
+    openOverlay();
+    if(target==='calendar'||target==='reminders'){
+     var tries=0;
+     (function openFeatureWhenReady(){
+      var overlay=document.getElementById('diaryMyNotesOverlay');
+      if(overlay&&overlay.classList.contains('open')){openMeFeature(target);return;}
+      if(tries++<15)window.setTimeout(openFeatureWhenReady,200);
+     })();
+    }
+   }catch(error){try{openOverlay();}catch(ignore){}}
+  };
+
   var currentMeFeatureKind=null;
   function showMeFeaturePage(kind){
    currentMeFeatureKind=kind;
@@ -3006,6 +3041,78 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var shareAppBtn=el('button',{id:'diaryShareAppBtn',type:'button'},t('shareApp'));
   mePanel.appendChild(shareAppBtn);
   shareAppBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(window.DiaryAppActions&&DiaryAppActions.shareApp){DiaryAppActions.shareApp();}});
+
+  var widgetSettingsBtn=el('button',{id:'diaryHomeWidgetSettingsBtn',type:'button',class:'diary-me-feature-btn'},'🏠 Home Screen Widget Settings');
+  mePanel.appendChild(widgetSettingsBtn);
+  var widgetSettingsModal=el('section',{id:'diaryHomeWidgetSettingsModal',hidden:'hidden','aria-modal':'true','role':'dialog'});
+  var widgetSettingsHead=el('div',{class:'diary-home-widget-head'});
+  var widgetSettingsTitle=el('strong',{},'🏠 Home Screen Widget Settings');
+  var widgetSettingsClose=el('button',{type:'button',class:'diary-home-widget-close'},'✕');
+  widgetSettingsHead.append(widgetSettingsTitle,widgetSettingsClose);
+  var widgetSettingsHint=el('p',{},'Widget mein apni pasand ke options chunein. Save karke Home Screen par lagayein.');
+  var widgetSettingsOptions=el('div',{class:'diary-home-widget-options'});
+  function makeWidgetOption(id,label,checked){
+   var row=el('label',{class:'diary-home-widget-option'});
+   var input=el('input',{id:id,type:'checkbox'});input.checked=checked;
+   row.append(input,document.createTextNode(label));widgetSettingsOptions.appendChild(row);return input;
+  }
+  var widgetShowDate=makeWidgetOption('diaryWidgetShowDate','📅 Aaj ki Tareekh dikhayein',true);
+  var widgetShowDiary=makeWidgetOption('diaryWidgetShowDiary','📒 My Diary kholen',true);
+  var widgetShowCalendar=makeWidgetOption('diaryWidgetShowCalendar','📅 Personal Calendar kholen',true);
+  var widgetShowReminder=makeWidgetOption('diaryWidgetShowReminder','⏰ Smart Reminder kholen',true);
+  var widgetShowNewNote=makeWidgetOption('diaryWidgetShowNewNote','✍️ New Note kholen',true);
+  var widgetSizeLabel=el('label',{class:'diary-home-widget-size-label'},'Widget Size');
+  var widgetSize=el('select',{id:'diaryWidgetSize'});
+  [['compact','Chhota'],['standard','Normal'],['large','Bada']].forEach(function(item){widgetSize.appendChild(el('option',{value:item[0]},item[1]));});
+  widgetSettingsOptions.append(widgetSizeLabel,widgetSize);
+  var widgetSettingsStatus=el('p',{class:'diary-home-widget-status','aria-live':'polite'},'');
+  var widgetSettingsSave=el('button',{type:'button',class:'diary-home-widget-action'},'💾 Settings Save Karein');
+  var widgetSettingsPin=el('button',{type:'button',class:'diary-home-widget-action diary-home-widget-pin'},'➕ Home Screen par Lagayein');
+  widgetSettingsModal.append(widgetSettingsHead,widgetSettingsHint,widgetSettingsOptions,widgetSettingsSave,widgetSettingsPin,widgetSettingsStatus);
+  ov.appendChild(widgetSettingsModal);
+  function widgetSettingsValue(){
+   return {showDate:!!widgetShowDate.checked,showDiary:!!widgetShowDiary.checked,showCalendar:!!widgetShowCalendar.checked,showReminder:!!widgetShowReminder.checked,showNewNote:!!widgetShowNewNote.checked,size:String(widgetSize.value||'standard')};
+  }
+  function widgetApplySettings(value){
+   value=value||{};
+   widgetShowDate.checked=value.showDate!==false;
+   widgetShowDiary.checked=value.showDiary!==false;
+   widgetShowCalendar.checked=value.showCalendar!==false;
+   widgetShowReminder.checked=value.showReminder!==false;
+   widgetShowNewNote.checked=value.showNewNote!==false;
+   widgetSize.value=['compact','standard','large'].indexOf(value.size)>=0?value.size:'standard';
+  }
+  function widgetSaveSettings(showMessage){
+   if(!window.DiaryAppActions||typeof DiaryAppActions.saveHomeWidgetSettings!=='function'){
+    widgetSettingsStatus.textContent='Widget Settings ke liye My Diary ka installed Android app kholein.';return false;
+   }
+   try{
+    var saved=DiaryAppActions.saveHomeWidgetSettings(JSON.stringify(widgetSettingsValue()));
+    widgetSettingsStatus.textContent=saved?'Widget Settings save ho gayi.':'Settings save nahi ho sakin.';
+    return !!saved;
+   }catch(error){widgetSettingsStatus.textContent='Settings save nahi ho sakin.';return false;}
+  }
+  function widgetOpenSettings(){
+   if(window.DiaryAppActions&&typeof DiaryAppActions.getHomeWidgetSettings==='function'){
+    try{widgetApplySettings(JSON.parse(DiaryAppActions.getHomeWidgetSettings()||'{}'));}catch(error){widgetApplySettings({});}
+   }else{widgetApplySettings({});}
+   widgetSettingsStatus.textContent='';
+   widgetSettingsModal.hidden=false;
+  }
+  widgetSettingsBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();widgetOpenSettings();});
+  widgetSettingsClose.addEventListener('click',function(){widgetSettingsModal.hidden=true;});
+  widgetSettingsSave.addEventListener('click',function(){widgetSaveSettings(true);});
+  widgetSettingsPin.addEventListener('click',function(){
+   if(!widgetSaveSettings(false))return;
+   if(!window.DiaryAppActions||typeof DiaryAppActions.requestHomeWidgetPin!=='function'){
+    widgetSettingsStatus.textContent='Home Screen Widget ke liye installed Android app zaroori hai.';return;
+   }
+   try{
+    var requested=DiaryAppActions.requestHomeWidgetPin();
+    widgetSettingsStatus.textContent=requested?'Android ka Add Widget prompt khul gaya.':'Is Android version/launcher mein direct Add supported nahi. Home Screen par long-press karke Widgets mein My Diary chunein.';
+   }catch(error){widgetSettingsStatus.textContent='Widget add nahi ho saka. Home Screen par long-press karke Widgets mein My Diary chunein.';}
+  });
+
 
   checkUpdatesBtn.addEventListener('click',function(e){
    e.preventDefault();e.stopPropagation();
