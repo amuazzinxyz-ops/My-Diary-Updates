@@ -1,3 +1,14 @@
+# My Diary Backup/Restore — include Personal Calendar and Smart Reminder (Web Update pending, 2026-11-19)
+
+- User requested that the existing single **Diary-My-Notes-Backup.json** backup/restore also include **📅 Personal Calendar** and **⏰ Smart Reminder**, alongside the existing Notes, My Documents, and My Memories data.
+- Extended the existing export to read the `calendar` and `reminders` record kinds from the existing `diary_me_features_v1` IndexedDB store and include them as `myCalendar` and `myReminders` in the same JSON file (backup format version 3). No separate button or backup file was added.
+- Extended import/restore to validate and merge both record arrays by record ID without overwriting records already present. Existing version 2 and legacy Notes-only backups remain accepted because the two new arrays are optional.
+- Restored Calendar records re-register their existing event alarms through the existing Calendar scheduler; restored future Smart Reminder records are re-registered through the existing reminder scheduler. Existing PIN/lock settings, Notes, Trash, Documents, Memories, reminder fields/settings, and other data formats are not intentionally changed.
+- Backup branch: `backup/before-calendar-reminder-backup-2026-11-19`. Working branch: `fix/include-calendar-reminders-in-backup-2026-11-19`.
+- Source edit: `web-source/index.html` only. Static validation and release publication are pending; do not claim the update is live or device-tested until the publisher and live feed checks pass.
+
+---
+
 # Personal Calendar + Smart Reminder — center save-success popup on mobile (Web Update 355, 2026-11-19)
 
 - User clarified that the previous 114px top placement was still too high and requested the success popup appear in the middle of the mobile screen.
