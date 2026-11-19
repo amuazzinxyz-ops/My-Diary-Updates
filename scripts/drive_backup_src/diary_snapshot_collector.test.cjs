@@ -50,7 +50,13 @@ const localValues = {
   diary_me_section_pin_v1_calendar: "protected"
 };
 const context = {
-  window: {},
+  window: {
+    DiaryAppActions: {
+      readNativeBackupPreferences() {
+        return JSON.stringify({ items: "[]", auto_items: "[]" });
+      }
+    }
+  },
   Set, Promise, Object, Array, String, Number, Error, TextEncoder, Uint8Array, Date, Blob,
   btoa: (value) => Buffer.from(value, "binary").toString("base64"),
   indexedDB: fakeIndexedDB,
@@ -59,11 +65,6 @@ const context = {
     getItem(key) { return Object.prototype.hasOwnProperty.call(localValues, key) ? localValues[key] : null; },
     key(index) { return Object.keys(localValues)[index] || null; }
   },
-  DiaryAppActions: {
-    readNativeBackupPreferences() {
-      return JSON.stringify({ items: "[]", auto_items: "[]" });
-    }
-  }
 };
 vm.createContext(context);
 vm.runInContext(source, context);
