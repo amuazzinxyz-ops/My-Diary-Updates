@@ -19,7 +19,6 @@ test_target = project / "app/src/test/java/com/muazzin/diary/backup/DiaryBackupC
 snapshot_target = project / "app/src/main/java/com/muazzin/diary/backup/DiaryBackupSnapshot.kt"
 snapshot_test_target = project / "app/src/test/java/com/muazzin/diary/backup/DiaryBackupSnapshotTest.kt"
 collector_target = project / "app/src/main/assets/diary_snapshot_collector.js"
-snapshot_test_target = project / "app/src/test/java/com/muazzin/diary/backup/DiaryBackupSnapshotTest.kt"
 main_target.parent.mkdir(parents=True, exist_ok=True)
 test_target.parent.mkdir(parents=True, exist_ok=True)
 shutil.copyfile(ROOT / "drive_backup_src/DiaryBackupCrypto.kt", main_target)
