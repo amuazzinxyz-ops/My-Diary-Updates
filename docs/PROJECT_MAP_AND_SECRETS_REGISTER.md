@@ -1,3 +1,14 @@
+# Google Drive Auto Backup — Android Keystore DEK cache groundwork build-validated (2026-11-19)
+
+- Created pre-edit branch backup `backup/before-keystore-dek-2026-11-19` from working-branch commit `d5051bd0ba30445d0d3de377df1e2641cb472765`. Before editing this Register, its current blob `750e76bc938299ba3caf3e7580da5dcdcf3cc73d` was fetched from both the working branch and the backup branch and matched exactly.
+- Added isolated `DiaryBackupKeyStore.kt`: it creates/uses a non-exportable Android Keystore AES-256-GCM wrapping key and stores only the encrypted 32-byte backup DEK plus IV in app-private SharedPreferences. Added `DiaryBackupCrypto.encrypt(..., onDataKeyCreated)` callback; the native snapshot staging bridge now caches the generated DEK during encryption and wipes the callback copy after use. The build-copy patcher includes the new class and explicit imports. Existing manual JSON `saveBackup`, reminder state, Diary locks, published HTML and original Android ZIP remain unchanged.
+- Build-only workflow run **44530127852** on feature commit `34437034f00cf4041cec4f1dcf7f99e947b51d23` completed **success**. All 14 main steps passed, including collector/bridge guards, Kotlin crypto and snapshot JVM tests, Android debug APK build, and artifact upload. Artifact **14532594238**, `My-Diary-Google-Drive-feature-debug`, size **5,253,224 bytes**, SHA-256 `fff508366e1931ff5abac059307c5e7e2eb28231d9f1996d283b9cfa60d987eb`, expires 2026-11-26 13:08 UTC. This is an unsigned debug validation APK only, not a release APK; no phone test has occurred.
+- Important limitation: this Keystore work is a device-local DEK-cache foundation, not yet the complete unattended encryption/reuse lifecycle. It is not yet connected to an automatic worker or a completed Drive upload flow.
+- Still not implemented: Google `AuthorizationClient` consent and token lifecycle; Drive `appDataFolder` list/create/update/upload; WorkManager dirty-state/retry scheduling; user-facing Connect/Backup/Restore controls; encrypted download, decrypt and staged atomic restore/merge; account-revocation handling; device/second-device tests; final signed release.
+- No OAuth token or Diary content has been sent to Google Drive. No main branch, published HTML, `latest.json`, signed APK, production release, or user data changed. Continue on feature branch only; no publishing or merge without explicit authorization and full acceptance tests.
+
+---
+
 # Google Drive Auto Backup — safe snapshot and native encryption staging (2026-11-19)
 
 - Snapshot collector hardening:
@@ -998,7 +1009,6 @@ This procedure applies to every future My Diary task. Follow it before making ch
 - Physical phone testing remains pending. Fingerprint prompts require a compatible Android build/device with enrolled fingerprint; web-only browser cannot test native biometric callbacks. Do not claim device-side confirmation until the user installs Web Update 294 and tests all controls.
 
 ---
-
 # Private Locker Lock On available while Lock is OFF — Web Update 293 published (2026-11-17)
 
 - Source inspection found that the existing Lock On control was only on the PIN-entry screen, but Lock OFF automatically bypasses that screen and opens the unlocked Locker. This made it impossible to turn PIN protection back ON from the Lock OFF state.
@@ -1997,8 +2007,7 @@ This procedure applies to every future My Diary task. Follow it before making ch
   - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-text-colour-custom-button-2026-11-15.md`
   Both backup HTML files have blob SHA `1d88a1847e29f807554a2d68679346621c1978ae`; backup files were re-fetched and verified readable.
 - Feature branch: `feature/text-colour-custom-button-2026-11-15`. PR #28 merged successfully as `0b8551ca4007abc411f1fe304c8c7d60e7778f1a`. Reviewed source diff: only the Text Colour toolbar CSS and `makeDiaryTextFormatControls()` declaration/append/click handler changed. The existing input `input` event handler and reset/load selectors querying `input[type=color]` remain unchanged.
-- Publisher workflow run `43634354707`, job `132567766617`, completed with **success**; every listed job step completed successfully. Publisher commit: `573780027df618109769162ef74662d7b660580f`.
-- Post-publish verification: live source and `diary-web/index.html` mirror are byte-identical; both blob SHA `5341263f65526888587c18685a344d7a979b5887`. Independently calculated UTF-8 SHA-256 `0d1a4458326adf11568b4795ee565752d43f849a539dc0f72feb12a3abb86f34` matches live `latest.json.webSha256`. Live `webVersion=218`. The publisher workflow also independently calculated and printed the same SHA-256 from the source bytes.
+- Publisher workflow run `43634354707`, job `132567766617`, completed with **success**; every listed job step completed successfully. Publisher commit: `573780027df618109769162ef74662d7b660580f`.- Post-publish verification: live source and `diary-web/index.html` mirror are byte-identical; both blob SHA `5341263f65526888587c18685a344d7a979b5887`. Independently calculated UTF-8 SHA-256 `0d1a4458326adf11568b4795ee565752d43f849a539dc0f72feb12a3abb86f34` matches live `latest.json.webSha256`. Live `webVersion=218`. The publisher workflow also independently calculated and printed the same SHA-256 from the source bytes.
 - APK unchanged: `1.0.143` / versionCode `142`; package `com.personal.diaryapp`; APK SHA-256 `4eccf17f61389bbb112a1daf910eb88d11315c19c22efa2d9e71171115688961`. No APK rebuild or signing operation.
 - Static targeted checks passed: the visible button is created once per shared toolbar; the click handler opens the existing native picker via `showPicker()` with `click()` fallback; the original colour update handler remains; both Cover and Details still use the shared toolbar function. Physical-device verification is **pending**. User should open **My Diary → Me → Check for Updates**, install Web Update 218, then confirm that both Text Colour toolbars show the **Custom** button, tapping it opens the colour picker, and the selected colour applies independently to the relevant text. Do not claim phone-side success until confirmed.
 - Rollback: restore only `web-source/index.html` from the verified backup branch above and publish a higher webVersion if needed. Preserve all local notes, photos and PIN/recovery data.
@@ -2997,8 +3006,7 @@ The user can simply say what they want in Roman Hindi. No special template, file
   - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-one-press-diary-exit-2026-11-12.md`
 - Web publication: Web Update **133**, workflow run **43276059809**, completed successfully. Source and published mirror are byte-identical; both Git blob SHA `81c75f34835dd7d51cac6da32b7e6729f6380aaf`. Independently recalculated UTF-8 SHA-256 `3cb78b3dc27621fa277323b4c5eec729fe60a1adc80921290795be17268116bd` matches live `latest.json.webSha256`.
 - APK publication: workflow run **43276194581**, completed successfully. Debug build, signed Release build, certificate check, publish step and artifact uploads all passed. The release certificate matched the previously trusted SHA-256 fingerprint `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A`.
-- Live feed now reports APK **1.0.136 / versionCode 135**, webVersion **133**, package `com.personal.diaryapp`, APK URL `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.136.apk`, APK SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`. The signed workflow artifact was downloaded and independently hashed; it exactly matches the live feed checksum.
-- Post-publish checks: source and mirror re-fetched and confirmed identical; feed package/version/URL/hash checked; backup files re-fetched and confirmed readable. No APK signing secret or keystore was changed.
+- Live feed now reports APK **1.0.136 / versionCode 135**, webVersion **133**, package `com.personal.diaryapp`, APK URL `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary-1.0.136.apk`, APK SHA-256 `6fc74ca82888fed4121cc352c1846ec8c6a7063e2d2a33fbe032726f7a244348`. The signed workflow artifact was downloaded and independently hashed; it exactly matches the live feed checksum.- Post-publish checks: source and mirror re-fetched and confirmed identical; feed package/version/URL/hash checked; backup files re-fetched and confirmed readable. No APK signing secret or keystore was changed.
 - Phone verification remains **pending**. User should apply APK **1.0.136** through the existing **Me → Check for Updates** path, then open Diary, enter nested sections such as note editor / Me / Recently Deleted, and press Android Back once. Confirm that the entire Diary closes immediately and returns to the underlying screen. Do not claim physical-device testing until user confirms.
 - Rollback reference: backup branch above; pre-change main commit `2effcdd79bc4375a5f018afac014b88c13e3d8ff`; pre-change web feed backup listed above. Preserve all user data; do not clear app data or uninstall as a rollback shortcut.
 
@@ -3997,7 +4005,6 @@ The user can simply say what they want in Roman Hindi. No special template, file
 ---
 
 # Web Update 197 — Hide the redundant Lock button in My Kharcha (2026-11-13)
-
 - User request: after opening **💰 My Kharcha**, remove the visible `🔒 Lock` header button. This is a UI-only removal; keep My Kharcha's section PIN protection and lock/recovery system unchanged.
 - Starting live state: APK 1.0.137 / versionCode 136; Web Update 196; package `com.personal.diaryapp`. Starting source/mirror blob `fd585bed757ddb961098b3a8f9c7059d59543622`; feed blob `f4e3717e47aa72a426cad0bd844374083ba24063d`; register blob `e1e94bd23661b650099fd06c02485d89e6a242f7`.
 - Scope: changed exactly one line in `web-source/index.html`. The header `🔒 Lock` button is now hidden for `kharcha`; it remains governed as before for Documents and Memories. Existing `meFeatureProtected(kind)` still includes `kharcha`, `documents` and `memories`; the PIN gate, PIN/recovery storage keys, dialogs, records and other features were not changed. No APK/native source, data schema or translations changed.
@@ -4998,7 +5005,6 @@ The user can simply say what they want in Roman Hindi. No special template, file
 ---
 
 # Recently Deleted — full-screen mobile view (Web Update 356, 2026-11-19)
-
 - User requested that tapping **🗑️ Delete Ki Huwi Note** open the deleted-notes view across the full mobile screen rather than inside the compact Me menu.
 - Updated only the existing Recently Deleted open/close presentation and added isolated mobile CSS. The Me-menu trash button becomes **✕ Band Karein** while the full-screen view is open; tapping it returns to the regular Diary view.
 - Existing trash rendering, note contents, Restore, permanent-delete confirmation, 30-day expiry, storage keys, and note data format are unchanged. No APK/native Android code or unrelated Diary features were changed.
