@@ -1544,7 +1544,7 @@ if collector_marker not in html:
         raise SystemExit("BLOCKED: unexpected partial snapshot collector injection")
     if html.lower().count("</body>") != 1:
         raise SystemExit("BLOCKED: expected one HTML body closing tag for collector injection")
-    html = html.replace("</body>", collector_marker + "\\n</body>", 1)
+    html = html.replace("</body>", collector_marker + "\n</body>", 1)
     html_target.write_text(html, encoding="utf-8")
 collector_target.write_bytes(collector_source.read_bytes())
 
