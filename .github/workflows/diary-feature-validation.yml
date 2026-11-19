@@ -175,6 +175,21 @@ jobs:
           print("PASS: Android compileOptions sourceCompatibility and targetCompatibility are JVM 17")
           PY
 
+      - name: Package extracted Android integration source for safe review
+        working-directory: diary-project
+        run: |
+          set -euo pipefail
+          zip -qr /tmp/diary-android-integration-source.zip app/src/main/java app/src/main/AndroidManifest.xml app/build.gradle.kts build.gradle.kts settings.gradle.kts gradle.properties
+          test -s /tmp/diary-android-integration-source.zip
+
+      - name: Upload extracted Android integration source for review
+        uses: actions/upload-artifact@v4
+        with:
+          name: My-Diary-Android-integration-source-review
+          path: /tmp/diary-android-integration-source.zip
+          if-no-files-found: error
+          retention-days: 2
+
       - name: Run encrypted-backup crypto tests and build debug APK only — no signing and no publishing
         working-directory: diary-project
         run: gradle --no-daemon :app:testDebugUnitTest :app:assembleDebug
