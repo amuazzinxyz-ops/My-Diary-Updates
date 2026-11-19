@@ -7,8 +7,8 @@
   "sha256": "8060716edd4c0d7ad2871c110eb2e1f7e8f6ac197bf4c5cc7cb09e16d8afcaa3",
   "releaseNotes": "My Diary 1.0.194: Personal Calendar and Smart Reminder support Custom weekday recurrence. All previous repeat options for each section, saved entries, snooze timing and limits, ringtone, notifications and unrelated features are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 355,
+  "webVersion": 356,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "d15435c3e7f72788a2c62bb52e64633ba7c9554d28f599747e221c4e7dc604b8",
-  "webReleaseNotes": "My Diary Web Update 355: Personal Calendar and Smart Reminder save-success popup centered on the mobile screen. Existing 4-second display duration, date format, saved data, reminders and other features are preserved."
+  "webSha256": "cacdf70e35e1a4c02f75d2c23ac85743f59039f6b424b04acc8dc99cf62b6fa7",
+  "webReleaseNotes": "My Diary Web Update 356: Delete Ki Huwi Note opens in a full-screen mobile view with a close control. Existing restore, permanent delete, 30-day expiry and saved note data are preserved."
 }
