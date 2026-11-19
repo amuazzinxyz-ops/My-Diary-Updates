@@ -23,7 +23,7 @@ marker = "</body>"
 position = html.rfind(marker)
 if position < 0:
     raise SystemExit("BLOCKED: final HTML body close is missing")
-tag = '<script src="diary_google_drive_ui.js"></script>\\n'
+tag = '<script src="diary_google_drive_ui.js"></script>\n'
 html = html[:position] + tag + html[position:]
 html_path.write_text(html, encoding="utf-8")
 if html.count('src="diary_google_drive_ui.js"') != 1:
