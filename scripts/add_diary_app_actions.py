@@ -288,6 +288,82 @@ native = r"""
             }
         }
 
+        private fun diaryJsonValue(value: Any?): Any? = when {
+            value == JSONObject.NULL -> null
+            value is JSONObject -> {
+                val result = LinkedHashMap<String, Any?>()
+                val keys = value.keys()
+                while (keys.hasNext()) {
+                    val key = keys.next()
+                    result[key] = diaryJsonValue(value.get(key))
+                }
+                result
+            }
+            value is org.json.JSONArray -> {
+                val result = ArrayList<Any?>()
+                for (index in 0 until value.length()) result.add(diaryJsonValue(value.get(index)))
+                result
+            }
+            value is String || value is Number || value is Boolean -> value
+            else -> throw IllegalArgumentException("Unsupported value in backup snapshot.")
+        }
+
+        @JavascriptInterface fun encryptDiaryBackupSnapshot(snapshotJson: String, passphrase: String, byteLength: Long): String {
+            val password = passphrase.toCharArray()
+            var temporary: File? = null
+            try {
+                if (snapshotJson.isEmpty() || byteLength !in 1..(64L * 1024L * 1024L)) {
+                    throw IllegalArgumentException("Initial encrypted backup limit is 64 MiB.")
+                }
+                val snapshotObject = JSONObject(snapshotJson)
+                @Suppress("UNCHECKED_CAST")
+                val snapshotMap = diaryJsonValue(snapshotObject) as? Map<String, Any?>
+                    ?: throw IllegalArgumentException("Backup snapshot is invalid.")
+                DiaryBackupSnapshot.validate(snapshotMap)
+
+                val folder = File(cacheDir, "diary-cloud-backup")
+                if (!folder.exists() && !folder.mkdirs()) throw java.io.IOException("Cannot create encrypted backup cache.")
+                val fileName = "my-diary-backup-" + System.currentTimeMillis() + ".mydbk"
+                temporary = File(folder, fileName + ".tmp")
+                val destination = File(folder, fileName)
+
+                val pipeIn = java.io.PipedInputStream(64 * 1024)
+                val pipeOut = java.io.PipedOutputStream(pipeIn)
+                val writerFailure = java.util.concurrent.atomic.AtomicReference<Throwable?>(null)
+                val writer = Thread({
+                    try {
+                        java.io.OutputStreamWriter(pipeOut, java.nio.charset.StandardCharsets.UTF_8).use { it.write(snapshotJson) }
+                    } catch (error: Throwable) {
+                        writerFailure.set(error)
+                        try { pipeOut.close() } catch (_: Exception) { }
+                    }
+                }, "DiaryBackupSnapshotWriter")
+                writer.start()
+                try {
+                    pipeIn.use { input ->
+                        java.io.FileOutputStream(temporary).use { output ->
+                            DiaryBackupCrypto.encrypt(input, output, password)
+                        }
+                    }
+                    writer.join()
+                    writerFailure.get()?.let { throw java.io.IOException("Could not stream backup snapshot.", it) }
+                    if (!temporary!!.renameTo(destination)) throw java.io.IOException("Could not finalize encrypted backup.")
+                    return JSONObject().put("ok", true).put("fileName", fileName)
+                        .put("encryptedBytes", destination.length()).toString()
+                } finally {
+                    try { pipeIn.close() } catch (_: Exception) { }
+                    try { pipeOut.close() } catch (_: Exception) { }
+                    if (writer.isAlive) writer.join(2000)
+                }
+            } catch (error: Exception) {
+                temporary?.delete()
+                return JSONObject().put("ok", false)
+                    .put("message", error.message ?: "Backup encryption failed.").toString()
+            } finally {
+                password.fill('\u0000')
+            }
+        }
+
         @JavascriptInterface fun saveBackup(content: String, suggestedName: String) {
             if (content.isEmpty()) return
             this@MainActivity.startDiaryBackupSave(content, suggestedName)
@@ -1769,6 +1845,8 @@ html_path.write_text(html, encoding="utf-8")
 kotlin_path = Path("diary-project/app/src/main/java/com/muazzin/diary/MainActivity.kt")
 kotlin = kotlin_path.read_text(encoding="utf-8")
 imports = [
+    "import com.muazzin.diary.backup.DiaryBackupCrypto",
+    "import com.muazzin.diary.backup.DiaryBackupSnapshot",
     "import android.app.AlertDialog",
     "import android.text.InputFilter",
     "import android.text.InputType",
