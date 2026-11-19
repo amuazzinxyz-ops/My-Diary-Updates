@@ -207,7 +207,7 @@ g=gradle.read_text(encoding="utf-8")
 m=re.search(r"dependencies\s*\{([^}]*)\}",g,re.S)
 if not m: raise SystemExit("BLOCKED: Gradle dependencies block missing")
 body=m.group(1)
-dep='implementation("com.google.android.gms:play-services-auth:22.0.0")'
+dep='implementation("com.google.android.gms:play-services-auth:21.2.0")'
 if dep not in body: body=body.rstrip()+"\n    "+dep+"\n"
 g=g[:m.start(1)]+body+g[m.end(1):]
 main.write_text(s,encoding="utf-8")
@@ -215,4 +215,5 @@ gradle.write_text(g,encoding="utf-8")
 if "https://www.googleapis.com/auth/drive.appdata" not in s: raise SystemExit("BLOCKED: least-privilege scope missing")
 if "drive.file" in s or "drive.readonly" in s or '\"https://www.googleapis.com/auth/drive\"' in s: raise SystemExit("BLOCKED: broad Drive scope detected")
 if dep not in g or "uploadEncryptedDiaryBackup(fileName: String)" not in s: raise SystemExit("BLOCKED: Drive bridge/dependency incomplete")
+if "play-services-auth:21.2.0" not in g: raise SystemExit("BLOCKED: auth dependency must remain compatible with minSdk 23")
 print("PASS: AuthorizationClient drive.appdata and encrypted appDataFolder create/update/verify bridge staged.")
