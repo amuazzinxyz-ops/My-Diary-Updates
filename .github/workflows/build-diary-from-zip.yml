@@ -116,7 +116,7 @@ jobs:
               raise SystemExit("BLOCKED: web-source and diary-web mirror are not byte-identical")
           actual=hashlib.sha256(source.read_bytes()).hexdigest()
           meta["webSha256"]=actual
-          meta["webReleaseNotes"]="Personal Calendar and Smart Reminder now include Custom weekday repeat with saved weekday choices. Existing repeat options and other saved data/features are preserved."
+          meta["webReleaseNotes"]="My Diary Web Update 358: Added configurable Android Home Screen Widget Settings inside Me. Choose the date and Diary, Personal Calendar, Smart Reminder, and New Note shortcuts, select widget size, and add the widget to the Android Home Screen. Existing Diary features and saved data are preserved."
           Path("latest.json").write_text(json.dumps(meta,indent=2)+"\n",encoding="utf-8")
           expected=meta.get("webSha256","").lower()
           if len(expected)!=64 or actual!=expected:
