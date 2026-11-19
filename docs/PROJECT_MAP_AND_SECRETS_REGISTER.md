@@ -1,3 +1,15 @@
+# Personal Calendar + Smart Reminder — move success popup lower and extend duration (Web Update 351, 2026-11-19)
+
+- User reported the Web Update 350 success popup appeared too close to the top and requested a slightly lower position and four-second visibility.
+- Changed only the existing shared success-toast styling/timer in `web-source/index.html`: top offset from safe-area top **18px to 64px**, and automatic dismissal from **2.6 seconds to 4 seconds**. Applies to both **📅 Personal Calendar** and **⏰ Smart Reminder**.
+- Toast trigger remains limited to successful saves in those two sections. Existing localized message, toast design, validation/error messages, entry placement/order, saved data, reminder scheduling, alarms, notifications, and all other sections remain unchanged.
+- Backup branch: `backup/before-calendar-reminder-toast-position-duration-2026-11-19`. Working branch: `fix/calendar-reminder-toast-position-duration-2026-11-19`. PR #257 merged as `c5d97ac6ef8e1dec840441ce8eafd45a5de4c6c6`. Feature diff: 2 insertions, 2 deletions in `web-source/index.html` only.
+- Web publisher workflow run `44443472880` completed successfully. Published as **Web Update 351**. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `e2554989fa2b2247e0afce713ab03b314c99fa64`. Live `latest.json` web SHA-256: `899c4f0a9df4c9d1b172a46b292ddd5323ac85f5ad89e261dda113d2757c50a9`.
+- APK/native code was not changed. APK feed remains **1.0.194 / versionCode 193**. This is a web-only update; no new APK is required or claimed.
+- Static checks confirmed the 64px safe-area offset, 4-second timeout, one shared helper, and unchanged Calendar/Reminder-only trigger. Physical phone visual test is pending user confirmation.
+
+---
+
 # Personal Calendar + Smart Reminder — temporary save-success popup (Web Update 350, 2026-11-19)
 
 - User clarified that only the successful-save popup should appear briefly and disappear; no other layout or behaviour change was requested.
