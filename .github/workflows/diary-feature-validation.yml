@@ -114,6 +114,8 @@ jobs:
           grep -q 'uploadEncryptedDiaryBackup' scripts/add_diary_google_drive.py
           grep -q 'fields=id,size,name' scripts/add_diary_google_drive.py
           grep -q 'remoteSize != file.length()' scripts/add_diary_google_drive.py
+          grep -q 'File(filesDir, "diary-cloud-backup")' scripts/add_diary_app_actions.py
+          grep -q 'File(filesDir, "diary-cloud-backup")' scripts/add_diary_google_drive.py
           grep -q 'verifiedRemoteId' scripts/add_diary_google_drive.py
           grep -q '64 \* 1024 \* 1024' scripts/drive_backup_src/diary_snapshot_collector.js
           grep -q 'diary_google_drive_ui.js' scripts/add_diary_google_drive_ui.py
