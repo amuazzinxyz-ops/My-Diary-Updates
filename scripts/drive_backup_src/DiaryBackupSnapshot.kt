@@ -61,18 +61,14 @@ internal object DiaryBackupSnapshot {
 
         val dbs = root["indexedDb"] as? Map<*, *>
             ?: throw IllegalArgumentException("Backup IndexedDB section is missing.")
-        require(dbs.keys.filterIsInstance<String>().toSet() == indexedDbStores.keys) {
-            "Backup IndexedDB inventory is incomplete."
-        }
+        requireExactKeys(dbs, indexedDbStores.keys, "Backup IndexedDB inventory is incomplete.")
 
         var recordCount = 0
         var estimatedBytes = 0L
         for ((dbName, expectedStores) in indexedDbStores) {
             val db = dbs[dbName] as? Map<*, *>
                 ?: throw IllegalArgumentException("IndexedDB database $dbName is missing.")
-            require(db.keys.filterIsInstance<String>().toSet() == expectedStores) {
-                "IndexedDB store inventory is incomplete for $dbName."
-            }
+            requireExactKeys(db, expectedStores, "IndexedDB store inventory is incomplete for $dbName.")
             for (storeName in expectedStores) {
                 val records = db[storeName] as? List<*>
                     ?: throw IllegalArgumentException("IndexedDB store $storeName is invalid.")
@@ -88,14 +84,10 @@ internal object DiaryBackupSnapshot {
 
         val native = root["nativePreferences"] as? Map<*, *>
             ?: throw IllegalArgumentException("Native reminder state is missing.")
-        require(native.keys.filterIsInstance<String>().toSet() == setOf("diary_reminders_native_v1")) {
-            "Unsupported native preference section."
-        }
+        requireExactKeys(native, setOf("diary_reminders_native_v1"), "Unsupported native preference section.")
         val reminders = native["diary_reminders_native_v1"] as? Map<*, *>
             ?: throw IllegalArgumentException("Native reminder state is invalid.")
-        require(reminders.keys.filterIsInstance<String>().toSet() == setOf("items", "auto_items")) {
-            "Native reminder scheduler state is incomplete."
-        }
+        requireExactKeys(reminders, setOf("items", "auto_items"), "Native reminder scheduler state is incomplete.")
         reminders.values.forEach { value ->
             require(value == null || value is String) { "Native reminder values must remain strings." }
         }
@@ -103,6 +95,10 @@ internal object DiaryBackupSnapshot {
         estimatedBytes += measure(local, 0) + measure(native, 0)
         require(estimatedBytes <= MAX_ESTIMATED_BYTES) { "Backup exceeds the safe size limit." }
         return Report(recordCount, estimatedBytes)
+    }
+
+    private fun requireExactKeys(map: Map<*, *>, expected: Set<String>, message: String) {
+        require(map.keys.all { it is String } && map.keys.map { it as String }.toSet() == expected) { message }
     }
 
     private fun measure(value: Any?, depth: Int): Long {
@@ -117,11 +113,16 @@ internal object DiaryBackupSnapshot {
                 var total = 0L
                 for ((key, child) in value) {
                     val name = key as? String ?: throw IllegalArgumentException("Backup object key is invalid.")
-                    val normalized = name.lowercase().replace("-", "_")
-                    require(normalized !in setOf(
-                        "access_token", "refresh_token", "authorization", "oauth",
-                        "device_id", "fingerprint_key", "private_locker_biometric"
-                    )) { "Device credentials cannot be included in a portable backup." }
+                    val normalized = name
+                        .replace(Regex("([a-z0-9])([A-Z])"), "$1_$2")
+                        .lowercase()
+                        .replace("-", "_")
+                    val forbidden = normalized in setOf(
+                        "access_token", "refresh_token", "id_token", "authorization", "oauth",
+                        "device_id", "deviceid", "fingerprint", "fingerprint_key", "biometric",
+                        "private_locker_biometric", "device_token"
+                    ) || normalized.startsWith("oauth_")
+                    require(!forbidden) { "Device credentials cannot be included in a portable backup." }
                     total += name.toByteArray(Charsets.UTF_8).size + measure(child, depth + 1)
                     require(total <= MAX_ESTIMATED_BYTES) { "Backup exceeds the safe size limit." }
                 }
