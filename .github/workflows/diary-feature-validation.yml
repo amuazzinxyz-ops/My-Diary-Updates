@@ -100,6 +100,11 @@ jobs:
           grep -q 'DiaryBackupSnapshot.validate' scripts/add_diary_app_actions.py
           grep -q 'DiaryBackupKeyStore.cacheDataKey' scripts/add_diary_app_actions.py
           grep -q 'DiaryBackupKeyStore.cacheDataKeyAndEnvelope' scripts/add_diary_app_actions.py
+          grep -q 'hasCachedDiaryBackupKey' scripts/add_diary_app_actions.py
+          grep -q 'loadDataKey(this@MainActivity)' scripts/add_diary_app_actions.py
+          grep -q 'encryptWithCachedDataKey(input, output' scripts/add_diary_app_actions.py
+          grep -q 'cachedAtOpen' scripts/drive_backup_src/diary_google_drive_ui.js
+          grep -q 'loadKeyEnvelope' scripts/drive_backup_src/DiaryBackupKeyStore.kt
           grep -q 'encryptWithCachedDataKey' scripts/drive_backup_src/DiaryBackupCrypto.kt
           grep -q 'cachedKeyCanEncryptMultipleBackupsWithPortablePassphraseEnvelope' scripts/drive_backup_src/DiaryBackupCryptoTest.kt
           grep -q 'DiaryBackupKeyStore.kt' scripts/add_diary_drive_backup.py
