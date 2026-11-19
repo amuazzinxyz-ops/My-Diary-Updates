@@ -13,7 +13,7 @@ import java.io.InputStream
 import java.io.OutputStream
 import java.nio.charset.StandardCharsets
 import java.security.SecureRandom
-import java.util.Base64
+import android.util.Base64
 import javax.crypto.AEADBadTagException
 import javax.crypto.Cipher
 import javax.crypto.CipherInputStream
@@ -214,10 +214,10 @@ internal object DiaryBackupCrypto {
     private fun payloadAad(header: ByteArray): ByteArray =
         MAGIC + "|payload|".toByteArray(StandardCharsets.US_ASCII) + header
 
-    private fun b64(bytes: ByteArray): String = Base64.getEncoder().withoutPadding().encodeToString(bytes)
+    private fun b64(bytes: ByteArray): String = Base64.encodeToString(bytes, Base64.NO_WRAP)
 
     private fun decodeB64(value: String, expectedBytes: Int): ByteArray {
-        val decoded = try { Base64.getDecoder().decode(value) }
+        val decoded = try { Base64.decode(value, Base64.DEFAULT) }
         catch (error: IllegalArgumentException) { throw SecurityException("Backup metadata encoding is invalid.", error) }
         if (decoded.size != expectedBytes) {
             decoded.fill(0)
