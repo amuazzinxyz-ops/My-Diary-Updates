@@ -1,3 +1,15 @@
+# Google Drive Auto Backup — crypto validation passed and snapshot contract added (2026-11-19)
+
+- Build-only validation run **44519583932** on feature commit `236e922c9fbd7a812fa35e94b220afc92fecc735` completed with conclusion **success**. All 13 main job steps passed, including `:app:testDebugUnitTest`, `:app:assembleDebug`, and artifact upload. Artifact **14528001287**, `My-Diary-Google-Drive-feature-debug`, size 5,238,070 bytes, SHA-256 `0c6b5f149d670574d1abcd7066f4c76598cc24dd1e8b7c8702df662a4f2a5b8d`, expires 2026-11-26 12:01 UTC. This is an unsigned debug validation APK only; no release signing, publishing, or phone test.
+- Added `scripts/drive_backup_src/DiaryBackupSnapshot.kt`: a strict version-1 portable snapshot contract that requires all audited IndexedDB databases/stores and native reminder scheduler state, permits only inventoried persistent localStorage keys (including dynamic Me PIN/recovery keys), rejects device-bound fingerprint preferences and OAuth/device credential fields, enforces nesting/record/size bounds, and reports record count/estimated size.
+- Added JVM tests for complete inventory acceptance, missing database/store rejection, device-bound/OAuth material rejection, and excessive nesting. Updated `scripts/add_diary_drive_backup.py` so the validation build copy receives the new snapshot source and tests alongside crypto.
+- Snapshot implementation commits: source `7e5bf8806147de0dd70298e8adc760d42763a314`; tests `831cf0ff8cbb1c54b40d4cf778564c4be4689ea3`; build patcher `068d0a72c9e026652b5fffc4f2af281be4b51f03`.
+- New build-only workflow run **44520295080** on commit `068d0a72c9e026652b5fffc4f2af281be4b51f03` is pending/in progress and must pass before the new snapshot contract is treated as build-validated.
+- Pre-edit Register backup: `backup/before-drive-snapshot-schema-2026-11-19`; full working Register fetched from backup and feature branches and verified byte-for-byte identical (blob `5a7603f04fe56b9a4717f6e4bbec9348cf29cc73`) before this entry was added.
+- Scope remains incomplete: this contract is not yet a runtime collector and does not connect to OAuth, Drive, WorkManager, UI, restore, or Keystore. No cloud upload/download, restore, main-branch change, release, or phone test occurred. Continue only on the feature branch; keep existing manual JSON export/import and native reminder/fingerprint flows untouched.
+
+---
+
 # Google Drive Auto Backup — crypto compile correction (2026-11-19)
 
 - The first full build attempt for the isolated crypto primitive, workflow run **44519020487** on feature SHA `333049ba2945527456e85702a19441f556f8824b`, failed at `:app:compileDebugKotlin` before unit tests ran. Exact compiler error: `GZIPInputStream` and `GZIPOutputStream` were imported from `java.io`; their correct package is `java.util.zip`. The additional Kotlin inference diagnostics were downstream of those unresolved types.
