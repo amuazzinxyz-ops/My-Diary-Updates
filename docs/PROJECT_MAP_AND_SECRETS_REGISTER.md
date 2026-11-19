@@ -1,3 +1,15 @@
+# Personal Calendar + Smart Reminder — temporary save-success popup (Web Update 350, 2026-11-19)
+
+- User clarified that only the successful-save popup should appear briefly and disappear; no other layout or behaviour change was requested.
+- Added one temporary, accessible success toast for **📅 Personal Calendar** and **⏰ Smart Reminder** after the existing save operation succeeds. It displays the existing localized success message and removes itself automatically after **2.6 seconds**. A repeated save replaces the previous toast rather than stacking messages.
+- Validation, reminder scheduling, permission errors, save failures, saved records, entry order, entry cards, form reset, repeat rules, alarms, notifications, and all other Me tools retain their previous handling. Only the success-message presentation for Calendar and Smart Reminder changed.
+- Backup branch: `backup/before-calendar-reminder-success-toast-2026-11-19`. Working branch: `fix/calendar-reminder-success-toast-2026-11-19`. PR #255 merged as `54fdaab0f155175f01691394839cd506f3777f91`. Feature diff: `web-source/index.html` only (11 additions, 1 deletion).
+- Web publisher workflow run `44442681340` completed successfully. Published as **Web Update 350**. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `b4047fc81b6e9c9e3d1a0afa238427df55e80154`. Live `latest.json` web SHA-256: `58fffa562dac0bfa8340b7b1e014516cc63662520d8dda024d3a38a6d4307b97`.
+- APK/native code was not changed. APK remains **1.0.194 / versionCode 193**, SHA-256 `6b67de24f36f6ee985c1b6e1b88ce3f9259653c96938a412513570aee0c1428d`. Automatic APK workflow run `44442681396` stopped at the existing exact-latest-HTML guard; all later build/release/upload steps were skipped. No APK was built or published for this web-only change.
+- Static checks confirmed one toast helper, 2.6-second dismissal, and success-toast use only for Calendar/Reminder. Physical Android phone visual test is pending user confirmation; do not claim device-side PASS until the user confirms it.
+
+---
+
 # Personal Calendar — remove duplicate standalone date below name (Web Update 349, 2026-11-19)
 
 - User reported that the date appeared separately as plain text in addition to the new Date badge. Corrected only the **Personal Calendar** saved-entry renderer: the old standalone date line is no longer rendered for Calendar entries.
