@@ -1520,7 +1520,6 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   function worldClockText(key){var lang=language();return (worldClockCopy[lang]&&worldClockCopy[lang][key])||worldClockCopy.roman[key];}
   var worldClockBtn=el('button',{id:'diaryWorldClockBtn',type:'button',class:'diary-me-feature-btn'},worldClockText('button'));
   mePanel.appendChild(worldClockBtn);
-  mePanel.appendChild(widgetSettingsBtn);
   var worldClockCities=[
    {name:'Mumbai · India',zone:'Asia/Kolkata'},
    {name:'Dubai · UAE',zone:'Asia/Dubai'},
@@ -3034,6 +3033,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 
   var widgetSettingsBtn=el('button',{id:'diaryHomeWidgetSettingsBtn',type:'button',class:'diary-me-feature-btn'},'🏠 Home Screen Widget Settings');
   widgetSettingsBtn.style.setProperty('font-size','15px','important');
+  mePanel.appendChild(widgetSettingsBtn);
   var widgetSettingsModal=el('section',{id:'diaryHomeWidgetSettingsModal',hidden:'hidden','aria-modal':'true','role':'dialog'});
   var widgetSettingsHead=el('div',{class:'diary-home-widget-head'});
   var widgetSettingsTitle=el('strong',{},'🏠 Home Screen Widget Settings');
