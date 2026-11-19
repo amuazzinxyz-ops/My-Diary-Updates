@@ -4813,3 +4813,13 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Backup branch: `backup/before-trash-fullscreen-2026-11-19`. Working branch: `fix/trash-fullscreen-2026-11-19`. PR #269: https://github.com/amuazzinxyz-ops/My-Diary-Updates/pull/269
 - `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `c72f0ff77f3108e0fad5c9dc2ed836204e4eeb29` (565,582 bytes). `latest.json` advertises Web Update 356 with web SHA-256 `aeb426d92edebba1cd186f2a200c4ad10a682837343be53303a474c6f1a735fe`. APK remains **1.0.194 / versionCode 193**; no APK rebuild is required for this web-only UI change.
 - Physical-phone visual test remains pending user confirmation. Do not claim device-side PASS until the user confirms the deleted-notes view fills the mobile screen and its close control returns correctly.
+
+
+---
+
+# Recently Deleted full-screen close-state safeguard — Web Update 356 correction (2026-11-19)
+
+- Added a small cleanup to the existing Diary close path: if the user closes the entire Diary while Recently Deleted is open, the full-screen class is removed, the trash list is returned to its original Diary body location, the trash button label is restored, and the next Diary opening starts in the normal view.
+- This is a presentation-state safeguard only. Trash records, saved notes, Restore/Delete Permanently handlers, expiry, PINs, locks, photos, and APK/native code are unchanged.
+- Backup branch: `backup/before-trash-fullscreen-close-reset-2026-11-19`. Correction branch: `fix/trash-fullscreen-close-reset-2026-11-19`.
+- Source and mirror are byte-identical at Git blob SHA `95d1fca296beb8b9b11866994fd89057694bceaa` (566,154 bytes). `latest.json` retains Web Update 356 and advertises the updated SHA-256 `2b11d49a46953783bcb45f76557d1d3fcbe95490eefa74043c542ebe964a4cc5`. Physical-phone visual testing remains pending user confirmation.

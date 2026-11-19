@@ -4262,9 +4262,9 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   document.getElementById('diaryMyNotesSearch').focus();
  }
  function closeOverlay(fromPop){
-  Object.keys(unlockTimers).forEach(clearUnlockTimer);unlockedNotes={};expandedNoteId=null;
+  Object.keys(unlockTimers).forEach(clearUnlockTimer);unlockedNotes={};expandedNoteId=null;showingTrash=false;
   var ov=document.getElementById('diaryMyNotesOverlay');if(ov){ov.classList.remove('open');ov.setAttribute('aria-hidden','true')}
-  var diaryPanel=document.getElementById('diaryMyNotesPanel');if(diaryPanel)diaryPanel.classList.remove('diary-me-menu-open');var diaryMePanel=document.getElementById('diaryDiaryMePanel');if(diaryMePanel)diaryMePanel.hidden=true;var diaryMeButton=document.getElementById('diaryDiaryMeBtn');if(diaryMeButton)diaryMeButton.setAttribute('aria-expanded','false');
+  var diaryPanel=document.getElementById('diaryMyNotesPanel');if(diaryPanel)diaryPanel.classList.remove('diary-me-menu-open','diary-trash-fullscreen');var diaryMePanel=document.getElementById('diaryDiaryMePanel');if(diaryMePanel)diaryMePanel.hidden=true;var diaryMeButton=document.getElementById('diaryDiaryMeBtn');if(diaryMeButton)diaryMeButton.setAttribute('aria-expanded','false');var trashButton=document.getElementById('diaryMyNotesTrash');if(trashButton){trashButton.textContent=t('recentlyDeleted');trashButton.setAttribute('aria-expanded','false');}var trashList=document.getElementById('diaryMyNotesList'),diaryBody=document.getElementById('diaryMyNotesBody');if(trashList){if(diaryBody&&trashList.parentNode!==diaryBody)diaryBody.appendChild(trashList);trashList.style.display='none';}var allNotesButton=document.getElementById('diaryMyNotesAllNotes');if(allNotesButton)allNotesButton.style.display='';
   document.body.style.overflow='';
   if(diaryOverlayHistoryOpen){diaryOverlayHistoryOpen=false;if(!fromPop){try{history.back()}catch(e){}}}
  }
