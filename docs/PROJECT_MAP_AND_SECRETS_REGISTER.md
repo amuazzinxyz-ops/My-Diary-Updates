@@ -1,3 +1,12 @@
+# Google Drive backup — native Android reminder and biometric state audited (2026-11-19)
+
+- Reviewed the native patcher `scripts/add_diary_app_actions.py`. It adds a separate Android SharedPreferences store `diary_reminders_native_v1` containing active scheduler `items` and `auto_items` (including auto-snooze state), in addition to reminder records in the Web IndexedDB store. Restore must reconcile both layers and re-register alarms without duplicate IDs.
+- The patcher also stores legacy Private Locker biometric material in SharedPreferences `private_locker_biometric`, protected by Android Keystore alias `my_diary_private_locker_biometric_v1`. This key is device-bound and cannot be exported as a portable credential. Cloud backup must preserve portable PIN/recovery-wrapped Locker ciphertext while excluding the device Keystore key and providing safe PIN/recovery fallback on another device.
+- Custom reminder sound fields may contain Android content URIs. Their persistable permission and file portability remain unverified; do not promise custom sound restoration across devices until tested. Native reminder scheduler state and web reminder records must be restored together.
+- Updated `docs/GOOGLE_DRIVE_AUTO_BACKUP_DESIGN.md` with these native-state findings. Documentation commit: `1819e994298a461769e2f22bcf5d4f19a48ed638`. No application code or user data changed; no build or device test was run.
+
+---
+
 # Google Drive backup — design document recorded (2026-11-19)
 
 - Created `docs/GOOGLE_DRIVE_AUTO_BACKUP_DESIGN.md` on the working branch. It records the Android AuthorizationClient + least-privilege Drive appDataFolder design, full current data inventory, portable encryption/Keystore wrapping strategy, snapshot/WorkManager flow, safe restore sequence, and static/security/device acceptance checks.
