@@ -104,21 +104,34 @@ jobs:
           PY
           node --check /tmp/diary-feature-module.js
 
-      - name: Align Java compile target with Kotlin 17 for validation build
+      - name: Set Android Java compileOptions to JVM 17 for validation build
         working-directory: diary-project/app
         run: |
           set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
+          import re
           p = Path("build.gradle.kts")
           s = p.read_text(encoding="utf-8")
-          marker = "tasks.withType<org.gradle.api.tasks.compile.JavaCompile>().configureEach {"
-          if marker not in s:
-              s += '\n\n' + marker + '\n    sourceCompatibility = "17"\n    targetCompatibility = "17"\n}\n'
-          if marker not in s or 'targetCompatibility = "17"' not in s:
-              raise SystemExit("BLOCKED: Java/Kotlin JVM target alignment patch failed")
+          block = '''compileOptions {
+                  sourceCompatibility = JavaVersion.VERSION_17
+                  targetCompatibility = JavaVersion.VERSION_17
+              }'''
+          pattern = re.compile(r'compileOptions\\s*\\{[^}]*\\}', re.S)
+          if pattern.search(s):
+              s, n = pattern.subn(block, s, count=1)
+              if n != 1:
+                  raise SystemExit("BLOCKED: could not update existing Android compileOptions")
+          else:
+              m = re.search(r'android\\s*\\{', s)
+              if not m:
+                  raise SystemExit("BLOCKED: Android DSL block not found")
+              s = s[:m.end()] + "\\n    " + block + s[m.end():]
           p.write_text(s, encoding="utf-8")
-          print("PASS: JavaCompile source/target compatibility aligned to Kotlin JVM 17")
+          check = re.search(r'compileOptions\\s*\\{([^}]*)\\}', s, re.S)
+          if not check or "JavaVersion.VERSION_17" not in check.group(1) or check.group(1).count("JavaVersion.VERSION_17") != 2:
+              raise SystemExit("BLOCKED: Android Java source/target are not both JVM 17")
+          print("PASS: Android compileOptions sourceCompatibility and targetCompatibility are JVM 17")
           PY
 
       - name: Build debug APK only — no signing and no publishing
