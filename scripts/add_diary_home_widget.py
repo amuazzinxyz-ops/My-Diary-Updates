@@ -222,7 +222,7 @@ elif "requestHomeWidgetPin()" not in kotlin:
 field_anchor = "    private lateinit var webView: WebView\n"
 if "private var pendingWidgetTarget: String?" not in kotlin:
     kotlin = require_once(kotlin, field_anchor, field_anchor + "    private var pendingWidgetTarget: String? = null\n", "pending Home Screen widget target")
-create_anchor = "        super.onCreate(savedInstanceState)\n"
+create_anchor = "    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n"
 if "pendingWidgetTarget = intent?.getStringExtra(\"diary_widget_target\")" not in kotlin:
     kotlin = require_once(kotlin, create_anchor, create_anchor + "        pendingWidgetTarget = intent?.getStringExtra(\"diary_widget_target\")\n", "initial widget launch target")
 page_anchor = "                super.onPageFinished(view, url)\n"
