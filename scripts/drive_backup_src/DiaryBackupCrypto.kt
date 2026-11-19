@@ -160,7 +160,13 @@ internal object DiaryBackupCrypto {
                 // stop at its member trailer before consuming the cipher stream.
                 val drain = ByteArray(BUFFER_BYTES)
                 try {
-                    while (cipherBuffer.read(drain) >= 0) { }
+                    while (true) {
+                        val count = cipherBuffer.read(drain)
+                        if (count < 0) break
+                        if (count > 0) throw SecurityException("Encrypted backup has unexpected trailing data.")
+                        if (cipherBuffer.read() < 0) break
+                        throw SecurityException("Encrypted backup has unexpected trailing data.")
+                    }
                 } finally {
                     drain.fill(0)
                 }
