@@ -1,3 +1,13 @@
+# Personal Calendar — remove duplicate standalone date below name (Web Update 349, 2026-11-19)
+
+- User reported that the date appeared separately as plain text in addition to the new Date badge. Corrected only the **Personal Calendar** saved-entry renderer: the old standalone date line is no longer rendered for Calendar entries.
+- The one-line **Birthday · Date · Time** badge row remains unchanged. The name badge, Date badge, Birthday/type badge, Time badge, saved record data, ordering, pin/long-press actions, repeat rules, reminder scheduling, alarms, and notifications remain unchanged. Smart Reminder retains its existing date display.
+- Backup branch: `backup/before-calendar-extra-date-removal-2026-11-19`. Working branch: `fix/calendar-remove-duplicate-date-2026-11-19`. PR #253 merged as `6c3544088eb48629b4e12a22c5494e5b2f0fd05a`.
+- Web publisher run `44439949757` completed successfully. Published as **Web Update 349**. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `c6f1c53910162946b52247a5c22c96d005e0cda7` (558,847 bytes). `latest.json` web SHA-256: `01425dda964943fa6b070b3e320b9e1ef6baa7bf9d283040346733699509f2c9`.
+- APK/native code was not changed. APK remains **1.0.194 / versionCode 193**; no APK release was made for this web-only fix. Physical-phone testing remains pending user confirmation.
+
+---
+
 # Personal Calendar + Smart Reminder — show pinned marker on saved entries (Web Update 346, 2026-11-19)
 
 - User reported that Pin/Unpin was working but a pinned saved entry did not visibly show its pinned state. Added a visible **📌** marker before the saved entry title whenever the existing `record.pinned` flag is true.
