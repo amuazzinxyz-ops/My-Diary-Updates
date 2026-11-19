@@ -4861,3 +4861,15 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Web publisher run #438 correctly deferred the native-dependent widget bundle while APK 1.0.195 was pending. The successful APK release commit then published the matching webVersion 358/hash in the same live feed. Source/mirror parity and APK/feed hash were rechecked after publication.
 - User previously confirmed Web Update 357 on mobile: **“Mobile pe chack kiya alhamdulillah bilkul sahi huwa hai.”** That confirmation applies to the deleted-note full-screen layout. **Physical phone testing of the new Home Screen widget and Widget Settings remains pending**; do not claim it was device-tested.
 
+
+
+---
+
+# Widget Settings button spacing and placement (Web Update 359, 2026-11-19)
+
+- User requested the **Home Screen Widget Settings** button label be slightly smaller because it touched the button line, and requested the button be placed below **World Clock** inside Me.
+- Reduced only this button's label font from 16px to 15px (small adjustment); moved its append position to immediately after the World Clock button. No other button styles, widget settings/behavior, data, notes, photos, PINs, locks, reminders, or native APK files were changed.
+- Backup branch: `backup/before-widget-button-spacing-2026-11-19`. UI change PR #279 merged as `12a16a098e6c812abc404f27f37cb8603efe867e`.
+- Web publisher workflow run #439 (`44477571040`) completed **successfully**. Published Web Update **359**; APK remains **1.0.195 / versionCode 194**.
+- Verified `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `43052be5f7ede20bf2c33376b1f90dccc5aba35f`. Live `latest.json` advertises webVersion 359 and SHA-256 `12e4d8dec319370a5ed5ada1cb8f45eb423471a17cd624d660aafbe8ef5f69dc`.
+- Physical-phone confirmation of this button spacing/placement and the Home Screen widget remains pending; do not claim it has been device-tested.
