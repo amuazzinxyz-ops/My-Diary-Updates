@@ -102,22 +102,38 @@ elif "widgetSettingsPin.addEventListener" not in html:
 feature_anchor = "  function openMeFeature(kind){if(meFeatureProtected(kind)&&meFeaturePinConfig(kind)){showMeFeaturePin(kind);return;}showMeFeaturePage(kind);}"
 widget_target = r"""
   window.__diaryOpenWidgetTarget=function(target){
-   try{
-    if(localStorage.getItem(DIARY_MASTER_PIN_KEY)){openOverlay();return;}
-    openOverlay();
-    if(target==='calendar'||target==='reminders'){
-     var tries=0;
-     (function openFeatureWhenReady(){
-      var overlay=document.getElementById('diaryMyNotesOverlay');
-      if(overlay&&overlay.classList.contains('open')){openMeFeature(target);return;}
-      if(tries++<15)window.setTimeout(openFeatureWhenReady,200);
-     })();
-    }
-   }catch(error){try{openOverlay();}catch(ignore){}}
+   if(target==='calendar'||target==='reminders')openMeFeature(target);
   };
 """
 if "window.__diaryOpenWidgetTarget=function(target)" not in html:
     html = require_once(html, feature_anchor, feature_anchor + "\n" + widget_target, "native widget destination handler")
+
+overlay_anchor = r""" function openOverlay(){
+  if(!diaryStorageReady){prepareDiaryStorage().then(function(){openOverlay()});return;}
+  var masterPin=localStorage.getItem(DIARY_MASTER_PIN_KEY)||'';
+  if(masterPin){showDiaryUnlock();return;}
+  openDiaryPanel();
+ }
+ function openDiaryPanel(){"""
+widget_launcher = r"""
+ window.__diaryOpenWidgetTargetFromAndroid=function(target){
+  try{
+   if(localStorage.getItem(DIARY_MASTER_PIN_KEY)){openOverlay();return;}
+   openOverlay();
+   if(target==='calendar'||target==='reminders'){
+    var tries=0;
+    (function waitForDiaryOverlay(){
+     if(typeof window.__diaryOpenWidgetTarget==='function'){window.__diaryOpenWidgetTarget(target);return;}
+     if(tries++<20)window.setTimeout(waitForDiaryOverlay,200);
+    })();
+   }
+  }catch(error){try{openOverlay();}catch(ignore){}}
+ };
+"""
+if "window.__diaryOpenWidgetTargetFromAndroid=function(target)" not in html:
+    if overlay_anchor not in html:
+        raise SystemExit("BLOCKED: page-level openOverlay widget insertion point missing")
+    html = html.replace(overlay_anchor, overlay_anchor.replace(" function openDiaryPanel(){", widget_launcher + " function openDiaryPanel(){"), 1)
 
 widget_style = r"""
 <style id="diary-home-widget-settings-style">
@@ -218,10 +234,10 @@ widget_activity_methods = r"""
     private fun consumePendingWidgetTarget() {
         val target = pendingWidgetTarget ?: return
         if (!::webView.isInitialized) return
-        webView.evaluateJavascript("(typeof window.__diaryOpenWidgetTarget === 'function')") { ready ->
+        webView.evaluateJavascript("(typeof window.__diaryOpenWidgetTargetFromAndroid === 'function')") { ready ->
             if (ready == "true" && pendingWidgetTarget == target) {
                 pendingWidgetTarget = null
-                webView.evaluateJavascript("window.__diaryOpenWidgetTarget(" + JSONObject.quote(target) + ");", null)
+                webView.evaluateJavascript("window.__diaryOpenWidgetTargetFromAndroid(" + JSONObject.quote(target) + ");", null)
             }
         }
     }
@@ -467,6 +483,6 @@ if not any(node.get(ANDROID_NS + "resource") == "@xml/diary_home_widget_info" fo
     raise SystemExit("FAIL: My Diary widget provider metadata missing")
 if not (res / "layout/diary_home_widget.xml").is_file() or not provider_path.is_file():
     raise SystemExit("FAIL: My Diary widget layout/provider source missing")
-if "getHomeWidgetSettings()" not in KOTLIN_PATH.read_text(encoding="utf-8") or "window.__diaryOpenWidgetTarget=function(target)" not in HTML_PATH.read_text(encoding="utf-8"):
+if "getHomeWidgetSettings()" not in KOTLIN_PATH.read_text(encoding="utf-8") or "window.__diaryOpenWidgetTargetFromAndroid=function(target)" not in HTML_PATH.read_text(encoding="utf-8"):
     raise SystemExit("FAIL: My Diary widget settings bridge or destination handler missing")
 print("PASS: native AppWidgetProvider, manifest receiver, RemoteViews layout, selectable options, and tap destinations verified.")
