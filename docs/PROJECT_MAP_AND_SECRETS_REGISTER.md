@@ -1,3 +1,14 @@
+# Collector integration regression test — fake IndexedDB runtime coverage (2026-11-19)
+
+- Commits on `feature/google-drive-auto-backup-2026-11-19`: `ef0627988efb53460125ebf5bdd15fc3bdd72d86` added a fake-IndexedDB runtime exercise; `85e4659ea675905d81ce350c4810d559b25cc4fb` corrected the test context so the native bridge is exposed on the collector's actual `window` object.
+- The Node test now invokes `collectSnapshot()` against deterministic fake instances of all three audited databases. It asserts preservation of the Diary Safety out-of-line `latest` key and snapshot value, Private Locker entries/meta, dynamic Me-section PIN localStorage, and native reminder scheduler strings.
+- This is test-only coverage; it does not write to live Diary databases, import user records, or change reminder schedules.
+- The feature workflow `.github/workflows/diary-feature-validation.yml` automatically runs this Node test on pushes to the feature branch, followed by Kotlin unit tests and an Android debug APK build. The latest test/build outcome has not yet been retrieved from GitHub Actions; await and inspect the run before marking PASS.
+- Restore remains unimplemented. No decrypted data is applied to user storage; no restore preview, rollback transaction, WorkManager background upload, Drive download/disconnect, or physical/second-device test is complete.
+- Continue on the feature branch only. Keep production, main and published assets unchanged.
+
+---
+
 # Google Drive restore groundwork — preserve Diary Safety IndexedDB keys (2026-11-19)
 
 - Feature-branch commits: collector fix `e1256c12ca51f75deac6aa0dcad4e0f98f361efe`; regression-guard update `f8bed570099da6f6ba5f050a90249a3e7b8553e2`.
