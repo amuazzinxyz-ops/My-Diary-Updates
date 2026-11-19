@@ -4703,3 +4703,13 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Applies identically to **Personal Calendar** and **Smart Reminder** because both use the same shared control. No recurrence calculation, saved entries, reminder scheduling, alarm settings, PINs, locks, notes, photos, native APK code, or unrelated UI was changed.
 - Snapshot branch: `backup/before-custom-weekday-multiselect-2026-11-18`. Working branch: `fix/custom-weekday-multiselect-stay-open-2026-11-18`.
 - Only `web-source/index.html` and its required identical mirror `diary-web/index.html` changed, plus this Master Register entry and `latest.json`. PR #204 merged as `37a6abe6fd054a7ec517e7abf9d053b674b93aa7`. Source/mirror are byte-identical at Git blob SHA `cb73cbef9aad890957aaa9f6d7da170297d4d589` (525,712 bytes). The feed now advertises Web Update 324 with web SHA-256 `77b333ee5e5b928a31d645f1afb2608807a3bddbb68ded23c2e76b448200db99`. APK remains 1.0.194 / versionCode 193; no APK rebuild was made. Physical-phone testing remains pending.
+
+
+# Personal Calendar + Smart Reminder — centre the saved-entry name button (Web Update 347, 2026-11-19)
+
+- User clarified that the entire name badge/button should move horizontally to the centre of each saved entry card, while remaining at the top in its existing vertical position. The text inside the badge is centred too.
+- Applied one shared CSS-rule change in `web-source/index.html`: added `align-self:center`, changed badge justification and text alignment to centre, and retained its existing fit-content width, wrapping, and top placement. Because both **📅 Personal Calendar** and **⏰ Smart Reminder** use the same renderer/class, the change applies identically to both.
+- No entry data, order, pin state, long-press actions, form, recurrence, alarm/reminder scheduling, notification, ringtone, APK/native code, or unrelated features were changed.
+- Backup branch: `backup/before-calendar-reminder-name-button-center-2026-11-19`. Working branch: `fix/calendar-reminder-name-button-center-2026-11-19`. PR #249 merged as `ce3c60146b565d6de7c46f26536c5e192019cb56`.
+- Published successfully as **Web Update 347**. The web publisher synchronized `diary-web/index.html` with `web-source/index.html`; both are byte-identical at Git blob SHA `821c3dbb8e9cfb4de1382b199b2af03af32f5673` (558,341 bytes). `latest.json` advertises web SHA-256 `0b9433413ef79afacd0af73d72da3c888d41ff7ff2ffb10d911d99566fa1a463`.
+- APK remains **1.0.194 / versionCode 193**. No APK/native build or release was made. Physical-phone testing remains pending user confirmation.
