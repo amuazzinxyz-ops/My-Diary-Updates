@@ -103,6 +103,9 @@ jobs:
           grep -q 'drive.appdata' scripts/add_diary_google_drive.py
           grep -q 'play-services-auth:21.2.0' scripts/add_diary_google_drive.py
           grep -q 'uploadEncryptedDiaryBackup' scripts/add_diary_google_drive.py
+          grep -q 'fields=id,size,name' scripts/add_diary_google_drive.py
+          grep -q 'remoteSize != file.length()' scripts/add_diary_google_drive.py
+          grep -q 'verifiedRemoteId' scripts/add_diary_google_drive.py
           grep -q '64 \* 1024 \* 1024' scripts/drive_backup_src/diary_snapshot_collector.js
           grep -q 'diary_google_drive_ui.js' scripts/add_diary_google_drive_ui.py
           grep -q 'encryptDiaryBackupSnapshot' scripts/drive_backup_src/diary_google_drive_ui.js
