@@ -66,11 +66,24 @@
     if (value === null || ["string", "number", "boolean"].includes(typeof value)) return value;
     throw new Error("Unsupported data type in Diary backup.");
   }
-  async function readStore(db, storeName) {
+  async function readStore(db, storeName, preserveOutOfLineKeys) {
     if (!db.objectStoreNames.contains(storeName)) throw new Error("Backup store missing: " + storeName);
     const tx = db.transaction(storeName, "readonly");
-    const result = await requestResult(tx.objectStore(storeName).getAll());
-    return portable(result, 0);
+    const store = tx.objectStore(storeName);
+    const result = await requestResult(store.getAll());
+    if (!preserveOutOfLineKeys) return portable(result, 0);
+    // Diary Safety uses an out-of-line key ("latest"). getAll() alone loses it,
+    // so preserve each original key alongside its value for a future safe restore.
+    const keys = await requestResult(store.getAllKeys());
+    if (keys.length !== result.length) throw new Error("Diary Safety key/value inventory is inconsistent.");
+    const keyed = result.map((value, index) => {
+      const key = keys[index];
+      if (!(typeof key === "string" || (typeof key === "number" && Number.isFinite(key)))) {
+        throw new Error("Diary Safety contains an unsupported record key.");
+      }
+      return { __diaryBackupKey: key, __diaryBackupValue: value };
+    });
+    return portable(keyed, 0);
   }
   async function collectSnapshot() {
     const localStorageData = {};
@@ -94,7 +107,10 @@
       const db = await openDatabase(dbName);
       try {
         const data = {};
-        for (const storeName of stores) data[storeName] = await readStore(db, storeName);
+        for (const storeName of stores) {
+          const preserveKeys = dbName === "diary_diary_safety_v1" && storeName === "snapshots";
+          data[storeName] = await readStore(db, storeName, preserveKeys);
+        }
         indexedDb[dbName] = data;
       } finally {
         db.close();
