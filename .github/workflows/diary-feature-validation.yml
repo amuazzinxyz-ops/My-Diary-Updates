@@ -117,18 +117,18 @@ jobs:
                   sourceCompatibility = JavaVersion.VERSION_17
                   targetCompatibility = JavaVersion.VERSION_17
               }'''
-          pattern = re.compile(r'compileOptions\\s*\\{[^}]*\\}', re.S)
+          pattern = re.compile(r'compileOptions\s*\{[^}]*\}', re.S)
           if pattern.search(s):
               s, n = pattern.subn(block, s, count=1)
               if n != 1:
                   raise SystemExit("BLOCKED: could not update existing Android compileOptions")
           else:
-              m = re.search(r'android\\s*\\{', s)
+              m = re.search(r'android\s*\{', s)
               if not m:
                   raise SystemExit("BLOCKED: Android DSL block not found")
-              s = s[:m.end()] + "\\n    " + block + s[m.end():]
+              s = s[:m.end()] + "\n    " + block + s[m.end():]
           p.write_text(s, encoding="utf-8")
-          check = re.search(r'compileOptions\\s*\\{([^}]*)\\}', s, re.S)
+          check = re.search(r'compileOptions\s*\{([^}]*)\}', s, re.S)
           if not check or "JavaVersion.VERSION_17" not in check.group(1) or check.group(1).count("JavaVersion.VERSION_17") != 2:
               raise SystemExit("BLOCKED: Android Java source/target are not both JVM 17")
           print("PASS: Android compileOptions sourceCompatibility and targetCompatibility are JVM 17")
