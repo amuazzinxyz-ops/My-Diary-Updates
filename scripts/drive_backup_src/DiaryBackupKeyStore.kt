@@ -20,6 +20,9 @@ internal object DiaryBackupKeyStore {
     private const val PREFS = "diary_cloud_backup_keys_v1"
     private const val IV = "dek_iv"
     private const val CIPHER_TEXT = "dek_cipher"
+    private const val ENVELOPE_SALT = "envelope_salt"
+    private const val ENVELOPE_NONCE = "envelope_nonce"
+    private const val ENVELOPE_WRAPPED_DEK = "envelope_wrapped_dek"
     private const val KEYSTORE = "AndroidKeyStore"
 
     @Synchronized
@@ -52,6 +55,42 @@ internal object DiaryBackupKeyStore {
             .commit()
         encrypted.fill(0)
         if (!saved) throw IllegalStateException("Backup key cache could not be saved.")
+    }
+
+    @Synchronized
+    fun cacheDataKeyAndEnvelope(
+        context: Context,
+        dataKey: ByteArray,
+        salt: ByteArray,
+        wrapNonce: ByteArray,
+        wrappedDek: ByteArray
+    ) {
+        require(dataKey.size == 32 && salt.size == 16 && wrapNonce.size == 12 && wrappedDek.size == 48) {
+            "Invalid portable backup key envelope."
+        }
+        cacheDataKey(context, dataKey)
+        val saved = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
+            .putString(ENVELOPE_SALT, android.util.Base64.encodeToString(salt, android.util.Base64.NO_WRAP))
+            .putString(ENVELOPE_NONCE, android.util.Base64.encodeToString(wrapNonce, android.util.Base64.NO_WRAP))
+            .putString(ENVELOPE_WRAPPED_DEK, android.util.Base64.encodeToString(wrappedDek, android.util.Base64.NO_WRAP))
+            .commit()
+        if (!saved) throw IllegalStateException("Portable backup key envelope could not be saved.")
+    }
+
+    @Synchronized
+    fun loadKeyEnvelope(context: Context): Array<ByteArray> {
+        val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        val salt = android.util.Base64.decode(prefs.getString(ENVELOPE_SALT, null)
+            ?: throw IllegalStateException("Backup recovery envelope is missing."), android.util.Base64.NO_WRAP)
+        val nonce = android.util.Base64.decode(prefs.getString(ENVELOPE_NONCE, null)
+            ?: throw IllegalStateException("Backup recovery envelope is incomplete."), android.util.Base64.NO_WRAP)
+        val wrapped = android.util.Base64.decode(prefs.getString(ENVELOPE_WRAPPED_DEK, null)
+            ?: throw IllegalStateException("Backup recovery envelope is incomplete."), android.util.Base64.NO_WRAP)
+        if (salt.size != 16 || nonce.size != 12 || wrapped.size != 48) {
+            salt.fill(0); nonce.fill(0); wrapped.fill(0)
+            throw SecurityException("Backup recovery envelope is invalid.")
+        }
+        return arrayOf(salt, nonce, wrapped)
     }
 
     @Synchronized
