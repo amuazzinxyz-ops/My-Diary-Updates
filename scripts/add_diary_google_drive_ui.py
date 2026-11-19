@@ -12,7 +12,7 @@ target = assets / "diary_google_drive_ui.js"
 if not html_path.is_file() or not source.is_file():
     raise SystemExit("BLOCKED: Diary HTML or Google Drive UI source is missing")
 html = html_path.read_text(encoding="utf-8")
-if 'id="diaryDiaryMePanel"' not in html:
+if "diaryDiaryMePanel" not in html:
     raise SystemExit("BLOCKED: expected Me panel is missing from Diary HTML")
 if "diary_google_drive_ui.js" in html:
     raise SystemExit("BLOCKED: unexpected pre-existing Google Drive UI injection")
