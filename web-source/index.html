@@ -2482,7 +2482,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     var dateDisplay=mfEl('span',{'aria-hidden':'true',class:'diary-me-date-display'},'DD/MM/YYYY');
     dateDisplay.style.position='absolute';dateDisplay.style.left='12px';dateDisplay.style.right='42px';dateDisplay.style.top='0';dateDisplay.style.bottom='0';dateDisplay.style.display='flex';dateDisplay.style.alignItems='center';dateDisplay.style.pointerEvents='none';dateDisplay.style.zIndex='2';dateDisplay.style.fontSize='16px';dateDisplay.style.fontWeight='600';dateDisplay.style.whiteSpace='nowrap';dateDisplay.style.overflow='hidden';dateDisplay.style.color='#8b8495';
     function syncDayFirstDateDisplay(){
-     var match=/^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(String(input.value||''));
+     var match=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(input.value||''));
      dateDisplay.textContent=match?match[3]+'/'+match[2]+'/'+match[1]:'DD/MM/YYYY';
      dateDisplay.style.color=match?'#241a31':'#8b8495';
     }
