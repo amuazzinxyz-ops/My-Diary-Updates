@@ -20,4 +20,10 @@ if (!context.window.MyDiaryCloudBackup || typeof context.window.MyDiaryCloudBack
 if (!source.includes("indexedDB.databases()") || !source.includes('indexedDB.open(name, 1)') || !source.includes("onupgradeneeded")) {
   throw new Error("Collector must inspect existing databases and must not create missing ones");
 }
-console.log("PASS: collector parses, exposes API, and refuses to create missing IndexedDB databases");
+if (!source.includes("store.getAllKeys()") ||
+    !source.includes("__diaryBackupKey") ||
+    !source.includes("__diaryBackupValue") ||
+    !source.includes('dbName === "diary_diary_safety_v1"')) {
+  throw new Error("Collector must preserve out-of-line Diary Safety record keys for restore");
+}
+console.log("PASS: collector parses, refuses to create missing databases, and preserves Diary Safety keys");
