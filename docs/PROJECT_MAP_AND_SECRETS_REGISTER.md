@@ -4801,3 +4801,15 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Backup branch: `backup/before-calendar-date-badge-2026-11-19`. Working branch: `fix/calendar-birthday-date-time-row-2026-11-19`. PR #251 merged as `9fc880975823831bbee21a6697ac6e98da6663d4`.
 - Published successfully as **Web Update 348**. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `d702aa397f0fcef677ff56cd7b3ef4c41d635e44` (558,826 bytes). `latest.json` web SHA-256: `9fae0229aa6b2a996581e7d0850dc465d976d86b1898590e932e26d444e43248`.
 - APK remains **1.0.194 / versionCode 193**. No APK/native build or release was made. Physical-phone testing remains pending user confirmation.
+
+
+---
+
+# Recently Deleted — full-screen mobile view (Web Update 356, 2026-11-19)
+
+- User requested that tapping **🗑️ Delete Ki Huwi Note** open the deleted-notes view across the full mobile screen rather than inside the compact Me menu.
+- Updated only the existing Recently Deleted open/close presentation and added isolated mobile CSS. The Me-menu trash button becomes **✕ Band Karein** while the full-screen view is open; tapping it returns to the regular Diary view.
+- Existing trash rendering, note contents, Restore, permanent-delete confirmation, 30-day expiry, storage keys, and note data format are unchanged. No APK/native Android code or unrelated Diary features were changed.
+- Backup branch: `backup/before-trash-fullscreen-2026-11-19`. Working branch: `fix/trash-fullscreen-2026-11-19`. PR #269: https://github.com/amuazzinxyz-ops/My-Diary-Updates/pull/269
+- `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `c72f0ff77f3108e0fad5c9dc2ed836204e4eeb29` (565,582 bytes). `latest.json` advertises Web Update 356 with web SHA-256 `aeb426d92edebba1cd186f2a200c4ad10a682837343be53303a474c6f1a735fe`. APK remains **1.0.194 / versionCode 193**; no APK rebuild is required for this web-only UI change.
+- Physical-phone visual test remains pending user confirmation. Do not claim device-side PASS until the user confirms the deleted-notes view fills the mobile screen and its close control returns correctly.
