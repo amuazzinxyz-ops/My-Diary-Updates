@@ -3,6 +3,7 @@ from pathlib import Path
 import re
 import xml.etree.ElementTree as ET
 
+ROOT=Path(__file__).resolve().parent
 base=Path("diary-project/app")
 kt=base/"src/main/java/com/muazzin/diary/MainActivity.kt"
 s=kt.read_text(encoding="utf-8")
