@@ -25,6 +25,40 @@ class DiaryBackupCryptoTest {
     }
 
     @Test
+    fun cachedKeyCanEncryptMultipleBackupsWithPortablePassphraseEnvelope() {
+        val originalOne = "first backup".toByteArray(StandardCharsets.UTF_8)
+        val originalTwo = "second backup with newer diary data".toByteArray(StandardCharsets.UTF_8)
+        var cachedKey: ByteArray? = null
+        var salt: ByteArray? = null
+        var wrapNonce: ByteArray? = null
+        var wrappedDek: ByteArray? = null
+        try {
+            val first = ByteArrayOutputStream()
+            DiaryBackupCrypto.encrypt(ByteArrayInputStream(originalOne), first, passphrase) { key, s, n, wrapped ->
+                cachedKey = key; salt = s; wrapNonce = n; wrappedDek = wrapped
+            }
+            val second = ByteArrayOutputStream()
+            DiaryBackupCrypto.encryptWithCachedDataKey(
+                ByteArrayInputStream(originalTwo), second,
+                cachedKey!!, salt!!, wrapNonce!!, wrappedDek!!
+            )
+            val restoredOne = ByteArrayOutputStream()
+            DiaryBackupCrypto.decrypt(ByteArrayInputStream(first.toByteArray()), restoredOne, passphrase)
+            val restoredTwo = ByteArrayOutputStream()
+            DiaryBackupCrypto.decrypt(ByteArrayInputStream(second.toByteArray()), restoredTwo, passphrase)
+            assertArrayEquals(originalOne, restoredOne.toByteArray())
+            assertArrayEquals(originalTwo, restoredTwo.toByteArray())
+            // Each backup must have a different payload nonce even though its DEK is reused.
+            val nonceOffset = "MYDIARYBKP1".length + (6 * 4) + 16 + 12 + 48
+            val firstNonce = first.toByteArray().copyOfRange(nonceOffset, nonceOffset + 12)
+            val secondNonce = second.toByteArray().copyOfRange(nonceOffset, nonceOffset + 12)
+            assertFalse(firstNonce.contentEquals(secondNonce))
+        } finally {
+            cachedKey?.fill(0); salt?.fill(0); wrapNonce?.fill(0); wrappedDek?.fill(0)
+        }
+    }
+
+    @Test
     fun wrongPassphraseIsRejected() {
         val encrypted = ByteArrayOutputStream()
         DiaryBackupCrypto.encrypt(ByteArrayInputStream("secret".toByteArray()), encrypted, passphrase)
