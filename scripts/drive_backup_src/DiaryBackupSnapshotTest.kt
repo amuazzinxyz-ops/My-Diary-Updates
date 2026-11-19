@@ -61,6 +61,37 @@ class DiaryBackupSnapshotTest {
     }
 
     @Test
+    fun rejectsNonStringInventoryKeys() {
+        val broken = validSnapshot().toMutableMap()
+        broken["indexedDb"] = mapOf(
+            "diary_me_features_v1" to mapOf("records" to emptyList<Any>(), 7 to "unexpected"),
+            "diary_private_locker_v1" to mapOf("entries" to emptyList<Any>(), "meta" to emptyList<Any>()),
+            "diary_diary_safety_v1" to mapOf("snapshots" to emptyList<Any>())
+        )
+        try {
+            DiaryBackupSnapshot.validate(broken)
+            fail("Non-string inventory keys must be rejected")
+        } catch (_: IllegalArgumentException) { }
+    }
+
+    @Test
+    fun rejectsCamelCaseOAuthAndDeviceCredentials() {
+        val forbiddenKeys = listOf("accessToken", "refreshToken", "deviceId", "fingerprintKey")
+        for (key in forbiddenKeys) {
+            val broken = validSnapshot().toMutableMap()
+            broken["indexedDb"] = mapOf(
+                "diary_me_features_v1" to mapOf("records" to listOf(mapOf(key to "must-not-export"))),
+                "diary_private_locker_v1" to mapOf("entries" to emptyList<Any>(), "meta" to emptyList<Any>()),
+                "diary_diary_safety_v1" to mapOf("snapshots" to emptyList<Any>())
+            )
+            try {
+                DiaryBackupSnapshot.validate(broken)
+                fail("$key must not enter a portable backup")
+            } catch (_: IllegalArgumentException) { }
+        }
+    }
+
+    @Test
     fun rejectsExcessiveNesting() {
         var nested: Any = "x"
         repeat(DiaryBackupSnapshot.MAX_DEPTH + 2) { nested = listOf(nested) }
