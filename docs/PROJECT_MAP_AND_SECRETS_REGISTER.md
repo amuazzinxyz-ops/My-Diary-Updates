@@ -5214,3 +5214,11 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Restore must not call the existing legacy `importNotes` as a full cloud restore engine. Preserve current Diary data until a complete validated staging/preview and recoverable apply/rollback plan is implemented. Never overwrite destination records on ID conflict; do not import device-bound PIN/biometric credentials blindly; reschedule native reminders only after durable data import.
 - Next safe milestone: implement and test read-only Drive backup listing/download plus passphrase decryption into an isolated staging area; do not write into live Diary databases until the full restore planner and recovery journal are ready. Keep the existing manual local Backup/Restore unchanged.
 - No Google consent, real Drive upload, phone install/test, or second-device restore was performed in this workflow. No user data was uploaded or altered.
+
+
+# Google Drive backup retry prerequisite — durable encrypted staging (2026-11-19)
+
+- On `feature/google-drive-auto-backup-2026-11-19`, changed the encrypted backup staging directory from Android `cacheDir` to the app-private `filesDir` in both snapshot encryption and Drive upload paths. This prevents Android cache eviction from silently deleting a pending encrypted backup before retry/recovery.
+- Added validation-workflow source guards requiring both paths to use the same durable private directory.
+- Commits: `88472e19870b79714b25c13d7ed075a84024abb1` (snapshot staging), `6e93e6ac9ba6d33f985bec12e8ef55fe423a17d8` (upload staging), `e1cc99b0ad1923ee1f17bffc22cb93ea1fc0b3c4` (workflow guard).
+- **Validation pending:** do not mark this milestone as passed until the feature validation workflow succeeds. WorkManager scheduling, network retry, process-death resumption, and background Google authorization are still not implemented. No phone test, signed APK, production publish, or live Diary data change was performed.
