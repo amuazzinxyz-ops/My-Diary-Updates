@@ -1542,9 +1542,10 @@ collector_marker = '<script src="diary_snapshot_collector.js"></script>'
 if collector_marker not in html:
     if "diary_snapshot_collector.js" in html:
         raise SystemExit("BLOCKED: unexpected partial snapshot collector injection")
-    if html.lower().count("</body>") != 1:
-        raise SystemExit("BLOCKED: expected one HTML body closing tag for collector injection")
-    html = html.replace("</body>", collector_marker + "\n</body>", 1)
+    body_index = html.lower().rfind("</body>")
+    if body_index < 0:
+        raise SystemExit("BLOCKED: HTML body closing tag missing for collector injection")
+    html = html[:body_index] + collector_marker + "\\n" + html[body_index:]
     html_target.write_text(html, encoding="utf-8")
 collector_target.write_bytes(collector_source.read_bytes())
 
