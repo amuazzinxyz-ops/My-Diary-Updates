@@ -1,3 +1,11 @@
+# Google Drive backup — design document recorded (2026-11-19)
+
+- Created `docs/GOOGLE_DRIVE_AUTO_BACKUP_DESIGN.md` on the working branch. It records the Android AuthorizationClient + least-privilege Drive appDataFolder design, full current data inventory, portable encryption/Keystore wrapping strategy, snapshot/WorkManager flow, safe restore sequence, and static/security/device acceptance checks.
+- The design is intentionally not yet treated as implementation approval: KDF performance, full persistence-key coverage, Worker token renewal/consent resolution, payload size limits, and cross-device restore still require verification. No app code has been changed.
+- Documentation commit: `914b92b2afaf4e94f86715292258e120c122b942`. Register progress commits: `11699b43f6fc30b295827fc6663797ae9aa75428` and `abd2856493345b3d159f8c5ff76c585f24dedc1c`. Working branch remains `feature/google-drive-auto-backup-2026-11-19`; backup branch remains `backup/before-google-drive-auto-backup-2026-11-19`.
+
+---
+
 # Google Drive backup — persistent data inventory and Android authorization design (2026-11-19)
 
 - Further audit of Web Update 362 found three IndexedDB databases: `diary_me_features_v1` (records of kinds documents, memories, calendar and reminders); `diary_private_locker_v1` (separate `entries` and `meta` stores, containing encrypted Private Locker entries and wrapped master-key/config data); and `diary_diary_safety_v1` (redundant local safety snapshot of Notes and Trash). The Notes primary store is `diary_personal_notes_v1`; Trash is separately stored in `diary_personal_notes_trash_v1`.
