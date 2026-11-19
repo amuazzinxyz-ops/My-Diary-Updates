@@ -1,3 +1,14 @@
+# Personal Calendar + Smart Reminder — center save-success popup on mobile (Web Update 355, 2026-11-19)
+
+- User clarified that the previous 114px top placement was still too high and requested the success popup appear in the middle of the mobile screen.
+- Updated only the shared `meFeatureShowSavedToast()` positioning used by **Personal Calendar** and **Smart Reminder**: fixed position at `top:50%; left:50%` with `transform:translate(-50%,-50%)`, centering the toast in the viewport.
+- Existing 4-second display duration (`4000ms`), day-first **DD/MM/YYYY** date display, native date picker, saved records, reminder scheduling/settings, and all unrelated features remain unchanged. APK/native code was not changed.
+- Backup branch: `backup/before-toast-center-mobile-2026-11-19`; feature branch: `fix/toast-center-mobile-both-forms-2026-11-19`; PR #267 merged as `03637dfb0ef29445b987946e7e2cea27aab38ee1`.
+- Published as **Web Update 355**. `web-source/index.html` and `diary-web/index.html` are byte-identical; verified web SHA-256: `d15435c3e7f72788a2c62bb52e64633ba7c9554d28f599747e221c4e7dc604b8`. `latest.json` advertises webVersion **355** and this exact checksum.
+- Static checks passed for centered positioning, 4-second duration, preserved DD/MM/YYYY date display, source/mirror parity, and checksum match. Physical Android visual testing is pending user confirmation.
+
+---
+
 # Personal Calendar + Smart Reminder — move shared success popup 30px lower (Web Update 354, 2026-11-19)
 
 - User requested the save-success popup be moved another 30px lower in both Personal Calendar and Smart Reminder.
