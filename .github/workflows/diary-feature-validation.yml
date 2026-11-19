@@ -83,6 +83,7 @@ jobs:
           python3 scripts/add_online_diary_updates.py
           python3 scripts/apply_diary_identity.py
           python3 scripts/add_diary_drive_backup.py --project diary-project
+          python3 scripts/add_diary_google_drive.py --project diary-project
 
       - name: Verify complete backup snapshot collector
         run: |
@@ -96,6 +97,9 @@ jobs:
           grep -q 'DiaryBackupSnapshot.validate' scripts/add_diary_app_actions.py
           grep -q 'DiaryBackupKeyStore.cacheDataKey' scripts/add_diary_app_actions.py
           grep -q 'DiaryBackupKeyStore.kt' scripts/add_diary_drive_backup.py
+          grep -q 'drive.appdata' scripts/add_diary_google_drive.py
+          grep -q 'uploadEncryptedDiaryBackup' scripts/add_diary_google_drive.py
+          ! grep -Eq 'drive.readonly|https://www.googleapis.com/auth/drive([" ])' scripts/add_diary_google_drive.py
           echo "PASS: collector syntax, safe DB inventory, native reminder bridge and encrypted snapshot staging API"
 
       - name: Verify final Android package identity and HTML syntax
