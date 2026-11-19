@@ -2934,18 +2934,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   function openMeFeature(kind){if(meFeatureProtected(kind)&&meFeaturePinConfig(kind)){showMeFeaturePin(kind);return;}showMeFeaturePage(kind);}
 
   window.__diaryOpenWidgetTarget=function(target){
-   try{
-    if(localStorage.getItem(DIARY_MASTER_PIN_KEY)){openOverlay();return;}
-    openOverlay();
-    if(target==='calendar'||target==='reminders'){
-     var tries=0;
-     (function openFeatureWhenReady(){
-      var overlay=document.getElementById('diaryMyNotesOverlay');
-      if(overlay&&overlay.classList.contains('open')){openMeFeature(target);return;}
-      if(tries++<15)window.setTimeout(openFeatureWhenReady,200);
-     })();
-    }
-   }catch(error){try{openOverlay();}catch(ignore){}}
+   if(target==='calendar'||target==='reminders')openMeFeature(target);
   };
 
   var currentMeFeatureKind=null;
@@ -4363,6 +4352,19 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   if(masterPin){showDiaryUnlock();return;}
   openDiaryPanel();
  }
+ window.__diaryOpenWidgetTargetFromAndroid=function(target){
+  try{
+   if(localStorage.getItem(DIARY_MASTER_PIN_KEY)){openOverlay();return;}
+   openOverlay();
+   if(target==='calendar'||target==='reminders'){
+    var tries=0;
+    (function waitForDiaryOverlay(){
+     if(typeof window.__diaryOpenWidgetTarget==='function'){window.__diaryOpenWidgetTarget(target);return;}
+     if(tries++<20)window.setTimeout(waitForDiaryOverlay,200);
+    })();
+   }
+  }catch(error){try{openOverlay();}catch(ignore){}}
+ };
  function openDiaryPanel(){
   makeOverlay();var ov=document.getElementById('diaryMyNotesOverlay');
   ov.classList.add('open');ov.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';
