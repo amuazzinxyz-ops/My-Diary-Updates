@@ -332,7 +332,7 @@ native = r"""
                     ?: throw IllegalArgumentException("Backup snapshot is invalid.")
                 DiaryBackupSnapshot.validate(snapshotMap)
 
-                val folder = File(cacheDir, "diary-cloud-backup")
+                val folder = File(filesDir, "diary-cloud-backup")
                 if (!folder.exists() && !folder.mkdirs()) throw java.io.IOException("Cannot create encrypted backup cache.")
                 val fileName = "my-diary-backup-" + System.currentTimeMillis() + ".mydbk"
                 val tempFile = File(folder, fileName + ".tmp")
