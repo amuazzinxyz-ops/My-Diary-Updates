@@ -3049,7 +3049,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var widgetSettingsTitle=el('strong',{},'🏠 Home Screen Widget Settings');
   var widgetSettingsClose=el('button',{type:'button',class:'diary-home-widget-close'},'✕');
   widgetSettingsHead.append(widgetSettingsTitle,widgetSettingsClose);
-  var widgetSettingsHint=el('p',{},'Widget mein apni pasand ke options chunein. Save karke Home Screen par lagayein.');
+  var widgetSettingsHint=el('p',{},'Widget ka actual size Home Screen par long-press karke resize karein. Yahan text size aur dikhne wale shortcuts chunein.');
   var widgetSettingsOptions=el('div',{class:'diary-home-widget-options'});
   function makeWidgetOption(id,label,checked){
    var row=el('label',{class:'diary-home-widget-option'});
@@ -3061,7 +3061,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var widgetShowCalendar=makeWidgetOption('diaryWidgetShowCalendar','📅 Personal Calendar kholen',true);
   var widgetShowReminder=makeWidgetOption('diaryWidgetShowReminder','⏰ Smart Reminder kholen',true);
   var widgetShowNewNote=makeWidgetOption('diaryWidgetShowNewNote','✍️ New Note kholen',true);
-  var widgetSizeLabel=el('label',{class:'diary-home-widget-size-label'},'Widget Size');
+  var widgetSizeLabel=el('label',{class:'diary-home-widget-size-label'},'Widget Text Size');
   var widgetSize=el('select',{id:'diaryWidgetSize'});
   [['compact','Chhota'],['standard','Normal'],['large','Bada']].forEach(function(item){widgetSize.appendChild(el('option',{value:item[0]},item[1]));});
   widgetSettingsOptions.append(widgetSizeLabel,widgetSize);
