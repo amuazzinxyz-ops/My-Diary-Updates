@@ -1,3 +1,12 @@
+# Google Drive backup — isolated build-only validation workflow prepared (2026-11-19)
+
+- Added `.github/workflows/diary-feature-validation.yml` on the working branch (commit `571725289b469bc497a7d8e633bb561bb86546fd`). It is explicitly build-only: extracts the Android ZIP, runs the source project's integrity verifier, copies the exact current web HTML only after checking source/mirror equality and `latest.json` SHA-256, applies the existing Diary native patchers and identity script, checks the final package identity and JS syntax, and builds only `:app:assembleDebug`. It has no signing secrets, no APK publication, no checkout/push to main, and no release metadata update.
+- The validation workflow has not yet executed; the current GitHub connection does not expose a workflow-dispatch action, and the workflow is intentionally kept on the feature branch rather than modifying main just to trigger it. Do not claim a successful Gradle build until a run result is available.
+- Branch diff from pre-edit main commit `213933eb770154c7ce075c6591d9847f4b5e6d46` currently shows only documentation/register and the new build-only workflow; no application source, Android ZIP, web HTML, release metadata or user data has been edited.
+- Next: begin the Google Drive native bridge and encrypted snapshot implementation on this branch, then use the isolated build-only workflow to verify compilation before any release/publishing step.
+
+---
+
 # Google Drive backup — authorization API details and account privacy (2026-11-19)
 
 - Checked the current Android authorization guide directly. It explicitly lists `com.google.android.gms:play-services-auth:22.0.0`, uses `AuthorizationClient`, `AuthorizationRequest`, `ActivityResultContracts.StartIntentSenderForResult`, `getAuthorizationResultFromIntent`, and an access token for REST requests. The exact app-private Drive scope is `https://www.googleapis.com/auth/drive.appdata`. The SDK flow can silently re-authorize while the user's grant remains; access tokens are short-lived (about one hour) and must not be persisted as long-term credentials.
