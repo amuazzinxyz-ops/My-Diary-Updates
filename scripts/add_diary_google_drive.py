@@ -50,7 +50,7 @@ outer=r"""
                 notifyGoogleDriveBackupResult(false, "Encrypted backup file name invalid hai.")
                 return@runOnUiThread
             }
-            val folder = File(cacheDir, "diary-cloud-backup").canonicalFile
+            val folder = File(filesDir, "diary-cloud-backup").canonicalFile
             val file = File(folder, fileName).canonicalFile
             if (file.parentFile != folder || !file.isFile || file.length() <= 0L || file.length() > 80L * 1024L * 1024L) {
                 notifyGoogleDriveBackupResult(false, "Encrypted backup file missing ya size limit se badi hai.")
@@ -100,7 +100,7 @@ outer=r"""
         Thread({
             var ok = false
             try {
-                val folder = File(cacheDir, "diary-cloud-backup").canonicalFile
+                val folder = File(filesDir, "diary-cloud-backup").canonicalFile
                 val file = File(folder, fileName).canonicalFile
                 if (file.parentFile != folder || !file.isFile || file.length() <= 0L || file.length() > 80L * 1024L * 1024L) {
                     throw java.io.IOException("Encrypted staging file invalid.")
