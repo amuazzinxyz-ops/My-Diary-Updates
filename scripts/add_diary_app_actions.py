@@ -312,7 +312,8 @@ native = r"""
             val password = passphrase.toCharArray()
             var temporary: File? = null
             try {
-                if (snapshotJson.isEmpty() || byteLength !in 1..(64L * 1024L * 1024L)) {
+                if (snapshotJson.isEmpty() || byteLength !in 1..(64L * 1024L * 1024L) ||
+                    snapshotJson.length.toLong() > 64L * 1024L * 1024L) {
                     throw IllegalArgumentException("Initial encrypted backup limit is 64 MiB.")
                 }
                 val snapshotObject = JSONObject(snapshotJson)
@@ -324,7 +325,8 @@ native = r"""
                 val folder = File(cacheDir, "diary-cloud-backup")
                 if (!folder.exists() && !folder.mkdirs()) throw java.io.IOException("Cannot create encrypted backup cache.")
                 val fileName = "my-diary-backup-" + System.currentTimeMillis() + ".mydbk"
-                temporary = File(folder, fileName + ".tmp")
+                val tempFile = File(folder, fileName + ".tmp")
+                temporary = tempFile
                 val destination = File(folder, fileName)
 
                 val pipeIn = java.io.PipedInputStream(64 * 1024)
@@ -341,13 +343,13 @@ native = r"""
                 writer.start()
                 try {
                     pipeIn.use { input ->
-                        java.io.FileOutputStream(temporary).use { output ->
+                        java.io.FileOutputStream(tempFile).use { output ->
                             DiaryBackupCrypto.encrypt(input, output, password)
                         }
                     }
                     writer.join()
                     writerFailure.get()?.let { throw java.io.IOException("Could not stream backup snapshot.", it) }
-                    if (!temporary!!.renameTo(destination)) throw java.io.IOException("Could not finalize encrypted backup.")
+                    if (!tempFile.renameTo(destination)) throw java.io.IOException("Could not finalize encrypted backup.")
                     return JSONObject().put("ok", true).put("fileName", fileName)
                         .put("encryptedBytes", destination.length()).toString()
                 } finally {
