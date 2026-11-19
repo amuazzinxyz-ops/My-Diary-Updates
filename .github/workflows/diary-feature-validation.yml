@@ -92,7 +92,9 @@ jobs:
           grep -q 'diary_snapshot_collector.js' diary-project/app/src/main/assets/index.html
           test -s diary-project/app/src/main/assets/diary_snapshot_collector.js
           grep -q 'readNativeBackupPreferences' scripts/add_diary_app_actions.py
-          echo "PASS: collector syntax, exposed API, Android asset injection and native reminder bridge"
+          grep -q 'encryptDiaryBackupSnapshot' scripts/add_diary_app_actions.py
+          grep -q 'DiaryBackupSnapshot.validate' scripts/add_diary_app_actions.py
+          echo "PASS: collector syntax, safe DB inventory, native reminder bridge and encrypted snapshot staging API"
 
       - name: Verify final Android package identity and HTML syntax
         run: |
