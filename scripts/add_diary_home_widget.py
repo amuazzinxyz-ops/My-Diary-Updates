@@ -65,8 +65,10 @@ widget_ui = r"""
    if(!window.DiaryAppActions||typeof DiaryAppActions.saveHomeWidgetSettings!=='function'){
     widgetSettingsStatus.textContent='Widget Settings ke liye My Diary ka installed Android app kholein.';return false;
    }
+   var value=widgetSettingsValue();
+   if(!value.showDiary&&!value.showCalendar&&!value.showReminder&&!value.showNewNote){widgetSettingsStatus.textContent='Kam se kam ek shortcut select karein.';return false;}
    try{
-    var saved=DiaryAppActions.saveHomeWidgetSettings(JSON.stringify(widgetSettingsValue()));
+    var saved=DiaryAppActions.saveHomeWidgetSettings(JSON.stringify(value));
     widgetSettingsStatus.textContent=saved?'Widget Settings save ho gayi.':'Settings save nahi ho sakin.';
     return !!saved;
    }catch(error){widgetSettingsStatus.textContent='Settings save nahi ho sakin.';return false;}
