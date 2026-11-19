@@ -1,3 +1,12 @@
+# Google Drive backup — original Android project integrity test (2026-11-19)
+
+- Re-downloaded the exact preserved source artifact `Diary-original-Android-source.zip` (17,240,876 bytes) and extracted it into an isolated temporary audit directory. Ran the archive's own `scripts/verify_project.py`: **exit code 0**, reporting PASS for original Diary HTML SHA-256 `c242a422405dd58c71f0415a3760e1d4863ae9902143690a86772416afd3fdf2`, Android manifest, private FileProvider paths, app entry point, and all pre-build integrity checks. Python startup printed an unrelated spreadsheet-runtime warmup warning to stderr after the successful check; it did not change the script's exit code or its PASS result.
+- Confirmed the Android source ZIP's `MainActivity` is a `ComponentActivity` with existing Activity Result contracts for location and file selection; the app's JavaScript bridge is injected by the build patcher. The manual backup save uses `ACTION_CREATE_DOCUMENT` and existing callback; preserve it unchanged.
+- No Gradle/Android SDK compilation was run locally; no Google OAuth consent or Drive operation was attempted. No source ZIP, application source, release files or user data were modified. This was an isolated read-only integrity check.
+- Next implementation gate: build a no-publish validation path first, then add the AuthorizationClient bridge and encrypted snapshot uploader on the working branch. Do not invoke the existing publishing workflow until a separate guard guarantees it cannot checkout/push main from a feature-branch test.
+
+---
+
 # Google Drive backup — Android source and authorization integration verified (2026-11-19)
 
 - Downloaded and inspected the preserved Android source artifact `Diary-original-Android-source.zip` (artifact ID `14512061150`, from workflow run `44488942360`). The archive contains the WebView shell, Gradle Kotlin DSL, manifest, `MainActivity.kt`, and `scripts/verify_project.py`. Original project configuration: Android Gradle Plugin 8.7.3, Kotlin 2.0.21, Gradle 8.9, compile/target SDK 35, min SDK 23. The original ZIP's package is `com.muazzin.diary`; `scripts/apply_diary_identity.py` changes final applicationId to `com.personal.diaryapp`, label to My Diary and applies the Diary icon. The OAuth Android client must be bound to the final applicationId, not the ZIP's original package.
