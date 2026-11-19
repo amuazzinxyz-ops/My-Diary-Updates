@@ -1,3 +1,14 @@
+# Personal Calendar + Smart Reminder — day-first date display and lower save popup (merged, web publication pending; 2026-11-19)
+
+- User asked for the save-success popup to appear a little lower than Web Update 351, and for date fields to display Indian day/month/year order instead of the US month/day/year order.
+- In the shared `mfField` helper, date inputs now receive `lang='en-GB'` so browser date controls request day-first formatting (example: **19/11/2026**). The underlying stored date remains the existing ISO `YYYY-MM-DD`; date parsing, Calendar/Reminder scheduling, and saved records are unchanged.
+- Moved the shared Personal Calendar + Smart Reminder success toast from **64px to 84px** below the safe-area top. The existing **4-second** display duration, message, trigger, and all other behavior remain unchanged.
+- Feature branch: `fix/date-format-and-toast-position-2026-11-19`; backup branch: `backup/before-date-format-and-toast-position-2026-11-19`. PR #259 merged as `53ab0821adbced2239ce66e1900f970a7813c12b`. Feature diff is limited to the two HTML bundles (`web-source/index.html` and `diary-web/index.html`), which are byte-identical at Git blob SHA `e5a753192ba048ad6f99dcf4786295f7c127b682`.
+- The repository's `latest.json` still points to **Web Update 351** at the time of this register entry; Web Update 352 publication has **not yet been verified**. Do not tell the user to install/check 352 until the feed advances and the published checksum matches the HTML bundle.
+- APK/native code was not changed. APK remains **1.0.194 / versionCode 193**. No physical-device test has been performed; date-control appearance can depend on the Android browser/OS locale, so user confirmation is required after publication.
+
+---
+
 # Personal Calendar + Smart Reminder — move success popup lower and extend duration (Web Update 351, 2026-11-19)
 
 - User reported the Web Update 350 success popup appeared too close to the top and requested a slightly lower position and four-second visibility.
