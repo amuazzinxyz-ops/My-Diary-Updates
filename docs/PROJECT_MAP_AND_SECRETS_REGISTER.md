@@ -4,7 +4,7 @@
 - Updated only the shared `meFeatureShowSavedToast()` position in `web-source/index.html`: top offset from 84px to 114px below the safe-area top (+30px). Both forms use this same helper, so both are covered.
 - Existing 4-second display duration (`4000ms`) is unchanged. Web Update 353's day-first date display and native date picker are preserved. No saved data, reminder settings, scheduling logic, or APK code changed.
 - Backup branch: `backup/before-toast-plus-30px-2026-11-19`; feature branch: `fix/toast-plus-30px-both-forms-2026-11-19`; PR #264 merged as `942bd791868e540febd7f34c28673ea8813d88fd`.
-- Published as **Web Update 354**. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `57a2c3dde06358f70aae318d82418e759ef41089`. Verified web SHA-256: `c33ff6cc87a0e78400c2ef4584f600e0a8ec351bc211a3824e97c859fba24297`; `latest.json` advertises webVersion **354** and this exact checksum.
+- Published as **Web Update 354**. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `57a2c3dde06358f70aae318d82418e759ef41089`. Verified web SHA-256: `aa5f78fc1d23b060f9ab4d8641726035164da7bdcb4339655eba8958f80fee83`; `latest.json` advertises webVersion **354** and this exact checksum.
 - APK remains `1.0.194` / versionCode `193`; no APK update. Static checks passed for 114px position, 4-second duration, preserved DD/MM/YYYY date fix, and source/mirror parity. Physical Android testing is pending user confirmation.
 
 ---
