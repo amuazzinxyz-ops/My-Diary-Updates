@@ -1,3 +1,12 @@
+# Google Drive backup — authorization API details and account privacy (2026-11-19)
+
+- Checked the current Android authorization guide directly. It explicitly lists `com.google.android.gms:play-services-auth:22.0.0`, uses `AuthorizationClient`, `AuthorizationRequest`, `ActivityResultContracts.StartIntentSenderForResult`, `getAuthorizationResultFromIntent`, and an access token for REST requests. The exact app-private Drive scope is `https://www.googleapis.com/auth/drive.appdata`. The SDK flow can silently re-authorize while the user's grant remains; access tokens are short-lived (about one hour) and must not be persisted as long-term credentials.
+- The authorization response does not provide the chosen account's email. Do not request extra `userinfo`, `profile`, or `openid` scopes solely to display an email; use a generic “Google Drive connected” state unless a separately justified identity feature is designed. Default/non-default account switching remains an explicit test requirement.
+- Design file refined in commit `cb2ef85d72eab351fb3a9dc00abccbe80e37b8c3`; it now documents the exact Android Activity Result path, current dependency version, scope, and account-privacy limitation. Official guide: `https://developer.android.com/identity/authorization` (current guide explicitly lists 22.0.0).
+- No application source code or data changed. The working branch currently contains documentation and register updates only; no APK was built or published.
+
+---
+
 # Google Drive backup — original Android project integrity test (2026-11-19)
 
 - Re-downloaded the exact preserved source artifact `Diary-original-Android-source.zip` (17,240,876 bytes) and extracted it into an isolated temporary audit directory. Ran the archive's own `scripts/verify_project.py`: **exit code 0**, reporting PASS for original Diary HTML SHA-256 `c242a422405dd58c71f0415a3760e1d4863ae9902143690a86772416afd3fdf2`, Android manifest, private FileProvider paths, app entry point, and all pre-build integrity checks. Python startup printed an unrelated spreadsheet-runtime warmup warning to stderr after the successful check; it did not change the script's exit code or its PASS result.
