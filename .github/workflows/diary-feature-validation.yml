@@ -84,6 +84,16 @@ jobs:
           python3 scripts/apply_diary_identity.py
           python3 scripts/add_diary_drive_backup.py --project diary-project
 
+      - name: Verify complete backup snapshot collector
+        run: |
+          set -euo pipefail
+          node --check scripts/drive_backup_src/diary_snapshot_collector.js
+          node scripts/drive_backup_src/diary_snapshot_collector.test.cjs scripts/drive_backup_src/diary_snapshot_collector.js
+          grep -q 'diary_snapshot_collector.js' diary-project/app/src/main/assets/index.html
+          test -s diary-project/app/src/main/assets/diary_snapshot_collector.js
+          grep -q 'readNativeBackupPreferences' scripts/add_diary_app_actions.py
+          echo "PASS: collector syntax, exposed API, Android asset injection and native reminder bridge"
+
       - name: Verify final Android package identity and HTML syntax
         run: |
           python3 - <<'PY'
