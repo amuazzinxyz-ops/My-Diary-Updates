@@ -235,6 +235,14 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 @media(min-width:560px){.diary-me-repeat-days{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .diary-me-repeat-days-wrap[hidden]{display:none!important}
 </style>
+<style id="diary-trash-fullscreen-popup-style">
+#diaryTrashFullscreenPopup{position:fixed!important;inset:0!important;z-index:10060!important;display:none;flex-direction:column;width:100vw;height:100vh;height:100dvh;box-sizing:border-box;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);overflow:hidden;background:linear-gradient(160deg,#f8fbf8 0%,#eaf2ec 100%);color:#203d2a}
+#diaryTrashFullscreenPopup .diary-trash-fullscreen-header{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:58px;padding:8px 14px;box-sizing:border-box;border-bottom:1px solid #d4e1d6;background:linear-gradient(145deg,#fff,#edf5ef);box-shadow:0 2px 8px rgba(24,60,36,.10)}
+#diaryTrashFullscreenPopup .diary-trash-fullscreen-header h2{flex:1;min-width:0;margin:0;font-size:clamp(17px,4.5vw,21px);font-weight:900;line-height:1.25}
+#diaryTrashFullscreenPopup .diary-trash-fullscreen-close{display:flex;align-items:center;justify-content:center;flex:0 0 42px;width:42px;height:42px;padding:0;border:1px solid #c8d9cb;border-radius:12px;background:linear-gradient(145deg,#fff,#e4eee6);color:#17452c;font-size:30px;font-weight:800;line-height:1;box-shadow:0 2px 0 #bfd1c2}
+#diaryTrashFullscreenPopup .diary-trash-fullscreen-content{flex:1 1 auto;min-height:0;width:100%;box-sizing:border-box;padding:12px 12px calc(18px + env(safe-area-inset-bottom));overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+#diaryTrashFullscreenPopup #diaryMyNotesList{display:block!important;width:100%;max-width:760px;margin:0 auto;box-sizing:border-box}
+</style>
 </head>
 <body>
 <main class="diary-home">
@@ -3096,8 +3104,35 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   backup.appendChild(exportBtn);backup.appendChild(importBtn);backup.appendChild(importFile);
   var allNotesBtn=el('button',{id:'diaryMyNotesAllNotes',type:'button','aria-expanded':'false','aria-controls':'diaryMyNotesList'},t('allNotes'));
   var trashBtn=el('button',{id:'diaryMyNotesTrash',type:'button',class:'secondary','aria-expanded':'false'},t('recentlyDeleted'));
-  trashBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();showingTrash=!showingTrash;allNotesBtn.style.display=showingTrash?'none':'';trashBtn.setAttribute('aria-expanded',showingTrash?'true':'false');list.style.display=showingTrash?'':'none';if(showingTrash){mePanel.appendChild(list);mePanel.scrollTop=0;var diaryOverlay=document.getElementById('diaryMyNotesOverlay');if(diaryOverlay){diaryOverlay.classList.add('open');diaryOverlay.setAttribute('aria-hidden','false');}mePanel.hidden=false;meBtn.setAttribute('aria-expanded','true');panel.classList.add('diary-me-menu-open');renderList();}else{body.appendChild(list);renderList();}});
-  /* Recently Deleted list opens directly below its button inside the Me menu. */
+  trashBtn.addEventListener('click',function(e){
+   e.preventDefault();e.stopPropagation();
+   var trashPopup=document.getElementById('diaryTrashFullscreenPopup');
+   if(!trashPopup){
+    trashPopup=el('section',{id:'diaryTrashFullscreenPopup',role:'dialog','aria-modal':'true','aria-label':'Recently Deleted'});
+    var trashHeader=el('header',{class:'diary-trash-fullscreen-header'});
+    var trashHeading=el('h2',{id:'diaryTrashFullscreenHeading'},'🗑️ '+t('recentlyDeleted'));
+    var trashClose=el('button',{type:'button',class:'diary-trash-fullscreen-close','aria-label':'Close'},'×');
+    var trashContent=el('div',{class:'diary-trash-fullscreen-content'});
+    trashHeader.appendChild(trashHeading);trashHeader.appendChild(trashClose);trashPopup.appendChild(trashHeader);trashPopup.appendChild(trashContent);
+    trashClose.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();trashPopup._closeDiaryTrash();});
+    trashPopup.addEventListener('click',function(ev){if(ev.target===trashPopup)trashPopup._closeDiaryTrash();});
+    trashPopup._closeDiaryTrash=function(){
+     trashPopup.style.display='none';showingTrash=false;body.appendChild(list);list.style.display='none';
+     allNotesBtn.style.display='';trashBtn.setAttribute('aria-expanded','false');
+     mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');
+     renderList();
+    };
+    document.addEventListener('keydown',function(ev){if(ev.key==='Escape'&&trashPopup.style.display==='flex')trashPopup._closeDiaryTrash();});
+    document.body.appendChild(trashPopup);
+   }
+   if(trashPopup.style.display==='flex'){trashPopup._closeDiaryTrash();return;}
+   showingTrash=true;allNotesBtn.style.display='none';trashBtn.setAttribute('aria-expanded','true');
+   mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');
+   trashPopup.querySelector('#diaryTrashFullscreenHeading').textContent='🗑️ '+t('recentlyDeleted');
+   trashPopup.querySelector('.diary-trash-fullscreen-content').appendChild(list);
+   list.style.display='';trashPopup.style.display='flex';renderList();
+  });
+  /* Recently Deleted opens in its own full-screen dialog; existing note data and actions stay intact. */
   mePanel.appendChild(trashBtn);
   list.style.display='none';
   allNotesBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();showingTrash=false;if(list.parentNode!==body)body.appendChild(list);allNotesBtn.style.display='';trashBtn.setAttribute('aria-expanded','false');var opening=list.style.display==='none';list.style.display=opening?'':'none';allNotesBtn.setAttribute('aria-expanded',opening?'true':'false');if(opening)renderList();});
