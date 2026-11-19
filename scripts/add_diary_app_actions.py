@@ -344,7 +344,7 @@ native = r"""
                 try {
                     pipeIn.use { input ->
                         java.io.FileOutputStream(tempFile).use { output ->
-                            DiaryBackupCrypto.encrypt(input, output, password)
+                            DiaryBackupCrypto.encrypt(input, output, password) { dataKey -> DiaryBackupKeyStore.cacheDataKey(this@MainActivity, dataKey) }
                         }
                     }
                     writer.join()
