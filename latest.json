@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 356,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "cacdf70e35e1a4c02f75d2c23ac85743f59039f6b424b04acc8dc99cf62b6fa7",
+  "webSha256": "aeb426d92edebba1cd186f2a200c4ad10a682837343be53303a474c6f1a735fe",
   "webReleaseNotes": "My Diary Web Update 356: Delete Ki Huwi Note opens in a full-screen mobile view with a close control. Existing restore, permanent delete, 30-day expiry and saved note data are preserved."
 }
