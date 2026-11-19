@@ -7,8 +7,8 @@
   "sha256": "5f59b76683c8d13e1c6f56a65cec062e6825048e040a0735cb3d2e672bd24fb4",
   "releaseNotes": "My Diary 1.0.194: Personal Calendar and Smart Reminder support Custom weekday recurrence. All previous repeat options for each section, saved entries, snooze timing and limits, ringtone, notifications and unrelated features are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 344,
+  "webVersion": 345,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "6563393083eb41373bfdb7e27dbc20167dcef31ffb659a9dfe87d49359e4ed56",
-  "webReleaseNotes": "Web Update 344 makes Note search results appear immediately below the Note search bar, matching Personal Calendar and Smart Reminder. Clearing search restores the notes list to its original position and visibility. Existing search, note order, saved data, PIN locks and other Diary features remain unchanged."
+  "webReleaseNotes": "Web Update 345 adds long-press actions to Personal Calendar and Smart Reminder entries: Delete, Copy, Pin/Unpin, Edit and Select. Pinned entries appear first. Existing entries, saved data, repeat/custom weekdays, ringtone, snooze, volume and notification settings are preserved. APK remains unchanged."
 }
