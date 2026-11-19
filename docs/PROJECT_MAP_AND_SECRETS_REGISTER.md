@@ -4873,3 +4873,14 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Web publisher workflow run #439 (`44477571040`) completed **successfully**. Published Web Update **359**; APK remains **1.0.195 / versionCode 194**.
 - Verified `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `43052be5f7ede20bf2c33376b1f90dccc5aba35f`. Live `latest.json` advertises webVersion 359 and SHA-256 `12e4d8dec319370a5ed5ada1cb8f45eb423471a17cd624d660aafbe8ef5f69dc`.
 - Physical-phone confirmation of this button spacing/placement and the Home Screen widget remains pending; do not claim it has been device-tested.
+
+
+---
+
+# My Diary startup correction — Home Screen Widget Settings button order (Web Update 360, 2026-11-19)
+
+- User reported that Diary stopped opening beyond the welcome screen after Web Update 359. Inspection of the exact merged PR #279 diff found the cause: `mePanel.appendChild(widgetSettingsBtn)` had been inserted before the `widgetSettingsBtn` variable was created. During Diary initialization this attempted to append an undefined value and could throw, preventing the app from opening.
+- Corrected only the initialization order in `web-source/index.html`: the existing button is now created and given its existing **15px** font size before it is appended to `mePanel`. Since the World Clock button is appended earlier, Widget Settings remains immediately below World Clock. No other feature, saved data, PIN, lock, reminder, or native APK source was intentionally changed.
+- Backup branch: `backup/before-widget-settings-startup-fix-2026-11-19`; Register backup branch: `backup/before-widget-startup-fix-register-2026-11-19`. Fix PR #281 merged as `6feccdfec6c69e556b4e409c7f31bd9ec5a93a2f`.
+- Web publisher workflow run **44484323209** completed successfully. Published as **Web Update 360**. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `698325f28bc485f4170cb7affa80fe25635b4734` (575,728 characters). Live `latest.json` advertises webVersion **360** and SHA-256 `934c4cac4634875a935a621946301c3fa85e191e3eb21c398e6a2e5e486a02e2`.
+- APK feed remains **1.0.195 / versionCode 194**; this correction is web-only and does not require reinstalling the APK. Physical Android confirmation that the app now opens and that the button position looks right is still pending; do not claim phone testing until the user confirms.
