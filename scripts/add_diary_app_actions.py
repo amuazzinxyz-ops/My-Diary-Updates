@@ -291,6 +291,13 @@ native = r"""
             if (content.isEmpty()) return
             this@MainActivity.startDiaryBackupSave(content, suggestedName)
         }
+        @JavascriptInterface fun readNativeBackupPreferences(): String {
+            val prefs = getSharedPreferences("diary_reminders_native_v1", Context.MODE_PRIVATE)
+            return JSONObject().apply {
+                put("items", prefs.getString("items", "[]") ?: "[]")
+                put("auto_items", prefs.getString("auto_items", "[]") ?: "[]")
+            }.toString()
+        }
         @JavascriptInterface fun saveMemoryImage(base64: String, fileName: String, mimeType: String): Boolean {
             return try {
                 val bytes = android.util.Base64.decode(base64, android.util.Base64.DEFAULT)
@@ -1521,6 +1528,24 @@ if "class DiaryReminderReceiver" in s or "object DiaryReminderScheduler" in s:
     raise SystemExit("Reminder native classes already exist in script; refusing duplicate insertion")
 s += "\n" + reminder_native + "\n"
 kt.write_text(s,encoding="utf-8")
+
+# Add the isolated cloud-backup snapshot collector only to this extracted build copy.
+assets = base/"src/main/assets"
+collector_source = ROOT/"drive_backup_src/diary_snapshot_collector.js"
+collector_target = assets/"diary_snapshot_collector.js"
+html_target = assets/"index.html"
+if not collector_source.is_file() or not html_target.is_file():
+    raise SystemExit("BLOCKED: snapshot collector source or app HTML is missing")
+html = html_target.read_text(encoding="utf-8")
+collector_marker = '<script src="diary_snapshot_collector.js"></script>'
+if collector_marker not in html:
+    if "diary_snapshot_collector.js" in html:
+        raise SystemExit("BLOCKED: unexpected partial snapshot collector injection")
+    if html.lower().count("</body>") != 1:
+        raise SystemExit("BLOCKED: expected one HTML body closing tag for collector injection")
+    html = html.replace("</body>", collector_marker + "\\n</body>", 1)
+    html_target.write_text(html, encoding="utf-8")
+collector_target.write_bytes(collector_source.read_bytes())
 
 manifest=base/"src/main/AndroidManifest.xml"
 ms=manifest.read_text(encoding="utf-8")
