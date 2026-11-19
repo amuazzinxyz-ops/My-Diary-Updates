@@ -53,6 +53,12 @@ Before coding, inspect every persistent key and every IndexedDB record kind at t
 - Restore is opt-in. Download ciphertext, verify envelope/schema/size, ask for passphrase if local DEK is unavailable, authenticate/decrypt, parse and validate every store, then stage the full restore before committing. Merge records by stable ID where appropriate; preserve existing records and never reset current PIN/locks. Keep alarms/schedulers consistent with existing restore functions. On any failure, leave current app data untouched.
 - Maintain one backup file; use a stable name and update file content. Never delete a prior cloud backup until a replacement upload has succeeded and been verified.
 
+## Additional native Android state found during patcher review
+
+- Native SharedPreferences `diary_reminders_native_v1` stores the reminder scheduler's active `items` and `auto_items` (including pending/automatic snooze state). The records themselves live in `diary_me_features_v1`; a complete backup must preserve the scheduler state or deterministically rebuild it from records without duplicating alarms.
+- Native SharedPreferences `private_locker_biometric` and Android Keystore alias `my_diary_private_locker_biometric_v1` hold device-bound fingerprint-wrapped Locker key material. This cannot be copied as a portable credential to another device. Never export the Android Keystore key or biometric ciphertext as if it were portable. The cloud copy must retain the portable PIN/recovery-wrapped Locker data and treat biometric unlock as device-local; cross-device restore must safely fall back to the existing PIN/recovery route without changing the source device.
+- Custom reminder ringtone URIs may refer to user-selected local content. Their portability and persisted URI grants must be checked separately; do not claim custom audio files are restored cross-device unless the actual media bytes are safely included and tested. Existing alarm scheduler preferences must be reconciled with restored reminder records.
+
 ## Acceptance checks
 
 1. Static checks: exact scope, no broad scopes, no service account, no secrets in source, no plaintext upload, correct file create/update/list behavior, one-file logic, encryption/version/AAD validation, size limits, retries and redacted logs.
