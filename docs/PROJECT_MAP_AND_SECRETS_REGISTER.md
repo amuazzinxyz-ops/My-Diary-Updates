@@ -1,3 +1,15 @@
+# Google Drive restore groundwork — preserve Diary Safety IndexedDB keys (2026-11-19)
+
+- Feature-branch commits: collector fix `e1256c12ca51f75deac6aa0dcad4e0f98f361efe`; regression-guard update `f8bed570099da6f6ba5f050a90249a3e7b8553e2`.
+- Inspection of the actual Diary source confirmed `diary_diary_safety_v1.snapshots` is an IndexedDB object store with out-of-line keys; its existing record is saved under key `latest`. The previous cloud collector used `getAll()` only, which copied the snapshot value but silently lost the key required to restore it.
+- Updated the collector to read `getAllKeys()` for that specific store and package each value with its original key as `__diaryBackupKey` / `__diaryBackupValue`. It rejects mismatched key/value counts and unsupported key types. Other object stores retain their existing record format.
+- Updated the collector contract test to assert that out-of-line Diary Safety keys are preserved. The change is isolated to the cloud backup collector and its test; it does not modify live Diary storage or the existing importNotes flow.
+- **Validation status:** GitHub file updates/commits succeeded. The Actions build/test run triggered by these script changes has not yet been independently confirmed; do not mark tests or APK build as PASS until its result is inspected.
+- Restore implementation remains blocked on full versioned import/merge design and compatibility tests. Existing `importNotes` is legacy note/export import only; it does not restore all canonical snapshot stores. Background WorkManager scheduling, download/decrypt, restore preview/merge, native reminder rescheduling, Drive disconnect/revoke controls, device testing and second-device restore remain pending.
+- Continue only on `feature/google-drive-auto-backup-2026-11-19`. Do not modify main, published app/feed, or production artifacts.
+
+---
+
 # Google Drive backup key reuse — build passed (2026-11-19)
 
 - Pre-edit backup branch for the next restore/worker milestone: `backup/before-drive-restore-and-worker-2026-11-19`.
