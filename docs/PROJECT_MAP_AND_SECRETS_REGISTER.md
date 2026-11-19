@@ -4909,3 +4909,15 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Web publisher completed automatically after the merge and published **Web Update 361**. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `98ef6644c15d7ddb0c882457c35c047ae0201db2` (575,821 bytes). Live `latest.json` advertises webVersion 361 and web SHA-256 `5375f435a2728c0bc0af7767535b859d030133ab1d56df553e781ff103cf8785`.
 - Static source checks passed: 14px override present; 15px override absent; button is created before its append; Widget Settings append is immediately after World Clock append; source and published mirror match exactly. APK remains **1.0.195 / versionCode 194**; no APK rebuild or reinstall is required for this web-only change.
 - Physical-phone confirmation of the 14px size and exact on-screen position remains pending. Do not claim device-side PASS until user confirms.
+
+
+---
+
+# Web Update 362 — signed APK archival build (2026-11-19)
+
+- User requested a safe installable APK containing the exact Web Update 362 source, which added Personal Calendar and Smart Reminder to the existing Backup/Restore flow. The earlier APK workflow attempt (run 44488942360) failed before compilation because the source and mirror were not byte-identical at that time.
+- Created isolated build-only branch `build/web-update-362-apk-only-2026-11-19` from main snapshot `213933eb770154c7ce075c6591d9847f4b5e6d46`. Only the branch's build workflow was adjusted to permit this branch and to prevent the publish step from running anywhere except main. No main/live web source, APK, update feed, or Google Drive feature branch was modified.
+- Exact source/mirror parity verified: `web-source/index.html` and `diary-web/index.html` both use blob SHA `a5a8c969413b4f79e64f8aa533cebcaa7f14cefd`. The build log confirms the embedded APK HTML SHA-256 is `c07f44281594480679d95732f7258dbd996e3fc2ed29d08d470f4af09bbea17c`, matching the published Web Update 362 HTML.
+- Build workflow run `44544712842` completed **successfully**. Debug build and signed Release build passed. Signing certificate SHA-256 was verified as `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A`, matching the previously approved Diary certificate.
+- Signed APK: **My Diary 1.0.195 / versionCode 194**, package `com.personal.diaryapp`; extracted APK size **2,082,469 bytes**; SHA-256 `d9c1f3623474042e07b649da348552dce4fa388228bc5f6cb3b72c009af8a438`. GitHub artifact `My-Diary-1.0.195-signed-test-candidate`, ID `14539757082`, archive size 2,024,999 bytes, expires 2026-12-19.
+- The publish step was intentionally skipped on the build-only branch. No APK was installed on a physical phone in this task; installation/device behavior remains unverified. This artifact is an archival APK for the Web Update 362 source, not the unfinished Google Drive Auto Backup build.
