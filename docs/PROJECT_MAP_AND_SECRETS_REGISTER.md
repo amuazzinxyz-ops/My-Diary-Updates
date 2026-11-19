@@ -1,3 +1,13 @@
+# Personal Calendar + Smart Reminder — long-press entry actions (Web Update pending, 2026-11-19)
+
+- User requested the same five actions as My Diary Notes when an entry is long-pressed in both **Personal Calendar** and **Smart Reminder**: Delete, Copy, Pin/Unpin, Edit, and Select.
+- Added a long-press/context-menu action panel to saved Calendar and Reminder entry cards. Delete uses the existing confirmation and existing alarm cancellation paths; Copy creates a separate record with a new ID and does not reuse the original reminder IDs; Pin/Unpin stores a `pinned` flag and places pinned entries first while preserving date/created ordering; Edit uses the existing edit form; Select enters the existing bulk-selection mode with the pressed entry selected.
+- Existing visible controls, saved entry fields, repeat/custom weekdays, ringtone, snooze, volume, notification scheduling, and unrelated features are retained. Existing entries are not migrated or rewritten; their default pin state is unpinned.
+- Backup branch: `backup/before-calendar-reminder-long-press-actions-2026-11-19`. Working branch: `fix/calendar-reminder-long-press-actions-2026-11-19`. Base main commit: `dce6bd632e29ec91ac2b7e17c787727a4d7dfd15`.
+- Web-only change. APK/native code is not changed. Verify source and mirror equality, static checks, PR checks, and web publishing before marking complete. Physical Android phone test is pending user confirmation.
+
+---
+
 # My Diary Note Search — results directly below the search bar (Web Update 344, 2026-11-19)
 
 - Corrected the earlier misunderstanding: user wants the matching Note search results list itself moved immediately below the Note search bar, exactly like Personal Calendar and Smart Reminder move their filtered result list directly below their search panel while a query is entered.
