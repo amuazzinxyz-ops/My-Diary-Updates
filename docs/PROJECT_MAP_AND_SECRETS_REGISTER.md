@@ -1,3 +1,12 @@
+# Google Drive Auto Backup — collector HTML injection build fix (2026-11-19)
+
+- Build run **44521219049** failed during the combined Android bridge/backup patch step. Exact cause: current published HTML contains three literal `</body>` strings in embedded report templates plus the actual document close; the injection script incorrectly required exactly one. This is not an app or user-data failure.
+- Fixed `scripts/add_diary_app_actions.py` to locate the final `</body>` with `rfind` and inject the collector script immediately before that final document close. The feature branch now has this fix (file blob `af3cad97994520a1116823c0b51903e5bf71173b`). The original published HTML remains byte-for-byte unchanged.
+- Register pre-edit backup branch: `backup/before-html-close-fix-register-2026-11-19`; full file was fetched from feature and backup branches and verified byte-for-byte identical (blob `cfa79c34a34ca66168967aeaefd63b2d9bac7cc1`) before this entry.
+- A fresh validation run is expected from the latest feature-branch push; verify the exact run before claiming success. No main/release publishing or phone test.
+
+---
+
 # Google Drive Auto Backup — web snapshot collector integration (2026-11-19)
 
 - Build-only run **44520295080** on commit `068d0a72c9e026652b5fffc4f2af281be4b51f03` completed successfully. All 13 steps passed, including crypto and snapshot-contract JVM tests, debug APK build, and artifact upload. Artifact **14527268765**, `My-Diary-Google-Drive-feature-debug`, size 5,244,530 bytes, SHA-256 `bb178dc5a04b784cc7268628a442fc56d65ef7d0af8fd14687032b80c92be363`, expires 2026-11-26 12:06 UTC. Unsigned debug validation APK only; not signed, published, or phone-tested.
