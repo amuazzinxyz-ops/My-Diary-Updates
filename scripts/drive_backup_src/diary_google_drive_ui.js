@@ -45,7 +45,7 @@
         boxSizing: "border-box", boxShadow: "0 12px 40px rgba(0,0,0,.35)" }});
     var title = make("h2", { id: "diaryDriveTitle", style: { margin: "0 0 10px", fontSize: "21px" }}, "☁️ Google Drive Encrypted Backup");
     var explain = make("p", { style: { lineHeight: "1.5", fontSize: "14px" }},
-      "Aapki Diary pehle phone par encrypt hogi, phir Google Drive ke private app folder mein upload hogi. Passphrase Google ya My Diary mein save nahi hogi. Ise bhool gaye to backup restore nahi ho sakega. Kam se kam 12 characters ka passphrase yaad rakhein.");
+      "Pehli baar ek recovery passphrase banayein. Yeh save nahi hota—ise bhoolne par backup restore nahi hoga. Agle backups mein phone ki protected key use hogi; passphrase dobara nahi maanga jayega.");
     var pass = make("input", { type: "password", id: "diaryDrivePassphrase", autocomplete: "new-password",
       placeholder: "Naya backup passphrase", minlength: "12", required: "required",
       style: { display: "block", width: "100%", boxSizing: "border-box", padding: "13px",
@@ -68,9 +68,11 @@
     cancel.addEventListener("click", function () { if (!submit.disabled) overlay.remove(); });
     submit.addEventListener("click", async function () {
       var password = pass.value;
-      if (password.length < 12) { status.textContent = "Passphrase kam se kam 12 characters ka rakhein."; return; }
-      if (password !== confirm.value) { status.textContent = "Dono passphrase ek jaise nahi hain."; return; }
       var bridge = window.DiaryAppActions;
+      var hasKey = !!(bridge && typeof bridge.hasCachedDiaryBackupKey === "function" && bridge.hasCachedDiaryBackupKey());
+      if (!hasKey && password.length < 12) { status.textContent = "Pehli baar passphrase kam se kam 12 characters ka rakhein."; return; }
+      if (!hasKey && password !== confirm.value) { status.textContent = "Dono passphrase ek jaise nahi hain."; return; }
+      if (hasKey) { password = ""; pass.value = ""; confirm.value = ""; }
       if (!bridge || typeof bridge.encryptDiaryBackupSnapshot !== "function" ||
           typeof bridge.uploadEncryptedDiaryBackup !== "function") {
         status.textContent = "Is feature ke liye My Diary ka naya Android app version chahiye.";
