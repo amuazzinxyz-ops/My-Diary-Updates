@@ -1,0 +1,117 @@
+name: My Diary feature branch — build-only validation
+
+on:
+  push:
+    branches:
+      - feature/google-drive-auto-backup-2026-11-19
+    paths:
+      - ".github/workflows/diary-feature-validation.yml"
+      - "Diary-Android-Project-v13 (6).zip"
+      - "web-source/index.html"
+      - "diary-web/index.html"
+      - "scripts/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: diary-feature-validation
+  cancel-in-progress: true
+
+jobs:
+  build-debug-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@v4
+
+      - name: Extract original Android source
+        run: |
+          set -euo pipefail
+          test -s 'Diary-Android-Project-v13 (6).zip'
+          mkdir -p diary-project
+          unzip -q 'Diary-Android-Project-v13 (6).zip' -d diary-project
+          test -s diary-project/app/build.gradle.kts
+          test -s diary-project/app/src/main/assets/index.html
+
+      - name: Verify original Android project
+        working-directory: diary-project
+        run: python3 scripts/verify_project.py
+
+      - name: Install Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install Android SDK
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Set up Gradle 8.9
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+
+      - name: Apply exact current published Diary HTML
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          source = Path("web-source/index.html")
+          mirror = Path("diary-web/index.html")
+          meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
+          if not source.is_file() or not mirror.is_file() or source.read_bytes() != mirror.read_bytes():
+              raise SystemExit("BLOCKED: published HTML source/mirror are missing or differ")
+          actual = hashlib.sha256(source.read_bytes()).hexdigest()
+          if actual != str(meta.get("webSha256", "")).lower():
+              raise SystemExit("BLOCKED: current published HTML SHA-256 does not match latest.json")
+          target = Path("diary-project/app/src/main/assets/index.html")
+          target.write_bytes(source.read_bytes())
+          print(f"PASS: copied exact published Diary HTML ({actual})")
+          PY
+          python3 -m py_compile scripts/add_diary_app_actions.py scripts/add_diary_home_widget.py scripts/add_online_diary_updates.py scripts/apply_diary_identity.py
+
+      - name: Apply existing native Diary bridges and independent app identity
+        run: |
+          set -euo pipefail
+          python3 scripts/add_diary_app_actions.py
+          python3 scripts/add_online_diary_updates.py
+          python3 scripts/apply_diary_identity.py
+
+      - name: Verify final Android package identity and HTML syntax
+        run: |
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          gradle = Path("diary-project/app/build.gradle.kts").read_text(encoding="utf-8")
+          manifest = Path("diary-project/app/src/main/AndroidManifest.xml").read_text(encoding="utf-8")
+          if 'applicationId = "com.personal.diaryapp"' not in gradle:
+              raise SystemExit("BLOCKED: wrong Diary applicationId")
+          if 'android:label="My Diary"' not in manifest:
+              raise SystemExit("BLOCKED: My Diary app label missing")
+          html = Path("diary-project/app/src/main/assets/index.html").read_text(encoding="utf-8")
+          scripts = re.findall(r"<script[^>]*>(.*?)</script>", html, re.I | re.S)
+          module = next((s for s in scripts if "function openDiaryPanel" in s), None)
+          if module is None:
+              raise SystemExit("BLOCKED: main Diary JavaScript module missing")
+          Path("/tmp/diary-feature-module.js").write_text(module, encoding="utf-8")
+          print("PASS: independent package identity and main Diary module")
+          PY
+          node --check /tmp/diary-feature-module.js
+
+      - name: Build debug APK only — no signing and no publishing
+        working-directory: diary-project
+        run: gradle --no-daemon :app:assembleDebug
+
+      - name: Upload build-only debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: My-Diary-Google-Drive-feature-debug
+          path: diary-project/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 7
