@@ -1,3 +1,12 @@
+# Google Drive Auto Backup — crypto compile correction (2026-11-19)
+
+- The first full build attempt for the isolated crypto primitive, workflow run **44519020487** on feature SHA `333049ba2945527456e85702a19441f556f8824b`, failed at `:app:compileDebugKotlin` before unit tests ran. Exact compiler error: `GZIPInputStream` and `GZIPOutputStream` were imported from `java.io`; their correct package is `java.util.zip`. The additional Kotlin inference diagnostics were downstream of those unresolved types.
+- Corrected only those two imports in `scripts/drive_backup_src/DiaryBackupCrypto.kt` (source commit `236e922c9fbd7a812fa35e94b220afc92fecc735`). No other app source, published HTML, original ZIP, data, or main branch was changed by this correction.
+- New build-only workflow run **44519583932** is now in progress on the corrected source. It must complete `:app:testDebugUnitTest` and `:app:assembleDebug` successfully before the crypto primitive is treated as validated. The previous failure is retained in history and is not being described as a pass.
+- Pre-edit register backup for this status correction: `backup/before-gzip-import-fix-2026-11-19`; current register and backup branch were fetched and verified byte-for-byte identical before this edit (blob `47ba80e320cd6cc01ba66dfac73eb0f7eaac5014`).
+
+---
+
 # Google Drive Auto Backup — Argon2id foundation and full Web 362 storage audit (2026-11-19)
 
 - Re-read the full working-branch Master Register before this task (5,027 lines; 830,101 characters). The mandatory start gate, backup-before-edit rule, isolated feature-branch rule, minimal-change rule, verification and rollback requirements, phone-test requirements, and no-publish rule were followed.
