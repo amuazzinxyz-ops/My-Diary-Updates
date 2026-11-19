@@ -4834,3 +4834,14 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Backup branch: `backup/before-trash-fullscreen-position-fix-2026-11-19`. Correction branch: `fix/trash-fullscreen-position-2026-11-19`.
 - Source and mirror are byte-identical at Git blob SHA `460dee9914ca3d2f5f711e7e23f94d981dee8e69` (566,688 bytes). `latest.json` web SHA-256: `5bc392dd51238b4172c7b6405e0677143a8e9eb0e1480c07772baf08dea939c5`. APK remains `1.0.194 / versionCode 193`.
 - This corrects the earlier 356 UI presentation; physical-phone testing is still pending user confirmation.
+
+
+---
+
+# Recently Deleted full-screen positioning correction (Web Update 357, 2026-11-19)
+
+- Reissued the corrected mobile-only layout as Web Update 357 so the app's Check for Update flow can detect and fetch the fix rather than seeing the previous Web Update 356 number.
+- The source/mirror HTML change is the positioning correction already merged in PR #272; no additional HTML or data logic change in this release step.
+- Backup branch: `backup/before-trash-fullscreen-web357-2026-11-19`. Release metadata branch: `release/trash-fullscreen-web357-2026-11-19`.
+- `latest.json` advertises Web Update 357 and retains web SHA-256 `5bc392dd51238b4172c7b6405e0677143a8e9eb0e1480c07772baf08dea939c5`. APK remains `1.0.194 / versionCode 193`; no APK build was made.
+- Physical-phone visual confirmation remains pending.
