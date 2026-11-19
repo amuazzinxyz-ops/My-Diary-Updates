@@ -49,13 +49,19 @@ internal object DiaryBackupCrypto {
     private val HEADER_BYTES = MAGIC.size + (6 * 4) + SALT_BYTES + NONCE_BYTES + (KEY_BYTES + 16) + NONCE_BYTES
     private val random = SecureRandom()
 
-    fun encrypt(input: InputStream, output: OutputStream, passphrase: CharArray) {
+    fun encrypt(input: InputStream, output: OutputStream, passphrase: CharArray, onDataKeyCreated: (ByteArray) -> Unit = {}) {
         validatePassphrase(passphrase)
         val passwordCopy = passphrase.copyOf()
         val salt = ByteArray(SALT_BYTES).also(random::nextBytes)
         val wrapNonce = ByteArray(NONCE_BYTES).also(random::nextBytes)
         val payloadNonce = ByteArray(NONCE_BYTES).also(random::nextBytes)
         val dek = ByteArray(KEY_BYTES).also(random::nextBytes)
+        val cacheCopy = dek.copyOf()
+        try {
+            onDataKeyCreated(cacheCopy)
+        } finally {
+            cacheCopy.fill(0)
+        }
         var kek: ByteArray? = null
         try {
             val derivedKek = deriveKey(passwordCopy, salt)
