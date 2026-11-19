@@ -152,8 +152,20 @@ internal object DiaryBackupCrypto {
             cipher.init(Cipher.DECRYPT_MODE, SecretKeySpec(unwrappedDek, "AES"), GCMParameterSpec(GCM_TAG_BITS, payloadNonceBytes))
             cipher.updateAAD(payloadAad(header))
             val cipherIn = CipherInputStream(data, cipher)
-            GZIPInputStream(BufferedInputStream(cipherIn), BUFFER_BYTES).use { gzipIn ->
+            val cipherBuffer = BufferedInputStream(cipherIn)
+            val gzipIn = GZIPInputStream(cipherBuffer, BUFFER_BYTES)
+            try {
                 copyLimited(gzipIn, output, MAX_PLAINTEXT_BYTES)
+                // Force AES-GCM to reach its end-of-stream tag check. GZIP may
+                // stop at its member trailer before consuming the cipher stream.
+                val drain = ByteArray(BUFFER_BYTES)
+                try {
+                    while (cipherBuffer.read(drain) >= 0) { }
+                } finally {
+                    drain.fill(0)
+                }
+            } finally {
+                gzipIn.close()
             }
             output.flush()
         } catch (error: SecurityException) {
