@@ -82,6 +82,7 @@ jobs:
           python3 scripts/add_diary_app_actions.py
           python3 scripts/add_online_diary_updates.py
           python3 scripts/apply_diary_identity.py
+          python3 scripts/add_diary_drive_backup.py --project diary-project
 
       - name: Verify final Android package identity and HTML syntax
         run: |
@@ -134,9 +135,9 @@ jobs:
           print("PASS: Android compileOptions sourceCompatibility and targetCompatibility are JVM 17")
           PY
 
-      - name: Build debug APK only — no signing and no publishing
+      - name: Run encrypted-backup crypto tests and build debug APK only — no signing and no publishing
         working-directory: diary-project
-        run: gradle --no-daemon :app:assembleDebug
+        run: gradle --no-daemon :app:testDebugUnitTest :app:assembleDebug
 
       - name: Upload build-only debug APK
         uses: actions/upload-artifact@v4
