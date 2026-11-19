@@ -4991,3 +4991,19 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Web publisher completed automatically after the merge and published **Web Update 361**. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `98ef6644c15d7ddb0c882457c35c047ae0201db2` (575,821 bytes). Live `latest.json` advertises webVersion 361 and web SHA-256 `5375f435a2728c0bc0af7767535b859d030133ab1d56df553e781ff103cf8785`.
 - Static source checks passed: 14px override present; 15px override absent; button is created before its append; Widget Settings append is immediately after World Clock append; source and published mirror match exactly. APK remains **1.0.195 / versionCode 194**; no APK rebuild or reinstall is required for this web-only change.
 - Physical-phone confirmation of the 14px size and exact on-screen position remains pending. Do not claim device-side PASS until user confirms.
+
+
+---
+
+# Google Drive Auto Backup — Android validation checkpoint (2026-11-19)
+
+- User supplied an OAuth 2.0 Android client ID for the planned Google Drive Auto Backup work. The identifier has **not yet been added to app source or committed into this register**. No OAuth client secret or refresh token is stored in the repository.
+- Created isolated working branch `feature/google-drive-auto-backup-2026-11-19` and backup branch `backup/before-jvm-target-fix-2026-11-19`. This work remains off `main`; no production APK or web release was published.
+- Added a build-only validation workflow at `.github/workflows/diary-feature-validation.yml`. It checks the original Android project, embeds the exact current published Diary HTML, runs existing app identity/native bridge scripts, checks JavaScript syntax and package identity, then builds a **debug APK only**. It does not sign or publish a release APK.
+- Initial build attempts exposed Java 8 vs Kotlin 17 compatibility. The validation workflow was corrected to set Android `compileOptions` source and target to Java 17 in the extracted validation project only; the original Android ZIP and production source were not edited by this compatibility patch.
+- Successful validation workflow run: **44514836097** (commit `671e115bb7a0ced25de1f183f05514f3186d67f0`). All checks and debug APK build passed; artifact upload passed.
+- Debug artifact: `My-Diary-Google-Drive-feature-debug`, artifact ID `14525910712`, 2,720,651-byte ZIP; contains `app-debug.apk` (2,783,333 bytes). Extracted APK SHA-256: `5cdb2b1a8c6967d11f65190635020f8d9ad64eb00c5c1140bfc367c0f63e32c8`. GitHub artifact expires 2026-11-26.
+- **Important scope boundary:** this successful build proves the existing Android app can be built in the isolated validation workflow. It does **not** prove Google Sign-In, Drive API authorization, upload, scheduled/background backup, restore, or account switching are implemented or tested. Source inspection found no Google Drive/OAuth implementation in the current feature scripts/workflow yet.
+- Next implementation steps: inspect the complete Android project structure and existing storage/export format; add least-privilege Google authorization and Drive appDataFolder backup/restore flow; handle token expiry/revocation, offline/retry, user consent and backup status; then test on a device. Do not overwrite local Diary data during restore without explicit confirmation.
+- No phone test has been performed. No production branch, signed APK, `latest.json`, web source/mirror, or published release metadata was changed. Continue only after reviewing this register and verifying the current live feed (the live `latest.json` checked during this checkpoint advertised webVersion 362 while the register's latest UI entry was Web Update 361).
+
