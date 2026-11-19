@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 354,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "c33ff6cc87a0e78400c2ef4584f600e0a8ec351bc211a3824e97c859fba24297",
+  "webSha256": "aa5f78fc1d23b060f9ab4d8641726035164da7bdcb4339655eba8958f80fee83",
   "webReleaseNotes": "My Diary Web Update 354: Personal Calendar and Smart Reminder save-success popup moved 30px lower. Existing 4-second display duration, date format, saved data, reminders and other features are preserved."
 }
