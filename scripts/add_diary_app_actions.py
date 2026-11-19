@@ -344,7 +344,13 @@ native = r"""
                 try {
                     pipeIn.use { input ->
                         java.io.FileOutputStream(tempFile).use { output ->
-                            DiaryBackupCrypto.encrypt(input, output, password) { dataKey -> DiaryBackupKeyStore.cacheDataKey(this@MainActivity, dataKey) }
+                            DiaryBackupCrypto.encrypt(input, output, password) { dataKey, salt, wrapNonce, wrappedDek ->
+                                try {
+                                    DiaryBackupKeyStore.cacheDataKeyAndEnvelope(this@MainActivity, dataKey, salt, wrapNonce, wrappedDek)
+                                } finally {
+                                    dataKey.fill(0); salt.fill(0); wrapNonce.fill(0); wrappedDek.fill(0)
+                                }
+                            }
                         }
                     }
                     writer.join()
