@@ -49,24 +49,21 @@ internal object DiaryBackupCrypto {
     private val HEADER_BYTES = MAGIC.size + (6 * 4) + SALT_BYTES + NONCE_BYTES + (KEY_BYTES + 16) + NONCE_BYTES
     private val random = SecureRandom()
 
-    fun encrypt(input: InputStream, output: OutputStream, passphrase: CharArray, onDataKeyCreated: (ByteArray) -> Unit = {}) {
+    fun encrypt(input: InputStream, output: OutputStream, passphrase: CharArray, onDataKeyCreated: (ByteArray, ByteArray, ByteArray, ByteArray) -> Unit = { _, _, _, _ -> }) {
         validatePassphrase(passphrase)
         val passwordCopy = passphrase.copyOf()
         val salt = ByteArray(SALT_BYTES).also(random::nextBytes)
         val wrapNonce = ByteArray(NONCE_BYTES).also(random::nextBytes)
         val payloadNonce = ByteArray(NONCE_BYTES).also(random::nextBytes)
         val dek = ByteArray(KEY_BYTES).also(random::nextBytes)
-        val cacheCopy = dek.copyOf()
-        try {
-            onDataKeyCreated(cacheCopy)
-        } finally {
-            cacheCopy.fill(0)
-        }
         var kek: ByteArray? = null
+        var wrappedDek: ByteArray? = null
         try {
             val derivedKek = deriveKey(passwordCopy, salt)
             kek = derivedKek
-            val wrappedDek = aesGcm(Cipher.ENCRYPT_MODE, derivedKek, wrapNonce, dek, wrapAad(salt, wrapNonce))
+            val wrapped = aesGcm(Cipher.ENCRYPT_MODE, derivedKek, wrapNonce, dek, wrapAad(salt, wrapNonce))
+            wrappedDek = wrapped
+            onDataKeyCreated(dek.copyOf(), salt.copyOf(), wrapNonce.copyOf(), wrapped.copyOf())
             val header = ByteBuffer.allocate(HEADER_BYTES).order(ByteOrder.BIG_ENDIAN)
                 .put(MAGIC)
                 .putInt(FORMAT_VERSION)
@@ -102,7 +99,51 @@ internal object DiaryBackupCrypto {
             wrapNonce.fill(0)
             payloadNonce.fill(0)
             dek.fill(0)
+            wrappedDek?.fill(0)
             kek?.fill(0)
+        }
+    }
+
+    /**
+     * Encrypts a fresh snapshot with the device-cached DEK and its original
+     * passphrase-wrapped envelope. A new payload nonce is generated every time.
+     * This keeps older backups portable: the user still unlocks them with the
+     * original passphrase, while background runs never need to persist it.
+     */
+    fun encryptWithCachedDataKey(
+        input: InputStream,
+        output: OutputStream,
+        dataKey: ByteArray,
+        salt: ByteArray,
+        wrapNonce: ByteArray,
+        wrappedDek: ByteArray
+    ) {
+        require(dataKey.size == KEY_BYTES && salt.size == SALT_BYTES &&
+            wrapNonce.size == NONCE_BYTES && wrappedDek.size == KEY_BYTES + 16) {
+            "Cached backup key envelope is invalid."
+        }
+        val payloadNonce = ByteArray(NONCE_BYTES).also(random::nextBytes)
+        val header = ByteBuffer.allocate(HEADER_BYTES).order(ByteOrder.BIG_ENDIAN)
+            .put(MAGIC).putInt(FORMAT_VERSION).putInt(SNAPSHOT_SCHEMA)
+            .putInt(KDF_VERSION).putInt(MEMORY_KIB).putInt(ITERATIONS).putInt(PARALLELISM)
+            .put(salt).put(wrapNonce).put(wrappedDek).put(payloadNonce).array()
+        try {
+            val data = DataOutputStream(BufferedOutputStream(output))
+            data.write(header)
+            data.flush()
+            val cipher = Cipher.getInstance("AES/GCM/NoPadding")
+            cipher.init(Cipher.ENCRYPT_MODE, SecretKeySpec(dataKey, "AES"), GCMParameterSpec(GCM_TAG_BITS, payloadNonce))
+            cipher.updateAAD(payloadAad(header))
+            val cipherOut = CipherOutputStream(data, cipher)
+            val gzipOut = GZIPOutputStream(BufferedOutputStream(cipherOut), BUFFER_BYTES)
+            try {
+                copyLimited(input, gzipOut, MAX_PLAINTEXT_BYTES)
+                gzipOut.finish()
+            } finally {
+                gzipOut.close()
+            }
+        } finally {
+            payloadNonce.fill(0)
         }
     }
 
