@@ -1,3 +1,13 @@
+# Personal Calendar + Smart Reminder — force day-first date display independent of Android locale (Web Update 353, 2026-11-19)
+
+- User reported that the Web Update 352 date field still displayed in the device's US-style order. Root cause: the browser's native `input[type="date"]` controls their visible date text using Android/browser locale; setting `lang="en-GB"` alone does not reliably override that UI.
+- Updated only the shared `mfField()` date-field helper in `web-source/index.html`: keep the native date input and calendar picker, but overlay a visible, locale-independent **DD/MM/YYYY** display (for example **19/11/2026**). The input's underlying ISO `YYYY-MM-DD` value remains intact for validation, form submission, saved records, date comparisons, and reminder scheduling. Programmatic date assignments and native picker input/change events refresh the displayed day-first text.
+- Feature backup branch: `backup/before-date-display-format-fix-2026-11-19`; feature branch: `fix/force-day-first-date-display-2026-11-19`; PR #262 merged as `2bb0cda03200ac31f0d1ec924eab15f4f9a8da93`. Feature diff: only `web-source/index.html` (21 additions, 2 deletions).
+- Published as **Web Update 353**. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `926da9abe6808a7989e671ca897064690c187a22`. Verified web SHA-256: `f13b58a651ec4f690dd6da883d56fac014f25da280248f2f7859536816bd03a8`; `latest.json` advertises webVersion **353** and this exact checksum.
+- APK/native code remains **My Diary 1.0.194 / versionCode 193**; no APK build or release was made. Existing saved data, reminder records, alarms, and unrelated features were not intentionally changed. Static checks confirm the formatter, ISO-value preservation, native date picker event handling, and unchanged 84px/4-second success popup. Physical Android testing is pending user confirmation; do not claim device-side PASS until the user checks it.
+
+---
+
 # Personal Calendar + Smart Reminder — day-first date display and lower save popup (Web Update 352, 2026-11-19)
 
 - User requested the success popup slightly lower than before and date fields in day/month/year order (e.g. **19/11/2026** instead of **11/19/2026**).
