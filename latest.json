@@ -1,14 +1,14 @@
 {
   "appName": "My Diary",
   "packageName": "com.personal.diaryapp",
-  "versionCode": 193,
-  "versionName": "1.0.194",
+  "versionCode": 194,
+  "versionName": "1.0.195",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
-  "sha256": "61bb1307afda4f66b14957d7d81f0586241710bfdddc603ef971d2f9e226c68f",
-  "releaseNotes": "My Diary 1.0.194: Personal Calendar and Smart Reminder support Custom weekday recurrence. All previous repeat options for each section, saved entries, snooze timing and limits, ringtone, notifications and unrelated features are preserved.",
+  "sha256": "3aef65ca93be3bc7cc4520185594d57072fc0cb7a731f18e09b23e222da09549",
+  "releaseNotes": "My Diary 1.0.195: Added configurable Android Home Screen widgets from Me > Home Screen Widget Settings. Choose the date and Diary, Personal Calendar, Smart Reminder, and New Note shortcuts, select widget size, and add it to the Home Screen. Existing notes, photos, PINs, locks, reminders, and unrelated features are preserved.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 358,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "5ad1a51ae1c5994bd2343a08bbefa062cd1836a867ce6109034b52e3fc565446",
+  "webSha256": "3fc059ce199d0d56cd5e7720131948f5d7a2680ed0eeeb06fa97fdcd30d91830",
   "webReleaseNotes": "My Diary Web Update 358: Added configurable Android Home Screen Widget Settings inside Me. Choose the date and Diary, Personal Calendar, Smart Reminder, and New Note shortcuts, select widget size, and add the widget to the Android Home Screen. Existing Diary features and saved data are preserved."
 }
