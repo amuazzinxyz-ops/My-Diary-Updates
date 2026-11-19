@@ -1,10 +1,11 @@
-# Personal Calendar + Smart Reminder — long-press entry actions (Web Update pending, 2026-11-19)
+# Personal Calendar + Smart Reminder — long-press entry actions (Web Update 345, 2026-11-19)
 
 - User requested the same five actions as My Diary Notes when an entry is long-pressed in both **Personal Calendar** and **Smart Reminder**: Delete, Copy, Pin/Unpin, Edit, and Select.
 - Added a long-press/context-menu action panel to saved Calendar and Reminder entry cards. Delete uses the existing confirmation and existing alarm cancellation paths; Copy creates a separate record with a new ID and does not reuse the original reminder IDs; Pin/Unpin stores a `pinned` flag and places pinned entries first while preserving date/created ordering; Edit uses the existing edit form; Select enters the existing bulk-selection mode with the pressed entry selected.
 - Existing visible controls, saved entry fields, repeat/custom weekdays, ringtone, snooze, volume, notification scheduling, and unrelated features are retained. Existing entries are not migrated or rewritten; their default pin state is unpinned.
-- Backup branch: `backup/before-calendar-reminder-long-press-actions-2026-11-19`. Working branch: `fix/calendar-reminder-long-press-actions-2026-11-19`. Base main commit: `dce6bd632e29ec91ac2b7e17c787727a4d7dfd15`.
-- Web-only change. APK/native code is not changed. Verify source and mirror equality, static checks, PR checks, and web publishing before marking complete. Physical Android phone test is pending user confirmation.
+- Backup branch: `backup/before-calendar-reminder-long-press-actions-2026-11-19`. Working branch: `fix/calendar-reminder-long-press-actions-2026-11-19`. PR #245 merged as `68c64913ff64215f2d2f41e1a9eb507018ca703a`.
+- Web publisher commit: `68ef3796e03d068f9dcd3d4f82728dbd82c0ab8f`. Check for Update feed advanced to **Web Update 345** in commit `9ce1d48477751366241670b4dcec27bfdedb242b`; web SHA-256 `6563393083eb41373bfdb7e27dbc20167dcef31ffb659a9dfe87d49359e4ed56`.
+- Source and mirror are byte-identical at Git blob SHA `d76ebb3a2a906d5a0d9a1fae56e7e80e002a3882`. APK remains **1.0.194 / versionCode 193**, SHA-256 `5f59b76683c8d13e1c6f56a65cec062e6825048e040a0735cb3d2e672bd24fb4`; no APK/native code was changed. Physical Android phone testing is pending user confirmation.
 
 ---
 
