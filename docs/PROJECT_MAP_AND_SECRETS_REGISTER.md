@@ -1,3 +1,16 @@
+# Google Drive upload verification hardening — build passed (2026-11-19)
+
+- Pre-edit backup branch for the verification hardening: `backup/before-drive-auto-scheduler-2026-11-19`.
+- Hardened `scripts/add_diary_google_drive.py`: after create/update, the native upload bridge now verifies the exact remote Drive file by ID, name and exact byte size via the Drive files.get endpoint. A newly created file's returned ID is captured; an existing file retains its ID. The encrypted local staging file is deleted only after this exact verification succeeds. Failed verification leaves the encrypted staging copy for retry.
+- Added workflow guards for the exact remote-file verification fields.
+- Build-only workflow run **44534020359**, commit `fcaead7570a9202acc9027a793863076ab123713`, completed **success**. All steps passed, including encrypted-backup crypto tests, Android debug APK build and artifact upload.
+- Artifact **14534264874**, `My-Diary-Google-Drive-feature-debug`, size **5,981,620 bytes**, SHA-256 `ac71d1de021e0e8afb4cdd2767ee792dac0430eaccf99451bb9de18e778be1ee`, expires **2026-11-26 13:32:51 UTC**. Unsigned debug validation APK only; not installed or tested on a physical phone.
+- Still not implemented: complete reusable key-material lifecycle for unattended backups; WorkManager scheduling/constraints/retry; background-safe Google authorization/token refresh; encrypted download and validated staged restore; disconnect/revocation UX; phone and second-device acceptance tests; final signed release.
+- Important: current manual UI still asks for a passphrase for each backup and generates a fresh DEK per encryption. Existing Android Keystore DEK cache is not yet used to encrypt subsequent snapshots. Do not claim automatic/background backup is available. No OAuth consent or Drive upload was performed; no Diary data was transmitted. Main/published app, production release and original Android source were not changed. Continue on feature branch only; do not merge or publish without explicit permission.
+- Next safe milestone: design and test a versioned reusable key envelope with a non-exportable Keystore-wrapped DEK and fresh AES-GCM payload nonce per backup, then implement an opt-in background worker only after silent authorization/token lifecycle is proven. Never persist the passphrase or access token.
+
+---
+
 # Google Drive Auto Backup — Me-section backup UI build-validated (2026-11-19)
 
 - Pre-edit backup branch for this UI/size-limit milestone: `backup/before-drive-ui-and-limit-2026-11-19`. Before this Register update, its Register blob matched the working branch exactly (`518d40624d492b21ed232be12883a5974182252c`, 854,459 characters).
