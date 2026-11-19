@@ -4823,3 +4823,14 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - This is a presentation-state safeguard only. Trash records, saved notes, Restore/Delete Permanently handlers, expiry, PINs, locks, photos, and APK/native code are unchanged.
 - Backup branch: `backup/before-trash-fullscreen-close-reset-2026-11-19`. Correction branch: `fix/trash-fullscreen-close-reset-2026-11-19`.
 - Source and mirror are byte-identical at Git blob SHA `95d1fca296beb8b9b11866994fd89057694bceaa` (566,154 bytes). `latest.json` retains Web Update 356 and advertises the updated SHA-256 `2b11d49a46953783bcb45f76557d1d3fcbe95490eefa74043c542ebe964a4cc5`. Physical-phone visual testing remains pending user confirmation.
+
+
+---
+
+# Recently Deleted full-screen mobile positioning correction (Web Update 356, 2026-11-19)
+
+- User reported the first full-screen version shifted the content above the visible mobile area. Investigation found the existing Me-menu vertical-centering transform was still applied after the menu was repositioned inside the full-screen header.
+- Corrected the mobile-only CSS to explicitly reset transforms and offsets on the Me wrapper and panel, keep the close control visible, and let the trash button/list occupy the visible viewport. No trash or note data logic changed.
+- Backup branch: `backup/before-trash-fullscreen-position-fix-2026-11-19`. Correction branch: `fix/trash-fullscreen-position-2026-11-19`.
+- Source and mirror are byte-identical at Git blob SHA `460dee9914ca3d2f5f711e7e23f94d981dee8e69` (566,688 bytes). `latest.json` web SHA-256: `5bc392dd51238b4172c7b6405e0677143a8e9eb0e1480c07772baf08dea939c5`. APK remains `1.0.194 / versionCode 193`.
+- This corrects the earlier 356 UI presentation; physical-phone testing is still pending user confirmation.
