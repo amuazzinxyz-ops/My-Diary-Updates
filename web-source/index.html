@@ -3096,7 +3096,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   backup.appendChild(exportBtn);backup.appendChild(importBtn);backup.appendChild(importFile);
   var allNotesBtn=el('button',{id:'diaryMyNotesAllNotes',type:'button','aria-expanded':'false','aria-controls':'diaryMyNotesList'},t('allNotes'));
   var trashBtn=el('button',{id:'diaryMyNotesTrash',type:'button',class:'secondary','aria-expanded':'false'},t('recentlyDeleted'));
-  trashBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();showingTrash=!showingTrash;allNotesBtn.style.display=showingTrash?'none':'';trashBtn.setAttribute('aria-expanded',showingTrash?'true':'false');list.style.display=showingTrash?'':'none';if(showingTrash){mePanel.appendChild(list);mePanel.scrollTop=0;var diaryOverlay=document.getElementById('diaryMyNotesOverlay');if(diaryOverlay){diaryOverlay.classList.add('open');diaryOverlay.setAttribute('aria-hidden','false');}mePanel.hidden=false;meBtn.setAttribute('aria-expanded','true');panel.classList.add('diary-me-menu-open');renderList();}else{body.appendChild(list);renderList();}});
+  trashBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();showingTrash=!showingTrash;allNotesBtn.style.display=showingTrash?'none':'';trashBtn.setAttribute('aria-expanded',showingTrash?'true':'false');list.style.display=showingTrash?'':'none';if(showingTrash){mePanel.appendChild(list);mePanel.scrollTop=0;var diaryOverlay=document.getElementById('diaryMyNotesOverlay');if(diaryOverlay){diaryOverlay.classList.add('open');diaryOverlay.setAttribute('aria-hidden','false');}mePanel.hidden=false;meBtn.setAttribute('aria-expanded','true');panel.classList.add('diary-me-menu-open','diary-trash-fullscreen');trashBtn.textContent='✕ Band Karein';renderList();}else{panel.classList.remove('diary-trash-fullscreen');trashBtn.textContent=t('recentlyDeleted');body.appendChild(list);renderList();}});
   /* Recently Deleted list opens directly below its button inside the Me menu. */
   mePanel.appendChild(trashBtn);
   list.style.display='none';
@@ -4917,3 +4917,55 @@ body{background:radial-gradient(ellipse at 50% 12%,#fff 0%,#f5edff 42%,#e8dcf8 1
 <!-- Web Update 251: Personal Calendar uses Gregorian dates only; no Hijri date labels. -->
 <!-- SHA-256 release verification refresh 2026-11-12 -->
 <!-- My Diary release trigger: ringtone volume and timed screen wake, APK 1.0.146 -->
+
+
+<style id="diary-trash-fullscreen-mobile">
+/* Show only Recently Deleted as a true full-screen mobile view; keep the existing trash actions and data logic. */
+@media(max-width:760px){
+ #diaryMyNotesOverlay:has(#diaryMyNotesPanel.diary-trash-fullscreen){
+  padding:0!important;align-items:stretch!important;justify-content:stretch!important;
+ }
+ #diaryMyNotesPanel.diary-trash-fullscreen{
+  position:fixed!important;inset:0!important;width:100vw!important;max-width:none!important;
+  height:100dvh!important;max-height:100dvh!important;margin:0!important;
+  border:0!important;border-radius:0!important;transform:none!important;
+  display:flex!important;flex-direction:column!important;overflow:hidden!important;
+ }
+ #diaryMyNotesPanel.diary-trash-fullscreen #diaryMyNotesHead{
+  flex:0 0 auto!important;padding:10px 56px 10px 10px!important;
+  border-radius:0!important;box-shadow:0 3px 12px #123c2b35!important;
+ }
+ #diaryMyNotesPanel.diary-trash-fullscreen #diaryMyNotesHeading,
+ #diaryMyNotesPanel.diary-trash-fullscreen #diaryMyNotesHead:after{display:none!important}
+ #diaryMyNotesPanel.diary-trash-fullscreen #diaryDiaryMeWrap{
+  position:static!important;display:flex!important;flex:1 1 auto!important;
+  flex-direction:column!important;min-width:0!important;min-height:0!important;width:100%!important;
+ }
+ #diaryMyNotesPanel.diary-trash-fullscreen #diaryDiaryMeBtn{display:none!important}
+ #diaryMyNotesPanel.diary-trash-fullscreen #diaryDiaryMePanel:not([hidden]){
+  position:relative!important;inset:auto!important;display:flex!important;
+  flex:1 1 auto!important;flex-direction:column!important;gap:10px!important;
+  width:100%!important;max-width:none!important;height:100%!important;max-height:none!important;
+  min-height:0!important;overflow:hidden!important;box-sizing:border-box!important;
+  padding:12px 12px calc(12px + env(safe-area-inset-bottom,0px))!important;
+  border:0!important;border-radius:0!important;background:linear-gradient(180deg,#fbfcf8,#edf5ee)!important;
+ }
+ #diaryMyNotesPanel.diary-trash-fullscreen #diaryDiaryMePanel > :not(#diaryMyNotesTrash):not(#diaryMyNotesList){display:none!important}
+ #diaryMyNotesPanel.diary-trash-fullscreen #diaryMyNotesTrash{
+  display:flex!important;flex:0 0 42px!important;align-items:center!important;
+  justify-content:center!important;width:100%!important;min-width:0!important;
+  min-height:42px!important;height:42px!important;max-height:42px!important;
+  margin:0!important;padding:0 12px!important;border:2px solid #b99a4b!important;
+  border-radius:12px!important;background:linear-gradient(145deg,#fff8df,#f1dfaa)!important;
+  color:#49350b!important;font-size:14px!important;font-weight:1000!important;
+  box-shadow:0 3px 0 #b99a4b,0 6px 12px #5d4a1d20!important;
+ }
+ #diaryMyNotesPanel.diary-trash-fullscreen #diaryMyNotesList{
+  display:grid!important;flex:1 1 auto!important;align-content:start!important;
+  min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;
+  overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;
+  width:100%!important;box-sizing:border-box!important;margin:0!important;padding:4px 2px 12px!important;
+ }
+ #diaryMyNotesPanel.diary-trash-fullscreen #diaryMyNotesBody{display:none!important}
+}
+</style>
