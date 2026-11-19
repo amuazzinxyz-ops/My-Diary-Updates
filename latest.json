@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 355,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "74aa6f8da6d760e3427ada8cbc56e0e0621a9b84d51b82da15eaf501881d525c",
+  "webSha256": "d15435c3e7f72788a2c62bb52e64633ba7c9554d28f599747e221c4e7dc604b8",
   "webReleaseNotes": "My Diary Web Update 355: Personal Calendar and Smart Reminder save-success popup centered on the mobile screen. Existing 4-second display duration, date format, saved data, reminders and other features are preserved."
 }
