@@ -4713,3 +4713,13 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Backup branch: `backup/before-calendar-reminder-name-button-center-2026-11-19`. Working branch: `fix/calendar-reminder-name-button-center-2026-11-19`. PR #249 merged as `ce3c60146b565d6de7c46f26536c5e192019cb56`.
 - Published successfully as **Web Update 347**. The web publisher synchronized `diary-web/index.html` with `web-source/index.html`; both are byte-identical at Git blob SHA `821c3dbb8e9cfb4de1382b199b2af03af32f5673` (558,341 bytes). `latest.json` advertises web SHA-256 `0b9433413ef79afacd0af73d72da3c888d41ff7ff2ffb10d911d99566fa1a463`.
 - APK remains **1.0.194 / versionCode 193**. No APK/native build or release was made. Physical-phone testing remains pending user confirmation.
+
+
+# Personal Calendar — Birthday, Date and Time badges on one line (Web Update 348, 2026-11-19)
+
+- User clarified that the existing Birthday and Time buttons should remain, and only the missing Date button should be added. The required order directly under the centred name button is **Birthday · Date · Time**, all on one line.
+- Added a date badge using the already-saved entry date and existing date formatter. Kept the existing Birthday/type badge and Time badge. Added a Calendar-row-specific no-wrap layout with compact badge spacing so the three badges stay together on one line; no form fields or saved data format changed.
+- Only `web-source/index.html` was edited for the feature (4 additions, 1 deletion). No Smart Reminder renderer, entry data/order, pin, long-press actions, recurrence, alarm scheduling, notification, ringtone, APK/native code, or unrelated feature was changed.
+- Backup branch: `backup/before-calendar-date-badge-2026-11-19`. Working branch: `fix/calendar-birthday-date-time-row-2026-11-19`. PR #251 merged as `9fc880975823831bbee21a6697ac6e98da6663d4`.
+- Published successfully as **Web Update 348**. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `d702aa397f0fcef677ff56cd7b3ef4c41d635e44` (558,826 bytes). `latest.json` web SHA-256: `9fae0229aa6b2a996581e7d0850dc465d976d86b1898590e932e26d444e43248`.
+- APK remains **1.0.194 / versionCode 193**. No APK/native build or release was made. Physical-phone testing remains pending user confirmation.
