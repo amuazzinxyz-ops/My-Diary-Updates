@@ -28,7 +28,7 @@ widget_ui = r"""
   var widgetSettingsTitle=el('strong',{},'🏠 Home Screen Widget Settings');
   var widgetSettingsClose=el('button',{type:'button',class:'diary-home-widget-close'},'✕');
   widgetSettingsHead.append(widgetSettingsTitle,widgetSettingsClose);
-  var widgetSettingsHint=el('p',{},'Widget mein apni pasand ke options chunein. Save karke Home Screen par lagayein.');
+  var widgetSettingsHint=el('p',{},'Widget ka actual size Home Screen par long-press karke resize karein. Yahan text size aur dikhne wale shortcuts chunein.');
   var widgetSettingsOptions=el('div',{class:'diary-home-widget-options'});
   function makeWidgetOption(id,label,checked){
    var row=el('label',{class:'diary-home-widget-option'});
@@ -40,7 +40,7 @@ widget_ui = r"""
   var widgetShowCalendar=makeWidgetOption('diaryWidgetShowCalendar','📅 Personal Calendar kholen',true);
   var widgetShowReminder=makeWidgetOption('diaryWidgetShowReminder','⏰ Smart Reminder kholen',true);
   var widgetShowNewNote=makeWidgetOption('diaryWidgetShowNewNote','✍️ New Note kholen',true);
-  var widgetSizeLabel=el('label',{class:'diary-home-widget-size-label'},'Widget Size');
+  var widgetSizeLabel=el('label',{class:'diary-home-widget-size-label'},'Widget Text Size');
   var widgetSize=el('select',{id:'diaryWidgetSize'});
   [['compact','Chhota'],['standard','Normal'],['large','Bada']].forEach(function(item){widgetSize.appendChild(el('option',{value:item[0]},item[1]));});
   widgetSettingsOptions.append(widgetSizeLabel,widgetSize);
@@ -417,7 +417,7 @@ button_bg = r'''<?xml version="1.0" encoding="utf-8"?>
 widget_info = r'''<?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="180dp"
-    android:minHeight="150dp"
+    android:minHeight="230dp"
     android:updatePeriodMillis="1800000"
     android:initialLayout="@layout/diary_home_widget"
     android:resizeMode="horizontal|vertical"
