@@ -5,7 +5,7 @@
 - Minimal feature diff: only `web-source/index.html`, one line changed (1 insertion, 1 deletion). Existing pin state, pinned-first sorting, long-press actions, entry data, edit/copy/delete/select, reminders, alarms, repeat settings, ringtone, snooze, notifications, and unrelated features remain unchanged.
 - Backup branch: `backup/before-calendar-reminder-pin-indicator-2026-11-19`. Working branch: `fix/calendar-reminder-pin-indicator-2026-11-19`. PR #246 merged as `dff6f9a32dc3d52fd9f4bf100a0828f5db35f27e`.
 - Web publisher run `44437220499` completed successfully. Published as **Web Update 346**; `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `0a065d715449b08a9b5639767f4fcac2ec557967` (558,315 bytes). `latest.json` web SHA-256: `fa73b38f0018a75de3defaa4505ca85bd73f5784287c6d9026d4682249aa1f5d`.
-- APK/native code was not edited by this task; the APK build workflow was triggered automatically by the repository push and its final outcome must be checked separately. Do not claim a new APK release unless the workflow confirms one. Phone-side testing remains pending user confirmation.
+- APK/native code was not edited by this task. The automatic APK workflow `44437220444` failed safely at its pre-build synchronization guard because `web-source/index.html` and `diary-web/index.html` were temporarily not byte-identical while the publisher was syncing; the workflow skipped every build/release/upload step. The publisher subsequently completed successfully and the two files are now byte-identical. APK remains versionName `1.0.194` / versionCode `193`; no APK was built or published. Phone-side testing remains pending user confirmation.
 
 ---
 
