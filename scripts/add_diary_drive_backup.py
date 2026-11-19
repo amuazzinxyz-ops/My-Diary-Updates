@@ -19,6 +19,7 @@ test_target = project / "app/src/test/java/com/muazzin/diary/backup/DiaryBackupC
 snapshot_target = project / "app/src/main/java/com/muazzin/diary/backup/DiaryBackupSnapshot.kt"
 snapshot_test_target = project / "app/src/test/java/com/muazzin/diary/backup/DiaryBackupSnapshotTest.kt"
 collector_target = project / "app/src/main/assets/diary_snapshot_collector.js"
+keystore_target = project / "app/src/main/java/com/muazzin/diary/backup/DiaryBackupKeyStore.kt"
 main_target.parent.mkdir(parents=True, exist_ok=True)
 test_target.parent.mkdir(parents=True, exist_ok=True)
 shutil.copyfile(ROOT / "drive_backup_src/DiaryBackupCrypto.kt", main_target)
@@ -26,6 +27,7 @@ shutil.copyfile(ROOT / "drive_backup_src/DiaryBackupCryptoTest.kt", test_target)
 shutil.copyfile(ROOT / "drive_backup_src/DiaryBackupSnapshot.kt", snapshot_target)
 shutil.copyfile(ROOT / "drive_backup_src/DiaryBackupSnapshotTest.kt", snapshot_test_target)
 shutil.copyfile(ROOT / "drive_backup_src/diary_snapshot_collector.js", collector_target)
+shutil.copyfile(ROOT / "drive_backup_src/DiaryBackupKeyStore.kt", keystore_target)
 
 text = gradle.read_text(encoding="utf-8")
 match = re.search(r"dependencies\s*\{([^}]*)\}", text, re.S)
@@ -43,6 +45,6 @@ text = text[:match.start(1)] + body + text[match.end(1):]
 gradle.write_text(text, encoding="utf-8")
 
 check = gradle.read_text(encoding="utf-8")
-if any(dep not in check for dep in required) or not all(p.is_file() for p in (main_target, test_target, snapshot_target, snapshot_test_target, collector_target)):
+if any(dep not in check for dep in required) or not all(p.is_file() for p in (main_target, test_target, snapshot_target, snapshot_test_target, collector_target, keystore_target)):
     raise SystemExit("BLOCKED: Drive crypto foundation was not applied exactly")
 print("PASS: crypto, snapshot contract/tests, and web collector applied to build copy")
