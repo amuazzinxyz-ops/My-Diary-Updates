@@ -1,6 +1,6 @@
 (function (global) {
   "use strict";
-  const MAX_BYTES = 512 * 1024 * 1024;
+  const MAX_BYTES = 64 * 1024 * 1024;
   const LOCAL_KEYS = new Set([
     "diary_personal_notes_v1", "diary_personal_notes_trash_v1",
     "diary_diary_master_pin_v1", "diary_diary_master_pattern_v1",
@@ -115,7 +115,7 @@
     };
     const serialized = JSON.stringify(snapshot);
     const byteLength = new TextEncoder().encode(serialized).byteLength;
-    if (byteLength > MAX_BYTES) throw new Error("Backup is larger than the safe 512 MiB limit.");
+    if (byteLength > MAX_BYTES) throw new Error("Backup is larger than the current safe 64 MiB limit.");
     return { snapshot, serialized, byteLength };
   }
 
