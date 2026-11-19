@@ -4884,3 +4884,17 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Backup branch: `backup/before-widget-settings-startup-fix-2026-11-19`; Register backup branch: `backup/before-widget-startup-fix-register-2026-11-19`. Fix PR #281 merged as `6feccdfec6c69e556b4e409c7f31bd9ec5a93a2f`.
 - Web publisher workflow run **44484323209** completed successfully. Published as **Web Update 360**. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `698325f28bc485f4170cb7affa80fe25635b4734` (575,728 characters). Live `latest.json` advertises webVersion **360** and SHA-256 `934c4cac4634875a935a621946301c3fa85e191e3eb21c398e6a2e5e486a02e2`.
 - APK feed remains **1.0.195 / versionCode 194**; this correction is web-only and does not require reinstalling the APK. Physical Android confirmation that the app now opens and that the button position looks right is still pending; do not claim phone testing until the user confirms.
+
+
+
+---
+
+# Home Screen Widget Settings — 14px and directly below World Clock (Web Update 361, 2026-11-19)
+
+- User corrected the earlier Web 359 result: the button label must be **14px**, not 15px, and the button must appear immediately below **World Clock** (not lower elsewhere in the Me panel).
+- Fixed only the button creation/placement in `web-source/index.html`: create the Widget Settings button before the World Clock button is appended, apply 14px with the existing important override, append World Clock, then append Widget Settings immediately after it. This ordering also ensures the button exists before it is appended; no use-before-initialization or undefined append is introduced.
+- No other Me controls, widget settings behavior, saved notes/photos/documents, PINs, locks, reminders, native Android sources, or APK were changed.
+- Backup branch: `backup/before-widget-settings-14px-worldclock-order-2026-11-19`. Fix PR #283 merged as `ec1c7aa8a1abb19dd29b306ecc7617fb1fefadaa`. Register backup branch: `backup/before-widget-settings-14px-register-2026-11-19`.
+- Web publisher completed automatically after the merge and published **Web Update 361**. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `98ef6644c15d7ddb0c882457c35c047ae0201db2` (575,821 bytes). Live `latest.json` advertises webVersion 361 and web SHA-256 `5375f435a2728c0bc0af7767535b859d030133ab1d56df553e781ff103cf8785`.
+- Static source checks passed: 14px override present; 15px override absent; button is created before its append; Widget Settings append is immediately after World Clock append; source and published mirror match exactly. APK remains **1.0.195 / versionCode 194**; no APK rebuild or reinstall is required for this web-only change.
+- Physical-phone confirmation of the 14px size and exact on-screen position remains pending. Do not claim device-side PASS until user confirms.
