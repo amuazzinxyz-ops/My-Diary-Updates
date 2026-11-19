@@ -308,6 +308,16 @@ native = r"""
             else -> throw IllegalArgumentException("Unsupported value in backup snapshot.")
         }
 
+        @JavascriptInterface fun hasCachedDiaryBackupKey(): Boolean {
+            return try {
+                val key = DiaryBackupKeyStore.loadDataKey(this@MainActivity)
+                key.fill(0)
+                val envelope = DiaryBackupKeyStore.loadKeyEnvelope(this@MainActivity)
+                envelope.forEach { it.fill(0) }
+                true
+            } catch (_: Exception) { false }
+        }
+
         @JavascriptInterface fun encryptDiaryBackupSnapshot(snapshotJson: String, passphrase: String, byteLength: Long): String {
             val password = passphrase.toCharArray()
             var temporary: File? = null
@@ -344,11 +354,22 @@ native = r"""
                 try {
                     pipeIn.use { input ->
                         java.io.FileOutputStream(tempFile).use { output ->
-                            DiaryBackupCrypto.encrypt(input, output, password) { dataKey, salt, wrapNonce, wrappedDek ->
+                            if (password.isNotEmpty()) {
+                                DiaryBackupCrypto.encrypt(input, output, password) { dataKey, salt, wrapNonce, wrappedDek ->
+                                    try {
+                                        DiaryBackupKeyStore.cacheDataKeyAndEnvelope(this@MainActivity, dataKey, salt, wrapNonce, wrappedDek)
+                                    } finally {
+                                        dataKey.fill(0); salt.fill(0); wrapNonce.fill(0); wrappedDek.fill(0)
+                                    }
+                                }
+                            } else {
+                                val dataKey = DiaryBackupKeyStore.loadDataKey(this@MainActivity)
+                                val envelope = DiaryBackupKeyStore.loadKeyEnvelope(this@MainActivity)
                                 try {
-                                    DiaryBackupKeyStore.cacheDataKeyAndEnvelope(this@MainActivity, dataKey, salt, wrapNonce, wrappedDek)
+                                    DiaryBackupCrypto.encryptWithCachedDataKey(input, output, dataKey, envelope[0], envelope[1], envelope[2])
                                 } finally {
-                                    dataKey.fill(0); salt.fill(0); wrapNonce.fill(0); wrappedDek.fill(0)
+                                    dataKey.fill(0)
+                                    envelope.forEach { it.fill(0) }
                                 }
                             }
                         }
