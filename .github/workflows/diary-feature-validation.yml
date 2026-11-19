@@ -104,6 +104,23 @@ jobs:
           PY
           node --check /tmp/diary-feature-module.js
 
+      - name: Align Java compile target with Kotlin 17 for validation build
+        working-directory: diary-project/app
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("build.gradle.kts")
+          s = p.read_text(encoding="utf-8")
+          marker = "tasks.withType<org.gradle.api.tasks.compile.JavaCompile>().configureEach {"
+          if marker not in s:
+              s += '\n\n' + marker + '\n    sourceCompatibility = "17"\n    targetCompatibility = "17"\n}\n'
+          if marker not in s or 'targetCompatibility = "17"' not in s:
+              raise SystemExit("BLOCKED: Java/Kotlin JVM target alignment patch failed")
+          p.write_text(s, encoding="utf-8")
+          print("PASS: JavaCompile source/target compatibility aligned to Kotlin JVM 17")
+          PY
+
       - name: Build debug APK only — no signing and no publishing
         working-directory: diary-project
         run: gradle --no-daemon :app:assembleDebug
