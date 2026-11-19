@@ -44,8 +44,12 @@
         background: "#fff", color: "#211a2c", borderRadius: "18px", padding: "20px",
         boxSizing: "border-box", boxShadow: "0 12px 40px rgba(0,0,0,.35)" }});
     var title = make("h2", { id: "diaryDriveTitle", style: { margin: "0 0 10px", fontSize: "21px" }}, "☁️ Google Drive Encrypted Backup");
+    var bridgeAtOpen = window.DiaryAppActions;
+    var cachedAtOpen = !!(bridgeAtOpen && typeof bridgeAtOpen.hasCachedDiaryBackupKey === "function" && bridgeAtOpen.hasCachedDiaryBackupKey());
     var explain = make("p", { style: { lineHeight: "1.5", fontSize: "14px" }},
-      "Pehli baar ek recovery passphrase banayein. Yeh save nahi hota—ise bhoolne par backup restore nahi hoga. Agle backups mein phone ki protected key use hogi; passphrase dobara nahi maanga jayega.");
+      cachedAtOpen
+        ? "Is device ki protected encryption key se naya backup banega. Recovery passphrase aapke paas hi rehna chahiye—phone kho jaane par isi se backup restore hoga."
+        : "Pehli baar ek recovery passphrase banayein. Yeh save nahi hota—ise bhoolne par backup restore nahi hoga. Agle backups mein phone ki protected key use hogi; passphrase dobara nahi maanga jayega.");
     var pass = make("input", { type: "password", id: "diaryDrivePassphrase", autocomplete: "new-password",
       placeholder: "Naya backup passphrase", minlength: "12", required: "required",
       style: { display: "block", width: "100%", boxSizing: "border-box", padding: "13px",
@@ -62,6 +66,7 @@
     var submit = make("button", { type: "button", style: { flex: "1", padding: "12px",
       border: "0", borderRadius: "10px", background: "#315d3c", color: "#fff", fontWeight: "900" }}, "Encrypt & Backup");
     actions.append(cancel, submit);
+    if (cachedAtOpen) { pass.style.display = "none"; confirm.style.display = "none"; }
     box.append(title, explain, pass, confirm, status, actions);
     overlay.appendChild(box);
     overlay.addEventListener("click", function (e) { if (e.target === overlay && !submit.disabled) overlay.remove(); });
