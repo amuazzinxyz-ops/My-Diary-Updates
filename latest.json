@@ -7,8 +7,8 @@
   "sha256": "3aef65ca93be3bc7cc4520185594d57072fc0cb7a731f18e09b23e222da09549",
   "releaseNotes": "My Diary 1.0.195: Added configurable Android Home Screen widgets from Me > Home Screen Widget Settings. Choose the date and Diary, Personal Calendar, Smart Reminder, and New Note shortcuts, select widget size, and add it to the Home Screen. Existing notes, photos, PINs, locks, reminders, and unrelated features are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 358,
+  "webVersion": 359,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "3fc059ce199d0d56cd5e7720131948f5d7a2680ed0eeeb06fa97fdcd30d91830",
-  "webReleaseNotes": "My Diary Web Update 358: Added configurable Android Home Screen Widget Settings inside Me. Choose the date and Diary, Personal Calendar, Smart Reminder, and New Note shortcuts, select widget size, and add the widget to the Android Home Screen. Existing Diary features and saved data are preserved."
+  "webSha256": "12e4d8dec319370a5ed5ada1cb8f45eb423471a17cd624d660aafbe8ef5f69dc",
+  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
