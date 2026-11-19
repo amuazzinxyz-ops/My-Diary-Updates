@@ -58,8 +58,9 @@ internal object DiaryBackupCrypto {
         val dek = ByteArray(KEY_BYTES).also(random::nextBytes)
         var kek: ByteArray? = null
         try {
-            kek = deriveKey(passwordCopy, salt)
-            val wrappedDek = aesGcm(Cipher.ENCRYPT_MODE, kek, wrapNonce, dek, wrapAad(salt, wrapNonce))
+            val derivedKek = deriveKey(passwordCopy, salt)
+            kek = derivedKek
+            val wrappedDek = aesGcm(Cipher.ENCRYPT_MODE, derivedKek, wrapNonce, dek, wrapAad(salt, wrapNonce))
             val metadata = JSONObject()
                 .put("format", "MY_DIARY_CLOUD_BACKUP")
                 .put("formatVersion", FORMAT_VERSION)
@@ -133,24 +134,31 @@ internal object DiaryBackupCrypto {
                 metadata.optInt("parallelism", -1) != PARALLELISM
             ) throw SecurityException("Backup format or security parameters are not supported.")
 
-            salt = decodeB64(metadata.getString("salt"), SALT_BYTES)
-            wrapNonce = decodeB64(metadata.getString("wrapNonce"), NONCE_BYTES)
-            wrappedDek = decodeB64(metadata.getString("wrappedDek"), KEY_BYTES + 16)
-            payloadNonce = decodeB64(metadata.getString("payloadNonce"), NONCE_BYTES)
-            kek = deriveKey(passwordCopy, salt)
-            dek = try {
-                aesGcm(Cipher.DECRYPT_MODE, kek, wrapNonce, wrappedDek, wrapAad(salt, wrapNonce))
+            val saltBytes = decodeB64(metadata.getString("salt"), SALT_BYTES)
+            salt = saltBytes
+            val wrapNonceBytes = decodeB64(metadata.getString("wrapNonce"), NONCE_BYTES)
+            wrapNonce = wrapNonceBytes
+            val wrappedDekBytes = decodeB64(metadata.getString("wrappedDek"), KEY_BYTES + 16)
+            wrappedDek = wrappedDekBytes
+            val payloadNonceBytes = decodeB64(metadata.getString("payloadNonce"), NONCE_BYTES)
+            payloadNonce = payloadNonceBytes
+            val derivedKek = deriveKey(passwordCopy, saltBytes)
+            kek = derivedKek
+            val unwrappedDek = try {
+                aesGcm(Cipher.DECRYPT_MODE, derivedKek, wrapNonceBytes, wrappedDekBytes, wrapAad(saltBytes, wrapNonceBytes))
             } catch (_: AEADBadTagException) {
                 throw SecurityException("Recovery passphrase galat hai ya backup damaged hai.")
             }
-            if (dek.size != KEY_BYTES) throw SecurityException("Backup encryption key is invalid.")
+            dek = unwrappedDek
+            if (unwrappedDek.size != KEY_BYTES) throw SecurityException("Backup encryption key is invalid.")
 
             val cipher = Cipher.getInstance("AES/GCM/NoPadding")
-            cipher.init(Cipher.DECRYPT_MODE, SecretKeySpec(dek, "AES"), GCMParameterSpec(GCM_TAG_BITS, payloadNonce))
+            cipher.init(Cipher.DECRYPT_MODE, SecretKeySpec(unwrappedDek, "AES"), GCMParameterSpec(GCM_TAG_BITS, payloadNonceBytes))
             cipher.updateAAD(payloadAad(header))
             val cipherIn = CipherInputStream(data, cipher)
-            val gzipIn = GZIPInputStream(BufferedInputStream(cipherIn), BUFFER_BYTES)
-            copyLimited(gzipIn, output, MAX_PLAINTEXT_BYTES)
+            GZIPInputStream(BufferedInputStream(cipherIn), BUFFER_BYTES).use { gzipIn ->
+                copyLimited(gzipIn, output, MAX_PLAINTEXT_BYTES)
+            }
             output.flush()
         } catch (error: SecurityException) {
             throw error
