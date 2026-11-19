@@ -120,6 +120,7 @@ outer=r"""
                     if (files != null && files.length() > 0) files.optJSONObject(0)?.optString("id")?.takeIf { it.isNotBlank() } else null
                 } finally { list.disconnect() }
 
+                var verifiedRemoteId: String? = existingId
                 if (existingId != null) {
                     val updateUrl = URL("https://www.googleapis.com/upload/drive/v3/files/" +
                         java.net.URLEncoder.encode(existingId, "UTF-8") + "?uploadType=media")
@@ -158,18 +159,29 @@ outer=r"""
                             output.write(("\r\n--" + boundary + "--\r\n").toByteArray(Charsets.UTF_8))
                         }
                         if (create.responseCode !in 200..299) throw java.io.IOException("Drive create HTTP " + create.responseCode)
+                        val created = JSONObject(create.inputStream.bufferedReader().use { it.readText() })
+                        verifiedRemoteId = created.optString("id").takeIf { it.isNotBlank() }
+                            ?: throw java.io.IOException("Drive create response did not include a file ID.")
                     } finally { create.disconnect() }
                 }
 
-                val verify = listUrl.openConnection() as HttpURLConnection
+                val remoteId = verifiedRemoteId ?: throw java.io.IOException("Drive upload returned no file ID.")
+                val verifyUrl = URL("https://www.googleapis.com/drive/v3/files/" +
+                    java.net.URLEncoder.encode(remoteId, "UTF-8") + "?fields=id,size,name")
+                val verify = verifyUrl.openConnection() as HttpURLConnection
                 verify.requestMethod = "GET"
                 verify.connectTimeout = 20000
                 verify.readTimeout = 30000
                 verify.setRequestProperty("Authorization", "Bearer " + token)
                 try {
                     if (verify.responseCode !in 200..299) throw java.io.IOException("Drive verification HTTP " + verify.responseCode)
-                    val files = JSONObject(verify.inputStream.bufferedReader().use { it.readText() }).optJSONArray("files")
-                    if (files == null || files.length() == 0) throw java.io.IOException("Drive backup not visible after upload.")
+                    val remote = JSONObject(verify.inputStream.bufferedReader().use { it.readText() })
+                    val remoteSize = remote.optString("size").toLongOrNull()
+                        ?: throw java.io.IOException("Drive did not report the uploaded file size.")
+                    if (remote.optString("id") != remoteId || remote.optString("name") != driveName ||
+                        remoteSize != file.length()) {
+                        throw java.io.IOException("Drive backup ID, name or exact byte size did not match.")
+                    }
                 } finally { verify.disconnect() }
                 if (!file.delete()) throw java.io.IOException("Uploaded backup staging cleanup failed.")
                 getSharedPreferences("diary_cloud_backup_status_v1", Context.MODE_PRIVATE)
