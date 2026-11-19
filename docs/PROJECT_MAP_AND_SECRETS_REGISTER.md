@@ -4845,3 +4845,19 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Backup branch: `backup/before-web357-metadata-refresh-2026-11-19`. Release branch: `release/web357-metadata-refresh-2026-11-19`.
 - `latest.json` advertises Web Update 357 with web SHA-256 `5bc392dd51238b4172c7b6405e0677143a8e9eb0e1480c07772baf08dea939c5`. APK remains `1.0.194 / versionCode 193`; no APK build was made.
 - Physical-phone visual confirmation remains pending.
+
+
+---
+
+# My Diary Home Screen Widget Settings + native Android widget (APK 1.0.195 / Web Update 358, 2026-11-19)
+
+- User approved adding **Home Screen Widget Settings** inside the existing **Me** button. Added selectable widget content: today's date, My Diary, Personal Calendar, Smart Reminder, and New Note. Added compact/normal/large **text-size** preference; actual widget dimensions remain launcher-resizable, with the Me settings screen explaining this distinction.
+- Added a real Android AppWidgetProvider and RemoteViews layout, widget metadata/receiver, persisted SharedPreferences settings, an Android 8+ direct pin request with manual Widgets-picker fallback, and widget-tap routing into the existing Diary WebView. Diary master PIN remains in front of widget destinations; calendar/reminder shortcuts open their existing protected sections. Existing notes, photos, documents, PINs, locks, reminder records/settings, and app identity are preserved.
+- Source implementation is in `scripts/add_diary_home_widget.py`, invoked by `scripts/add_diary_app_actions.py`; the original Android project ZIP `Diary-Android-Project-v13 (6).zip` was not modified. Native provider/resources are generated during the existing Android build.
+- Backup branch: `backup/before-home-widget-settings-2026-11-19`. Feature PR #275 merged as `9f6cfa193609bb31ab8b9a16167970325a3e3b6e`. The first build stopped safely at an ambiguous MainActivity onCreate anchor before compilation/publication; corrected by PR #276, merged as `0489090644fc287683cbc44ec02b447cf1cb14ca`. No failed-build APK was published.
+- Build workflow run #392 (`44475822156`) completed **successfully**. Project guards, exact HTML embedding, translation audit, identity/version checks, debug build, signed release build, signing-certificate continuity, and publish verification all passed. Existing signing certificate SHA-256 remained `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A`.
+- Published signed APK: **1.0.195 / versionCode 194**, package `com.personal.diaryapp`. Signed artifact `My-Diary-1.0.195-signed-test-candidate` ID `14506152745`; extracted APK size 2,082,016 bytes; independently computed SHA-256 `3aef65ca93be3bc7cc4520185594d57072fc0cb7a731f18e09b23e222da09549`, matching live `latest.json`.
+- Published **Web Update 358**. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `ec39fe889b501035045b7968d61583a147227fcd` (575,657 characters/bytes as returned by the connector). Live web SHA-256: `3fc059ce199d0d56cd5e7720131948f5d7a2680ed0eeeb06fa97fdcd30d91830`; live `latest.json` advertises webVersion 358, APK 1.0.195/194, and both matching checksums.
+- Web publisher run #438 correctly deferred the native-dependent widget bundle while APK 1.0.195 was pending. The successful APK release commit then published the matching webVersion 358/hash in the same live feed. Source/mirror parity and APK/feed hash were rechecked after publication.
+- User previously confirmed Web Update 357 on mobile: **“Mobile pe chack kiya alhamdulillah bilkul sahi huwa hai.”** That confirmation applies to the deleted-note full-screen layout. **Physical phone testing of the new Home Screen widget and Widget Settings remains pending**; do not claim it was device-tested.
+
