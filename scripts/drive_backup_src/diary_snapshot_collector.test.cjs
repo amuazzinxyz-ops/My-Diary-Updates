@@ -17,4 +17,7 @@ vm.runInContext(source, context);
 if (!context.window.MyDiaryCloudBackup || typeof context.window.MyDiaryCloudBackup.collectSnapshot !== "function") {
   throw new Error("Collector API was not registered");
 }
-console.log("PASS: snapshot collector module parses and exposes collectSnapshot");
+if (!source.includes("indexedDB.databases()") || !source.includes('indexedDB.open(name, 1)') || !source.includes("onupgradeneeded")) {
+  throw new Error("Collector must inspect existing databases and must not create missing ones");
+}
+console.log("PASS: collector parses, exposes API, and refuses to create missing IndexedDB databases");
