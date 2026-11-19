@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - build/web-update-362-apk-only-2026-11-19
     paths:
       - "Diary-Android-Project-v13 (6).zip"
       - "web-source/index.html"
@@ -564,7 +565,7 @@ jobs:
           rm -f app/diary-release.jks
 
       - name: Publish verified Diary update 1.0.195 after release verification PASS
-        if: env.DIARY_RELEASE_READY == 'true'
+        if: env.DIARY_RELEASE_READY == 'true' && github.ref == 'refs/heads/main'
         shell: bash
         run: |
           set -euo pipefail
