@@ -34,7 +34,28 @@ Status: design/audit only; no application code is changed by this document.
 | localStorage security values | Diary PIN, Pattern, fingerprint-enabled setting, recovery-name salt/hash, Me-section PIN/recovery values, Note Lock embedded fields | Include only inside the outer encrypted payload; preserve exact values |
 | localStorage preferences | language, theme/custom colour, note font, World Clock cities/favourites and other persistent app preferences | Include after full key audit; exclude transient UI/session state |
 
-Before coding, inspect every persistent key and every IndexedDB record kind at the current Web 362 baseline. Do not assume the list above is exhaustive. Never include access tokens, OAuth credentials, device identifiers, temporary dialogs, or session-only UI state.
+Current Web 362 source audit (2026-11-19): the HTML has 577,368 characters and was fetched from the live main branch. The exhaustive literal localStorage key scan found the following persistent keys:
+- Notes and trash: `diary_personal_notes_v1`, `diary_personal_notes_trash_v1`.
+- Diary lock/recovery: `diary_diary_master_pin_v1`, `diary_diary_master_pattern_v1`, `diary_diary_recovery_name_salt_v1`, `diary_diary_recovery_name_hash_v1`, `diaryDiaryMustChooseNewPinAfterRecovery`.
+- Note appearance: `diary_diary_note_font_v1`.
+- Device-bound fingerprint toggle: `diary_fingerprint_unlock_enabled_v1` — deliberately do **not** restore as enabled on another installation; clear/disable it after cross-device restore until that device is explicitly configured.
+- Me-section PIN/recovery configuration: dynamic keys `diary_me_section_pin_v1_{kind}` and `diary_me_section_recovery_v1_{kind}`; current protected kinds are `calendar`, `kharcha`, `documents`, and `memories`.
+- Preferences: `diary_language_v204`, `diary_interface_theme_v1`, `diary_interface_custom_colour_v1`, `diaryWorldClockCities`, `diaryWorldClockFavourites`.
+- The recovery-pending flag's `sessionStorage` copy is transient and must not be backed up.
+
+IndexedDB inventory confirmed in source:
+- `diary_me_features_v1` version 1, store `records` with keyPath `id`. Current kinds: `calendar`, `reminders`, `kharcha`, `documents`, `memories`. Preserve every record and all fields; convert `fileBlob` attachments to a portable binary representation for the encrypted snapshot and restore them to Blob values.
+- `diary_private_locker_v1` version 1, stores `entries` and `meta`, both keyPath `id`. Preserve records and metadata as opaque encrypted data/configuration; do not decrypt or rewrite them during backup.
+- `diary_diary_safety_v1` version 1, store `snapshots`. It contains the redundant Notes/Trash safety copy; primary Notes and Trash are captured separately, so this store is a recovery source only if the primary local data is invalid. Never let the stale safety copy overwrite valid current Notes/Trash.
+
+Native Android persistent state confirmed in the patcher:
+- SharedPreferences `diary_reminders_native_v1`, keys `items` and `auto_items`, contain active and automatic reminder scheduler state. Capture both in the encrypted snapshot and validate/reconcile them against reminder records during restore.
+- SharedPreferences `private_locker_biometric` and Android Keystore alias `my_diary_private_locker_biometric_v1` are device-bound fingerprint material. Exclude them completely from portable backup and restore. Cross-device unlock must use the existing portable Locker PIN/recovery route.
+- Custom ringtone URIs can be device-local. Preserve record/scheduler metadata but do not promise that the sound file or URI grant transfers to another device; fall back safely to the default sound when unavailable.
+
+Important gap found in the existing manual JSON v3 exporter/importer: it currently exports Notes, Documents, Memories, Personal Calendar, and Smart Reminder, but not Trash, My Kharcha, lock/recovery settings, Private Locker, World Clock preferences, or native reminder scheduler state. The cloud backup must therefore use a new complete versioned snapshot collector, not simply reuse the current manual JSON output. Do not change the existing manual export/import behavior as part of this feature.
+
+Never include access tokens, OAuth credentials, device identifiers, temporary dialogs, or session-only UI state.
 
 
 ## Verified Android build integration (source ZIP audit)
