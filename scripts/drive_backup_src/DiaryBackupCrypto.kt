@@ -125,13 +125,17 @@ internal object DiaryBackupCrypto {
                 buffer.int != PARALLELISM
             ) throw SecurityException("Backup format or security parameters are not supported.")
 
-            val saltBytes = ByteArray(SALT_BYTES).also(buffer::get)
+            val saltBytes = ByteArray(SALT_BYTES)
+            buffer.get(saltBytes)
             salt = saltBytes
-            val wrapNonceBytes = ByteArray(NONCE_BYTES).also(buffer::get)
+            val wrapNonceBytes = ByteArray(NONCE_BYTES)
+            buffer.get(wrapNonceBytes)
             wrapNonce = wrapNonceBytes
-            val wrappedDekBytes = ByteArray(KEY_BYTES + 16).also(buffer::get)
+            val wrappedDekBytes = ByteArray(KEY_BYTES + 16)
+            buffer.get(wrappedDekBytes)
             wrappedDek = wrappedDekBytes
-            val payloadNonceBytes = ByteArray(NONCE_BYTES).also(buffer::get)
+            val payloadNonceBytes = ByteArray(NONCE_BYTES)
+            buffer.get(payloadNonceBytes)
             payloadNonce = payloadNonceBytes
 
             val derivedKek = deriveKey(passwordCopy, saltBytes)
