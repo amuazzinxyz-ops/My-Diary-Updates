@@ -1,3 +1,14 @@
+# Restore compatibility audit and pre-implementation safety point (2026-11-19)
+
+- Created and preserved a fresh pre-restore safety branch: `backup/before-drive-restore-implementation-2026-11-19`, from feature head `7c90bbb6a8c6b818beacaef087182fd31ce09bd9`. This is a source-control safety point only; it is not a Diary data backup.
+- Audited the real `web-source/index.html` restore path. Legacy `importNotes` restores note records and calls `restoreDiaryFeatureBackup` for My Documents, My Memories, Personal Calendar and Smart Reminder only. That helper adds only records whose IDs are absent, but it is not a full snapshot restore: it does not restore `diary_private_locker_v1`, `diary_diary_safety_v1`, inventoried localStorage settings, or original IndexedDB out-of-line keys. It also reschedules calendar/reminder alarms after its IndexedDB transaction; this path is not a cross-database atomic transaction and must not be reused as the cloud restore engine.
+- Confirmed source storage schemas: Me features DB has `records` keyed by `id`; Private Locker DB has `entries` and `meta` keyed by `id`; Diary Safety DB has `snapshots` with an out-of-line `latest` key. The cloud collector now packages the latter as `{__diaryBackupKey, __diaryBackupValue}` while retaining the original key.
+- Restore design gate: implement a versioned restore planner/preview and per-database staged safety copies before any writes. Preserve existing destination records on ID conflicts (never overwrite); validate every store and attachment before confirmation; use explicit rollback/recovery journaling because IndexedDB transactions cannot atomically span the three separate databases plus localStorage/native preferences. Keep destination-device lock/biometric secrets device-bound; do not blindly import device-specific security state. Native reminders must be rescheduled only after durable import succeeds, and rescheduling failure must be reported separately with retry data retained.
+- The collector fake-IndexedDB runtime regression test is part of workflow run **44539780706** (head `85e4659ea675905d81ce350c4810d559b25cc4fb`). At last check, collector verification step 10 completed successfully; crypto unit tests and debug APK build step 13 was still running, with artifact upload pending. Confirm final workflow conclusion before marking the build PASS.
+- No cloud restore, Drive download, WorkManager scheduler, account disconnect/revocation, physical phone test, or second-device restore is complete. No main/published branch or live user Diary data was changed.
+
+---
+
 # Collector integration regression test — fake IndexedDB runtime coverage (2026-11-19)
 
 - Commits on `feature/google-drive-auto-backup-2026-11-19`: `ef0627988efb53460125ebf5bdd15fc3bdd72d86` added a fake-IndexedDB runtime exercise; `85e4659ea675905d81ce350c4810d559b25cc4fb` corrected the test context so the native bridge is exposed on the collector's actual `window` object.
