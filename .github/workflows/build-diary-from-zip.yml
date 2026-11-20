@@ -1,4 +1,4 @@
-# Approved release build: publish signed Diary 1.0.201/200 with equal-width 3D widget buttons with centered Diary title/date and compact outer sizing.
+# Approved release build: publish signed Diary 1.0.201/200 with responsive, manually resizable 3D widget with equal-width buttons and centered Diary title/date.
 name: Build Diary APK from uploaded project ZIP
 
 on:
