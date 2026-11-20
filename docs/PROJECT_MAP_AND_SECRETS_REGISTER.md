@@ -1,3 +1,14 @@
+# Final widget update status — visible height 1.0.203 published; resize handle request closed (2026-11-20)
+
+- User confirmed the visible widget-height update is the intended completed work: **APK 1.0.203 / versionCode 202 is published** and available through **Me → Check for Updates**.
+- Published fix: widget panel/background now wraps the visible selected shortcut rows (`widgetRoot` uses `wrap_content`), so the background ends after the last displayed button rather than leaving unused blank height. Existing button behavior and two-axis launcher resize support remain unchanged.
+- Live release metadata and SHA-256 are recorded in the immediately preceding 1.0.203 published entry above.
+- Follow-up request to make the resize handle itself larger/easier to grab was inspected and closed without code changes: Android launcher owns the resize handles and their hit areas; the app cannot reliably enlarge them. No decorative/non-functional handle was added.
+- **Final status:** 1.0.203 visible-height update = published; launcher resize-handle enlargement = not implemented (platform-controlled). Physical launcher appearance test remains pending user confirmation. Delivery remains **Me → Check for Updates only**.
+- No APK was sent directly and no Diary data/features were changed for the resize-handle discussion.
+
+---
+
 # My Diary Home Screen Widget — visible height follows selected button count (2026-11-20; published)
 
 - User requirement: two selected/displayed shortcuts => visible widget panel/background ends after two buttons; four selected/displayed shortcuts => panel expands to fit four buttons; no blank panel below the last visible button.
