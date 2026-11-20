@@ -301,10 +301,10 @@ class DiaryHomeWidgetProvider : AppWidgetProvider() {
 
             views.setTextViewText(R.id.widgetDate, SimpleDateFormat("EEE, dd MMM yyyy", Locale.getDefault()).format(Date()))
             views.setViewVisibility(R.id.widgetDate, if (showDate) View.VISIBLE else View.GONE)
-            views.setViewVisibility(R.id.widgetDiaryButton, if (showDiary) View.VISIBLE else View.GONE)
-            views.setViewVisibility(R.id.widgetCalendarButton, if (showCalendar) View.VISIBLE else View.GONE)
-            views.setViewVisibility(R.id.widgetReminderButton, if (showReminder) View.VISIBLE else View.GONE)
-            views.setViewVisibility(R.id.widgetNewNoteButton, if (showNewNote) View.VISIBLE else View.GONE)
+            views.setViewVisibility(R.id.widgetDiaryButtonHit, if (showDiary) View.VISIBLE else View.GONE)
+            views.setViewVisibility(R.id.widgetCalendarButtonHit, if (showCalendar) View.VISIBLE else View.GONE)
+            views.setViewVisibility(R.id.widgetReminderButtonHit, if (showReminder) View.VISIBLE else View.GONE)
+            views.setViewVisibility(R.id.widgetNewNoteButtonHit, if (showNewNote) View.VISIBLE else View.GONE)
 
             val size = prefs.getString("size", "standard") ?: "standard"
             val titleSize = when (size) { "compact" -> 15f; "large" -> 21f; else -> 18f }
@@ -314,10 +314,10 @@ class DiaryHomeWidgetProvider : AppWidgetProvider() {
             listOf(R.id.widgetDiaryButton, R.id.widgetCalendarButton, R.id.widgetReminderButton, R.id.widgetNewNoteButton)
                 .forEach { views.setTextViewTextSize(it, TypedValue.COMPLEX_UNIT_SP, bodySize) }
 
-            setTarget(context, views, widgetId, R.id.widgetDiaryButton, 1, "diary")
-            setTarget(context, views, widgetId, R.id.widgetCalendarButton, 2, "calendar")
-            setTarget(context, views, widgetId, R.id.widgetReminderButton, 3, "reminders")
-            setTarget(context, views, widgetId, R.id.widgetNewNoteButton, 4, "new-note")
+            setTarget(context, views, widgetId, R.id.widgetDiaryButtonHit, 1, "diary")
+            setTarget(context, views, widgetId, R.id.widgetCalendarButtonHit, 2, "calendar")
+            setTarget(context, views, widgetId, R.id.widgetReminderButtonHit, 3, "reminders")
+            setTarget(context, views, widgetId, R.id.widgetNewNoteButtonHit, 4, "new-note")
             manager.updateAppWidget(widgetId, views)
         }
 
@@ -341,13 +341,14 @@ elif "class DiaryHomeWidgetProvider" not in provider_path.read_text(encoding="ut
 res = APP / "src/main/res"
 (res / "layout").mkdir(parents=True, exist_ok=True)
 (res / "drawable").mkdir(parents=True, exist_ok=True)
-(res / "xml").mkdir(parents=True, exist_ok=True)
-layout = r'''<?xml version="1.0" encoding="utf-8"?>
+(res / "xml").mkdir(parenlayout = r'''<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widgetRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:clickable="false"
+    android:focusable="false"
     android:padding="10dp"
     android:background="@drawable/diary_widget_bg">
     <TextView
@@ -368,54 +369,88 @@ layout = r'''<?xml version="1.0" encoding="utf-8"?>
         android:textColor="#5B4B6E"
         android:textSize="14sp"
         android:paddingBottom="7dp" />
-    <TextView
-        android:id="@+id/widgetDiaryButton"
+    <FrameLayout
+        android:id="@+id/widgetDiaryButtonHit"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:padding="8dp"
-        android:gravity="center"
-        android:text="📒 My Diary"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:background="@drawable/diary_widget_button" />
-    <TextView
-        android:id="@+id/widgetCalendarButton"
+        android:layout_height="48dp"
+        android:layout_marginTop="4dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:longClickable="false"
+        android:background="@drawable/diary_widget_button">
+        <TextView
+            android:id="@+id/widgetDiaryButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="📒 My Diary"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:clickable="false"
+            android:focusable="false" />
+    </FrameLayout>
+    <FrameLayout
+        android:id="@+id/widgetCalendarButtonHit"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:padding="8dp"
-        android:gravity="center"
-        android:text="📅 Personal Calendar"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:background="@drawable/diary_widget_button" />
-    <TextView
-        android:id="@+id/widgetReminderButton"
+        android:layout_height="48dp"
+        android:layout_marginTop="4dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:longClickable="false"
+        android:background="@drawable/diary_widget_button">
+        <TextView
+            android:id="@+id/widgetCalendarButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="📅 Personal Calendar"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:clickable="false"
+            android:focusable="false" />
+    </FrameLayout>
+    <FrameLayout
+        android:id="@+id/widgetReminderButtonHit"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:padding="8dp"
-        android:gravity="center"
-        android:text="⏰ Smart Reminder"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:background="@drawable/diary_widget_button" />
-    <TextView
-        android:id="@+id/widgetNewNoteButton"
+        android:layout_height="48dp"
+        android:layout_marginTop="4dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:longClickable="false"
+        android:background="@drawable/diary_widget_button">
+        <TextView
+            android:id="@+id/widgetReminderButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="⏰ Smart Reminder"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:clickable="false"
+            android:focusable="false" />
+    </FrameLayout>
+    <FrameLayout
+        android:id="@+id/widgetNewNoteButtonHit"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:padding="8dp"
-        android:gravity="center"
-        android:text="✍️ New Note"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:background="@drawable/diary_widget_button" />
+        android:layout_height="48dp"
+        android:layout_marginTop="4dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:longClickable="false"
+        android:background="@drawable/diary_widget_button">
+        <TextView
+            android:id="@+id/widgetNewNoteButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="✍️ New Note"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:clickable="false"
+            android:focusable="false" />
+    </FrameLayout>
 </LinearLayout>
-'''
-layout_path = res / "layout/diary_home_widget.xml"
-if not layout_path.exists(): layout_path.write_text(layout, encoding="utf-8")
+'''oding="utf-8")
 bg = r'''<?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
     <gradient android:startColor="#FFFDF8" android:endColor="#EEE4FF" android:angle="135" />
