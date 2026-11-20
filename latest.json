@@ -4,7 +4,7 @@
   "versionCode": 194,
   "versionName": "1.0.195",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
-  "sha256": "3aef65ca93be3bc7cc4520185594d57072fc0cb7a731f18e09b23e222da09549",
+  "sha256": "213972c2561a5026eedcd703dcc6d546f9f45ffe78499b11d9213f6abd992fef",
   "releaseNotes": "My Diary 1.0.195: Added configurable Android Home Screen widgets from Me > Home Screen Widget Settings. Choose the date and Diary, Personal Calendar, Smart Reminder, and New Note shortcuts, select widget size, and add it to the Home Screen. Existing notes, photos, PINs, locks, reminders, and unrelated features are preserved.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 363,
