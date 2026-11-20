@@ -93,9 +93,9 @@ BUTTON_BG.write_text(button_selector, encoding="utf-8")
 
 info = ET.parse(INFO).getroot()
 if (info.get(ANDROID + "minHeight") != "280dp" or info.get(ANDROID + "minWidth") != "180dp"
-        or info.get(ANDROID + "minResizeWidth") != "150dp" or info.get(ANDROID + "resizeMode") != "horizontal"
-        or info.get(ANDROID + "minResizeHeight") is not None):
-    raise SystemExit("BLOCKED: horizontal-only widget resize dimensions changed unexpectedly")
+        or info.get(ANDROID + "minResizeWidth") != "150dp" or info.get(ANDROID + "minResizeHeight") != "260dp"
+        or info.get(ANDROID + "resizeMode") != "horizontal|vertical"):
+    raise SystemExit("BLOCKED: two-axis widget resize dimensions changed unexpectedly")
 provider = PROVIDER.read_text(encoding="utf-8")
 for target in ('"diary"', '"calendar"', '"reminders"', '"new-note"'):
     if target not in provider:
