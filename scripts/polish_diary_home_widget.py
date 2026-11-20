@@ -39,9 +39,11 @@ for hit_id, label_id in BUTTONS.items():
     label = nodes.get(label_id)
     if wrapper is None or label is None or label not in list(wrapper):
         raise SystemExit(f"BLOCKED: expected independent widget button and label: {hit_id}/{label_id}")
-    wrapper.set(ANDROID + "layout_width", "160dp")
+    wrapper.set(ANDROID + "layout_width", "match_parent")
     wrapper.set(ANDROID + "layout_height", "48dp")
     wrapper.set(ANDROID + "layout_gravity", "center_horizontal")
+    wrapper.set(ANDROID + "layout_marginLeft", "2dp")
+    wrapper.set(ANDROID + "layout_marginRight", "2dp")
     wrapper.set(ANDROID + "layout_marginTop", "4dp")
     wrapper.set(ANDROID + "background", "@drawable/diary_widget_button")
     wrapper.set(ANDROID + "clickable", "true")
@@ -90,8 +92,9 @@ button_selector = '''<?xml version="1.0" encoding="utf-8"?>
 BUTTON_BG.write_text(button_selector, encoding="utf-8")
 
 info = ET.parse(INFO).getroot()
-if info.get(ANDROID + "minHeight") != "280dp" or info.get(ANDROID + "minWidth") != "180dp":
-    raise SystemExit("BLOCKED: required 180dp x 280dp widget minimum size changed unexpectedly")
+if (info.get(ANDROID + "minHeight") != "280dp" or info.get(ANDROID + "minWidth") != "180dp"
+        or info.get(ANDROID + "minResizeWidth") != "150dp" or info.get(ANDROID + "minResizeHeight") != "260dp"):
+    raise SystemExit("BLOCKED: required widget minimum/resize dimensions changed unexpectedly")
 provider = PROVIDER.read_text(encoding="utf-8")
 for target in ('"diary"', '"calendar"', '"reminders"', '"new-note"'):
     if target not in provider:
@@ -103,8 +106,8 @@ check = ET.parse(LAYOUT).getroot()
 check_nodes = {n.get(ANDROID + "id", "").rsplit("/", 1)[-1]: n for n in check.iter() if n.get(ANDROID + "id", "").startswith("@+id/")}
 for hit_id, label_id in BUTTONS.items():
     wrapper, label = check_nodes.get(hit_id), check_nodes.get(label_id)
-    if wrapper is None or label is None or wrapper.get(ANDROID + "layout_width") != "160dp":
-        raise SystemExit("FAIL: equal-width button layout not applied: " + hit_id)
+    if wrapper is None or label is None or wrapper.get(ANDROID + "layout_width") != "match_parent":
+        raise SystemExit("FAIL: responsive equal-width button layout not applied: " + hit_id)
     if wrapper.get(ANDROID + "layout_height") != "48dp" or wrapper.get(ANDROID + "layout_gravity") != "center_horizontal":
         raise SystemExit("FAIL: button hit area/centering changed: " + hit_id)
     if label.get(ANDROID + "layout_width") != "match_parent" or label.get(ANDROID + "clickable") != "false":
@@ -120,6 +123,10 @@ for header_id in ("widgetTitle", "widgetDate"):
     header = check_nodes.get(header_id)
     if header is None or header.get(ANDROID + "gravity") != "center":
         raise SystemExit("FAIL: Diary title and date must be centered above the buttons: " + header_id)
-if any(check_nodes[x].get(ANDROID + "layout_width") != "160dp" for x in BUTTONS):
-    raise SystemExit("FAIL: all four buttons must have the same Personal Calendar-sized width")
-print("PASS: four equal 160dp x 48dp buttons, centered Diary title/date, compact 180dp x 280dp widget, raised 3D face, isolated pressed state, and independent tap routing.")
+if any(check_nodes[x].get(ANDROID + "layout_width") != "match_parent" for x in BUTTONS):
+    raise SystemExit("FAIL: all four buttons must expand equally to the resized widget content width")
+provider_text = PROVIDER.read_text(encoding="utf-8")
+for marker in ("onAppWidgetOptionsChanged", "OPTION_APPWIDGET_MIN_WIDTH", "OPTION_APPWIDGET_MIN_HEIGHT", "responsiveBodySize"):
+    if marker not in provider_text:
+        raise SystemExit("FAIL: widget resize adaptation missing: " + marker)
+print("PASS: four equal full-content-width 48dp buttons, centered Diary title/date, responsive text/padding, user-resizable widget, raised 3D face, isolated pressed state, and independent tap routing.")
