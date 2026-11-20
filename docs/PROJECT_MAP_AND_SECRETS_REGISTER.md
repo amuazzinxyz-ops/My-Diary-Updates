@@ -4909,3 +4909,10 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Web publisher completed automatically after the merge and published **Web Update 361**. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `98ef6644c15d7ddb0c882457c35c047ae0201db2` (575,821 bytes). Live `latest.json` advertises webVersion 361 and web SHA-256 `5375f435a2728c0bc0af7767535b859d030133ab1d56df553e781ff103cf8785`.
 - Static source checks passed: 14px override present; 15px override absent; button is created before its append; Widget Settings append is immediately after World Clock append; source and published mirror match exactly. APK remains **1.0.195 / versionCode 194**; no APK rebuild or reinstall is required for this web-only change.
 - Physical-phone confirmation of the 14px size and exact on-screen position remains pending. Do not claim device-side PASS until user confirms.
+
+# Physical-device verification — Calendar + Smart Reminder backup/restore (Web Update 362, 2026-11-20)
+
+- User confirmed the Web Update 362 backup/restore test on their Android phone: **“Ha huwa barabar”** (both test records restored correctly).
+- Test covered one Personal Calendar entry and one Smart Reminder entry: create both, export `Diary-My-Notes-Backup.json`, then restore it without clearing app data or uninstalling. User confirmed the result was correct.
+- **Device-side status: PASS (user-confirmed).** This closes the previously pending physical-phone verification for the Web Update 362 Calendar + Smart Reminder backup/restore change.
+- No additional source-code change, APK rebuild, or app-data operation was performed for this verification. Web Update remains **362**; APK remains **1.0.195 / versionCode 194**.
