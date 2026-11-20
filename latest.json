@@ -7,8 +7,8 @@
   "sha256": "d76b5d9d0c8620033c97a6739c2ff37ce98bceda5aad8abd2d20d5fda11786cf",
   "releaseNotes": "My Diary 1.0.203: Home Screen widget content/background now ends after the selected shortcuts: two visible buttons use two-button height; four visible buttons expand to four-button height. Left–Right and Upper–Neeche resizing, four independent shortcuts, and individual 3D press feedback are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 366,
+  "webVersion": 367,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "c21da4af5ab579539e9870fffa5444344059f9ad3ae806e7d5ea2852fa13195f",
+  "webSha256": "7998038e198d8a389c0d62bc6127df0f1955be5549d9e170c31b7febe22fa554",
   "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }

@@ -2860,9 +2860,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      }
      if(kind==='kharcha'){
       card.appendChild(mfEl('p',{},(record.incomeAmount!==undefined?'Raqam: ₹'+Number(record.incomeAmount||0).toFixed(2)+' • Kharcha: ₹'+Number(record.expenseAmount||0).toFixed(2):(record.flow==='income'?'+ ':'− ')+'₹'+Number(record.amount||0).toFixed(2))+(record.category?' • '+record.category:'')+(record.details?' • '+record.details:'')));
-      var edit=mfEl('button',{type:'button',class:'diary-me-feature-edit'},'✏️ '+mf('edit'));
-      edit.addEventListener('click',function(){var form=meFeatureContent.querySelector('.diary-me-feature-form');if(!form)return;form._editingRecord=record;form.querySelector('[name="date"]').value=record.date||meFeatureToday();form.querySelector('[name="amount"]').value=record.incomeAmount!==undefined?record.incomeAmount:(record.flow==='income'?record.amount:0);form.querySelector('[name="expenseAmount"]').value=record.expenseAmount!==undefined?record.expenseAmount:(record.flow==='income'?0:record.amount||0);form.querySelector('[name="category"]').value=record.category||'';form.querySelector('[name="details"]').value=record.details||'';form.querySelector('button[type="submit"]').textContent=mf('save');meFeatureStatus.textContent='';form.scrollIntoView({behavior:'smooth',block:'start'});});
-      card.appendChild(edit);
+      var kharchaEdit=mfEl('button',{type:'button',class:'diary-me-feature-edit'},'✏️ '+mf('edit'));
+      kharchaEdit.addEventListener('click',function(){var form=meFeatureContent.querySelector('.diary-me-feature-form');if(!form)return;form._editingRecord=record;form.querySelector('[name="date"]').value=record.date||meFeatureToday();form.querySelector('[name="amount"]').value=record.incomeAmount!==undefined?record.incomeAmount:(record.flow==='income'?record.amount:0);form.querySelector('[name="expenseAmount"]').value=record.expenseAmount!==undefined?record.expenseAmount:(record.flow==='income'?0:record.amount||0);form.querySelector('[name="category"]').value=record.category||'';form.querySelector('[name="details"]').value=record.details||'';form.querySelector('button[type="submit"]').textContent=mf('save');meFeatureStatus.textContent='';form.scrollIntoView({behavior:'smooth',block:'start'});});
      }
      if(kind==='memories'&&record.details)card.appendChild(mfEl('p',{},record.details));
      if(record.fileBlob){
@@ -2933,9 +2932,11 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      }
      var del=mfEl('button',{type:'button',class:'diary-me-feature-delete'},'🗑️ '+mf('remove'));
      del.addEventListener('click',function(){if(!window.confirm(mf('confirmDelete')))return;meFeatureDelete(record.id).then(function(){if(kind==='reminders'&&window.DiaryAppActions&&typeof window.DiaryAppActions.cancelReminder==='function')window.DiaryAppActions.cancelReminder(record.id);if(kind==='calendar')calendarCancelAlarms(record);renderMeFeatureList(kind);}).catch(function(){meFeatureStatus.textContent=mf('failed');});});
-     if(kind==='documents'||kind==='memories'){
+     if(kind==='documents'||kind==='memories'||kind==='kharcha'){
       var recordActions=mfEl('div',{class:'diary-me-feature-record-actions'});
-      recordActions.append(entryNameEdit,del);card.appendChild(recordActions);
+      if(kind==='kharcha')recordActions.append(kharchaEdit,del);
+      else recordActions.append(entryNameEdit,del);
+      card.appendChild(recordActions);
      }else card.appendChild(del);
      if(kind==='calendar'||kind==='reminders'){
       var recordHoldTimer=null,recordHoldTriggered=false,recordHoldStart=null;
