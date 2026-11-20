@@ -1,3 +1,18 @@
+# My Diary Home Screen Widget — visible height follows selected button count (2026-11-20; published)
+
+- User requirement: two selected/displayed shortcuts => visible widget panel/background ends after two buttons; four selected/displayed shortcuts => panel expands to fit four buttons; no blank panel below the last visible button.
+- Root cause: native RemoteViews root `widgetRoot` had `android:layout_height="match_parent"`, filling the launcher's resized height even when shortcut rows were hidden.
+- Fix on main: root height changed to `wrap_content`; shortcut rows, independent 48dp touch targets, button selection, text sizing, horizontal/vertical resizing, colors, 3D styling, and tap routing preserved.
+- Fail-closed checks added in generator, polish script, and workflow. Workflow also builds native version **1.0.203 / versionCode 202**.
+- Backup branch: `backup/before-widget-content-height-fit-2026-11-20`. PR #305 merged successfully. Merge SHA reported: `28c1aa50179db6be03755683758678ae7d6ef7f5`.
+- Build-trigger commit: `ccb2484ea5e81d002c33f77ea8a86b9372fc33fb`.
+- Live `latest.json` re-fetched from main and confirms published version **1.0.203 / 202**, package `com.personal.diaryapp`, APK URL `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk`, SHA-256 `d76b5d9d0c8620033c97a6739c2ff37ce98bceda5aad8abd2d20d5fda11786cf`.
+- Publication gate in the workflow requires signing readiness, successful release build, and matching previously supplied signing-certificate fingerprint before updating `latest.json`; the live feed advancing to 202/1.0.203 therefore confirms the signed release passed that gate and was published.
+- Physical phone/launcher visual test remains pending. The outer allocated widget frame is still controlled by Android launcher; this change makes the visible panel content/background wrap the selected button rows.
+- APK delivery remains through **My Diary → Me → Check for Updates**; do not send a direct APK unless explicitly requested. No Diary notes/data/photos/PIN/lock/reminder features were intentionally changed.
+
+---
+
 # My Diary Home Screen Widget — visible height follows selected button count (2026-11-20; build pending)
 
 - User clarified the exact behavior: if only two shortcuts are selected/displayed, the visible widget panel/background must end immediately after those two buttons; if four are displayed, it must extend to fit all four. No unused blank panel area below the last visible button.
