@@ -521,6 +521,8 @@ if not any(node.get(ANDROID_NS + "resource") == "@xml/diary_home_widget_info" fo
     raise SystemExit("FAIL: My Diary widget provider metadata missing")
 if not (res / "layout/diary_home_widget.xml").is_file() or not provider_path.is_file():
     raise SystemExit("FAIL: My Diary widget layout/provider source missing")
+if 'android:minHeight="300dp"' not in widget_info:
+    raise SystemExit("FAIL: widget minimum height must fit all four 48dp shortcut rows")
 if "getHomeWidgetSettings()" not in KOTLIN_PATH.read_text(encoding="utf-8") or "window.__diaryOpenWidgetTargetFromAndroid=function(target)" not in HTML_PATH.read_text(encoding="utf-8"):
     raise SystemExit("FAIL: My Diary widget settings bridge or destination handler missing")
 print("PASS: native AppWidgetProvider, manifest receiver, RemoteViews layout, selectable options, and tap destinations verified.")
