@@ -1,3 +1,15 @@
+# My Diary Home Screen Widget — preserve original size and fix shortcut destination routing (APK 1.0.198 build pending, 2026-11-20)
+
+- User explicitly instructed: keep the widget size exactly as it was and make the buttons work correctly. Restored the original AppWidget provider minimum height to **230dp**; retained each of the four independent full-width **48dp** clickable shortcut wrappers and unique PendingIntent request codes. No 300dp size increase.
+- Fixed the actual destination-loss bug: widget taps for Personal Calendar or Smart Reminder were discarded when the Diary master PIN screen appeared. The selected destination is now held until Diary unlock completes and then opens the requested section. The same continuation is wired after PIN, Pattern, and Fingerprint unlock. My Diary and New Note continue to open the Diary's default new-note view.
+- Updated generator guards to require 230dp, all four native targets, the pending destination bridge, and all unlock-resume paths. Web source and mirror are kept byte-identical.
+- Backup branch: `backup/before-widget-button-routing-fix-2026-11-20`. Working branch: `fix/widget-button-routing-keep-size-2026-11-20`. Changes staged in this branch: widget generator, `web-source/index.html`, `diary-web/index.html`, release workflow, and this register.
+- Next release must be **1.0.198 / versionCode 197** so Check for Update recognizes it above live 1.0.197 / code 196. Build and device testing are pending; no APK is claimed built or tested yet.
+- User also asked to delete the two recent APK versions 1.0.196 and 1.0.197. Available GitHub actions in this workspace do not expose workflow-artifact deletion; do not claim those historical candidate artifacts were deleted. The next verified publication will replace the single live `My-Diary.apk` and advance `latest.json`; no APK/feed file was manually removed.
+- No Diary data, notes, photos, locks, PINs, reminder settings, or unrelated app features were intentionally changed.
+
+---
+
 # My Diary Home Screen Widget — minimum height / shortcut hit-area correction (APK 1.0.197 build pending, 2026-11-20)
 
 - User reported that the Home Screen widget shortcut touch behaviour was still incorrect. Inspection found a concrete layout mismatch: the AppWidget provider advertised `android:minHeight="230dp"`, while the vertical content requires more height for the title, date, and four separate 48dp shortcut rows plus spacing and padding. This could cause the launcher to clip or compress the widget content and its touch regions.
