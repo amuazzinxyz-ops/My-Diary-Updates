@@ -1,3 +1,16 @@
+# Home Screen widget — label-sized 3D buttons and isolated tap feedback (APK 1.0.199 / versionCode 198, 2026-11-20)
+
+- User requested that the Home Screen widget buttons size themselves according to their names, look raised with a 3D effect, and that tapping one button must not move or disturb the whole widget.
+- Updated the native widget generator so each of the four independent shortcut buttons uses wrap-content width based on its own label while retaining a 48dp touch height. Labels remain non-clickable children; each wrapper owns its own PendingIntent.
+- Added a raised layered purple/gold 3D button face and a darker individual pressed-state drawable. The widget root remains non-clickable, non-focusable and now explicitly non-long-clickable; the button wrappers remain separate tap targets and no tap animation is applied to the widget container.
+- Preserved the existing widget minimum height 230dp, existing launcher-resizable behavior, four shortcut names/destinations, settings, and all Diary data/features. The widget's overall size is not enlarged.
+- Backup branch: backup/before-widget-label-size-3d-tap-feedback-2026-11-20. Working branch: fix/widget-label-width-3d-isolated-tap-2026-11-20.
+- Added build-time guards for text-based widths, 48dp hit heights, pressed-state styling, root tap/long-press isolation, and the original 230dp minimum height.
+- Planned release: My Diary 1.0.199 / versionCode 198. Delivery must remain through Me → Check for Updates only; do not send or offer an APK unless the user explicitly asks.
+- Physical-device verification remains pending: user must confirm each button has its own label-based width and 3D pressed effect, and that tapping a button does not shift the full widget.
+
+---
+
 # Permanent APK delivery rule — Check for Update only (2026-11-20)
 
 - User instruction: **Do not provide or send an APK proactively.** Provide an APK only if the user explicitly asks for one.
