@@ -1,4 +1,4 @@
-# Approved release build: publish signed Diary 1.0.204/203 with ten selectable Home Screen shortcuts.
+# Approved release build: publish signed Diary 1.0.205/204 with uniquely routed ten selectable Home Screen shortcuts.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -420,7 +420,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved Diary release version 1.0.204 (versionCode 203)
+      - name: Set approved Diary release version 1.0.205 (versionCode 204)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
@@ -428,12 +428,12 @@ jobs:
           from pathlib import Path
           p = Path("app/build.gradle.kts")
           s = p.read_text(encoding="utf-8")
-          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 203', s, count=1)
-          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.204"', s, count=1)
+          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 204', s, count=1)
+          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.205"', s, count=1)
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary release versionName=1.0.204, versionCode=203")
+          print("Set Diary release versionName=1.0.205, versionCode=204")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -455,10 +455,10 @@ jobs:
           name = one(r'versionName\s*=\s*"([^"]+)"', "versionName")
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
-          if code != 203 or name != "1.0.204":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.204/203, found {name}/{code}")
+          if code != 204 or name != "1.0.205":
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.205/204, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if feed_version != (202, "1.0.203"):
+          if feed_version != (203, "1.0.204"):
               raise SystemExit(f"BLOCKED: update feed is neither the installed baseline nor the exact new release: {feed_version}")
           print(f"PASS: package={package}, release={name}/{code}; feed state is approved: {feed_version}")
           PY
@@ -584,7 +584,7 @@ jobs:
           echo "Release APK certificate matches the previously supplied SHA-256 fingerprint."
           rm -f app/diary-release.jks
 
-      - name: Publish verified Diary update 1.0.203 after release verification PASS
+      - name: Publish verified Diary update 1.0.205 after release verification PASS
         if: env.DIARY_RELEASE_READY == 'true'
         shell: bash
         run: |
@@ -593,7 +593,7 @@ jobs:
           test -s "$APK"
           SHA256="$(sha256sum "$APK" | awk '{print $1}')"
           cp "$APK" /tmp/My-Diary-verified.apk
-          printf '1.0.204\n203\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.205\n204\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -f -B diary-publish-main origin/main
           python3 - <<'PY'
@@ -601,7 +601,7 @@ jobs:
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if meta.get("packageName") != "com.personal.diaryapp" or feed_version != (202, "1.0.203"):
+          if meta.get("packageName") != "com.personal.diaryapp" or feed_version != (203, "1.0.204"):
               raise SystemExit(f"BLOCKED: live main feed is neither the installed baseline nor the exact new release: {feed_version}")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
@@ -610,17 +610,17 @@ jobs:
           meta["versionCode"] = int(lines[1])
           meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk"
           meta["sha256"] = lines[2]
-          meta["releaseNotes"] = "My Diary 1.0.204: Home Screen Widget Settings now offers ten independently selectable shortcuts: My Diary, Personal Calendar, Smart Reminder, New Note, My Kharcha, My Documents, My Memories, Private Locker, Favourite Notes, and World Clock. The widget shows exactly the selected shortcuts; the date can be toggled separately. Existing purple/gold raised 3D buttons, individual press feedback, responsive content height, and Left–Right plus Upper–Neeche resizing are preserved."
+          meta["releaseNotes"] = "My Diary 1.0.205: Fixes Home Screen Widget shortcut routing by assigning each button a unique Android PendingIntent action and widget/slot/target URI. Private Locker, Favourite Notes, and World Clock now have isolated tap identities; the other seven shortcuts, selected-button layout, date toggle, 3D feedback, and resize behavior are preserved."
           meta["webSha256"] = hashlib.sha256(Path("web-source/index.html").read_bytes()).hexdigest()
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           cp /tmp/My-Diary-verified.apk My-Diary.apk
-          cp /tmp/My-Diary-verified.apk My-Diary-1.0.204.apk
+          cp /tmp/My-Diary-verified.apk My-Diary-1.0.205.apk
           python3 -m json.tool latest.json >/dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add My-Diary.apk My-Diary-1.0.204.apk latest.json
-          git commit -m "Publish My Diary update 1.0.203"
+          git add My-Diary.apk My-Diary-1.0.205.apk latest.json
+          git commit -m "Publish My Diary update 1.0.205"
           git push origin HEAD:main
       - name: Upload unsigned Release APK for private owner-side signing
         if: env.DIARY_RELEASE_READY != 'true'
@@ -635,7 +635,7 @@ jobs:
         if: env.DIARY_RELEASE_READY == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: My-Diary-1.0.204-signed-test-candidate
+          name: My-Diary-1.0.205-signed-test-candidate
           path: diary-project/app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
           retention-days: 30
@@ -651,7 +651,7 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: My-Diary-1.0.204-debug-test-candidate
+          name: My-Diary-1.0.205-debug-test-candidate
           path: diary-project/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
