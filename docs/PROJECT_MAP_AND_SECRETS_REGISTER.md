@@ -1,3 +1,12 @@
+# Permanent APK delivery rule — Check for Update only (2026-11-20)
+
+- User instruction: **Do not provide or send an APK proactively.** Provide an APK only if the user explicitly asks for one.
+- All normal app updates must be published through the existing in-app **Me → Check for Updates** flow. The installed app must detect and receive the new release from the live update feed; do not substitute a manually supplied APK download.
+- Before publishing any future change, verify that the live update metadata/version is advanced appropriately and that the in-app Check for Update path will detect the update. Prefer web-only publication when the change does not require native Android code; do not rebuild or distribute an APK unnecessarily.
+- This is a permanent delivery preference and applies to all future My Diary work unless the user explicitly changes it.
+
+---
+
 # My Diary Home Screen Widget — original size and shortcut routing fixed; APK 1.0.198 published (2026-11-20)
 
 - User explicitly instructed: keep the widget size exactly as it was and make the buttons work correctly. Restored the original AppWidget provider minimum height to **230dp**; retained each of the four independent full-width **48dp** clickable shortcut wrappers and unique PendingIntent request codes. No 300dp size increase.
