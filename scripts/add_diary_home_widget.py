@@ -135,7 +135,7 @@ widget_launcher = r"""
   try{
    if(localStorage.getItem(DIARY_MASTER_PIN_KEY)){openOverlay();return;}
    openOverlay();
-   if(target==='calendar'||target==='reminders'){
+   if(['calendar','reminders','kharcha','documents','memories','private-locker','favourite-notes','world-clock'].indexOf(target)>=0){
     var tries=0;
     (function waitForDiaryOverlay(){
      if(typeof window.__diaryOpenWidgetTarget==='function'){window.__diaryOpenWidgetTarget(target);return;}
