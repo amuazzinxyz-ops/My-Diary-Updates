@@ -450,7 +450,7 @@ jobs:
           name = one(r'versionName\s*=\s*"([^"]+)"', "versionName")
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
-          if code != 199 or name != "1.0.201":
+          if code != 200 or name != "1.0.201":
               raise SystemExit(f"BLOCKED: expected approved APK version 1.0.201/200, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
           if feed_version not in ((199, "1.0.200"),):
@@ -588,7 +588,7 @@ jobs:
           test -s "$APK"
           SHA256="$(sha256sum "$APK" | awk '{print $1}')"
           cp "$APK" /tmp/My-Diary-verified.apk
-          printf '1.0.201\n199\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.201\n200\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -f -B diary-publish-main origin/main
           python3 - <<'PY'
