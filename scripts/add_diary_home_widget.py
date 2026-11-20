@@ -298,7 +298,8 @@ class DiaryHomeWidgetProvider : AppWidgetProvider() {
             val views = RemoteViews(context.packageName, R.layout.diary_home_widget)
             val options = manager.getAppWidgetOptions(widgetId)
             val availableWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 180)
-            val showDate = prefs.getBoolean("showDate", true)
+            val availableHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 280)
+            val showDate = prefs.getBoolean("showDate", true) && availableHeight >= 280
             var showDiary = prefs.getBoolean("showDiary", true)
             val showCalendar = prefs.getBoolean("showCalendar", true)
             val showReminder = prefs.getBoolean("showReminder", true)
@@ -322,7 +323,7 @@ class DiaryHomeWidgetProvider : AppWidgetProvider() {
                 .forEach { views.setTextViewTextSize(it, TypedValue.COMPLEX_UNIT_SP, responsiveBodySize) }
             val density = context.resources.displayMetrics.density
             val horizontalPadding = (if (availableWidth < 180) 6 * density else 10 * density).toInt()
-            val verticalPadding = (10 * density).toInt()
+            val verticalPadding = (if (availableHeight < 280) 6 * density else 10 * density).toInt()
             views.setViewPadding(R.id.widgetRoot, horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
 
             setTarget(context, views, widgetId, R.id.widgetDiaryButtonHit, 1, "diary")
@@ -488,9 +489,10 @@ widget_info = r'''<?xml version="1.0" encoding="utf-8"?>
     android:minWidth="180dp"
     android:minHeight="280dp"
     android:minResizeWidth="150dp"
+    android:minResizeHeight="260dp"
     android:updatePeriodMillis="1800000"
     android:initialLayout="@layout/diary_home_widget"
-    android:resizeMode="horizontal"
+    android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen"
     android:label="My Diary" />
 '''
@@ -536,8 +538,8 @@ if not any(node.get(ANDROID_NS + "resource") == "@xml/diary_home_widget_info" fo
 if not (res / "layout/diary_home_widget.xml").is_file() or not provider_path.is_file():
     raise SystemExit("FAIL: My Diary widget layout/provider source missing")
 if ('android:minHeight="280dp"' not in widget_info or 'android:minResizeWidth="150dp"' not in widget_info
-        or 'android:resizeMode="horizontal"' not in widget_info or 'minResizeHeight' in widget_info):
-    raise SystemExit("FAIL: horizontal-only widget resize dimensions are incomplete")
+        or 'android:minResizeHeight="260dp"' not in widget_info or 'android:resizeMode="horizontal|vertical"' not in widget_info):
+    raise SystemExit("FAIL: two-axis widget resize dimensions are incomplete")
 if "getHomeWidgetSettings()" not in KOTLIN_PATH.read_text(encoding="utf-8") or "window.__diaryOpenWidgetTargetFromAndroid=function(target)" not in HTML_PATH.read_text(encoding="utf-8"):
     raise SystemExit("FAIL: My Diary widget settings bridge or destination handler missing")
 widget_html_check = HTML_PATH.read_text(encoding="utf-8")
@@ -551,8 +553,8 @@ for required in (
 if widget_html_check.count("diaryFinishPendingWidgetTarget();") != 5:
     raise SystemExit("FAIL: widget destination must resume after app open, PIN, Pattern, and Fingerprint unlock")
 if ('android:minHeight="280dp"' not in widget_info or 'android:minResizeWidth="150dp"' not in widget_info
-        or 'android:resizeMode="horizontal"' not in widget_info or 'minResizeHeight' in widget_info):
-    raise SystemExit("FAIL: horizontal-only widget resize dimensions are incomplete")
+        or 'android:minResizeHeight="260dp"' not in widget_info or 'android:resizeMode="horizontal|vertical"' not in widget_info):
+    raise SystemExit("FAIL: two-axis widget resize dimensions are incomplete")
 for target in ('"diary"', '"calendar"', '"reminders"', '"new-note"'):
     if target not in provider_path.read_text(encoding="utf-8"):
         raise SystemExit("FAIL: missing native widget shortcut target " + target)
