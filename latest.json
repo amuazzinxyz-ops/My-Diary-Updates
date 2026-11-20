@@ -5,7 +5,7 @@
   "versionName": "1.0.201",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
   "sha256": "5133cf43c0528683cb3701a1c24da501df94e1bde3cf591f2ccdb34eb971fc63",
-  "releaseNotes": "My Diary 1.0.201: Home Screen widget buttons now expand equally to the available widget width. The widget can be resized from the Home Screen, and text, date visibility and padding adapt to the available dimensions. Individual 3D press feedback and all four independent shortcuts are preserved.",
+  "releaseNotes": "My Diary 1.0.201: Home Screen widget buttons expand equally to the available width. The widget can be resized left-right only; text size and side padding adapt to its width. Vertical resizing is disabled. Individual 3D press feedback and all four independent shortcuts are preserved.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 364,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
