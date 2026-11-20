@@ -1,3 +1,17 @@
+# My Documents and My Memories — editable saved-entry names (Web Update 365, 2026-11-20)
+
+- User requested an **Edit** option for the displayed name of any saved image or entry in both **My Documents** and **My Memories**.
+- Added a per-entry **✏️ Edit** button to every Documents and Memories card. It opens the existing form with that record loaded and saves against the same record ID, so the entry is updated rather than duplicated.
+- **My Documents:** the existing file chooser is temporarily optional while editing the name, so the user does not need to select/re-upload the same file. Its required state is restored after a successful save. Existing file Blob, MIME type, original stored filename, and document date are preserved.
+- **My Memories:** the existing date and details are loaded back into the form before editing the name; the saved photo/file Blob, MIME type, and original filename remain unchanged. The edited title is also shown in the entry's Open link label.
+- The change is web-only. No APK/native source, package identity, signing, database/storage keys, saved attachments, PINs, locks, reminders, or unrelated Diary features were changed.
+- Pre-edit source backup branch: `backup/before-documents-memories-entry-name-edit-2026-11-20`. Source working branch: `fix/documents-memories-entry-name-edit-2026-11-20`. PR **#306** merged successfully; merge commit: `2ee4ffa038b7dbae43842dc5c99161496cea96b0`.
+- Web publisher commit: `036a28c706d711b60356af48e01d837e26b86f40`. Re-fetched `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `266a892db25b2731cb39cefcba6820e7041f7f0d` (578,905 bytes). Live `latest.json` confirms **webVersion 365** and web SHA-256 `67a3ddbdecc115759b858a9ce3599eee017926955e065a1baa8299ed894c45dc`.
+- APK remains **1.0.203 / versionCode 202**, package `com.personal.diaryapp`; APK SHA-256 remains `d76b5d9d0c8620033c97a6739c2ff37ce98bceda5aad8abd2d20d5fda11786cf`. No APK rebuild was required. Delivery remains **Me → Check for Updates only**; do not send an APK unless the user explicitly asks.
+- Physical-phone confirmation of the new Edit buttons and rename/save behavior is **pending**. Do not claim device-side PASS until the user confirms it.
+
+---
+
 # Final widget update status — visible height 1.0.203 published; resize handle request closed (2026-11-20)
 
 - User confirmed the visible widget-height update is the intended completed work: **APK 1.0.203 / versionCode 202 is published** and available through **Me → Check for Updates**.
