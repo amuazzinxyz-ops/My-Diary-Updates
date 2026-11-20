@@ -5009,3 +5009,13 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - No APK was published and no user app data or installed app was changed by this failed run.
 - Corrective workflow change: after published HTML is copied into the extracted Android project and scripts/add_diary_app_actions.py installs the native app bridge, run scripts/add_diary_home_widget.py to generate the widget layout/provider/manifest and bridge; then run scripts/polish_diary_home_widget.py to apply label-sized 3D styling and individual pressed feedback.
 - New backup branch: backup/before-widget-generator-order-fix-2026-11-20. Corrective working branch: fix/widget-generator-order-before-polish-2026-11-20. Rebuild and publication remain pending; do not mark the task complete until the corrected workflow passes.
+---
+
+# My Diary Home Screen Widget — label-sized 3D buttons published (1.0.199 / versionCode 198, 2026-11-20)
+
+- Corrected build run **44744106612** (workflow run 407) after the first attempt exposed that the source ZIP is a base Android project and native widget files must be generated before visual polish. The corrected order runs scripts/add_diary_home_widget.py after the native app bridge setup, then scripts/polish_diary_home_widget.py.
+- Generator and visual guards passed; the widget root remains non-clickable/non-focusable. The four shortcut wrappers remain independent 48dp hit areas and their widths wrap to their own label plus 16dp horizontal padding. Normal state uses a raised 3D shadow/face; pressed state changes only that individual button to a darker flat face.
+- Original outer widget minimum size preserved at **180dp width × 230dp height**. Existing independent destinations/PendingIntents are retained. No Diary records, photos, PINs, locks, or unrelated features were intentionally changed.
+- Debug build succeeded; signed Release APK built; signing certificate verification passed; publication and artifact uploads passed. Run **44744106612** published the live feed. `latest.json` was re-fetched from main and confirms **1.0.199 / versionCode 198**, APK SHA-256 `aa3aee82196d79f9e4990c6f10b26859456c569f37666081dece82ae586cfdf3`.
+- Release notes in the live feed confirm the requested label-sized buttons, raised 3D look, and pressed effect limited to the tapped button. Delivery remains **Me → Check for Updates only**; do not send an APK unless the user explicitly asks.
+- **Phone-side verification is pending**: user must update through Check for Updates and visually/tactually test all four shortcuts, confirming that only the tapped button changes and the overall widget does not shift. Do not claim device-side PASS before the user's confirmation.
