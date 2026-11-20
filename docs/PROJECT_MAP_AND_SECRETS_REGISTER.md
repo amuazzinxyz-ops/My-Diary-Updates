@@ -1,9 +1,14 @@
-# My Diary Backup/Restore — Private Locker scope fix (Web Update 369)
+# My Diary Backup/Restore — safe Private Locker merge into existing Locker (Web Update 370, 2026-11-21)
 
-- User testing Web Update 368 found `Backup nahi bana: privateLockerSnapshotForBackup is not defined`.
-- Root cause: Private Locker database helpers were declared in the Locker UI scope, while Notes Backup/Restore ran in a separate scope. Added a narrow `window.diaryPrivateLockerBackupAPI` bridge for snapshot, validation, and restore; no Locker encryption, Notes format, or saved data logic was changed.
-- Updated `web-source/index.html`, kept `diary-web/index.html` byte-identical, and set `latest.json` to webVersion 369 with the matching SHA-256. APK remains 1.0.203; no APK/native code changed.
-- Static source/reference checks passed; physical-device Backup/Restore retest is still pending user confirmation.
+- User reported that restoring the Notes backup displayed: `Private Locker: pehle se data tha, isliye existing Locker safe rakha gaya`; the backup's Private Locker entries were not restored because the destination Locker was non-empty.
+- Implemented a narrow, fail-safe merge in `web-source/index.html`: when a destination Locker already contains data, encrypted backup entries are merged only if the existing `meta/config` record exactly matches the backup's `meta/config`. This preserves the same wrapped encryption-key/security configuration and avoids mixing unrelated Locker keys.
+- Merge is ID-safe: already-present entry IDs are never overwritten; only missing encrypted entry IDs are inserted. Existing metadata/config is never overwritten; only missing metadata IDs are added. Empty Locker restore continues to work as before.
+- If either config is missing or the two config records differ, the Locker restore is skipped and the status explains that the backup security key/config differs; the existing Locker remains untouched. This is intentional protection, not a silent overwrite.
+- Updated restore status text to distinguish successful merge from a security-config mismatch. No PIN, encryption algorithm, unlock/recovery/biometric flow, Notes, My Kharcha, native Android code, or APK was changed.
+- Exact pre-edit backup branch: `backup/before-private-locker-safe-merge-2026-11-21`. Working branch: `fix/private-locker-safe-merge-2026-11-21`. PR #318 merged successfully as `e2acf523601aa77b1ea09f285a14565d8afc1eec`. The PR changed only `web-source/index.html`.
+- Both embedded JavaScript blocks passed syntax parsing after merge. Re-fetched `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `13cbfe24e29f44b46790dafee0539b314a55d7f4` (585266 characters). The publisher calculated web SHA-256 `036b4d53cfa2b645f8429e35a383fc40637dea878f90385b6cdad251d997be78`, now advertised in live `latest.json`.
+- Live `latest.json` confirms webVersion **370**. APK remains **1.0.203 / versionCode 202**, SHA-256 `d76b5d9d0c8620033c97a6739c2ff37ce98bceda5aad8abd2d20d5fda11786cf`; no APK was built or changed. Delivery is through **Me → Check for Updates**.
+- Physical-phone restore test remains pending user confirmation. Do not claim device-side PASS until the user restores a backup on the phone and confirms the Locker entries are present.
 
 ---
 
