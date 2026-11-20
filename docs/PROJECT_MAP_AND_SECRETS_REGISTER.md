@@ -5,7 +5,9 @@
 - Restored height-aware widget rendering: the provider reads `OPTION_APPWIDGET_MIN_HEIGHT`, hides the date only when the resized height is below 280dp, and reduces vertical outer padding at smaller heights. Width-responsive text and side padding, equal-width buttons, 3D press feedback, and independent shortcuts remain intact.
 - Updated the generator guard, polish guard, and release-workflow guard to require both resize directions and verify both minimum resize bounds.
 - Backup branch: `backup/before-widget-two-axis-resize-2026-11-20`. Working branch: `fix/widget-two-axis-resize-2026-11-20`.
-- Release target remains **1.0.201 / versionCode 200**. Build, signing, feed publication, and phone-side launcher resize testing are pending. Live feed remains at **1.0.200 / versionCode 199** until every release verification passes. Delivery remains **Me → Check for Updates only**; do not send a direct APK.
+- GitHub Actions build run `44756334025` completed successfully. Debug/release builds, signing fingerprint match, APK signature verification, signed APK upload and APK publication passed. Published **1.0.201 / versionCode 200**; feed SHA-256: `c96cb4615db0040b00f659f22f4f1003243287c0875117ee190d74aaf4b54509`.
+- The workflow initially wrote stale horizontal-only release notes. Corrected `latest.json` in commit `e06a21a26e5d418bf4a92fee3663231a3e60f902` to accurately state two-axis resizing. The workflow's hardcoded release-note template remains to be corrected safely in a future workflow maintenance change; do not reuse its old horizontal-only wording.
+- Phone-side launcher resize test is still pending; do not claim device verification. Delivery remains **Me → Check for Updates only**; do not send a direct APK.
 - No Diary data, notes, photos, PINs, locks, reminders, or unrelated features are intentionally changed.
 
 ---
