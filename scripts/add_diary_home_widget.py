@@ -354,6 +354,7 @@ res = APP / "src/main/res"
 (res / "layout").mkdir(parents=True, exist_ok=True)
 (res / "drawable").mkdir(parents=True, exist_ok=True)
 (res / "xml").mkdir(parents=True, exist_ok=True)
+# Keep the visible widget panel compact: wrap only the selected shortcut rows.
 layout = r'''<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widgetRoot"
