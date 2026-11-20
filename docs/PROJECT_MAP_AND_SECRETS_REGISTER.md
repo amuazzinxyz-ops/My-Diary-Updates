@@ -1,3 +1,16 @@
+# Widget shortcut routing correction — published APK 1.0.205 / versionCode 204 (2026-11-21)
+
+- User reported that tapping **Private Locker**, **Favourite Notes**, or **World Clock** on the 1.0.204 Home Screen widget opened **My Memories**; the other shortcuts worked.
+- Inspected the published HTML route handler and native widget target list. The three destinations were present as distinct targets in source. Hardened the native PendingIntent identity for every shortcut: each now has a target-specific action (`<package>.HOME_WIDGET_TARGET.<target>`), data URI containing widget ID + slot + target, and an explicit slot extra, in addition to its existing unique request code and target extra.
+- Extended `scripts/polish_diary_home_widget.py` to fail the build if target-specific action/data identity is missing. No changes to Diary data, Memories, Locker contents, PIN/recovery, Favourite Notes data, World Clock data, widget settings, styling, or resize behavior.
+- Exact pre-edit backup branch: `backup/before-widget-route-fix-2026-11-21`. Working branch: `fix/widget-shortcut-route-identity-2026-11-21`. PR **#324** merged successfully as `a2845917f792eeca6c57cccf7be06aa6078e03b6`.
+- Build run **44809451056**: debug build PASS; signed release build PASS; release signing-certificate verification PASS; publication and artifact upload PASS.
+- Published APK: **1.0.205**, versionCode **204**, package `com.personal.diaryapp`. Live `latest.json` SHA-256: `b0a6c1ea59b48c4291f5654ee948ecb77bda1f271050606611ddf608fbd6e196`. Independently downloaded signed build artifact and confirmed its APK SHA-256 matches the live feed. Compiled DEX contains the target-specific action/data markers. Embedded HTML SHA-256 remains the previously published Web Update 371 hash `66482da0fcfd67a393c62542f58639bd55918ff977462066e1ff0df6466a9a45`; web-source and diary-web mirror remain byte-identical.
+- Delivery: **My Diary → Me → Check for Updates** only. Do not send a direct APK link unless the user explicitly asks.
+- Physical phone verification of Private Locker, Favourite Notes, and World Clock taps on 1.0.205 is **pending user confirmation**. Do not claim device-side PASS until user tests all three.
+
+---
+
 # My Diary Home Screen Widget — ten selectable shortcuts published (APK 1.0.204 / versionCode 203, 2026-11-21)
 
 - User approved six additional widget shortcuts: 💰 My Kharcha, 📁 My Documents, 📒 My Memories, 🔐 Private Locker, ⭐ Favourite Notes, and 🌍 World Clock.
