@@ -1,10 +1,9 @@
-# My Diary Home Screen Widget — equal button widths and centered title/date (APK 1.0.200 build pending, 2026-11-20)
+# My Diary Home Screen Widget — equal buttons and centered header (APK 1.0.200 published, 2026-11-20)
 
-- User confirmed the corrected layout: all four shortcuts must have the same width as the **Personal Calendar** button; the Diary title and date at the top must be centered above the buttons (not left-aligned); the outer widget should fit the buttons with only a small margin. The buttons remain individually clickable with independent pressed feedback.
-- Updated native widget generator and styling guard: each button is now **160dp wide × 48dp high**, centered; all labels remain centered. Diary title and date are centered. Outer widget minimum size is **180dp × 280dp**, leaving approximately 10dp side padding around the 160dp buttons and enough height for the header plus four rows.
-- Existing four PendingIntent destinations, 3D raised face, per-button pressed selector, widget settings, Diary data and other app features are preserved. No APK is being sent directly; release must arrive through **Me → Check for Updates**.
-- Backup branch: `backup/before-widget-header-alignment-2026-11-20`. Working branch: `fix/widget-equal-calendar-width-centered-header-2026-11-20`.
-- Native generator `scripts/add_diary_home_widget.py`, style/guard `scripts/polish_diary_home_widget.py`, and release workflow are updated for **1.0.200 / versionCode 199**. Build and publication status will be recorded after workflow verification. Physical launcher appearance/tap testing remains pending; do not claim device-side PASS until the user tests it.
+- Release workflow run **44747723308** completed with conclusion **success**. Debug build, signed release build, signature verification and publication completed successfully.
+- Live `latest.json` verified on main: **versionName 1.0.200**, **versionCode 199**, SHA-256 `58a9257824c53f84f8a5d9f9327b611698e45c4e8f5bf741c1026cbd8a74e1c9`. Update is available only through **Me → Check for Updates**; no APK was sent directly.
+- Release notes confirm: Diary title/date centered above four equal-width buttons, each sized to the Personal Calendar button, compact outer margin, and individual 3D press feedback with all four shortcuts preserved.
+- Source-level checks and build/publication passed. Physical phone/launcher test remains **pending**; user should install from Check for Updates and confirm appearance and that only the tapped button responds.
 
 ---
 
