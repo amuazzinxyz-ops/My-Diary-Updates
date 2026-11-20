@@ -1,3 +1,14 @@
+# My Diary Home Screen Widget — minimum height / shortcut hit-area correction (APK 1.0.197 build pending, 2026-11-20)
+
+- User reported that the Home Screen widget shortcut touch behaviour was still incorrect. Inspection found a concrete layout mismatch: the AppWidget provider advertised `android:minHeight="230dp"`, while the vertical content requires more height for the title, date, and four separate 48dp shortcut rows plus spacing and padding. This could cause the launcher to clip or compress the widget content and its touch regions.
+- Corrected only the generated AppWidget provider minimum height to **300dp**, preserving the four 48dp shortcut wrappers, all four labels, unique PendingIntents, and existing widget settings. Added a generator guard requiring the 300dp minimum so this cannot silently regress.
+- Backup branch: `backup/before-widget-minheight-fix-2026-11-20`. Working branch: `fix/widget-minheight-hit-area-2026-11-20`. PR **#294** merged to main as `e6815fecfe17b7a4d2951c1b1f06673d8f210444`.
+- Release workflow was advanced to **1.0.197 / versionCode 196**. The workflow run has not yet appeared in the Actions list at the time of this register update; do not claim APK build or publication success until a matching run completes and live `latest.json` is verified.
+- Only `scripts/add_diary_home_widget.py` and `.github/workflows/build-diary-from-zip.yml` changed in PR #294. No Diary HTML, notes, photos, PINs, locks, reminder settings, widget labels, or other app features were changed.
+- Physical launcher verification remains pending after the 1.0.197 APK is installed. Build success alone does not prove the phone's launcher hit-testing is fixed.
+
+---
+
 # My Diary Home Screen Widget — APK 1.0.196 / versionCode 195 published (2026-11-20)
 
 - Correction to the previous entry: APK **1.0.195 / versionCode 194** was the already-installed version, so it was not a newer Check for Update release. The prior register entry's wording that it was a new release was incorrect; the APK SHA recorded there belongs to that older version.
