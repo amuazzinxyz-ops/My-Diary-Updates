@@ -8,6 +8,7 @@
 - Web publisher workflow run **44791741047** completed successfully. Re-fetched `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `c80b23c6f8c84f6d589b474eadc6452636896888` (579,923 bytes). Live `latest.json` confirms **webVersion 367** and web SHA-256 `7998038e198d8a389c0d62bc6127df0f1955be5549d9e170c31b7febe22fa554`.
 - APK feed remains **1.0.203 / versionCode 202**, package `com.personal.diaryapp`, APK SHA-256 `d76b5d9d0c8620033c97a6739c2ff37ce98bceda5aad8abd2d20d5fda11786cf`. No APK rebuild or delivery is required for this web-only change. Delivery remains **Me → Check for Updates only**; do not send an APK unless the user explicitly asks.
 - Physical-phone verification of the Kharcha Edit/Delete side-by-side placement remains **pending**. Do not claim device-side PASS until the user confirms it.
+- The repository's APK workflow was automatically triggered by the same main-branch push, but run **44791740686** stopped at its pre-build integrity check because the web source and published mirror were temporarily out of sync while the web publisher was still running. It did not reach any APK build/sign/upload step. The web publisher then completed successfully and the source/mirror were re-fetched as byte-identical. Live `latest.json` still advertises the unchanged APK **1.0.203 / 202** with the same SHA-256; no APK artifact was produced or delivered.
 
 ---
 
