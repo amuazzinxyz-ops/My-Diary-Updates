@@ -1,3 +1,13 @@
+# My Diary Home Screen Widget — equal button widths and centered title/date (APK 1.0.200 build pending, 2026-11-20)
+
+- User confirmed the corrected layout: all four shortcuts must have the same width as the **Personal Calendar** button; the Diary title and date at the top must be centered above the buttons (not left-aligned); the outer widget should fit the buttons with only a small margin. The buttons remain individually clickable with independent pressed feedback.
+- Updated native widget generator and styling guard: each button is now **160dp wide × 48dp high**, centered; all labels remain centered. Diary title and date are centered. Outer widget minimum size is **180dp × 280dp**, leaving approximately 10dp side padding around the 160dp buttons and enough height for the header plus four rows.
+- Existing four PendingIntent destinations, 3D raised face, per-button pressed selector, widget settings, Diary data and other app features are preserved. No APK is being sent directly; release must arrive through **Me → Check for Updates**.
+- Backup branch: `backup/before-widget-header-alignment-2026-11-20`. Working branch: `fix/widget-equal-calendar-width-centered-header-2026-11-20`.
+- Native generator `scripts/add_diary_home_widget.py`, style/guard `scripts/polish_diary_home_widget.py`, and release workflow are updated for **1.0.200 / versionCode 199**. Build and publication status will be recorded after workflow verification. Physical launcher appearance/tap testing remains pending; do not claim device-side PASS until the user tests it.
+
+---
+
 # Permanent APK delivery rule — Check for Update only (2026-11-20)
 
 - User instruction: **Do not provide or send an APK proactively.** Provide an APK only if the user explicitly asks for one.
