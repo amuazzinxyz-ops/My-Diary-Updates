@@ -350,6 +350,7 @@ layout = r'''<?xml version="1.0" encoding="utf-8"?>
     android:orientation="vertical"
     android:clickable="false"
     android:focusable="false"
+    android:longClickable="false"
     android:padding="10dp"
     android:background="@drawable/diary_widget_bg">
     <TextView
@@ -372,7 +373,8 @@ layout = r'''<?xml version="1.0" encoding="utf-8"?>
         android:paddingBottom="7dp" />
     <FrameLayout
         android:id="@+id/widgetDiaryButtonHit"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_gravity="start"
         android:layout_height="48dp"
         android:layout_marginTop="4dp"
         android:clickable="true"
@@ -381,9 +383,13 @@ layout = r'''<?xml version="1.0" encoding="utf-8"?>
         android:background="@drawable/diary_widget_button">
         <TextView
             android:id="@+id/widgetDiaryButton"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
             android:text="📒 My Diary"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
@@ -392,7 +398,8 @@ layout = r'''<?xml version="1.0" encoding="utf-8"?>
     </FrameLayout>
     <FrameLayout
         android:id="@+id/widgetCalendarButtonHit"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_gravity="start"
         android:layout_height="48dp"
         android:layout_marginTop="4dp"
         android:clickable="true"
@@ -401,9 +408,13 @@ layout = r'''<?xml version="1.0" encoding="utf-8"?>
         android:background="@drawable/diary_widget_button">
         <TextView
             android:id="@+id/widgetCalendarButton"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
             android:text="📅 Personal Calendar"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
@@ -412,7 +423,8 @@ layout = r'''<?xml version="1.0" encoding="utf-8"?>
     </FrameLayout>
     <FrameLayout
         android:id="@+id/widgetReminderButtonHit"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_gravity="start"
         android:layout_height="48dp"
         android:layout_marginTop="4dp"
         android:clickable="true"
@@ -421,9 +433,13 @@ layout = r'''<?xml version="1.0" encoding="utf-8"?>
         android:background="@drawable/diary_widget_button">
         <TextView
             android:id="@+id/widgetReminderButton"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
             android:text="⏰ Smart Reminder"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
@@ -432,7 +448,8 @@ layout = r'''<?xml version="1.0" encoding="utf-8"?>
     </FrameLayout>
     <FrameLayout
         android:id="@+id/widgetNewNoteButtonHit"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_gravity="start"
         android:layout_height="48dp"
         android:layout_marginTop="4dp"
         android:clickable="true"
@@ -441,9 +458,13 @@ layout = r'''<?xml version="1.0" encoding="utf-8"?>
         android:background="@drawable/diary_widget_button">
         <TextView
             android:id="@+id/widgetNewNoteButton"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
             android:text="✍️ New Note"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
@@ -463,13 +484,48 @@ bg = r'''<?xml version="1.0" encoding="utf-8"?>
 '''
 (res / "drawable/diary_widget_bg.xml").write_text(bg, encoding="utf-8")
 button_bg = r'''<?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-    <gradient android:startColor="#A77BE0" android:endColor="#6330B8" android:angle="135" />
-    <corners android:radius="9dp" />
-    <stroke android:width="1dp" android:color="#D4AF37" />
-</shape>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true" android:drawable="@drawable/diary_widget_button_pressed" />
+    <item android:drawable="@drawable/diary_widget_button_raised" />
+</selector>
+'''
+button_raised = r'''<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#482078" />
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+    <item android:bottom="4dp">
+        <shape android:shape="rectangle">
+            <gradient android:startColor="#C19AF0" android:endColor="#6330B8" android:angle="135" />
+            <corners android:radius="10dp" />
+            <stroke android:width="1dp" android:color="#E8C85A" />
+        </shape>
+    </item>
+</layer-list>
+'''
+button_pressed = r'''<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#35145F" />
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+    <item android:bottom="1dp">
+        <shape android:shape="rectangle">
+            <gradient android:startColor="#8050C0" android:endColor="#4B238A" android:angle="135" />
+            <corners android:radius="10dp" />
+            <stroke android:width="1dp" android:color="#D4AF37" />
+        </shape>
+    </item>
+</layer-list>
 '''
 (res / "drawable/diary_widget_button.xml").write_text(button_bg, encoding="utf-8")
+(res / "drawable/diary_widget_button_raised.xml").write_text(button_raised, encoding="utf-8")
+(res / "drawable/diary_widget_button_pressed.xml").write_text(button_pressed, encoding="utf-8")
 # Preserve the original widget minimum size; each shortcut keeps its own 48dp hit target.
 widget_info = r'''<?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
@@ -482,6 +538,33 @@ widget_info = r'''<?xml version="1.0" encoding="utf-8"?>
     android:label="My Diary" />
 '''
 (res / "xml/diary_home_widget_info.xml").write_text(widget_info, encoding="utf-8")
+
+# Validate label-sized shortcut rows and keep all touch handling off the widget container.
+import xml.etree.ElementTree as _ET
+_layout_root = _ET.fromstring(layout)
+_android = "{http://schemas.android.com/apk/res/android}"
+if _layout_root.get(_android + "clickable") != "false" or _layout_root.get(_android + "longClickable") != "false":
+    raise SystemExit("BLOCKED: widget root must not receive clicks or long-press")
+for _hit, _label in [
+    ("widgetDiaryButtonHit", "widgetDiaryButton"),
+    ("widgetCalendarButtonHit", "widgetCalendarButton"),
+    ("widgetReminderButtonHit", "widgetReminderButton"),
+    ("widgetNewNoteButtonHit", "widgetNewNoteButton"),
+]:
+    _hit_node = _layout_root.find(".//*[@{" + _android + "}id='@+id/" + _hit + "']")
+    _label_node = _layout_root.find(".//*[@{" + _android + "}id='@+id/" + _label + "']")
+    if _hit_node is None or _label_node is None:
+        raise SystemExit("BLOCKED: widget shortcut hit target/label missing: " + _hit)
+    if _hit_node.get(_android + "layout_width") != "wrap_content" or _hit_node.get(_android + "layout_height") != "48dp":
+        raise SystemExit("BLOCKED: widget shortcut must be text-width with a 48dp touch height: " + _hit)
+    if _label_node.get(_android + "layout_width") != "wrap_content" or _label_node.get(_android + "clickable") != "false":
+        raise SystemExit("BLOCKED: widget shortcut label must wrap text and leave tap handling to its wrapper: " + _label)
+if 'android:minHeight="230dp"' not in widget_info:
+    raise SystemExit("BLOCKED: original 230dp widget minimum height changed")
+_selector = _ET.fromstring(button_bg)
+if not any(item.get(_android + "state_pressed") == "true" for item in list(_selector)):
+    raise SystemExit("BLOCKED: widget buttons lack isolated pressed-state feedback")
+print("PASS: original widget size retained; four text-width 48dp buttons have independent pressed-state 3D styling.")
 
 # 4) Register the real Android home-screen widget without changing existing receivers/providers.
 ANDROID_NS = "{http://schemas.android.com/apk/res/android}"
