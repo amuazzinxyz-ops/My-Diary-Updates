@@ -1,3 +1,14 @@
+# Permanent release and delivery rule — Check for Updates only; APK on explicit request (2026-11-21)
+
+- User's standing instruction: all My Diary updates must be published and delivered using the existing in-app path **Me → Check for Updates**, exactly as the current workflow operates.
+- Do not send, attach, link, or otherwise deliver an APK directly. **Build/create a new APK only when the user explicitly asks for an APK.** A web-only change must remain a web-only publication and must not trigger an APK build as an extra deliverable.
+- For ordinary feature fixes and UI changes, use the established Check for Updates web publication pipeline; verify the published web version/feed and source/mirror parity before reporting availability.
+- Keep the existing backup-before-edit, minimal-change, preservation, verification, and Master Register update requirements unchanged.
+- Current baseline at this instruction update: Web Update **370**; APK feed remains **1.0.203 / versionCode 202**. No APK build or APK delivery was requested or performed for this register-only instruction.
+- Exact pre-edit Register backup branch: `backup/before-check-for-updates-only-apk-on-request-2026-11-21`. Register-only working branch: `docs/check-for-updates-only-apk-on-request-2026-11-21`.
+
+---
+
 # My Diary Backup/Restore — safe Private Locker merge into existing Locker (Web Update 370, 2026-11-21)
 
 - User reported that restoring the Notes backup displayed: `Private Locker: pehle se data tha, isliye existing Locker safe rakha gaya`; the backup's Private Locker entries were not restored because the destination Locker was non-empty.
