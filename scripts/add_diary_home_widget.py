@@ -294,6 +294,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.widget.RemoteViews
 import android.view.View
 import android.util.TypedValue
@@ -367,7 +368,10 @@ class DiaryHomeWidgetProvider : AppWidgetProvider() {
 
         private fun setTarget(context: Context, views: RemoteViews, widgetId: Int, viewId: Int, slot: Int, target: String) {
             val intent = Intent(context, MainActivity::class.java).apply {
+                action = "${context.packageName}.HOME_WIDGET_TARGET.$target"
+                data = Uri.parse("mydiary-widget://$widgetId/$slot/$target")
                 putExtra("diary_widget_target", target)
+                putExtra("diary_widget_slot", slot)
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
             }
             val flags = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE

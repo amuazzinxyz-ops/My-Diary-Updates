@@ -108,6 +108,10 @@ for target in ('"diary"', '"calendar"', '"reminders"', '"new-note"', '"kharcha"'
         raise SystemExit("BLOCKED: missing independent widget destination " + target)
 if provider.count("setOnClickPendingIntent(") != 1 or "widgetId * 10 + slot" not in provider:
     raise SystemExit("BLOCKED: independent per-button PendingIntent routing changed")
+if 'import android.net.Uri' not in provider or 'action = "${context.packageName}.HOME_WIDGET_TARGET.$target"' not in provider:
+    raise SystemExit("BLOCKED: each widget shortcut must have a target-specific PendingIntent action")
+if 'data = Uri.parse("mydiary-widget://$widgetId/$slot/$target")' not in provider or 'putExtra("diary_widget_slot", slot)' not in provider:
+    raise SystemExit("BLOCKED: each widget shortcut must have unique widget/slot/target identity")
 
 check = ET.parse(LAYOUT).getroot()
 check_nodes = {n.get(ANDROID + "id", "").rsplit("/", 1)[-1]: n for n in check.iter() if n.get(ANDROID + "id", "").startswith("@+id/")}
