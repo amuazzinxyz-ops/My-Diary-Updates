@@ -470,6 +470,7 @@ button_bg = r'''<?xml version="1.0" encoding="utf-8"?>
 </shape>
 '''
 (res / "drawable/diary_widget_button.xml").write_text(button_bg, encoding="utf-8")
+# Keep the provider bounds large enough for the complete vertical layout and all four touch rows.
 widget_info = r'''<?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="180dp"
