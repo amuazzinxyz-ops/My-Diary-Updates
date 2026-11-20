@@ -204,10 +204,10 @@ jobs:
           import xml.etree.ElementTree as ET
           info=ET.parse("diary-project/app/src/main/res/xml/diary_home_widget_info.xml").getroot()
           ns="{http://schemas.android.com/apk/res/android}"
-          for key,value in {"minResizeWidth":"150dp","minResizeHeight":"260dp"}.items():
-              if info.get(ns+key)!=value: raise SystemExit("FAIL: widget resize bounds "+key)
+          if info.get(ns+"minResizeWidth")!="150dp" or info.get(ns+"resizeMode")!="horizontal" or info.get(ns+"minResizeHeight") is not None:
+              raise SystemExit("FAIL: widget must support horizontal-only resizing")
           provider=Path("diary-project/app/src/main/java/com/muazzin/diary/DiaryHomeWidgetProvider.kt").read_text(encoding="utf-8")
-          for marker in ("onAppWidgetOptionsChanged","OPTION_APPWIDGET_MIN_WIDTH","OPTION_APPWIDGET_MIN_HEIGHT","responsiveBodySize"):
+          for marker in ("onAppWidgetOptionsChanged","OPTION_APPWIDGET_MIN_WIDTH","OPTION_APPWIDGET_MIN_WIDTH","responsiveBodySize"):
               if marker not in provider: raise SystemExit("FAIL: responsive widget source missing "+marker)
           print("PASS: user resize bounds and responsive widget sizing guards")
           PY
@@ -605,7 +605,7 @@ jobs:
           meta["versionCode"] = int(lines[1])
           meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk"
           meta["sha256"] = lines[2]
-          meta["releaseNotes"] = "My Diary 1.0.201: Home Screen widget buttons now expand equally to the available widget width. The widget can be resized from the Home Screen, and text, date visibility and padding adapt to the available dimensions. Individual 3D press feedback and all four independent shortcuts are preserved."
+          meta["releaseNotes"] = "My Diary 1.0.201: Home Screen widget buttons now expand equally to the available widget width. The widget can be resized from the Home Screen, and text size and left/right padding adapt to the available width; manual resizing is horizontal only. Individual 3D press feedback and all four independent shortcuts are preserved."
           meta["webSha256"] = hashlib.sha256(Path("web-source/index.html").read_bytes()).hexdigest()
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
