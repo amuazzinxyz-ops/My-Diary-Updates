@@ -1,3 +1,14 @@
+# My Diary Home Screen Widget — APK 1.0.196 / versionCode 195 published (2026-11-20)
+
+- Correction to the previous entry: APK **1.0.195 / versionCode 194** was the already-installed version, so it was not a newer Check for Update release. The prior register entry's wording that it was a new release was incorrect; the APK SHA recorded there belongs to that older version.
+- The required new release is now **1.0.196 / versionCode 195**. PR #292 merged as `0e35b86aed556eb1a36739aa033fd3c4565935f5`; workflow run **44729235057** (run #402) completed with conclusion **success**. Signed Release build, publication verification, signed APK upload, and APK artifact upload all succeeded.
+- Live `latest.json` was fetched from main and confirms `versionName: 1.0.196`, `versionCode: 195`, APK URL `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk`, and advertised APK SHA-256 `95eae8d0d37f1f04209107ace8cff87dff277bd689263663e284edace4934795`. Release notes identify the four widget shortcut hit-target correction.
+- Signed test-candidate artifact: `My-Diary-1.0.196-signed-test-candidate`, artifact ID **14625921362**, ZIP digest `sha256:f89c0f5ab3bfacb5bd9c9cd537a57f85f0ff242c90bdfb2fc29d60fbae4813c5`. Debug candidate artifact ID **14625931416**. Backup branch: `backup/before-version-bump-1.0.196-2026-11-20`.
+- Native widget change details remain as recorded in the preceding widget entry: four independent full-width 48dp clickable/focusable wrappers for My Diary, Personal Calendar, Smart Reminder, and New Note; generator `scripts/add_diary_home_widget.py`; PRs #289 and #290. No Diary web bundle or user data was changed for this APK release.
+- **Phone-side verification is still pending**: user must confirm Check for Update now offers 1.0.196 and test all four widget shortcuts. Successful build/publication does not prove launcher tap behavior on the physical device.
+
+---
+
 # My Diary Home Screen Widget — reliable button tap targets (APK 1.0.195 / versionCode 194, 2026-11-20)
 
 - User reported that the four Home Screen widget shortcuts could sometimes activate a neighbouring button or appear to shift during tapping. Corrected the generated Android widget layout so **My Diary**, **Personal Calendar**, **Smart Reminder**, and **New Note** each have their own full-width 48dp clickable/focusable wrapper and independent PendingIntent target. The visible text remains a non-clickable child; the widget root is non-clickable/non-focusable and long-click is disabled on the individual wrappers.
