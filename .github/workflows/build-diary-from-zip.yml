@@ -204,12 +204,12 @@ jobs:
           import xml.etree.ElementTree as ET
           info=ET.parse("diary-project/app/src/main/res/xml/diary_home_widget_info.xml").getroot()
           ns="{http://schemas.android.com/apk/res/android}"
-          if info.get(ns+"minResizeWidth")!="150dp" or info.get(ns+"resizeMode")!="horizontal" or info.get(ns+"minResizeHeight") is not None:
-              raise SystemExit("FAIL: widget must support horizontal-only resizing")
+          if info.get(ns+"minResizeWidth")!="150dp" or info.get(ns+"minResizeHeight")!="260dp" or info.get(ns+"resizeMode")!="horizontal|vertical":
+              raise SystemExit("FAIL: widget must support horizontal and vertical resizing")
           provider=Path("diary-project/app/src/main/java/com/muazzin/diary/DiaryHomeWidgetProvider.kt").read_text(encoding="utf-8")
-          for marker in ("onAppWidgetOptionsChanged","OPTION_APPWIDGET_MIN_WIDTH","OPTION_APPWIDGET_MIN_WIDTH","responsiveBodySize"):
+          for marker in ("onAppWidgetOptionsChanged","OPTION_APPWIDGET_MIN_WIDTH","OPTION_APPWIDGET_MIN_HEIGHT","responsiveBodySize"):
               if marker not in provider: raise SystemExit("FAIL: responsive widget source missing "+marker)
-          print("PASS: user resize bounds and responsive widget sizing guards")
+          print("PASS: two-axis user resize bounds and responsive widget sizing guards")
           PY
           python3 - <<'PY'
           from pathlib import Path
