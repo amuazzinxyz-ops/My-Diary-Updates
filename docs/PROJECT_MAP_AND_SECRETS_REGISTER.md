@@ -1,3 +1,14 @@
+# My Diary Home Screen Widget — reliable button tap targets (APK 1.0.195 / versionCode 194, 2026-11-20)
+
+- User reported that the four Home Screen widget shortcuts could sometimes activate a neighbouring button or appear to shift during tapping. Corrected the generated Android widget layout so **My Diary**, **Personal Calendar**, **Smart Reminder**, and **New Note** each have their own full-width 48dp clickable/focusable wrapper and independent PendingIntent target. The visible text remains a non-clickable child; the widget root is non-clickable/non-focusable and long-click is disabled on the individual wrappers.
+- Native generator: `scripts/add_diary_home_widget.py`. Feature PR #289 merged; generator syntax repair PR #290 merged. The first build attempt failed before compilation due to a malformed generator statement and published no APK. The statement was repaired in PR #290; the subsequent workflow run **44727801935** completed successfully.
+- Backup branches: `backup/before-widget-button-hit-areas-2026-11-20`, `backup/before-widget-generator-syntax-repair-2026-11-20`, and register backup `backup/before-widget-tap-register-2026-11-20`. Working branches: `fix/widget-button-hit-areas-2026-11-20`, `fix/widget-generator-syntax-repair-2026-11-20`, and `docs/widget-tap-target-register-2026-11-20`.
+- Build verification: all project/version/source guards passed; debug APK and signed release APK built; signed release publication and APK upload succeeded. Published feed version remains **1.0.195 / versionCode 194** (no additional version bump). Live `latest.json` APK SHA-256: `b5382396ca30d422e9d09df6a7ca6cbf2c9e7fdc40e887a7b53a6307f9470e30`; APK URL: `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk`. Signed artifact ID **14625341178**; artifact digest (ZIP): `sha256:e990d2e78c8b6510f19efd5e3298ea738edf8411ed4cea9f45717192ff81ac02`.
+- Phone-side tapping test is **pending**. Build and publication success do not prove physical launcher hit-testing; user must test all four shortcuts on the Android Home Screen before device-side PASS is recorded.
+- No Diary web source, saved user records, notes/photos, PINs, locks, reminder settings, or unrelated app features were intentionally changed.
+
+---
+
 # Check for Update test marker removed (Web Update 364, 2026-11-20)
 
 - User confirmed the Web Update 363 test label was visible in the Me screen and explicitly asked to remove it.
