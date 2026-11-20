@@ -1,3 +1,13 @@
+# My Diary Backup/Restore — My Kharcha + Private Locker release verified (Web Update 368, 2026-11-21)
+
+- The requested My Kharcha and encrypted Private Locker backup/restore change was merged in PR #313 (merge commit d212f5ea43a437683a2434492786c04f9539b4f3).
+- Web publisher completed with commit 5075a2caf4ede7c80640c60cf29c6fca980fe36f. Live latest.json reports webVersion 368 and web SHA-256 330e46f7181210eea101add64e44a97872f8ebff65d28c7ed0ebf17165558d3a.
+- Current web-source/index.html and diary-web/index.html were fetched and confirmed byte-identical (Git blob SHA 5588fbc0cb1864112cc2620ddf23f7ceceff671f); latest.json remains APK 1.0.203 / versionCode 202 with SHA-256 undefined. No APK was built or changed for this web-only release.
+- New backup JSON schema version 4 includes myKharcha and Private Locker encrypted entries plus metadata/lock configuration. Kharcha restore is ID-safe. Private Locker restore only writes into an empty Locker database; if destination data/metadata already exists, restore skips Locker to protect existing data and avoid mixing encryption keys. Legacy backup files remain supported.
+- Embedded JavaScript syntax checks passed for both script blocks before merge. Phone-side backup/restore test for My Kharcha and Private Locker is still pending; do not mark device testing passed until user confirms.
+
+---
+
 # My Diary Backup/Restore — include My Kharcha and encrypted Private Locker (Web Update 368 target, 2026-11-21)
 
 - User requested that 💰 My Kharcha and 🔐 Private Locker also be included in the existing Notes Backup/Restore file.
