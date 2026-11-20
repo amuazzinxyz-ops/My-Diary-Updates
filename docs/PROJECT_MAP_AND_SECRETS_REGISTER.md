@@ -1,4 +1,4 @@
-# My Diary Home Screen Widget — responsive width and manual resizing (APK 1.0.201 / versionCode 200, build pending, 2026-11-20)
+# My Diary Home Screen Widget — horizontal-only manual resizing (APK 1.0.201 / versionCode 200, build pending, 2026-11-20)
 
 - User requested that the widget outer size fit the visible buttons without excessive blank space and that the user can manually make the widget smaller or larger on the Android Home Screen.
 - Updated the widget generator and polish guard: all four shortcut hit areas now expand equally to the available inner widget width, with only 2dp left/right button margins. The Personal Calendar button remains equal in width to the other three; each keeps its independent 48dp touch target and existing 3D pressed selector.
