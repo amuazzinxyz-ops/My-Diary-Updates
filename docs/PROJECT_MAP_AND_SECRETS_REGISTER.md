@@ -4991,3 +4991,13 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Test covered one Personal Calendar entry and one Smart Reminder entry: create both, export `Diary-My-Notes-Backup.json`, then restore it without clearing app data or uninstalling. User confirmed the result was correct.
 - **Device-side status: PASS (user-confirmed).** This closes the previously pending physical-phone verification for the Web Update 362 Calendar + Smart Reminder backup/restore change.
 - No additional source-code change, APK rebuild, or app-data operation was performed for this verification. Web Update remains **362**; APK remains **1.0.195 / versionCode 194**.
+---
+
+# My Diary Home Screen Widget — label-sized 3D buttons and isolated press feedback (work in progress, 2026-11-20)
+
+- User request: size the Home Screen widget buttons according to each button name; make the buttons visibly raised with a subtle 3D effect; when one button is tapped, only that button should show the pressed effect and the entire widget must not shift.
+- The previous outer widget minimum dimensions remain protected at 180dp width × 230dp height. Each of the four independent hit areas remains 48dp high; button width now wraps to its own label plus horizontal padding (My Diary, Personal Calendar, Smart Reminder, New Note).
+- Added scripts/polish_diary_home_widget.py to apply the layout/drawable change to the extracted Android source during the release workflow. The widget root remains non-clickable/non-focusable. Each button receives its own selector background: raised shadow in normal state and a darker flat face only while that button is pressed. Existing independent PendingIntent routing is guarded.
+- Working branch: fix/widget-name-sized-3d-press-2026-11-20. Backup branch: backup/before-widget-name-sized-3d-press-2026-11-20.
+- Release workflow is being advanced to 1.0.199 / versionCode 198 so the change can arrive through Me → Check for Updates. No APK is to be sent directly.
+- Status at register update: source patch and workflow version guards are staged on the working branch; CI/build/publication and phone-side visual/tap testing are not yet confirmed. Do not mark complete until workflow succeeds and the user verifies the buttons on the phone.
