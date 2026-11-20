@@ -81,9 +81,6 @@ jobs:
           if-no-files-found: error
           retention-days: 3
 
-      - name: Apply label-sized 3D widget buttons with individual press feedback
-        run: python3 scripts/polish_diary_home_widget.py
-
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -199,6 +196,9 @@ jobs:
           print("PASS: optional Pattern Lock setup, 3x3 grid, PIN fallback and recovery preservation markers verified")
           PY
           python3 scripts/add_diary_app_actions.py
+          python3 -m py_compile scripts/add_diary_home_widget.py scripts/polish_diary_home_widget.py
+          python3 scripts/add_diary_home_widget.py
+          python3 scripts/polish_diary_home_widget.py
           python3 - <<'PY'
           from pathlib import Path
           kotlin = Path("diary-project/app/src/main/java/com/muazzin/diary/MainActivity.kt").read_text(encoding="utf-8")
