@@ -1,4 +1,4 @@
-# My Diary Home Screen Widget — resize in both directions (APK 1.0.201 / versionCode 200, build pending, 2026-11-20)
+# My Diary Home Screen Widget — resize in both directions (APK 1.0.201 / versionCode 200, build and feed verified, 2026-11-20)
 
 - User clarified the actual requirement: the Home Screen widget must be manually resizable **Left–Right and Upper–Neeche**. The previously committed horizontal-only mode was incorrect for this clarified request.
 - Corrected the generated AppWidget metadata to `android:resizeMode="horizontal|vertical"`, retaining the 180dp × 280dp initial minimum and setting launcher resize bounds to 150dp wide × 260dp high.
