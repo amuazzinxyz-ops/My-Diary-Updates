@@ -473,7 +473,7 @@ button_bg = r'''<?xml version="1.0" encoding="utf-8"?>
 widget_info = r'''<?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="180dp"
-    android:minHeight="230dp"
+    android:minHeight="300dp"
     android:updatePeriodMillis="1800000"
     android:initialLayout="@layout/diary_home_widget"
     android:resizeMode="horizontal|vertical"
