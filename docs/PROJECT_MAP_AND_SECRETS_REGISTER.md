@@ -1,3 +1,17 @@
+# My Diary — all status messages in one copyable popup (Web Update 371, 2026-11-21)
+
+- User asked to inspect the Backup/Restore message area and include every other message shown in that same area in the same popup.
+- Inspection of all references to `#diaryMyNotesStatus` confirmed that the shared area also receives note save/delete/storage errors, photo-added/photo-too-large feedback, PIN set/remove and auto-lock messages, copy success/failure, validation/storage messages, and Backup/Restore progress/results. These existing message producers were preserved.
+- Implemented one shared status popup in `web-source/index.html`. A MutationObserver mirrors every non-empty message written to the existing status element into the popup, so Backup/Restore and all other existing status messages use the same popup. The popup has an **×** close control and a **Copy** button that copies the complete visible message; clipboard fallback is included. The original status element remains as an off-screen live region for accessibility. Empty status clears close the popup.
+- No note content, backup schema, saved data, storage logic, PIN/lock logic, or native Android/APK code was intentionally changed. Only the status presentation changed.
+- Source pre-edit backup branch: `backup/before-unified-status-popup-2026-11-21`. Working branch: `fix/unified-status-popup-2026-11-21`. PR **#321** merged successfully as `5f1da75cf2d7c53c21b63279ecd34becf4f38ebd`; the PR changed only `web-source/index.html` (35 additions, 1 deletion).
+- Web publisher commit: `91b901e5c0168f10f58d72a412daec439c80d208`. Published **Web Update 371**. Re-fetched `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `e35f1e9e84ea243fe85827e41fab13ca488f08d0` (589,514 characters). Live `latest.json` confirms webVersion **371** and web SHA-256 `973b817b7de9cf0b921a95f3d20679687dc6e51bedf131c45556c60591c5a95e`.
+- APK remains **1.0.203 / versionCode 202**, package `com.personal.diaryapp`; no APK rebuild or delivery was made. Delivery is through **My Diary → Me → Check for Updates**.
+- Physical-phone testing of popup display, close, and Copy behavior remains pending user confirmation. Do not claim device-side PASS until the user tests it.
+- Exact pre-edit Register backup branch: `backup/before-unified-status-popup-register-2026-11-21`. Register working branch: `docs/unified-status-popup-register-2026-11-21`.
+
+---
+
 # Permanent release and delivery workflow — Check for Updates + APK handling (2026-11-21)
 
 - **Default app-update path:** publish ordinary web/feature/UI changes through the existing in-app **Me → Check for Updates** flow. Verify the live feed, published web version, and source/mirror parity before reporting an update as available.
