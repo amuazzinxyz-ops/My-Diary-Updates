@@ -113,6 +113,8 @@ for hit_id, label_id in BUTTONS.items():
         raise SystemExit("FAIL: button hit area/centering changed: " + hit_id)
     if label.get(ANDROID + "layout_width") != "match_parent" or label.get(ANDROID + "clickable") != "false":
         raise SystemExit("FAIL: button label must fill its equal-width wrapper and remain non-clickable: " + label_id)
+if check.get(ANDROID + "layout_height") != "wrap_content":
+    raise SystemExit("FAIL: visible widget background must end after the selected buttons")
 if check.get(ANDROID + "clickable") != "false" or check.get(ANDROID + "focusable") != "false":
     raise SystemExit("FAIL: widget container must remain non-clickable/non-focusable")
 selector = ET.parse(BUTTON_BG).getroot()
