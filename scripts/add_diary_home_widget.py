@@ -341,7 +341,8 @@ elif "class DiaryHomeWidgetProvider" not in provider_path.read_text(encoding="ut
 res = APP / "src/main/res"
 (res / "layout").mkdir(parents=True, exist_ok=True)
 (res / "drawable").mkdir(parents=True, exist_ok=True)
-(res / "xml").mkdir(parenlayout = r'''<?xml version="1.0" encoding="utf-8"?>
+(res / "xml").mkdir(parents=True, exist_ok=True)
+layout = r'''<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widgetRoot"
     android:layout_width="match_parent"
@@ -450,7 +451,9 @@ res = APP / "src/main/res"
             android:focusable="false" />
     </FrameLayout>
 </LinearLayout>
-'''oding="utf-8")
+'''
+layout_path = res / "layout/diary_home_widget.xml"
+layout_path.write_text(layout, encoding="utf-8")
 bg = r'''<?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
     <gradient android:startColor="#FFFDF8" android:endColor="#EEE4FF" android:angle="135" />
