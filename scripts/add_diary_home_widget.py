@@ -526,4 +526,19 @@ if 'android:minHeight="230dp"' not in widget_info:
     raise SystemExit("FAIL: original 230dp widget minimum size was not preserved")
 if "getHomeWidgetSettings()" not in KOTLIN_PATH.read_text(encoding="utf-8") or "window.__diaryOpenWidgetTargetFromAndroid=function(target)" not in HTML_PATH.read_text(encoding="utf-8"):
     raise SystemExit("FAIL: My Diary widget settings bridge or destination handler missing")
+widget_html_check = HTML_PATH.read_text(encoding="utf-8")
+for required in (
+    "function diaryFinishPendingWidgetTarget()",
+    "window.__diaryPendingWidgetTarget=(target==='calendar'||target==='reminders')?target:null;",
+    "if(typeof window.__diaryOpenWidgetTarget==='function')window.__diaryOpenWidgetTarget(target);",
+):
+    if required not in widget_html_check:
+        raise SystemExit("FAIL: widget shortcut destination preservation missing: " + required)
+if widget_html_check.count("diaryFinishPendingWidgetTarget();") != 5:
+    raise SystemExit("FAIL: widget destination must resume after app open, PIN, Pattern, and Fingerprint unlock")
+if 'android:minHeight="230dp"' not in widget_info:
+    raise SystemExit("FAIL: original 230dp widget minimum size was not preserved")
+for target in ('"diary"', '"calendar"', '"reminders"', '"new-note"'):
+    if target not in provider_path.read_text(encoding="utf-8"):
+        raise SystemExit("FAIL: missing native widget shortcut target " + target)
 print("PASS: native AppWidgetProvider, manifest receiver, RemoteViews layout, selectable options, and tap destinations verified.")
