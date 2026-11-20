@@ -421,6 +421,21 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     0 3px 0 #354b3a,0 6px 10px rgba(0,0,0,.24) !important;
 }
 </style>
+<style id="diary-status-popup-style">
+#diaryMyNotesStatus{position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+#diaryStatusPopup[hidden]{display:none!important}
+#diaryStatusPopup{position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(5,17,12,.58);backdrop-filter:blur(4px)}
+#diaryStatusPopupCard{width:min(520px,100%);max-height:78vh;display:flex;flex-direction:column;gap:14px;padding:17px;border:2px solid #d8b65b;border-radius:19px;background:linear-gradient(145deg,#fffef9,#eef6ed);color:#173b2a;box-shadow:0 8px 0 #9b7b36,0 22px 55px #0008}
+#diaryStatusPopupHead{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:17px;font-weight:900}
+#diaryStatusPopupClose{flex:0 0 40px;width:40px;height:40px;border:1px solid #c7b16d;border-radius:50%;background:linear-gradient(145deg,#fff,#f2e7c4);color:#573d08;font-size:27px;font-weight:900;line-height:1;cursor:pointer;box-shadow:0 3px 0 #b49a5d}
+#diaryStatusPopupMessage{max-height:48vh;overflow:auto;padding:13px;border:1px solid #cbdacb;border-radius:12px;background:#fff;color:#203b2b;font-size:14px;font-weight:750;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;user-select:text}
+#diaryStatusPopupCopy{align-self:stretch;min-height:44px;border:1px solid #0b6847;border-radius:12px;background:linear-gradient(145deg,#16865b,#075e3b);color:#fff;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 4px 0 #06472f,0 7px 13px #123d2b24}
+#diaryStatusPopupClose:active,#diaryStatusPopupCopy:active{transform:translateY(2px);box-shadow:0 1px 0 #06472f}
+.dark #diaryStatusPopupCard{background:linear-gradient(145deg,#243b2c,#17291e);color:#f1f7ef;border-color:#8b753d}
+.dark #diaryStatusPopupMessage{background:#111d17;color:#f1f7ef;border-color:#56715e}
+.dark #diaryStatusPopupClose{background:linear-gradient(145deg,#4a4229,#302b1b);color:#ffedb7;border-color:#9b7b34}
+@media(max-width:420px){#diaryStatusPopup{padding:14px}#diaryStatusPopupCard{padding:14px;gap:12px}}
+</style>
 <style id="diary-text-formatting-controls">
 #diaryMyNotesEditor .diary-diary-format-tools{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:5px 0 10px;padding:8px;border:1px solid #e1d5a8;border-radius:11px;background:linear-gradient(145deg,#fffdf5,#f5f0ff)}
 #diaryMyNotesEditor .diary-diary-format-heading{flex:1 0 100%;font-size:12px;color:#50317b;font-weight:900}
@@ -3230,7 +3245,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   list.style.display='none';
   allNotesBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();showingTrash=false;if(list.parentNode!==body)body.appendChild(list);allNotesBtn.style.display='';trashBtn.setAttribute('aria-expanded','false');var opening=list.style.display==='none';list.style.display=opening?'':'none';allNotesBtn.setAttribute('aria-expanded',opening?'true':'false');if(opening)renderList();});
   body.appendChild(search);body.appendChild(tools);body.appendChild(editor);coverFormatControls.refresh();detailFormatControls.refresh();body.appendChild(status);body.appendChild(backup);body.appendChild(allNotesBtn);body.appendChild(list);
-  panel.appendChild(head);panel.appendChild(body);ov.appendChild(panel);document.body.appendChild(ov);
+  panel.appendChild(head);panel.appendChild(body);ov.appendChild(panel);document.body.appendChild(ov);setupDiaryStatusPopup(status,ov);
   applyDiaryFont();
   close.addEventListener('click',closeOverlay);
   ov.addEventListener('click',function(e){if(e.target===ov)closeOverlay();if(!meWrap.contains(e.target)&&!mePanel.hidden){mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');}});
@@ -4424,6 +4439,25 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     restoreDiaryFeatureBackup(documents,memories,calendar,reminders,kharcha,privateLocker).then(function(fileCounts){var lockerResult=fileCounts.privateLocker,lockerStatus=lockerResult.skipped?(lockerResult.skippedReason==='keyConfigMismatch'?'Private Locker: backup ka security key/config alag hai; existing Locker safe rakha gaya':'Private Locker restore skip hua; existing Locker safe rakha gaya'):(lockerResult.merged?'Private Locker: '+lockerResult.added+' naye encrypted entries existing Locker mein merge hue':('Private Locker: '+lockerResult.added+' encrypted entries restore'));show(added+' '+t('restoreCount')+' | My Documents: '+fileCounts.documents+' | My Memories: '+fileCounts.memories+' | Personal Calendar: '+fileCounts.calendar+' | Smart Reminder: '+fileCounts.reminders+' | My Kharcha: '+fileCounts.kharcha+' | '+lockerStatus);renderList();}).catch(function(){if(previousRaw===null)localStorage.removeItem(KEY);else localStorage.setItem(KEY,previousRaw);show(t('invalidBackup'));renderList();});
    }catch(err){show(t('invalidBackup'));}finally{e.target.value='';}
   };reader.readAsText(file);
+ }
+ function setupDiaryStatusPopup(status,overlay){
+  if(!status||!overlay||document.getElementById('diaryStatusPopup'))return;
+  var popup=el('div',{id:'diaryStatusPopup',role:'dialog','aria-modal':'true','aria-label':'Status message'});
+  popup.hidden=true;
+  var card=el('div',{id:'diaryStatusPopupCard'});
+  var head=el('div',{id:'diaryStatusPopupHead'});
+  var heading=el('span',{},'Message');
+  var close=el('button',{id:'diaryStatusPopupClose',type:'button','aria-label':'Close message'},'×');
+  var message=el('div',{id:'diaryStatusPopupMessage','aria-live':'polite'});
+  var copy=el('button',{id:'diaryStatusPopupCopy',type:'button'},'Copy');
+  head.appendChild(heading);head.appendChild(close);card.appendChild(head);card.appendChild(message);card.appendChild(copy);popup.appendChild(card);overlay.appendChild(popup);
+  function refresh(){var value=String(status.textContent||'').trim();if(value){message.textContent=value;popup.hidden=false;}else{popup.hidden=true;message.textContent='';}}
+  function copyFeedback(ok){copy.textContent=ok?'Copied':'Copy failed';setTimeout(function(){copy.textContent='Copy';},1400);}
+  function fallbackCopy(value){var field=el('textarea');field.value=value;field.setAttribute('readonly','');field.style.position='fixed';field.style.left='-9999px';document.body.appendChild(field);field.select();var ok=false;try{ok=!!document.execCommand('copy');}catch(error){}field.remove();copyFeedback(ok);}
+  close.addEventListener('click',function(){popup.hidden=true;});
+  copy.addEventListener('click',function(){var value=String(message.textContent||'');if(!value)return;if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(value).then(function(){copyFeedback(true);}).catch(function(){fallbackCopy(value);});}else fallbackCopy(value);});
+  if(typeof MutationObserver==='function'){var observer=new MutationObserver(refresh);observer.observe(status,{childList:true,subtree:true,characterData:true});}
+  refresh();
  }
  function openOverlay(){
   if(!diaryStorageReady){prepareDiaryStorage().then(function(){openOverlay()});return;}
