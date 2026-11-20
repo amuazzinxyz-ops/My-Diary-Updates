@@ -1,4 +1,4 @@
-# Approved release build: publish signed Diary 1.0.203/201 so Check for Updates detects the native two-axis widget release.
+# Approved release build: publish signed Diary 1.0.203/202 so Check for Updates detects the native two-axis widget release.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -420,7 +420,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved Diary release version 1.0.203 (versionCode 201)
+      - name: Set approved Diary release version 1.0.203 (versionCode 202)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
@@ -433,7 +433,7 @@ jobs:
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary release versionName=1.0.203, versionCode=201")
+          print("Set Diary release versionName=1.0.203, versionCode=202")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -456,7 +456,7 @@ jobs:
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
           if code != 202 or name != "1.0.203":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.203/201, found {name}/{code}")
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.203/202, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
           if feed_version not in ((199, "1.0.200"), (200, "1.0.201"), (201, "1.0.202"),):
               raise SystemExit(f"BLOCKED: update feed is neither the installed baseline nor the exact new release: {feed_version}")
@@ -593,7 +593,7 @@ jobs:
           test -s "$APK"
           SHA256="$(sha256sum "$APK" | awk '{print $1}')"
           cp "$APK" /tmp/My-Diary-verified.apk
-          printf '1.0.203\n201\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.203\n202\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -f -B diary-publish-main origin/main
           python3 - <<'PY'
