@@ -1,11 +1,14 @@
-# Permanent release and delivery rule — Check for Updates only; APK on explicit request (2026-11-21)
+# Permanent release and delivery workflow — Check for Updates + APK handling (2026-11-21)
 
-- User's standing instruction: all My Diary updates must be published and delivered using the existing in-app path **Me → Check for Updates**, exactly as the current workflow operates.
-- Do not send, attach, link, or otherwise deliver an APK directly. **Build/create a new APK only when the user explicitly asks for an APK.** A web-only change must remain a web-only publication and must not trigger an APK build as an extra deliverable.
-- For ordinary feature fixes and UI changes, use the established Check for Updates web publication pipeline; verify the published web version/feed and source/mirror parity before reporting availability.
-- Keep the existing backup-before-edit, minimal-change, preservation, verification, and Master Register update requirements unchanged.
-- Current baseline at this instruction update: Web Update **370**; APK feed remains **1.0.203 / versionCode 202**. No APK build or APK delivery was requested or performed for this register-only instruction.
-- Exact pre-edit Register backup branch: `backup/before-check-for-updates-only-apk-on-request-2026-11-21`. Register-only working branch: `docs/check-for-updates-only-apk-on-request-2026-11-21`.
+- **Default app-update path:** publish ordinary web/feature/UI changes through the existing in-app **Me → Check for Updates** flow. Verify the live feed, published web version, and source/mirror parity before reporting an update as available.
+- **Web-only changes:** keep them web-only. Do not create or rebuild an APK just to deliver a web-only change.
+- **When the user asks for the current/latest APK:** first inspect the live `latest.json` and the published APK artifact. If a valid, already-published APK contains the latest required native changes, give the user that existing APK directly. Do not rebuild or create a duplicate APK unnecessarily.
+- **When a new APK is actually needed:** if the requested native changes are not included in the published APK, explain/build the new signed APK as part of the requested APK delivery workflow, after the usual build, signing-continuity, artifact, and feed checks. Do not make the user repeat the established workflow or ask them to restate instructions already recorded here.
+- **If the user has not asked for an APK:** do not send or offer a direct APK as an extra deliverable; use **Me → Check for Updates** for normal updates.
+- Keep the existing exact pre-edit backup, minimal-change, preservation, verification, and Master Register update requirements unchanged. Read and follow this Register before each task.
+- This workflow replaces the overly restrictive wording in the previous 2026-11-21 rule. It records the successful current-APK handling: when asked for an APK, check the live release first and provide the existing published build if it is already current; only build a new one when needed.
+- Current baseline at this workflow clarification: Web Update **370**; published APK **1.0.203 / versionCode 202**.
+- Exact pre-edit Register backup branch: `backup/before-apk-delivery-workflow-clarification-2026-11-21`. Working branch: `docs/apk-delivery-workflow-clarification-2026-11-21`.
 
 ---
 
