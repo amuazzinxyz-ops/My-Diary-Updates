@@ -1,3 +1,18 @@
+# My Diary Home Screen Widget — ten selectable shortcuts published (APK 1.0.204 / versionCode 203, 2026-11-21)
+
+- User approved six additional widget shortcuts: 💰 My Kharcha, 📁 My Documents, 📒 My Memories, 🔐 Private Locker, ⭐ Favourite Notes, and 🌍 World Clock.
+- The widget now has **10 selectable shortcut buttons**: the existing 📒 My Diary, 📅 Personal Calendar, ⏰ Smart Reminder, and ✍️ New Note, plus the six approved additions. **Aaj ki Tareekh** remains a separate show/hide option, so Widget Settings has 11 checkboxes in total (10 shortcuts + date).
+- Any combination of the ten shortcuts can be selected. The six new shortcuts default OFF to preserve the four existing buttons on previously configured widgets. Settings require at least one shortcut to remain selected.
+- The native widget layout generates ten independent 48dp button hit areas. Each has its own PendingIntent slot and retains the purple/gold raised 3D appearance and isolated pressed feedback. The visible content/background wraps the selected rows; the existing horizontal and vertical launcher resize support remains. The Android launcher still controls the outer allocated widget frame.
+- Verified routes: Diary, Personal Calendar, Smart Reminder, New Note, My Kharcha, My Documents, My Memories, Private Locker, Favourite Notes (shows only notes marked favourite/pinned), and World Clock. Existing data stores, PIN/lock logic, reminders, and unrelated Diary features were not intentionally changed.
+- Updated the Widget Settings UI, native settings bridge, widget generator, 3D polish/validation script, and signed APK workflow. The web-source/index.html and diary-web/index.html mirror are byte-identical at Git blob SHA 07e7aed57a21e5c06e73ce7f7e0409443d9a5594. Live feed webVersion remains 371; web SHA-256 is 66482da0fcfd67a393c62542f58639bd55918ff977462066e1ff0df6466a9a45.
+- Exact pre-edit backup branch: backup/before-widget-six-shortcuts-2026-11-21. Working branch: fix/widget-six-shortcuts-2026-11-21. PR #323 merged successfully as 326b22f1f9c74ef605ec7052fd36b0a5fc21c360.
+- GitHub Actions build run 44805807315 completed with conclusion success. Widget generation, XML/polish guards, debug build, signed release build, signing-certificate verification, publication, and artifact uploads passed. Signed test candidate My-Diary-1.0.204-signed-test-candidate uploaded (2,030,772 bytes).
+- Live latest.json confirms package com.personal.diaryapp, versionName **1.0.204**, versionCode **203**, and APK SHA-256 2a7c000b8431e1ab8b7bab319a6c3a2cf8b745d2c2f11407dd8c68525f1a2af7. The published APK is available through **My Diary → Me → Check for Updates** only; no direct APK was sent.
+- Physical-phone verification of selecting combinations, all ten tap routes, 3D press feedback, and launcher resizing remains **pending user confirmation**. Do not claim device-side PASS until the user tests it.
+
+---
+
 # My Diary — all status messages in one copyable popup (Web Update 371, 2026-11-21)
 
 - User asked to inspect the Backup/Restore message area and include every other message shown in that same area in the same popup.
