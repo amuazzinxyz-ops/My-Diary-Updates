@@ -4503,7 +4503,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  }
  window.__diaryShowFavouriteNotesFromWidget=function(){
   showingTrash=false;showingFavouriteNotes=true;
-  var list=document.getElementById('diaryMyNotesList'),allBtn=document.getElementById('diaryMyNotesAllNotes');
+  var list=document.getElementById('diaryMyNotesList'),allBtn=document.getElementById('diaryMyNotesAllNotes'),search=document.getElementById('diaryMyNotesSearch');
+  if(search)search.value='';
   if(list)list.style.display='';
   if(allBtn){allBtn.style.display='';allBtn.setAttribute('aria-expanded','true');}
   renderList();
