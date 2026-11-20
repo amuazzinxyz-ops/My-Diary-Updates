@@ -1,4 +1,4 @@
-# Approved release build: publish signed Diary 1.0.200/199 with equal-width 3D widget buttons with centered Diary title/date and compact outer sizing.
+# Approved release build: publish signed Diary 1.0.201/200 with responsive, manually resizable 3D widget with equal-width buttons and centered Diary title/date.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -199,6 +199,18 @@ jobs:
           python3 -m py_compile scripts/add_diary_home_widget.py scripts/polish_diary_home_widget.py
           python3 scripts/add_diary_home_widget.py
           python3 scripts/polish_diary_home_widget.py
+          python3 - <<'PY'
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+          info=ET.parse("diary-project/app/src/main/res/xml/diary_home_widget_info.xml").getroot()
+          ns="{http://schemas.android.com/apk/res/android}"
+          for key,value in {"minResizeWidth":"150dp","minResizeHeight":"260dp"}.items():
+              if info.get(ns+key)!=value: raise SystemExit("FAIL: widget resize bounds "+key)
+          provider=Path("diary-project/app/src/main/java/com/muazzin/diary/DiaryHomeWidgetProvider.kt").read_text(encoding="utf-8")
+          for marker in ("onAppWidgetOptionsChanged","OPTION_APPWIDGET_MIN_WIDTH","OPTION_APPWIDGET_MIN_HEIGHT","responsiveBodySize"):
+              if marker not in provider: raise SystemExit("FAIL: responsive widget source missing "+marker)
+          print("PASS: user resize bounds and responsive widget sizing guards")
+          PY
           python3 - <<'PY'
           from pathlib import Path
           kotlin = Path("diary-project/app/src/main/java/com/muazzin/diary/MainActivity.kt").read_text(encoding="utf-8")
@@ -403,7 +415,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved Diary release version 1.0.200 (versionCode 199)
+      - name: Set approved Diary release version 1.0.201 (versionCode 200)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
@@ -411,12 +423,12 @@ jobs:
           from pathlib import Path
           p = Path("app/build.gradle.kts")
           s = p.read_text(encoding="utf-8")
-          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 199', s, count=1)
-          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.200"', s, count=1)
+          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 200', s, count=1)
+          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.201"', s, count=1)
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary release versionName=1.0.200, versionCode=199")
+          print("Set Diary release versionName=1.0.201, versionCode=200")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -438,10 +450,10 @@ jobs:
           name = one(r'versionName\s*=\s*"([^"]+)"', "versionName")
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
-          if code != 199 or name != "1.0.200":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.200/199, found {name}/{code}")
+          if code != 200 or name != "1.0.201":
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.201/200, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if feed_version not in ((198, "1.0.199"),):
+          if feed_version not in ((199, "1.0.200"),):
               raise SystemExit(f"BLOCKED: update feed is neither the installed baseline nor the exact new release: {feed_version}")
           print(f"PASS: package={package}, release={name}/{code}; feed state is approved: {feed_version}")
           PY
@@ -567,7 +579,7 @@ jobs:
           echo "Release APK certificate matches the previously supplied SHA-256 fingerprint."
           rm -f app/diary-release.jks
 
-      - name: Publish verified Diary update 1.0.200 after release verification PASS
+      - name: Publish verified Diary update 1.0.201 after release verification PASS
         if: env.DIARY_RELEASE_READY == 'true'
         shell: bash
         run: |
@@ -576,7 +588,7 @@ jobs:
           test -s "$APK"
           SHA256="$(sha256sum "$APK" | awk '{print $1}')"
           cp "$APK" /tmp/My-Diary-verified.apk
-          printf '1.0.200\n199\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.201\n200\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -f -B diary-publish-main origin/main
           python3 - <<'PY'
@@ -584,7 +596,7 @@ jobs:
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in ((198, "1.0.199"),):
+          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in ((199, "1.0.200"),):
               raise SystemExit(f"BLOCKED: live main feed is neither the installed baseline nor the exact new release: {feed_version}")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
@@ -593,17 +605,17 @@ jobs:
           meta["versionCode"] = int(lines[1])
           meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk"
           meta["sha256"] = lines[2]
-          meta["releaseNotes"] = "My Diary 1.0.200: Home Screen widget now shows the Diary title and date centered above four equal-width buttons sized to the Personal Calendar button, with only a small outer margin. Individual 3D press feedback and all four independent shortcuts are preserved."
+          meta["releaseNotes"] = "My Diary 1.0.201: Home Screen widget buttons now expand equally to the available widget width. The widget can be resized from the Home Screen, and text, date visibility and padding adapt to the available dimensions. Individual 3D press feedback and all four independent shortcuts are preserved."
           meta["webSha256"] = hashlib.sha256(Path("web-source/index.html").read_bytes()).hexdigest()
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           cp /tmp/My-Diary-verified.apk My-Diary.apk
-          cp /tmp/My-Diary-verified.apk My-Diary-1.0.200.apk
+          cp /tmp/My-Diary-verified.apk My-Diary-1.0.201.apk
           python3 -m json.tool latest.json >/dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add My-Diary.apk My-Diary-1.0.200.apk latest.json
-          git commit -m "Publish My Diary update 1.0.200"
+          git add My-Diary.apk My-Diary-1.0.201.apk latest.json
+          git commit -m "Publish My Diary update 1.0.201"
           git push origin HEAD:main
       - name: Upload unsigned Release APK for private owner-side signing
         if: env.DIARY_RELEASE_READY != 'true'
@@ -618,7 +630,7 @@ jobs:
         if: env.DIARY_RELEASE_READY == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: My-Diary-1.0.200-signed-test-candidate
+          name: My-Diary-1.0.201-signed-test-candidate
           path: diary-project/app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
           retention-days: 30
@@ -634,7 +646,7 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: My-Diary-1.0.200-debug-test-candidate
+          name: My-Diary-1.0.201-debug-test-candidate
           path: diary-project/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
