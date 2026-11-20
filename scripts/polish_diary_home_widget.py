@@ -39,7 +39,7 @@ for hit_id, label_id in BUTTONS.items():
     label = nodes.get(label_id)
     if wrapper is None or label is None or label not in list(wrapper):
         raise SystemExit(f"BLOCKED: expected independent widget button and label: {hit_id}/{label_id}")
-    wrapper.set(ANDROID + "layout_width", "wrap_content")
+    wrapper.set(ANDROID + "layout_width", "160dp")
     wrapper.set(ANDROID + "layout_height", "48dp")
     wrapper.set(ANDROID + "layout_gravity", "center_horizontal")
     wrapper.set(ANDROID + "layout_marginTop", "4dp")
@@ -47,11 +47,11 @@ for hit_id, label_id in BUTTONS.items():
     wrapper.set(ANDROID + "clickable", "true")
     wrapper.set(ANDROID + "focusable", "true")
     wrapper.set(ANDROID + "longClickable", "false")
-    label.set(ANDROID + "layout_width", "wrap_content")
+    label.set(ANDROID + "layout_width", "match_parent")
     label.set(ANDROID + "layout_height", "match_parent")
     label.set(ANDROID + "gravity", "center")
-    label.set(ANDROID + "paddingLeft", "16dp")
-    label.set(ANDROID + "paddingRight", "16dp")
+    label.set(ANDROID + "paddingLeft", "6dp")
+    label.set(ANDROID + "paddingRight", "6dp")
     label.set(ANDROID + "clickable", "false")
     label.set(ANDROID + "focusable", "false")
     label.set(ANDROID + "textStyle", "bold")
@@ -90,8 +90,8 @@ button_selector = '''<?xml version="1.0" encoding="utf-8"?>
 BUTTON_BG.write_text(button_selector, encoding="utf-8")
 
 info = ET.parse(INFO).getroot()
-if info.get(ANDROID + "minHeight") != "230dp" or info.get(ANDROID + "minWidth") != "180dp":
-    raise SystemExit("BLOCKED: original 180dp x 230dp widget minimum size changed unexpectedly")
+if info.get(ANDROID + "minHeight") != "280dp" or info.get(ANDROID + "minWidth") != "180dp":
+    raise SystemExit("BLOCKED: required 180dp x 280dp widget minimum size changed unexpectedly")
 provider = PROVIDER.read_text(encoding="utf-8")
 for target in ('"diary"', '"calendar"', '"reminders"', '"new-note"'):
     if target not in provider:
@@ -103,12 +103,12 @@ check = ET.parse(LAYOUT).getroot()
 check_nodes = {n.get(ANDROID + "id", "").rsplit("/", 1)[-1]: n for n in check.iter() if n.get(ANDROID + "id", "").startswith("@+id/")}
 for hit_id, label_id in BUTTONS.items():
     wrapper, label = check_nodes.get(hit_id), check_nodes.get(label_id)
-    if wrapper is None or label is None or wrapper.get(ANDROID + "layout_width") != "wrap_content":
-        raise SystemExit("FAIL: label-sized button layout not applied: " + hit_id)
+    if wrapper is None or label is None or wrapper.get(ANDROID + "layout_width") != "160dp":
+        raise SystemExit("FAIL: equal-width button layout not applied: " + hit_id)
     if wrapper.get(ANDROID + "layout_height") != "48dp" or wrapper.get(ANDROID + "layout_gravity") != "center_horizontal":
         raise SystemExit("FAIL: button hit area/centering changed: " + hit_id)
-    if label.get(ANDROID + "layout_width") != "wrap_content" or label.get(ANDROID + "clickable") != "false":
-        raise SystemExit("FAIL: button label must size to its own text and remain non-clickable: " + label_id)
+    if label.get(ANDROID + "layout_width") != "match_parent" or label.get(ANDROID + "clickable") != "false":
+        raise SystemExit("FAIL: button label must fill its equal-width wrapper and remain non-clickable: " + label_id)
 if check.get(ANDROID + "clickable") != "false" or check.get(ANDROID + "focusable") != "false":
     raise SystemExit("FAIL: widget container must remain non-clickable/non-focusable")
 selector = ET.parse(BUTTON_BG).getroot()
@@ -116,4 +116,10 @@ if selector.tag != "selector" or not any(item.get(ANDROID + "state_pressed") == 
     raise SystemExit("FAIL: per-button pressed selector is missing")
 if 'android:bottom="3dp"' not in BUTTON_BG.read_text(encoding="utf-8"):
     raise SystemExit("FAIL: raised 3D button shadow layer is missing")
-print("PASS: four label-sized 48dp buttons, raised normal state, individual pressed state, unchanged widget size, and independent tap routing.")
+for header_id in ("widgetTitle", "widgetDate"):
+    header = check_nodes.get(header_id)
+    if header is None or header.get(ANDROID + "gravity") != "center":
+        raise SystemExit("FAIL: Diary title and date must be centered above the buttons: " + header_id)
+if any(check_nodes[x].get(ANDROID + "layout_width") != "160dp" for x in BUTTONS):
+    raise SystemExit("FAIL: all four buttons must have the same Personal Calendar-sized width")
+print("PASS: four equal 160dp x 48dp buttons, centered Diary title/date, compact 180dp x 280dp widget, raised 3D face, isolated pressed state, and independent tap routing.")

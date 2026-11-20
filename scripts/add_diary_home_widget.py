@@ -360,7 +360,7 @@ layout = r'''<?xml version="1.0" encoding="utf-8"?>
         android:textColor="#45236F"
         android:textStyle="bold"
         android:textSize="18sp"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:paddingBottom="3dp" />
     <TextView
         android:id="@+id/widgetDate"
@@ -369,6 +369,7 @@ layout = r'''<?xml version="1.0" encoding="utf-8"?>
         android:text="Today"
         android:textColor="#5B4B6E"
         android:textSize="14sp"
+        android:gravity="center"
         android:paddingBottom="7dp" />
     <FrameLayout
         android:id="@+id/widgetDiaryButtonHit"
@@ -470,11 +471,11 @@ button_bg = r'''<?xml version="1.0" encoding="utf-8"?>
 </shape>
 '''
 (res / "drawable/diary_widget_button.xml").write_text(button_bg, encoding="utf-8")
-# Preserve the original widget minimum size; each shortcut keeps its own 48dp hit target.
+# Fit the centered header and four equal-width 48dp shortcuts with minimal outer padding.
 widget_info = r'''<?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="180dp"
-    android:minHeight="230dp"
+    android:minHeight="280dp"
     android:updatePeriodMillis="1800000"
     android:initialLayout="@layout/diary_home_widget"
     android:resizeMode="horizontal|vertical"
@@ -522,8 +523,8 @@ if not any(node.get(ANDROID_NS + "resource") == "@xml/diary_home_widget_info" fo
     raise SystemExit("FAIL: My Diary widget provider metadata missing")
 if not (res / "layout/diary_home_widget.xml").is_file() or not provider_path.is_file():
     raise SystemExit("FAIL: My Diary widget layout/provider source missing")
-if 'android:minHeight="230dp"' not in widget_info:
-    raise SystemExit("FAIL: original 230dp widget minimum size was not preserved")
+if 'android:minHeight="280dp"' not in widget_info:
+    raise SystemExit("FAIL: required 280dp widget minimum size was not preserved")
 if "getHomeWidgetSettings()" not in KOTLIN_PATH.read_text(encoding="utf-8") or "window.__diaryOpenWidgetTargetFromAndroid=function(target)" not in HTML_PATH.read_text(encoding="utf-8"):
     raise SystemExit("FAIL: My Diary widget settings bridge or destination handler missing")
 widget_html_check = HTML_PATH.read_text(encoding="utf-8")
@@ -536,8 +537,8 @@ for required in (
         raise SystemExit("FAIL: widget shortcut destination preservation missing: " + required)
 if widget_html_check.count("diaryFinishPendingWidgetTarget();") != 5:
     raise SystemExit("FAIL: widget destination must resume after app open, PIN, Pattern, and Fingerprint unlock")
-if 'android:minHeight="230dp"' not in widget_info:
-    raise SystemExit("FAIL: original 230dp widget minimum size was not preserved")
+if 'android:minHeight="280dp"' not in widget_info:
+    raise SystemExit("FAIL: required 280dp widget minimum size was not preserved")
 for target in ('"diary"', '"calendar"', '"reminders"', '"new-note"'):
     if target not in provider_path.read_text(encoding="utf-8"):
         raise SystemExit("FAIL: missing native widget shortcut target " + target)
