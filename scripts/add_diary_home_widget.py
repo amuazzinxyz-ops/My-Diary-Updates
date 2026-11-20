@@ -40,6 +40,12 @@ widget_ui = r"""
   var widgetShowCalendar=makeWidgetOption('diaryWidgetShowCalendar','📅 Personal Calendar kholen',true);
   var widgetShowReminder=makeWidgetOption('diaryWidgetShowReminder','⏰ Smart Reminder kholen',true);
   var widgetShowNewNote=makeWidgetOption('diaryWidgetShowNewNote','✍️ New Note kholen',true);
+  var widgetShowKharcha=makeWidgetOption('diaryWidgetShowKharcha','💰 My Kharcha kholen',false);
+  var widgetShowDocuments=makeWidgetOption('diaryWidgetShowDocuments','📁 My Documents kholen',false);
+  var widgetShowMemories=makeWidgetOption('diaryWidgetShowMemories','📒 My Memories kholen',false);
+  var widgetShowPrivateLocker=makeWidgetOption('diaryWidgetShowPrivateLocker','🔐 Private Locker kholen',false);
+  var widgetShowFavouriteNotes=makeWidgetOption('diaryWidgetShowFavouriteNotes','⭐ Favourite Notes kholen',false);
+  var widgetShowWorldClock=makeWidgetOption('diaryWidgetShowWorldClock','🌍 World Clock kholen',false);
   var widgetSizeLabel=el('label',{class:'diary-home-widget-size-label'},'Widget Text Size');
   var widgetSize=el('select',{id:'diaryWidgetSize'});
   [['compact','Chhota'],['standard','Normal'],['large','Bada']].forEach(function(item){widgetSize.appendChild(el('option',{value:item[0]},item[1]));});
@@ -50,7 +56,7 @@ widget_ui = r"""
   widgetSettingsModal.append(widgetSettingsHead,widgetSettingsHint,widgetSettingsOptions,widgetSettingsSave,widgetSettingsPin,widgetSettingsStatus);
   ov.appendChild(widgetSettingsModal);
   function widgetSettingsValue(){
-   return {showDate:!!widgetShowDate.checked,showDiary:!!widgetShowDiary.checked,showCalendar:!!widgetShowCalendar.checked,showReminder:!!widgetShowReminder.checked,showNewNote:!!widgetShowNewNote.checked,size:String(widgetSize.value||'standard')};
+   return {showDate:!!widgetShowDate.checked,showDiary:!!widgetShowDiary.checked,showCalendar:!!widgetShowCalendar.checked,showReminder:!!widgetShowReminder.checked,showNewNote:!!widgetShowNewNote.checked,showKharcha:!!widgetShowKharcha.checked,showDocuments:!!widgetShowDocuments.checked,showMemories:!!widgetShowMemories.checked,showPrivateLocker:!!widgetShowPrivateLocker.checked,showFavouriteNotes:!!widgetShowFavouriteNotes.checked,showWorldClock:!!widgetShowWorldClock.checked,size:String(widgetSize.value||'standard')};
   }
   function widgetApplySettings(value){
    value=value||{};
@@ -59,6 +65,12 @@ widget_ui = r"""
    widgetShowCalendar.checked=value.showCalendar!==false;
    widgetShowReminder.checked=value.showReminder!==false;
    widgetShowNewNote.checked=value.showNewNote!==false;
+   widgetShowKharcha.checked=!!value.showKharcha;
+   widgetShowDocuments.checked=!!value.showDocuments;
+   widgetShowMemories.checked=!!value.showMemories;
+   widgetShowPrivateLocker.checked=!!value.showPrivateLocker;
+   widgetShowFavouriteNotes.checked=!!value.showFavouriteNotes;
+   widgetShowWorldClock.checked=!!value.showWorldClock;
    widgetSize.value=['compact','standard','large'].indexOf(value.size)>=0?value.size:'standard';
   }
   function widgetSaveSettings(showMessage){
@@ -66,7 +78,7 @@ widget_ui = r"""
     widgetSettingsStatus.textContent='Widget Settings ke liye My Diary ka installed Android app kholein.';return false;
    }
    var value=widgetSettingsValue();
-   if(!value.showDiary&&!value.showCalendar&&!value.showReminder&&!value.showNewNote){widgetSettingsStatus.textContent='Kam se kam ek shortcut select karein.';return false;}
+   if(!value.showDiary&&!value.showCalendar&&!value.showReminder&&!value.showNewNote&&!value.showKharcha&&!value.showDocuments&&!value.showMemories&&!value.showPrivateLocker&&!value.showFavouriteNotes&&!value.showWorldClock){widgetSettingsStatus.textContent='Kam se kam ek shortcut select karein.';return false;}
    try{
     var saved=DiaryAppActions.saveHomeWidgetSettings(JSON.stringify(value));
     widgetSettingsStatus.textContent=saved?'Widget Settings save ho gayi.':'Settings save nahi ho sakin.';
@@ -102,7 +114,10 @@ elif "widgetSettingsPin.addEventListener" not in html:
 feature_anchor = "  function openMeFeature(kind){if(meFeatureProtected(kind)&&meFeaturePinConfig(kind)){showMeFeaturePin(kind);return;}showMeFeaturePage(kind);}"
 widget_target = r"""
   window.__diaryOpenWidgetTarget=function(target){
-   if(target==='calendar'||target==='reminders')openMeFeature(target);
+   if(['calendar','reminders','kharcha','documents','memories'].indexOf(target)>=0){openMeFeature(target);return;}
+   if(target==='private-locker'){privateLockerOpen();return;}
+   if(target==='world-clock'){worldClockBtn.click();return;}
+   if(target==='favourite-notes'&&typeof window.__diaryShowFavouriteNotesFromWidget==='function'){window.__diaryShowFavouriteNotesFromWidget();return;}
   };
 """
 if "window.__diaryOpenWidgetTarget=function(target)" not in html:
@@ -120,7 +135,7 @@ widget_launcher = r"""
   try{
    if(localStorage.getItem(DIARY_MASTER_PIN_KEY)){openOverlay();return;}
    openOverlay();
-   if(target==='calendar'||target==='reminders'){
+   if(['calendar','reminders','kharcha','documents','memories','private-locker','favourite-notes','world-clock'].indexOf(target)>=0){
     var tries=0;
     (function waitForDiaryOverlay(){
      if(typeof window.__diaryOpenWidgetTarget==='function'){window.__diaryOpenWidgetTarget(target);return;}
@@ -173,6 +188,12 @@ bridge_methods = r"""
                 .put("showCalendar", prefs.getBoolean("showCalendar", true))
                 .put("showReminder", prefs.getBoolean("showReminder", true))
                 .put("showNewNote", prefs.getBoolean("showNewNote", true))
+                .put("showKharcha", prefs.getBoolean("showKharcha", false))
+                .put("showDocuments", prefs.getBoolean("showDocuments", false))
+                .put("showMemories", prefs.getBoolean("showMemories", false))
+                .put("showPrivateLocker", prefs.getBoolean("showPrivateLocker", false))
+                .put("showFavouriteNotes", prefs.getBoolean("showFavouriteNotes", false))
+                .put("showWorldClock", prefs.getBoolean("showWorldClock", false))
                 .put("size", prefs.getString("size", "standard"))
                 .toString()
         }
@@ -187,6 +208,12 @@ bridge_methods = r"""
                     .putBoolean("showCalendar", value.optBoolean("showCalendar", true))
                     .putBoolean("showReminder", value.optBoolean("showReminder", true))
                     .putBoolean("showNewNote", value.optBoolean("showNewNote", true))
+                    .putBoolean("showKharcha", value.optBoolean("showKharcha", false))
+                    .putBoolean("showDocuments", value.optBoolean("showDocuments", false))
+                    .putBoolean("showMemories", value.optBoolean("showMemories", false))
+                    .putBoolean("showPrivateLocker", value.optBoolean("showPrivateLocker", false))
+                    .putBoolean("showFavouriteNotes", value.optBoolean("showFavouriteNotes", false))
+                    .putBoolean("showWorldClock", value.optBoolean("showWorldClock", false))
                     .putString("size", value.optString("size", "standard").takeIf { it in setOf("compact", "standard", "large") } ?: "standard")
                     .apply()
                 runOnUiThread { DiaryHomeWidgetProvider.updateAll(this@MainActivity) }
@@ -300,18 +327,22 @@ class DiaryHomeWidgetProvider : AppWidgetProvider() {
             val availableWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 180)
             val availableHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 280)
             val showDate = prefs.getBoolean("showDate", true) && availableHeight >= 280
-            var showDiary = prefs.getBoolean("showDiary", true)
-            val showCalendar = prefs.getBoolean("showCalendar", true)
-            val showReminder = prefs.getBoolean("showReminder", true)
-            val showNewNote = prefs.getBoolean("showNewNote", true)
-            if (!showDiary && !showCalendar && !showReminder && !showNewNote) showDiary = true
+            val shortcuts = listOf(
+                Triple(R.id.widgetDiaryButtonHit, R.id.widgetDiaryButton, prefs.getBoolean("showDiary", true) to "diary"),
+                Triple(R.id.widgetCalendarButtonHit, R.id.widgetCalendarButton, prefs.getBoolean("showCalendar", true) to "calendar"),
+                Triple(R.id.widgetReminderButtonHit, R.id.widgetReminderButton, prefs.getBoolean("showReminder", true) to "reminders"),
+                Triple(R.id.widgetNewNoteButtonHit, R.id.widgetNewNoteButton, prefs.getBoolean("showNewNote", true) to "new-note"),
+                Triple(R.id.widgetKharchaButtonHit, R.id.widgetKharchaButton, prefs.getBoolean("showKharcha", false) to "kharcha"),
+                Triple(R.id.widgetDocumentsButtonHit, R.id.widgetDocumentsButton, prefs.getBoolean("showDocuments", false) to "documents"),
+                Triple(R.id.widgetMemoriesButtonHit, R.id.widgetMemoriesButton, prefs.getBoolean("showMemories", false) to "memories"),
+                Triple(R.id.widgetPrivateLockerButtonHit, R.id.widgetPrivateLockerButton, prefs.getBoolean("showPrivateLocker", false) to "private-locker"),
+                Triple(R.id.widgetFavouriteNotesButtonHit, R.id.widgetFavouriteNotesButton, prefs.getBoolean("showFavouriteNotes", false) to "favourite-notes"),
+                Triple(R.id.widgetWorldClockButtonHit, R.id.widgetWorldClockButton, prefs.getBoolean("showWorldClock", false) to "world-clock")
+            )
+            val anyShortcutSelected = shortcuts.any { it.third.first }
 
             views.setTextViewText(R.id.widgetDate, SimpleDateFormat("EEE, dd MMM yyyy", Locale.getDefault()).format(Date()))
             views.setViewVisibility(R.id.widgetDate, if (showDate) View.VISIBLE else View.GONE)
-            views.setViewVisibility(R.id.widgetDiaryButtonHit, if (showDiary) View.VISIBLE else View.GONE)
-            views.setViewVisibility(R.id.widgetCalendarButtonHit, if (showCalendar) View.VISIBLE else View.GONE)
-            views.setViewVisibility(R.id.widgetReminderButtonHit, if (showReminder) View.VISIBLE else View.GONE)
-            views.setViewVisibility(R.id.widgetNewNoteButtonHit, if (showNewNote) View.VISIBLE else View.GONE)
 
             val size = prefs.getString("size", "standard") ?: "standard"
             val titleSize = when (size) { "compact" -> 15f; "large" -> 21f; else -> 18f }
@@ -319,17 +350,18 @@ class DiaryHomeWidgetProvider : AppWidgetProvider() {
             val responsiveBodySize = if (availableWidth < 180) minOf(bodySize, 12f) else bodySize
             views.setTextViewTextSize(R.id.widgetTitle, TypedValue.COMPLEX_UNIT_SP, if (availableWidth < 180) minOf(titleSize, 16f) else titleSize)
             views.setTextViewTextSize(R.id.widgetDate, TypedValue.COMPLEX_UNIT_SP, responsiveBodySize)
-            listOf(R.id.widgetDiaryButton, R.id.widgetCalendarButton, R.id.widgetReminderButton, R.id.widgetNewNoteButton)
-                .forEach { views.setTextViewTextSize(it, TypedValue.COMPLEX_UNIT_SP, responsiveBodySize) }
+            shortcuts.forEachIndexed { index, shortcut ->
+                val (hitId, labelId, setting) = shortcut
+                val visible = setting.first || (index == 0 && !anyShortcutSelected)
+                views.setViewVisibility(hitId, if (visible) View.VISIBLE else View.GONE)
+                views.setTextViewTextSize(labelId, TypedValue.COMPLEX_UNIT_SP, responsiveBodySize)
+                setTarget(context, views, widgetId, hitId, index + 1, setting.second)
+            }
             val density = context.resources.displayMetrics.density
             val horizontalPadding = (if (availableWidth < 180) 6 * density else 10 * density).toInt()
             val verticalPadding = (if (availableHeight < 280) 6 * density else 10 * density).toInt()
             views.setViewPadding(R.id.widgetRoot, horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
 
-            setTarget(context, views, widgetId, R.id.widgetDiaryButtonHit, 1, "diary")
-            setTarget(context, views, widgetId, R.id.widgetCalendarButtonHit, 2, "calendar")
-            setTarget(context, views, widgetId, R.id.widgetReminderButtonHit, 3, "reminders")
-            setTarget(context, views, widgetId, R.id.widgetNewNoteButtonHit, 4, "new-note")
             manager.updateAppWidget(widgetId, views)
         }
 
@@ -383,9 +415,22 @@ layout = r'''<?xml version="1.0" encoding="utf-8"?>
         android:textColor="#5B4B6E"
         android:textSize="14sp"
         android:gravity="center"
-        android:paddingBottom="7dp" />
-    <FrameLayout
-        android:id="@+id/widgetDiaryButtonHit"
+        android:paddingBottom="7dp" />'''
+widget_button_specs = [
+    ("Diary", "📒 My Diary"),
+    ("Calendar", "📅 Personal Calendar"),
+    ("Reminder", "⏰ Smart Reminder"),
+    ("NewNote", "✍️ New Note"),
+    ("Kharcha", "💰 My Kharcha"),
+    ("Documents", "📁 My Documents"),
+    ("Memories", "📒 My Memories"),
+    ("PrivateLocker", "🔐 Private Locker"),
+    ("FavouriteNotes", "⭐ Favourite Notes"),
+    ("WorldClock", "🌍 World Clock"),
+]
+button_rows = "\n".join(
+    f'''    <FrameLayout
+        android:id="@+id/widget{key}ButtonHit"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginTop="4dp"
@@ -394,78 +439,18 @@ layout = r'''<?xml version="1.0" encoding="utf-8"?>
         android:longClickable="false"
         android:background="@drawable/diary_widget_button">
         <TextView
-            android:id="@+id/widgetDiaryButton"
+            android:id="@+id/widget{key}Button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="📒 My Diary"
+            android:text="{label}"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
             android:clickable="false"
             android:focusable="false" />
-    </FrameLayout>
-    <FrameLayout
-        android:id="@+id/widgetCalendarButtonHit"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="4dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:longClickable="false"
-        android:background="@drawable/diary_widget_button">
-        <TextView
-            android:id="@+id/widgetCalendarButton"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="📅 Personal Calendar"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:clickable="false"
-            android:focusable="false" />
-    </FrameLayout>
-    <FrameLayout
-        android:id="@+id/widgetReminderButtonHit"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="4dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:longClickable="false"
-        android:background="@drawable/diary_widget_button">
-        <TextView
-            android:id="@+id/widgetReminderButton"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="⏰ Smart Reminder"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:clickable="false"
-            android:focusable="false" />
-    </FrameLayout>
-    <FrameLayout
-        android:id="@+id/widgetNewNoteButtonHit"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="4dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:longClickable="false"
-        android:background="@drawable/diary_widget_button">
-        <TextView
-            android:id="@+id/widgetNewNoteButton"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="✍️ New Note"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:clickable="false"
-            android:focusable="false" />
-    </FrameLayout>
-</LinearLayout>
-'''
+    </FrameLayout>''' for key, label in widget_button_specs
+)
+layout = layout + "\n" + button_rows + "\n</LinearLayout>\n"
 layout_path = res / "layout/diary_home_widget.xml"
 layout_path.write_text(layout, encoding="utf-8")
 bg = r'''<?xml version="1.0" encoding="utf-8"?>
@@ -548,7 +533,7 @@ if "getHomeWidgetSettings()" not in KOTLIN_PATH.read_text(encoding="utf-8") or "
 widget_html_check = HTML_PATH.read_text(encoding="utf-8")
 for required in (
     "function diaryFinishPendingWidgetTarget()",
-    "window.__diaryPendingWidgetTarget=(target==='calendar'||target==='reminders')?target:null;",
+    "window.__diaryPendingWidgetTarget=(['calendar','reminders','kharcha','documents','memories','private-locker','favourite-notes','world-clock','diary','new-note'].indexOf(target)>=0)?target:null;",
     "if(typeof window.__diaryOpenWidgetTarget==='function')window.__diaryOpenWidgetTarget(target);",
 ):
     if required not in widget_html_check:
@@ -558,7 +543,7 @@ if widget_html_check.count("diaryFinishPendingWidgetTarget();") != 5:
 if ('android:minHeight="280dp"' not in widget_info or 'android:minResizeWidth="150dp"' not in widget_info
         or 'android:minResizeHeight="260dp"' not in widget_info or 'android:resizeMode="horizontal|vertical"' not in widget_info):
     raise SystemExit("FAIL: two-axis widget resize dimensions are incomplete")
-for target in ('"diary"', '"calendar"', '"reminders"', '"new-note"'):
+for target in ('"diary"', '"calendar"', '"reminders"', '"new-note"', '"kharcha"', '"documents"', '"memories"', '"private-locker"', '"favourite-notes"', '"world-clock"'):
     if target not in provider_path.read_text(encoding="utf-8"):
         raise SystemExit("FAIL: missing native widget shortcut target " + target)
 print("PASS: native AppWidgetProvider, manifest receiver, RemoteViews layout, selectable options, and tap destinations verified.")

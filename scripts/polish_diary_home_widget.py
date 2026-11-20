@@ -16,6 +16,12 @@ BUTTONS = {
     "widgetCalendarButtonHit": "widgetCalendarButton",
     "widgetReminderButtonHit": "widgetReminderButton",
     "widgetNewNoteButtonHit": "widgetNewNoteButton",
+    "widgetKharchaButtonHit": "widgetKharchaButton",
+    "widgetDocumentsButtonHit": "widgetDocumentsButton",
+    "widgetMemoriesButtonHit": "widgetMemoriesButton",
+    "widgetPrivateLockerButtonHit": "widgetPrivateLockerButton",
+    "widgetFavouriteNotesButtonHit": "widgetFavouriteNotesButton",
+    "widgetWorldClockButtonHit": "widgetWorldClockButton",
 }
 
 if not all(path.is_file() for path in (LAYOUT, INFO, PROVIDER)):
@@ -97,7 +103,7 @@ if (info.get(ANDROID + "minHeight") != "280dp" or info.get(ANDROID + "minWidth")
         or info.get(ANDROID + "resizeMode") != "horizontal|vertical"):
     raise SystemExit("BLOCKED: two-axis widget resize dimensions changed unexpectedly")
 provider = PROVIDER.read_text(encoding="utf-8")
-for target in ('"diary"', '"calendar"', '"reminders"', '"new-note"'):
+for target in ('"diary"', '"calendar"', '"reminders"', '"new-note"', '"kharcha"', '"documents"', '"memories"', '"private-locker"', '"favourite-notes"', '"world-clock"'):
     if target not in provider:
         raise SystemExit("BLOCKED: missing independent widget destination " + target)
 if provider.count("setOnClickPendingIntent(") != 1 or "widgetId * 10 + slot" not in provider:
@@ -132,4 +138,4 @@ provider_text = PROVIDER.read_text(encoding="utf-8")
 for marker in ("onAppWidgetOptionsChanged", "OPTION_APPWIDGET_MIN_WIDTH", "responsiveBodySize"):
     if marker not in provider_text:
         raise SystemExit("FAIL: widget resize adaptation missing: " + marker)
-print("PASS: four equal full-content-width 48dp buttons, centered Diary title/date, responsive text/padding, user-resizable widget, raised 3D face, isolated pressed state, and independent tap routing.")
+print("PASS: ten independently selectable full-content-width 48dp buttons, centered Diary title/date, responsive text/padding, two-axis user-resizable widget, raised 3D face, isolated pressed state, and independent tap routing.")
