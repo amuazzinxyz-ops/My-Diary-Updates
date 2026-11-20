@@ -7,8 +7,8 @@
   "sha256": "d76b5d9d0c8620033c97a6739c2ff37ce98bceda5aad8abd2d20d5fda11786cf",
   "releaseNotes": "My Diary 1.0.203: Home Screen widget content/background now ends after the selected shortcuts: two visible buttons use two-button height; four visible buttons expand to four-button height. Left–Right and Upper–Neeche resizing, four independent shortcuts, and individual 3D press feedback are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 368,
+  "webVersion": 369,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "330e46f7181210eea101add64e44a97872f8ebff65d28c7ed0ebf17165558d3a",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webSha256": "61911c65ea82f4144ca5a889d038e8f29538ad46794b48dc49a2993e38717757",
+  "webReleaseNotes": "Fix My Kharcha and encrypted Private Locker Backup/Restore failure caused by a cross-scope function reference. Existing backup contents, Notes, and saved Locker data are preserved. APK remains 1.0.203."
 }
