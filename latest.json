@@ -5,7 +5,7 @@
   "versionName": "1.0.200",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
   "sha256": "58a9257824c53f84f8a5d9f9327b611698e45c4e8f5bf741c1026cbd8a74e1c9",
-  "releaseNotes": "My Diary 1.0.200: Home Screen widget now shows the Diary title and date centered above four equal-width buttons sized to the Personal Calendar button, with only a small outer margin. Individual 3D press feedback and all four independent shortcuts are preserved.",
+  "releaseNotes": "My Diary 1.0.201: Home Screen widget buttons expand equally to the available width. The widget can be resized left-right only; text size and side padding adapt to its width. Vertical resizing is disabled. Individual 3D press feedback and all four independent shortcuts are preserved.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 364,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
