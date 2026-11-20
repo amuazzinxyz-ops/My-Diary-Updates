@@ -1,4 +1,4 @@
-# Approved release build: publish signed Diary 1.0.198/197 with original-size widget shortcut routing.
+# Approved release build: publish signed Diary 1.0.199/197 with original-size widget shortcut routing.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -195,6 +195,26 @@ jobs:
           print("PASS: optional Pattern Lock setup, 3x3 grid, PIN fallback and recovery preservation markers verified")
           PY
           python3 scripts/add_diary_app_actions.py
+          python3 - <<'PY'
+          import xml.etree.ElementTree as ET
+          from pathlib import Path
+          root=ET.parse("diary-project/app/src/main/res/layout/diary_home_widget.xml").getroot()
+          ns="{http://schemas.android.com/apk/res/android}"
+          if root.get(ns+"clickable")!="false" or root.get(ns+"longClickable")!="false":
+              raise SystemExit("BLOCKED: widget root must not respond to tap/long-press")
+          for hit,label in (("widgetDiaryButtonHit","widgetDiaryButton"),("widgetCalendarButtonHit","widgetCalendarButton"),("widgetReminderButtonHit","widgetReminderButton"),("widgetNewNoteButtonHit","widgetNewNoteButton")):
+              h=root.find(".//*[@"+ns+"id='@+id/"+hit+"']")
+              t=root.find(".//*[@"+ns+"id='@+id/"+label+"']")
+              if h is None or t is None or h.get(ns+"layout_width")!="wrap_content" or h.get(ns+"layout_height")!="48dp" or t.get(ns+"layout_width")!="wrap_content" or t.get(ns+"clickable")!="false":
+                  raise SystemExit("BLOCKED: shortcut must be text-width, 48dp high, and independently clickable: "+hit)
+          selector=ET.parse("diary-project/app/src/main/res/drawable/diary_widget_button.xml").getroot()
+          if not any(item.get(ns+"state_pressed")=="true" for item in list(selector)):
+              raise SystemExit("BLOCKED: individual pressed-state button feedback missing")
+          info=ET.parse("diary-project/app/src/main/res/xml/diary_home_widget_info.xml").getroot()
+          if info.get(ns+"minHeight")!="230dp":
+              raise SystemExit("BLOCKED: original widget minimum height changed")
+          print("PASS: text-based button sizing, 3D pressed feedback, isolated tap targets and original widget size")
+          PY
           python3 - <<'PY'
           from pathlib import Path
           kotlin = Path("diary-project/app/src/main/java/com/muazzin/diary/MainActivity.kt").read_text(encoding="utf-8")
@@ -399,7 +419,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved Diary release version 1.0.198 (versionCode 197)
+      - name: Set approved Diary release version 1.0.199 (versionCode 198)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
@@ -407,12 +427,12 @@ jobs:
           from pathlib import Path
           p = Path("app/build.gradle.kts")
           s = p.read_text(encoding="utf-8")
-          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 197', s, count=1)
-          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.198"', s, count=1)
+          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 198', s, count=1)
+          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.199"', s, count=1)
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary release versionName=1.0.198, versionCode=197")
+          print("Set Diary release versionName=1.0.199, versionCode=197")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -434,10 +454,10 @@ jobs:
           name = one(r'versionName\s*=\s*"([^"]+)"', "versionName")
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
-          if code != 197 or name != "1.0.198":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.198/197, found {name}/{code}")
+          if code != 198 or name != "1.0.199":
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.199/197, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if feed_version not in ((195, "1.0.196"), (196, "1.0.197")):
+          if feed_version != (197, "1.0.198"):
               raise SystemExit(f"BLOCKED: update feed is neither the installed baseline nor the exact new release: {feed_version}")
           print(f"PASS: package={package}, release={name}/{code}; feed state is approved: {feed_version}")
           PY
@@ -563,7 +583,7 @@ jobs:
           echo "Release APK certificate matches the previously supplied SHA-256 fingerprint."
           rm -f app/diary-release.jks
 
-      - name: Publish verified Diary update 1.0.198 after release verification PASS
+      - name: Publish verified Diary update 1.0.199 after release verification PASS
         if: env.DIARY_RELEASE_READY == 'true'
         shell: bash
         run: |
@@ -572,7 +592,7 @@ jobs:
           test -s "$APK"
           SHA256="$(sha256sum "$APK" | awk '{print $1}')"
           cp "$APK" /tmp/My-Diary-verified.apk
-          printf '1.0.198\n197\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.199\n197\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -f -B diary-publish-main origin/main
           python3 - <<'PY'
@@ -580,7 +600,7 @@ jobs:
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in ((195, "1.0.196"), (196, "1.0.197")):
+          if meta.get("packageName") != "com.personal.diaryapp" or feed_version != (197, "1.0.198"):
               raise SystemExit(f"BLOCKED: live main feed is neither the installed baseline nor the exact new release: {feed_version}")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
@@ -589,17 +609,17 @@ jobs:
           meta["versionCode"] = int(lines[1])
           meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk"
           meta["sha256"] = lines[2]
-          meta["releaseNotes"] = "My Diary 1.0.198: Kept the original widget size and corrected shortcut routing so Calendar and Smart Reminder open their selected section after Diary unlock. Each of the four shortcuts retains its own independent tap target."
+          meta["releaseNotes"] = "My Diary 1.0.199: Home Screen widget shortcuts now size to each label, use raised 3D gold-edged buttons with individual pressed feedback, and keep taps isolated to the selected button. Original widget minimum size and all four independent destinations are preserved."
           meta["webSha256"] = hashlib.sha256(Path("web-source/index.html").read_bytes()).hexdigest()
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           cp /tmp/My-Diary-verified.apk My-Diary.apk
-          cp /tmp/My-Diary-verified.apk My-Diary-1.0.198.apk
+          cp /tmp/My-Diary-verified.apk My-Diary-1.0.199.apk
           python3 -m json.tool latest.json >/dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add My-Diary.apk My-Diary-1.0.198.apk latest.json
-          git commit -m "Publish My Diary update 1.0.198"
+          git add My-Diary.apk My-Diary-1.0.199.apk latest.json
+          git commit -m "Publish My Diary update 1.0.199"
           git push origin HEAD:main
       - name: Upload unsigned Release APK for private owner-side signing
         if: env.DIARY_RELEASE_READY != 'true'
@@ -614,7 +634,7 @@ jobs:
         if: env.DIARY_RELEASE_READY == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: My-Diary-1.0.198-signed-test-candidate
+          name: My-Diary-1.0.199-signed-test-candidate
           path: diary-project/app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
           retention-days: 30
@@ -630,7 +650,7 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: My-Diary-1.0.198-debug-test-candidate
+          name: My-Diary-1.0.199-debug-test-candidate
           path: diary-project/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
