@@ -321,8 +321,9 @@ class DiaryHomeWidgetProvider : AppWidgetProvider() {
             views.setTextViewTextSize(R.id.widgetDate, TypedValue.COMPLEX_UNIT_SP, responsiveBodySize)
             listOf(R.id.widgetDiaryButton, R.id.widgetCalendarButton, R.id.widgetReminderButton, R.id.widgetNewNoteButton)
                 .forEach { views.setTextViewTextSize(it, TypedValue.COMPLEX_UNIT_SP, responsiveBodySize) }
-            if (availableHeight < 280) views.setViewPadding(R.id.widgetRoot, 6, 6, 6, 6)
-            else views.setViewPadding(R.id.widgetRoot, 10, 10, 10, 10)
+            val density = context.resources.displayMetrics.density
+            val outerPadding = if (availableHeight < 280) (6 * density).toInt() else (10 * density).toInt()
+            views.setViewPadding(R.id.widgetRoot, outerPadding, outerPadding, outerPadding, outerPadding)
 
             setTarget(context, views, widgetId, R.id.widgetDiaryButtonHit, 1, "diary")
             setTarget(context, views, widgetId, R.id.widgetCalendarButtonHit, 2, "calendar")
