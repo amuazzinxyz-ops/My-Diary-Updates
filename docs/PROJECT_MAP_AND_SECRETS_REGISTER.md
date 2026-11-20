@@ -1,3 +1,16 @@
+# My Kharcha — move Edit beside Delete (Web Update 367, 2026-11-20)
+
+- User requested that the existing ✏️ Edit button in **💰 My Kharcha** be removed from its previous separate position and placed immediately beside **🗑️ Hataayein**, matching the Documents/Memories action-row layout.
+- Moved the existing Kharcha Edit button into the same horizontal, right-aligned action row as Delete. The existing edit handler and save flow are reused without changing the editable fields or record ID.
+- The existing Delete button, confirmation prompt, and delete handler are unchanged. Expense/income amounts, date, category, details, records, storage, and calculations are unchanged.
+- Only the My Kharcha entry action layout was changed. My Documents/My Memories side-by-side rows and all other Diary sections remain unchanged. No native Java/Kotlin, PIN/lock, notes, reminders, or app identity changes.
+- Pre-edit backup branch: `backup/before-register-kharcha-edit-beside-delete-2026-11-20`. Source working branch: `fix/kharcha-edit-beside-delete-2026-11-20`. PR #310 merged as `1a77f4ac7ff6c06d07f9dac3f1bf6cdc244a97e1`.
+- Web publisher workflow run **44791741047** completed successfully. Re-fetched `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `c80b23c6f8c84f6d589b474eadc6452636896888` (579,923 bytes). Live `latest.json` confirms **webVersion 367** and web SHA-256 `7998038e198d8a389c0d62bc6127df0f1955be5549d9e170c31b7febe22fa554`.
+- APK feed remains **1.0.203 / versionCode 202**, package `com.personal.diaryapp`, APK SHA-256 `d76b5d9d0c8620033c97a6739c2ff37ce98bceda5aad8abd2d20d5fda11786cf`. No APK rebuild or delivery is required for this web-only change. Delivery remains **Me → Check for Updates only**; do not send an APK unless the user explicitly asks.
+- Physical-phone verification of the Kharcha Edit/Delete side-by-side placement remains **pending**. Do not claim device-side PASS until the user confirms it.
+
+---
+
 # My Documents and My Memories — move Edit beside Delete (Web Update 366, 2026-11-20)
 
 - User requested that the ✏️ Edit button be removed from its previous position near the top of each saved entry and placed immediately beside 🗑️ Hataayein.
