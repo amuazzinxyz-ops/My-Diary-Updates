@@ -1,3 +1,16 @@
+# My Documents and My Memories — move Edit beside Delete (Web Update 366, 2026-11-20)
+
+- User requested that the ✏️ Edit button be removed from its previous position near the top of each saved entry and placed immediately beside 🗑️ Hataayein.
+- Moved the existing Edit button into a shared bottom action row with the existing Delete button for **My Documents** and **My Memories** only. Both controls sit on the same horizontal line, right-aligned with a small gap.
+- The existing Edit click handler and form/save behavior are unchanged. Existing record IDs, photo/file Blobs, MIME types, original stored filenames, dates, and details remain preserved. The Delete handler and confirmation are unchanged.
+- No other Diary sections, notes, PINs, locks, reminders, native Android code, or APK were changed.
+- Pre-edit backup branch: `backup/before-register-edit-beside-delete-2026-11-20`. Source working branch: `fix/documents-memories-edit-beside-delete-2026-11-20`. PR #308 merged as `47b249d4e6a13adda4cf715a7feb8443fc023932`.
+- Web publisher commit: `e308d26cdb53f8ef4f1d76f1e221b879b9b2b32c`. Re-fetched `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `b0bdfd9e9c205ab3e40e18d03b857f2728e7b584` (579,844 bytes). Live `latest.json` confirms **webVersion 366** and web SHA-256 `c21da4af5ab579539e9870fffa5444344059f9ad3ae806e7d5ea2852fa13195f`.
+- APK remains **1.0.203 / versionCode 202**, package `com.personal.diaryapp`; APK SHA-256 remains `d76b5d9d0c8620033c97a6739c2ff37ce98bceda5aad8abd2d20d5fda11786cf`. No APK rebuild is required. Delivery remains **Me → Check for Updates only**; do not send an APK unless the user explicitly asks.
+- Physical-phone verification of the new side-by-side placement remains **pending**. Do not claim device-side PASS until the user confirms it.
+
+---
+
 # My Documents and My Memories — editable saved-entry names (Web Update 365, 2026-11-20)
 
 - User requested an **Edit** option for the displayed name of any saved image or entry in both **My Documents** and **My Memories**.
