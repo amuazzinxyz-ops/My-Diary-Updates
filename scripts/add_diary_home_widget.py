@@ -470,11 +470,11 @@ button_bg = r'''<?xml version="1.0" encoding="utf-8"?>
 </shape>
 '''
 (res / "drawable/diary_widget_button.xml").write_text(button_bg, encoding="utf-8")
-# Keep the provider bounds large enough for the complete vertical layout and all four touch rows.
+# Preserve the original widget minimum size; each shortcut keeps its own 48dp hit target.
 widget_info = r'''<?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="180dp"
-    android:minHeight="300dp"
+    android:minHeight="230dp"
     android:updatePeriodMillis="1800000"
     android:initialLayout="@layout/diary_home_widget"
     android:resizeMode="horizontal|vertical"
@@ -522,8 +522,8 @@ if not any(node.get(ANDROID_NS + "resource") == "@xml/diary_home_widget_info" fo
     raise SystemExit("FAIL: My Diary widget provider metadata missing")
 if not (res / "layout/diary_home_widget.xml").is_file() or not provider_path.is_file():
     raise SystemExit("FAIL: My Diary widget layout/provider source missing")
-if 'android:minHeight="300dp"' not in widget_info:
-    raise SystemExit("FAIL: widget minimum height must fit all four 48dp shortcut rows")
+if 'android:minHeight="230dp"' not in widget_info:
+    raise SystemExit("FAIL: original 230dp widget minimum size was not preserved")
 if "getHomeWidgetSettings()" not in KOTLIN_PATH.read_text(encoding="utf-8") or "window.__diaryOpenWidgetTargetFromAndroid=function(target)" not in HTML_PATH.read_text(encoding="utf-8"):
     raise SystemExit("FAIL: My Diary widget settings bridge or destination handler missing")
 print("PASS: native AppWidgetProvider, manifest receiver, RemoteViews layout, selectable options, and tap destinations verified.")
