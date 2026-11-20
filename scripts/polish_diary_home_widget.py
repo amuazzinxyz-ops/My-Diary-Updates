@@ -93,8 +93,9 @@ BUTTON_BG.write_text(button_selector, encoding="utf-8")
 
 info = ET.parse(INFO).getroot()
 if (info.get(ANDROID + "minHeight") != "280dp" or info.get(ANDROID + "minWidth") != "180dp"
-        or info.get(ANDROID + "minResizeWidth") != "150dp" or info.get(ANDROID + "minResizeHeight") != "260dp"):
-    raise SystemExit("BLOCKED: required widget minimum/resize dimensions changed unexpectedly")
+        or info.get(ANDROID + "minResizeWidth") != "150dp" or info.get(ANDROID + "resizeMode") != "horizontal"
+        or info.get(ANDROID + "minResizeHeight") is not None):
+    raise SystemExit("BLOCKED: horizontal-only widget resize dimensions changed unexpectedly")
 provider = PROVIDER.read_text(encoding="utf-8")
 for target in ('"diary"', '"calendar"', '"reminders"', '"new-note"'):
     if target not in provider:
@@ -126,7 +127,7 @@ for header_id in ("widgetTitle", "widgetDate"):
 if any(check_nodes[x].get(ANDROID + "layout_width") != "match_parent" for x in BUTTONS):
     raise SystemExit("FAIL: all four buttons must expand equally to the resized widget content width")
 provider_text = PROVIDER.read_text(encoding="utf-8")
-for marker in ("onAppWidgetOptionsChanged", "OPTION_APPWIDGET_MIN_WIDTH", "OPTION_APPWIDGET_MIN_HEIGHT", "responsiveBodySize"):
+for marker in ("onAppWidgetOptionsChanged", "OPTION_APPWIDGET_MIN_WIDTH", "responsiveBodySize"):
     if marker not in provider_text:
         raise SystemExit("FAIL: widget resize adaptation missing: " + marker)
 print("PASS: four equal full-content-width 48dp buttons, centered Diary title/date, responsive text/padding, user-resizable widget, raised 3D face, isolated pressed state, and independent tap routing.")
