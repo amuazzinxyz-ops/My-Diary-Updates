@@ -4,7 +4,7 @@
 - Removed only the temporary `diaryCheckUpdateTestLabel` block (the small “Web Update 363” text) immediately below **Check for Updates**. The Check for Updates button and its update logic are unchanged.
 - No other Me buttons, Diary features, saved records, PINs, locks, reminders, native Android code, or APK files were changed.
 - Backup branch: `backup/before-remove-check-update-marker-363-2026-11-20`. Working branch: `fix/remove-check-update-test-marker-2026-11-20`.
-- This removal is published as **Web Update 364** so the installed app can detect it through Check for Update. `web-source/index.html` and `diary-web/index.html` are byte-identical. Web SHA-256: `070b0e70b4bd2b84eea91d57d77d21442266f876413641f176b56727449b5031`. APK remains **1.0.195 / versionCode 194**; no APK rebuild or reinstall is required.
+- This removal is published as **Web Update 364** so the installed app can detect it through Check for Update. `web-source/index.html` and `diary-web/index.html` are byte-identical. Web SHA-256: `c07f44281594480679d95732f7258dbd996e3fc2ed29d08d470f4af09bbea17c`. APK remains **1.0.195 / versionCode 194**; no APK rebuild or reinstall is required.
 - Static checks: test marker ID and text are absent; source/mirror parity and advertised checksum verified. Device confirmation that the marker disappears is pending.
 
 ---
