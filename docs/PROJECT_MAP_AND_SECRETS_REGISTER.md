@@ -1,3 +1,12 @@
+# My Diary Backup/Restore — Private Locker scope fix (Web Update 369)
+
+- User testing Web Update 368 found `Backup nahi bana: privateLockerSnapshotForBackup is not defined`.
+- Root cause: Private Locker database helpers were declared in the Locker UI scope, while Notes Backup/Restore ran in a separate scope. Added a narrow `window.diaryPrivateLockerBackupAPI` bridge for snapshot, validation, and restore; no Locker encryption, Notes format, or saved data logic was changed.
+- Updated `web-source/index.html`, kept `diary-web/index.html` byte-identical, and set `latest.json` to webVersion 369 with the matching SHA-256. APK remains 1.0.203; no APK/native code changed.
+- Static source/reference checks passed; physical-device Backup/Restore retest is still pending user confirmation.
+
+---
+
 # My Diary Backup/Restore — My Kharcha + Private Locker release verified (Web Update 368, 2026-11-21)
 
 - The requested My Kharcha and encrypted Private Locker backup/restore change was merged in PR #313 (merge commit d212f5ea43a437683a2434492786c04f9539b4f3).
