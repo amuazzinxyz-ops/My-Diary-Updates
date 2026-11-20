@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 364,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "c07f44281594480679d95732f7258dbd996e3fc2ed29d08d470f4af09bbea17c",
+  "webSha256": "eb4d3d4553d6f3139c08bd7da83685996e76d2f2b2df92992a7b7d390cf9fa32",
   "webReleaseNotes": "Removed the temporary Web Update 363 test label from the Me screen. No other Diary feature or APK change."
 }
