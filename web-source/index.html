@@ -1509,6 +1509,9 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   fontSliderBox.appendChild(fontSlider);fontGroup.appendChild(fontLabel);fontGroup.appendChild(fontSliderBox);settingsRow.appendChild(fontGroup);mePanel.appendChild(settingsRow);
   var checkUpdatesBtn=el('button',{id:'diaryCheckUpdatesBtn',type:'button'},t('checkUpdates'));
   mePanel.appendChild(checkUpdatesBtn);
+  var checkUpdateTestLabel=el('div',{id:'diaryCheckUpdateTestLabel','aria-live':'polite'},'Web Update 363');
+  checkUpdateTestLabel.style.cssText='font-size:12px;text-align:center;opacity:.72;margin:3px 0 8px;';
+  mePanel.appendChild(checkUpdateTestLabel);
   var refreshDiaryBtn=el('button',{id:'diaryDiaryRefreshBtn',type:'button'},t('refresh'));
   mePanel.appendChild(refreshDiaryBtn);
   /* Optional, self-contained World Clock tool. Removing this block and its button leaves all existing Me tools untouched. */
