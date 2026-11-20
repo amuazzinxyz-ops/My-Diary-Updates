@@ -91,7 +91,7 @@ BUTTON_BG.write_text(button_selector, encoding="utf-8")
 
 info = ET.parse(INFO).getroot()
 if info.get(ANDROID + "minHeight") != "280dp" or info.get(ANDROID + "minWidth") != "180dp":
-    raise SystemExit("BLOCKED: original 180dp x 230dp widget minimum size changed unexpectedly")
+    raise SystemExit("BLOCKED: required 180dp x 280dp widget minimum size changed unexpectedly")
 provider = PROVIDER.read_text(encoding="utf-8")
 for target in ('"diary"', '"calendar"', '"reminders"', '"new-note"'):
     if target not in provider:
@@ -104,11 +104,11 @@ check_nodes = {n.get(ANDROID + "id", "").rsplit("/", 1)[-1]: n for n in check.it
 for hit_id, label_id in BUTTONS.items():
     wrapper, label = check_nodes.get(hit_id), check_nodes.get(label_id)
     if wrapper is None or label is None or wrapper.get(ANDROID + "layout_width") != "160dp":
-        raise SystemExit("FAIL: label-sized button layout not applied: " + hit_id)
+        raise SystemExit("FAIL: equal-width button layout not applied: " + hit_id)
     if wrapper.get(ANDROID + "layout_height") != "48dp" or wrapper.get(ANDROID + "layout_gravity") != "center_horizontal":
         raise SystemExit("FAIL: button hit area/centering changed: " + hit_id)
     if label.get(ANDROID + "layout_width") != "match_parent" or label.get(ANDROID + "clickable") != "false":
-        raise SystemExit("FAIL: button label must size to its own text and remain non-clickable: " + label_id)
+        raise SystemExit("FAIL: button label must fill its equal-width wrapper and remain non-clickable: " + label_id)
 if check.get(ANDROID + "clickable") != "false" or check.get(ANDROID + "focusable") != "false":
     raise SystemExit("FAIL: widget container must remain non-clickable/non-focusable")
 selector = ET.parse(BUTTON_BG).getroot()
