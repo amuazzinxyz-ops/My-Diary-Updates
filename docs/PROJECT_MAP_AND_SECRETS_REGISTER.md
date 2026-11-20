@@ -1,3 +1,14 @@
+# My Diary Home Screen Widget — responsive width and manual resizing (APK 1.0.201 / versionCode 200, build pending, 2026-11-20)
+
+- User requested that the widget outer size fit the visible buttons without excessive blank space and that the user can manually make the widget smaller or larger on the Android Home Screen.
+- Updated the widget generator and polish guard: all four shortcut hit areas now expand equally to the available inner widget width, with only 2dp left/right button margins. The Personal Calendar button remains equal in width to the other three; each keeps its independent 48dp touch target and existing 3D pressed selector.
+- Added native `onAppWidgetOptionsChanged` handling so the widget refreshes when the launcher resizes it. Button/title text size responds to narrower widths; date is hidden and outer padding reduced when the available height is below 280dp. Widget provider retains horizontal and vertical resize mode and now declares minimum resize bounds of 150dp wide by 260dp high.
+- Backup branch: `backup/before-widget-auto-fit-resize-2026-11-20`. Working branch: `fix/widget-auto-fit-user-resize-2026-11-20`.
+- APK release target: **1.0.201 / versionCode 200**. Build and publication are pending PR merge and workflow verification. The live update feed must remain at 1.0.200/199 until the signed 1.0.201 build is verified; delivery remains **Me → Check for Updates only**. Do not provide a direct APK.
+- Phone-side launcher resize and visual tests remain pending. Android launchers control the actual outer widget frame; the app provides resize support and responsive content, but the exact resize handles/steps depend on the launcher. No notes, photos, PINs, locks, reminders, or unrelated Diary features were changed intentionally.
+
+---
+
 # My Diary Home Screen Widget — equal buttons and centered header (APK 1.0.200 published, 2026-11-20)
 
 - Release workflow run **44747723308** completed with conclusion **success**. Debug build, signed release build, signature verification and publication completed successfully.
