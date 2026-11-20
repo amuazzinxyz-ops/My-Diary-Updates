@@ -1,3 +1,17 @@
+# My Diary Backup/Restore — include My Kharcha and encrypted Private Locker (Web Update 368 target, 2026-11-21)
+
+- User requested that 💰 My Kharcha and 🔐 Private Locker also be included in the existing Notes Backup/Restore file.
+- Backup exports all My Kharcha records from the existing Diary feature database, preserving record IDs, dates, income/expense amounts, category, details, and other stored fields.
+- Backup snapshots Private Locker's separate database: encrypted entry rows plus its metadata and lock configuration. Private note plaintext is not decrypted for export; AES-GCM ciphertext and the existing key-wrapping, recovery, and biometric settings are preserved as stored.
+- Restore adds Kharcha records by ID without replacing existing records. Private Locker restore imports encrypted entries and metadata only when the destination Private Locker database is completely empty. If it already has any entries or metadata, import is skipped and the existing Locker remains untouched, avoiding mixed encryption keys or overwriting a different Locker.
+- New backup schema version is 4 and includes myKharcha and privateLocker. Legacy backup files without these fields remain supported.
+- Existing Notes, Documents, Memories, Calendar, Smart Reminder, file conversion, and reminder rescheduling behavior remain. No Private Locker PIN, encryption algorithm, biometric flow, or native Android code is changed.
+- Pre-edit source backup branch: backup/before-kharcha-private-locker-backup-restore-2026-11-21. Working branch: fix/backup-kharcha-private-locker-2026-11-21. Pre-edit main commit: 13d9f44a4131c6020697a94ecf59edf21ba568f5.
+- Release is pending PR merge, publisher completion, source/mirror equality, and live latest.json verification. Intended web-only delivery is through Me → Check for Updates; APK remains 1.0.203 / versionCode 202 and must not be sent unless explicitly requested.
+- Phone-side Backup/Restore verification for both added sections remains pending user confirmation.
+
+---
+
 # My Kharcha — move Edit beside Delete (Web Update 367, 2026-11-20)
 
 - User requested that the existing ✏️ Edit button in **💰 My Kharcha** be removed from its previous separate position and placed immediately beside **🗑️ Hataayein**, matching the Documents/Memories action-row layout.
