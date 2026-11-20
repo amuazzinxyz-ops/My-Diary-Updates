@@ -1,3 +1,15 @@
+# My Diary Home Screen Widget — resize in both directions (APK 1.0.201 / versionCode 200, build pending, 2026-11-20)
+
+- User clarified the actual requirement: the Home Screen widget must be manually resizable **Left–Right and Upper–Neeche**. The previously committed horizontal-only mode was incorrect for this clarified request.
+- Corrected the generated AppWidget metadata to `android:resizeMode="horizontal|vertical"`, retaining the 180dp × 280dp initial minimum and setting launcher resize bounds to 150dp wide × 260dp high.
+- Restored height-aware widget rendering: the provider reads `OPTION_APPWIDGET_MIN_HEIGHT`, hides the date only when the resized height is below 280dp, and reduces vertical outer padding at smaller heights. Width-responsive text and side padding, equal-width buttons, 3D press feedback, and independent shortcuts remain intact.
+- Updated the generator guard, polish guard, and release-workflow guard to require both resize directions and verify both minimum resize bounds.
+- Backup branch: `backup/before-widget-two-axis-resize-2026-11-20`. Working branch: `fix/widget-two-axis-resize-2026-11-20`.
+- Release target remains **1.0.201 / versionCode 200**. Build, signing, feed publication, and phone-side launcher resize testing are pending. Live feed remains at **1.0.200 / versionCode 199** until every release verification passes. Delivery remains **Me → Check for Updates only**; do not send a direct APK.
+- No Diary data, notes, photos, PINs, locks, reminders, or unrelated features are intentionally changed.
+
+---
+
 # My Diary Home Screen Widget — horizontal-only manual resizing (APK 1.0.201 / versionCode 200, build pending, 2026-11-20)
 
 - User requested that the widget outer size fit the visible buttons without excessive blank space and that the user can manually make the widget smaller or larger on the Android Home Screen.
