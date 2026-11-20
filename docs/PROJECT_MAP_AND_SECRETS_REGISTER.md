@@ -4,7 +4,7 @@
 - Added one small, muted **Web Update 363** label immediately below **Check for Updates** in the existing Me panel. It is a delivery-test indicator only; it adds no app functionality and does not alter saved data, update logic, existing controls, PINs, locks, reminders, or native Android code.
 - Backup branch: `backup/before-check-update-test-363-2026-11-20`. Working branch: `test/check-update-marker-363-2026-11-20`.
 - Only the web source and its required mirror are changed for the UI marker. `latest.json` advances webVersion to **363** and advertises the SHA-256 below; APK metadata and APK binary remain unchanged at **1.0.195 / versionCode 194**.
-- Web bundle SHA-256: `ab346807e207bcf7371ca1401a9f9e152ea6ca32fc6e8235db4adf8f4d57257d`. Static checks must confirm one marker directly after the Check for Updates button and exact source/mirror parity. Device-side delivery confirmation is pending the user's Check for Update test.
+- Web bundle SHA-256: `e92c1ca476215d12a02699e2479bae840f6e7b8984f8658da65cb7bf9da6f6a9`. Static checks must confirm one marker directly after the Check for Updates button and exact source/mirror parity. Device-side delivery confirmation is pending the user's Check for Update test.
 
 ---
 
