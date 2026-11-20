@@ -1,3 +1,16 @@
+# My Diary Home Screen Widget — Check for Updates fix and 1.0.202 publication verified (2026-11-20)
+
+- User reported that Me → Check for Updates showed “Diary pehle se update hai” after the 1.0.201 release. Traced the exact message to the web-bundle SHA check: it only means the HTML bundle was already current; it does not confirm the native widget APK is installed.
+- The updater compares feed `versionCode` with the installed Android package version. The 1.0.201 release used versionCode 200, so a device already at that version would skip native APK installation and only check the web bundle. Corrected the build workflow to publish the next signed native version as **1.0.202 / versionCode 201**, while accepting 1.0.201/200 as the previous feed baseline.
+- Workflow-only change backed up at `backups/build-diary-from-zip-before-versioncode-201-bump-2026-11-20.yml`; PR #304 merged as commit `5432a27c7b228aca51a783894339e02ec30af6cd`.
+- GitHub Actions run [44758323197](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/44758323197) completed successfully. Debug build, release signing configuration, signed release build, publication, and artifact uploads all passed; no failed steps.
+- Live `latest.json` now reports appName My Diary, packageName `com.personal.diaryapp`, versionName **1.0.202**, versionCode **201**, APK URL `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk`, and APK SHA-256 `b36cfe0fc45a2628f0daf920191b277121d63e058e59ae4966a502fbc0d1e63c`. Release notes state that this is the native two-axis widget-resize build (Left–Right and Upper–Neeche).
+- Signed candidate artifact `My-Diary-1.0.202-signed-test-candidate` uploaded successfully (artifact ID 14640876089; size 2,026,362 bytes). Debug candidate and original Android source artifacts also uploaded. Direct APK delivery is not requested; delivery remains through **Me → Check for Updates**.
+- Launcher-side resize and in-app installation have not been tested on the user's phone. Do not claim phone verification. User should now see the newer native version in Check for Updates; installation may ask Android for the usual install/update confirmation.
+- No Diary data, notes, photos, PINs, locks, reminders, or unrelated features were intentionally changed.
+
+---
+
 # My Diary Home Screen Widget — resize in both directions (APK 1.0.201 / versionCode 200, build and feed verified, 2026-11-20)
 
 - User clarified the actual requirement: the Home Screen widget must be manually resizable **Left–Right and Upper–Neeche**. The previously committed horizontal-only mode was incorrect for this clarified request.
