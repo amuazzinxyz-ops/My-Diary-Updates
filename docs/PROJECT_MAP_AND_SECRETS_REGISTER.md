@@ -1,3 +1,16 @@
+# My Diary Home Screen Widget — visible height follows selected button count (2026-11-20; build pending)
+
+- User clarified the exact behavior: if only two shortcuts are selected/displayed, the visible widget panel/background must end immediately after those two buttons; if four are displayed, it must extend to fit all four. No unused blank panel area below the last visible button.
+- Root cause: the generated native RemoteViews root `widgetRoot` used `android:layout_height="match_parent"`, forcing its gradient/gold background to fill the launcher's entire resized height even when some shortcut rows were hidden.
+- Changed only the native widget layout root to `wrap_content`; all existing shortcut rows remain independent 48dp touch targets, selection settings, text sizing, horizontal/vertical resize support, colors, 3D button styling, and tap routing are preserved.
+- Added fail-closed checks to the widget generator, 3D polish script, and release workflow to require the visible root to use `wrap_content`.
+- Backup branch: `backup/before-widget-content-height-fit-2026-11-20`. Working branch: `fix/widget-height-fits-visible-buttons-2026-11-20`.
+- Planned native update: **1.0.203 / versionCode 202** so the installed 1.0.202/201 app can receive it through **Me → Check for Updates**. Workflow build/publication is pending; do not say it is available until Actions and the live feed are verified.
+- Launcher still controls the outer allocated widget frame; this change makes the visible widget content/background stop after the last selected button. Physical launcher appearance test remains pending.
+- No Diary data, notes, photos, PINs, locks, reminders, or unrelated features were intentionally changed. APK delivery remains Check for Updates only; do not send a direct APK unless explicitly requested.
+
+---
+
 # My Diary Home Screen Widget — Check for Updates fix and 1.0.202 publication verified (2026-11-20)
 
 - User reported that Me → Check for Updates showed “Diary pehle se update hai” after the 1.0.201 release. Traced the exact message to the web-bundle SHA check: it only means the HTML bundle was already current; it does not confirm the native widget APK is installed.

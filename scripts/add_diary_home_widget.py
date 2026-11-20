@@ -358,7 +358,7 @@ layout = r'''<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widgetRoot"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:clickable="false"
     android:focusable="false"
@@ -537,6 +537,8 @@ if not any(node.get(ANDROID_NS + "resource") == "@xml/diary_home_widget_info" fo
     raise SystemExit("FAIL: My Diary widget provider metadata missing")
 if not (res / "layout/diary_home_widget.xml").is_file() or not provider_path.is_file():
     raise SystemExit("FAIL: My Diary widget layout/provider source missing")
+if 'android:layout_height="wrap_content"' not in layout.split('android:id="@+id/widgetRoot"',1)[1].split('>',1)[0]:
+    raise SystemExit("FAIL: widget visible content must wrap its selected buttons, not fill unused height")
 if ('android:minHeight="280dp"' not in widget_info or 'android:minResizeWidth="150dp"' not in widget_info
         or 'android:minResizeHeight="260dp"' not in widget_info or 'android:resizeMode="horizontal|vertical"' not in widget_info):
     raise SystemExit("FAIL: two-axis widget resize dimensions are incomplete")
