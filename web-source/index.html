@@ -2815,8 +2815,9 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      var heading=mfEl('span',{class:'diary-calendar-badge diary-calendar-name-badge'},(record.pinned?'📌 ':'')+reminderHeadingText);
      var displayDate=meFeatureDisplayDate(record.date);
      card.appendChild(heading);
+     var entryNameEdit=null;
      if(kind==='documents'||kind==='memories'){
-      var entryNameEdit=mfEl('button',{type:'button',class:'diary-me-feature-edit'},'✏️ '+mf('edit'));
+      entryNameEdit=mfEl('button',{type:'button',class:'diary-me-feature-edit'},'✏️ '+mf('edit'));
       entryNameEdit.addEventListener('click',function(){
        var editForm=meFeatureContent.querySelector('.diary-me-feature-form');if(!editForm)return;
        var nameInput=editForm.querySelector('[name="title"]');if(!nameInput)return;
@@ -2829,7 +2830,6 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
        var editSubmit=editForm.querySelector('button[type="submit"]');if(editSubmit)editSubmit.textContent=mf('save');
        meFeatureStatus.textContent='';editForm.scrollIntoView({behavior:'smooth',block:'start'});nameInput.focus();
       });
-      card.appendChild(entryNameEdit);
      }
      if(kind==='reminders'){
       var reminderDateTimeBadges=mfEl('div',{class:'diary-calendar-badge-row'});
@@ -2933,7 +2933,10 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      }
      var del=mfEl('button',{type:'button',class:'diary-me-feature-delete'},'🗑️ '+mf('remove'));
      del.addEventListener('click',function(){if(!window.confirm(mf('confirmDelete')))return;meFeatureDelete(record.id).then(function(){if(kind==='reminders'&&window.DiaryAppActions&&typeof window.DiaryAppActions.cancelReminder==='function')window.DiaryAppActions.cancelReminder(record.id);if(kind==='calendar')calendarCancelAlarms(record);renderMeFeatureList(kind);}).catch(function(){meFeatureStatus.textContent=mf('failed');});});
-     card.appendChild(del);
+     if(kind==='documents'||kind==='memories'){
+      var recordActions=mfEl('div',{class:'diary-me-feature-record-actions'});
+      recordActions.append(entryNameEdit,del);card.appendChild(recordActions);
+     }else card.appendChild(del);
      if(kind==='calendar'||kind==='reminders'){
       var recordHoldTimer=null,recordHoldTriggered=false,recordHoldStart=null;
       card.addEventListener('pointerdown',function(e){
@@ -4856,6 +4859,8 @@ input[name="diary-note-lock-pin"]::placeholder,#diaryMyNotesList input[name="dia
 .diary-me-feature-card a{color:#56308b!important;font-weight:800!important}
 .diary-me-feature-thumb{display:block!important;max-width:100%!important;max-height:190px!important;object-fit:contain!important;border-radius:8px!important}
  .diary-me-feature-delete{align-self:flex-end!important;min-height:34px!important;padding:6px 10px!important;background:linear-gradient(145deg,#fff,#f6e8e8)!important;border-color:#c77!important;color:#7d2424!important}
+.diary-me-feature-record-actions{display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-end!important;gap:8px!important;width:100%!important;margin-top:4px!important}
+.diary-me-feature-record-actions .diary-me-feature-edit,.diary-me-feature-record-actions .diary-me-feature-delete{display:inline-flex!important;align-items:center!important;justify-content:center!important;align-self:auto!important;min-height:36px!important;padding:6px 11px!important;margin:0!important;border:1px solid #c77!important;border-radius:9px!important;background:linear-gradient(145deg,#fff,#f6e8e8)!important;color:#7d2424!important;font-size:13px!important;font-weight:900!important;white-space:nowrap!important}
 .diary-me-feature-tools{display:flex!important;flex-direction:column!important;gap:8px!important;padding:10px!important;border:1px solid #d4af37!important;border-radius:12px!important;background:#fff!important}
 .diary-me-feature-search,.diary-me-feature-category-filter{width:100%!important;min-height:42px!important;padding:9px!important;border:2px solid #7540b8!important;border-radius:9px!important;background:#fff!important;color:#241a31!important;font-size:16px!important}
 .diary-me-feature-report,.diary-me-feature-lock{min-height:38px!important;padding:7px 10px!important;border:2px solid #d4af37!important;border-radius:9px!important;background:linear-gradient(145deg,#f7e8a8,#d1a33a)!important;color:#382700!important;font-weight:900!important}
