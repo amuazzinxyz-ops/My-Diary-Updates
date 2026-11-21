@@ -5327,3 +5327,13 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Debug build succeeded; signed Release APK built; signing certificate verification passed; publication and artifact uploads passed. Run **44744106612** published the live feed. `latest.json` was re-fetched from main and confirms **1.0.199 / versionCode 198**, APK SHA-256 `aa3aee82196d79f9e4990c6f10b26859456c569f37666081dece82ae586cfdf3`.
 - Release notes in the live feed confirm the requested label-sized buttons, raised 3D look, and pressed effect limited to the tapped button. Delivery remains **Me → Check for Updates only**; do not send an APK unless the user explicitly asks.
 - **Phone-side verification is pending**: user must update through Check for Updates and visually/tactually test all four shortcuts, confirming that only the tapped button changes and the overall widget does not shift. Do not claim device-side PASS before the user's confirmation.
+
+
+# My Diary Favourite Notes widget routing fix — published 1.0.208 (2026-11-21)
+
+- Fixed cold-launch widget destination routing: the Favourite Notes shortcut now carries its pending destination through app startup; the normal Diary auto-open no longer overrides a widget launch. Native URL dispatch accepts the widget launch query marker while preserving ordinary saved WebView restoration.
+- Main source fix merged in PR #333 at commit `1f20b4b168b27f00c5756cbe90e7774f2705081b`. Workflow guard was safely adjusted to permit rebuilding the approved target release if its metadata had already been prepublished.
+- Signed APK workflow run **44872629322** (run #433), commit `84c54e07079e12d30768586957c4441fdbd02de6`, completed with overall **success**. Signing readiness and keystore/alias validation passed; debug compilation passed; signed Release build and publication verification passed; signed APK upload passed.
+- Live `latest.json` confirms My Diary **1.0.208 / versionCode 207**, APK URL `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk`, SHA-256 `35ca4e085335bbe04f30d11e40d16752a107628fd05b72f89706618ca4aef819`.
+- Release notes specify the Favourite Notes cold-launch routing fix and preservation of existing shortcuts, saved notes, photos, PINs, locks, settings, 3D feedback, and resize behavior. Delivery is through **Me → Check for Updates**; do not send APK unless explicitly requested.
+- **Phone-side verification remains pending**. User must update via Check for Updates and test Favourite Notes from a cold launch. Do not claim phone testing PASS until user confirms.
