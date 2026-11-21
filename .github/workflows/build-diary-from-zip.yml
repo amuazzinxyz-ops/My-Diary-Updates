@@ -1,4 +1,4 @@
-# Approved release build: publish signed Diary 1.0.207/206 with Smart Search and Quick Note Home Screen widget shortcuts.
+# Approved release build: publish signed Diary 1.0.208/207 with the cold-launch widget destination fix.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -608,7 +608,7 @@ jobs:
           test -s "$APK"
           SHA256="$(sha256sum "$APK" | awk '{print $1}')"
           cp "$APK" /tmp/My-Diary-verified.apk
-          printf '1.0.208\n206\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.208\n207\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -f -B diary-publish-main origin/main
           python3 - <<'PY'
@@ -616,7 +616,7 @@ jobs:
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if meta.get("packageName") != "com.personal.diaryapp" or feed_version != (205, "1.0.206"):
+          if meta.get("packageName") != "com.personal.diaryapp" or feed_version != (206, "1.0.207"):
               raise SystemExit(f"BLOCKED: live main feed is neither the installed baseline nor the exact new release: {feed_version}")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
@@ -634,7 +634,7 @@ jobs:
           python3 -m json.tool latest.json >/dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add My-Diary.apk My-Diary-1.0.207.apk latest.json
+          git add My-Diary.apk My-Diary-1.0.208.apk latest.json
           git commit -m "Publish My Diary update 1.0.208"
           git push origin HEAD:main
       - name: Upload unsigned Release APK for private owner-side signing
@@ -650,7 +650,7 @@ jobs:
         if: env.DIARY_RELEASE_READY == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: My-Diary-1.0.207-signed-test-candidate
+          name: My-Diary-1.0.208-signed-test-candidate
           path: diary-project/app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
           retention-days: 30
@@ -666,7 +666,7 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: My-Diary-1.0.207-debug-test-candidate
+          name: My-Diary-1.0.208-debug-test-candidate
           path: diary-project/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
