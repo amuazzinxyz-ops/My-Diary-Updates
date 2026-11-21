@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 379,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "eef83af19caca11d90cba53351f1b16a7027a918397a42c74186623148ad90d5",
+  "webSha256": "74f1f8e2fe9b7c0eeaa4c5919a9c8bfb591b9a33a5c9d0eb38b3a11781e34f63",
   "webReleaseNotes": "Web Update 379: Favourite Notes widget now opens the Diary with the selected favourite note already visible at the top, without manual scrolling. Existing inline reading view, note content, photos, attachments, PIN checks, and other features are preserved."
 }
