@@ -3214,6 +3214,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   fontLabel.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var opening=fontSliderBox.hidden;fontSliderBox.hidden=!opening;fontLabel.setAttribute('aria-expanded',opening?'true':'false');});
   meWrap.appendChild(meBtn);meWrap.appendChild(mePanel);head.appendChild(meWrap);
   meBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var opening=mePanel.hidden;mePanel.hidden=!opening;meBtn.setAttribute('aria-expanded',opening?'true':'false');panel.classList.toggle('diary-me-menu-open',opening);if(opening){mePanel.scrollTop=0;privateLockerRenderExternalControls();}});
+  try{if(sessionStorage.getItem('diaryKeepMeOpenAfterUpdate')==='1'){sessionStorage.removeItem('diaryKeepMeOpenAfterUpdate');keepDiaryMeMenuOpen();}}catch(_){ }
   function updateDiaryFontFromSlider(e){if(e)e.stopPropagation();var chosen=Math.max(12,Math.min(24,parseInt(fontSlider.value,10)||14));localStorage.setItem(DIARY_FONT_KEY,String(chosen));applyDiaryFont();}
   fontSlider.addEventListener('input',updateDiaryFontFromSlider);
   fontSlider.addEventListener('change',updateDiaryFontFromSlider);
