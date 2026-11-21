@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 372,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "71442e32955d3c9b0bd87da24e9ac4f4898dccf757543f7f0cb200c5c3129e89",
+  "webSha256": "3b2b8a4109ede8f25c39bf753dac751e5a58a6eec88b2437daaf31abe181bc4d",
   "webReleaseNotes": "My Diary Web Update 372: Adds a separate ⭐ Favourite toggle to each note. 📌 Pin Note remains independent; pinning or unpinning no longer changes Favourite. Favourite Notes shows only notes explicitly marked Favourite. Existing saved note content, photos, PINs, locks, and unrelated features are preserved."
 }
