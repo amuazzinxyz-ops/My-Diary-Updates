@@ -1,3 +1,14 @@
+# Private Locker Wapas button position — Web Update 394 release (phone test pending, 2026-11-22)
+
+- User reported that the smaller Wapas button still needed to sit a little higher and farther left. Changed only its CSS transform to `translate(-10px,-5px)`, keeping the smaller button size.
+- Centered `🔐 Private Locker` title, right-side ✕, existing Wapas close/return handler, PIN, recovery, encryption and saved Locker data remain unchanged.
+- Safety backup branch: `backup/before-private-locker-wapas-position-2026-11-22`. Working branch: `fix/private-locker-wapas-position-2026-11-22`. PR #353 merged as `eb16f33201b5cf8114cfe2aa3195234662274047`.
+- Source and mirror files were changed identically; Wapas position is 10px left and 5px up relative to Web Update 393.
+- Metadata backup branch: `backup/before-private-locker-web394-register-2026-11-22`.
+- Phone test pending; do not mark PASS until user confirms the button position, Wapas return, and ✕ close behavior.
+
+---
+
 # Private Locker Wapas button spacing — Web Update 393 published (phone test pending, 2026-11-22)
 
 - User reported that the Private Locker **Wapas** button overlapped the lock icon in the centered `🔐 Private Locker` title. Reduced the button font from 14px to 12px, reduced its padding and height, and shifted it 5px left. The title remains centered and the ✕ remains on the right.

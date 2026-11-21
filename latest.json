@@ -7,8 +7,8 @@
   "sha256": "c286a6203cf63c312c158d6b10c9102f74c34ec488203577025d59c6c2354f9d",
   "releaseNotes": "My Diary 1.0.212: Update Check refresh now restores the Diary Me menu after the verified web bundle reload. Existing APK download/install and web update verification flows are unchanged. Includes Web Update 383. Existing notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 393,
+  "webVersion": 394,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "e2586ef0ef3d8b48ef48a1f2acda887edc708b15c6968f996068d5125cadb494",
-  "webReleaseNotes": "Private Locker's Wapas button is now smaller and shifted slightly left so it does not overlap the 🔐 Private Locker title/icon. Existing Locker PIN, saved data and security features are unchanged."
+  "webReleaseNotes": "Private Locker's smaller Wapas button has been moved slightly higher and farther left to keep it clear of the centered 🔐 Private Locker title/icon. Existing Locker PIN, saved data and security features are unchanged."
 }
