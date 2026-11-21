@@ -1,3 +1,14 @@
+# Update Report popup moved into the Me menu — Web Update 385 (phone test pending, 2026-11-21)
+
+- User clarified that the Update Report popup must appear exactly where the **Me** button dropdown opens, not as a separate centered/full-screen overlay.
+- Changed only the popup presentation: it is now mounted inside the existing `diaryDiaryMePanel`, filling that dropdown area. The Me menu itself remains open underneath; the popup's **Copy** and **×** actions remain the only controls.
+- Preserved the report content/fetch, clipboard fallback, `keepDiaryMeMenuOpen()`, and original `DiaryAppActions.checkForUpdates()` native updater call. Download, verification, and installation behavior is unchanged. No APK/native code or saved data changed.
+- Safety backup branch: `backup/before-update-report-menu-position-2026-11-21`, created from main commit `80e1b5cac4b8af4f3448cc60927d9047d520d33b`.
+- Source and mirror are updated identically. `latest.json` advertises Web Update 385; APK remains **1.0.212 / versionCode 211**. Web SHA-256: `5ba1aa05a3db26ae17e591f596d6a6fe65467e37d7d60430d63cad6e58520ee1`.
+- **Phone test pending.** Do not mark PASS until the user confirms the popup appears in the Me dropdown area, Copy copies the full report, × closes only the report and leaves Me open, and the existing updater still works.
+
+---
+
 # Copyable Update Report popup — Web Update 384 (phone test pending, 2026-11-21)
 
 - Added a separate **My Diary Update Report** popup that opens when the user taps **Me → Check for Updates**. It fetches live `latest.json` and displays the latest APK version/versionCode, Web Update number, full APK release notes, full web release notes, and both SHA-256 hashes.
