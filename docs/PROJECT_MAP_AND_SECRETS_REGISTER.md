@@ -1,3 +1,12 @@
+# Private Locker PIN label left-shifted and button widened — Web Update 398 candidate (phone test pending, 2026-11-22)
+
+- User reported that the PIN label was still clipping on the right. Adjusted only the Private Locker header PIN button CSS: moved the label slightly left using a small negative text indent and increased the button's minimum width and right-side padding so the full label has room.
+- Existing center alignment, gold button styling, PIN click handler, Lock On/Off behavior, PIN verification, recovery, encryption, and saved Locker entries are unchanged. No native APK or user data changes.
+- Safety backup branch: `backup/before-private-locker-pin-width-2026-11-22`. Working branch: `fix/private-locker-pin-width-left-2026-11-22`.
+- Updated `web-source/index.html` and `diary-web/index.html` identically. Candidate Web Update: **398** after the publisher workflow completes. Phone test pending; do not mark PASS until the user confirms the complete PIN label is visible and the button still works.
+
+---
+
 # Private Locker — one direct My Memories-style page (Web Update 396 published, phone test pending, 2026-11-22)
 
 - User approved making Private Locker behave like My Memories: no separate Lock OFF choice screen and no extra “Locker Kholein” step before the entries page.
