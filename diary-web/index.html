@@ -4196,9 +4196,9 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   if(unlocked){
    addAction(t('deleteAction'),function(){activeId=n.id;deleteNote();});
    addAction(t('copyAction'),function(){copyNote(n);});
-   addAction((n.pinnedNote||n.favourite||n.pinned)?t('unpinNote'):t('pinNote'),function(){
+   addAction((n.pinnedNote||n.pinned)?t('unpinNote'):t('pinNote'),function(){
     var saved=read(),target=saved.find(function(x){return x.id===n.id});if(!target)return;
-    target.pinnedNote=!(target.pinnedNote||target.favourite||target.pinned);delete target.favourite;delete target.pinned;
+    target.pinnedNote=!(target.pinnedNote||target.pinned);delete target.pinned;
     if(!write(saved)){var status=document.getElementById('diaryMyNotesStatus');if(status)status.textContent=t('storageUnavailable');return;}renderList();
    });
    addAction(t('editAction'),function(){openNote(n.id);});
