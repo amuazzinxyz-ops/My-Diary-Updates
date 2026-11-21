@@ -4525,12 +4525,19 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   if(list)list.style.display='';
   if(allBtn){allBtn.style.display='';allBtn.setAttribute('aria-expanded','true');}
   if(trashBtn)trashBtn.setAttribute('aria-expanded','false');
-  /* The widget opens the Favourite Notes list only. Do not auto-open a
-     recently edited ordinary note; let the user choose a favourite card. */
-  expandedNoteId=null;
+  var favouriteRecords=read().filter(function(note){return !!note.favourite;});
+  favouriteRecords.sort(function(a,b){return (b.updated||0)-(a.updated||0);});
   renderList();
-  if(search)search.blur();
- };
+  if(favouriteRecords.length){
+   var latestFavourite=favouriteRecords[0];
+   if(latestFavourite.pinLock&&!noteIsUnlocked(latestFavourite)){
+    expandedNoteId=latestFavourite.id;
+    renderList();
+   }else{
+    openNote(latestFavourite.id);
+   }
+  }
+ }
  function closeOverlay(fromPop){
   Object.keys(unlockTimers).forEach(clearUnlockTimer);unlockedNotes={};expandedNoteId=null;showingTrash=false;showingFavouriteNotes=false;
   var ov=document.getElementById('diaryMyNotesOverlay');if(ov){ov.classList.remove('open');ov.setAttribute('aria-hidden','true')}
