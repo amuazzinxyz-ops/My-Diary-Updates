@@ -265,6 +265,23 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 #diaryMyNotesEditor.diary-read-mode #diaryMyNotesActions button:not(#diaryMyNotesEditView){display:none!important}
 #diaryMyNotesEditor.diary-read-mode #diaryMyNotesEditView:not([hidden]){display:inline-flex!important;align-items:center;justify-content:center}
 </style>
+
+<style id="my-kharcha-dark-black-text">
+/* My Kharcha only: keep every visible label, value, control and typed text dark black. */
+#diaryMeFeatureModal.diary-me-feature-kharcha,
+#diaryMeFeatureModal.diary-me-feature-kharcha *{
+  color:#000000!important;
+}
+#diaryMeFeatureModal.diary-me-feature-kharcha input::placeholder,
+#diaryMeFeatureModal.diary-me-feature-kharcha textarea::placeholder{
+  color:#000000!important;
+  opacity:1!important;
+}
+#diaryMeFeatureModal.diary-me-feature-kharcha input,
+#diaryMeFeatureModal.diary-me-feature-kharcha textarea{
+  caret-color:#000000!important;
+}
+</style>
 </head>
 <body>
 <main class="diary-home">
@@ -2996,7 +3013,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     });
    }).catch(function(){meFeatureList.replaceChildren(mfEl('p',{class:'diary-me-feature-empty'},mf('failed')));});
   }
-  function openMeFeature(kind){if(meFeatureProtected(kind)&&meFeaturePinConfig(kind)){showMeFeaturePin(kind);return;}showMeFeaturePage(kind);}
+  function openMeFeature(kind){meFeatureModal.classList.toggle('diary-me-feature-kharcha',kind==='kharcha');if(meFeatureProtected(kind)&&meFeaturePinConfig(kind)){showMeFeaturePin(kind);return;}showMeFeaturePage(kind);}
 
   window.__diaryOpenWidgetTarget=function(target){
    if(['calendar','reminders','kharcha','documents','memories'].indexOf(target)>=0){openMeFeature(target);return;}
@@ -3010,6 +3027,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var currentMeFeatureKind=null;
   function showMeFeaturePage(kind){
    currentMeFeatureKind=kind;
+   meFeatureModal.classList.toggle('diary-me-feature-kharcha',kind==='kharcha');
    meFeatureModal.classList.toggle('diary-me-feature-bold-text',kind==='calendar'||kind==='reminders');
    if(kind==='calendar')meFeatureAll('calendar').then(function(records){records.forEach(function(record){if(record.remind&&record.repeat&&record.repeat!=='none'&&calendarScheduleAlarms(record))meFeaturePut(record);});});
 
@@ -3022,7 +3040,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    renderMeFeatureList(kind);
   }
   function closeMeFeature(){
-   meFeatureModal.classList.remove('diary-me-feature-bold-text');
+   meFeatureModal.classList.remove('diary-me-feature-bold-text','diary-me-feature-kharcha');
    currentMeFeatureKind=null;meFeatureBulkEdit=false;meFeatureSelectedIds.clear();meFeatureMenu.hidden=true;meFeatureMenuButton.hidden=true;meFeatureBulkBar.hidden=true;++meFeatureRenderToken;clearMeFeatureUrls();meFeatureLock.hidden=true;meFeatureModal.hidden=true;meFeatureContent.replaceChildren();mePanel.hidden=false;mePanel.scrollTop=0;meBtn.setAttribute('aria-expanded','true');panel.classList.add('diary-me-menu-open');
   }
   meFeatureManage.addEventListener('click',function(){if(currentMeFeatureKind)showMeFeaturePinManager(currentMeFeatureKind);});
