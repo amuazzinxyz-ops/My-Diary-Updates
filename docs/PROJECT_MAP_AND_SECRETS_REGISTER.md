@@ -1,3 +1,13 @@
+# Favourite Notes widget inline reading view — phone test PASS (2026-11-21)
+
+- User confirmed on 2026-11-21: **“Test paas.”** Physical Android phone test of Web Update **378** is now **PASS (user-confirmed)**. This closes the pending device test recorded below.
+- The verified behaviour under test is that tapping the Favourite Notes Home Screen widget opens the favourite note in the normal inline reading view, not the New Note/editor screen, with saved cover, writing, detail image, and attachment visible.
+- No source-code change, web/APK publication, build, or user-data operation was performed for this test confirmation.
+- Live baseline remains Web Update **378**, web SHA-256 `982dd8315629b6fcda993b5c44ffbc1b0a7a5a755013aeec0eec1797ca9f519d`; native app remains **1.0.210 / versionCode 209**. Source and mirror remain byte-identical at Git blob SHA `2a72f3e420a4ecf05e5f96605d9707a93cd9a16e`.
+- Register pre-edit backup branch: `backup/before-favourite-widget-phone-pass-register-2026-11-21`.
+
+---
+
 # Favourite Notes widget opens in the normal inline reading view — Web Update 378 (2026-11-21)
 
 - User clarified that tapping the **Favourite Notes Home Screen widget** must open the favourite note exactly like tapping an ordinary note card: expanded inside the notes list, with its saved cover, writing, detail image, and attachment visible. It must not open the New Note/editor screen.
