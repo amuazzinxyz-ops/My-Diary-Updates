@@ -1,3 +1,13 @@
+# Private Locker header PIN button — Web Update 395 candidate (phone test pending, 2026-11-22)
+
+- User approved replacing the right-side **✕** in the Private Locker header with a single **🔑 PIN** button, matching the My Memories header control. The new button reopens the existing Private Locker PIN gate; it does not close the Locker.
+- The left **Wapas** button, centered 🔐 Private Locker title, existing **Lock On Karein** and **Locker Kholein** controls shown when Lock OFF, PIN/recovery, fingerprint/pattern, encryption, and saved Locker entries are unchanged. No native APK or saved data changes.
+- Safety backup branch: `backup/before-private-locker-pin-header-2026-11-22`. Working branch: `fix/private-locker-pin-header-button-2026-11-22`.
+- Web-only source change is prepared for publication as Web Update 395. The publisher will synchronize the mirror and update feed after merge.
+- **Phone test pending**: confirm the right-side 🔑 PIN button appears instead of ✕, opens the existing PIN screen, and Wapas plus both Lock OFF controls still work. Do not mark PASS until user confirms.
+
+---
+
 # Private Locker Wapas button position — Web Update 394 phone test PASS (user-confirmed, 2026-11-22)
 
 - User confirmed the Android phone test with: **“Paas”**. The Web Update 394 Private Locker header adjustment is now **phone-test PASS**.
