@@ -7,8 +7,8 @@
   "sha256": "e4973cfb7446f7c4d3b9c789dc16d8e40c67444ae09c1f8dee0d5602f913d96c",
   "releaseNotes": "My Diary 1.0.212: Update Check refresh now restores the Diary Me menu after the verified web bundle reload. Existing APK download/install and web update verification flows are unchanged. Includes Web Update 383. Existing notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 390,
+  "webVersion": 391,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "95cd6be7d1ad502952dec52a73b230ae7cdb7a6f2df6b5a78d1fbae358b3f9fe",
-  "webReleaseNotes": "Update Report now fetches the latest release details directly and shows the current Web Update number."
+  "webSha256": "805bcc8b0ce267313d64a4be28c691b51cf0f6f81201b11597cff8b86624d0c0",
+  "webReleaseNotes": "All text inside My Kharcha is now dark black. Existing Kharcha records, calculations, PIN and other features are unchanged."
 }
