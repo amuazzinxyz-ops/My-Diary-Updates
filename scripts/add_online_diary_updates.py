@@ -54,13 +54,16 @@ web_method = r"""
                 // serves the verified on-disk HTML immediately.
                 runOnUiThread {
                     webView.post {
-                        // Force WebView to discard any stale in-memory/disk page before reloading
-                        // the SHA-256-verified local Diary HTML bundle.
-                        webView.stopLoading()
-                        webView.clearCache(true)
-                        webView.clearHistory()
-                        webView.loadUrl("https://appassets.androidplatform.net/assets/index.html?diaryRefresh=" + System.currentTimeMillis())
-                        Toast.makeText(this@MainActivity, "Diary pehle se update hai. Screen refresh kar di gayi hai.", Toast.LENGTH_LONG).show()
+                        // Save the open Me-menu state before refreshing the verified HTML.
+                        webView.evaluateJavascript("try{sessionStorage.setItem('diaryKeepMeOpenAfterUpdate','1')}catch(e){}") { _ ->
+                            webView.post {
+                                webView.stopLoading()
+                                webView.clearCache(true)
+                                webView.clearHistory()
+                                webView.loadUrl("https://appassets.androidplatform.net/assets/index.html?diaryRefresh=" + System.currentTimeMillis())
+                                Toast.makeText(this@MainActivity, "Diary pehle se update hai. Screen refresh kar di gayi hai.", Toast.LENGTH_LONG).show()
+                            }
+                        }
                     }
                 }
                 return
@@ -117,10 +120,14 @@ web_method = r"""
                     runOnUiThread {
                         Toast.makeText(this@MainActivity, "My Diary update lag gaya. App refresh ho rahi hai...", Toast.LENGTH_LONG).show()
                         webView.postDelayed({
-                            webView.stopLoading()
-                            webView.clearCache(true)
-                            webView.clearHistory()
-                            webView.loadUrl("https://appassets.androidplatform.net/assets/index.html?diaryRefresh=" + System.currentTimeMillis())
+                            webView.evaluateJavascript("try{sessionStorage.setItem('diaryKeepMeOpenAfterUpdate','1')}catch(e){}") { _ ->
+                                webView.post {
+                                    webView.stopLoading()
+                                    webView.clearCache(true)
+                                    webView.clearHistory()
+                                    webView.loadUrl("https://appassets.androidplatform.net/assets/index.html?diaryRefresh=" + System.currentTimeMillis())
+                                }
+                            }
                         }, 700)
                     }
                 } catch (e: Exception) {
