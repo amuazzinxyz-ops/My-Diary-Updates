@@ -1,3 +1,12 @@
+# My Diary native widget build-validator correction (release pending, 2026-11-21)
+
+- After merging PR #337, the Android build exposed a stale validator: `scripts/add_diary_home_widget.py` and `scripts/polish_diary_home_widget.py` still required legacy native target IDs `new-note` and `quick-note`, even though the native widget generator and layout now intentionally expose only ten shortcuts.
+- Corrected both validation target lists to check exactly the ten active widget destinations. Kept the legacy in-app note destination handlers intact for compatibility; the Diary's normal New Note feature is unchanged.
+- Next step: merge this validator-only fix, then verify a fresh signed 1.0.210 / versionCode 209 build and certificate. The update feed remains 1.0.209 / 208 until signed build verification passes. Phone testing still pending.
+- Working branch: `fix/native-widget-target-validation-10-shortcuts-2026-11-21`.
+
+---
+
 # My Diary native Widget shortcut removal — signed APK 1.0.210 build preparation (release pending, 2026-11-21)
 
 - Continued the merged PR #335 work so the Android Home Screen Widget itself, not only its web settings, removes **✍️ Quick Note kholen** and **✍️ New Note kholen**. The existing native widget generator now emits the remaining ten shortcuts; its polish validator no longer expects the two removed button IDs. The Diary's in-app New Note feature remains.
