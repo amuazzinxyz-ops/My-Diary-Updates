@@ -5,10 +5,18 @@
 - The header **🔑 PIN** button starts the existing Lock-On PIN creation flow directly when Lock is OFF. If the user cancels PIN setup, the existing entries page remains open. When Lock is ON, the existing PIN verification/security flow remains required before private entries are shown.
 - The old two-button Lock OFF screen is no longer used by the opening or PIN-setup-cancel flow. No data migration, storage schema change, saved entry modification, native Android source change, or APK rebuild is included.
 - Safety backup branch: `backup/before-private-locker-one-page-2026-11-22`. Working branch: `fix/private-locker-one-page-memories-style-2026-11-22`. PR **#359** merged as `bbcbbf24fe67ae32a2b0777767d30d8d7acb15d9`.
-- Published **Web Update 396** in `latest.json`. Final `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `6b9756c0b7315ec59696c95236cbc0581afb6b10`; verified web SHA-256: `6be113dbfd66e26dec528bbe22584adaedf7eedd3fd65dfc764d62090d7867e3`.
+- Published **Web Update 396** in `latest.json`. Final `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `6b9756c0b7315ec59696c95236cbc0581afb6b10`; verified web SHA-256: `aaacc3e8e213e6b9f3d0b0ca55e91dbb9b0b30b9571204a1d10686514b98e2a5`.
 - Native APK remains **My Diary 1.0.212 / versionCode 211**. This is a web-only update; no APK rebuild or APK version change was made. Delivery is through **Me → Check for Updates**.
-- Static checks: source/mirror equality PASS; feed version/checksum match PASS; both inline JavaScript blocks parse PASS; pre-edit backup branch still matches the original main source.
+- Static checks: source/mirror equality PASS; source UTF-8 SHA-256 independently recomputed and matched to feed after checksum correction; inline JavaScript parse PASS; pre-edit backup branch still matches the original main source.
 - **Phone test pending**: update through Check for Updates, confirm Lock OFF opens entries directly, header 🔑 PIN starts Lock On setup, cancelling PIN setup returns to entries, and Lock ON still requires PIN before entries appear. Do not claim device-side PASS until user confirms.
+
+
+# Web Update 396 checksum correction — user-reported updater rejection (2026-11-22)
+
+- User tested **Me → Check for Updates** and received: “Diary update nahi ho saka — Wajah: Diary update SHA-256 match nahi hua”. The update was rejected before installation; user-facing message stated notes, photos, and PIN data were not touched.
+- Investigation found `latest.json` advertised `6be113dbfd66e26dec528bbe22584adaedf7eedd3fd65dfc764d62090d7867e3`, but the exact current UTF-8 bytes of `web-source/index.html` hash to `aaacc3e8e213e6b9f3d0b0ca55e91dbb9b0b30b9571204a1d10686514b98e2a5`. The `web-source/index.html` and `diary-web/index.html` files are byte-identical (same Git blob SHA `6b9756c0b7315ec59696c95236cbc0581afb6b10`). SHA implementation sanity-checked against the standard SHA-256 “abc” test vector.
+- Corrected only `latest.json.webSha256` to the independently verified source hash. No HTML, app code, notes, photos, PINs, APK, or user data changed.
+- Safety backup branch: `backup/before-web396-sha256-fix-2026-11-22`. Working branch: `fix/web396-sha256-manifest-2026-11-22`. Release/phone retest pending until correction is merged and live; do not claim phone test PASS.
 
 ---
 # Private Locker header PIN button — Web Update 395 candidate (phone test pending, 2026-11-22)

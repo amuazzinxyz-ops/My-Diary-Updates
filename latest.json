@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 396,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "6be113dbfd66e26dec528bbe22584adaedf7eedd3fd65dfc764d62090d7867e3",
+  "webSha256": "aaacc3e8e213e6b9f3d0b0ca55e91dbb9b0b30b9571204a1d10686514b98e2a5",
   "webReleaseNotes": "Private Locker now opens its entries directly when Lock is OFF, like My Memories. The header PIN button starts Lock On setup; existing PIN verification and encryption protection remain unchanged."
 }
