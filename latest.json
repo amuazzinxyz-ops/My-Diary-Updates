@@ -7,8 +7,8 @@
   "sha256": "1ac0d4ee6af50af4bd29c79d568109b66b4cd3f750a5bbf60ec42e2a3ed239b6",
   "releaseNotes": "My Diary 1.0.211: Diary Lock PIN prompt now has a Cancel button that returns to Diary → Me without changing the PIN or disabling the lock. Note cards use one ⭐ Favourite button, and long-press offers Favourite Karo / Favourite Hataayein. Includes Web Updates 380 and 381. Existing notes, photos, PINs, locks, Favourite Notes read mode, and Home Screen Widget features are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 381,
+  "webVersion": 382,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "aba6e4cad65670f9eb9bbef74a37806c08a213aa2d50b2e5c1289143345f1e33",
-  "webReleaseNotes": "Web Update 381: Note Pin button is replaced with a single ⭐ Favourite button. Long-pressing a note now offers Favourite Karo / Favourite Hataayein. Existing notes and saved data are preserved."
+  "webSha256": "f925866479ed85cbde55e0db8f700e75213df6183b8c728f486000412d20943d",
+  "webReleaseNotes": "Web Update 382: Closing World Clock or Home Screen Widget Settings now closes only that window and keeps the Diary Me menu open. Check for Updates also keeps Me open. No other Diary features or saved data are changed."
 }
