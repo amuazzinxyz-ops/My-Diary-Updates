@@ -1,3 +1,14 @@
+# Me menu remains open after closing tools / checking updates — Web Update 382 (phone test pending, 2026-11-21)
+
+- User reported that closing **🌍 World Clock** and **🏠 Home Screen Widget Settings** also closed the Diary **Me** menu, and tapping **Update Check Karein** likewise closed Me. User clarified that the first two already have their own Close controls; those controls must close only their own window. Update Check has no Close control and must leave Me open.
+- Changed only the relevant web UI event handling in `web-source/index.html`: World Clock and Widget Settings Close handlers now prevent click bubbling, close only their own modal, and explicitly keep Me open; the overlay outside-click handler ignores clicks inside either tool modal; Update Check explicitly preserves the Me menu state before and after invoking the existing Android update checker. No new Close button was added. No note, PIN, lock, widget content, or saved user data logic was changed.
+- Safety backup branch: `backup/before-web382-register-update-2026-11-21`, created from main before this Register entry.
+- Source and mirror were re-fetched and verified byte-identical at Git blob SHA `461694ac6a99f85ea917ac55ce8b728c8b4c431c` (597,171 characters). SHA-256: `f925866479ed85cbde55e0db8f700e75213df6183b8c728f486000412d20943d`.
+- Live `latest.json` now advertises **Web Update 382** with the above SHA-256. Native APK remains **My Diary 1.0.211 / versionCode 210**; no APK was built or changed. **Phone test is pending**; do not mark PASS until the user confirms.
+- Register pre-edit content preserved in branch `backup/before-web382-register-update-2026-11-21`.
+
+---
+
 # My Diary 1.0.211 — Diary Lock Cancel + Note Favourite APK published (2026-11-21)
 
 - User explicitly approved building a new APK containing the two phone-tested web features from Web Updates 380 and 381.
