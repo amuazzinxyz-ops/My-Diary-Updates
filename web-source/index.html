@@ -3252,7 +3252,14 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      '',
      'APK SHA-256: '+(meta.sha256||'Not listed'),
      'WEB SHA-256: '+(meta.webSha256||'Not listed')
-    ].join('\n');body.textContent=reportText;
+    ].join('\n');
+    var shortReport=[
+     'My Diary Version: '+(meta.versionName||'Not listed'),
+     'Web Update: '+(meta.webVersion==null?'Not listed':meta.webVersion),
+     'Latest Kaam: Update Report ab Me menu mein hi dikhega.',
+     'Status: Phone test pending'
+    ].join('\n');
+    body.textContent=shortReport;
    }).catch(function(){reportText='MY DIARY — UPDATE REPORT\nUpdate details abhi load nahi ho sakin. Internet connection check karke dobara Check for Update dabayein.';body.textContent=reportText;});
   }
 
