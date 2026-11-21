@@ -1,3 +1,13 @@
+# Update Report shows current Web Update and release note — Web Update 390 candidate (phone test pending, 2026-11-22)
+
+- User reported that the copied Update Report still showed Web Update 388 and the Web Update 388 summary even though the manifest had advanced to 389.
+- Updated the report loader to request the current `latest.json` through the GitHub Contents API with a unique cache-busting query and `no-store`, with the raw GitHub manifest as fallback. The report now displays `meta.webVersion` and `meta.webReleaseNotes` instead of hard-coding the Web Update 388 summary.
+- Updated `web-source/index.html` and `diary-web/index.html` identically. Source/mirror Git blob SHA: `c16cd2ca0d6c6d39121efe2ca05eb008c3beb257` before the manifest update. Web bundle SHA-256 for the updated report code: `95cd6be7d1ad502952dec52a73b230ae7cdb7a6f2df6b5a78d1fbae358b3f9fe`.
+- Manifest candidate: Web Update 390; release note: "Update Report now fetches the latest release details directly and shows the current Web Update number." APK remains My Diary 1.0.212 / versionCode 211. No APK/native code or saved Diary data was changed.
+- **Phone test pending**: user must confirm the copied report shows Web Update 390 and the new summary. Do not mark PASS until confirmed.
+
+---
+
 # World Clock text changed to dark black — Web Update 389 published (phone test pending, 2026-11-22)
 
 - User requested that **all text inside 🌍 World Clock** be dark black. Added a narrowly scoped style rule only to `#diaryWorldClockModal` and its descendants, forcing all displayed text, city names, live times, dates, day/night and offset/sunrise/sunset details, controls, search text, and placeholders to `#000000`. Search input caret is also black.
