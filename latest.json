@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 391,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "805bcc8b0ce267313d64a4be28c691b51cf0f6f81201b11597cff8b86624d0c0",
+  "webSha256": "e94e0df9d079f4a5e9d8aafa721359deee25019dde4a9f6f9e279e1b7feb7b93",
   "webReleaseNotes": "All text inside My Kharcha is now dark black. Existing Kharcha records, calculations, PIN and other features are unchanged."
 }
