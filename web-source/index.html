@@ -1540,6 +1540,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   fontSliderBox.appendChild(fontSlider);fontGroup.appendChild(fontLabel);fontGroup.appendChild(fontSliderBox);settingsRow.appendChild(fontGroup);mePanel.appendChild(settingsRow);
   var checkUpdatesBtn=el('button',{id:'diaryCheckUpdatesBtn',type:'button'},t('checkUpdates'));
   mePanel.appendChild(checkUpdatesBtn);
+  var updateVersionStatus=el('div',{id:'diaryUpdateVersionStatus','aria-live':'polite',style:'display:block;width:100%;min-height:16px;margin:2px 0 5px;padding:2px 4px;box-sizing:border-box;color:#655b72;font-size:12px;font-weight:700;line-height:1.35;text-align:center;overflow-wrap:anywhere;'},'');
+  mePanel.appendChild(updateVersionStatus);
   var refreshDiaryBtn=el('button',{id:'diaryDiaryRefreshBtn',type:'button'},t('refresh'));
   mePanel.appendChild(refreshDiaryBtn);
   /* Optional, self-contained World Clock tool. Removing this block and its button leaves all existing Me tools untouched. */
@@ -3184,8 +3186,24 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   });
 
 
+  function refreshUpdateVersionInfo(){
+   if(typeof window.fetch!=='function')return;
+   var feedUrl='https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/latest.json?cacheBust='+Date.now();
+   window.fetch(feedUrl,{cache:'no-store'}).then(function(response){
+    if(!response.ok)throw new Error('Update feed unavailable');
+    return response.json();
+   }).then(function(meta){
+    var apkVersion=String(meta.versionName||'').trim();
+    var webVersion=Number(meta.webVersion||0);
+    if(!apkVersion||!Number.isFinite(webVersion)||webVersion<1)return;
+    updateVersionStatus.textContent='Latest available: APK '+apkVersion+' • Web Update '+webVersion;
+   }).catch(function(){});
+  }
+  refreshUpdateVersionInfo();
+
   checkUpdatesBtn.addEventListener('click',function(e){
    e.preventDefault();e.stopPropagation();keepDiaryMeMenuOpen();
+   refreshUpdateVersionInfo();
    if(window.DiaryAppActions&&typeof DiaryAppActions.checkForUpdates==='function'){
     try{DiaryAppActions.checkForUpdates();}finally{keepDiaryMeMenuOpen();}
    }else{
