@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 392,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "e94e0df9d079f4a5e9d8aafa721359deee25019dde4a9f6f9e279e1b7feb7b93",
+  "webSha256": "ffc4f0d4245445b8479fa6423987d58dc913e36649410cfb40910a2b2385729b",
   "webReleaseNotes": "Private Locker now has a left-side Wapas button and a centered 🔐 Private Locker title, with ✕ on the right. Existing Locker PIN, saved data and security features are unchanged."
 }
