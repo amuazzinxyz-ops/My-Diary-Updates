@@ -1,3 +1,19 @@
+# My Diary Home Screen Widget — Smart Search + Quick Note added (APK 1.0.207 / versionCode 206, 2026-11-21)
+
+- User requested two new Home Screen Widget shortcuts: **🔍 Smart Search** and **✍️ Quick Note**. Smart Search opens and focuses the existing Diary notes search field. Quick Note opens the existing blank note editor and focuses the existing note text box so the user can type and save immediately.
+- The widget now supports **12 selectable shortcuts**. The two new shortcuts default OFF so existing users' saved widget selections, layout, and button count are not unexpectedly changed; enable them in **My Diary → Me → Home Screen Widget Settings**. Existing ten shortcuts, date toggle, Chhota/Normal/Bada text sizing, 3D button faces, individual pressed feedback, responsive padding, and horizontal/vertical resizing are preserved.
+- Updated `web-source/index.html`, its `diary-web/index.html` mirror, `scripts/add_diary_home_widget.py`, `scripts/polish_diary_home_widget.py`, and the signed APK build workflow. The native generator creates independent Smart Search and Quick Note button hit areas and target-specific PendingIntent identities. Existing note search, note editor, Save Note, stored records, photos, PINs, locks, reminders, and unrelated Diary features were not intentionally changed.
+- PR **#327** merged successfully as `6c596bbf2c76f33e1d5982f238f021750ce0f541`. Exact pre-edit source backup branch: `backup/before-widget-smart-search-quick-note-2026-11-21`; working branch: `feat/widget-smart-search-quick-note-2026-11-21`.
+- GitHub Actions APK build run **44853301160** (run #427) completed **successfully**. Published signed APK **1.0.207 / versionCode 206**, package `com.personal.diaryapp`, SHA-256 `a67bb7f1841ee39cd8d9e57025f27cc769e93cb0cdb831d1a60d4a214e84bce0`. Debug build, generated native widget layout/provider and 12-button validation, signed Release build, signing-certificate continuity, feed publication, and artifact uploads passed. Existing signing certificate SHA-256 remains `23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A`.
+- Live `latest.json` confirms **1.0.207 / 206** and the APK SHA-256 above. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `c88ae03ac3bc2eaff33a00b2dcfbda53152d4f49`; live web SHA-256 is `bcd7072cd925ae6d44ba0f336408c505fed1427c8ca9da093cb243863e4ba502`. Web version remains **371** because this updated HTML is bundled with the matching native APK release.
+- The web publisher guard now requires signed APK **1.0.207 / versionCode 206** before exposing the new Smart Search/Quick Note native-dependent bridge to older app versions.
+- Delivery: **My Diary → Me → Check for Updates**. No direct APK was sent.
+- **Physical-phone testing is pending user confirmation**: after updating, enable both new shortcuts in Widget Settings, add them to the Home Screen widget, then test Smart Search and Quick Note. Do not mark device-side PASS until the user confirms.
+
+Register pre-edit backup branch: `backup/before-widget-smart-search-quick-note-register-2026-11-21`.
+
+---
+
 # My Diary Home Screen Widget — Chhota / Normal / Bada phone test PASS (2026-11-21)
 
 - User confirmed on 2026-11-21: **“Chack Kiya Alhamdulillah Ho Gaya Paas”**. Physical Android phone verification of the published APK **1.0.206 / versionCode 205** is now **PASS (user-confirmed)** for the Chhota, Normal, and Bada widget text-size choices.
