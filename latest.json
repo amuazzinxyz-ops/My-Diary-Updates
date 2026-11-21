@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 383,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "f925866479ed85cbde55e0db8f700e75213df6183b8c728f486000412d20943d",
+  "webSha256": "a82c1d28432be3115f06cd8fe8e84c41732f7cf542d1c72df57fee7d8fbc718f",
   "webReleaseNotes": "Web Update 383: After the verified web update refreshes the Diary screen, the Me menu is restored open. The update download, verification, installation, and other Diary features are unchanged."
 }
