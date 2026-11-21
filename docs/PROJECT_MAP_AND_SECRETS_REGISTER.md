@@ -1,3 +1,14 @@
+# Compact Update Report inside Me menu — Web Update 387 (phone test pending, 2026-11-21)
+
+- User approved shortening the report and clarified it must appear immediately when **Me → Check for Updates** is tapped. The report now opens in the existing Me-menu area before the native updater call; the one-time session handoff continues to reopen it after the updater refreshes the WebView.
+- The visible report is limited to four concise lines: My Diary version, Web Update number, latest work, and phone-test status. The **📋 Copy** action still copies the complete technical report, including APK/web release notes and SHA-256 hashes. **×** still restores the original Me options. Existing updater/download/verification/install behavior is unchanged.
+- Safety backup branch: `backup/before-compact-update-report-2026-11-21`, based on pre-edit main commit `94958061d8742b492ccb76a7bd97d693f5cf5c1b`.
+- Web publisher workflow run [44928708287](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/44928708287) completed successfully. Published **Web Update 387**. `web-source/index.html` and `diary-web/index.html` were re-fetched and verified byte-identical at Git blob SHA `04e224b8a6b66d8e2bda0c6a33f0cf3deb50dab4` (604,097 characters). Live `latest.json` advertises webVersion 387 and web SHA-256 `b8b0fcb0fc7ec3e92ef97ec986edd889cbd0cf1c6e8769356b986e4181117967`.
+- Native APK remains **My Diary 1.0.212 / versionCode 211**, with its existing APK SHA-256 unchanged; no APK/native source or saved Diary data was edited for this web-only change.
+- Static checks confirmed the compact report renderer, full-report Copy source, and immediate Check for Updates open call are present in both identical source/mirror files. **Phone testing is pending**: user must confirm the short report appears immediately after tapping Check for Updates, remains visible after the updater refresh, Copy contains the full report, and × restores Me options. Do not mark PASS until user confirms.
+
+---
+
 # Update Report shown inside the Me menu — Web Update 386 (phone test pending, 2026-11-21)
 
 - User reported that Web Update 384 performed the update but the report popup was not visible. Corrected the report presentation to render directly inside the existing **Me** dropdown area, replacing the Me options in that same space; tapping **×** restores the original Me options.
