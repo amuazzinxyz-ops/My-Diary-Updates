@@ -2210,7 +2210,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     entry.focus();
    }
    entry.addEventListener('input',function(){if(stage<2)entry.value=String(entry.value||'').replace(/[^0-9]/g,'').slice(0,4);});
-   cancel.addEventListener('click',function(){privateLockerShowLockOffGate(raw,config);});
+   cancel.addEventListener('click',function(){privateLockerMessage('Private Locker khula hai. PIN change radd kar diya.',false);privateLockerShowEntries();});
    save.addEventListener('click',function(){
     if(busy)return;
     if(stage===0){if(!/^[0-9]{4}$/.test(entry.value)){status.textContent='Naya 4 digit PIN zaroori hai.';entry.focus();return;}pinValue=entry.value;showStage(1);return;}
