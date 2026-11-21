@@ -7,8 +7,8 @@
   "sha256": "a67bb7f1841ee39cd8d9e57025f27cc769e93cb0cdb831d1a60d4a214e84bce0",
   "releaseNotes": "My Diary 1.0.207: Adds two selectable Home Screen Widget shortcuts: Smart Search opens the existing notes search field, and Quick Note opens the existing blank note editor ready to type. All twelve shortcut routes, prior settings, 3D button feedback, text-size choices, responsive padding, and resize behavior are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 371,
+  "webVersion": 372,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "71442e32955d3c9b0bd87da24e9ac4f4898dccf757543f7f0cb200c5c3129e89",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "My Diary Web Update 372: Adds a separate ⭐ Favourite toggle to each note. 📌 Pin Note remains independent; pinning or unpinning no longer changes Favourite. Favourite Notes shows only notes explicitly marked Favourite. Existing saved note content, photos, PINs, locks, and unrelated features are preserved."
 }
