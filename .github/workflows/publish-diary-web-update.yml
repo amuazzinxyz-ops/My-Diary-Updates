@@ -46,9 +46,20 @@ jobs:
           # web bundle to an older installed APK until the signed native release
           # is already present in the feed. The APK workflow's feed commit then
           # triggers this publisher again.
-          if "ringDurationSeconds" in text or "ringVolumePercent" in text or "snoozeInterval:" in text or "saveMemoryImage" in text or "authenticateFingerprint" in text or "canUseFingerprint" in text or "scheduleReminderCustom" in text or "saveHomeWidgetSettings" in text or "requestHomeWidgetPin" in text:
+          if "ringDurationSeconds" in text or "ringVolumePercent" in text or "snoozeInterval:" in text or "saveMemoryImage" in text or "authenticateFingerprint" in text or "canUseFingerprint" in text or "scheduleReminderCustom" in text or "saveHomeWidgetSettings" in text or "requestHomeWidgetPin" in text or "showSmartSearch" in text or "showQuickNote" in text:
               app_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-              required_native = (194, "1.0.195") if ("saveHomeWidgetSettings" in text or "requestHomeWidgetPin" in text) else ((193, "1.0.194") if "scheduleReminderCustom" in text else ((175, "1.0.176") if "authenticateFingerprint" in text else ((161, "1.0.162") if "saveMemoryImage" in text else (146, "1.0.147"))))
+              if "showSmartSearch" in text or "showQuickNote" in text:
+                  required_native = (206, "1.0.207")
+              elif "saveHomeWidgetSettings" in text or "requestHomeWidgetPin" in text:
+                  required_native = (194, "1.0.195")
+              elif "scheduleReminderCustom" in text:
+                  required_native = (193, "1.0.194")
+              elif "authenticateFingerprint" in text or "canUseFingerprint" in text:
+                  required_native = (175, "1.0.176")
+              elif "saveMemoryImage" in text:
+                  required_native = (161, "1.0.162")
+              else:
+                  required_native = (146, "1.0.147")
               if app_version < required_native:
                   Path("/tmp/diary-web-publish-skipped").write_text("native release pending")
                   print("SKIP: native-dependent web bundle waits for its matching signed APK release")
