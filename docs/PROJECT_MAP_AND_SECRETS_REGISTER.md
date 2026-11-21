@@ -1,3 +1,15 @@
+# My Diary Favourite Notes read mode + remove Quick Note / New Note widget shortcuts (PR #335 merged, release pending, 2026-11-21)
+
+- User requested that **⭐ Favourite Notes** open the favourite note in a read-only reading view first, with an explicit **Edit Note** action to enter the existing editor. Favourite Notes opening now sets the existing title/body fields to read-only, hides edit controls while reading, preserves the saved cover/detail/photo previews, and exposes the existing edit controls only after the user taps Edit Note. The normal note-opening path remains unchanged; opening a note from the Favourite Notes view uses read mode.
+- Existing per-note PIN remains required before the favourite note can be read. After PIN unlock, selecting that favourite from the Favourite Notes view still opens it in read mode. No PIN bypass, note data, photos, Favourite/Pin flags, Diary lock/recovery, or other data structures were intentionally changed.
+- Removed **✍️ Quick Note kholen** and **✍️ New Note kholen** from Home Screen Widget settings and from generated native widget buttons. The normal New Note feature inside Diary is retained. Remaining widget shortcut set is ten options; widget generator and 3D polish validation were updated accordingly. Other shortcuts/settings and widget resize/text-size behavior are unchanged.
+- Exact pre-edit backup branch: `backup/before-favourite-read-mode-and-widget-shortcut-removal-2026-11-21`. Working branch: `fix/favourite-read-mode-remove-quick-new-widget-2026-11-21`. PR **#335** merged successfully as `43243bd39ced02ccdacee7823f3b22489ac8cc92`.
+- Static checks: both embedded JavaScript blocks parse successfully. Main-branch `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `a0330c23110c48a83ef01626a78446ffe4f6de9b`; the source contains the read-mode behavior and no longer contains either widget option.
+- **Release not yet confirmed:** live `latest.json` still reports webVersion **375** and APK **1.0.209 / versionCode 208**. The new source is merged, but publisher completion, signed APK rebuild/publication, and phone testing have not yet been verified. Do not say the change is available through Check for Updates or mark phone PASS until the live feed and user's phone test confirm it. Do not send APK directly unless user asks.
+- Delivery, once published: **My Diary → Me → Check for Updates**.
+
+---
+
 # My Diary Favourite Notes Widget — open the favourite note directly (Web Update 375, 2026-11-21)
 
 - User explicitly clarified the required behavior: tapping **⭐ Favourite Notes** on the Home Screen Widget must open a Favourite Note directly inside the Diary editor; it must not stop at a list.
