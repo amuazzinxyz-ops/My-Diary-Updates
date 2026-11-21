@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 393,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "ffc4f0d4245445b8479fa6423987d58dc913e36649410cfb40910a2b2385729b",
+  "webSha256": "e2586ef0ef3d8b48ef48a1f2acda887edc708b15c6968f996068d5125cadb494",
   "webReleaseNotes": "Private Locker's Wapas button is now smaller and shifted slightly left so it does not overlap the 🔐 Private Locker title/icon. Existing Locker PIN, saved data and security features are unchanged."
 }
