@@ -3185,11 +3185,29 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 
   checkUpdatesBtn.addEventListener('click',function(e){
    e.preventDefault();e.stopPropagation();
-   if(window.DiaryAppActions&&typeof DiaryAppActions.checkForUpdates==='function'){
-    DiaryAppActions.checkForUpdates();
-   }else{
-    alert(t('updateAppUnavailable'));
+   if(!(window.DiaryAppActions&&typeof DiaryAppActions.checkForUpdates==='function')){
+    alert(t('updateAppUnavailable'));return;
    }
+   checkUpdatesBtn.disabled=true;
+   fetch('https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/latest.json?check='+Date.now(),{cache:'no-store'})
+    .then(function(response){if(!response.ok)throw new Error('Update details unavailable');return response.json();})
+    .then(function(info){
+     var old=document.getElementById('diaryUpdateInfoShade');if(old&&old.parentNode)old.parentNode.removeChild(old);
+     var shade=el('div',{id:'diaryUpdateInfoShade',role:'dialog','aria-modal':'true'});
+     shade.style.cssText='position:fixed;inset:0;z-index:2147483647;background:rgba(20,10,35,.90);display:flex;align-items:center;justify-content:center;padding:18px;box-sizing:border-box;';
+     var card=el('section');card.style.cssText='width:min(360px,100%);max-height:82vh;overflow:auto;box-sizing:border-box;padding:20px 17px;border-radius:18px;text-align:left;background:linear-gradient(145deg,#fff,#f0e8ff);border:3px solid #d4af37;box-shadow:inset 0 2px 0 #fff,0 5px 0 #9b7415,0 14px 35px rgba(0,0,0,.4);';
+     var title=el('strong',null,'⬇️ Latest Update Details');title.style.cssText='display:block;font-size:20px;line-height:1.35;font-weight:1000;color:#321653;margin:0 0 14px;text-align:center;';
+     var web=el('div',null,'🌐 Web Update '+String(info.webVersion||'—'));web.style.cssText='font-size:18px;font-weight:1000;color:#4b287e;margin:0 0 7px;';
+     var app=el('div',null,'📱 Android App '+String(info.versionName||'—'));app.style.cssText='font-size:15px;font-weight:900;color:#4b287e;margin:0 0 12px;';
+     var notes=el('p',null,String(info.webReleaseNotes||'Is update ki tafseel available nahi hai.'));notes.style.cssText='font-size:15px;line-height:1.5;font-weight:700;color:#241536;white-space:pre-wrap;overflow-wrap:anywhere;margin:0 0 18px;';
+     var actions=el('div');actions.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:10px;';
+     var cancel=el('button',{type:'button'},'Abhi Nahi');cancel.style.cssText='min-height:46px;padding:9px 7px;border:2px solid #8b5acb;border-radius:11px;background:linear-gradient(145deg,#fff,#eee5ff);color:#4b287e;font-weight:900;box-shadow:0 3px 0 #8b5acb;';
+     var go=el('button',{type:'button'},'Check Karein');go.style.cssText='min-height:46px;padding:9px 7px;border:2px solid #8b5acb;border-radius:11px;background:linear-gradient(145deg,#c4a2ff,#7540c2);color:#fff;font-weight:900;box-shadow:0 3px 0 #54258f;';
+     cancel.addEventListener('click',function(){if(shade.parentNode)shade.parentNode.removeChild(shade);checkUpdatesBtn.disabled=false;});
+     go.addEventListener('click',function(){if(shade.parentNode)shade.parentNode.removeChild(shade);checkUpdatesBtn.disabled=false;DiaryAppActions.checkForUpdates();});
+     actions.appendChild(cancel);actions.appendChild(go);card.appendChild(title);card.appendChild(web);card.appendChild(app);card.appendChild(notes);card.appendChild(actions);shade.appendChild(card);document.body.appendChild(shade);
+    })
+    .catch(function(){checkUpdatesBtn.disabled=false;DiaryAppActions.checkForUpdates();});
   });
   refreshDiaryBtn.addEventListener('click',function(e){
    e.preventDefault();e.stopPropagation();
@@ -3573,9 +3591,20 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    if(String(input.value||'').length!==4)return;
    var saved=localStorage.getItem(DIARY_MASTER_PIN_KEY)||'';
    if(String(input.value)===saved&&saved){
-    if(!window.confirm(t('diaryLockOffConfirm')))return;
-    try{localStorage.removeItem(DIARY_MASTER_PIN_KEY);localStorage.removeItem(DIARY_MASTER_PATTERN_KEY);localStorage.removeItem(DIARY_RECOVERY_NAME_SALT_KEY);localStorage.removeItem(DIARY_RECOVERY_NAME_HASH_KEY);localStorage.removeItem('diaryDiaryMustChooseNewPinAfterRecovery');try{sessionStorage.removeItem('diaryDiaryMustChooseNewPinAfterRecovery');}catch(recoveryFlagError){}if(shade.parentNode)shade.parentNode.removeChild(shade);var st=document.getElementById('diaryMyNotesStatus');if(st)st.textContent=t('diaryLockRemoved');}
-    catch(e){pinStatus.textContent=t('storageUnavailable');}
+    var confirmShade=el('div',{id:'diaryDiaryLockOffConfirmShade',role:'dialog','aria-modal':'true'});
+    confirmShade.style.cssText='position:fixed;inset:0;z-index:2147483647;background:rgba(20,10,35,.90);display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;';
+    var confirmBox=el('section');confirmBox.style.cssText='width:min(340px,100%);box-sizing:border-box;padding:22px 18px;border-radius:18px;text-align:center;background:linear-gradient(145deg,#fff,#f0e8ff);border:3px solid #d4af37;box-shadow:inset 0 2px 0 #fff,0 5px 0 #9b7415,0 14px 35px rgba(0,0,0,.4);';
+    var confirmMessage=el('strong',null,t('diaryLockOffConfirm'));confirmMessage.style.cssText='display:block;font-size:19px;line-height:1.45;font-weight:900;color:#321653;margin:0 0 18px;overflow-wrap:anywhere;';
+    var confirmActions=el('div');confirmActions.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:10px;';
+    var cancelConfirm=el('button',{type:'button'},'Abhi Nahi');cancelConfirm.style.cssText='min-height:48px;padding:10px 8px;border:2px solid #8b5acb;border-radius:11px;background:linear-gradient(145deg,#fff,#eee5ff);color:#4b287e;font-size:16px;font-weight:900;box-shadow:0 3px 0 #8b5acb;';
+    var acceptConfirm=el('button',{type:'button'},'OK');acceptConfirm.style.cssText='min-height:48px;padding:10px 8px;border:2px solid #8b5acb;border-radius:11px;background:linear-gradient(145deg,#c4a2ff,#7540c2);color:#fff;font-size:16px;font-weight:900;box-shadow:0 3px 0 #54258f;';
+    cancelConfirm.addEventListener('click',function(){if(confirmShade.parentNode)confirmShade.parentNode.removeChild(confirmShade);input.value='';input.focus();});
+    acceptConfirm.addEventListener('click',function(){
+     if(confirmShade.parentNode)confirmShade.parentNode.removeChild(confirmShade);
+     try{localStorage.removeItem(DIARY_MASTER_PIN_KEY);localStorage.removeItem(DIARY_MASTER_PATTERN_KEY);localStorage.removeItem(DIARY_RECOVERY_NAME_SALT_KEY);localStorage.removeItem(DIARY_RECOVERY_NAME_HASH_KEY);localStorage.removeItem('diaryDiaryMustChooseNewPinAfterRecovery');try{sessionStorage.removeItem('diaryDiaryMustChooseNewPinAfterRecovery');}catch(recoveryFlagError){}if(shade.parentNode)shade.parentNode.removeChild(shade);var st=document.getElementById('diaryMyNotesStatus');if(st)st.textContent=t('diaryLockRemoved');}
+     catch(e){pinStatus.textContent=t('storageUnavailable');}
+    });
+    confirmActions.appendChild(cancelConfirm);confirmActions.appendChild(acceptConfirm);confirmBox.appendChild(confirmMessage);confirmBox.appendChild(confirmActions);confirmShade.appendChild(confirmBox);document.body.appendChild(confirmShade);
    }else{pinStatus.textContent=t('diaryPinWrong');input.value='';input.focus();}
   }
   input.addEventListener('input',function(){input.value=String(input.value||'').replace(/\\D/g,'').slice(0,4);if(input.value.length===4)submitPin();});
