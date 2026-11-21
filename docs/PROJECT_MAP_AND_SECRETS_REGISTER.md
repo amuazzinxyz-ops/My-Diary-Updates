@@ -8,9 +8,8 @@
 - Live `latest.json` confirms **1.0.207 / 206** and the APK SHA-256 above. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `c88ae03ac3bc2eaff33a00b2dcfbda53152d4f49`; live web SHA-256 is `bcd7072cd925ae6d44ba0f336408c505fed1427c8ca9da093cb243863e4ba502`. Web version remains **371** because this updated HTML is bundled with the matching native APK release.
 - The web publisher guard now requires signed APK **1.0.207 / versionCode 206** before exposing the new Smart Search/Quick Note native-dependent bridge to older app versions.
 - Delivery: **My Diary → Me → Check for Updates**. No direct APK was sent.
-- **Physical-phone testing is pending user confirmation**: after updating, enable both new shortcuts in Widget Settings, add them to the Home Screen widget, then test Smart Search and Quick Note. Do not mark device-side PASS until the user confirms.
-
-Register pre-edit backup branch: `backup/before-widget-smart-search-quick-note-register-2026-11-21`.
+- **Physical-phone testing: PASS (user-confirmed, 2026-11-21).** User replied “Paas” after the 1.0.207 phone-testing request, confirming the two new widget shortcuts passed on their Android phone. This closes the pending device-verification item for Smart Search and Quick Note. No source-code change, APK rebuild, or user-data operation was performed for this verification.
+- Register pre-edit backup branch: `backup/before-widget-smart-search-quick-note-phone-pass-2026-11-21`.
 
 ---
 
