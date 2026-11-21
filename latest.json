@@ -10,5 +10,5 @@
   "webVersion": 385,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "5ba1aa05a3db26ae17e591f596d6a6fe65467e37d7d60430d63cad6e58520ee1",
-  "webReleaseNotes": "Web Update 385: Moved the copyable Update Report popup into the exact Me-button dropdown area. It now opens inside the Me menu instead of appearing as a separate centered screen overlay. Copy, × close, and the existing native updater/download/install flow remain unchanged."
+  "webReleaseNotes": "Web Update 385: Corrected Update Report so it appears inside the existing Me menu in the exact same area, replacing the Me options until × is tapped. The report is restored after the updater refreshes the WebView. Copy and × remain the only report actions; the existing native download, verification, and installation flow is preserved."
 }
