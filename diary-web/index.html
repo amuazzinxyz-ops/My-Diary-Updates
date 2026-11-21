@@ -3188,7 +3188,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   /* Separate, copyable update report; the native updater remains independent. */
   function openDiaryUpdateReport(){
    var overlay=document.getElementById('diaryUpdateReportModal');
-   var body,status,reportText='MY DIARY UPDATE REPORT\\nUpdate details load ho rahi hain...';
+   var body,status,reportText='MY DIARY UPDATE REPORT\nUpdate details load ho rahi hain...';
    if(!overlay){
     overlay=document.createElement('div');overlay.id='diaryUpdateReportModal';
     overlay.style.cssText='position:fixed;inset:0;z-index:100500;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;background:rgba(20,12,30,.62);';
@@ -3227,8 +3227,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      '',
      'APK SHA-256: '+(meta.sha256||'Not listed'),
      'WEB SHA-256: '+(meta.webSha256||'Not listed')
-    ].join('\\n');body.textContent=reportText;
-   }).catch(function(){reportText='MY DIARY — UPDATE REPORT\\nUpdate details abhi load nahi ho sakin. Internet connection check karke dobara Check for Update dabayein.';body.textContent=reportText;});
+    ].join('\n');body.textContent=reportText;
+   }).catch(function(){reportText='MY DIARY — UPDATE REPORT\nUpdate details abhi load nahi ho sakin. Internet connection check karke dobara Check for Update dabayein.';body.textContent=reportText;});
   }
 
   checkUpdatesBtn.addEventListener('click',function(e){
