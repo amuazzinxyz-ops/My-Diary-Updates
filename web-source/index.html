@@ -264,7 +264,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 #diaryMyNotesEditor.diary-read-mode #diaryMyNotesText{cursor:text;background:#fff!important}
 #diaryMyNotesEditor.diary-read-mode #diaryMyNotesActions button:not(#diaryMyNotesEditView){display:none!important}
 #diaryMyNotesEditor.diary-read-mode #diaryMyNotesEditView:not([hidden]){display:inline-flex!important;align-items:center;justify-content:center}
-</style>\n</head>
+</style>
+</head>
 <body>
 <main class="diary-home">
  <div class="diary-mark">📒</div>
@@ -4557,7 +4558,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     expandedNoteId=latestFavourite.id;
     renderList();
    }else{
-    openNote(latestFavourite.id);
+    openNote(latestFavourite.id,true);
    }
   }
  }
