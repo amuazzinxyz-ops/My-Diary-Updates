@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 384,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "6156aec8b3dd91c2b36e24ff4bfa65342e17b6b24225afad68e9294e41317793",
+  "webSha256": "ec7d27944d463b35482354891cdf133219440d17b36b652fc5dcdd1be1f329d5",
   "webReleaseNotes": "Web Update 384: Added a separate, copyable Update Report popup that opens when Check for Update is tapped. It shows the latest APK version and version code, Web Update number, complete APK and web release notes, and both SHA-256 hashes. Copy copies the full report; × closes only the popup. The existing native update check, download, verification, installation, and saved-data flows are unchanged."
 }
