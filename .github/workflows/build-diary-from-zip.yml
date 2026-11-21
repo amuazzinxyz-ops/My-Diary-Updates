@@ -1,4 +1,4 @@
-# Approved release build: publish signed Diary 1.0.208/207 with the cold-launch widget destination fix.
+# Approved release build: publish signed Diary 1.0.208/207 with the cold-launch widget destination fix. Triggered after PR #333 merge.
 name: Build Diary APK from uploaded project ZIP
 
 on:
