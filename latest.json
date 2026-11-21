@@ -1,14 +1,14 @@
 {
   "appName": "My Diary",
   "packageName": "com.personal.diaryapp",
-  "versionCode": 207,
-  "versionName": "1.0.208",
+  "versionCode": 208,
+  "versionName": "1.0.209",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
-  "sha256": "35ca4e085335bbe04f30d11e40d16752a107628fd05b72f89706618ca4aef819",
-  "releaseNotes": "My Diary 1.0.208: Fixes Home Screen Widget destination routing so the requested shortcut stays open on cold launch instead of being reset by Diary auto-open. Existing widget shortcuts, saved notes, photos, PINs, locks, settings, 3D feedback, and resize behavior are preserved.",
+  "sha256": "383d7ec04772e6743b5478ab4a83757649dd1e93e8896ade9a7a915efa4e356e",
+  "releaseNotes": "My Diary 1.0.209: Favourite Notes widget now opens the filtered Favourite Notes list instead of auto-opening a different recently edited note. Existing notes, photos, PINs, locks, widget shortcuts, settings, and other features are preserved.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 374,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "6bd6d772d9f3781601484970e3a26f7b2d1611252472c609295ac74023e0a3a4",
+  "webSha256": "8eee9c7ae6281d677fa4e994389845d0a38c2e6907ab57caaf3fb8067ba7a7f1",
   "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
