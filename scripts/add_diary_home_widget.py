@@ -39,7 +39,6 @@ widget_ui = r"""
   var widgetShowDiary=makeWidgetOption('diaryWidgetShowDiary','📒 My Diary kholen',true);
   var widgetShowCalendar=makeWidgetOption('diaryWidgetShowCalendar','📅 Personal Calendar kholen',true);
   var widgetShowReminder=makeWidgetOption('diaryWidgetShowReminder','⏰ Smart Reminder kholen',true);
-  var widgetShowNewNote=makeWidgetOption('diaryWidgetShowNewNote','✍️ New Note kholen',true);
   var widgetShowKharcha=makeWidgetOption('diaryWidgetShowKharcha','💰 My Kharcha kholen',false);
   var widgetShowDocuments=makeWidgetOption('diaryWidgetShowDocuments','📁 My Documents kholen',false);
   var widgetShowMemories=makeWidgetOption('diaryWidgetShowMemories','📒 My Memories kholen',false);
@@ -47,7 +46,6 @@ widget_ui = r"""
   var widgetShowFavouriteNotes=makeWidgetOption('diaryWidgetShowFavouriteNotes','⭐ Favourite Notes kholen',false);
   var widgetShowWorldClock=makeWidgetOption('diaryWidgetShowWorldClock','🌍 World Clock kholen',false);
   var widgetShowSmartSearch=makeWidgetOption('diaryWidgetShowSmartSearch','🔍 Smart Search kholen',false);
-  var widgetShowQuickNote=makeWidgetOption('diaryWidgetShowQuickNote','✍️ Quick Note kholen',false);
   var widgetSizeLabel=el('label',{class:'diary-home-widget-size-label'},'Widget Text Size');
   var widgetSize=el('select',{id:'diaryWidgetSize'});
   [['compact','Chhota'],['standard','Normal'],['large','Bada']].forEach(function(item){widgetSize.appendChild(el('option',{value:item[0]},item[1]));});
@@ -58,7 +56,7 @@ widget_ui = r"""
   widgetSettingsModal.append(widgetSettingsHead,widgetSettingsHint,widgetSettingsOptions,widgetSettingsSave,widgetSettingsPin,widgetSettingsStatus);
   ov.appendChild(widgetSettingsModal);
   function widgetSettingsValue(){
-   return {showDate:!!widgetShowDate.checked,showDiary:!!widgetShowDiary.checked,showCalendar:!!widgetShowCalendar.checked,showReminder:!!widgetShowReminder.checked,showNewNote:!!widgetShowNewNote.checked,showKharcha:!!widgetShowKharcha.checked,showDocuments:!!widgetShowDocuments.checked,showMemories:!!widgetShowMemories.checked,showPrivateLocker:!!widgetShowPrivateLocker.checked,showFavouriteNotes:!!widgetShowFavouriteNotes.checked,showWorldClock:!!widgetShowWorldClock.checked,showSmartSearch:!!widgetShowSmartSearch.checked,showQuickNote:!!widgetShowQuickNote.checked,size:String(widgetSize.value||'standard')};
+   return {showDate:!!widgetShowDate.checked,showDiary:!!widgetShowDiary.checked,showCalendar:!!widgetShowCalendar.checked,showReminder:!!widgetShowReminder.checked,showKharcha:!!widgetShowKharcha.checked,showDocuments:!!widgetShowDocuments.checked,showMemories:!!widgetShowMemories.checked,showPrivateLocker:!!widgetShowPrivateLocker.checked,showFavouriteNotes:!!widgetShowFavouriteNotes.checked,showWorldClock:!!widgetShowWorldClock.checked,showSmartSearch:!!widgetShowSmartSearch.checked,size:String(widgetSize.value||'standard')};
   }
   function widgetApplySettings(value){
    value=value||{};
@@ -66,7 +64,6 @@ widget_ui = r"""
    widgetShowDiary.checked=value.showDiary!==false;
    widgetShowCalendar.checked=value.showCalendar!==false;
    widgetShowReminder.checked=value.showReminder!==false;
-   widgetShowNewNote.checked=value.showNewNote!==false;
    widgetShowKharcha.checked=!!value.showKharcha;
    widgetShowDocuments.checked=!!value.showDocuments;
    widgetShowMemories.checked=!!value.showMemories;
@@ -74,7 +71,6 @@ widget_ui = r"""
    widgetShowFavouriteNotes.checked=!!value.showFavouriteNotes;
    widgetShowWorldClock.checked=!!value.showWorldClock;
    widgetShowSmartSearch.checked=!!value.showSmartSearch;
-   widgetShowQuickNote.checked=!!value.showQuickNote;
    widgetSize.value=['compact','standard','large'].indexOf(value.size)>=0?value.size:'standard';
   }
   function widgetSaveSettings(showMessage){
@@ -82,7 +78,7 @@ widget_ui = r"""
     widgetSettingsStatus.textContent='Widget Settings ke liye My Diary ka installed Android app kholein.';return false;
    }
    var value=widgetSettingsValue();
-   if(!value.showDiary&&!value.showCalendar&&!value.showReminder&&!value.showNewNote&&!value.showKharcha&&!value.showDocuments&&!value.showMemories&&!value.showPrivateLocker&&!value.showFavouriteNotes&&!value.showWorldClock&&!value.showSmartSearch&&!value.showQuickNote){widgetSettingsStatus.textContent='Kam se kam ek shortcut select karein.';return false;}
+   if(!value.showDiary&&!value.showCalendar&&!value.showReminder&&!value.showKharcha&&!value.showDocuments&&!value.showMemories&&!value.showPrivateLocker&&!value.showFavouriteNotes&&!value.showWorldClock&&!value.showSmartSearch){widgetSettingsStatus.textContent='Kam se kam ek shortcut select karein.';return false;}
    try{
     var saved=DiaryAppActions.saveHomeWidgetSettings(JSON.stringify(value));
     widgetSettingsStatus.textContent=saved?'Widget Settings save ho gayi.':'Settings save nahi ho sakin.';
@@ -193,7 +189,6 @@ bridge_methods = r"""
                 .put("showDiary", prefs.getBoolean("showDiary", true))
                 .put("showCalendar", prefs.getBoolean("showCalendar", true))
                 .put("showReminder", prefs.getBoolean("showReminder", true))
-                .put("showNewNote", prefs.getBoolean("showNewNote", true))
                 .put("showKharcha", prefs.getBoolean("showKharcha", false))
                 .put("showDocuments", prefs.getBoolean("showDocuments", false))
                 .put("showMemories", prefs.getBoolean("showMemories", false))
@@ -201,7 +196,6 @@ bridge_methods = r"""
                 .put("showFavouriteNotes", prefs.getBoolean("showFavouriteNotes", false))
                 .put("showWorldClock", prefs.getBoolean("showWorldClock", false))
                 .put("showSmartSearch", prefs.getBoolean("showSmartSearch", false))
-                .put("showQuickNote", prefs.getBoolean("showQuickNote", false))
                 .put("size", prefs.getString("size", "standard"))
                 .toString()
         }
@@ -215,7 +209,6 @@ bridge_methods = r"""
                     .putBoolean("showDiary", value.optBoolean("showDiary", true))
                     .putBoolean("showCalendar", value.optBoolean("showCalendar", true))
                     .putBoolean("showReminder", value.optBoolean("showReminder", true))
-                    .putBoolean("showNewNote", value.optBoolean("showNewNote", true))
                     .putBoolean("showKharcha", value.optBoolean("showKharcha", false))
                     .putBoolean("showDocuments", value.optBoolean("showDocuments", false))
                     .putBoolean("showMemories", value.optBoolean("showMemories", false))
@@ -223,7 +216,6 @@ bridge_methods = r"""
                     .putBoolean("showFavouriteNotes", value.optBoolean("showFavouriteNotes", false))
                     .putBoolean("showWorldClock", value.optBoolean("showWorldClock", false))
                     .putBoolean("showSmartSearch", value.optBoolean("showSmartSearch", false))
-                    .putBoolean("showQuickNote", value.optBoolean("showQuickNote", false))
                     .putString("size", value.optString("size", "standard").takeIf { it in setOf("compact", "standard", "large") } ?: "standard")
                     .apply()
                 runOnUiThread { DiaryHomeWidgetProvider.updateAll(this@MainActivity) }
@@ -345,7 +337,6 @@ class DiaryHomeWidgetProvider : AppWidgetProvider() {
                 Triple(R.id.widgetDiaryButtonHit, R.id.widgetDiaryButton, prefs.getBoolean("showDiary", true) to "diary"),
                 Triple(R.id.widgetCalendarButtonHit, R.id.widgetCalendarButton, prefs.getBoolean("showCalendar", true) to "calendar"),
                 Triple(R.id.widgetReminderButtonHit, R.id.widgetReminderButton, prefs.getBoolean("showReminder", true) to "reminders"),
-                Triple(R.id.widgetNewNoteButtonHit, R.id.widgetNewNoteButton, prefs.getBoolean("showNewNote", true) to "new-note"),
                 Triple(R.id.widgetKharchaButtonHit, R.id.widgetKharchaButton, prefs.getBoolean("showKharcha", false) to "kharcha"),
                 Triple(R.id.widgetDocumentsButtonHit, R.id.widgetDocumentsButton, prefs.getBoolean("showDocuments", false) to "documents"),
                 Triple(R.id.widgetMemoriesButtonHit, R.id.widgetMemoriesButton, prefs.getBoolean("showMemories", false) to "memories"),
@@ -353,7 +344,6 @@ class DiaryHomeWidgetProvider : AppWidgetProvider() {
                 Triple(R.id.widgetFavouriteNotesButtonHit, R.id.widgetFavouriteNotesButton, prefs.getBoolean("showFavouriteNotes", false) to "favourite-notes"),
                 Triple(R.id.widgetWorldClockButtonHit, R.id.widgetWorldClockButton, prefs.getBoolean("showWorldClock", false) to "world-clock"),
                 Triple(R.id.widgetSmartSearchButtonHit, R.id.widgetSmartSearchButton, prefs.getBoolean("showSmartSearch", false) to "smart-search"),
-                Triple(R.id.widgetQuickNoteButtonHit, R.id.widgetQuickNoteButton, prefs.getBoolean("showQuickNote", false) to "quick-note")
             )
             val anyShortcutSelected = shortcuts.any { it.third.first }
 
@@ -440,7 +430,6 @@ widget_button_specs = [
     ("Diary", "📒 My Diary"),
     ("Calendar", "📅 Personal Calendar"),
     ("Reminder", "⏰ Smart Reminder"),
-    ("NewNote", "✍️ New Note"),
     ("Kharcha", "💰 My Kharcha"),
     ("Documents", "📁 My Documents"),
     ("Memories", "📒 My Memories"),
@@ -448,7 +437,6 @@ widget_button_specs = [
     ("FavouriteNotes", "⭐ Favourite Notes"),
     ("WorldClock", "🌍 World Clock"),
     ("SmartSearch", "🔍 Smart Search"),
-    ("QuickNote", "✍️ Quick Note"),
 ]
 button_rows = "\n".join(
     f'''    <FrameLayout
@@ -491,7 +479,7 @@ button_bg = r'''<?xml version="1.0" encoding="utf-8"?>
 </shape>
 '''
 (res / "drawable/diary_widget_button.xml").write_text(button_bg, encoding="utf-8")
-# Fit the centered header and four equal-width 48dp shortcuts with minimal outer padding.
+# Fit the centered header and ten selectable 48dp shortcuts with minimal outer padding.
 widget_info = r'''<?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="180dp"
