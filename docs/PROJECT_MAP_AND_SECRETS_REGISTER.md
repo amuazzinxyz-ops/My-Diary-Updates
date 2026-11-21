@@ -7,7 +7,7 @@
 - Build run **44809451056**: debug build PASS; signed release build PASS; release signing-certificate verification PASS; publication and artifact upload PASS.
 - Published APK: **1.0.205**, versionCode **204**, package `com.personal.diaryapp`. Live `latest.json` SHA-256: `b0a6c1ea59b48c4291f5654ee948ecb77bda1f271050606611ddf608fbd6e196`. Independently downloaded signed build artifact and confirmed its APK SHA-256 matches the live feed. Compiled DEX contains the target-specific action/data markers. Embedded HTML SHA-256 remains the previously published Web Update 371 hash `66482da0fcfd67a393c62542f58639bd55918ff977462066e1ff0df6466a9a45`; web-source and diary-web mirror remain byte-identical.
 - Delivery: **My Diary → Me → Check for Updates** only. Do not send a direct APK link unless the user explicitly asks.
-- Physical phone verification of Private Locker, Favourite Notes, and World Clock taps on 1.0.205 is **pending user confirmation**. Do not claim device-side PASS until user tests all three.
+- User confirmed on 2026-11-21 that all three widget shortcuts—**Private Locker, Favourite Notes, and World Clock**—were tapped on APK 1.0.205 and each opened correctly. **Physical-device test: PASS (user-confirmed).** This closes the final pending phone-verification item for the 1.0.205 widget shortcut routing fix.
 
 ---
 
