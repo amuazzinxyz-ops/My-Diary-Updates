@@ -5579,3 +5579,12 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Live `latest.json` confirms My Diary **1.0.209 / versionCode 208**, APK SHA-256 `383d7ec04772e6743b5478ab4a83757649dd1e93e8896ade9a7a915efa4e356e`; web bundle SHA-256 `8eee9c7ae6281d677fa4e994389845d0a38c2e6907ab57caaf3fb8067ba7a7f1`.
 - Delivery remains **My Diary → Me → Check for Updates**. Do not send APK unless explicitly requested.
 - The list-only behavior from this APK release was superseded by Web Update 375, which now opens the most recently updated Favourite Note directly. Physical-phone verification of the direct-open behavior is tracked in the current top register entry; do not mark PASS until the user confirms.
+
+
+# My Kharcha text changed to dark black — Web Update 391 candidate (phone test pending, 2026-11-22)
+
+- User requested all text inside **💰 My Kharcha** to be dark black. Added a narrowly scoped style rule that applies only while the My Kharcha section (including its PIN screens) is open. It covers headings, labels, totals, saved entries, buttons, form controls, typed text, placeholders, and the input caret.
+- The My Kharcha-only CSS class is enabled when opening this section and removed when it closes. No Kharcha calculations, record storage, backup/restore, categories, PIN/recovery logic, other Me sections, notes, photos, widgets, or native APK files were changed.
+- Safety backup branch: `backup/before-my-kharcha-black-text-2026-11-22`. Working branch: `fix/my-kharcha-dark-black-text-2026-11-22`.
+- Updated `web-source/index.html` and `diary-web/index.html` identically. Candidate Web Update: **391**; web SHA-256: `805bcc8b0ce267313d64a4be28c691b51cf0f6f81201b11597cff8b86624d0c0`. APK remains **My Diary 1.0.212 / versionCode 211**; no APK rebuild is required.
+- **Phone test pending**: user must confirm all My Kharcha text appears dark black and the existing controls/records still work. Do not mark device-side PASS until confirmed.
