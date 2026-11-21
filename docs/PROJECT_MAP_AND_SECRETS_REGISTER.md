@@ -1,3 +1,16 @@
+# Diary Lock Off — restore the old Cancel / “Abhi nahi” confirmation (Web Update 380, 2026-11-21)
+
+- User asked to restore the previous **Abhi nahi / Cancel** option in the existing **🔓 Diary Lock Band Karein** flow, exactly where it used to appear. The last completed task before this change was Favourite Notes widget Web Update **379**, which the user had confirmed PASS on the phone.
+- Restored the old confirmation step **after the correct 4-digit Diary PIN is entered and before any lock/recovery data is removed**. The existing localized prompt `diaryLockOffConfirm` is reused. Choosing **Cancel / Abhi nahi** leaves Diary Lock and all stored PIN/recovery values unchanged; choosing OK continues the existing lock-off action.
+- Wrong-PIN message/clearing behavior remains unchanged. The no-lock message, current PIN overlay, PIN entry behavior, note locks, recovery flows, saved notes/photos, and all unrelated Diary features remain unchanged. Only one confirmation line was added to `turnDiaryLockOff()`.
+- Safety backup branch: `backup/before-diary-lock-off-cancel-restore-2026-11-21`. Working branch: `fix/diary-lock-off-abhi-nahi-confirmation-2026-11-21`. PR [#341](https://github.com/amuazzinxyz-ops/My-Diary-Updates/pull/341) merged successfully as `829eff6b944f9e336ffbfab0ff4548d9d334ed47`.
+- Static verification: exactly one `window.confirm(t('diaryLockOffConfirm'))` exists in the Lock Off flow; it executes before the first PIN/recovery storage removal. Wrong-PIN status branch remains intact. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `a4ba794b1d360393195b264ab15e316c3732dd40` (597,045 characters).
+- **Web publication verified:** `latest.json` now advertises **Web Update 380** with web SHA-256 `74f1f8e2fe9b7c0eeaa4c5919a9c8bfb591b9a33a5c9d0eb38b3a11781e34f63`. Delivery: **My Diary → Me → Check for Updates**.
+- Native app remains **1.0.210 / versionCode 209**; this is a web-only update. No APK was built or sent.
+- **Physical-phone testing is pending user confirmation.** User should update to Web Update 380, open **🔓 Diary Lock Band Karein**, enter the correct PIN, and confirm that **Cancel / Abhi nahi** leaves the lock on. Do not mark phone PASS until the user confirms.
+
+---
+
 # Favourite Notes widget — Web Update 379 phone test PASS (user-confirmed, 2026-11-21)
 
 - User approved the focused change: after tapping the **⭐ Favourite Notes Home Screen Widget**, the Diary opens with the selected favourite note already visible at the top of the Diary content area; the user does not need to scroll down to find it.
