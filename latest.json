@@ -10,5 +10,5 @@
   "webVersion": 380,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "c5eafc1aebe90eaf2c9e7c8ed05e65c83e63f54d8058edd14308987aa0e63277",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "Web Update 380: Diary Lock PIN box now has a Cancel button. Tap it to return to Diary → Me without changing the PIN or turning off Diary Lock. Existing notes and data are preserved."
 }
