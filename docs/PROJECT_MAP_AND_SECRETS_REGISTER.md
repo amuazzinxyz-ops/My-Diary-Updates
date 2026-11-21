@@ -1,3 +1,16 @@
+# My Diary 1.0.211 — Diary Lock Cancel + Note Favourite APK published (2026-11-21)
+
+- User explicitly approved building a new APK containing the two phone-tested web features from Web Updates 380 and 381.
+- Created safety backup branch before the build: `backup/before-apk-1.0.211-diary-lock-favourite-2026-11-21`, based on main commit `9523c23193d13d74575f1cd9c80f0d4fb988268f`. A second register-only backup branch was created before this register update: `backup/before-apk-1.0.211-register-update-2026-11-21`.
+- Build workflow version was advanced from native **1.0.210 / versionCode 209** to **1.0.211 / versionCode 210**. The build embeds the exact published Web Update 381 HTML, which already includes the Diary Lock Cancel button from Web Update 380.
+- Workflow run **44901942693** completed with overall **success**. Signing readiness and keystore/alias validation passed; debug build passed; signed Release configuration/build and APK signature verification passed; publication and signed APK upload passed. Translation audit upload passed. Unsigned Release upload was correctly skipped because the signed Release path succeeded.
+- Live `latest.json` was re-fetched and confirms **1.0.211 / versionCode 210**, webVersion **381**, APK URL `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk`, APK SHA-256 `1ac0d4ee6af50af4bd29c79d568109b66b4cd3f750a5bbf60ec42e2a3ed239b6`.
+- Release notes confirm both requested behaviors: Diary Lock PIN prompt has Cancel (returns to Diary → Me without changing PIN/lock); Note card has one ⭐ Favourite button and long-press Favourite Karo / Favourite Hataayein. Existing notes, photos, PINs, locks, Favourite Notes read mode, and Home Screen Widget features are preserved.
+- Delivery remains **My Diary → Me → Check for Updates**. No APK file was sent in chat; user can install the signed 1.0.211 update from the in-app updater.
+- Web Updates 380 and 381 were separately phone-tested and marked PASS earlier by explicit user confirmation. **APK 1.0.211 phone-side installation/testing is still pending**; do not mark APK phone PASS until user confirms.
+
+---
+
 # Note Pin replaced with Favourite — Web Update 381 phone test PASS (user-confirmed, 2026-11-21)
 
 - User approved replacing the note-card **📌 Pin** button with one **⭐ Favourite** button; the duplicate existing Favourite button was consolidated so only one star remains in the old Pin button position.
