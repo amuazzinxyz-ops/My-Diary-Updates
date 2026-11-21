@@ -479,7 +479,7 @@ button_bg = r'''<?xml version="1.0" encoding="utf-8"?>
 </shape>
 '''
 (res / "drawable/diary_widget_button.xml").write_text(button_bg, encoding="utf-8")
-# Fit the centered header and four equal-width 48dp shortcuts with minimal outer padding.
+# Fit the centered header and ten selectable 48dp shortcuts with minimal outer padding.
 widget_info = r'''<?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="180dp"
