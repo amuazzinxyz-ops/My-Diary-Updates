@@ -9,6 +9,7 @@
 - Web publisher workflow run [44893911088](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/44893911088) completed **success**. It published **Web Update 381**. Live `latest.json` confirms web SHA-256 `9c6c018751e569437f5b94b72b470312e7985d783109e9dacd637bc2f8f8008b`.
 - `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `cb89f237509173770f1e96af706d3530f7dd8c17` (602,073 characters). Static checks confirm the custom Cancel and OK controls are present, the lock PIN is removed only from the OK handler, the wrong-PIN branch remains, and the update dialog displays the live Web Update, Android version, and release notes.
 - Native app remains **1.0.210 / versionCode 209**. No APK was built or published by this web-only publisher run; do not send an APK unless the user explicitly asks.
+- The separate automatically triggered APK workflow run **44893911107** stopped at its pre-build HTML/source validation step; debug/release APK compilation and APK upload were skipped. No APK was produced or published. This does not affect the successful Web Update 381 publication.
 - **Physical-phone test is pending.** User must update through **My Diary → Me → Check for Updates**, confirm that the popup identifies Web Update 381, then test Diary Lock Band Karein: correct PIN → Abhi Nahi must leave the lock enabled; repeat and choose OK only if they intend to turn the lock off. Do not mark phone PASS until the user confirms.
 
 ---
