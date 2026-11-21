@@ -1,3 +1,15 @@
+# My Diary Favourite Notes Widget — open latest favourite note directly (Web Update 374, 2026-11-21)
+
+- User reported that tapping **⭐ Favourite Notes** from the Home Screen Widget did not open a favourite note.
+- Root cause: the widget route only displayed the filtered Favourite Notes list and did not open a note automatically.
+- Fixed the route to open the most recently updated note whose existing `favourite` flag is true, directly in the existing Diary editor. If that note has its own Note PIN and is not unlocked, the route expands the existing PIN entry UI instead; no PIN bypass was added. If no favourite note exists, the existing empty Favourite Notes list is shown.
+- No note data, photos, Pin/Favourite flags, PINs, Diary lock/recovery, or unrelated widget routes/settings were intentionally changed. Only `web-source/index.html` was changed in the feature PR; the publisher synced the mirror and update feed.
+- Exact pre-edit backup branch: `backup/before-favourite-note-direct-open-2026-11-21`. Working branch: `fix/favourite-widget-direct-open-2026-11-21`. PR **#332** merged successfully as `0a5c749e196c8defd65d277fee150ec98c5dec6a`.
+- Static verification: both embedded JavaScript blocks parse successfully. Git source and mirror blobs are identical at `6a626f3df3b50fb6378a338789142ce728413a43`. GitHub Actions web publisher run **44870486567** completed **successfully** and published **Web Update 374** with SHA-256 `fc4c8eefde4b1b3beb9a00d79a3dd82a869fba37270bacee666468c95159b127`. Live `latest.json` confirms webVersion **374**; signed APK remains **1.0.207 / versionCode 206**.
+- Delivery: **My Diary → Me → Check for Updates**. Physical-phone testing of the widget opening the latest favourite note, including the existing Note PIN flow when applicable, is **pending user confirmation**; do not mark PASS until the user confirms.
+
+---
+
 # My Diary Favourite Notes Widget — open fix (Web Update 373, 2026-11-21)
 
 - User reported that tapping **⭐ Favourite Notes** in the Home Screen Widget did not open the favourite note.
