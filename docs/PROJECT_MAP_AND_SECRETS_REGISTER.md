@@ -5674,3 +5674,11 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Safety backup branch: `backup/before-my-kharcha-black-text-2026-11-22`. Working branch: `fix/my-kharcha-dark-black-text-2026-11-22`.
 - Updated `web-source/index.html` and `diary-web/index.html` identically. Candidate Web Update: **391**; web SHA-256: `805bcc8b0ce267313d64a4be28c691b51cf0f6f81201b11597cff8b86624d0c0`. APK remains **My Diary 1.0.212 / versionCode 211**; no APK rebuild is required.
 - **Phone test pending**: user must confirm all My Kharcha text appears dark black and the existing controls/records still work. Do not mark device-side PASS until confirmed.
+
+
+# Web Update 396 installed on phone — Private Locker behavior test pending (2026-11-22)
+
+- User confirmed the Web Update 396 installation on the phone: **install PASS**.
+- This confirms the update/checksum delivery path on the user's device. It does **not** yet confirm the Private Locker UI behavior.
+- Pending user test: with Private Locker Lock OFF, confirm the entries page opens directly; tap the header 🔑 PIN button and confirm Lock On setup starts directly; with Lock ON, confirm PIN verification is still required before entries appear.
+- Do not mark the Private Locker phone behavior test PASS until the user confirms these checks. Existing PIN, recovery, encryption, and stored data must remain protected.
