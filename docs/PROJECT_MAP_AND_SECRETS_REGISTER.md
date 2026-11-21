@@ -1,3 +1,18 @@
+# Check for Updates details + Diary Lock Off in-app Cancel — Web Update 381 (2026-11-21)
+
+- User reported that Check for Updates did not identify which update had been found. The previous Diary Lock Off confirmation also failed to appear on the phone because it relied on the WebView's JavaScript `window.confirm`.
+- Updated only `web-source/index.html` for these two related update-flow issues:
+  - Check for Updates now fetches the live `latest.json` feed without caching and displays the current Web Update number, Android app version, and release notes in a visible in-app dialog before invoking the existing native update check.
+  - Diary Lock Band Karein now shows its own in-page confirmation after the correct 4-digit PIN. The dialog has clear **Abhi Nahi** and **OK** buttons. Abhi Nahi closes the confirmation and keeps the lock enabled; OK alone performs the existing lock removal.
+  - Wrong-PIN feedback remains unchanged. PIN/recovery storage is untouched when Abhi Nahi is selected. Saved notes, photos, and other Diary features are preserved.
+- Safety backup branch: `backup/before-update-info-and-lock-confirmation-2026-11-21`. Register backup branch: `backup/before-update-info-lock-confirm-register-2026-11-21`. PR [#342](https://github.com/amuazzinxyz-ops/My-Diary-Updates/pull/342) merged as `1eafcdd2b944a2b93c878255857b5480d9591643`.
+- Web publisher workflow run [44893911088](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/44893911088) completed **success**. It published **Web Update 381**. Live `latest.json` confirms web SHA-256 `9c6c018751e569437f5b94b72b470312e7985d783109e9dacd637bc2f8f8008b`.
+- `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `cb89f237509173770f1e96af706d3530f7dd8c17` (602,073 characters). Static checks confirm the custom Cancel and OK controls are present, the lock PIN is removed only from the OK handler, the wrong-PIN branch remains, and the update dialog displays the live Web Update, Android version, and release notes.
+- Native app remains **1.0.210 / versionCode 209**. No APK was built or published by this web-only publisher run; do not send an APK unless the user explicitly asks.
+- **Physical-phone test is pending.** User must update through **My Diary → Me → Check for Updates**, confirm that the popup identifies Web Update 381, then test Diary Lock Band Karein: correct PIN → Abhi Nahi must leave the lock enabled; repeat and choose OK only if they intend to turn the lock off. Do not mark phone PASS until the user confirms.
+
+---
+
 # Diary Lock Off — restore the old Cancel / “Abhi nahi” confirmation (Web Update 380, 2026-11-21)
 
 - User asked to restore the previous **Abhi nahi / Cancel** option in the existing **🔓 Diary Lock Band Karein** flow, exactly where it used to appear. The last completed task before this change was Favourite Notes widget Web Update **379**, which the user had confirmed PASS on the phone.
