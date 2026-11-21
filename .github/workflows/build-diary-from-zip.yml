@@ -1,4 +1,4 @@
-# Approved release build: publish signed Diary 1.0.212/210 with Diary Lock Cancel and Note Favourite actions embedded from Web Update 381.
+# Approved release build: publish signed Diary 1.0.212/211 with Diary Lock Cancel and Note Favourite actions embedded from Web Update 381.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -360,6 +360,16 @@ jobs:
           print("PASS: AlarmClock scheduler, unanswered-alarm auto-repeat, standard notification tap, wake-only activity, per-reminder ringtone/file selection, sound persistence, manifest receivers and permissions verified")
           PY
           python3 scripts/add_online_diary_updates.py
+          python3 - <<'PY'
+          from pathlib import Path
+          html = Path("diary-project/app/src/main/assets/index.html").read_text(encoding="utf-8")
+          kotlin = Path("diary-project/app/src/main/java/com/muazzin/diary/MainActivity.kt").read_text(encoding="utf-8")
+          if "diaryKeepMeOpenAfterUpdate" not in html:
+              raise SystemExit("BLOCKED: Diary HTML cannot restore the Me menu after update refresh")
+          if kotlin.count("diaryKeepMeOpenAfterUpdate") != 2 or kotlin.count("evaluateJavascript") < 2:
+              raise SystemExit("BLOCKED: native updater must save Me-menu state before both verified refresh paths")
+          print("PASS: Me menu state is saved before both native verified web refresh paths and restored by Diary HTML")
+          PY
           echo "---- Android app identity (before branding adjustment) ----"
           grep -RInE 'applicationId|namespace|android:label|app_name' diary-project/app/build.gradle.kts diary-project/app/src/main/AndroidManifest.xml diary-project/app/src/main/res/values* 2>/dev/null || true
 
@@ -434,7 +444,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved Diary release version 1.0.212 (versionCode 210)
+      - name: Set approved Diary release version 1.0.212 (versionCode 211)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
@@ -447,7 +457,7 @@ jobs:
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary release versionName=1.0.212, versionCode=210")
+          print("Set Diary release versionName=1.0.212, versionCode=211")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -470,7 +480,7 @@ jobs:
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
           if code != 211 or name != "1.0.212":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.212/210, found {name}/{code}")
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.212/211, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
           if feed_version not in ((210, "1.0.211"), (211, "1.0.212")):
               raise SystemExit(f"BLOCKED: update feed is neither the installed baseline nor the approved target release: {feed_version}")
@@ -624,7 +634,7 @@ jobs:
           meta["versionCode"] = int(lines[1])
           meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk"
           meta["sha256"] = lines[2]
-          meta["releaseNotes"] = "My Diary 1.0.212: Diary Lock PIN prompt now has a Cancel button that returns to Diary → Me without changing the PIN or disabling the lock. Note cards use one ⭐ Favourite button, and long-press offers Favourite Karo / Favourite Hataayein. Includes Web Updates 380 and 381. Existing notes, photos, PINs, locks, Favourite Notes read mode, and Home Screen Widget features are preserved."
+          meta["releaseNotes"] = "My Diary 1.0.212: Update Check refresh now restores the Diary Me menu after the verified web bundle reload. Existing APK download/install and web update verification flows are unchanged. Includes Web Update 383. Existing notes, photos, PINs, locks, widgets, and saved data are preserved."
           meta["webSha256"] = hashlib.sha256(Path("web-source/index.html").read_bytes()).hexdigest()
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
