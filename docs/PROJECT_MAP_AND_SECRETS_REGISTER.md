@@ -1,3 +1,15 @@
+# Diary Lock PIN prompt Cancel button — Web Update 380 published (phone test pending, 2026-11-21)
+
+- User approved adding a clear way to back out after tapping **🔓 Diary Lock Band Karein** and reaching the 4-digit PIN prompt.
+- Added **❌ Band Karein** to the PIN prompt. Tapping it only removes the PIN overlay and returns to the existing **Diary → Me** page. It does not clear/change the PIN, disable Diary Lock, alter recovery settings, or touch notes/data. Incorrect-PIN handling and successful PIN-based lock removal remain unchanged.
+- Exact pre-edit backup branch: `backup/before-diary-lock-cancel-button-2026-11-21`, created from the restored pre-change main commit `e19d20cc836f738df344f0c0ba299e1dce65d095`.
+- Source change committed as `494f22beef8d1fa645ad012cad2acdd88702941c`. The web publisher workflow [44900066563](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/44900066563) completed successfully and published **Web Update 380**.
+- Main-branch `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `0a8c1f89283609af52bf41ab456e80b4cbf103c3` (597,532 characters). Live `latest.json` advertises web SHA-256 `c5eafc1aebe90eaf2c9e7c8ed05e65c83e63f54d8058edd14308987aa0e63277`.
+- Native app remains **1.0.210 / versionCode 209**; no APK was built or changed. Delivery: **My Diary → Me → Check for Updates**.
+- **Phone test pending.** User must update to Web Update 380 and tap **🔓 Diary Lock Band Karein**, then verify Cancel returns to Me without changing the PIN or disabling the lock. Do not mark phone PASS until the user confirms.
+
+---
+
 # Favourite Notes widget — Web Update 379 phone test PASS (user-confirmed, 2026-11-21)
 
 - User approved the focused change: after tapping the **⭐ Favourite Notes Home Screen Widget**, the Diary opens with the selected favourite note already visible at the top of the Diary content area; the user does not need to scroll down to find it.
