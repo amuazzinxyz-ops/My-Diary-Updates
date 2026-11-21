@@ -4516,10 +4516,10 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  window.__diaryShowFavouriteNotesFromWidget=function(){
   if(!document.getElementById('diaryMyNotesOverlay'))makeOverlay();
   showingTrash=false;showingFavouriteNotes=true;
-  var ov=document.getElementById('diaryMyNotesOverlay'),list=document.getElementById('diaryMyNotesList'),allBtn=document.getElementById('diaryMyNotesAllNotes'),search=document.getElementById('diaryMyNotesSearch'),filterEl=document.getElementById('diaryMyNotesCategoryFilter'),trashBtn=document.getElementById('diaryMyNotesTrash');
+  var ov=document.getElementById('diaryMyNotesOverlay'),bodyEl=document.getElementById('diaryMyNotesBody'),list=document.getElementById('diaryMyNotesList'),allBtn=document.getElementById('diaryMyNotesAllNotes'),search=document.getElementById('diaryMyNotesSearch'),filterEl=document.getElementById('diaryMyNotesCategoryFilter'),trashBtn=document.getElementById('diaryMyNotesTrash');
   if(ov){ov.classList.add('open');ov.setAttribute('aria-hidden','false');}
   document.body.style.overflow='hidden';
-  if(list&&list.parentNode!==body)body.appendChild(list);
+  if(list&&bodyEl&&list.parentNode!==bodyEl)bodyEl.appendChild(list);
   if(search)search.value='';
   if(filterEl)filterEl.value='all';
   if(list)list.style.display='';
