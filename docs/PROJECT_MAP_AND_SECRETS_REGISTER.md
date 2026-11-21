@@ -1,3 +1,15 @@
+# My Diary Favourite Notes Widget — open the favourite note directly (Web Update 375, 2026-11-21)
+
+- User explicitly clarified the required behavior: tapping **⭐ Favourite Notes** on the Home Screen Widget must open a Favourite Note directly inside the Diary editor; it must not stop at a list.
+- The previous 1.0.209 behavior opened only the filtered list. Restored the direct-open handler: select the most recently updated note whose existing `favourite` flag is true, then open that exact note in the existing editor. If that favourite has its own Note PIN and is not unlocked, show its existing PIN-entry card; no PIN bypass. If no favourite exists, retain the empty Favourite Notes view.
+- Preserved the already-published cold-launch destination fix from APK 1.0.208 so the normal startup auto-open cannot override the widget destination. No note contents, photos, Favourite/Pin flags, PINs, Diary lock/recovery, or unrelated widget shortcuts/settings were changed.
+- Exact pre-edit backup branch: `backup/before-favourite-widget-direct-open-current-2026-11-21`. Working branch: `fix/favourite-widget-direct-note-open-2026-11-21`. PR **#334** merged successfully as `1ba74402f92a595306e89bf77df15799aa24b47e`.
+- Publisher workflow run **44874551775** (run #465) completed **successfully**. Published **Web Update 375**. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `355227ac104ea89ab837ba1b53afbb9a6206d2ea`. Live web SHA-256: `1a91373efc812f01db9c39d6721b97cce8cbe37af0691b88472e427c1c66ed88`.
+- Live APK remains **1.0.209 / versionCode 208**, SHA-256 `383d7ec04772e6743b5478ab4a83757649dd1e93e8896ade9a7a915efa4e356e`. This was a web-only update; no APK was rebuilt or sent. The separate APK workflow triggered by the HTML push stopped at its pre-build source guard and did not build or publish an APK.
+- Delivery: **My Diary → Me → Check for Updates**. Physical-phone testing of the widget opening the favourite note directly and remaining on that note is **pending user confirmation**; do not mark PASS until the user confirms.
+
+---
+
 # My Diary Favourite Notes Widget — cold-launch destination reset fix (APK 1.0.208 / versionCode 207 pending, 2026-11-21)
 
 - User clarified that tapping **⭐ Favourite Notes** opens Diary briefly, then returns to the previous/default Diary page; the app itself does not close.
