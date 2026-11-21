@@ -10,13 +10,13 @@
 
 ---
 
-# My Diary Favourite Notes Widget — cold-launch destination reset fix (APK 1.0.208 / versionCode 207 pending, 2026-11-21)
+# My Diary Favourite Notes Widget — cold-launch destination reset fix (APK 1.0.208 / versionCode 207 published, 2026-11-21)
 
 - User clarified that tapping **⭐ Favourite Notes** opens Diary briefly, then returns to the previous/default Diary page; the app itself does not close.
 - Root cause found in the current source: the normal app-start listener automatically clicks the Diary entry 350 ms after page load. On a cold widget launch this second open calls `openDiaryPanel()`, which resets `showingFavouriteNotes` and clears the selected note, overriding the requested widget destination.
 - Minimal fix: cold widget launches now load the same local Diary page with the marker `?diary_widget_launch=1`; only the normal startup auto-open is skipped for that marked launch. Native target dispatch now matches the asset URL prefix so the marker does not block delivery. WebView state restoration remains unchanged when no widget target is pending.
 - Updated `web-source/index.html`, its `diary-web/index.html` mirror, `scripts/add_diary_home_widget.py`, and the signed APK workflow. Added fail-closed checks for the marker and native dispatch. Release target is **1.0.208 / versionCode 207**; the current live release remains **1.0.207 / versionCode 206** until the signed build and feed publication pass.
-- Exact pre-edit backup branch: `backup/before-widget-favourite-routing-race-2026-11-21`. Working branch: `fix/widget-favourite-routing-race-2026-11-21`. PR **#333** merged successfully as `1f20b4b168b27f00c5756cbe90e7774f2705081b`. Signed workflow build, signing, and publication are pending; live feed remains webVersion 374 / APK 1.0.207 (206).
+- Exact pre-edit backup branch: `backup/before-widget-favourite-routing-race-2026-11-21`. Working branch: `fix/widget-favourite-routing-race-2026-11-21`. PR **#333** merged successfully as `1f20b4b168b27f00c5756cbe90e7774f2705081b`. Signed workflow run **44872629322** completed successfully and published APK **1.0.208 / versionCode 207** (SHA-256 `35ca4e085335bbe04f30d11e40d16752a107628fd05b72f89706618ca4aef819`). It is included in the current live APK 1.0.209/208; current web version is 375.
 - No note contents, photos, Favourite/Pin flags, PINs, Diary lock/recovery, or unrelated widget routes/settings were intentionally changed. No APK has been sent directly.
 - Delivery remains **My Diary → Me → Check for Updates** after publication. Physical-phone testing of Favourite Notes opening and remaining open is pending user confirmation; do not mark PASS until the user confirms.
 
@@ -5360,4 +5360,4 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Signed APK workflow run **44873357694** (run #434), commit `ed764b3f7bd8ad420e1f17a181c9d4811f8e33a3`, completed **success**. Signing checks, version guards, debug build, signed Release build, publication, and artifact uploads passed.
 - Live `latest.json` confirms My Diary **1.0.209 / versionCode 208**, APK SHA-256 `383d7ec04772e6743b5478ab4a83757649dd1e93e8896ade9a7a915efa4e356e`; web bundle SHA-256 `8eee9c7ae6281d677fa4e994389845d0a38c2e6907ab57caaf3fb8067ba7a7f1`.
 - Delivery remains **My Diary → Me → Check for Updates**. Do not send APK unless explicitly requested.
-- **Phone-side verification is pending**. User must update to 1.0.209 and confirm the widget opens the filtered Favourite Notes list. Do not mark phone test PASS until user confirms.
+- The list-only behavior from this APK release was superseded by Web Update 375, which now opens the most recently updated Favourite Note directly. Physical-phone verification of the direct-open behavior is tracked in the current top register entry; do not mark PASS until the user confirms.
