@@ -1,3 +1,14 @@
+# Copyable Update Report popup — Web Update 384 (phone test pending, 2026-11-21)
+
+- Added a separate **My Diary Update Report** popup that opens when the user taps **Me → Check for Updates**. It fetches live `latest.json` and displays the latest APK version/versionCode, Web Update number, full APK release notes, full web release notes, and both SHA-256 hashes.
+- The popup has only two actions: **📋 Copy** copies the complete report text; **×** closes only the popup and keeps the Me menu open. The popup is independent of the updater.
+- Preserved the existing `DiaryAppActions.checkForUpdates()` call, its native download/verification/install flow, Me-menu restoration, and all saved-data/features. No native APK change was made.
+- Safety backup branch: `backup/before-update-report-popup-2026-11-21`, created from main commit `fb040512f8409158b4e2996ba667208cfbb088b8`.
+- Web source and mirror are updated identically. `latest.json` advertises **Web Update 384**; native APK remains **1.0.212 / versionCode 211**. The web publisher will repair the feed's web SHA-256 from the exact published source.
+- **Phone testing is pending.** Do not mark PASS until the user confirms the popup opens on tap, Copy returns the complete report, × closes only the popup, and the original updater still downloads/installs normally.
+
+---
+
 # Update Check keeps Diary Me menu open — Web Update 383 + APK 1.0.212 (2026-11-21)
 
 - User approved the focused fix for **Me → Update Check Karein** closing the Diary **Me** menu during an update refresh. No Close button was added. The existing APK download/install flow, web download, SHA-256 verification, and saved-data logic were left unchanged.
