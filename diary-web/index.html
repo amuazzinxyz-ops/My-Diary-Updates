@@ -1540,8 +1540,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   fontSliderBox.appendChild(fontSlider);fontGroup.appendChild(fontLabel);fontGroup.appendChild(fontSliderBox);settingsRow.appendChild(fontGroup);mePanel.appendChild(settingsRow);
   var checkUpdatesBtn=el('button',{id:'diaryCheckUpdatesBtn',type:'button'},t('checkUpdates'));
   mePanel.appendChild(checkUpdatesBtn);
-  var updateVersionStatus=el('span',{id:'diaryUpdateVersionStatus','aria-live':'polite',style:'display:block;width:100%;margin:1px 0 0;padding:0 2px;box-sizing:border-box;color:#655b72;font-size:10px;font-weight:700;line-height:1.2;text-align:center;white-space:normal;overflow-wrap:anywhere;'},'');
-  checkUpdatesBtn.appendChild(updateVersionStatus);
+  var updateVersionStatus=el('span',{id:'diaryUpdateVersionStatus','aria-live':'polite',style:'display:block;width:100%;margin:3px 0 5px;padding:0 2px;box-sizing:border-box;color:#655b72;font-size:10px;font-weight:700;line-height:1.2;text-align:center;white-space:normal;overflow-wrap:anywhere;'},'');
+  mePanel.appendChild(updateVersionStatus);
   var refreshDiaryBtn=el('button',{id:'diaryDiaryRefreshBtn',type:'button'},t('refresh'));
   mePanel.appendChild(refreshDiaryBtn);
   /* Optional, self-contained World Clock tool. Removing this block and its button leaves all existing Me tools untouched. */
