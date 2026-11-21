@@ -1,3 +1,17 @@
+# My Diary Favourite Notes Widget — open fix (Web Update 373, 2026-11-21)
+
+- User reported that tapping **⭐ Favourite Notes** in the Home Screen Widget did not open the favourite note.
+- Fixed the widget destination so the Favourite Notes list is brought into the visible Diary notes container, the Diary overlay is explicitly opened, and stale search/category filters are cleared. This also restores the list from the Me/Recently Deleted container if it had been moved there previously.
+- When the user taps an unlocked favourite note in this filtered list, it now opens that exact note in the existing editor. Notes protected by an individual Note PIN still require the existing unlock flow; no PIN bypass was added.
+- Favourite Notes still filters only the `favourite` flag. Pin and Favourite remain separate. No note contents, photos, PINs, Diary lock/recovery, or unrelated widget buttons/settings were intentionally changed.
+- Feature PR **#330** merged as `558f0e1505008b5ea7ad3d7430fcc2256682449d`. Exact pre-edit source backup: `backup/before-favourite-widget-open-fix-2026-11-21`; working branch: `fix/favourite-widget-open-note-2026-11-21`.
+- Static checks: both embedded JavaScript blocks parse successfully; source and mirror are byte-identical at Git blob SHA `4164446d95f1d12993210c679e00065e50b14b06`. Main-branch source SHA-256 is `3b2b8a4109ede8f25c39bf753dac751e5a58a6eec88b2437daaf31abe181bc4d`; independently calculated and verified against the live feed.
+- Published **Web Update 373** in `latest.json`. Existing signed APK remains **1.0.207 / versionCode 206**; no APK rebuild or APK delivery was made. Delivery: **My Diary → Me → Check for Updates**.
+- Physical phone test of Favourite Notes widget opening and direct note opening is **pending user confirmation**; do not mark PASS until the user confirms.
+- Register pre-edit backup branch: `backup/before-favourite-widget-fix-register-2026-11-21`.
+
+---
+
 # My Diary Notes — independent ⭐ Favourite toggle (Web Update 372, 2026-11-21)
 
 - User approved adding a separate **⭐ Favourite** control to each Diary note because the Favourite Notes widget existed but the regular note card exposed only the Pin control.
