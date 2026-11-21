@@ -1,3 +1,12 @@
+# Short copied Update Report — Web Update pending publication (2026-11-21)
+
+- User clarified that the **📋 Copy** result must also be short, not the full technical report. Changed the single report text source so both the visible Me-menu report and Copy contain only: My Diary version, Web Update number, latest update summary, and phone-test status. Removed package name, APK/web release notes, and SHA-256 hashes from the report and clipboard output.
+- Safety backup branch: `backup/before-short-copy-update-report-2026-11-21`, based on main commit `404d3d123797f103c0c521a2c74a7df60c1d706e`.
+- PR [#345](https://github.com/amuazzinxyz-ops/My-Diary-Updates/pull/345) merged successfully as `607d79e4ae7111e3c56257912b67490d39bdd2fa`. Source and mirror were verified byte-identical before merge. APK/native code, update feed, saved data, notes, photos, PINs, locks, and widgets were not changed.
+- Web publisher workflow and live `latest.json` verification are pending. Do not tell the user to test until publication and source/mirror/feed verification succeed. Physical-phone testing remains pending user confirmation.
+
+---
+
 # Compact Update Report inside Me menu — Web Update 387 (phone test pending, 2026-11-21)
 
 - User approved shortening the report and clarified it must appear immediately when **Me → Check for Updates** is tapped. The report now opens in the existing Me-menu area before the native updater call; the one-time session handoff continues to reopen it after the updater refreshes the WebView.
