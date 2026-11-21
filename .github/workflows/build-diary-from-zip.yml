@@ -1,4 +1,4 @@
-# Approved release build: publish signed Diary 1.0.206/204 with visible Chhota / Normal / Bada Home Screen widget text sizes.
+# Approved release build: publish signed Diary 1.0.206/205 with visible Chhota / Normal / Bada Home Screen widget text sizes.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -433,7 +433,7 @@ jobs:
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary release versionName=1.0.206, versionCode=204")
+          print("Set Diary release versionName=1.0.206, versionCode=205")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -456,7 +456,7 @@ jobs:
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
           if code != 205 or name != "1.0.206":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.206/204, found {name}/{code}")
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.206/205, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
           if feed_version != (204, "1.0.205"):
               raise SystemExit(f"BLOCKED: update feed is neither the installed baseline nor the exact new release: {feed_version}")
