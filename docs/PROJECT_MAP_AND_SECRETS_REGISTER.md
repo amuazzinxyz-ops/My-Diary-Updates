@@ -1,3 +1,15 @@
+# Private Locker Wapas button spacing — Web Update 393 published (phone test pending, 2026-11-22)
+
+- User reported that the Private Locker **Wapas** button overlapped the lock icon in the centered `🔐 Private Locker` title. Reduced the button font from 14px to 12px, reduced its padding and height, and shifted it 5px left. The title remains centered and the ✕ remains on the right.
+- The Wapas button still uses the existing `privateLockerCloseNow()` handler. No PIN, recovery, encryption, saved Locker records, data, or security logic was changed.
+- Safety backup branch: `backup/before-private-locker-back-button-spacing-2026-11-22`. Working branch: `fix/private-locker-back-button-spacing-2026-11-22`. PR #351 merged as `068ba289b5c1b67df245842cae62235557988c5f`.
+- Published **Web Update 393**. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `391ea4230dfde7a639b083698cdba784c326734c`. Live `latest.json` advertises web SHA-256 `ffc4f0d4245445b8479fa6423987d58dc913e36649410cfb40910a2b2385729b` and the Wapas spacing release note.
+- Web publisher workflow #503 (run `44944405132`) completed successfully. APK workflow #461 (run `44944405174`) also completed successfully; APK remains **My Diary 1.0.212 / versionCode 211** (no version increment). The rebuilt signed APK checksum in the feed is `724cff62c29d122d04431920d7d47b855735ce6f67e5709a35917b94cfec729c`.
+- Register/manifest metadata backup branch: `backup/before-private-locker-web393-register-2026-11-22`.
+- **Phone test pending**: user must confirm Wapas no longer touches the lock icon, Wapas returns to Me, and ✕ still closes Locker correctly. Do not mark PASS until user confirms.
+
+---
+
 # Private Locker centered title and Wapas button — Web Update 392 published (phone test pending, 2026-11-22)
 
 - User requested the Private Locker heading be centered and a **Wapas** button be added to its left, matching the My Memories header layout; the existing close ✕ remains on the right.
