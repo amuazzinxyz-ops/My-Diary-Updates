@@ -1,3 +1,14 @@
+# Update Report shown inside the Me menu — Web Update 385 (phone test pending, 2026-11-21)
+
+- User reported that Web Update 384 performed the update but the report popup was not visible. Corrected the report presentation to render directly inside the existing **Me** dropdown area, replacing the Me options in that same space; tapping **×** restores the original Me options.
+- Added a short render delay before invoking the existing native updater and a one-time `sessionStorage` handoff so the report is reopened in the Me menu after the updater refreshes the WebView. **📋 Copy** and **×** remain the only report controls.
+- Preserved the existing native `DiaryAppActions.checkForUpdates()` download, verification, and installation path. No APK/native source or saved Diary data was changed.
+- Safety backup branch: `backup/before-update-report-in-me-menu-2026-11-21`.
+- Web Update 385 is web-only; APK remains **1.0.212 / versionCode 211**. Source and mirror are updated together and must be verified byte-identical after publication.
+- **Phone testing is pending.** Do not mark PASS until the user confirms the report is visible in the Me-menu position, Copy works, × restores the Me options, and the original updater still works.
+
+---
+
 # Update Report popup moved into the Me menu — Web Update 385 (phone test pending, 2026-11-21)
 
 - User clarified that the Update Report popup must appear exactly where the **Me** button dropdown opens, not as a separate centered/full-screen overlay.
