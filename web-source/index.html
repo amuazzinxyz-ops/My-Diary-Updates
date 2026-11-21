@@ -3569,6 +3569,9 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var input=el('input',{type:'password',name:'diary-lock-off-pin',inputmode:'numeric',pattern:'[0-9]*',maxlength:'4',autocomplete:'new-password',autocapitalize:'off',autocorrect:'off',spellcheck:'false','aria-autocomplete':'none','data-lpignore':'true','data-1p-ignore':'true'});
   input.classList.add('diary-master-pin-entry');input.placeholder=t('pinPrompt');input.style.cssText='display:block;width:100%;max-width:100%;min-width:0;min-height:60px;box-sizing:border-box;padding:10px 8px;border:2px solid #d4af37;border-radius:10px;font-size:22px;font-weight:800;letter-spacing:6px;line-height:1.3;text-align:center;';applyDiaryMasterPinPlaceholderSize(input);
   var pinStatus=el('div');pinStatus.style.cssText='min-height:20px;margin:8px 0 0;color:#b42318;font-size:14px;font-weight:900;';
+  var cancelButton=el('button',{type:'button','aria-label':t('closeLabel')},'❌ '+t('closeLabel'));
+  cancelButton.style.cssText='display:block;width:100%;margin:12px 0 0;padding:11px;border:2px solid #d4af37;border-radius:10px;background:linear-gradient(145deg,#f4e6a8,#c69a27);color:#382700;font-weight:900;box-shadow:inset 0 2px 0 rgba(255,255,230,.75),0 3px 0 #9b7415,0 6px 11px rgba(70,48,0,.22);';
+  cancelButton.addEventListener('click',function(){if(shade.parentNode)shade.parentNode.removeChild(shade);});
   function submitPin(){
    if(String(input.value||'').length!==4)return;
    var saved=localStorage.getItem(DIARY_MASTER_PIN_KEY)||'';
@@ -3579,7 +3582,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   }
   input.addEventListener('input',function(){input.value=String(input.value||'').replace(/\\D/g,'').slice(0,4);if(input.value.length===4)submitPin();});
   input.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();submitPin();}});
-  box.appendChild(heading);box.appendChild(input);box.appendChild(pinStatus);shade.appendChild(box);document.body.appendChild(shade);setTimeout(function(){input.focus();},50);
+  box.appendChild(heading);box.appendChild(input);box.appendChild(pinStatus);box.appendChild(cancelButton);shade.appendChild(box);document.body.appendChild(shade);setTimeout(function(){input.focus();},50);
  }
  function forgotDiaryPin(onDone){
   var current=localStorage.getItem(DIARY_MASTER_PIN_KEY)||'';
