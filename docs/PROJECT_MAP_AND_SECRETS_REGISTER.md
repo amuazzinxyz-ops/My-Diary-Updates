@@ -1,4 +1,4 @@
-# Favourite Notes widget — show selected note at top (Web Update 379 published; phone test pending — 2026-11-21)
+# Favourite Notes widget — Web Update 379 phone test PASS (user-confirmed, 2026-11-21)
 
 - User approved the focused change: after tapping the **⭐ Favourite Notes Home Screen Widget**, the Diary opens with the selected favourite note already visible at the top of the Diary content area; the user does not need to scroll down to find it.
 - Implemented only in the Favourite Notes widget launch handler. After the existing inline reading card is expanded, the Diary's own scrollable content area is adjusted to align that expanded card at the top. Ordinary note taps, editor/read-only behavior, PIN checks, note data, photos, attachments, and all other widget routes remain unchanged.
@@ -6,7 +6,7 @@
 - Main-branch `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `6364bb3036d8019e68d6229eea880759a884ba0b` (596,988 characters). The only feature addition is the widget-only scroll-to-expanded-note positioning block.
 - **Web publication verified:** live `latest.json` now advertises **Web Update 379** with web SHA-256 `eef83af19caca11d90cba53351f1b16a7027a918397a42c74186623148ad90d5`. This hash was independently recalculated from the exact main-branch source and matches the feed. Feed commit: `115fb5020f854bda093810d2b4f71c0dfb06e7e0`.
 - Native app remains **1.0.210 / versionCode 209**; this is a web-only update and no APK was built or changed. Delivery: **My Diary → Me → Check for Updates**.
-- **Phone test pending.** User must update to Web Update 379, tap Favourite Notes widget, and confirm the correct expanded favourite is immediately visible at the top without scrolling. Do not mark PASS until user confirms.
+- **Phone test PASS (user-confirmed):** After Web Update 379 was tested on the phone, the user responded **“Very good 💯👍👍👍👍👍👍👍”**, confirming the requested behaviour was satisfactory. The selected Favourite Note opens already visible at the top of Diary, without manual scrolling.
 - Register pre-edit backup branch: `backup/before-favourite-widget-top-register-2026-11-21`.
 
 ---
