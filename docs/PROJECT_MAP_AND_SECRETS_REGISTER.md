@@ -1,3 +1,13 @@
+# Private Locker Wapas button position — Web Update 394 phone test PASS (user-confirmed, 2026-11-22)
+
+- User confirmed the Android phone test with: **“Paas”**. The Web Update 394 Private Locker header adjustment is now **phone-test PASS**.
+- Confirmation applies to the smaller **Wapas** button's position (10px left and 5px up relative to Web Update 393), with the centered 🔐 Private Locker title and right-side ✕ unchanged.
+- Existing Wapas return behavior, ✕ close behavior, Locker PIN, recovery, encryption, and saved Locker data remain unchanged. No new source-code, web bundle, APK, or app-data change was made to record this confirmation.
+- Live feed remains **Web Update 394**; native APK remains **My Diary 1.0.212 / versionCode 211**.
+- Register-only safety backup branch: `backup/before-private-locker-web394-phone-pass-register-2026-11-22`.
+
+---
+
 # Private Locker Wapas button position — Web Update 394 release (phone test pending, 2026-11-22)
 
 - User reported that the smaller Wapas button still needed to sit a little higher and farther left. Changed only its CSS transform to `translate(-10px,-5px)`, keeping the smaller button size.
