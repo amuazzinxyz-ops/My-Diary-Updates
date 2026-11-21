@@ -10,5 +10,5 @@
   "webVersion": 379,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "eef83af19caca11d90cba53351f1b16a7027a918397a42c74186623148ad90d5",
-  "webReleaseNotes": "Web Update 379: Favourite Notes widget now opens the Diary with the selected favourite note already visible at the top, without manual scrolling. Existing inline reading view, note content, photos, attachments, PIN checks, and other features are preserved."
+  "webReleaseNotes": "Web Update 380: Added a Cancel button to the Diary Lock PIN prompt. Tapping it closes the PIN prompt and returns to the Diary Me page without changing the PIN or turning off the lock. Existing notes, data, and lock settings are preserved."
 }
