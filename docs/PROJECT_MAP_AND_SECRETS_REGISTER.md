@@ -5682,3 +5682,12 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - This confirms the update/checksum delivery path on the user's device. It does **not** yet confirm the Private Locker UI behavior.
 - Pending user test: with Private Locker Lock OFF, confirm the entries page opens directly; tap the header 🔑 PIN button and confirm Lock On setup starts directly; with Lock ON, confirm PIN verification is still required before entries appear.
 - Do not mark the Private Locker phone behavior test PASS until the user confirms these checks. Existing PIN, recovery, encryption, and stored data must remain protected.
+
+
+# Private Locker PIN button label centered — Web Update 397 candidate (phone test pending, 2026-11-22)
+
+- User requested the `PIN` label to sit in the middle of the Private Locker header button.
+- Minimal scoped CSS change: added `text-align:center` to `.diary-me-feature-lock`; retained the existing button dimensions, gold styling, icon/text label, click behavior, and all PIN/security logic.
+- Safety backup branch: `backup/before-private-locker-pin-center-2026-11-22`. Working branch: `fix/private-locker-pin-label-center-2026-11-22`.
+- Updated `web-source/index.html` and `diary-web/index.html` identically; both files are 606,289 characters and share blob SHA `358b339b9b1865419f104b0b07bf44e4c939e708` on the working branch.
+- Candidate web update: **397** after publication workflow updates the manifest. Phone test pending; do not mark PASS until the user confirms the PIN label is centered and the button still works.
