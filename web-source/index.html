@@ -587,6 +587,10 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 /* Multiple favourite notes: each note has its own independent top-of-list toggle. */
 #diaryMyNotesPanel .diary-note-favourite{float:right;min-width:38px;min-height:34px;margin:-3px -2px 5px 8px;padding:3px 8px;border:1px solid #d9bd70;border-radius:10px;background:linear-gradient(145deg,#fff9df,#f2e2ad);color:#8a650c;font-size:21px;font-weight:900;line-height:1;cursor:pointer;box-shadow:0 3px 0 #d8c48b,0 5px 9px #173d2b18}
 #diaryMyNotesPanel .diary-note-favourite[aria-pressed="true"]{background:linear-gradient(145deg,#ffe9a6,#e9c75e);color:#76500a}
+#diaryMyNotesPanel .diary-note-favourite-toggle{float:right;min-width:38px;min-height:34px;margin:-3px 5px 5px 8px;padding:3px 8px;border:1px solid #d9bd70;border-radius:10px;background:linear-gradient(145deg,#fff9df,#f2e2ad);color:#8a650c;font-size:21px;font-weight:900;line-height:1;cursor:pointer;box-shadow:0 3px 0 #d8c48b,0 5px 9px #173d2b18}
+#diaryMyNotesPanel .diary-note-favourite-toggle[aria-pressed="true"]{background:linear-gradient(145deg,#ffe9a6,#e9c75e);color:#76500a}
+.dark #diaryMyNotesPanel .diary-note-favourite-toggle{background:linear-gradient(145deg,#59471d,#3d3219);color:#ffe7a0;border-color:#9b7b34;box-shadow:0 3px 0 #302713,0 5px 9px #0005}
+
 #diaryMyNotesPanel .diary-note-favourite-label{display:inline-block;margin:0 0 5px 0;padding:3px 8px;border-radius:20px;background:#fff0c8;color:#815d12;font-size:9px;font-weight:900;letter-spacing:.4px}
 .dark #diaryMyNotesPanel .diary-note-favourite{background:linear-gradient(145deg,#59471d,#3d3219);color:#ffe7a0;border-color:#9b7b34;box-shadow:0 3px 0 #302713,0 5px 9px #0005}
 .dark #diaryMyNotesPanel .diary-note-favourite-label{background:#5b491e;color:#ffe9a5}
@@ -4260,7 +4264,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    delete list.__diarySearchWasVisible;
   }
   var all=read();
-  if(showingFavouriteNotes)all=all.filter(function(n){return !!(n.pinnedNote||n.favourite||n.pinned);});
+  if(showingFavouriteNotes)all=all.filter(function(n){return !!n.favourite;});
   var filterEl=document.getElementById('diaryMyNotesCategoryFilter'),selectedCategory=filterEl?filterEl.value:'all';
   if(selectedCategory!=='all')all=all.filter(function(n){return String(n.category||'general')===selectedCategory;});
   all.sort(function(a,b){
@@ -4283,16 +4287,17 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   }
   matches.forEach(function(n){
    var card=el('article',{class:'diary-my-note',tabindex:'0',role:'button','aria-label':t('edit')});
-   var noteIsPinned=!!(n.pinnedNote||n.favourite||n.pinned);
+   var noteIsPinned=!!(n.pinnedNote||n.pinned);
    if(noteIsPinned)card.classList.add('diary-note-is-favourite');
    if(selectedNoteIds[n.id])card.classList.add('diary-note-selected');
    var pinNoteBtn=el('button',{type:'button',class:'diary-note-pin','aria-pressed':noteIsPinned?'true':'false','aria-label':noteIsPinned?t('unpinNote'):t('pinNote')},noteIsPinned?'📌':'📍');pinNoteBtn.title=noteIsPinned?t('unpinNote'):t('pinNote');
-   pinNoteBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var saved=read(),target=saved.find(function(x){return x.id===n.id});if(!target)return;var nextPinned=!(target.pinnedNote||target.favourite||target.pinned);target.pinnedNote=nextPinned;delete target.favourite;delete target.pinned;if(!write(saved)){document.getElementById('diaryMyNotesStatus').textContent=t('storageUnavailable');return;}renderList();});card.appendChild(pinNoteBtn);
+   pinNoteBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var saved=read(),target=saved.find(function(x){return x.id===n.id});if(!target)return;var nextPinned=!(target.pinnedNote||target.pinned);target.pinnedNote=nextPinned;delete target.pinned;if(!write(saved)){document.getElementById('diaryMyNotesStatus').textContent=t('storageUnavailable');return;}renderList();});card.appendChild(pinNoteBtn);
+   var isFavourite=!!n.favourite;var favouriteBtn=el('button',{type:'button',class:'diary-note-favourite-toggle','aria-pressed':isFavourite?'true':'false','aria-label':t('favourite')},isFavourite?'⭐':'☆');favouriteBtn.title=isFavourite?t('removeFavourite'):t('makeFavourite');favouriteBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var saved=read(),target=saved.find(function(x){return x.id===n.id});if(!target)return;target.favourite=!target.favourite;if(!write(saved)){document.getElementById('diaryMyNotesStatus').textContent=t('storageUnavailable');return;}renderList();});card.appendChild(favouriteBtn);
    card.appendChild(el('strong',null,n.title||t('untitled')));
    var preview=String(n.body||'');
    if(expandedNoteId===n.id){
     card.classList.add('expanded');
-    if(n.pinnedNote||n.favourite||n.pinned)card.appendChild(el('span',{class:'diary-note-favourite-label'},t('pinNote')));
+    if(n.pinnedNote||n.pinned)card.appendChild(el('span',{class:'diary-note-favourite-label'},t('pinNote')));
     if(noteIsUnlocked(n)){
      var titleDisplay=card.querySelector('strong');
      if(n.coverPhotoData&&String(n.coverPhotoData).indexOf('data:image/')===0){applyDiaryFieldImage(titleDisplay,n.coverPhotoData,'title',n.coverColour);titleDisplay.classList.add('diary-diary-card-field-image');}else if(n.coverColour&&n.coverColour.mode&&n.coverColour.mode!=='none'){applyDiaryFieldImage(titleDisplay,null,'title',n.coverColour);}applyDiaryTextFormat(titleDisplay,n.coverTextFormat);
@@ -4449,7 +4454,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     if(privateLocker!==null&&!window.diaryPrivateLockerBackupAPI.isValid(privateLocker))throw new Error('Invalid Private Locker backup');
     var current=read(),ids={};current.forEach(function(n){ids[n.id]=true;});var added=0;
     incoming.forEach(function(n){if(n&&typeof n==='object'&&typeof n.id==='string'&&!ids[n.id]&&(typeof n.body==='string'||typeof n.title==='string')){
-     var restored={id:n.id,title:String(n.title||''),body:String(n.body||''),category:String(n.category||'general'),coverColour:cleanDiaryColour(n.coverColour),detailColour:cleanDiaryColour(n.detailColour),photoColour:cleanDiaryColour(n.photoColour),favourite:!!(n.favourite||n.pinned),pinnedNote:!!n.pinnedNote,photoData:(typeof n.photoData==='string'&&n.photoData.indexOf('data:image/')===0&&n.photoData.length<1400000)?n.photoData:null,coverPhotoData:(typeof n.coverPhotoData==='string'&&n.coverPhotoData.indexOf('data:image/')===0&&n.coverPhotoData.length<1400000)?n.coverPhotoData:null,coverText:String(n.coverText||''),detailPhotoData:(typeof n.detailPhotoData==='string'&&n.detailPhotoData.indexOf('data:image/')===0&&n.detailPhotoData.length<1400000)?n.detailPhotoData:null,detailText:String(n.detailText||''),coverTextFormat:cleanDiaryTextFormat(n.coverTextFormat),detailTextFormat:cleanDiaryTextFormat(n.detailTextFormat),created:Number(n.created)||Date.now(),updated:Number(n.updated)||Date.now()};
+     var restored={id:n.id,title:String(n.title||''),body:String(n.body||''),category:String(n.category||'general'),coverColour:cleanDiaryColour(n.coverColour),detailColour:cleanDiaryColour(n.detailColour),photoColour:cleanDiaryColour(n.photoColour),favourite:!!n.favourite,pinnedNote:!!(n.pinnedNote||n.pinned),photoData:(typeof n.photoData==='string'&&n.photoData.indexOf('data:image/')===0&&n.photoData.length<1400000)?n.photoData:null,coverPhotoData:(typeof n.coverPhotoData==='string'&&n.coverPhotoData.indexOf('data:image/')===0&&n.coverPhotoData.length<1400000)?n.coverPhotoData:null,coverText:String(n.coverText||''),detailPhotoData:(typeof n.detailPhotoData==='string'&&n.detailPhotoData.indexOf('data:image/')===0&&n.detailPhotoData.length<1400000)?n.detailPhotoData:null,detailText:String(n.detailText||''),coverTextFormat:cleanDiaryTextFormat(n.coverTextFormat),detailTextFormat:cleanDiaryTextFormat(n.detailTextFormat),created:Number(n.created)||Date.now(),updated:Number(n.updated)||Date.now()};
      if(n.pinLock&&typeof n.pinLock.pinValue==='string')restored.pinLock={pinValue:n.pinLock.pinValue,changePinOnNextLock:!!n.pinLock.changePinOnNextLock};else if(n.pinLock&&typeof n.pinLock.salt==='string'&&typeof n.pinLock.hash==='string'){restored.pinLock={salt:n.pinLock.salt,hash:n.pinLock.hash};if(typeof n.pinLock.recoverySalt==='string'&&typeof n.pinLock.recoveryHash==='string'){restored.pinLock.recoverySalt=n.pinLock.recoverySalt;restored.pinLock.recoveryHash=n.pinLock.recoveryHash;}}
      current.push(restored);ids[n.id]=true;added++;
     }});
