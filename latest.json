@@ -4,7 +4,7 @@
   "versionCode": 207,
   "versionName": "1.0.208",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
-  "sha256": "5d804dffdcddd01470bf797bd62f476ca9d06893dddf778f703bffa648603e80",
+  "sha256": "35ca4e085335bbe04f30d11e40d16752a107628fd05b72f89706618ca4aef819",
   "releaseNotes": "My Diary 1.0.208: Fixes Home Screen Widget destination routing so the requested shortcut stays open on cold launch instead of being reset by Diary auto-open. Existing widget shortcuts, saved notes, photos, PINs, locks, settings, 3D feedback, and resize behavior are preserved.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 374,
