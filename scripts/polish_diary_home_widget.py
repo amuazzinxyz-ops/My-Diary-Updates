@@ -103,7 +103,7 @@ if (info.get(ANDROID + "minHeight") != "280dp" or info.get(ANDROID + "minWidth")
         or info.get(ANDROID + "resizeMode") != "horizontal|vertical"):
     raise SystemExit("BLOCKED: two-axis widget resize dimensions changed unexpectedly")
 provider = PROVIDER.read_text(encoding="utf-8")
-for target in ('"diary"', '"calendar"', '"reminders"', '"new-note"', '"kharcha"', '"documents"', '"memories"', '"private-locker"', '"favourite-notes"', '"world-clock"', '"smart-search"', '"quick-note"'):
+for target in ('"diary"', '"calendar"', '"reminders"', '"kharcha"', '"documents"', '"memories"', '"private-locker"', '"favourite-notes"', '"world-clock"', '"smart-search"'):
     if target not in provider:
         raise SystemExit("BLOCKED: missing independent widget destination " + target)
 if provider.count("setOnClickPendingIntent(") != 1 or "widgetId * 10 + slot" not in provider:

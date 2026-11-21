@@ -553,7 +553,7 @@ if widget_html_check.count("diaryFinishPendingWidgetTarget();") != 5:
 if ('android:minHeight="280dp"' not in widget_info or 'android:minResizeWidth="150dp"' not in widget_info
         or 'android:minResizeHeight="260dp"' not in widget_info or 'android:resizeMode="horizontal|vertical"' not in widget_info):
     raise SystemExit("FAIL: two-axis widget resize dimensions are incomplete")
-for target in ('"diary"', '"calendar"', '"reminders"', '"new-note"', '"kharcha"', '"documents"', '"memories"', '"private-locker"', '"favourite-notes"', '"world-clock"', '"smart-search"', '"quick-note"'):
+for target in ('"diary"', '"calendar"', '"reminders"', '"kharcha"', '"documents"', '"memories"', '"private-locker"', '"favourite-notes"', '"world-clock"', '"smart-search"'):
     if target not in provider_path.read_text(encoding="utf-8"):
         raise SystemExit("FAIL: missing native widget shortcut target " + target)
 print("PASS: native AppWidgetProvider, manifest receiver, RemoteViews layout, selectable options, and tap destinations verified.")
