@@ -1,9 +1,9 @@
-# World Clock text changed to dark black — Web Update 389 candidate (phone test pending, 2026-11-22)
+# World Clock text changed to dark black — Web Update 389 published (phone test pending, 2026-11-22)
 
 - User requested that **all text inside 🌍 World Clock** be dark black. Added a narrowly scoped style rule only to `#diaryWorldClockModal` and its descendants, forcing all displayed text, city names, live times, dates, day/night and offset/sunrise/sunset details, controls, search text, and placeholders to `#000000`. Search input caret is also black.
 - No World Clock logic, saved city/favourite data, buttons/actions, Me-menu behaviour, Widget Settings, notes, photos, PINs, locks, APK/native code, or other Diary features were changed.
 - Safety backup branch: `backup/before-world-clock-black-text-2026-11-22`, created from `main` before edits. Working branch: `fix/world-clock-dark-black-text-2026-11-22`.
-- `web-source/index.html` and `diary-web/index.html` receive the same isolated style block and are intended to remain byte-identical. This is a web-only change; native APK remains **My Diary 1.0.212 / versionCode 211**.
+- Published **Web Update 389** in `latest.json`. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `51ad0189bcf7b05672d9fa060bb5dd3a143d9f12`; live feed advertises web SHA-256 `acefbd8c019156d58bfd41cc557bbb4f893e83763c3636da50f2df9a6a021a86`. This is a web-only change; native APK remains **My Diary 1.0.212 / versionCode 211**.
 - **Phone test pending**: do not mark PASS until the user confirms every text item inside World Clock appears dark black and the existing controls still work.
 
 ---
