@@ -15,7 +15,6 @@ BUTTONS = {
     "widgetDiaryButtonHit": "widgetDiaryButton",
     "widgetCalendarButtonHit": "widgetCalendarButton",
     "widgetReminderButtonHit": "widgetReminderButton",
-    "widgetNewNoteButtonHit": "widgetNewNoteButton",
     "widgetKharchaButtonHit": "widgetKharchaButton",
     "widgetDocumentsButtonHit": "widgetDocumentsButton",
     "widgetMemoriesButtonHit": "widgetMemoriesButton",
@@ -23,7 +22,6 @@ BUTTONS = {
     "widgetFavouriteNotesButtonHit": "widgetFavouriteNotesButton",
     "widgetWorldClockButtonHit": "widgetWorldClockButton",
     "widgetSmartSearchButtonHit": "widgetSmartSearchButton",
-    "widgetQuickNoteButtonHit": "widgetQuickNoteButton",
 }
 
 if not all(path.is_file() for path in (LAYOUT, INFO, PROVIDER)):
