@@ -123,7 +123,7 @@ widget_target = r"""
    if(target==='world-clock'){worldClockBtn.click();return;}
    if(target==='favourite-notes'&&typeof window.__diaryShowFavouriteNotesFromWidget==='function'){window.__diaryShowFavouriteNotesFromWidget();return;}
    if(target==='smart-search'){var search=document.getElementById('diaryMyNotesSearch');if(search){search.value='';search.focus();}return;}
-   if(target==='quick-note'||target==='new-note'){var title=document.getElementById('diaryMyNotesTitle');if(title){title.focus();}return;}
+   if(target==='quick-note'||target==='new-note'){var note=document.getElementById('diaryMyNotesText');if(note){note.focus();}return;}
   };
 """
 if "window.__diaryOpenWidgetTarget=function(target)" not in html:
