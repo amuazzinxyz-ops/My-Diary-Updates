@@ -3191,9 +3191,9 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    var body,status,reportText='MY DIARY UPDATE REPORT\nUpdate details load ho rahi hain...';
    if(!overlay){
     overlay=document.createElement('div');overlay.id='diaryUpdateReportModal';
-    overlay.style.cssText='position:fixed;inset:0;z-index:100500;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;background:rgba(20,12,30,.62);';
+    var meHost=document.getElementById('diaryDiaryMePanel');if(!meHost)meHost=document.body;if(meHost!==document.body)meHost.style.position='relative';overlay.style.cssText='position:absolute;inset:0;z-index:100500;display:flex;align-items:stretch;justify-content:stretch;padding:0;box-sizing:border-box;background:transparent;border-radius:12px;';
     var card=document.createElement('section');card.setAttribute('role','dialog');card.setAttribute('aria-modal','true');card.setAttribute('aria-labelledby','diaryUpdateReportTitle');
-    card.style.cssText='display:flex;flex-direction:column;width:min(100%,520px);max-height:86vh;overflow:hidden;border:2px solid #d4af37;border-radius:18px;background:linear-gradient(145deg,#fffefa,#f4edff);box-shadow:0 8px 28px rgba(0,0,0,.32);color:#241a31;';
+    card.style.cssText='display:flex;flex-direction:column;width:100%;height:100%;min-height:220px;max-height:100%;overflow:hidden;border:2px solid #d4af37;border-radius:12px;background:linear-gradient(145deg,#fffefa,#f4edff);box-shadow:inset 0 2px 0 rgba(255,255,255,.9),0 3px 0 #9b7415;color:#241a31;';
     var header=document.createElement('div');header.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid #d4af37;';
     var title=document.createElement('strong');title.id='diaryUpdateReportTitle';title.textContent='📢 My Diary Update Report';title.style.cssText='font-size:17px;font-weight:900;color:#4b267c;';
     var close=document.createElement('button');close.type='button';close.textContent='×';close.setAttribute('aria-label','Close update report');close.style.cssText='flex:0 0 40px;width:40px;height:40px;border:2px solid #b99a4b;border-radius:10px;background:#fff;color:#382700;font-size:27px;font-weight:900;line-height:1;';
@@ -3208,7 +3208,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      function fallbackCopy(){var ta=document.createElement('textarea');ta.value=reportText;ta.setAttribute('readonly','');ta.style.cssText='position:fixed;left:-9999px;top:0;';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(_){ok=false;}ta.remove();status.textContent=ok?'✓ Copied':'Copy nahi ho saka';}
      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(reportText).then(function(){status.textContent='✓ Copied';}).catch(fallbackCopy);}else fallbackCopy();
     });
-    footer.append(status,copy);card.append(header,body,footer);overlay.appendChild(card);document.body.appendChild(overlay);
+    footer.append(status,copy);card.append(header,body,footer);overlay.appendChild(card);meHost.appendChild(overlay);
    }else{body=overlay.querySelector('#diaryUpdateReportText');status=overlay.querySelector('span');}
    overlay.style.display='flex';body.textContent=reportText;status.textContent='';keepDiaryMeMenuOpen();
    fetch('https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/latest.json?report='+Date.now(),{cache:'no-store'}).then(function(response){if(!response.ok)throw new Error('HTTP '+response.status);return response.json();}).then(function(meta){
