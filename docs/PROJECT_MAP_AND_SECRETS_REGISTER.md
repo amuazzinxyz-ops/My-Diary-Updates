@@ -1,3 +1,14 @@
+# Note Pin replaced with Favourite — Web Update 381 (phone test pending, 2026-11-21)
+
+- User approved replacing the note-card **📌 Pin** button with one **⭐ Favourite** button; the duplicate existing Favourite button was consolidated so only one star remains in the old Pin button position.
+- Long-pressing an unlocked note now offers **⭐ Favourite Karo** or **☆ Favourite Hataayein** and toggles the existing `favourite` field. The expanded-note label reflects Favourite status. Roman Hindi, English, and Hindi labels were updated.
+- The old `pinnedNote` / legacy `pinned` data is preserved and not rewritten; this change removes only the note-card Pin UI/action. Note content, Note PIN/lock, Diary Lock/recovery, photos, attachments, selection, and unrelated Diary features were not intentionally changed.
+- Safety backup branch: `backup/before-note-favourite-replace-pin-2026-11-21`, created from main at `d924a10e14e769ca614cc0035f52dfab056ee311` before the edit.
+- Web source and mirror are being published as **Web Update 381**. SHA-256: `aba6e4cad65670f9eb9bbef74a37806c08a213aa2d50b2e5c1289143345f1e33`. Native app remains **1.0.210 / versionCode 209**; no APK was requested or built.
+- Phone test pending: update through **My Diary → Me → Check for Updates**, then test the single ⭐ button and long-press Favourite action. Do not mark phone PASS until the user confirms.
+
+---
+
 # Diary Lock PIN prompt Cancel button — Web Update 380 published (phone test pending, 2026-11-21)
 
 - User approved adding a clear way to back out after tapping **🔓 Diary Lock Band Karein** and reaching the 4-digit PIN prompt.
