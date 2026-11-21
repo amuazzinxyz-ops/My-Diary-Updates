@@ -4,7 +4,7 @@
   "versionCode": 211,
   "versionName": "1.0.212",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
-  "sha256": "91ad2897fd9ba5d7f721b49c3191a65a7b3c8df99839c0b646f7ea6bea36dafc",
+  "sha256": "724cff62c29d122d04431920d7d47b855735ce6f67e5709a35917b94cfec729c",
   "releaseNotes": "My Diary 1.0.212: Update Check refresh now restores the Diary Me menu after the verified web bundle reload. Existing APK download/install and web update verification flows are unchanged. Includes Web Update 383. Existing notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 392,
