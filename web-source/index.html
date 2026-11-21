@@ -4398,12 +4398,11 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     if(e.target&&e.target.closest&&e.target.closest('button,input,textarea,select'))return;
     if(holdTriggered){e.preventDefault();e.stopPropagation();holdTriggered=false;return;}
     if(noteSelectionMode){toggleNoteSelection(n.id);return;}
-    if(showingFavouriteNotes){if(n.pinLock&&!noteIsUnlocked(n)){expandedNoteId=n.id;renderList();return;}openNote(n.id);return;}
     if(expandedNoteId===n.id){expandedNoteId=null;renderList();return;}
     if(n.pinLock&&!noteIsUnlocked(n)){expandedNoteId=n.id;renderList();return;}
     expandedNoteId=n.id;renderList();
    });
-   card.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();if(noteSelectionMode){toggleNoteSelection(n.id);return;}if(showingFavouriteNotes){if(n.pinLock&&!noteIsUnlocked(n)){expandedNoteId=n.id;renderList();return;}openNote(n.id);return;}if(expandedNoteId===n.id){expandedNoteId=null;renderList();return;}if(n.pinLock&&!noteIsUnlocked(n)){expandedNoteId=n.id;renderList();return;}expandedNoteId=n.id;renderList()}});
+   card.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();if(noteSelectionMode){toggleNoteSelection(n.id);return;}if(expandedNoteId===n.id){expandedNoteId=null;renderList();return;}if(n.pinLock&&!noteIsUnlocked(n)){expandedNoteId=n.id;renderList();return;}expandedNoteId=n.id;renderList()}});
    list.appendChild(card);
   });
   /* Re-apply selected size after every list rebuild. */
@@ -4553,13 +4552,10 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   favouriteRecords.sort(function(a,b){return (b.updated||0)-(a.updated||0);});
   renderList();
   if(favouriteRecords.length){
-   var latestFavourite=favouriteRecords[0];
-   if(latestFavourite.pinLock&&!noteIsUnlocked(latestFavourite)){
-    expandedNoteId=latestFavourite.id;
-    renderList();
-   }else{
-    openNote(latestFavourite.id,true);
-   }
+   /* Match an ordinary note tap: expand the selected favourite inside the list
+      so its saved cover, text, detail image and attachment are read in place. */
+   expandedNoteId=favouriteRecords[0].id;
+   renderList();
   }
  }
  function closeOverlay(fromPop){
