@@ -4,11 +4,11 @@
   "versionCode": 211,
   "versionName": "1.0.212",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
-  "sha256": "2e720fc9c8cb52ebc59051959e24e2041889b906f55b497d2baa77b80f834738",
+  "sha256": "dbb04f318189137e6e55f65a5121000aa47b81fa19cde2fb3fde88e423f512b9",
   "releaseNotes": "My Diary 1.0.212: Update Check refresh now restores the Diary Me menu after the verified web bundle reload. Existing APK download/install and web update verification flows are unchanged. Includes Web Update 383. Existing notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 384,
+  "webVersion": 383,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "de0f1ab1b7a7a12c0ada2fd0718a2f6a3ccce5f8a4aaba16aa28a121eb54759e",
-  "webReleaseNotes": "Web Update 384: Me → Update Check Karein now shows the latest available APK version and Web Update number beneath the button. This is informational only; the existing native update process and verification are unchanged."
+  "webSha256": "a82c1d28432be3115f06cd8fe8e84c41732f7cf542d1c72df57fee7d8fbc718f",
+  "webReleaseNotes": "Web Update 383: After the verified web update refreshes the Diary screen, the Me menu is restored open. The update download, verification, installation, and other Diary features are unchanged."
 }
