@@ -1,3 +1,14 @@
+# My Diary 1.0.210 signed native release published — phone test pending (2026-11-21)
+
+- **Release PASS:** GitHub Actions run [44876747524](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/44876747524) completed with conclusion `success`. The debug build, signed Release configuration, verified release publication, signed APK upload, translation audit upload, and APK upload all completed successfully.
+- **Published app update:** `latest.json` now advertises **My Diary 1.0.210 / versionCode 209**. APK URL: `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk`. Published SHA-256: `29c150f432b384bf8a8abda62d4c0894bde102c999d143e19b332811a3ba5e58`.
+- Release notes: Favourite Notes opens the selected favourite note in read-only mode first, with an Edit Note action. Quick Note and New Note shortcuts are removed from the Home Screen Widget. The regular New Note feature inside Diary remains. Existing notes, photos, PINs, locks, and other Diary features are preserved.
+- **Web update:** Web Update **377** is live; source and mirror contain the explicit `openNote(latestFavourite.id,true)` read-only route. Widget Settings no longer offers Quick Note or New Note.
+- **Native build correction:** PR #338 fixed stale ten-shortcut validation lists in both `scripts/add_diary_home_widget.py` and `scripts/polish_diary_home_widget.py`. Both now validate the ten active widget destinations only.
+- **User testing remains pending:** User should open **My Diary → Me → Check for Updates**, install 1.0.210, then verify Favourite Notes opens in read mode, Edit Note works, the two widget shortcuts are absent, and all other features/data remain intact. Do not claim phone PASS until the user confirms. No APK sent directly, per user preference.
+
+---
+
 # My Diary native widget build-validator correction (release pending, 2026-11-21)
 
 - After merging PR #337, the Android build exposed a stale validator: `scripts/add_diary_home_widget.py` and `scripts/polish_diary_home_widget.py` still required legacy native target IDs `new-note` and `quick-note`, even though the native widget generator and layout now intentionally expose only ten shortcuts.
