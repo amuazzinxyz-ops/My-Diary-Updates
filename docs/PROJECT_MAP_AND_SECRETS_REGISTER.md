@@ -1,3 +1,15 @@
+# Update Check keeps Diary Me menu open — Web Update 383 + APK 1.0.212 (2026-11-21)
+
+- User approved the focused fix for **Me → Update Check Karein** closing the Diary **Me** menu during an update refresh. No Close button was added. The existing APK download/install flow, web download, SHA-256 verification, and saved-data logic were left unchanged.
+- Root cause addressed: the native updater refreshes the WebView after checking/applying the verified web bundle. Before each of its two refresh paths (already-current verified bundle and newly downloaded verified bundle), the Android updater now saves a one-time `sessionStorage` marker and waits for the JavaScript callback before reloading. On Diary HTML initialization, the marker is consumed and the Me menu is reopened.
+- Safety backup branch: `backup/before-update-check-me-open-fix-2026-11-21`. Register pre-edit backup branch: `backup/before-update-check-me-open-register-2026-11-21`.
+- Web source and mirror were re-fetched and verified byte-identical at Git blob SHA `4860469eeb9a938f0d435b5d02722724cafab344` (597,332 characters). Live `latest.json` advertises **Web Update 383** with SHA-256 `a82c1d28432be3115f06cd8fe8e84c41732f7cf542d1c72df57fee7d8fbc718f`.
+- Signed native APK **My Diary 1.0.212 / versionCode 211** was built and published. GitHub Actions build run [44920630126](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/44920630126) completed **success**; signing/alias validation, build-time Me-menu restoration guard, debug build, signed Release build, certificate verification, APK publication, and signed artifact upload all passed. Web publisher run [44920630076](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/44920630076) completed **success**.
+- Live `latest.json` confirms APK SHA-256 `dbb04f318189137e6e55f65a5121000aa47b81fa19cde2fb3fde88e423f512b9`, Web Update 383, and the corresponding web SHA-256. Delivery: **My Diary → Me → Check for Updates**.
+- **Phone test is pending.** User must confirm that Update Check now leaves the Me menu open after the refresh; do not mark PASS until explicit confirmation.
+
+---
+
 # Web Update 382 phone test PASS — user-confirmed (2026-11-21)
 
 - User confirmed that both **🌍 World Clock Close** and **🏠 Home Screen Widget Settings Close** now close only their own window and leave the Diary **Me** menu open. Both tests are **PASS**.
