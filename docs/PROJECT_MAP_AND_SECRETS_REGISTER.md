@@ -1,3 +1,15 @@
+# Show update version numbers in Diary Me — publication pending (2026-11-21)
+
+- User requested that **Me → Update Check Karein** visibly show which update number is being offered. Added a small informational line under the existing button: **Latest available: APK [versionName] • Web Update [webVersion]**.
+- The line reads the existing public `latest.json` feed with a cache-busted, no-store informational fetch. It does not call, delay, replace, or modify the native `DiaryAppActions.checkForUpdates()` updater. Existing APK download/install, web bundle download, SHA-256 verification, and Me-menu restoration handlers remain in place.
+- No native Android source, versionCode, APK, update feed, saved data, notes, PINs, locks, or other Diary features were changed.
+- Safety backup branch: `backup/before-update-version-number-display-2026-11-21`.
+- `web-source/index.html` and `diary-web/index.html` were re-fetched and verified byte-identical at Git blob SHA `444bcd7c6bf59ff1eda387c6e036455129acfd4e` (598,443 characters).
+- Current live feed at the time of this Register entry still advertises **APK 1.0.212 / versionCode 211** and **Web Update 383**. Publication of the new informational line as the next web bundle is **pending verification**; do not tell the user Web Update 384 is live until `latest.json` confirms it.
+- **Phone test pending.** After publication, user should check that the version line displays and that the normal update process still works. Do not mark phone PASS before explicit confirmation.
+
+---
+
 # Update Check keeps Diary Me menu open — Web Update 383 + APK 1.0.212 (2026-11-21)
 
 - User approved the focused fix for **Me → Update Check Karein** closing the Diary **Me** menu during an update refresh. No Close button was added. The existing APK download/install flow, web download, SHA-256 verification, and saved-data logic were left unchanged.
