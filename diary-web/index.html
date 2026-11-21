@@ -4556,6 +4556,13 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
       so its saved cover, text, detail image and attachment are read in place. */
    expandedNoteId=favouriteRecords[0].id;
    renderList();
+   /* Put the selected favourite at the top of the visible Diary area immediately. */
+   var expandedCard=list&&list.querySelector('.diary-my-note.expanded');
+   if(expandedCard&&bodyEl){
+    var cardTop=expandedCard.getBoundingClientRect().top;
+    var bodyTop=bodyEl.getBoundingClientRect().top;
+    bodyEl.scrollTop+=cardTop-bodyTop-8;
+   }
   }
  }
  function closeOverlay(fromPop){
