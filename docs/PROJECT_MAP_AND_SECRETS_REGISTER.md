@@ -1,3 +1,17 @@
+# My Diary Notes — independent ⭐ Favourite toggle (Web Update 372, 2026-11-21)
+
+- User approved adding a separate **⭐ Favourite** control to each Diary note because the Favourite Notes widget existed but the regular note card exposed only the Pin control.
+- Added an independent star toggle to each note card. Its state is stored in the existing note record's `favourite` field. **📌 Pin Note** now reads/writes only the pin fields and does not overwrite or delete Favourite. The note action menu follows the same independent pin behavior.
+- The **Favourite Notes** widget route now filters only records explicitly marked `favourite`; a pinned-only note is no longer automatically shown as a Favourite. Existing favourite values remain preserved. Backup restore migration keeps legacy `pinned` records as pinned and keeps the separate `favourite` value unchanged.
+- No note content, attached photos, Note PIN/lock, Diary PIN/lock/recovery, or unrelated data structures/features were intentionally changed.
+- Exact pre-edit full-source backup branch: `backup/before-note-favourite-toggle-2026-11-21`. Feature branch: `feat/separate-note-favourite-toggle-2026-11-21`. PR **#328** merged successfully as `fc0dc2a8029429c24bcbfe197dcdba985d3bccae`.
+- Static verification: both embedded JavaScript blocks parse successfully; `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `cbbc0ac7d494ada1bcc8b2c37ab35e37a6b795f7`.
+- Published **Web Update 372** through `latest.json`. Live feed confirms webVersion **372** and web SHA-256 `71442e32955d3c9b0bd87da24e9ac4f4898dccf757543f7f0cb200c5c3129e89`; independently recomputed SHA-256 matches. Existing signed APK remains **1.0.207 / versionCode 206**, package `com.personal.diaryapp`; no APK rebuild or direct APK delivery was made.
+- Delivery: **My Diary → Me → Check for Updates**. Physical-phone test of the new Favourite toggle, independence from Pin, and Favourite Notes widget filtering is **pending user confirmation**; do not mark PASS until the user tests it.
+- Register pre-edit backup branch: `backup/before-note-favourite-register-2026-11-21`. Register working branch: `docs/note-favourite-register-2026-11-21`.
+
+---
+
 # My Diary Home Screen Widget — Smart Search + Quick Note added (APK 1.0.207 / versionCode 206, 2026-11-21)
 
 - User requested two new Home Screen Widget shortcuts: **🔍 Smart Search** and **✍️ Quick Note**. Smart Search opens and focuses the existing Diary notes search field. Quick Note opens the existing blank note editor and focuses the existing note text box so the user can type and save immediately.
