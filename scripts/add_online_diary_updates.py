@@ -56,7 +56,8 @@ web_method = r"""
                     webView.post {
                         // Force WebView to discard any stale in-memory/disk page before reloading
                         // the SHA-256-verified local Diary HTML bundle.
-                        webView.stopLoading()
+                        webView.evaluateJavascript("try{sessionStorage.setItem('diaryKeepMeOpenAfterUpdate','1')}catch(e){}", null)
+                            webView.stopLoading()
                         webView.clearCache(true)
                         webView.clearHistory()
                         webView.loadUrl("https://appassets.androidplatform.net/assets/index.html?diaryRefresh=" + System.currentTimeMillis())
@@ -117,6 +118,7 @@ web_method = r"""
                     runOnUiThread {
                         Toast.makeText(this@MainActivity, "My Diary update lag gaya. App refresh ho rahi hai...", Toast.LENGTH_LONG).show()
                         webView.postDelayed({
+                            webView.evaluateJavascript("try{sessionStorage.setItem('diaryKeepMeOpenAfterUpdate','1')}catch(e){}", null)
                             webView.stopLoading()
                             webView.clearCache(true)
                             webView.clearHistory()
