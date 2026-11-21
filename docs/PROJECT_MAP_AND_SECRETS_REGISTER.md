@@ -5337,3 +5337,15 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Live `latest.json` confirms My Diary **1.0.208 / versionCode 207**, APK URL `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk`, SHA-256 `35ca4e085335bbe04f30d11e40d16752a107628fd05b72f89706618ca4aef819`.
 - Release notes specify the Favourite Notes cold-launch routing fix and preservation of existing shortcuts, saved notes, photos, PINs, locks, settings, 3D feedback, and resize behavior. Delivery is through **Me → Check for Updates**; do not send APK unless explicitly requested.
 - **Phone-side verification remains pending**. User must update via Check for Updates and test Favourite Notes from a cold launch. Do not claim phone testing PASS until user confirms.
+
+
+# Favourite Notes widget opens only Favourite Notes — 1.0.209 published (2026-11-21)
+
+- User reported that tapping ⭐ Favourite Notes opened a different ordinary note. The previous widget handler auto-opened the most recently edited favourite note; this was not a reliable destination when several notes existed.
+- Created safety branch `backup/before-favourite-widget-list-fix-2026-11-21` before editing.
+- Minimal HTML change: the widget now opens the filtered Favourite Notes list only and does not auto-open any note. The user can choose the intended favourite from that list. No note records, favourite flags, photos, PINs, locks, or unrelated note logic were modified.
+- Updated `web-source/index.html` and `diary-web/index.html`; re-fetched and verified both files are byte-identical. Verified the new handler no longer calls `openNote(latestFavourite.id)`.
+- Signed APK workflow run **44873357694** (run #434), commit `ed764b3f7bd8ad420e1f17a181c9d4811f8e33a3`, completed **success**. Signing checks, version guards, debug build, signed Release build, publication, and artifact uploads passed.
+- Live `latest.json` confirms My Diary **1.0.209 / versionCode 208**, APK SHA-256 `383d7ec04772e6743b5478ab4a83757649dd1e93e8896ade9a7a915efa4e356e`; web bundle SHA-256 `8eee9c7ae6281d677fa4e994389845d0a38c2e6907ab57caaf3fb8067ba7a7f1`.
+- Delivery remains **My Diary → Me → Check for Updates**. Do not send APK unless explicitly requested.
+- **Phone-side verification is pending**. User must update to 1.0.209 and confirm the widget opens the filtered Favourite Notes list. Do not mark phone test PASS until user confirms.
