@@ -263,7 +263,7 @@ create_anchor = "    override fun onCreate(savedInstanceState: Bundle?) {\n     
 if "pendingWidgetTarget = intent?.getStringExtra(\"diary_widget_target\")" not in kotlin:
     kotlin = require_once(kotlin, create_anchor, create_anchor + "        pendingWidgetTarget = intent?.getStringExtra(\"diary_widget_target\")\n", "initial widget launch target")
 page_anchor = "                super.onPageFinished(view, url)\n"
-page_replacement = page_anchor + "                if (url == \"https://appassets.androidplatform.net/assets/index.html\") consumePendingWidgetTarget()\n"
+page_replacement = page_anchor + "                if (url.startsWith(\"https://appassets.androidplatform.net/assets/index.html\")) consumePendingWidgetTarget()\n"
 if "consumePendingWidgetTarget()" not in kotlin:
     kotlin = require_once(kotlin, page_anchor, page_replacement, "WebView widget launch dispatch")
 on_save_anchor = "    override fun onSaveInstanceState(outState: Bundle) {\n"
@@ -291,6 +291,9 @@ widget_activity_methods = r"""
 """
 if "override fun onNewIntent(intent: Intent)" not in kotlin:
     kotlin = require_once(kotlin, on_save_anchor, widget_activity_methods + on_save_anchor, "singleTop widget activity routing")
+load_anchor = '        if (savedInstanceState != null) webView.restoreState(savedInstanceState)\n        else webView.loadUrl("https://appassets.androidplatform.net/assets/index.html")'
+load_replacement = '        if (savedInstanceState != null && pendingWidgetTarget == null) webView.restoreState(savedInstanceState)\n        else webView.loadUrl("https://appassets.androidplatform.net/assets/index.html" + if (pendingWidgetTarget != null) "?diary_widget_launch=1" else "")'
+kotlin = require_once(kotlin, load_anchor, load_replacement, "cold widget launch marker URL")
 KOTLIN_PATH.write_text(kotlin, encoding="utf-8")
 print("PASS: Android WebView bridge saves settings and routes widget taps into the existing app.")
 

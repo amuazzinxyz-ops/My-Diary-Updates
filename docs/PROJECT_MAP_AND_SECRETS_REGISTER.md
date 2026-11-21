@@ -1,3 +1,15 @@
+# My Diary Favourite Notes Widget — cold-launch destination reset fix (APK 1.0.208 / versionCode 207 pending, 2026-11-21)
+
+- User clarified that tapping **⭐ Favourite Notes** opens Diary briefly, then returns to the previous/default Diary page; the app itself does not close.
+- Root cause found in the current source: the normal app-start listener automatically clicks the Diary entry 350 ms after page load. On a cold widget launch this second open calls `openDiaryPanel()`, which resets `showingFavouriteNotes` and clears the selected note, overriding the requested widget destination.
+- Minimal fix: cold widget launches now load the same local Diary page with the marker `?diary_widget_launch=1`; only the normal startup auto-open is skipped for that marked launch. Native target dispatch now matches the asset URL prefix so the marker does not block delivery. WebView state restoration remains unchanged when no widget target is pending.
+- Updated `web-source/index.html`, its `diary-web/index.html` mirror, `scripts/add_diary_home_widget.py`, and the signed APK workflow. Added fail-closed checks for the marker and native dispatch. Release target is **1.0.208 / versionCode 207**; the current live release remains **1.0.207 / versionCode 206** until the signed build and feed publication pass.
+- Exact pre-edit backup branch: `backup/before-widget-favourite-routing-race-2026-11-21`. Working branch: `fix/widget-favourite-routing-race-2026-11-21`. PR **#333** is open; merge, workflow build, signing, and publication are pending.
+- No note contents, photos, Favourite/Pin flags, PINs, Diary lock/recovery, or unrelated widget routes/settings were intentionally changed. No APK has been sent directly.
+- Delivery remains **My Diary → Me → Check for Updates** after publication. Physical-phone testing of Favourite Notes opening and remaining open is pending user confirmation; do not mark PASS until the user confirms.
+
+---
+
 # My Diary Favourite Notes Widget — open latest favourite note directly (Web Update 374, 2026-11-21)
 
 - User reported that tapping **⭐ Favourite Notes** from the Home Screen Widget did not open a favourite note.

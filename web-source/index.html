@@ -4594,6 +4594,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 /* Preserve the existing launch behaviour: open My Diary automatically on app start. */
 window.addEventListener('load',function(){
  setTimeout(function(){
+  /* A widget launch must keep its requested destination; do not let the normal startup auto-open reset it. */
+  if(/(?:^|[?&])diary_widget_launch=1(?:&|$)/.test(window.location.search||''))return;
   var button=document.getElementById('diaryMyNotesEntry');
   if(button)button.click();
  },350);
