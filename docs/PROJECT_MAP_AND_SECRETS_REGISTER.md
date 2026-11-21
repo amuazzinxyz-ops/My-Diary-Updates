@@ -1,3 +1,14 @@
+# My Diary native Widget shortcut removal — signed APK 1.0.210 build preparation (release pending, 2026-11-21)
+
+- Continued the merged PR #335 work so the Android Home Screen Widget itself, not only its web settings, removes **✍️ Quick Note kholen** and **✍️ New Note kholen**. The existing native widget generator now emits the remaining ten shortcuts; its polish validator no longer expects the two removed button IDs. The Diary's in-app New Note feature remains.
+- Confirmed the Favourite Notes widget route sets `showingFavouriteNotes=true`; made the direct selected-favourite call explicit as `openNote(latestFavourite.id,true)` so it always opens read-only first, even if routing state changes. Existing per-note PIN check remains before opening. Also corrected the read-mode style block's closing HTML newline.
+- The prior APK workflow was pinned to version **1.0.209 / versionCode 208**, which is already installed and cannot serve as an in-place update. Prepared the next build as **1.0.210 / versionCode 209** and updated the workflow's baseline/target guards, release metadata, ten-shortcut notes, and artifact names.
+- Backup branch: `backup/before-1.0.210-native-widget-release-2026-11-21`. Working branch: `release/1.0.210-widget-shortcuts-2026-11-21`.
+- **Release remains pending:** this branch must be reviewed/merged, the Android build must complete, and the workflow must verify the original signing certificate and publish the signed APK. If signing secrets are unavailable, the workflow only uploads an unsigned APK artifact and the user-facing update feed must remain unchanged. No APK has been sent. Do not claim the native widget options are removed from the installed app until the signed 1.0.210 APK is published and installed.
+- Web source and mirror on this branch were updated identically; after merge the web publisher should advertise the corrected read-only route as a new web update. Phone testing remains pending.
+
+---
+
 # My Diary Favourite Notes read mode + remove Quick Note / New Note widget shortcuts (PR #335 merged, release pending, 2026-11-21)
 
 - User requested that **⭐ Favourite Notes** open the favourite note in a read-only reading view first, with an explicit **Edit Note** action to enter the existing editor. Favourite Notes opening now sets the existing title/body fields to read-only, hides edit controls while reading, preserves the saved cover/detail/photo previews, and exposes the existing edit controls only after the user taps Edit Note. The normal note-opening path remains unchanged; opening a note from the Favourite Notes view uses read mode.
