@@ -7,8 +7,8 @@
   "sha256": "043b2f4d3257b45016c7c1da3d249c975caeb790f4123e714a32cb15c7bc5f46",
   "releaseNotes": "My Diary 1.0.210: Favourite Notes widget opens the selected favourite note in read-only mode first, with an Edit Note action. Removed Quick Note and New Note shortcuts from the Home Screen Widget. Existing notes, photos, PINs, locks, and other Diary features are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 380,
+  "webVersion": 381,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "74f1f8e2fe9b7c0eeaa4c5919a9c8bfb591b9a33a5c9d0eb38b3a11781e34f63",
+  "webSha256": "9c6c018751e569437f5b94b72b470312e7985d783109e9dacd637bc2f8f8008b",
   "webReleaseNotes": "Web Update 381: Check for Updates now displays the live Web Update number, Android app version, and release notes before checking. Diary Lock Band Karein now shows an in-app confirmation with Abhi Nahi and OK; Abhi Nahi keeps the lock enabled. Wrong-PIN feedback and all saved notes, photos, PINs, recovery data, and other features are preserved."
 }
