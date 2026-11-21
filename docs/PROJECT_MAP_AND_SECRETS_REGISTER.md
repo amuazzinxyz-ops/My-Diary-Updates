@@ -4,7 +4,7 @@
 - Long-pressing an unlocked note now offers **⭐ Favourite Karo** or **☆ Favourite Hataayein** and toggles the existing `favourite` field. The expanded-note label reflects Favourite status. Roman Hindi, English, and Hindi labels were updated.
 - The old `pinnedNote` / legacy `pinned` data is preserved and not rewritten; this change removes only the note-card Pin UI/action. Note content, Note PIN/lock, Diary Lock/recovery, photos, attachments, selection, and unrelated Diary features were not intentionally changed.
 - Safety backup branch: `backup/before-note-favourite-replace-pin-2026-11-21`, created from main at `d924a10e14e769ca614cc0035f52dfab056ee311` before the edit.
-- Web source and mirror are being published as **Web Update 381**. SHA-256: `aba6e4cad65670f9eb9bbef74a37806c08a213aa2d50b2e5c1289143345f1e33`. Native app remains **1.0.210 / versionCode 209**; no APK was requested or built.
+- **Web Update 381 is published in `latest.json`** with SHA-256 `aba6e4cad65670f9eb9bbef74a37806c08a213aa2d50b2e5c1289143345f1e33`. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `0743b9cdfc8eb04326a87bd18698bce96957d993` (596,748 characters). Source, mirror, and feed metadata were re-fetched from `main` and verified. Native app remains **1.0.210 / versionCode 209**; no APK was requested or built.
 - Phone test pending: update through **My Diary → Me → Check for Updates**, then test the single ⭐ button and long-press Favourite action. Do not mark phone PASS until the user confirms.
 
 ---
