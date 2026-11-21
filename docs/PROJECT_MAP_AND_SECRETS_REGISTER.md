@@ -1,16 +1,16 @@
-# Private Locker — one direct My Memories-style page (Web Update 396 candidate, phone test pending, 2026-11-22)
+# Private Locker — one direct My Memories-style page (Web Update 396 published, phone test pending, 2026-11-22)
 
 - User approved making Private Locker behave like My Memories: no separate Lock OFF choice screen and no extra “Locker Kholein” step before the entries page.
-- Minimal behavior change in `web-source/index.html`: when Lock is OFF and its existing unlocked encryption key is available, opening Private Locker now immediately imports that key and opens the existing entries editor/list. The existing encrypted records, editor, search, favourites, pins, attachments, and save/delete behavior are not changed.
-- The header **🔑 PIN** button now starts the existing Lock-On PIN creation flow directly when Lock is OFF. When Lock is ON, it continues to reopen the existing PIN verification/security controls. PIN verification, recovery, encryption, fingerprint/pattern, and lock state remain protected; no security bypass was added.
-- The old two-button Lock OFF screen is no longer used by the opening flow. No data migration, storage schema change, saved entry modification, native Android source change, or APK rebuild is included.
-- Safety backup branch: `backup/before-private-locker-one-page-2026-11-22`. Working branch: `fix/private-locker-one-page-memories-style-2026-11-22`.
-- Source and published mirror were updated identically on the working branch; source/mirror equality and static flow checks must pass before merge/publication.
-- Candidate web release: **Web Update 396**; live Check for Update publication and final checksum verification are pending merge/publisher workflow.
-- **Phone test pending**: update through Check for Updates, confirm Lock OFF opens entries directly, header 🔑 PIN starts Lock On setup, and Lock ON still requires PIN before entries appear. Do not claim phone-side PASS until user confirms.
+- When Lock is OFF and its existing unlocked encryption key is available, opening Private Locker now immediately imports that key and opens the existing entries editor/list. The existing encrypted records, editor, search, favourites, pins, attachments, and save/delete behavior are unchanged.
+- The header **🔑 PIN** button starts the existing Lock-On PIN creation flow directly when Lock is OFF. If the user cancels PIN setup, the existing entries page remains open. When Lock is ON, the existing PIN verification/security flow remains required before private entries are shown.
+- The old two-button Lock OFF screen is no longer used by the opening or PIN-setup-cancel flow. No data migration, storage schema change, saved entry modification, native Android source change, or APK rebuild is included.
+- Safety backup branch: `backup/before-private-locker-one-page-2026-11-22`. Working branch: `fix/private-locker-one-page-memories-style-2026-11-22`. PR **#359** merged as `bbcbbf24fe67ae32a2b0777767d30d8d7acb15d9`.
+- Published **Web Update 396** in `latest.json`. Final `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `6b9756c0b7315ec59696c95236cbc0581afb6b10`; verified web SHA-256: `6be113dbfd66e26dec528bbe22584adaedf7eedd3fd65dfc764d62090d7867e3`.
+- Native APK remains **My Diary 1.0.212 / versionCode 211**. This is a web-only update; no APK rebuild or APK version change was made. Delivery is through **Me → Check for Updates**.
+- Static checks: source/mirror equality PASS; feed version/checksum match PASS; both inline JavaScript blocks parse PASS; pre-edit backup branch still matches the original main source.
+- **Phone test pending**: update through Check for Updates, confirm Lock OFF opens entries directly, header 🔑 PIN starts Lock On setup, cancelling PIN setup returns to entries, and Lock ON still requires PIN before entries appear. Do not claim device-side PASS until user confirms.
 
 ---
-
 # Private Locker header PIN button — Web Update 395 candidate (phone test pending, 2026-11-22)
 
 - User approved replacing the right-side **✕** in the Private Locker header with a single **🔑 PIN** button, matching the My Memories header control. The new button reopens the existing Private Locker PIN gate; it does not close the Locker.
