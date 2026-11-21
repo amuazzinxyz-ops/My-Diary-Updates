@@ -1,10 +1,10 @@
-# My Diary Home Screen Widget — make Chhota / Normal / Bada visibly distinct (native change in progress, 2026-11-21)
+# My Diary Home Screen Widget — make Chhota / Normal / Bada visibly distinct (native release in progress, 2026-11-21)
 
 - User reported that changing Widget Text Size between **Chhota** and **Bada** showed almost no visible difference.
 - Root cause confirmed in the generated native RemoteViews code: when widget width was below 180dp, body/date/button labels were all clamped to 12sp and the title was clamped to at most 16sp. This erased most of the selected size difference on narrow widgets.
 - Minimal fix: retain the existing selected values (Chhota 15sp title / 12sp body, Normal 18sp / 14sp, Bada 21sp / 17sp) at every widget width. Only the existing outer padding remains responsive to width. No widget settings, button routing, layout dimensions, stored data, Diary features, PIN/locks, or HTML source are intentionally changed.
 - Exact pre-edit backup branch: `backup/before-widget-text-size-visibility-2026-11-21`. Working branch: `fix/widget-text-size-visibility-2026-11-21`. Main baseline: `90e782af2e8d3914b80549c2c1dcd01235f6587f`.
-- Native widget generator updated; build/validation, PR merge, signed release and publication are pending. Physical-phone visual confirmation is pending and must not be marked PASS until the user checks Chhota, Normal, and Bada on the device.
+- Native widget generator updated. PR #325 merged as 10a0ba83477371e0e9eaf0dfb4ca65c3149240ca. Release workflow is being advanced to the next monotonic APK version, 1.0.206 / versionCode 205, because 1.0.205 / 204 is already live. Signed release/build validation and publication are pending. Physical-phone visual confirmation is pending and must not be marked PASS until the user checks Chhota, Normal, and Bada on the device.
 - Delivery follows the existing **My Diary → Me → Check for Updates** flow. Do not send a direct APK unless explicitly requested.
 
 ---
