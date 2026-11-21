@@ -348,8 +348,9 @@ class DiaryHomeWidgetProvider : AppWidgetProvider() {
             val size = prefs.getString("size", "standard") ?: "standard"
             val titleSize = when (size) { "compact" -> 15f; "large" -> 21f; else -> 18f }
             val bodySize = when (size) { "compact" -> 12f; "large" -> 17f; else -> 14f }
-            val responsiveBodySize = if (availableWidth < 180) minOf(bodySize, 12f) else bodySize
-            views.setTextViewTextSize(R.id.widgetTitle, TypedValue.COMPLEX_UNIT_SP, if (availableWidth < 180) minOf(titleSize, 16f) else titleSize)
+            // Keep the user's selected text size at every widget width; only outer padding adapts.
+            val responsiveBodySize = bodySize
+            views.setTextViewTextSize(R.id.widgetTitle, TypedValue.COMPLEX_UNIT_SP, titleSize)
             views.setTextViewTextSize(R.id.widgetDate, TypedValue.COMPLEX_UNIT_SP, responsiveBodySize)
             shortcuts.forEachIndexed { index, shortcut ->
                 val (hitId, labelId, setting) = shortcut
