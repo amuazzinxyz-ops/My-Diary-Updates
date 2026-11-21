@@ -3185,32 +3185,57 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 
 
 
-  /* Separate, copyable update report; the native updater remains independent. */
+  /* Update report is shown in the exact Me-menu area; preserve it across the updater's WebView refresh. */
   function openDiaryUpdateReport(){
-   var overlay=document.getElementById('diaryUpdateReportModal');
+   var report=document.getElementById('diaryUpdateReportModal');
    var body,status,reportText='MY DIARY UPDATE REPORT\nUpdate details load ho rahi hain...';
-   if(!overlay){
-    overlay=document.createElement('div');overlay.id='diaryUpdateReportModal';
-    var meHost=document.getElementById('diaryDiaryMePanel');if(!meHost)meHost=document.body;if(meHost!==document.body)meHost.style.position='relative';overlay.style.cssText='position:absolute;inset:0;z-index:100500;display:flex;align-items:stretch;justify-content:stretch;padding:0;box-sizing:border-box;background:transparent;border-radius:12px;';
-    var card=document.createElement('section');card.setAttribute('role','dialog');card.setAttribute('aria-modal','true');card.setAttribute('aria-labelledby','diaryUpdateReportTitle');
-    card.style.cssText='display:flex;flex-direction:column;width:100%;height:100%;min-height:220px;max-height:100%;overflow:hidden;border:2px solid #d4af37;border-radius:12px;background:linear-gradient(145deg,#fffefa,#f4edff);box-shadow:inset 0 2px 0 rgba(255,255,255,.9),0 3px 0 #9b7415;color:#241a31;';
-    var header=document.createElement('div');header.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid #d4af37;';
-    var title=document.createElement('strong');title.id='diaryUpdateReportTitle';title.textContent='📢 My Diary Update Report';title.style.cssText='font-size:17px;font-weight:900;color:#4b267c;';
+   var meHost=document.getElementById('diaryDiaryMePanel');
+   if(!meHost)return;
+   function hideMeOptions(){
+    Array.prototype.forEach.call(meHost.children,function(child){
+     if(child===report)return;
+     if(!child.__diaryUpdateReportSavedStyle){
+      child.__diaryUpdateReportSavedStyle={display:child.style.getPropertyValue('display'),priority:child.style.getPropertyPriority('display'),hidden:child.hidden};
+     }
+     child.style.setProperty('display','none','important');
+    });
+   }
+   function restoreMeOptions(){
+    Array.prototype.forEach.call(meHost.children,function(child){
+     if(child===report||!child.__diaryUpdateReportSavedStyle)return;
+     var saved=child.__diaryUpdateReportSavedStyle;
+     if(saved.display)child.style.setProperty('display',saved.display,saved.priority||'');
+     else child.style.removeProperty('display');
+     child.hidden=saved.hidden;
+     delete child.__diaryUpdateReportSavedStyle;
+    });
+   }
+   if(!report){
+    report=document.createElement('section');report.id='diaryUpdateReportModal';
+    report.setAttribute('role','region');report.setAttribute('aria-labelledby','diaryUpdateReportTitle');
+    report.style.cssText='display:flex;flex-direction:column;flex:1 1 auto;width:100%;min-width:0;max-height:58dvh;overflow:hidden;box-sizing:border-box;border:2px solid #d4af37;border-radius:12px;background:linear-gradient(145deg,#fffefa,#f4edff);box-shadow:inset 0 2px 0 rgba(255,255,255,.9),0 3px 0 #9b7415;color:#241a31;';
+    var header=document.createElement('div');header.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:10px;flex:0 0 auto;padding:10px 12px;border-bottom:1px solid #d4af37;';
+    var title=document.createElement('strong');title.id='diaryUpdateReportTitle';title.textContent='📢 My Diary Update Report';title.style.cssText='font-size:16px;font-weight:900;color:#4b267c;';
     var close=document.createElement('button');close.type='button';close.textContent='×';close.setAttribute('aria-label','Close update report');close.style.cssText='flex:0 0 40px;width:40px;height:40px;border:2px solid #b99a4b;border-radius:10px;background:#fff;color:#382700;font-size:27px;font-weight:900;line-height:1;';
-    close.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();overlay.style.display='none';keepDiaryMeMenuOpen();});
+    close.addEventListener('click',function(ev){
+     ev.preventDefault();ev.stopPropagation();report.style.display='none';restoreMeOptions();
+     try{sessionStorage.removeItem('diaryShowUpdateReportAfterCheck');}catch(_){}
+     keepDiaryMeMenuOpen();
+    });
     header.append(title,close);
-    body=document.createElement('pre');body.id='diaryUpdateReportText';body.style.cssText='flex:1 1 auto;min-height:90px;max-height:60vh;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;margin:0;padding:14px;font:600 14px/1.55 Arial,sans-serif;color:#17121d;';
-    var footer=document.createElement('div');footer.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-top:1px solid #d4af37;';
-    status=document.createElement('span');status.style.cssText='font-size:12px;font-weight:800;color:#4b267c;';
+    body=document.createElement('pre');body.id='diaryUpdateReportText';body.style.cssText='flex:1 1 auto;min-height:100px;max-height:42dvh;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;margin:0;padding:12px;font:600 13px/1.5 Arial,sans-serif;color:#17121d;';
+    var footer=document.createElement('div');footer.style.cssText='display:flex;align-items:center;justify-content:flex-end;gap:10px;flex:0 0 auto;padding:9px 12px;border-top:1px solid #d4af37;';
+    status=document.createElement('span');status.id='diaryUpdateReportStatus';status.style.cssText='margin-right:auto;font-size:12px;font-weight:800;color:#4b267c;';
     var copy=document.createElement('button');copy.type='button';copy.textContent='📋 Copy';copy.style.cssText='min-width:104px;min-height:42px;padding:8px 16px;border:2px solid #7540b8;border-radius:10px;background:linear-gradient(145deg,#fff,#e9dcf8);color:#45216f;font-size:15px;font-weight:900;box-shadow:0 3px 0 #7540b8;';
     copy.addEventListener('click',function(ev){
      ev.preventDefault();ev.stopPropagation();
      function fallbackCopy(){var ta=document.createElement('textarea');ta.value=reportText;ta.setAttribute('readonly','');ta.style.cssText='position:fixed;left:-9999px;top:0;';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(_){ok=false;}ta.remove();status.textContent=ok?'✓ Copied':'Copy nahi ho saka';}
      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(reportText).then(function(){status.textContent='✓ Copied';}).catch(fallbackCopy);}else fallbackCopy();
     });
-    footer.append(status,copy);card.append(header,body,footer);overlay.appendChild(card);meHost.appendChild(overlay);
-   }else{body=overlay.querySelector('#diaryUpdateReportText');status=overlay.querySelector('span');}
-   overlay.style.display='flex';body.textContent=reportText;status.textContent='';keepDiaryMeMenuOpen();
+    footer.append(status,copy);report.append(header,body,footer);meHost.appendChild(report);
+   }else{body=report.querySelector('#diaryUpdateReportText');status=report.querySelector('#diaryUpdateReportStatus');}
+   hideMeOptions();report.style.display='flex';body.textContent=reportText;status.textContent='';
+   meHost.scrollTop=0;keepDiaryMeMenuOpen();
    fetch('https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/latest.json?report='+Date.now(),{cache:'no-store'}).then(function(response){if(!response.ok)throw new Error('HTTP '+response.status);return response.json();}).then(function(meta){
     reportText=[
      'MY DIARY — COMPLETE UPDATE REPORT',
@@ -3232,12 +3257,20 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   }
 
   checkUpdatesBtn.addEventListener('click',function(e){
-   e.preventDefault();e.stopPropagation();keepDiaryMeMenuOpen();openDiaryUpdateReport();
-   if(window.DiaryAppActions&&typeof DiaryAppActions.checkForUpdates==='function'){
-    try{DiaryAppActions.checkForUpdates();}finally{keepDiaryMeMenuOpen();}
-   }else{
-    alert(t('updateAppUnavailable'));keepDiaryMeMenuOpen();
-   }
+   e.preventDefault();e.stopPropagation();keepDiaryMeMenuOpen();
+   try{sessionStorage.setItem('diaryShowUpdateReportAfterCheck','1');}catch(_){}
+   openDiaryUpdateReport();
+   window.setTimeout(function(){
+    try{
+     if(window.DiaryAppActions&&typeof DiaryAppActions.checkForUpdates==='function'){
+      DiaryAppActions.checkForUpdates();keepDiaryMeMenuOpen();
+     }else{
+      sessionStorage.removeItem('diaryShowUpdateReportAfterCheck');
+      alert(t('updateAppUnavailable'));keepDiaryMeMenuOpen();
+     }
+    }catch(error){keepDiaryMeMenuOpen();}
+   },180);
+   window.setTimeout(function(){try{sessionStorage.removeItem('diaryShowUpdateReportAfterCheck');}catch(_){ }},45000);
   });
   refreshDiaryBtn.addEventListener('click',function(e){
    e.preventDefault();e.stopPropagation();
@@ -3261,7 +3294,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   fontLabel.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var opening=fontSliderBox.hidden;fontSliderBox.hidden=!opening;fontLabel.setAttribute('aria-expanded',opening?'true':'false');});
   meWrap.appendChild(meBtn);meWrap.appendChild(mePanel);head.appendChild(meWrap);
   meBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var opening=mePanel.hidden;mePanel.hidden=!opening;meBtn.setAttribute('aria-expanded',opening?'true':'false');panel.classList.toggle('diary-me-menu-open',opening);if(opening){mePanel.scrollTop=0;privateLockerRenderExternalControls();}});
-  try{if(sessionStorage.getItem('diaryKeepMeOpenAfterUpdate')==='1'){sessionStorage.removeItem('diaryKeepMeOpenAfterUpdate');keepDiaryMeMenuOpen();}}catch(_){ }
+  try{if(sessionStorage.getItem('diaryKeepMeOpenAfterUpdate')==='1'){sessionStorage.removeItem('diaryKeepMeOpenAfterUpdate');keepDiaryMeMenuOpen();if(sessionStorage.getItem('diaryShowUpdateReportAfterCheck')==='1'){sessionStorage.removeItem('diaryShowUpdateReportAfterCheck');window.setTimeout(function(){openDiaryUpdateReport();},180);}}}catch(_){ }
   function updateDiaryFontFromSlider(e){if(e)e.stopPropagation();var chosen=Math.max(12,Math.min(24,parseInt(fontSlider.value,10)||14));localStorage.setItem(DIARY_FONT_KEY,String(chosen));applyDiaryFont();}
   fontSlider.addEventListener('input',updateDiaryFontFromSlider);
   fontSlider.addEventListener('change',updateDiaryFontFromSlider);
