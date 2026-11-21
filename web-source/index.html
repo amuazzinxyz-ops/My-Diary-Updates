@@ -2985,6 +2985,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    if(target==='private-locker'){privateLockerOpen();return;}
    if(target==='world-clock'){worldClockBtn.click();return;}
    if(target==='favourite-notes'&&typeof window.__diaryShowFavouriteNotesFromWidget==='function'){window.__diaryShowFavouriteNotesFromWidget();return;}
+   if(target==='smart-search'){var search=document.getElementById('diaryMyNotesSearch');if(search){search.value='';search.focus();}return;}
+   if(target==='quick-note'||target==='new-note'){var note=document.getElementById('diaryMyNotesText');if(note){note.focus();}return;}
   };
 
   var currentMeFeatureKind=null;
@@ -3105,6 +3107,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var widgetShowPrivateLocker=makeWidgetOption('diaryWidgetShowPrivateLocker','🔐 Private Locker kholen',false);
   var widgetShowFavouriteNotes=makeWidgetOption('diaryWidgetShowFavouriteNotes','⭐ Favourite Notes kholen',false);
   var widgetShowWorldClock=makeWidgetOption('diaryWidgetShowWorldClock','🌍 World Clock kholen',false);
+  var widgetShowSmartSearch=makeWidgetOption('diaryWidgetShowSmartSearch','🔍 Smart Search kholen',false);
+  var widgetShowQuickNote=makeWidgetOption('diaryWidgetShowQuickNote','✍️ Quick Note kholen',false);
   var widgetSizeLabel=el('label',{class:'diary-home-widget-size-label'},'Widget Text Size');
   var widgetSize=el('select',{id:'diaryWidgetSize'});
   [['compact','Chhota'],['standard','Normal'],['large','Bada']].forEach(function(item){widgetSize.appendChild(el('option',{value:item[0]},item[1]));});
@@ -3115,7 +3119,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   widgetSettingsModal.append(widgetSettingsHead,widgetSettingsHint,widgetSettingsOptions,widgetSettingsSave,widgetSettingsPin,widgetSettingsStatus);
   ov.appendChild(widgetSettingsModal);
   function widgetSettingsValue(){
-   return {showDate:!!widgetShowDate.checked,showDiary:!!widgetShowDiary.checked,showCalendar:!!widgetShowCalendar.checked,showReminder:!!widgetShowReminder.checked,showNewNote:!!widgetShowNewNote.checked,showKharcha:!!widgetShowKharcha.checked,showDocuments:!!widgetShowDocuments.checked,showMemories:!!widgetShowMemories.checked,showPrivateLocker:!!widgetShowPrivateLocker.checked,showFavouriteNotes:!!widgetShowFavouriteNotes.checked,showWorldClock:!!widgetShowWorldClock.checked,size:String(widgetSize.value||'standard')};
+   return {showDate:!!widgetShowDate.checked,showDiary:!!widgetShowDiary.checked,showCalendar:!!widgetShowCalendar.checked,showReminder:!!widgetShowReminder.checked,showNewNote:!!widgetShowNewNote.checked,showKharcha:!!widgetShowKharcha.checked,showDocuments:!!widgetShowDocuments.checked,showMemories:!!widgetShowMemories.checked,showPrivateLocker:!!widgetShowPrivateLocker.checked,showFavouriteNotes:!!widgetShowFavouriteNotes.checked,showWorldClock:!!widgetShowWorldClock.checked,showSmartSearch:!!widgetShowSmartSearch.checked,showQuickNote:!!widgetShowQuickNote.checked,size:String(widgetSize.value||'standard')};
   }
   function widgetApplySettings(value){
    value=value||{};
@@ -3130,6 +3134,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    widgetShowPrivateLocker.checked=!!value.showPrivateLocker;
    widgetShowFavouriteNotes.checked=!!value.showFavouriteNotes;
    widgetShowWorldClock.checked=!!value.showWorldClock;
+   widgetShowSmartSearch.checked=!!value.showSmartSearch;
+   widgetShowQuickNote.checked=!!value.showQuickNote;
    widgetSize.value=['compact','standard','large'].indexOf(value.size)>=0?value.size:'standard';
   }
   function widgetSaveSettings(showMessage){
@@ -3137,7 +3143,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     widgetSettingsStatus.textContent='Widget Settings ke liye My Diary ka installed Android app kholein.';return false;
    }
    var value=widgetSettingsValue();
-   if(!value.showDiary&&!value.showCalendar&&!value.showReminder&&!value.showNewNote&&!value.showKharcha&&!value.showDocuments&&!value.showMemories&&!value.showPrivateLocker&&!value.showFavouriteNotes&&!value.showWorldClock){widgetSettingsStatus.textContent='Kam se kam ek shortcut select karein.';return false;}
+   if(!value.showDiary&&!value.showCalendar&&!value.showReminder&&!value.showNewNote&&!value.showKharcha&&!value.showDocuments&&!value.showMemories&&!value.showPrivateLocker&&!value.showFavouriteNotes&&!value.showWorldClock&&!value.showSmartSearch&&!value.showQuickNote){widgetSettingsStatus.textContent='Kam se kam ek shortcut select karein.';return false;}
    try{
     var saved=DiaryAppActions.saveHomeWidgetSettings(JSON.stringify(value));
     widgetSettingsStatus.textContent=saved?'Widget Settings save ho gayi.':'Settings save nahi ho sakin.';
@@ -4484,13 +4490,13 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  }
  function diaryFinishPendingWidgetTarget(){
   var target=window.__diaryPendingWidgetTarget;
-  if(['calendar','reminders','kharcha','documents','memories','private-locker','favourite-notes','world-clock','diary','new-note'].indexOf(target)<0)return;
+  if(['calendar','reminders','kharcha','documents','memories','private-locker','favourite-notes','world-clock','smart-search','quick-note','diary','new-note'].indexOf(target)<0)return;
   window.__diaryPendingWidgetTarget=null;
   if(typeof window.__diaryOpenWidgetTarget==='function')window.__diaryOpenWidgetTarget(target);
  }
  window.__diaryOpenWidgetTargetFromAndroid=function(target){
   try{
-   window.__diaryPendingWidgetTarget=(['calendar','reminders','kharcha','documents','memories','private-locker','favourite-notes','world-clock','diary','new-note'].indexOf(target)>=0)?target:null;
+   window.__diaryPendingWidgetTarget=(['calendar','reminders','kharcha','documents','memories','private-locker','favourite-notes','world-clock','smart-search','quick-note','diary','new-note'].indexOf(target)>=0)?target:null;
    openOverlay();
   }catch(error){try{openOverlay();}catch(ignore){}}
  };
