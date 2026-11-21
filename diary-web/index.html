@@ -2005,7 +2005,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    privateLockerStatus.textContent='Aapki private likhai alag encrypted storage mein rahegi.';
    Promise.all([privateLockerGet('meta','config'),privateLockerAll()]).then(function(result){
     var config=result[0],rows=result[1]||[];
-    if(privateLockerConfigValid(config)){if(config.lockDisabled&&config.unlockedKey){var unlocked=privateLockerUnB64(config.unlockedKey);if(unlocked.length!==32)throw new Error('Lock OFF key format sahi nahi hai. Saved data surakshit hai.');privateLockerShowLockOffGate(unlocked,config);return;}privateLockerGate.appendChild(privateLockerPinForm(config));return;}
+    if(privateLockerConfigValid(config)){if(config.lockDisabled&&config.unlockedKey){var unlocked=privateLockerUnB64(config.unlockedKey);if(unlocked.length!==32)throw new Error('Lock OFF key format sahi nahi hai. Saved data surakshit hai.');return privateLockerFinishUnlock(unlocked).catch(function(e){privateLockerMessage(e.message||'Locker nahi khula.',true);});}privateLockerGate.appendChild(privateLockerPinForm(config));return;}
     if(rows.length){privateLockerMessage('Purani encrypted entries mili hain. Unka data surakshit rakha gaya hai; naya lock setup nahi kiya gaya. Data reset na karein.',true);return;}
     if(config)privateLockerMessage('Locker mein abhi koi entry nahi hai. Naya secure PIN aur recovery setup banayein.',false);
     privateLockerGate.appendChild(privateLockerSetupForm());
@@ -2328,7 +2328,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   }
   function privateLockerCloseNow(){window.__privateLockerFingerprintPending=false;privateLockerExternalAction=null;privateLockerKey=null;privateLockerRawKey=null;privateLockerRecords=[];privateLockerContent.replaceChildren();privateLockerGate.replaceChildren();privateLockerModal.hidden=true;privateLockerMessage('Locker band hai.',false);mePanel.hidden=false;meBtn.setAttribute('aria-expanded','true');panel.classList.add('diary-me-menu-open');}
   privateLockerBack.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();privateLockerCloseNow();});
-  privateLockerPin.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();privateLockerOpen();});
+  privateLockerPin.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();privateLockerGet('meta','config').then(function(config){if(privateLockerConfigValid(config)&&config.lockDisabled&&config.unlockedKey){privateLockerTurnLockOn(config);return;}privateLockerOpen();}).catch(function(err){privateLockerMessage(err.message||'PIN settings nahi khul sakin.',true);});});
   privateLockerButton.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();privateLockerOpen();});
 
   var meFeatureDbPromise=null,meFeatureObjectUrls=[];
