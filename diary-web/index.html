@@ -1540,8 +1540,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   fontSliderBox.appendChild(fontSlider);fontGroup.appendChild(fontLabel);fontGroup.appendChild(fontSliderBox);settingsRow.appendChild(fontGroup);mePanel.appendChild(settingsRow);
   var checkUpdatesBtn=el('button',{id:'diaryCheckUpdatesBtn',type:'button'},t('checkUpdates'));
   mePanel.appendChild(checkUpdatesBtn);
-  var updateVersionStatus=el('div',{id:'diaryUpdateVersionStatus','aria-live':'polite',style:'display:block;width:100%;min-height:16px;margin:2px 0 5px;padding:2px 4px;box-sizing:border-box;color:#655b72;font-size:12px;font-weight:700;line-height:1.35;text-align:center;overflow-wrap:anywhere;'},'');
-  mePanel.appendChild(updateVersionStatus);
+  var updateVersionStatus=el('span',{id:'diaryUpdateVersionStatus','aria-live':'polite',style:'display:block;width:100%;margin:1px 0 0;padding:0 2px;box-sizing:border-box;color:#655b72;font-size:10px;font-weight:700;line-height:1.2;text-align:center;white-space:normal;overflow-wrap:anywhere;'},'');
+  checkUpdatesBtn.appendChild(updateVersionStatus);
   var refreshDiaryBtn=el('button',{id:'diaryDiaryRefreshBtn',type:'button'},t('refresh'));
   mePanel.appendChild(refreshDiaryBtn);
   /* Optional, self-contained World Clock tool. Removing this block and its button leaves all existing Me tools untouched. */
@@ -5304,4 +5304,14 @@ body{background:radial-gradient(ellipse at 50% 12%,#fff 0%,#f5edff 42%,#e8dcf8 1
  }
  #diaryMyNotesPanel.diary-trash-fullscreen #diaryMyNotesBody{display:none!important}
 }
+</style>
+
+<style id="diary-update-version-inline-status-385">
+/* Keep the version detail inside its own Update Check button so it cannot push away the next Me-menu button. */
+#diaryDiaryMePanel #diaryCheckUpdatesBtn{
+ display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+ height:auto!important;min-height:40px!important;max-height:none!important;padding:5px 9px!important;
+ white-space:normal!important;overflow:visible!important;gap:2px!important;line-height:1.2!important;
+}
+#diaryDiaryMePanel #diaryUpdateVersionStatus{flex:0 0 auto!important;max-width:100%!important;}
 </style>
