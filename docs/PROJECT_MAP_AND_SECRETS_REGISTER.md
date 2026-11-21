@@ -1,3 +1,14 @@
+# Favourite Notes widget opens in the normal inline reading view — Web Update 378 (2026-11-21)
+
+- User clarified that tapping the **Favourite Notes Home Screen widget** must open the favourite note exactly like tapping an ordinary note card: expanded inside the notes list, with its saved cover, writing, detail image, and attachment visible. It must not open the New Note/editor screen.
+- Changed only the Favourite Notes widget handler in `web-source/index.html`: it now selects the most recently updated favourite and expands it through the same `expandedNoteId` + `renderList()` path used by ordinary note taps. Removed the widget-only editor route; ordinary card click/keyboard behavior and per-note PIN handling remain unchanged.
+- Safety backup branch: `backup/before-favourite-note-reading-view-2026-11-21`. Fix branch: `fix/favourite-note-inline-reading-view-2026-11-21`. PR [#339](https://github.com/amuazzinxyz-ops/My-Diary-Updates/pull/339) merged as `f00e3bcab3d232545dfb3ae8bfce2b8ea4301033`.
+- Web publisher workflow run [44878233524](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/44878233524) completed successfully. Published **Web Update 378**. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `2a72f3e420a4ecf05e5f96605d9707a93cd9a16e` (596,644 characters). Live `latest.json` web SHA-256 is `982dd8315629b6fcda993b5c44ffbc1b0a7a5a755013aeec0eec1797ca9f519d`.
+- Native app remains **1.0.210 / versionCode 209**; this is a web-only update and no APK is required. Delivery: **My Diary → Me → Check for Updates**.
+- **Phone-side testing is pending.** User must update to Web Update 378 and tap the Favourite Notes widget to confirm the note opens inline with its saved images. Do not mark device PASS until user confirms.
+
+---
+
 # My Diary 1.0.210 signed native release published — phone test pending (2026-11-21)
 
 - **Release PASS:** GitHub Actions run [44876747524](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/44876747524) completed with conclusion `success`. The debug build, signed Release configuration, verified release publication, signed APK upload, translation audit upload, and APK upload all completed successfully.
