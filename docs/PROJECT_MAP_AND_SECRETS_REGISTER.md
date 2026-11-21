@@ -1,3 +1,12 @@
+# My Kharcha dark-black text — Web Update 391 phone test PASS (user-confirmed, 2026-11-22)
+
+- User confirmed the Android phone test with: **“Phone Test Paas”**. Marked the Web Update 391 My Kharcha dark-black text change as **phone-test PASS**.
+- The test confirmation applies to the change that makes all text inside **💰 My Kharcha** dark black. No new code, web bundle, APK, or app data was changed as part of recording this confirmation.
+- Live feed remains **Web Update 391**; native APK remains **My Diary 1.0.212 / versionCode 211**.
+- Register-only safety backup branch: `backup/before-my-kharcha-phone-pass-register-2026-11-22`.
+
+---
+
 # Update Report shows current Web Update and release note — Web Update 390 candidate (phone test pending, 2026-11-22)
 
 - User reported that the copied Update Report still showed Web Update 388 and the Web Update 388 summary even though the manifest had advanced to 389.
