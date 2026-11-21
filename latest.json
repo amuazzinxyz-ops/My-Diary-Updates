@@ -7,8 +7,8 @@
   "sha256": "29c150f432b384bf8a8abda62d4c0894bde102c999d143e19b332811a3ba5e58",
   "releaseNotes": "My Diary 1.0.210: Favourite Notes widget opens the selected favourite note in read-only mode first, with an Edit Note action. Removed Quick Note and New Note shortcuts from the Home Screen Widget. Existing notes, photos, PINs, locks, and other Diary features are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 377,
+  "webVersion": 378,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "d733e52bb202ca48b1e20fd02bf45a630241b4f4847d01a7bf00714ced41c907",
-  "webReleaseNotes": "My Diary Web Update 377: Favourite Notes opens the selected favourite note in read-only mode first, with Edit Note available. Quick Note and New Note shortcuts removed from Widget Settings. Existing notes and saved data are preserved."
+  "webSha256": "982dd8315629b6fcda993b5c44ffbc1b0a7a5a755013aeec0eec1797ca9f519d",
+  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
