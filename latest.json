@@ -7,8 +7,8 @@
   "sha256": "f871f65682a17233a06e8edd2844017a5f45eda1a15f897f9e76576ff8337e55",
   "releaseNotes": "My Diary 1.0.210: Favourite Notes widget opens the selected favourite note in read-only mode first, with an Edit Note action. Removed Quick Note and New Note shortcuts from the Home Screen Widget. Existing notes, photos, PINs, locks, and other Diary features are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 380,
+  "webVersion": 381,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "c5eafc1aebe90eaf2c9e7c8ed05e65c83e63f54d8058edd14308987aa0e63277",
-  "webReleaseNotes": "Web Update 380: Diary Lock PIN box now has a Cancel button. Tap it to return to Diary → Me without changing the PIN or turning off Diary Lock. Existing notes and data are preserved."
+  "webSha256": "aba6e4cad65670f9eb9bbef74a37806c08a213aa2d50b2e5c1289143345f1e33",
+  "webReleaseNotes": "Web Update 381: Note Pin button is replaced with a single ⭐ Favourite button. Long-pressing a note now offers Favourite Karo / Favourite Hataayein. Existing notes and saved data are preserved."
 }
