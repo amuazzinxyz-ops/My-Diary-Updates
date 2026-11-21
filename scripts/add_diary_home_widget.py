@@ -46,6 +46,8 @@ widget_ui = r"""
   var widgetShowPrivateLocker=makeWidgetOption('diaryWidgetShowPrivateLocker','🔐 Private Locker kholen',false);
   var widgetShowFavouriteNotes=makeWidgetOption('diaryWidgetShowFavouriteNotes','⭐ Favourite Notes kholen',false);
   var widgetShowWorldClock=makeWidgetOption('diaryWidgetShowWorldClock','🌍 World Clock kholen',false);
+  var widgetShowSmartSearch=makeWidgetOption('diaryWidgetShowSmartSearch','🔍 Smart Search kholen',false);
+  var widgetShowQuickNote=makeWidgetOption('diaryWidgetShowQuickNote','✍️ Quick Note kholen',false);
   var widgetSizeLabel=el('label',{class:'diary-home-widget-size-label'},'Widget Text Size');
   var widgetSize=el('select',{id:'diaryWidgetSize'});
   [['compact','Chhota'],['standard','Normal'],['large','Bada']].forEach(function(item){widgetSize.appendChild(el('option',{value:item[0]},item[1]));});
@@ -56,7 +58,7 @@ widget_ui = r"""
   widgetSettingsModal.append(widgetSettingsHead,widgetSettingsHint,widgetSettingsOptions,widgetSettingsSave,widgetSettingsPin,widgetSettingsStatus);
   ov.appendChild(widgetSettingsModal);
   function widgetSettingsValue(){
-   return {showDate:!!widgetShowDate.checked,showDiary:!!widgetShowDiary.checked,showCalendar:!!widgetShowCalendar.checked,showReminder:!!widgetShowReminder.checked,showNewNote:!!widgetShowNewNote.checked,showKharcha:!!widgetShowKharcha.checked,showDocuments:!!widgetShowDocuments.checked,showMemories:!!widgetShowMemories.checked,showPrivateLocker:!!widgetShowPrivateLocker.checked,showFavouriteNotes:!!widgetShowFavouriteNotes.checked,showWorldClock:!!widgetShowWorldClock.checked,size:String(widgetSize.value||'standard')};
+   return {showDate:!!widgetShowDate.checked,showDiary:!!widgetShowDiary.checked,showCalendar:!!widgetShowCalendar.checked,showReminder:!!widgetShowReminder.checked,showNewNote:!!widgetShowNewNote.checked,showKharcha:!!widgetShowKharcha.checked,showDocuments:!!widgetShowDocuments.checked,showMemories:!!widgetShowMemories.checked,showPrivateLocker:!!widgetShowPrivateLocker.checked,showFavouriteNotes:!!widgetShowFavouriteNotes.checked,showWorldClock:!!widgetShowWorldClock.checked,showSmartSearch:!!widgetShowSmartSearch.checked,showQuickNote:!!widgetShowQuickNote.checked,size:String(widgetSize.value||'standard')};
   }
   function widgetApplySettings(value){
    value=value||{};
@@ -71,6 +73,8 @@ widget_ui = r"""
    widgetShowPrivateLocker.checked=!!value.showPrivateLocker;
    widgetShowFavouriteNotes.checked=!!value.showFavouriteNotes;
    widgetShowWorldClock.checked=!!value.showWorldClock;
+   widgetShowSmartSearch.checked=!!value.showSmartSearch;
+   widgetShowQuickNote.checked=!!value.showQuickNote;
    widgetSize.value=['compact','standard','large'].indexOf(value.size)>=0?value.size:'standard';
   }
   function widgetSaveSettings(showMessage){
@@ -78,7 +82,7 @@ widget_ui = r"""
     widgetSettingsStatus.textContent='Widget Settings ke liye My Diary ka installed Android app kholein.';return false;
    }
    var value=widgetSettingsValue();
-   if(!value.showDiary&&!value.showCalendar&&!value.showReminder&&!value.showNewNote&&!value.showKharcha&&!value.showDocuments&&!value.showMemories&&!value.showPrivateLocker&&!value.showFavouriteNotes&&!value.showWorldClock){widgetSettingsStatus.textContent='Kam se kam ek shortcut select karein.';return false;}
+   if(!value.showDiary&&!value.showCalendar&&!value.showReminder&&!value.showNewNote&&!value.showKharcha&&!value.showDocuments&&!value.showMemories&&!value.showPrivateLocker&&!value.showFavouriteNotes&&!value.showWorldClock&&!value.showSmartSearch&&!value.showQuickNote){widgetSettingsStatus.textContent='Kam se kam ek shortcut select karein.';return false;}
    try{
     var saved=DiaryAppActions.saveHomeWidgetSettings(JSON.stringify(value));
     widgetSettingsStatus.textContent=saved?'Widget Settings save ho gayi.':'Settings save nahi ho sakin.';
@@ -118,6 +122,8 @@ widget_target = r"""
    if(target==='private-locker'){privateLockerOpen();return;}
    if(target==='world-clock'){worldClockBtn.click();return;}
    if(target==='favourite-notes'&&typeof window.__diaryShowFavouriteNotesFromWidget==='function'){window.__diaryShowFavouriteNotesFromWidget();return;}
+   if(target==='smart-search'){var search=document.getElementById('diaryMyNotesSearch');if(search){search.value='';search.focus();}return;}
+   if(target==='quick-note'||target==='new-note'){var title=document.getElementById('diaryMyNotesTitle');if(title){title.focus();}return;}
   };
 """
 if "window.__diaryOpenWidgetTarget=function(target)" not in html:
@@ -135,7 +141,7 @@ widget_launcher = r"""
   try{
    if(localStorage.getItem(DIARY_MASTER_PIN_KEY)){openOverlay();return;}
    openOverlay();
-   if(['calendar','reminders','kharcha','documents','memories','private-locker','favourite-notes','world-clock'].indexOf(target)>=0){
+   if(['calendar','reminders','kharcha','documents','memories','private-locker','favourite-notes','world-clock','smart-search','quick-note','new-note'].indexOf(target)>=0){
     var tries=0;
     (function waitForDiaryOverlay(){
      if(typeof window.__diaryOpenWidgetTarget==='function'){window.__diaryOpenWidgetTarget(target);return;}
@@ -194,6 +200,8 @@ bridge_methods = r"""
                 .put("showPrivateLocker", prefs.getBoolean("showPrivateLocker", false))
                 .put("showFavouriteNotes", prefs.getBoolean("showFavouriteNotes", false))
                 .put("showWorldClock", prefs.getBoolean("showWorldClock", false))
+                .put("showSmartSearch", prefs.getBoolean("showSmartSearch", false))
+                .put("showQuickNote", prefs.getBoolean("showQuickNote", false))
                 .put("size", prefs.getString("size", "standard"))
                 .toString()
         }
@@ -214,6 +222,8 @@ bridge_methods = r"""
                     .putBoolean("showPrivateLocker", value.optBoolean("showPrivateLocker", false))
                     .putBoolean("showFavouriteNotes", value.optBoolean("showFavouriteNotes", false))
                     .putBoolean("showWorldClock", value.optBoolean("showWorldClock", false))
+                    .putBoolean("showSmartSearch", value.optBoolean("showSmartSearch", false))
+                    .putBoolean("showQuickNote", value.optBoolean("showQuickNote", false))
                     .putString("size", value.optString("size", "standard").takeIf { it in setOf("compact", "standard", "large") } ?: "standard")
                     .apply()
                 runOnUiThread { DiaryHomeWidgetProvider.updateAll(this@MainActivity) }
@@ -338,7 +348,9 @@ class DiaryHomeWidgetProvider : AppWidgetProvider() {
                 Triple(R.id.widgetMemoriesButtonHit, R.id.widgetMemoriesButton, prefs.getBoolean("showMemories", false) to "memories"),
                 Triple(R.id.widgetPrivateLockerButtonHit, R.id.widgetPrivateLockerButton, prefs.getBoolean("showPrivateLocker", false) to "private-locker"),
                 Triple(R.id.widgetFavouriteNotesButtonHit, R.id.widgetFavouriteNotesButton, prefs.getBoolean("showFavouriteNotes", false) to "favourite-notes"),
-                Triple(R.id.widgetWorldClockButtonHit, R.id.widgetWorldClockButton, prefs.getBoolean("showWorldClock", false) to "world-clock")
+                Triple(R.id.widgetWorldClockButtonHit, R.id.widgetWorldClockButton, prefs.getBoolean("showWorldClock", false) to "world-clock"),
+                Triple(R.id.widgetSmartSearchButtonHit, R.id.widgetSmartSearchButton, prefs.getBoolean("showSmartSearch", false) to "smart-search"),
+                Triple(R.id.widgetQuickNoteButtonHit, R.id.widgetQuickNoteButton, prefs.getBoolean("showQuickNote", false) to "quick-note")
             )
             val anyShortcutSelected = shortcuts.any { it.third.first }
 
@@ -432,6 +444,8 @@ widget_button_specs = [
     ("PrivateLocker", "🔐 Private Locker"),
     ("FavouriteNotes", "⭐ Favourite Notes"),
     ("WorldClock", "🌍 World Clock"),
+    ("SmartSearch", "🔍 Smart Search"),
+    ("QuickNote", "✍️ Quick Note"),
 ]
 button_rows = "\n".join(
     f'''    <FrameLayout
@@ -538,7 +552,7 @@ if "getHomeWidgetSettings()" not in KOTLIN_PATH.read_text(encoding="utf-8") or "
 widget_html_check = HTML_PATH.read_text(encoding="utf-8")
 for required in (
     "function diaryFinishPendingWidgetTarget()",
-    "window.__diaryPendingWidgetTarget=(['calendar','reminders','kharcha','documents','memories','private-locker','favourite-notes','world-clock','diary','new-note'].indexOf(target)>=0)?target:null;",
+    "window.__diaryPendingWidgetTarget=(['calendar','reminders','kharcha','documents','memories','private-locker','favourite-notes','world-clock','smart-search','quick-note','diary','new-note'].indexOf(target)>=0)?target:null;",
     "if(typeof window.__diaryOpenWidgetTarget==='function')window.__diaryOpenWidgetTarget(target);",
 ):
     if required not in widget_html_check:
@@ -548,7 +562,7 @@ if widget_html_check.count("diaryFinishPendingWidgetTarget();") != 5:
 if ('android:minHeight="280dp"' not in widget_info or 'android:minResizeWidth="150dp"' not in widget_info
         or 'android:minResizeHeight="260dp"' not in widget_info or 'android:resizeMode="horizontal|vertical"' not in widget_info):
     raise SystemExit("FAIL: two-axis widget resize dimensions are incomplete")
-for target in ('"diary"', '"calendar"', '"reminders"', '"new-note"', '"kharcha"', '"documents"', '"memories"', '"private-locker"', '"favourite-notes"', '"world-clock"'):
+for target in ('"diary"', '"calendar"', '"reminders"', '"new-note"', '"kharcha"', '"documents"', '"memories"', '"private-locker"', '"favourite-notes"', '"world-clock"', '"smart-search"', '"quick-note"'):
     if target not in provider_path.read_text(encoding="utf-8"):
         raise SystemExit("FAIL: missing native widget shortcut target " + target)
 print("PASS: native AppWidgetProvider, manifest receiver, RemoteViews layout, selectable options, and tap destinations verified.")
