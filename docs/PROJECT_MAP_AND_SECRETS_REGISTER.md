@@ -1,3 +1,13 @@
+# Update Check version line moved outside button; restore following Me button visibility — Web Update 385 (phone test pending, 2026-11-21)
+
+- User reported the new version-information text did not appear and a button below **Me → Update Check Karein** had disappeared. Inspection found the status `<span>` had been appended *inside* the Update Check button, instead of as a separate sibling. This altered the button's contents/layout and could visually consume the following control's space.
+- Corrected only the DOM placement: the version status line is now appended directly to the Me panel after the Update Check button and before the existing Refresh button. Added a small margin for clear separation. The Update Check button text/action and the Refresh button/action remain separate and unchanged.
+- Safety backup branch: `backup/before-fix-update-status-button-layout-2026-11-21`.
+- Web Update **385** published; APK remains **1.0.212 / versionCode 211**. Source/mirror equality and live feed/hash must be verified after publication.
+- **Phone test pending.** User must confirm the version line and the button below Update Check are both visible and tappable. Do not mark phone PASS before explicit confirmation.
+
+---
+
 # Show update version numbers in Diary Me — Web Update 384 published (phone test pending, 2026-11-21)
 
 - User requested that **Me → Update Check Karein** visibly show which update number is being offered. Added a small informational line under the existing button: **Latest available: APK [versionName] • Web Update [webVersion]**.
