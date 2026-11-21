@@ -201,6 +201,21 @@ jobs:
           python3 scripts/polish_diary_home_widget.py
           python3 - <<'PY'
           from pathlib import Path
+          html = Path("diary-project/app/src/main/assets/index.html").read_text(encoding="utf-8")
+          kotlin = Path("diary-project/app/src/main/java/com/muazzin/diary/MainActivity.kt").read_text(encoding="utf-8")
+          required_html = ("diary_widget_launch=1(?:&|$)",)
+          required_kotlin = (
+              'url.startsWith("https://appassets.androidplatform.net/assets/index.html")',
+              'pendingWidgetTarget != null) "?diary_widget_launch=1"',
+              "savedInstanceState != null && pendingWidgetTarget == null",
+          )
+          missing = [item for item in required_html if item not in html] + [item for item in required_kotlin if item not in kotlin]
+          if missing:
+              raise SystemExit("BLOCKED: cold widget launch must preserve the requested destination: " + ", ".join(missing))
+          print("PASS: cold widget launch marker prevents Diary startup auto-open from replacing widget destination")
+          PY
+          python3 - <<'PY'
+          from pathlib import Path
           import xml.etree.ElementTree as ET
           info=ET.parse("diary-project/app/src/main/res/xml/diary_home_widget_info.xml").getroot()
           ns="{http://schemas.android.com/apk/res/android}"
@@ -420,7 +435,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved Diary release version 1.0.207 (versionCode 206)
+      - name: Set approved Diary release version 1.0.208 (versionCode 207)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
@@ -428,12 +443,12 @@ jobs:
           from pathlib import Path
           p = Path("app/build.gradle.kts")
           s = p.read_text(encoding="utf-8")
-          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 206', s, count=1)
-          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.207"', s, count=1)
+          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 207', s, count=1)
+          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.208"', s, count=1)
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary release versionName=1.0.207, versionCode=206")
+          print("Set Diary release versionName=1.0.208, versionCode=207")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -455,10 +470,10 @@ jobs:
           name = one(r'versionName\s*=\s*"([^"]+)"', "versionName")
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
-          if code != 206 or name != "1.0.207":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.207/206, found {name}/{code}")
+          if code != 207 or name != "1.0.208":
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.208/207, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if feed_version != (205, "1.0.206"):
+          if feed_version != (206, "1.0.207"):
               raise SystemExit(f"BLOCKED: update feed is neither the installed baseline nor the exact new release: {feed_version}")
           print(f"PASS: package={package}, release={name}/{code}; feed state is approved: {feed_version}")
           PY
@@ -584,7 +599,7 @@ jobs:
           echo "Release APK certificate matches the previously supplied SHA-256 fingerprint."
           rm -f app/diary-release.jks
 
-      - name: Publish verified Diary update 1.0.207 after release verification PASS
+      - name: Publish verified Diary update 1.0.208 after release verification PASS
         if: env.DIARY_RELEASE_READY == 'true'
         shell: bash
         run: |
@@ -593,7 +608,7 @@ jobs:
           test -s "$APK"
           SHA256="$(sha256sum "$APK" | awk '{print $1}')"
           cp "$APK" /tmp/My-Diary-verified.apk
-          printf '1.0.207\n206\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.208\n206\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -f -B diary-publish-main origin/main
           python3 - <<'PY'
@@ -610,17 +625,17 @@ jobs:
           meta["versionCode"] = int(lines[1])
           meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk"
           meta["sha256"] = lines[2]
-          meta["releaseNotes"] = "My Diary 1.0.207: Adds two selectable Home Screen Widget shortcuts: Smart Search opens the existing notes search field, and Quick Note opens the existing blank note editor ready to type. All twelve shortcut routes, prior settings, 3D button feedback, text-size choices, responsive padding, and resize behavior are preserved."
+          meta["releaseNotes"] = "My Diary 1.0.208: Fixes Home Screen Widget destination routing so the requested shortcut stays open on cold launch instead of being reset by Diary auto-open. Existing widget shortcuts, saved notes, photos, PINs, locks, settings, 3D feedback, and resize behavior are preserved."
           meta["webSha256"] = hashlib.sha256(Path("web-source/index.html").read_bytes()).hexdigest()
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           cp /tmp/My-Diary-verified.apk My-Diary.apk
-          cp /tmp/My-Diary-verified.apk My-Diary-1.0.207.apk
+          cp /tmp/My-Diary-verified.apk My-Diary-1.0.208.apk
           python3 -m json.tool latest.json >/dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add My-Diary.apk My-Diary-1.0.207.apk latest.json
-          git commit -m "Publish My Diary update 1.0.207"
+          git commit -m "Publish My Diary update 1.0.208"
           git push origin HEAD:main
       - name: Upload unsigned Release APK for private owner-side signing
         if: env.DIARY_RELEASE_READY != 'true'
