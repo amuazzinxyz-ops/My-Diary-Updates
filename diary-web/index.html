@@ -1751,7 +1751,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     renderWorldClock();
    },1000);
   });
-  worldClockClose.addEventListener('click',function(){worldClockModal.hidden=true;worldClockModal.style.display='none';if(worldClockTimer){clearInterval(worldClockTimer);worldClockTimer=null;}});
+  function keepDiaryMeMenuOpen(){mePanel.hidden=false;meBtn.setAttribute('aria-expanded','true');panel.classList.add('diary-me-menu-open');}
+  worldClockClose.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();worldClockModal.hidden=true;worldClockModal.style.display='none';if(worldClockTimer){clearInterval(worldClockTimer);worldClockTimer=null;}keepDiaryMeMenuOpen();});
   /* Calendar View: show saved notes by the day they were first written. */
   var calendarBtn=el('button',{id:'diaryCalendarBtn',type:'button','aria-expanded':'false','aria-controls':'diaryCalendarPanel'},t('calendar'));
   var calendarPanel=el('section',{id:'diaryCalendarPanel',hidden:'hidden','aria-label':t('calendarLabel')});
@@ -3169,7 +3170,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    widgetSettingsModal.hidden=false;
   }
   widgetSettingsBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();widgetOpenSettings();});
-  widgetSettingsClose.addEventListener('click',function(){widgetSettingsModal.hidden=true;});
+  widgetSettingsClose.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();widgetSettingsModal.hidden=true;keepDiaryMeMenuOpen();});
   widgetSettingsSave.addEventListener('click',function(){widgetSaveSettings(true);});
   widgetSettingsPin.addEventListener('click',function(){
    if(!widgetSaveSettings(false))return;
@@ -3184,11 +3185,11 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 
 
   checkUpdatesBtn.addEventListener('click',function(e){
-   e.preventDefault();e.stopPropagation();
+   e.preventDefault();e.stopPropagation();keepDiaryMeMenuOpen();
    if(window.DiaryAppActions&&typeof DiaryAppActions.checkForUpdates==='function'){
-    DiaryAppActions.checkForUpdates();
+    try{DiaryAppActions.checkForUpdates();}finally{keepDiaryMeMenuOpen();}
    }else{
-    alert(t('updateAppUnavailable'));
+    alert(t('updateAppUnavailable'));keepDiaryMeMenuOpen();
    }
   });
   refreshDiaryBtn.addEventListener('click',function(e){
@@ -3282,7 +3283,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   panel.appendChild(head);panel.appendChild(body);ov.appendChild(panel);document.body.appendChild(ov);setupDiaryStatusPopup(status,ov);
   applyDiaryFont();
   close.addEventListener('click',closeOverlay);
-  ov.addEventListener('click',function(e){if(e.target===ov)closeOverlay();if(!meWrap.contains(e.target)&&!mePanel.hidden){mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');}});
+  ov.addEventListener('click',function(e){if(e.target===ov)closeOverlay();if(!meWrap.contains(e.target)&&!worldClockModal.contains(e.target)&&!widgetSettingsModal.contains(e.target)&&!mePanel.hidden){mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');}});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&ov.classList.contains('open'))closeOverlay()});
   search.addEventListener('input',renderList);
   document.getElementById('diaryMyNotesSave').addEventListener('click',saveNote);
