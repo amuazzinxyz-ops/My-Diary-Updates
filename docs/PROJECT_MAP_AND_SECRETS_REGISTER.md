@@ -1,9 +1,11 @@
-# Short copied Update Report — Web Update pending publication (2026-11-21)
+# Short copied Update Report — Web Update 388 published (phone test pending, 2026-11-21)
 
-- User clarified that the **📋 Copy** result must also be short, not the full technical report. Changed the single report text source so both the visible Me-menu report and Copy contain only: My Diary version, Web Update number, latest update summary, and phone-test status. Removed package name, APK/web release notes, and SHA-256 hashes from the report and clipboard output.
-- Safety backup branch: `backup/before-short-copy-update-report-2026-11-21`, based on main commit `404d3d123797f103c0c521a2c74a7df60c1d706e`.
-- PR [#345](https://github.com/amuazzinxyz-ops/My-Diary-Updates/pull/345) merged successfully as `607d79e4ae7111e3c56257912b67490d39bdd2fa`. Source and mirror were verified byte-identical before merge. APK/native code, update feed, saved data, notes, photos, PINs, locks, and widgets were not changed.
-- Web publisher workflow and live `latest.json` verification are pending. Do not tell the user to test until publication and source/mirror/feed verification succeed. Physical-phone testing remains pending user confirmation.
+- User clarified that the **📋 Copy** result must also be short, not the full technical report. Changed the single report text source so both the visible Me-menu report and Copy contain only four items: My Diary version, Web Update number, latest update summary, and phone-test status. Removed package name, APK/web release notes, and SHA-256 hashes from the report and clipboard output.
+- Safety backup branch: `backup/before-short-copy-update-report-2026-11-21`, based on pre-edit main commit `404d3d123797f103c0c521a2c74a7df60c1d706e`.
+- PR [#345](https://github.com/amuazzinxyz-ops/My-Diary-Updates/pull/345) merged successfully as `607d79e4ae7111e3c56257912b67490d39bdd2fa`. Web publisher run [44929727871](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/44929727871) completed **successfully**. Published **Web Update 388**.
+- Re-fetched and verified `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `d1a8ad5390896e17caf9786b13767726f4b0b0d0`. Live `latest.json` confirms Web Update 388 and web SHA-256 `9782dd3f878cc381ab7ea0cd2544247b4315a895bd41a3a7602f01b90872c7b5`. Static checks confirm both visible report and Copy use the same four-line short text; long release notes and hashes are excluded.
+- APK/native code remains **My Diary 1.0.212 / versionCode 211**; no APK/native source or saved Diary data was changed. Notes, photos, PINs, locks, and widgets remain untouched.
+- **Phone test pending**: user must check Me → Check for Updates, then tap 📋 Copy and confirm only the four short details are copied. Do not mark PASS until the user confirms.
 
 ---
 
