@@ -3573,6 +3573,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    if(String(input.value||'').length!==4)return;
    var saved=localStorage.getItem(DIARY_MASTER_PIN_KEY)||'';
    if(String(input.value)===saved&&saved){
+    if(!window.confirm(t('diaryLockOffConfirm')))return;
     try{localStorage.removeItem(DIARY_MASTER_PIN_KEY);localStorage.removeItem(DIARY_MASTER_PATTERN_KEY);localStorage.removeItem(DIARY_RECOVERY_NAME_SALT_KEY);localStorage.removeItem(DIARY_RECOVERY_NAME_HASH_KEY);localStorage.removeItem('diaryDiaryMustChooseNewPinAfterRecovery');try{sessionStorage.removeItem('diaryDiaryMustChooseNewPinAfterRecovery');}catch(recoveryFlagError){}if(shade.parentNode)shade.parentNode.removeChild(shade);var st=document.getElementById('diaryMyNotesStatus');if(st)st.textContent=t('diaryLockRemoved');}
     catch(e){pinStatus.textContent=t('storageUnavailable');}
    }else{pinStatus.textContent=t('diaryPinWrong');input.value='';input.focus();}
