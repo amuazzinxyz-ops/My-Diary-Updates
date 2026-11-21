@@ -4,7 +4,7 @@
   "versionCode": 209,
   "versionName": "1.0.210",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
-  "sha256": "29c150f432b384bf8a8abda62d4c0894bde102c999d143e19b332811a3ba5e58",
+  "sha256": "f871f65682a17233a06e8edd2844017a5f45eda1a15f897f9e76576ff8337e55",
   "releaseNotes": "My Diary 1.0.210: Favourite Notes widget opens the selected favourite note in read-only mode first, with an Edit Note action. Removed Quick Note and New Note shortcuts from the Home Screen Widget. Existing notes, photos, PINs, locks, and other Diary features are preserved.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 379,
