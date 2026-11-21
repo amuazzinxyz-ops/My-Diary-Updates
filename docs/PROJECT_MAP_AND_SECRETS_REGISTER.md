@@ -1,3 +1,12 @@
+# My Diary Home Screen Widget — Chhota / Normal / Bada phone test PASS (2026-11-21)
+
+- User confirmed on 2026-11-21: **“Chack Kiya Alhamdulillah Ho Gaya Paas”**. Physical Android phone verification of the published APK **1.0.206 / versionCode 205** is now **PASS (user-confirmed)** for the Chhota, Normal, and Bada widget text-size choices.
+- This closes the phone-testing item left pending in the 1.0.206 release entry below. No further source-code change, APK rebuild, or data operation was performed for this confirmation.
+- Live release remains APK **1.0.206 / versionCode 205**, SHA-256 `d765109636fff62421feec03c189587ee93097b390e0eccecd7bead8eb8a1da5`; delivery remains **My Diary → Me → Check for Updates**.
+- Register pre-edit backup branch: `backup/before-widget-text-size-phone-pass-2026-11-21`.
+
+---
+
 # My Diary Home Screen Widget — make Chhota / Normal / Bada visibly distinct (native release in progress, 2026-11-21)
 
 - User reported that changing Widget Text Size between **Chhota** and **Bada** showed almost no visible difference.
