@@ -1,3 +1,12 @@
+# Web Update 382 phone test PASS — user-confirmed (2026-11-21)
+
+- User confirmed that both **🌍 World Clock Close** and **🏠 Home Screen Widget Settings Close** now close only their own window and leave the Diary **Me** menu open. Both tests are **PASS**.
+- The remaining Web Update 382 check, **Update Check Karein** keeping Me open, is not confirmed in this test message and remains pending.
+- No code or live update feed was changed for this test confirmation. Live `latest.json` remains Web Update 382 and native APK 1.0.211 / versionCode 210.
+- Register pre-edit content preserved in branch `backup/before-web382-phone-pass-register-2026-11-21`.
+
+---
+
 # Me menu remains open after closing tools / checking updates — Web Update 382 (phone test pending, 2026-11-21)
 
 - User reported that closing **🌍 World Clock** and **🏠 Home Screen Widget Settings** also closed the Diary **Me** menu, and tapping **Update Check Karein** likewise closed Me. User clarified that the first two already have their own Close controls; those controls must close only their own window. Update Check has no Close control and must leave Me open.
