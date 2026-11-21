@@ -85,7 +85,7 @@ jobs:
               meta["webVersion"] = version
               meta["webUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html"
               meta["webSha256"] = actual_sha
-              meta["webReleaseNotes"] = "My Diary web bundle update. Existing saved data and app identity are preserved."
+              meta["webReleaseNotes"] = meta.get("webReleaseNotes") or "My Diary web bundle update. Existing saved data and app identity are preserved."
               meta_path.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
               print("Prepared web-only update", version, "SHA-256", actual_sha)
           PY

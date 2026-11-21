@@ -10,5 +10,5 @@
   "webVersion": 380,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "74f1f8e2fe9b7c0eeaa4c5919a9c8bfb591b9a33a5c9d0eb38b3a11781e34f63",
-  "webReleaseNotes": "Web Update 380: Diary Lock Off now asks for confirmation after the correct 4-digit PIN. Choose Cancel / Abhi nahi to keep Diary Lock enabled; wrong-PIN feedback and all existing PIN, recovery, notes, photos, and other features remain unchanged."
+  "webReleaseNotes": "Web Update 381: Check for Updates now displays the live Web Update number, Android app version, and release notes before checking. Diary Lock Band Karein now shows an in-app confirmation with Abhi Nahi and OK; Abhi Nahi keeps the lock enabled. Wrong-PIN feedback and all saved notes, photos, PINs, recovery data, and other features are preserved."
 }
