@@ -1,3 +1,16 @@
+# Private Locker centered title and Wapas button — Web Update 392 published (phone test pending, 2026-11-22)
+
+- User requested the Private Locker heading be centered and a **Wapas** button be added to its left, matching the My Memories header layout; the existing close ✕ remains on the right.
+- Inspected both My Memories and Private Locker before editing. Added a left-side Wapas button that calls the existing Private Locker close routine, returning to the Me menu. Centered the 🔐 Private Locker title. Kept ✕ at the right.
+- No Private Locker PIN, recovery, encryption, saved records, data, or security logic was changed.
+- Pre-edit safety backup branch: `backup/before-private-locker-centered-header-2026-11-22`. Working branch: `fix/private-locker-centered-header-2026-11-22`. PR #350 merged successfully as `685e18b9c5f3f3f502b0f30705d49ada9e2cc9f4`.
+- Published **Web Update 392**. `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `69dd2a701f1be3a5ad9f1c9349ef4b4e164e5988`. Live `latest.json` advertises web SHA-256 `e94e0df9d079f4a5e9d8aafa721359deee25019dde4a9f6f9e279e1b7feb7b93` and the Private Locker release note.
+- Web publisher workflow #501 (run `44943408623`) completed successfully. APK workflow #460 (run `44943408630`) also completed successfully; live feed remains **My Diary 1.0.212 / versionCode 211** with its existing APK checksum. No APK version increment was made.
+- Register-only safety backup branch: `backup/before-private-locker-web392-register-2026-11-22`.
+- **Phone test pending**: user must confirm the centered heading, left Wapas button, return to Me menu, and existing ✕ work correctly. Do not mark PASS until user confirms.
+
+---
+
 # My Kharcha dark-black text — Web Update 391 phone test PASS (user-confirmed, 2026-11-22)
 
 - User confirmed the Android phone test with: **“Phone Test Paas”**. Marked the Web Update 391 My Kharcha dark-black text change as **phone-test PASS**.
