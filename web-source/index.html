@@ -3238,15 +3238,27 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    }else{body=report.querySelector('#diaryUpdateReportText');status=report.querySelector('#diaryUpdateReportStatus');}
    hideMeOptions();report.style.display='flex';body.textContent=reportText;status.textContent='';
    meHost.scrollTop=0;keepDiaryMeMenuOpen();
-   fetch('https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/latest.json?report='+Date.now(),{cache:'no-store'}).then(function(response){if(!response.ok)throw new Error('HTTP '+response.status);return response.json();}).then(function(meta){
+   var reportCacheKey='report='+Date.now()+'-'+Math.random().toString(36).slice(2);
+   var apiUrl='https://api.github.com/repos/amuazzinxyz-ops/My-Diary-Updates/contents/latest.json?ref=main&'+reportCacheKey;
+   var rawUrl='https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/latest.json?'+reportCacheKey;
+   function readReportManifest(url,headers){
+    return fetch(url,{cache:'no-store',headers:headers||{}}).then(function(response){
+     if(!response.ok)throw new Error('HTTP '+response.status);
+     return response.json();
+    });
+   }
+   readReportManifest(apiUrl,{Accept:'application/vnd.github.raw+json'}).catch(function(){
+    return readReportManifest(rawUrl);
+   }).then(function(meta){
+    if(!meta||meta.webVersion==null)throw new Error('Latest web version missing');
     reportText=[
      'My Diary Version: '+(meta.versionName||'Not listed'),
-     'Web Update: '+(meta.webVersion==null?'Not listed':meta.webVersion),
-     'Latest Update: Update Report ko short kiya gaya.',
+     'Web Update: '+meta.webVersion,
+     'Latest Update: '+(meta.webReleaseNotes||'Latest update available.'),
      'Status: Phone test pending'
-    ].join('\n');
+    ].join('\\n');
     body.textContent=reportText;
-   }).catch(function(){reportText='MY DIARY — UPDATE REPORT\nUpdate details abhi load nahi ho sakin. Internet connection check karke dobara Check for Update dabayein.';body.textContent=reportText;});
+   }).catch(function(){reportText='MY DIARY — UPDATE REPORT\\nUpdate details abhi load nahi ho sakin. Internet connection check karke dobara Check for Update dabayein.';body.textContent=reportText;});
   }
 
   checkUpdatesBtn.addEventListener('click',function(e){
