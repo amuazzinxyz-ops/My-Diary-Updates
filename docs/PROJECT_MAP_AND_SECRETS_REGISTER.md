@@ -1,3 +1,15 @@
+# Favourite Notes widget — show selected note at top (merged, web publication pending — 2026-11-21)
+
+- User approved the focused change: after tapping the **⭐ Favourite Notes Home Screen Widget**, the Diary should open with the selected favourite note already visible at the top of the Diary content area; the user should not need to scroll down to find it.
+- Implemented only in the Favourite Notes widget launch handler. After the existing inline reading card is expanded, the Diary's own scrollable content area is adjusted to align that expanded card at the top. Ordinary note taps, editor/read-only behavior, PIN checks, note data, photos, attachments, and all other widget routes remain unchanged.
+- Safety backup branch: `backup/before-favourite-widget-top-visible-2026-11-21`. PR [#340](https://github.com/amuazzinxyz-ops/My-Diary-Updates/pull/340) merged successfully as `d9ea4602a7d600ba4c76286bc0f0ae4b393f20de`.
+- Main-branch `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `6364bb3036d8019e68d6229eea880759a884ba0b` (596,988 characters). The only feature addition is the widget-only scroll-to-expanded-note positioning block.
+- **Publication is not yet verified.** Live `latest.json` still reports Web Update **378**, SHA-256 `982dd8315629b6fcda993b5c44ffbc1b0a7a5a755013aeec0eec1797ca9f519d`. Native app remains **1.0.210 / versionCode 209**. No APK was built or changed. Do not tell the user to expect this change from Check for Updates until the publisher updates `latest.json`.
+- **Phone test pending.** After Web Update 379 is published, user must use **My Diary → Me → Check for Updates**, tap Favourite Notes widget, and confirm the correct expanded favourite is immediately visible at the top without scrolling. Do not mark PASS until user confirms.
+- Register pre-edit backup branch: `backup/before-favourite-widget-top-register-2026-11-21`.
+
+---
+
 # Favourite Notes widget inline reading view — phone test PASS (2026-11-21)
 
 - User confirmed on 2026-11-21: **“Test paas.”** Physical Android phone test of Web Update **378** is now **PASS (user-confirmed)**. This closes the pending device test recorded below.
