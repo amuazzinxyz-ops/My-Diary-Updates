@@ -7,8 +7,8 @@
   "sha256": "aa4ffb5f440e6d93f6eccc8901cc6de8d4af444f60ba9d28f6dc08c9076175c2",
   "releaseNotes": "My Diary 1.0.212: Update Check refresh now restores the Diary Me menu after the verified web bundle reload. Existing APK download/install and web update verification flows are unchanged. Includes Web Update 383. Existing notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 384,
+  "webVersion": 385,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "ec7d27944d463b35482354891cdf133219440d17b36b652fc5dcdd1be1f329d5",
-  "webReleaseNotes": "Web Update 384: Added a separate, copyable Update Report popup that opens when Check for Update is tapped. It shows the latest APK version and version code, Web Update number, complete APK and web release notes, and both SHA-256 hashes. Copy copies the full report; × closes only the popup. The existing native update check, download, verification, installation, and saved-data flows are unchanged."
+  "webSha256": "5ba1aa05a3db26ae17e591f596d6a6fe65467e37d7d60430d63cad6e58520ee1",
+  "webReleaseNotes": "Web Update 385: Moved the copyable Update Report popup into the exact Me-button dropdown area. It now opens inside the Me menu instead of appearing as a separate centered screen overlay. Copy, × close, and the existing native updater/download/install flow remain unchanged."
 }
