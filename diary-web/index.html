@@ -1573,6 +1573,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var worldClockOptions=worldClockZones.map(function(zone){var parts=zone.split('/');var city=parts[parts.length-1].replace(/_/g,' ');return {name:city+' · '+zone,zone:zone};});
   var worldClockTimer=null;
   var worldClockModal=el('section',{id:'diaryWorldClockModal',hidden:'hidden','aria-modal':'true','role':'dialog','aria-label':'World Clock'});
+  var worldClockDarkTextStyle=el('style',{},'#diaryWorldClockModal, #diaryWorldClockModal * { color:#000000 !important; }\n#diaryWorldClockModal input::placeholder { color:#000000 !important; opacity:1 !important; }\n#diaryWorldClockModal input { caret-color:#000000 !important; }');
+  worldClockModal.appendChild(worldClockDarkTextStyle);
   worldClockModal.style.cssText='position:fixed;inset:0;z-index:2147483647;display:none;align-items:center;justify-content:center;box-sizing:border-box;padding:calc(14px + env(safe-area-inset-top,0px)) 12px calc(14px + env(safe-area-inset-bottom,0px));background:rgba(20,12,32,.62);overflow:auto;';
   var worldClockCard=el('div',{id:'diaryWorldClockCard'});
   worldClockCard.style.cssText='width:min(100%,460px);max-height:100%;overflow:auto;box-sizing:border-box;padding:15px;border:3px solid #d4af37;border-radius:18px;background:linear-gradient(145deg,#fffdf7,#f1e8ff);color:#35145f;box-shadow:inset 0 2px 0 #fff,0 4px 0 #7540b8,0 10px 24px #0005;';
