@@ -1,3 +1,16 @@
+# Diary note-name purple 3D border — Web Update 402 LIVE; phone test pending (2026-11-22)
+
+- User reported that the purple border still did not appear after Web Update 401. Root cause confirmed in the actual source: the title input has later global Diary CSS rules with `!important` declarations that overrode the purple class-based border/shadow.
+- Corrected only the title input styling in both saved-note pathways: when an existing saved note is opened and immediately after a save succeeds, JavaScript now applies the purple 3D border, rounded corners, light-purple background, and raised shadow directly as inline `!important` styles. Starting a new unsaved note removes only these four inline style properties. The note body/text box is unchanged.
+- The earlier attempt's claim that the save handler already applied the class was incorrect; inspection of the live source showed it did not. The new implementation explicitly applies styling after a successful `write(all)` and on every `openNote`.
+- Safety backup branch: `backup/before-title-inline-style-fix-2026-11-22`. Code PR **#376** merged as `1bcd6aaf46ff6daaf6fded53b9b5981fe0ee7db2`.
+- Web publish workflow run **45013614126** completed **success**. Source and published mirror are byte-identical at Git blob SHA `d929b6d096611f2a423441c20b827aba2ef837af` (610,467 characters). Live `latest.json` advertises **Web Update 402** with SHA-256 `7494c67e3c5366a1f669a1098bc46ea35b070fb90a417d614d9baa2eb691f7cc`; release notes describe the corrected behavior.
+- APK remains **My Diary 1.0.214 / versionCode 213**. This is a web-only change; no APK/native code, note schema, stored notes, photos, PINs, locks, or user data were changed.
+- **Phone test pending**: user must receive Web Update 402, open an older saved note and confirm the name box shows the purple raised 3D border, then create/save a new note and confirm the border appears after saving. The body/text box must remain unchanged. Do not mark PASS until the user confirms.
+- MUAZZIN project was not touched.
+
+---
+
 # Diary note-name purple 3D border after save — Web Update 401 LIVE; phone test pending (2026-11-22)
 
 - User clarified that the purple raised 3D border must appear on the note-name/title box for **both previously saved notes and newly created notes immediately after a successful save**. The note text/body box must remain unchanged.
