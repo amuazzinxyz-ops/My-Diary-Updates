@@ -505,10 +505,19 @@ native = r"""
             }
         }
         @JavascriptInterface fun shareApp() {
+            val downloadUrl = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk"
+            val shareMessage =
+                "📒 *MY DIARY*\n" +
+                "A simple space for your thoughts and notes.\n\n" +
+                "✍️ Write your thoughts\n" +
+                "🔎 Find saved notes quickly\n" +
+                "📚 Keep your notes together\n\n" +
+                "⬇️ *DOWNLOAD MY DIARY*\n" +
+                downloadUrl
             val share = Intent(Intent.ACTION_SEND).apply {
                 type = "text/plain"
-                putExtra(Intent.EXTRA_SUBJECT, "My Diary")
-                putExtra(Intent.EXTRA_TEXT, "📒 My Diary app\nDownload: https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk")
+                putExtra(Intent.EXTRA_SUBJECT, "My Diary — Personal Notes")
+                putExtra(Intent.EXTRA_TEXT, shareMessage)
             }
             startActivity(Intent.createChooser(share, "Share My Diary"))
         }
