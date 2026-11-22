@@ -1,3 +1,14 @@
+# Home Screen Widget Settings heading and Smart Search option — code merged; web publish pending (2026-11-23)
+
+- User requested the modal heading **🏠 Home Screen Widget Settings** stay on one line and the **🔍 Smart Search kholen** option be removed from inside the settings.
+- Changed only `web-source/index.html`: the modal title now uses a compact 13px bold, no-wrap flex layout with the close button retained; removed the Smart Search checkbox and its UI binding. The settings data continues to send `showSmartSearch: false` for compatibility. Other widget shortcuts, size selector, save/add buttons, notes, photos, PINs, locks, and saved data were not intentionally changed.
+- Safety backup branch: `backup/before-widget-settings-title-smartsearch-2026-11-23`. Code PR **#441** merged as `69c5d441ee8f6007cf5130ed26063f3d3a0661cc`; source branch commit `181b45ef2adf977f19ec60514aa3c3c9fd0d743b`.
+- Source file verification confirms the Smart Search option label/control is absent, `showSmartSearch:false` remains in the settings payload, and the heading has `white-space:nowrap`. At register update time the published mirror and `latest.json` had not yet been synchronized; do not treat this as a live web release until the publisher completes and source/mirror/checksum are verified.
+- **Phone test pending.** Do not mark PASS until the user tests the update on their Android phone and confirms.
+- APK/native source was not changed. MUAZZIN project was not touched.
+
+---
+
 # Theme Mode button removed — Web Update 421 phone test PASS (user-confirmed, 2026-11-23)
 
 - User requested removal of the newly added **🎨 Theme Mode** button inside **Me**. Removed the button, Light/Dark/Default chooser, modal handlers, and all three Theme Mode CSS blocks. The original Diary appearance is restored; the old `diaryThemeMode` preference and `data-diary-theme` attribute are cleared when the Diary overlay is created.
