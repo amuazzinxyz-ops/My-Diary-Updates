@@ -7,8 +7,8 @@
   "sha256": "f1133cae462f67aa2dc556b014c7bcd6fcc924bd3a017e2829075919231b5ed7",
   "releaseNotes": "My Diary 1.0.212: Update Check refresh now restores the Diary Me menu after the verified web bundle reload. Existing APK download/install and web update verification flows are unchanged. Includes Web Update 383. Existing notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 396,
+  "webVersion": 397,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "e0a5e8ff51033b4a617dbea3c4b2a314118769d00f975a3dc9c1f7351b351d74",
-  "webReleaseNotes": "Private Locker now opens its entries directly when Lock is OFF, like My Memories. The header PIN button starts Lock On setup; existing PIN verification and encryption protection remain unchanged."
+  "webReleaseNotes": "Private Locker header PIN label shifted slightly left and button widened so the full label fits. Existing PIN action, lock/security behavior, recovery, encryption, and saved entries are unchanged."
 }
