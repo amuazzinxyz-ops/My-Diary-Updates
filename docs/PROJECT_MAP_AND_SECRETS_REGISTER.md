@@ -1,3 +1,14 @@
+# Diary note-name box purple 3D styling — Web Update 399 LIVE; phone test pending (2026-11-22)
+
+- User reported the earlier purple title-box styling was **not visible on phone**. Investigation found PR #367 had merged the CSS, but `latest.json` still advertised Web Update **398**, so the app would not fetch the changed HTML.
+- Corrected the delivery version only: PR **#369** merged as `24afc963793d9f0dc18dd771cd23b88e233f0329`; backup branch `backup/before-note-title-purple-update-2026-11-22`. `latest.json` now advertises **Web Update 399** with release notes specifically describing the purple 3D border on the opened note-name/title box.
+- Web publish workflow run **45011981925** completed **success**. Live `latest.json` re-read and verified: webVersion **399**, webSha256 `353a4c855d89f4506f84c1a77fab1d046c61d7f66eaf1d3110a07978336b774e`. APK remains **My Diary 1.0.214 / versionCode 213**; no APK rebuild or native APK change was needed.
+- Existing `web-source/index.html` and `diary-web/index.html` remain identical at blob SHA `a6d2127913db412810ecf195424f3bc6e8d03b9d`. The styling targets only `#diaryMyNotesEditor.diary-read-mode #diaryMyNotesTitle`; note body, saved notes, photos, PINs, locks, and storage logic are untouched.
+- **Phone test pending**: user must receive Web Update 399 via **Me → Check for Updates**, then open a saved note and confirm only the name/title box shows the purple raised 3D border while the text box remains unchanged. Do not mark PASS until the user confirms.
+- MUAZZIN project was not touched.
+
+---
+
 # Register sync — PR #367 and current live feed verified (2026-11-22; documentation-only)
 
 - Audited the current `main` branch after PR **#367**. The merged change is limited to the opened saved-note title/name box: purple raised 3D border, rounded corners, light-purple gradient and shadow in read mode. It does not change the note body, PIN, photos, locks, saved records, or storage logic.
