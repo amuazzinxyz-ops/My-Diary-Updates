@@ -1,3 +1,15 @@
+# Diary PIN recovery × removed from Favourite Name verification — Web Update 413 feed correction (2026-11-22)
+
+- User clarified that the × close control must be removed, not shown, on the recovery screen that appears immediately after the temporary Recovery PIN is accepted (Favourite Name verification step).
+- Code PR **#412** merged as `df89f6bad734b9a1845ca5915ced226eef12336d`. Both `web-source/index.html` and `diary-web/index.html` were re-fetched from main and verified byte-identical (Git blob SHA `6b5236d1ee44f28a19e674fb63716be674d8b774`, 615,124 characters); the recovery × control and its handlers are absent.
+- Safety backup branch: `backup/before-remove-recovery-x-2026-11-22`. A separate feed-correction backup branch is `backup/before-web413-recovery-x-feed-2026-11-22`.
+- Publisher workflow run **45027238309** (run #547) completed success, but its script treated the already-matching source/mirror as a checksum-repair case and retained Web Update 412. This left the phone update checker without a new version and retained stale release notes. The actual feed correction is therefore **Web Update 413**, with the verified published HTML SHA-256 `190e8eab1e3807a5c2739d71b5f246613da8f0f705db5ebdb34d30d4a0a61c49`.
+- APK remains **My Diary 1.0.214 / versionCode 213**; APK URL and checksum are retained unchanged. No APK rebuild or APK feature change is intended.
+- **Phone test pending**: use **Me → Check for Updates**, confirm Web Update 413 is offered and installs, then open Diary PIN Lock → **❓ PIN Bhool Gaye?** → enter the temporary Recovery PIN. Confirm the Favourite Name verification screen has no ×. Do not mark phone PASS until user confirms.
+- MUAZZIN project was not touched.
+
+---
+
 # Diary PIN recovery × button moved to post-Recovery-PIN screen — Web Update 412 LIVE; phone test pending (2026-11-22)
 
 - User clarified the required location: remove × from the new-PIN and confirm-PIN screens; show it on the next recovery screen that opens immediately after the temporary Recovery PIN is entered successfully (Favourite Name verification step).
