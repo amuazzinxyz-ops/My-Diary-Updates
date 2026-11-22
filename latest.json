@@ -7,8 +7,8 @@
   "sha256": "006d075cca6ad5743d3cb313672b4c81b51d3ffbfc71d8d7a39554e0e6867769",
   "releaseNotes": "My Diary 1.0.214: App Share now attaches the original My Diary logo image with the formatted invitation and existing direct APK download link. Existing share chooser, app identity, notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 398,
+  "webVersion": 399,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "353a4c855d89f4506f84c1a77fab1d046c61d7f66eaf1d3110a07978336b774e",
-  "webReleaseNotes": "Pull down from the top of the opened Diary notes panel and release to refresh the saved notes list. Refresh preserves the open draft and does not reload the page or change notes, photos, PINs, locks, or saved data."
+  "webReleaseNotes": "Web Update 399: When opening a saved Diary note, the note-name/title box has a purple raised 3D border and light-purple background. The note text box and all saved notes, photos, PINs, locks, and other data remain unchanged."
 }
