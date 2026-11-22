@@ -1,3 +1,16 @@
+# Diary saved-note title purple 3D styling — Web Update 400 LIVE; phone test pending (2026-11-22)
+
+- User reported that **“Diary pehle se update hai”** appeared after checking for updates and the purple border was still not visible. Root cause: the earlier CSS targeted only `#diaryMyNotesEditor.diary-read-mode`, while normal saved-note opening uses editable mode. The styling therefore did not apply to the normal opened-note view.
+- Fixed the state handling in both `web-source/index.html` and `diary-web/index.html`: opening an existing saved note adds `diary-saved-note-opened` to the editor; starting a new note removes it. The purple 3D border now targets the saved-note title box in both editable and read-only opened-note modes. New-note title box and note body remain unchanged.
+- Source/mirror copies were verified byte-identical (609,331 characters before publish workflow). PR **#370** merged as `1b1810e2e8ae22f288a18de9e04a8f91c3c0bfba`; backup branch: `backup/before-purple-title-selector-fix-2026-11-22`.
+- Important delivery correction: the web publisher did not increment the version because both HTML mirrors had already been changed together. Bumped `latest.json` webVersion from **399** to **400** so installed apps fetch the changed HTML. PR **#371** merged as `f26558a885f0e83ab78d9a1f4ab69ee193cabb31`; backup branch: `backup/before-purple-title-web400-2026-11-22`.
+- Live `latest.json` re-read and verified: webVersion **400**, web SHA-256 `2ef47e57c4c9d6279b69640f4cf8de416da83bca04a0125321714b33c8ca67ab`, and release notes explicitly describe the purple title border for every opened saved note. Web publish workflow run **45012559281** completed **success**.
+- APK identity remains **My Diary 1.0.214 / versionCode 213**; no APK/native code was intentionally changed. The APK build workflow triggered by the HTML-source push was still in progress at the time of this register entry and is not required for this web-only fix.
+- **Phone test pending**: user must run **Me → Check for Updates**, receive Web Update **400**, open an existing saved note, and confirm only its name/title box has the purple raised 3D border while the note text box remains unchanged. Do not mark PASS until user confirms.
+- MUAZZIN project was not touched.
+
+---
+
 # Diary note-name box purple 3D styling — Web Update 399 LIVE; phone test pending (2026-11-22)
 
 - User reported the earlier purple title-box styling was **not visible on phone**. Investigation found PR #367 had merged the CSS, but `latest.json` still advertised Web Update **398**, so the app would not fetch the changed HTML.
