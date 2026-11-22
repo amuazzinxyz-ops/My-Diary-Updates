@@ -1,3 +1,16 @@
+# My Notes live 12-hour digital clock — Web Update 416 published; phone test pending (2026-11-22)
+
+- User approved replacing the decorative `WRITE • SAVE • REMEMBER` line directly beneath the top My Notes heading with a live **12-hour clock (AM/PM)** and date. The clock uses `Asia/Kolkata` (IST) and refreshes every second.
+- Code PR **#422** merged as `426b962bc2c6a9653ac1ff22afe444f463af55a8`. Only the tagline pseudo-element and the My Notes header construction were changed to insert the clock/date. Note content, save/search, photos, PINs, locks, and other Diary features were not intentionally changed.
+- Safety backup branch: `backup/before-my-notes-digital-clock-2026-11-22`.
+- Verified on main: `web-source/index.html` and `diary-web/index.html` are byte-identical (Git blob SHA `74c5a204ee768eead2850d6ed95a13663fa3c05b`, 616,384 characters). The 12-hour IST clock code is present and the old tagline is absent.
+- Web publisher workflow run **45053631261** completed **success** and verified the HTML bundle. Its automatic feed update changed the HTML checksum but left the version at 415, so feed-only PR **#423** was merged as `44582fa41f60d2d7f7f1102c978fe5ca9e46e6a8` to advance it correctly to **Web Update 416**.
+- Live `latest.json` confirms webVersion **416**, HTML SHA-256 `1ef109685868c650023f0dd327b9257ecdbc929be5344221d3768031e93a9aff`, and release notes for the live clock/date. APK metadata remains **My Diary 1.0.214 / versionCode 213** with its existing checksum; the automatic APK workflow run **45053631311** was still in progress when this register entry was prepared.
+- **Phone test pending**: user should use **Me → Check for Updates**, install Web Update 416, and confirm the clock appears directly under the My Notes heading, displays AM/PM and the date, and updates each second. If the design is not liked, user may ask to restore the previous tagline. Do not mark phone PASS until user confirms.
+- MUAZZIN project was not touched.
+
+---
+
 # Diary copied Recovery PIN entry × removed — Web Update 415 (2026-11-22)
 
 - User's latest instruction: **“Hata Do ×”**. The × added to the PIN-entry box after copying the temporary Recovery PIN has now been removed.
