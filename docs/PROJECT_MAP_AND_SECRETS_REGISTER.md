@@ -1,3 +1,13 @@
+# Private Locker PIN button width and left-shift — Web Update 398 phone test PASS (user-confirmed, 2026-11-22)
+
+- User confirmed the Android phone test: **“Chack kiya mai ne phone me pass hai.”** The PIN label positioning and widened button are therefore **phone-test PASS**.
+- Change PR **#363** is merged as `43e8ba74508aedd9a50bb57b480e0e18c4780470`. The main-branch `web-source/index.html` and `diary-web/index.html` were re-fetched and are byte-identical (Git blob SHA `7288e5f9e1d2e0b313cc8606fb3a318896859a11`).
+- Existing Private Locker PIN action, lock/security behavior, recovery, encryption, and saved entries were not changed by this visual adjustment.
+- Register-only safety backup branch: `backup/before-private-locker-pin-width-phone-pass-register-2026-11-22`.
+- **Publication/feed caveat:** the live `latest.json` still advertises Web Update **396**, not 398. Therefore this entry records the user's phone-test PASS for the PIN button adjustment, but does not claim Web Update 398 is live/published. APK remains **My Diary 1.0.212 / versionCode 211**.
+
+---
+
 # Private Locker PIN label left-shifted and button widened — Web Update 398 candidate (phone test pending, 2026-11-22)
 
 - User reported that the PIN label was still clipping on the right. Adjusted only the Private Locker header PIN button CSS: moved the label slightly left using a small negative text indent and increased the button's minimum width and right-side padding so the full label has room.
