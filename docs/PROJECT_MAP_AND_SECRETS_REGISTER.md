@@ -1,3 +1,15 @@
+# App Share invitation formatted — My Diary 1.0.213 LIVE; phone test pending (2026-11-22)
+
+- User requested that the existing **📤 App Share Karein** message be shared in a more attractive design. Verified the existing Android-native share method and preserved its exact direct APK URL: `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk`.
+- Changed only the native `DiaryNativeActions.shareApp()` template in `scripts/add_diary_app_actions.py`: the shared message now has a formatted **📒 MY DIARY** heading, short description, three feature lines (write thoughts, find saved notes, keep notes together), and a clear **⬇️ DOWNLOAD MY DIARY** call-to-action. The existing Android `ACTION_SEND` text share and **Share My Diary** chooser remain.
+- PR **#364** merged as `a79853abd8c5fec4b37a5b4dc8e8195e9b52e807`. Signed APK build/publish workflow run **#44992818149** completed with **success**.
+- Published **My Diary 1.0.213 / versionCode 212**. Live `latest.json` advertises versionCode 212, versionName 1.0.213, and APK SHA-256 `48af74af1a87a5c5b93e6c22ae9d15d17a5b274e10ee3ec3997c7cc547806f78`. Signed APK and debug test artifacts uploaded successfully.
+- Web-only release remains **Web Update 397**; `web-source/index.html` and `diary-web/index.html` remain byte-identical at blob SHA `7288e5f9e1d2e0b313cc8606fb3a318896859a11`. No web HTML, app identity, notes, photos, PINs, locks, widgets, or saved user data were changed.
+- Safety backup branch: `backup/before-app-share-message-design-2026-11-22`. Register-only backup branch before this entry: `backup/before-app-share-1.0.213-register-2026-11-22`.
+- **Phone test pending**: ask the user to install APK update 1.0.213 and tap **Me → 📤 App Share Karein**. Confirm the formatted heading, description, feature lines, download link, and working share chooser. Do not mark phone-test PASS until the user explicitly confirms.
+
+---
+
 # Private Locker PIN button width and left-shift — Web Update 397 LIVE; phone test PASS (user-confirmed, 2026-11-22)
 
 - User confirmed the Android phone test: **“Chack kiya mai ne phone me pass hai.”** The PIN label positioning and widened button are **phone-test PASS**.
