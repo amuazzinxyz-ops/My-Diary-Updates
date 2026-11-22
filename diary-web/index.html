@@ -284,6 +284,11 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 </style>
 </head>
 <body>
+
+<style id="diary-pull-down-refresh">
+#diaryMyNotesBody{overscroll-behavior-y:contain!important;-webkit-overflow-scrolling:touch!important}
+#diaryPullRefreshHint{flex:0 0 auto;width:100%;box-sizing:border-box}
+</style>
 <main class="diary-home">
  <div class="diary-mark">📒</div>
  <h1>My Diary</h1>
@@ -3327,6 +3332,41 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var close=el('button',{id:'diaryMyNotesClose',type:'button','aria-label':t('closeLabel')},'×');
   head.appendChild(close);
   var body=el('div',{id:'diaryMyNotesBody'});
+  var pullRefreshHint=el('div',{id:'diaryPullRefreshHint','aria-live':'polite'},'↓ Neeche kheench kar refresh karein');
+  pullRefreshHint.style.cssText='height:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#176044;transition:height .16s ease;pointer-events:none;';
+  body.appendChild(pullRefreshHint);
+  (function(){
+   var pullStartY=0,pullDistance=0,pullTracking=false,pullRefreshing=false;
+   function resetPullHint(message){
+    pullRefreshHint.textContent=message||'↓ Neeche kheench kar refresh karein';
+    pullRefreshHint.style.height='0px';
+   }
+   body.addEventListener('touchstart',function(e){
+    if(pullRefreshing||body.scrollTop>2||!e.touches||e.touches.length!==1)return;
+    pullStartY=e.touches[0].clientY;pullDistance=0;pullTracking=true;
+   },{passive:true});
+   body.addEventListener('touchmove',function(e){
+    if(!pullTracking||pullRefreshing||!e.touches||e.touches.length!==1)return;
+    pullDistance=Math.max(0,e.touches[0].clientY-pullStartY);
+    if(pullDistance>8&&body.scrollTop<=2){
+     pullRefreshHint.style.height=Math.min(52,Math.round(pullDistance*.55))+'px';
+     pullRefreshHint.textContent=pullDistance>=70?'↑ Chhodein — refresh ho raha hai':'↓ Refresh ke liye aur kheenchein';
+     if(pullDistance>14)e.preventDefault();
+    }else if(pullDistance<=8){pullRefreshHint.style.height='0px';}
+   },{passive:false});
+   function finishPull(){
+    if(!pullTracking)return;
+    pullTracking=false;
+    if(pullDistance>=70&&body.scrollTop<=2&&!pullRefreshing){
+     pullRefreshing=true;pullRefreshHint.style.height='38px';pullRefreshHint.textContent='⟳ Refresh ho raha hai…';
+     try{refreshLabels();renderList();pullRefreshHint.textContent='✓ Diary refresh ho gayi';}
+     catch(err){pullRefreshHint.textContent='Refresh nahi ho saka';}
+     window.setTimeout(function(){pullRefreshing=false;pullDistance=0;resetPullHint();},900);
+    }else{pullDistance=0;resetPullHint();}
+   }
+   body.addEventListener('touchend',finishPull,{passive:true});
+   body.addEventListener('touchcancel',finishPull,{passive:true});
+  })();
   var search=el('input',{id:'diaryMyNotesSearch',type:'search',autocomplete:'off',dir:'auto'});
   var editor=el('section',{id:'diaryMyNotesEditor'});
   var clearDraftX=el('button',{id:'diaryMyNotesDraftClearX',type:'button','aria-label':t('closeLabel')},'×');
