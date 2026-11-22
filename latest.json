@@ -7,8 +7,8 @@
   "sha256": "1e1010b1a51433de21e55125396d2b1f2ae4c6a6202a5128a7adac0181318a85",
   "releaseNotes": "My Diary 1.0.214: App Share now attaches the original My Diary logo image with the formatted invitation and existing direct APK download link. Existing share chooser, app identity, notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 418,
+  "webVersion": 419,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "551a28de9240ef9b15213306d5a5bb0a582485d9ac462a4f7ba9d43f60be4cf9",
-  "webReleaseNotes": "Web Update 418: Added a subtle gold-toned 3D raised text effect to the live time and date beneath My Notes. The 12-hour clock with AM/PM and seconds, IST time zone, one-line date, font sizes, saved notes, photos, PINs, and locks remain unchanged."
+  "webSha256": "6192fed47d957301e9a6469c7a0ecc699632f13c69c850f9f59837942498ac2c",
+  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
