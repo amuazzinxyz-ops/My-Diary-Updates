@@ -1,3 +1,18 @@
+# Note image and text layout preserved exactly after Save — Web Update 409 LIVE; phone test pending (2026-11-22)
+
+- User requested that all three existing Note image locations (Cover/title, Detail/body, and attached Photo) retain their exact chosen image position and zoom after Save, and that typed text retain its spacing, indentation, line breaks, alignment and placement.
+- Root causes found in current code: saved attached Photo's transform was assigned before `style.cssText`, which erased it; saved Cover/Detail cards had CSS forcing image backgrounds to 100% size and top-left position; image crop coordinates were being clamped more tightly during normalization than the finger-adjust controls allowed.
+- Fixed only the web note layout path: attached Photo transform is now applied after its style reset; saved Cover/Detail image rendering no longer overrides each note's saved crop/zoom; normalized crop coordinates now preserve the full finger-adjust range. On Save, the existing title/body fields' computed text geometry (padding, line height, alignment, direction, whitespace, spacing, tab size and related layout values) is stored with the note and reapplied in saved-note display. Existing notes without this optional layout metadata retain the prior fallback display.
+- Note text, image data, existing note IDs, save/read flow, PINs, locks, storage keys and native Android source were not intentionally changed. No migration or data deletion was added.
+- Safety backup branch before code changes: `backup/before-note-layout-preservation-2026-11-22`. Code PR **#400** merged as `be4390943161ef0032e37bb9ef97a1a0b8682c4a`.
+- `web-source/index.html` and `diary-web/index.html` re-fetched from main and verified byte-identical: Git blob SHA `d296e38393308d14d1fe46865a4496eea7aea0b0`, 613,978 characters. Specific checks confirmed the photo transform follows the style reset, crop-reset CSS is absent, crop bounds cover finger adjustment, and both text layouts are stored and reapplied.
+- Exact HTML SHA-256 independently computed: `45dd76ad8260c60ecc8ca1ffcf77867779081a58184178fd3a87c15a8fbc92f0`.
+- Feed safety backup branch: `backup/before-web409-feed-2026-11-22`. Feed PR **#401** merged as `27c218eb799f0416a71cd95f16465440f13232b1`. Live `latest.json` re-fetched and confirms **Web Update 409**, the matching SHA-256 and release notes. APK version fields remain unchanged at 1.0.214 / versionCode 213.
+- **Phone test pending**: user should use **Me → Check for Updates**, receive Web Update 409, add or edit a note using Cover, Detail and attached Photo images, adjust each with finger pan/zoom, type text with multiple spaces/indentation and line breaks, Save, then reopen the note and verify every image and all text remain in the same position and size. Do not mark phone PASS until user confirms.
+- MUAZZIN project was not touched.
+
+---
+
 # Remove optional Web Update 407 note-box design — Web Update 408 LIVE; phone test PASS (user-confirmed, 2026-11-22)
 
 - User asked to remove the previously added combined design (1 + 2 + 4): royal-purple title fill, cream/parchment body fill, and gold corner ornaments.
