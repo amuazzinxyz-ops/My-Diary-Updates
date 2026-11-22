@@ -1,3 +1,14 @@
+# Diary pull-down refresh — Web Update 398 LIVE; phone test PASS (user-confirmed, 2026-11-22)
+
+- User explicitly confirmed: **“Phone Me test pass”**. The pull-down gesture at the top of the opened Diary notes panel is now **phone-test PASS**.
+- The confirmed behavior is pull down from the very top of the Diary notes list and release to refresh the saved notes list in place. The update does not reload the page or alter saved notes, photos, PINs, locks, or other user data.
+- Web Update **398** remains live. Source and mirror remain byte-identical at Git blob SHA `6c71f2a6f2884efef581504c7afd55d7264a2451`; web SHA-256 `550d12dce4fce3f90c1cfd6d74168d10374e81978db9cc15523d6739bb739fc6`.
+- APK remains **My Diary 1.0.214 / versionCode 213**, SHA-256 `183011a38a25c183f39a1033bb2d169776adeafe61b1e199385e39834626f83a`.
+- Original implementation: backup branch `backup/before-diary-pull-to-refresh-2026-11-22`; PR **#366** merged as `b628248f43f10c7c3415ee1c8ef46f1e8f7bb0ce`. Web publish and APK build workflows both completed successfully.
+- MUAZZIN project was not touched.
+
+---
+
 # Diary pull-down refresh added — Web Update 398 LIVE; phone test pending (2026-11-22)
 
 - User approved a pull-down refresh gesture at the top of the opened Diary notes panel. Pulling down at the top of the scroll area and releasing (70px threshold) now refreshes the existing saved-note list in place. It does not reload the page, rewrite storage, or disturb the current unsaved draft.
