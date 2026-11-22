@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 415,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "PENDING",
+  "webSha256": "d0eab8bbf0e2a00822872eb5c5753613ee67f42a17f819299bbb44742f6eb4f2",
   "webReleaseNotes": "Web Update 415: Removed the × close control from the copied temporary Recovery PIN entry screen. Existing Diary PIN recovery, Favourite Name verification, PINs, notes, photos, and saved data are preserved."
 }
