@@ -1,3 +1,14 @@
+# Original Diary logo added to App Share — implementation merged; signed APK build pending (2026-11-22)
+
+- User asked to include the original Diary logo in the **📤 App Share Karein** message. Verified the exact original image `assets/my-diary-icon.jpg`, Git blob SHA `8ea3faa116fe583e0cbba3b5c80996596a3c95ed` (brown diary-cover artwork).
+- PR **#365** merged as `2afc8a4f0ef2063854bafd52106c4a7ab7d746ad`. Native App Share now attaches that image as `image/jpeg` together with the formatted caption and unchanged direct APK URL. Reuses the existing FileProvider and `cacheDir/diary-share` path; text-only fallback remains if image sharing setup fails.
+- Exact asset hash and native share attachment/caption/link/chooser are checked by a fail-closed build guard. Debug APK build **PASS**. Signed APK workflow run **#44993603460** is still in progress at the signed Release configuration stage; do not call this update LIVE until the workflow succeeds and `latest.json` is verified.
+- Target release: **My Diary 1.0.214 / versionCode 213**. Phone test pending; do not mark PASS until the user installs the signed APK and confirms the actual logo image and caption are shared.
+- No web HTML, app identity, existing notes, photos, PINs, locks, widgets, or saved user data were changed.
+- Safety backup branch: `backup/before-original-logo-app-share-2026-11-22`.
+
+---
+
 # App Share invitation formatted — My Diary 1.0.213 LIVE; phone test pending (2026-11-22)
 
 - User requested that the existing **📤 App Share Karein** message be shared in a more attractive design. Verified the existing Android-native share method and preserved its exact direct APK URL: `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk`.
