@@ -7,8 +7,8 @@
   "sha256": "4cd3833d038afd02fd335ff3bee192e40fea6b5ca9e3c55ec0c36b2935f35739",
   "releaseNotes": "My Diary 1.0.214: App Share now attaches the original My Diary logo image with the formatted invitation and existing direct APK download link. Existing share chooser, app identity, notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 409,
+  "webVersion": 410,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "4249307540ab37f73a51a572a3e7e20f67d57916df70bcd663ebf3e9f6b8d323",
-  "webReleaseNotes": "Web Update 409: Note images now retain their exact saved crop, finger position, and zoom in Cover, Detail, and Photo areas. Saved Note text also retains the editor's spacing, line breaks, alignment, direction, and text-box layout. Existing notes remain readable; notes without saved layout metadata use the previous display fallback. No note content, PINs, locks, or native Android source changed."
+  "webReleaseNotes": "Web Update 410: Saved Note Cover/title and Detail/body text no longer inherit the editor textarea's padding in the saved-note display, preventing the slight text shift after Save and reopening. Text spacing, indentation, line breaks, alignment, direction, font formatting, and the editor's saved layout remain preserved. Image placement, note data, PINs, locks, and native Android files are unchanged."
 }
