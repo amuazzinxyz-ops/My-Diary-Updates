@@ -1,3 +1,15 @@
+# Diary copied Recovery PIN entry × removed — Web Update 415 (2026-11-22)
+
+- User's latest instruction: **“Hata Do ×”**. The × added to the PIN-entry box after copying the temporary Recovery PIN has now been removed.
+- Code PR **#419** merged as `24b4c1e857130fa4df0581fb93b953f2cffc4661`. This reverts only the × close-control addition; no PIN/recovery verification logic or saved data was changed.
+- Verified on main: `web-source/index.html` and `diary-web/index.html` are byte-identical (Git blob SHA `6b5236d1ee44f28a19e674fb63716be674d8b774`, 615,124 characters); no `recoveryClose` code remains.
+- Feed now advertises **Web Update 415** with release note that the × was removed. Feed web SHA is `d0eab8bbf0e2a00822872eb5c5753613ee67f42a17f819299bbb44742f6eb4f2`, matching the previously verified original HTML version.
+- Backup branch: `backup/before-remove-recovery-pin-entry-x-2026-11-22`. Register backup branch for this entry: `backup/before-web415-remove-x-register-2026-11-22`.
+- **Phone test pending**. Do not claim phone PASS until user checks Web Update 415 on device and confirms.
+- This supersedes Web Update 414's × addition. MUAZZIN project was not touched.
+
+---
+
 # Diary copied Recovery PIN entry × — Web Update 414 published; phone test pending (2026-11-22)
 
 - User confirmed the exact requested location: a small **× glyph only** in the PIN-entry box that opens after the temporary Recovery PIN has been copied and the user returns to enter that PIN. Do not show × on Favourite Name verification, New PIN, or Confirm New PIN boxes.
