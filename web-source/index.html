@@ -237,7 +237,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 </style>
 
 <style id="diary-home-widget-settings-style">
-#diaryHomeWidgetSettingsBtn{display:flex!important;align-items:center!important;justify-content:flex-start!important;width:100%!important;min-height:40px!important;margin:7px 0 0!important;padding:7px 10px!important;box-sizing:border-box!important;border:2px solid #d4af37!important;border-radius:10px!important;background:linear-gradient(145deg,#c4a2ff,#6330b8)!important;color:#fff!important;font-size:13px!important;font-weight:1000!important;text-align:left!important;box-shadow:inset 0 2px 0 #ffffff88,0 3px 0 #54258f,0 6px 10px #3a19694a!important}
+#diaryHomeWidgetSettingsBtn{display:flex!important;align-items:center!important;justify-content:flex-start!important;width:100%!important;min-height:40px!important;margin:7px 0 0!important;padding:7px 10px!important;box-sizing:border-box!important;border:2px solid #d4af37!important;border-radius:10px!important;background:linear-gradient(145deg,#c4a2ff,#6330b8)!important;color:#fff!important;font-size:11px!important;font-weight:1000!important;text-align:left!important;box-shadow:inset 0 2px 0 #ffffff88,0 3px 0 #54258f,0 6px 10px #3a19694a!important}
 #diaryHomeWidgetSettingsModal{position:fixed!important;inset:0!important;z-index:100020!important;display:flex!important;flex-direction:column!important;gap:12px!important;overflow:auto!important;box-sizing:border-box!important;padding:calc(18px + env(safe-area-inset-top,0px)) 14px calc(24px + env(safe-area-inset-bottom,0px))!important;background:linear-gradient(145deg,#fffdf8,#eee4ff)!important;color:#2e2044!important}
 #diaryHomeWidgetSettingsModal[hidden]{display:none!important}
 .diary-home-widget-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px;border:2px solid #d4af37;border-radius:14px;background:linear-gradient(145deg,#fff,#f2eaff);box-shadow:0 3px 0 #9b7415}
@@ -1573,7 +1573,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   };
   function worldClockText(key){var lang=language();return (worldClockCopy[lang]&&worldClockCopy[lang][key])||worldClockCopy.roman[key];}
   var widgetSettingsBtn=el('button',{id:'diaryHomeWidgetSettingsBtn',type:'button',class:'diary-me-feature-btn'},'🏠 Home Screen Widget Settings');
-  widgetSettingsBtn.style.setProperty('font-size','13px','important');
+  widgetSettingsBtn.style.setProperty('font-size','11px','important');
   var worldClockBtn=el('button',{id:'diaryWorldClockBtn',type:'button',class:'diary-me-feature-btn'},worldClockText('button'));
   mePanel.appendChild(worldClockBtn);
   mePanel.appendChild(widgetSettingsBtn);
