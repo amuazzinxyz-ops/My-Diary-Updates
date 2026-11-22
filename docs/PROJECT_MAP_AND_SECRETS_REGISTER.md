@@ -1,3 +1,14 @@
+# Theme Mode button removed — Web Update pending publication; phone test pending (2026-11-23)
+
+- User requested: **“Hata do o button”** referring to the newly added **🎨 Theme Mode** button inside **Me**.
+- Removed the Theme Mode button, its Light/Dark/Default chooser, and its three theme-specific CSS blocks. Restored the app's original appearance by clearing only the `diaryThemeMode` localStorage preference and `data-diary-theme` attribute when the Diary overlay is created.
+- Preserved the existing Me button/panel and language selector. No note/photo/PIN/lock/storage data, unrelated Diary features, or APK/native source was intentionally changed.
+- Source backup branch: `backup/before-remove-theme-mode-2026-11-23`. Register backup branch: `backup/before-remove-theme-mode-register-2026-11-23`. Working branch: `fix/remove-theme-mode-button-2026-11-23`. Source edit is prepared and static checks confirm the Theme Mode button/handlers/styles are absent while Me and language controls remain.
+- **Publication not yet verified**. Do not install/test or claim success until the source/mirror, `latest.json` version/checksum, and publisher workflow are verified. Phone test remains pending.
+- MUAZZIN project was not touched.
+
+---
+
 # My Diary Theme Mode added inside Me — Web Update 420 published; phone test pending (2026-11-23)
 
 - User requested one **🎨 Theme Mode** button inside the existing **Me** menu. It opens exactly three choices: **Light Mode**, **Dark Mode**, and **Default Mode** (restores the original Diary appearance). No Auto Mode is included.
