@@ -1,3 +1,15 @@
+# Saved Note text stays in place after Save/reopen — Web Update 410 LIVE; phone test pending (2026-11-22)
+
+- User reported that any typed text shifted slightly after saving and reopening a Note. Root cause: the saved-note title/body display elements already have their own CSS padding, but the saved editor textarea padding was also copied onto those display elements, changing the text inset.
+- Fixed only saved-note display layout: the Cover/title and Detail/body display now retain their own box padding instead of inheriting the editor textarea padding. Saved letter spacing, word spacing, indentation, tab size, line height, alignment, direction, whitespace/line breaks, overflow wrapping and font formatting remain applied. Reopening the editor still restores its saved layout. No image code, note data, IDs, PINs, locks, storage keys or native Android source was changed.
+- Safety backup before the code fix: `backup/before-text-position-stability-fix-2026-11-22`. Code PR **#406** merged as `2f64599f7799bf8b3ab0a585e76abcf54b98688c`. Feed/register safety backup: `backup/before-web410-feed-register-2026-11-22`.
+- `web-source/index.html` and `diary-web/index.html` re-fetched from main and verified byte-identical: Git blob SHA `d5113920108bac557e5f4380a04dfeae1383cca2`, 615,108 characters. Exact HTML SHA-256 independently verified: `4249307540ab37f73a51a572a3e7e20f67d57916df70bcd663ebf3e9f6b8d323`.
+- Web Update **410** feed prepared with that exact SHA-256. APK version remains 1.0.214 / versionCode 213; no APK change.
+- **Phone test pending**: use **Me → Check for Updates**, receive Web Update 410, open an existing Note or create one, type text in the name and body boxes (including multiple spaces/indentation and line breaks), Save, reopen and verify that the text has not shifted. Do not mark phone PASS until user confirms.
+- MUAZZIN project was not touched.
+
+---
+
 # Note image and text layout preserved exactly after Save — Web Update 409 LIVE; phone test pending (2026-11-22)
 
 - User requested that all three existing Note image locations (Cover/title, Detail/body, and attached Photo) retain their exact chosen image position and zoom after Save, and that typed text retain its spacing, indentation, line breaks, alignment and placement.
