@@ -1,3 +1,17 @@
+# Corrected Diary 3D target: saved-note display only — Web Update 404 LIVE; phone test pending (2026-11-22)
+
+- User corrected the previous misunderstanding: the purple 3D effect was **not** wanted on the note editor's title/name or body/text input fields. Those editor fields must return to their previous appearance. The requested 3D styling belongs on the **saved note display card** when the saved note is expanded/opened in the notes list.
+- Corrected both `web-source/index.html` and `diary-web/index.html`: removed the editor-only saved-note class, inline title-style helper and calls, and the purple editor CSS overrides. The editor fields now use their original styling again. Added the purple raised 3D finish only to an expanded, unlocked saved-note card and its displayed title/body surfaces. Locked note cards do not receive the unlocked-note display styling.
+- Change is presentation-only. Note text/content, saved-note schema, save/read logic, photos, PINs, locks, backup/storage data, and existing features were not changed. Android native source was not intentionally modified.
+- Safety backup branch: `backup/before-note-card-3d-correction-2026-11-22`. Code PR **#381** merged as `471527e30189adb609f8569f9fbdd1a0e0c86923`.
+- Live source and mirror re-fetched and verified byte-identical: Git blob SHA `aef055b2131940a588c062590d3be61d56e26a4c`. Verified old editor hooks are absent and saved-note display class is present. Web publisher workflow run **45014940472** (run #527) completed **success**.
+- The publisher updated the HTML SHA-256 to `7608ad68626b4aac4b3e2ab2080cd3b820716ac10d110468d0dea044071ff4c2`. Safety backup branch for the delivery feed: `backup/before-web404-saved-note-display-feed-2026-11-22`. Feed PR **#382** merged as `3cfa3da9f044d9da588ae82ee936256f6fd9d863`. Live `latest.json` advertises **Web Update 404** and describes the correct behavior.
+- An automatic APK build workflow **45014940480** was triggered by the code merge; at the time of this register entry it was still running. The web-only publisher has passed. Do not claim a phone test PASS.
+- **Phone test pending**: user should run **Me → Check for Updates**, receive Web Update 404, verify the title/name and body/text editor fields look as they did before, then open a saved note from the notes list and confirm the purple raised 3D design appears on the saved-note display card only.
+- MUAZZIN project was not touched.
+
+---
+
 # Both Diary note boxes receive purple raised 3D styling — Web Update 403 LIVE; phone test pending (2026-11-22)
 
 - User clarified that the 3D effect must apply to **both** existing note editor fields: the note-name/title box and the note-writing/body box. The earlier Web Update 402 changed only the title field, which did not fulfill the request.
