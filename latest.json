@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 410,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "4249307540ab37f73a51a572a3e7e20f67d57916df70bcd663ebf3e9f6b8d323",
+  "webSha256": "905799c95fbedac28c85c53b2eb9506eca6dba2c18cb96bf43dbfb86a4d0b951",
   "webReleaseNotes": "Web Update 410: Saved Note Cover/title and Detail/body text no longer inherit the editor textarea's padding in the saved-note display, preventing the slight text shift after Save and reopening. Text spacing, indentation, line breaks, alignment, direction, font formatting, and the editor's saved layout remain preserved. Image placement, note data, PINs, locks, and native Android files are unchanged."
 }
