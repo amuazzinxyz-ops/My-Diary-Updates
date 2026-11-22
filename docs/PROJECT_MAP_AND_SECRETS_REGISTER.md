@@ -1,3 +1,14 @@
+# Home Screen Widget Settings button isolated from shared Me styling — Web Update 428 published; phone test pending (2026-11-23)
+
+- User reported Web Update 427 was installed but the **🏠 Home Screen Widget Settings** label still did not fit correctly. Inspection found the cause: the later, more-specific selector `#diaryDiaryMePanel .diary-me-feature-btn` overrode the earlier ID-only button rule, so the 13px/no-wrap/padding settings from Web Update 427 were not reliably winning in the cascade.
+- Created safety backup branch `backup/before-widget-settings-button-isolation-2026-11-23` from main before editing. Working branch: `fix/widget-settings-button-isolation-2026-11-23`. PR **#456** merged to main as `6cf754b98ff5bb802aac1351cf3b509ddf5d73b6`.
+- Added one narrowly scoped final selector, `#diaryDiaryMePanel #diaryHomeWidgetSettingsBtn`, to isolate this button from shared Me-feature layout. It uses a normal block text layout, 13px font, one-line no-wrap, bounded 100% box sizing, and controlled horizontal padding/overflow. Existing label, position, height, click behavior, and shared purple/gold 3D styling remain. No notes, photos, PINs, locks, APK/native code, or MUAZZIN files were intentionally changed.
+- Web publisher workflow run **45067007301** completed **success**. Published as **Web Update 428**. Re-fetched `web-source/index.html` and `diary-web/index.html` are byte-identical (Git blob SHA `c0ab28d60b1527208ba758452765651b96fcb28a`; 617,394 characters). Both contain the new specific selector. Live `latest.json` advertises webVersion **428** and web SHA-256 `3d494452bb223744744e86ddfe08ccd2913c0ac91ae34abc6df0c728d343b431`.
+- APK remains **My Diary 1.0.214 / versionCode 213**; this is web-only and does not require an APK rebuild.
+- **Phone test pending**: install Web Update 428 through **Me → Check for Updates** and confirm the complete label stays on one line, inside the button, and remains comfortably readable. Do not mark phone PASS until the user confirms.
+
+---
+
 # Home Screen Widget Settings label shifted slightly left — Web Update 427 published; phone test pending (2026-11-23)
 
 - User reported the one-line **🏠 Home Screen Widget Settings** label extends slightly beyond the button on the right. Changed only the button's left padding from 10px to 5px in its CSS and matching inline style, moving the label 5px left. Kept 13px text, one-line wrapping, button height, colors, borders, weight, and click behavior unchanged.
