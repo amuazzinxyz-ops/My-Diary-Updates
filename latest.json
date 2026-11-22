@@ -7,8 +7,8 @@
   "sha256": "ac62d591125b1ad734a4711f80c838a0b791ae4f12ae7221cb85b44ffc451709",
   "releaseNotes": "My Diary 1.0.214: App Share now attaches the original My Diary logo image with the formatted invitation and existing direct APK download link. Existing share chooser, app identity, notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 414,
+  "webVersion": 415,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "d0eab8bbf0e2a00822872eb5c5753613ee67f42a17f819299bbb44742f6eb4f2",
-  "webReleaseNotes": "Web Update 414: Added a small × close control only to the Diary PIN entry box shown after copying the temporary Recovery PIN and returning to enter it. The × closes only that recovery overlay; it is not shown on Favourite Name, New PIN, or Confirm New PIN screens. Existing recovery verification, PINs, notes, photos, and saved data are preserved."
+  "webReleaseNotes": "Web Update 415: Removed the × close control from the copied temporary Recovery PIN entry screen. Existing Diary PIN recovery, Favourite Name verification, PINs, notes, photos, and saved data are preserved."
 }
