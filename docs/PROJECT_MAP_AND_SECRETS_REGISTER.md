@@ -1,3 +1,15 @@
+# Register sync — PR #367 and current live feed verified (2026-11-22; documentation-only)
+
+- Audited the current `main` branch after PR **#367**. The merged change is limited to the opened saved-note title/name box: purple raised 3D border, rounded corners, light-purple gradient and shadow in read mode. It does not change the note body, PIN, photos, locks, saved records, or storage logic.
+- PR **#367**: https://github.com/amuazzinxyz-ops/My-Diary-Updates/pull/367; merged commit `ca66ae8ec69df291e6ea526c0b908e6cc2a518d8` (2026-11-22 09:40:15 UTC). The PR changed 7 CSS lines in each of `web-source/index.html` and `diary-web/index.html`; both copies are identical on current `main` (Git blob SHA `a6d2127913db412810ecf195424f3bc6e8d03b9d`, 609,080 characters each).
+- Automation after the merge: APK build workflow run **45008666658** (run #471) completed **success**; web publish workflow run **45008666581** (run #518) completed **success**. These are CI/workflow results, not a physical-phone test.
+- Current `latest.json` on `main` advertises **My Diary 1.0.214 / versionCode 213**, APK SHA-256 `006d075cca6ad5743d3cb313672b4c81b51d3ffbfc71d8d7a39554e0e6867769`, and **Web Update 398**, web SHA-256 `353a4c855d89f4506f84c1a77fab1d046c61d7f66eaf1d3110a07978336b774e`. The feed's web release note remains the Pull-Down Refresh Update 398 note; PR #367 did not increment the webVersion to 399.
+- **Register correction:** the older #366 top entry below records the checksums as they stood at that earlier checkpoint. Those APK/web checksum values no longer match the current `latest.json`. Keep that entry as historical evidence; this new top entry records the current feed values and supersedes it for present-state reporting.
+- **Phone test pending for PR #367**: no user-confirmed physical-phone PASS was found. Do not claim the purple title styling has been phone-tested until the user confirms.
+- This change updates **only this Master Register**. No HTML, APK, `latest.json`, user data, or MUAZZIN files are changed. No rollback or live release is performed by this documentation update.
+
+---
+
 # Diary pull-down refresh — Web Update 398 LIVE; phone test PASS (user-confirmed, 2026-11-22)
 
 - User explicitly confirmed: **“Phone Me test pass”**. The pull-down gesture at the top of the opened Diary notes panel is now **phone-test PASS**.
