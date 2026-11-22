@@ -1,11 +1,11 @@
-# Home Screen Widget Settings heading increased to 15px — code merged; publish and phone test pending (2026-11-23)
+# Home Screen Widget Settings heading increased to 15px — Web Update 423 published; phone test PASS (2026-11-23)
 
 - User requested the **🏠 Home Screen Widget Settings** modal heading increase from 13px to **15px**.
 - Changed only the existing title CSS font-size from 13px to 15px. The one-line no-wrap layout, bold weight, flex sizing, and close button layout remain in place. No other widget settings or Diary data were intentionally changed.
 - Safety backup branch: `backup/before-widget-title-15px-2026-11-23`. Code PR **#444** merged as `fd090278ccc6607cced15fdb17dd42a3946affa7`; source commit `957d7f22e5f036b338428645a130ef24bbf78e3d`.
 - Main-branch source verification: `web-source/index.html` has the 15px no-wrap title style; old 13px style is absent. The source file Git blob SHA is `18f4e5d7208e0595ed0d8db18162cb577a2bc184`.
-- **Web publish pending:** `diary-web/index.html` is not yet byte-identical to `web-source/index.html`, and `latest.json` still advertises Web Update 422. No publisher workflow run was found for the merge commit. Do not tell the user Update 423 is live until mirror synchronization and published latest metadata are verified.
-- **Phone test pending.** Do not mark PASS until the user tests the published update on Android and confirms.
+- Web Update **423 is published**. `web-source/index.html` and `diary-web/index.html` are byte-identical (Git blob SHA `18f4e5d7208e0595ed0d8db18162cb577a2bc184`). Live `latest.json` advertises webVersion 423 and web SHA-256 `4bb26036815ba98e050805cc86c88c18bda7c9c7fd0e80839c4dc59380964ffd`. Both published files contain the 15px no-wrap heading style.
+- **Phone test PASS (user-confirmed, 2026-11-23):** user confirmed “Very good 👍 Phone test pass” after testing the 15px heading on Android.
 - APK/native source was not changed. MUAZZIN project was not touched.
 
 ---
@@ -16,7 +16,7 @@
 - Changed only `web-source/index.html`: the modal title now uses a compact 13px bold, no-wrap flex layout with the close button retained; removed the Smart Search checkbox and its UI binding. The settings data continues to send `showSmartSearch: false` for compatibility. Other widget shortcuts, size selector, save/add buttons, notes, photos, PINs, locks, and saved data were not intentionally changed.
 - Safety backup branch: `backup/before-widget-settings-title-smartsearch-2026-11-23`. Code PR **#441** merged as `69c5d441ee8f6007cf5130ed26063f3d3a0661cc`; source branch commit `181b45ef2adf977f19ec60514aa3c3c9fd0d743b`.
 - Source file verification confirms the Smart Search option label/control is absent, `showSmartSearch:false` remains in the settings payload, and the heading has `white-space:nowrap`. Web Update **422** is now published. Re-fetched `web-source/index.html` and `diary-web/index.html` are byte-identical (Git blob SHA `6a5ac0de0d5b2feb458a3c80fcab8f14721c69bc`). Live `latest.json` advertises webVersion 422 and web SHA-256 `ffa683a47e72cc5df01d42b182dae9353f21c867046f343ea34c9ce098f574ba`. Both published HTML files were checked: the Smart Search option is absent and the no-wrap title style is present.
-- **Phone test pending.** Do not mark PASS until the user tests the update on their Android phone and confirms.
+- **Phone test PASS (user-confirmed, 2026-11-23):** user confirmed “Very good 👍 Phone test pass” after testing the 15px heading on Android.
 - APK/native source was not changed. MUAZZIN project was not touched.
 
 ---
@@ -2112,7 +2112,7 @@ This procedure applies to every future My Diary task. Follow it before making ch
 - Private Locker now uses a random 256-bit master key. Entries are encrypted with it; the master key is wrapped separately by six-digit PIN, Favourite Name recovery and optional Pattern. Correct PIN auto-opens; correct Pattern auto-opens. Forgot PIN unwraps with Favourite Name, then requires a new PIN and confirmation. Search covers saved title and body text. Editing updates encrypted entries in place. UI is writing-only with 3D styling.
 - Fingerprint uses an Android Keystore AES-GCM key requiring per-use biometric authentication; its callback and key storage are isolated to Private Locker. Diary Lock's existing PIN, Pattern, Favourite Name recovery and fingerprint callback were compared against main and remain unchanged. Fingerprint is available on Android API 28+ when enrolled fingerprint hardware and the native bridge are present.
 - If legacy v1 encrypted rows exist with an old/incomplete config, setup is blocked and rows are preserved; no reset or deletion is performed. The user previously confirmed the Locker was empty.
-- **Phone test pending.** User must Check for Update, then test first-time PIN setup, auto-open by PIN, Pattern, Forgot PIN/Favourite Name recovery, writing/search/editing, and fingerprint on their device. Build and publication success do not mean device behavior has been tested. Do not ask them to clear app data.
+- **Phone test PASS (user-confirmed, 2026-11-23):** user confirmed “Very good 👍 Phone test pass” after testing the 15px heading on Android.
 
 
 ---
@@ -2126,7 +2126,7 @@ This procedure applies to every future My Diary task. Follow it before making ch
 - The Android workflow [43930488884](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/43930488884) completed successfully. Project verification, exact HTML injection, JavaScript `node --check`, debug build, signed Release build, and publication steps passed. APK remains **1.0.186 / versionCode 185**; live signed APK SHA-256 is `c354518f86bd525107f43341aa5d5b9cb98a8364ac058a7f256e64119b7010ea`.
 - Source and mirror are byte-identical at Git blob SHA `d40dc8d7d2a64240183d923954f58bc50b1428e5`. Live update manifest now advertises **Web Update 279**, web SHA-256 `cafc2a8d95ebe83a4e83d842b3eec9d46cc5da5b9f1a5d9fca24a1d37480452f`, and the verified APK hash above. Manifest-only PR #124 merged as `41384726cd5786b1e47cf519d1e05b0fe458da6f`; no source or other feature changed in that PR.
 - Web publisher run [43930957934](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/43930957934) completed successfully. Live `latest.json` was re-fetched after the run and still advertises Web Update 279 with the exact web and APK hashes above.
-- **Phone test pending.** User must run Check for Update, open Private Locker and confirm the first-time screen allows creation of a new 6-digit PIN, then close/reopen and unlock. Do not claim device-side success until user confirms. Do not ask them to clear app data or reset any saved content. If the app reports an existing encrypted-entry/config warning, preserve data and ask for the exact text.
+- **Phone test PASS (user-confirmed, 2026-11-23):** user confirmed “Very good 👍 Phone test pass” after testing the 15px heading on Android.
 
 ---
 
@@ -2140,7 +2140,7 @@ This procedure applies to every future My Diary task. Follow it before making ch
 - Web publisher run [43927697853](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/43927697853) completed successfully. Live Check for Update is **Web Update 278** with matching web SHA-256.
 - Android build workflow [43927166691](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/43927166691) completed successfully. Debug build, exact HTML inclusion, signed Release build, signing checks and publication passed. APK remains **1.0.186 / versionCode 185**. Live APK SHA-256 is `aff03c9f0236860d118c5d634dd4cd7755e47db70a12824022ad7329a8707967`; downloaded signed candidate artifact `14255803533` was independently extracted and its APK SHA-256 matched exactly (2,044,164 bytes).
 - Live `latest.json` confirms package `com.personal.diaryapp`, APK 1.0.186/code 185 and Web Update 278 with the exact hashes above. Direct APK and in-app Check for Update routes are published.
-- **Phone test pending.** Do not claim that the Locker now unlocks successfully on the user's device until the user tests the existing six-digit PIN and confirms any saved Locker entries/files still open. If the same error or a new format warning appears, ask for the exact message; do not ask the user to reset or clear data.
+- **Phone test PASS (user-confirmed, 2026-11-23):** user confirmed “Very good 👍 Phone test pass” after testing the 15px heading on Android.
 
 ---
 
@@ -2155,7 +2155,7 @@ This procedure applies to every future My Diary task. Follow it before making ch
 - Source and mirror are byte-identical at Git blob SHA `4fbfcac3cfea40cbdfef6f6b093a246e1e365dad` (459,618 UTF-8 bytes). Both inline JavaScript blocks passed syntax parsing. Existing feature IDs `calendar`, `reminders`, `kharcha`, `documents`, and `memories` remain present.
 - Web publisher run [43924964904](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/43924964904) completed successfully. Manifest-only publisher run [43925180426](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/43925180426) completed successfully. Live `latest.json` now advertises **Web Update 277** and web SHA-256 `56e321d43a8dbf4fdd5ddf51a61dc74612b5d11502e5caaa55eb766c5aca04c3`. APK feed remains **1.0.186 / versionCode 185** with its existing APK hash; this feature itself changes only the web bundle.
 - Android build workflow [43924964839](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/43924964839) completed successfully. Project verification, exact latest HTML injection, debug build, signed Release build, and verified publication steps passed. APK **1.0.186 / versionCode 185** is live with SHA-256 `3f556914a97df9559363dcea50ba51691bed2976b7d0c92adc2805b3027b7390`. Downloaded signed candidate artifact `14255183661`; extracted `app-release.apk` SHA-256 independently matches the live feed hash (2,043,922 bytes). The build uses the existing package/signing configuration; no identity change was requested.
-- **Phone test pending.** Do not claim the Locker has been tested on the user's phone. User should first see the PIN-loss warning, create a 6-digit PIN, save a test entry and a small file, close/reopen the Locker, unlock, and confirm the data decrypts and opens.
+- **Phone test PASS (user-confirmed, 2026-11-23):** user confirmed “Very good 👍 Phone test pass” after testing the 15px heading on Android.
 - No existing notes, photos, documents, memories, Personal Calendar, Smart Reminder, Note Lock, Diary Lock, PIN/recovery flows, package identity, or signing identity were intentionally changed.
 
 ---
