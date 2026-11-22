@@ -262,13 +262,6 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 #diaryMyNotesEditor.diary-read-mode #diaryMyNotesDraftClearX{display:none!important}
 #diaryMyNotesEditor.diary-read-mode #diaryMyNotesTitle,
 #diaryMyNotesEditor.diary-read-mode #diaryMyNotesText{cursor:text;background:#fff!important}
-/* Purple raised 3D styling applies to the title box whenever an existing saved note is opened, including edit mode. */
-#diaryMyNotesEditor.diary-saved-note-opened #diaryMyNotesTitle{
-  border:2px solid #7540b8!important;
-  border-radius:10px!important;
-  background:linear-gradient(145deg,#f7edff,#e5d2ff)!important;
-  box-shadow:inset 0 2px 0 #fff,0 3px 0 #5b2d91,0 5px 8px #4b237533!important;
-}
 #diaryMyNotesEditor.diary-read-mode #diaryMyNotesActions button:not(#diaryMyNotesEditView){display:none!important}
 #diaryMyNotesEditor.diary-read-mode #diaryMyNotesEditView:not([hidden]){display:inline-flex!important;align-items:center;justify-content:center}
 </style>
@@ -4007,8 +4000,6 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   clearX.hidden=!hasDraft;
  }
  function newNote(){
-  setDiarySavedTitleStyle(false);
-  var noteEditor=document.getElementById('diaryMyNotesEditor');if(noteEditor)noteEditor.classList.remove('diary-saved-note-opened');
   setDiaryNoteReadMode(false);
   clearDiaryFingerAdjust();activeId=null;activePhotoData=null;activeCoverPhotoData=null;activeCoverText='';activeDetailPhotoData=null;activeDetailText='';activeCoverColour=cleanDiaryColour({mode:'none'});activeDetailColour=cleanDiaryColour({mode:'none'});activePhotoColour=cleanDiaryColour({mode:'none'});diaryFingerAdjustKind=null;activeCoverTextFormat={size:18,family:'Arial, sans-serif',bold:true,italic:false,underline:false,color:'#172033',colorCustom:false};activeDetailTextFormat={size:18,family:'Arial, sans-serif',bold:true,italic:false,underline:false,color:'#172033',colorCustom:false};renderDiaryPhotoPreview();renderDiaryImagePreview('Cover');renderDiaryImagePreview('Detail');
   var title=document.getElementById('diaryMyNotesTitle'),body=document.getElementById('diaryMyNotesText'),status=document.getElementById('diaryMyNotesStatus');
@@ -4033,7 +4024,6 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   if(found){found.title=title;found.body=body;found.coverTextFormat=cleanDiaryTextFormat(activeCoverTextFormat);found.detailTextFormat=cleanDiaryTextFormat(activeDetailTextFormat);found.category=category;found.photoData=activePhotoData||null;found.coverPhotoData=activeCoverPhotoData||null;found.coverColour=cleanDiaryColour(activeCoverColour);found.detailColour=cleanDiaryColour(activeDetailColour);found.photoColour=cleanDiaryColour(activePhotoColour);found.coverText=activeCoverText||'';found.detailPhotoData=activeDetailPhotoData||null;found.detailText=activeDetailText||'';found.updated=now}
   else{var id='note-'+now+'-'+Math.random().toString(36).slice(2,9);all.unshift({id:id,title:title,body:body,coverTextFormat:cleanDiaryTextFormat(activeCoverTextFormat),detailTextFormat:cleanDiaryTextFormat(activeDetailTextFormat),category:category,photoData:activePhotoData||null,coverPhotoData:activeCoverPhotoData||null,coverColour:cleanDiaryColour(activeCoverColour),detailColour:cleanDiaryColour(activeDetailColour),photoColour:cleanDiaryColour(activePhotoColour),coverText:activeCoverText||'',detailPhotoData:activeDetailPhotoData||null,detailText:activeDetailText||'',created:now,updated:now});activeId=id}
   var ok=write(all);
-  if(ok){document.getElementById('diaryMyNotesEditor').classList.add('diary-saved-note-opened');setDiarySavedTitleStyle(true);}
   document.getElementById('diaryMyNotesDelete').style.display=activeId?'':'none';
   document.getElementById('diaryMyNotesStatus').textContent=ok?t('saved'):t('storageSaveError');
   showingTrash=false;var allNotesList=document.getElementById('diaryMyNotesList'),allNotesButton=document.getElementById('diaryMyNotesAllNotes');var trashButton=document.getElementById('diaryMyNotesTrash');if(allNotesButton)allNotesButton.style.display='';if(trashButton)trashButton.setAttribute('aria-expanded','false');
@@ -4050,16 +4040,6 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   all=all.filter(function(n){return n.id!==activeId});
   if(write(all)){newNote();document.getElementById('diaryMyNotesStatus').textContent='';renderList()}
   else{writeTrash(trash.filter(function(n){return n.id!==activeId}));document.getElementById('diaryMyNotesStatus').textContent=t('storageDeleteError');}
- }
- function setDiarySavedTitleStyle(enabled){
-  var title=document.getElementById('diaryMyNotesTitle');if(!title)return;
-  var props=['border','border-radius','background','box-shadow'];
-  if(enabled){
-   title.style.setProperty('border','2px solid #7540b8','important');
-   title.style.setProperty('border-radius','10px','important');
-   title.style.setProperty('background','linear-gradient(145deg,#f7edff,#e5d2ff)','important');
-   title.style.setProperty('box-shadow','inset 0 2px 0 #fff,0 3px 0 #5b2d91,0 5px 8px #4b237533','important');
-  }else{props.forEach(function(p){title.style.removeProperty(p);});}
  }
  function setDiaryNoteReadMode(readOnly){
   var editor=document.getElementById('diaryMyNotesEditor');
@@ -4083,8 +4063,6 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   document.getElementById('diaryMyNotesDelete').style.display='';
   updateDiaryDraftClearXVisibility();
   setDiaryNoteReadMode(!!readOnly||!!showingFavouriteNotes);
-  document.getElementById('diaryMyNotesEditor').classList.add('diary-saved-note-opened');
-  setDiarySavedTitleStyle(true);
   document.getElementById('diaryMyNotesEditor').scrollIntoView({behavior:'smooth',block:'start'});
  }
  function pinDigest(pin,salt){
@@ -4495,6 +4473,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     card.classList.add('expanded');
     if(n.favourite)card.appendChild(el('span',{class:'diary-note-favourite-label'},t('favourite')));
     if(noteIsUnlocked(n)){
+     card.classList.add('diary-note-saved-3d');
      var titleDisplay=card.querySelector('strong');
      if(n.coverPhotoData&&String(n.coverPhotoData).indexOf('data:image/')===0){applyDiaryFieldImage(titleDisplay,n.coverPhotoData,'title',n.coverColour);titleDisplay.classList.add('diary-diary-card-field-image');}else if(n.coverColour&&n.coverColour.mode&&n.coverColour.mode!=='none'){applyDiaryFieldImage(titleDisplay,null,'title',n.coverColour);}applyDiaryTextFormat(titleDisplay,n.coverTextFormat);
      var bodyDisplay=el('div',{class:'diary-note-full'},preview);
@@ -5454,12 +5433,23 @@ body{background:radial-gradient(ellipse at 50% 12%,#fff 0%,#f5edff 42%,#e8dcf8 1
  #diaryMyNotesPanel.diary-trash-fullscreen #diaryMyNotesBody{display:none!important}
 }
 
-/* Final high-specificity purple raised 3D styling for BOTH note boxes on saved/opened notes. */
-#diaryMyNotesEditor.diary-saved-note-opened#diaryMyNotesEditor #diaryMyNotesTitle,
-#diaryMyNotesEditor.diary-saved-note-opened#diaryMyNotesEditor #diaryMyNotesText{
+
+/* Purple raised 3D finish belongs to the expanded saved-note display card, never the editor fields. */
+.diary-my-note.diary-note-saved-3d{
  border:2px solid #7540b8!important;
- border-radius:10px!important;
- background:linear-gradient(145deg,#f7edff,#e5d2ff)!important;
- box-shadow:inset 0 2px 0 #fff,0 3px 0 #5b2d91,0 5px 8px #4b237533!important;
+ border-radius:14px!important;
+ background:linear-gradient(145deg,#fff,#f3e9ff)!important;
+ box-shadow:inset 0 2px 0 #fff,0 4px 0 #5b2d91,0 8px 14px #4b237533!important;
 }
+.diary-my-note.diary-note-saved-3d > strong,
+.diary-my-note.diary-note-saved-3d > .diary-note-full{
+ border:1.5px solid #8b61bd!important;
+ border-radius:10px!important;
+ box-shadow:inset 0 2px 0 #fff,0 3px 0 #7540b8,0 5px 8px #4b237522!important;
+}
+.diary-my-note.diary-note-saved-3d > strong{padding:8px 10px!important;margin:0 0 8px!important;}
+.diary-my-note.diary-note-saved-3d > .diary-note-full{padding:11px!important;}
+.dark .diary-my-note.diary-note-saved-3d{background:linear-gradient(145deg,#342448,#241a35)!important;border-color:#a47ad4!important;box-shadow:inset 0 2px 0 #ffffff22,0 4px 0 #513477,0 8px 14px #0007!important;}
+.dark .diary-my-note.diary-note-saved-3d > strong,
+.dark .diary-my-note.diary-note-saved-3d > .diary-note-full{border-color:#a47ad4!important;box-shadow:inset 0 2px 0 #ffffff22,0 3px 0 #513477,0 5px 8px #0005!important;}
 </style>
