@@ -1,9 +1,9 @@
-# Home Screen Widget Settings heading and Smart Search option — code merged; web publish pending (2026-11-23)
+# Home Screen Widget Settings heading and Smart Search option — Web Update 422 published; phone test pending (2026-11-23)
 
 - User requested the modal heading **🏠 Home Screen Widget Settings** stay on one line and the **🔍 Smart Search kholen** option be removed from inside the settings.
 - Changed only `web-source/index.html`: the modal title now uses a compact 13px bold, no-wrap flex layout with the close button retained; removed the Smart Search checkbox and its UI binding. The settings data continues to send `showSmartSearch: false` for compatibility. Other widget shortcuts, size selector, save/add buttons, notes, photos, PINs, locks, and saved data were not intentionally changed.
 - Safety backup branch: `backup/before-widget-settings-title-smartsearch-2026-11-23`. Code PR **#441** merged as `69c5d441ee8f6007cf5130ed26063f3d3a0661cc`; source branch commit `181b45ef2adf977f19ec60514aa3c3c9fd0d743b`.
-- Source file verification confirms the Smart Search option label/control is absent, `showSmartSearch:false` remains in the settings payload, and the heading has `white-space:nowrap`. At register update time the published mirror and `latest.json` had not yet been synchronized; do not treat this as a live web release until the publisher completes and source/mirror/checksum are verified.
+- Source file verification confirms the Smart Search option label/control is absent, `showSmartSearch:false` remains in the settings payload, and the heading has `white-space:nowrap`. Web Update **422** is now published. Re-fetched `web-source/index.html` and `diary-web/index.html` are byte-identical (Git blob SHA `6a5ac0de0d5b2feb458a3c80fcab8f14721c69bc`). Live `latest.json` advertises webVersion 422 and web SHA-256 `ffa683a47e72cc5df01d42b182dae9353f21c867046f343ea34c9ce098f574ba`. Both published HTML files were checked: the Smart Search option is absent and the no-wrap title style is present.
 - **Phone test pending.** Do not mark PASS until the user tests the update on their Android phone and confirms.
 - APK/native source was not changed. MUAZZIN project was not touched.
 
