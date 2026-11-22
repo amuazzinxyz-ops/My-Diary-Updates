@@ -1,4 +1,4 @@
-# Remove optional Web Update 407 note-box design — Web Update 408 LIVE; phone test pending (2026-11-22)
+# Remove optional Web Update 407 note-box design — Web Update 408 LIVE; phone test PASS (user-confirmed, 2026-11-22)
 
 - User asked to remove the previously added combined design (1 + 2 + 4): royal-purple title fill, cream/parchment body fill, and gold corner ornaments.
 - Removed only the appended `web407-royal-note-box-design` CSS block from both `web-source/index.html` and `diary-web/index.html`. This restores the pre-407 Web 406 appearance; it does not remove the earlier Web 406 four-side purple/gold border treatment.
@@ -7,7 +7,7 @@
 - Source and mirror re-fetched from main and verified byte-identical: Git blob SHA `136abccb7798342166a186de176f67ed0e468cfe`, 611,441 characters. The Web 407 style block is absent; the earlier Web 406 saved-note styling remains.
 - Exact HTML SHA-256 independently computed and verified against the previous Web 407 known checksum: `e64b8c283f97a20fc613ef61bae443d0b07afd78e229d19a88a2b4450d366ab7`.
 - Delivery feed PR **#396** merged as `3d0e0f7292d7e55cf9acfae43945276c8c961d8a`. Live `latest.json` re-fetched and confirms **Web Update 408**, the matching HTML SHA-256, and rollback release notes. The app update feed now advertises the removal.
-- **Phone test pending**: user should use **Me → Check for Updates**, receive Web Update 408, open an expanded unlocked saved note, and confirm the Web 407 purple/cream fills and gold corner ornaments are gone while the prior Web 406 borders and existing note/photo content remain. Do not mark phone-side PASS until user confirms.
+- **Phone test PASS (user-confirmed)**: user confirmed “Phone Tes Pass” after installing/testing Web Update 408 on the Android phone. This closes the device-side test for removal of the Web 407 title/body fills and gold corner ornaments; the prior Web 406 appearance is accepted.
 - MUAZZIN project was not touched.
 
 
