@@ -7,8 +7,8 @@
   "sha256": "1e1010b1a51433de21e55125396d2b1f2ae4c6a6202a5128a7adac0181318a85",
   "releaseNotes": "My Diary 1.0.214: App Share now attaches the original My Diary logo image with the formatted invitation and existing direct APK download link. Existing share chooser, app identity, notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 421,
+  "webVersion": 422,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "25958e297e12787dbb1a603167c0baa76f79015656f4a2910fb7fc6db1664a53",
+  "webSha256": "ffa683a47e72cc5df01d42b182dae9353f21c867046f343ea34c9ce098f574ba",
   "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
