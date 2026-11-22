@@ -1,3 +1,16 @@
+# My Notes clock date forced onto one line — Web Update 417 published; phone test pending (2026-11-22)
+
+- User asked that the year **2026** remain on the same line as the rest of the date beneath the My Notes digital clock.
+- Changed only the existing `diaryClockDate` inline style in `web-source/index.html`, adding `white-space:nowrap;`. The displayed date format remains weekday, two-digit day, full month, and year (for example, `Sunday, 22 November 2026`); clock format and `Asia/Kolkata` time zone are unchanged.
+- Code PR **#425** merged as `0f03b4563bd04d2ee0b1e51b210f9beb0b48d4a9`. Safety backup branch: `backup/before-clock-date-nowrap-2026-11-22`.
+- Publisher updated the live feed to **Web Update 417**. Re-fetched `latest.json` confirms webVersion **417** and HTML SHA-256 `7abfd7bb65d85ef0e05d3b264ccad98f2610d00c316e927056cee20cbe4ae93f`. Re-fetched `web-source/index.html` and `diary-web/index.html` are byte-identical (Git blob SHA `eb6c38a136f4a7eca1827b23e0921f9409df6943`, 616,403 characters), and both contain the one-line date style.
+- APK remains **My Diary 1.0.214 / versionCode 213** with its existing SHA-256 `1e1010b1a51433de21e55125396d2b1f2ae4c6a6202a5128a7adac0181318a85`. No APK or user-data change was intended.
+- **Phone test pending**: user should use **Me → Check for Updates**, install Web Update 417, and confirm the full date (including 2026) stays on one line beneath the clock. Do not mark phone PASS until user confirms.
+- Register backup branch: `backup/before-web417-date-nowrap-register-2026-11-22`.
+- MUAZZIN project was not touched.
+
+---
+
 # My Notes live 12-hour digital clock — Web Update 416 phone test PASS (user-confirmed, 2026-11-22)
 
 - User confirmed: **“Alhamdulillah phone Test pass.”** This confirms the live 12-hour digital clock (AM/PM) and India Standard Time date directly beneath the My Notes heading were tested successfully on the Android phone.
