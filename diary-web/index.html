@@ -532,7 +532,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 #diaryMyNotesOverlay{background:radial-gradient(circle at 15% 5%,rgba(217,185,103,.24),transparent 35%),rgba(5,17,27,.82)}
 #diaryMyNotesPanel{border:1px solid #d8bd79;border-radius:25px;background:linear-gradient(180deg,#fffef9,#f4f8f1);box-shadow:0 28px 90px #0008}
 #diaryMyNotesHead{padding:20px 58px 18px 16px;background:linear-gradient(125deg,#064b32 0%,#087653 52%,#244c70 100%);box-shadow:0 5px 18px #123c2b35}
-#diaryMyNotesHead:after{content:'✦  WRITE • SAVE • REMEMBER  ✦';display:block;margin-top:5px;color:#f4df9e;font-size:9px;letter-spacing:2px;font-weight:800}
+#diaryMyNotesHead:after{content:none!important;display:none!important}
 #diaryMyNotesBody{padding:14px;background:linear-gradient(180deg,#fbfcf8,#f1f6f0)}
 #diaryMyNotesSearch{border:1px solid #c7d8ca;border-radius:16px;padding:14px 16px;background:#fff;box-shadow:0 4px 14px #173d2b0b}
 #diaryMyNotesTools{display:flex;gap:9px;margin:11px 0;align-items:center}
@@ -3328,6 +3328,21 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   fontSlider.addEventListener('input',updateDiaryFontFromSlider);
   fontSlider.addEventListener('change',updateDiaryFontFromSlider);
   head.appendChild(el('h2',{id:'diaryMyNotesHeading'},t('title')));
+  var diaryClockWrap=el('div',{id:'diaryMyNotesDigitalClock'});
+  var diaryClockTime=el('div',{id:'diaryMyNotesClockTime'});
+  var diaryClockDate=el('div',{id:'diaryMyNotesClockDate'});
+  diaryClockWrap.style.cssText='display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;margin:7px auto 0;padding:4px 12px 2px;max-width:230px;color:#f4df9e;';
+  diaryClockTime.style.cssText='font-size:clamp(17px,4.8vw,21px);font-weight:900;letter-spacing:1.4px;line-height:1.2;font-variant-numeric:tabular-nums;';
+  diaryClockDate.style.cssText='font-size:11px;font-weight:800;letter-spacing:.7px;line-height:1.25;';
+  diaryClockWrap.appendChild(diaryClockTime);diaryClockWrap.appendChild(diaryClockDate);head.appendChild(diaryClockWrap);
+  function updateDiaryHeaderClock(){
+   if(!document.body.contains(diaryClockWrap)){window.clearInterval(diaryHeaderClockTimer);return;}
+   var now=new Date();
+   diaryClockTime.textContent=new Intl.DateTimeFormat('en-IN',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}).format(now);
+   diaryClockDate.textContent=new Intl.DateTimeFormat('en-IN',{timeZone:'Asia/Kolkata',weekday:'long',day:'2-digit',month:'long',year:'numeric'}).format(now);
+  }
+  updateDiaryHeaderClock();
+  var diaryHeaderClockTimer=window.setInterval(updateDiaryHeaderClock,1000);
   var close=el('button',{id:'diaryMyNotesClose',type:'button','aria-label':t('closeLabel')},'×');
   head.appendChild(close);
   var body=el('div',{id:'diaryMyNotesBody'});
