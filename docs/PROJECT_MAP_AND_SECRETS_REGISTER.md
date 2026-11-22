@@ -1,3 +1,14 @@
+# Isolated My Diary APK built with Web Update 424 — signed artifact ready; phone test pending (2026-11-23)
+
+- User requested a standalone APK containing **Web Update 424** after the latest update caused trouble. Built on isolated branch `build/isolated-web424-apk-2026-11-23`; safety backup branch: `backup/before-isolated-web424-apk-2026-11-23`.
+- Exact Web 424 source commit: `98f191d48ea48f2a55faaa2568699873658b98ed`. The isolated build set `web-source/index.html` and `diary-web/index.html` to the same exact HTML; both have Git blob SHA `aa571ee65d7920b07f44732f3c1c96cc32d45f4c`. The APK workflow confirmed exact source/mirror parity and passed all source, translation-audit, identity, and version guards.
+- Isolated workflow run **45068187136** completed **success**. Debug build succeeded; signing readiness and keystore/alias validation passed; signed Release APK build and upload passed; translation audit and APK artifact uploads passed.
+- Built signed APK: **My Diary 1.0.215 / versionCode 214**, containing the Web 424 HTML bundle. Artifact: `My-Diary-Web-424-1.0.215-signed-APK` (GitHub Actions artifact ID `14771524096`); ZIP size 2,043,665 bytes; extracted `app-release.apk` size 2,101,228 bytes; extracted APK SHA-256 `463daa686847ec7fa00fa2074a5e7b6acc9ab3347eeae14a1bdac9c17cf7aaea`. JAR signature verification found a signing certificate valid through 2054-03-22.
+- **Isolation guard:** this workflow intentionally did not publish or change the live APK feed. Live main remains Web Update **428**, APK **1.0.214 / versionCode 213**. The 1.0.215 Web 424 APK is a separate downloadable candidate, not the live auto-update release.
+- Downloaded signed APK artifact ZIP for owner delivery. User must install/test the APK on their Android phone; **phone test pending**. Do not claim device PASS until user confirms. MUAZZIN project was not touched.
+
+---
+
 # Home Screen Widget Settings button isolated from shared Me styling — Web Update 428 published; phone test pending (2026-11-23)
 
 - User reported Web Update 427 was installed but the **🏠 Home Screen Widget Settings** label still did not fit correctly. Inspection found the cause: the later, more-specific selector `#diaryDiaryMePanel .diary-me-feature-btn` overrode the earlier ID-only button rule, so the 13px/no-wrap/padding settings from Web Update 427 were not reliably winning in the cascade.
