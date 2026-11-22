@@ -1,3 +1,15 @@
+# Remove optional Web Update 407 note-box design — code prepared; publishing pending (2026-11-22)
+
+- User asked to remove the previously added combined design (1 + 2 + 4): royal-purple title fill, cream/parchment body fill, and gold corner ornaments.
+- Removed only the appended `web407-royal-note-box-design` CSS block from both `web-source/index.html` and `diary-web/index.html`. This restores the pre-407 Web 406 appearance; it does not remove the earlier Web 406 four-side purple/gold border treatment.
+- No editor styling, note text, saved data, photo attachments, PINs, locks, storage, or native Android source was changed.
+- Safety backup branch: `backup/before-remove-web407-design-2026-11-22`. Working branch: `revert/remove-web407-design-2026-11-22`.
+- Both HTML copies were edited by removing the exact Web 407 style block only. Publishing and live-feed/checksum verification are still pending; do not tell the user to expect the rollback on phone until a new web update is live.
+- Phone test pending after publishing: check for updates, open an expanded unlocked saved note, and confirm the Web 407 purple/cream fills and gold corner ornaments are gone while the prior Web 406 borders and existing note/photo content remain.
+- MUAZZIN project was not touched.
+
+---
+
 # Royal purple name box + cream/gold writing box — Web Update 407 LIVE; phone test pending (2026-11-22)
 
 - User approved the combined visual direction: royal purple title/name box (idea 1), light cream/parchment writing box (idea 2), and subtle gold corner ornaments (idea 4). User explicitly requested that the new design be removable if they dislike it.
