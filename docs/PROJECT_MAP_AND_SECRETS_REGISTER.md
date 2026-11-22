@@ -1,3 +1,16 @@
+# Saved Note uniform four-side purple/gold borders — Web Update 406 LIVE; phone test pending (2026-11-22)
+
+- User reported that the bottom edge of both Web 405 borders looked thicker than the top and side edges. Root cause: the old 3D shadows used downward offsets (0 3px, 0 6px, 0 10px), which visually accumulated below the border.
+- Corrected only the expanded, unlocked saved-note display styling: replaced the bottom-offset shadows with centered, zero-offset bevel/ring shadows. The saved-note title remains purple and the displayed body remains gold, with uniform border thickness around all four sides. Dark-mode equivalents are included.
+- The note editor fields are not targeted. No note content/schema, save/read logic, photos, PINs, locks, storage, or native Android source was changed.
+- Safety backup branch before code correction: backup/before-web406-even-border-2026-11-22. Code PR #388 merged as bd3c5c6b2c8f7be12ca694918f702685614df81f.
+- web-source/index.html and diary-web/index.html were re-fetched from main and verified byte-identical (Git blob SHA 3f418f48457e309d0565c94d624df10e6bbbe133, 611,438 characters). The source contains the symmetric purple and gold ring rules.
+- The initial publisher run 45016604819 (run #531) succeeded but retained webVersion 405 because source and mirror had already been updated together; it repaired the checksum only. Feed-only PR #389 then advanced latest.json to Web Update 406, with SHA-256 d41d57fcd6346dd468e9472bf866d78c61f79c635596c8e116d88f7bf999eabd. PR merged as 5654a3c54bb51cce6a5364139a5270e9fa397570. Backup branch: backup/before-web406-feed-version-2026-11-22.
+- Publisher workflow run 45016784525 (run #532) completed success. Live latest.json was re-fetched and confirms webVersion 406, the matching SHA-256, and the release notes describing even four-side borders.
+- Phone test pending: user should run Me → Check for Updates, receive Web Update 406, open an expanded unlocked saved note, and confirm title border is evenly purple on all four sides and body border evenly gold on all four sides; editor fields must remain unchanged. Do not mark device PASS before user confirmation.
+- MUAZZIN project was not touched.
+
+---
 # Saved Note name purple + body gold 3D borders — Web Update 405 candidate; publishing/device test pending (2026-11-22)
 
 - User approved the distinction: the saved Note's displayed name/title gets a purple raised 3D border on all four sides; its displayed writing/body gets a gold raised 3D border on all four sides.
