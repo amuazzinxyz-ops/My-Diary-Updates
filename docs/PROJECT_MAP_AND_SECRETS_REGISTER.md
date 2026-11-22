@@ -1,30 +1,15 @@
-# Remove optional Web Update 407 note-box design — code merged; Web Update 408 feed PR pending (2026-11-22)
+# Remove optional Web Update 407 note-box design — Web Update 408 LIVE; phone test pending (2026-11-22)
 
 - User asked to remove the previously added combined design (1 + 2 + 4): royal-purple title fill, cream/parchment body fill, and gold corner ornaments.
 - Removed only the appended `web407-royal-note-box-design` CSS block from both `web-source/index.html` and `diary-web/index.html`. This restores the pre-407 Web 406 appearance; it does not remove the earlier Web 406 four-side purple/gold border treatment.
 - No editor styling, note text, saved data, photo attachments, PINs, locks, storage, or native Android source was changed.
 - Safety backup branch: `backup/before-remove-web407-design-2026-11-22`. Code PR **#395** merged as `acdc8773244b7963316b59c7c76106d0f8f16d41`.
 - Source and mirror re-fetched from main and verified byte-identical: Git blob SHA `136abccb7798342166a186de176f67ed0e468cfe`, 611,441 characters. The Web 407 style block is absent; the earlier Web 406 saved-note styling remains.
-- Independently computed SHA-256 for the exact merged HTML bytes: `e64b8c283f97a20fc613ef61bae443d0b07afd78e229d19a88a2b4450d366ab7`. The same SHA method was validated against the previous live Web 407 checksum.
-- Delivery feed branch `release/web408-remove-note-design-2026-11-22` updates `latest.json` to **Web Update 408** with that exact checksum and rollback release notes. Feed PR and live verification are pending; do not ask the user to phone-test until the feed is merged and re-fetched.
-- Phone test pending after Web Update 408 is live: use **Me → Check for Updates**, open an expanded unlocked saved note, and confirm the Web 407 purple/cream fills and gold corner ornaments are gone while the prior Web 406 borders and existing note/photo content remain.
+- Exact HTML SHA-256 independently computed and verified against the previous Web 407 known checksum: `e64b8c283f97a20fc613ef61bae443d0b07afd78e229d19a88a2b4450d366ab7`.
+- Delivery feed PR **#396** merged as `3d0e0f7292d7e55cf9acfae43945276c8c961d8a`. Live `latest.json` re-fetched and confirms **Web Update 408**, the matching HTML SHA-256, and rollback release notes. The app update feed now advertises the removal.
+- **Phone test pending**: user should use **Me → Check for Updates**, receive Web Update 408, open an expanded unlocked saved note, and confirm the Web 407 purple/cream fills and gold corner ornaments are gone while the prior Web 406 borders and existing note/photo content remain. Do not mark phone-side PASS until user confirms.
 - MUAZZIN project was not touched.
 
-
-# Royal purple name box + cream/gold writing box — Web Update 407 LIVE; phone test pending (2026-11-22)
-
-- User approved the combined visual direction: royal purple title/name box (idea 1), light cream/parchment writing box (idea 2), and subtle gold corner ornaments (idea 4). User explicitly requested that the new design be removable if they dislike it.
-- Implemented a CSS-only style block `web407-royal-note-box-design`, scoped only to the expanded, unlocked saved-note display class `.diary-note-saved-3d`. The title/name display receives a royal purple gradient and raised gold border; the writing/body display receives a light cream parchment gradient and raised gold border. Both receive small gold corner ornaments.
-- Photo-backed title/body display elements are excluded from the new background fills, preserving their existing image backgrounds and placement. No editor input styling, note content/schema, save/read logic, photo data, PINs, locks, storage, or native Android source was intentionally changed.
-- The design is reversible: remove only the appended `web407-royal-note-box-design` style block to restore the previous Web 406 appearance.
-- Safety backup branch before the code change: `backup/before-royal-note-box-design-2026-11-22`. Code PR **#392** merged as `f8a043b9490c419d73c0141fadfb596ca540ab34`.
-- `web-source/index.html` and `diary-web/index.html` were re-fetched from main and verified byte-identical at Git blob SHA `e5e86a1ea67ece71c1c2f3153c09042b1dbb7559` (614,038 characters). Web publisher run **45017993042** (run #533) completed **success** and repaired the exact web SHA-256 to `e1ad5419d52f3de2ce98dd6f70dbefb974ed471735f6c46e0054f027aa8fd826`.
-- Delivery feed PR **#393** merged as `6ea05c0ee603be8aa5de6e7832becdc945610b41`; live `latest.json` was re-fetched and confirms **Web Update 407**, the matching web SHA-256, and release notes for the new royal/cream/gold design. Feed publisher run **45018204693** (run #534) completed **success**.
-- The automatic APK workflow run **45017993157** (run #479) also completed **success**. It rebuilt the same My Diary **1.0.214 / versionCode 213** release and updated the APK checksum in the feed; no native source change was requested or made by this CSS-only task.
-- **Phone test pending**: user should use **Me → Check for Updates**, receive Web Update 407, open an expanded unlocked saved note, and inspect the purple/gold title box, cream/gold writing box, and all four corner decorations. Existing photo-backed notes should retain their images. Do not mark phone-side PASS until user confirms.
-- MUAZZIN project was not touched.
-
----
 
 # Saved Note uniform four-side purple/gold borders — Web Update 406 LIVE; phone test PASS (user-confirmed, 2026-11-22)
 
