@@ -3313,6 +3313,56 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    if(!diaryStorageReady){prepareDiaryStorage().then(refreshDiaryNow);return;}
    refreshDiaryNow();
   });
+  /* Pull down from the very top of the Diary page to run the existing Refresh action. */
+  (function enableDiaryPullToRefresh(){
+   var startX=0,startY=0,pullDistance=0,pullActive=false;
+   var indicator=document.createElement('div');
+   indicator.id='diaryPullRefreshIndicator';
+   indicator.setAttribute('aria-live','polite');
+   indicator.style.cssText='position:fixed;z-index:100000;top:calc(env(safe-area-inset-top,0px) + 8px);left:50%;transform:translate(-50%,-150%);padding:8px 15px;border:2px solid #d4af37;border-radius:999px;background:#6330b8;color:#fff;box-shadow:0 3px 0 #9b7415,0 6px 14px #24133b44;font-size:13px;font-weight:900;white-space:nowrap;pointer-events:none;transition:transform .12s ease;';
+   document.body.appendChild(indicator);
+   function pageAtTop(){
+    return Math.max(window.scrollY||0,document.documentElement.scrollTop||0,document.body.scrollTop||0)<=0;
+   }
+   function allowedStart(target){
+    if(!target||!target.closest)return true;
+    if(target.closest('input,textarea,select,button,a,[contenteditable="true"],[role="dialog"],dialog,[aria-modal="true"],.diary-me-menu-open,.diary-finger-adjust-active'))return false;
+    for(var node=target;node&&node!==document.body;node=node.parentElement){
+     var style=window.getComputedStyle(node);
+     if((style.overflowY==='auto'||style.overflowY==='scroll')&&node.scrollHeight>node.clientHeight+4)return false;
+    }
+    return true;
+   }
+   function hideIndicator(){indicator.style.transform='translate(-50%,-150%)';}
+   document.addEventListener('touchstart',function(e){
+    if(e.touches.length!==1||!pageAtTop()||!allowedStart(e.target))return;
+    startX=e.touches[0].clientX;startY=e.touches[0].clientY;pullDistance=0;pullActive=true;
+   },{capture:true,passive:true});
+   document.addEventListener('touchmove',function(e){
+    if(!pullActive)return;
+    if(e.touches.length!==1){pullActive=false;hideIndicator();return;}
+    var touch=e.touches[0],dx=touch.clientX-startX,dy=touch.clientY-startY;
+    if(dy<0||Math.abs(dx)>Math.max(22,dy*0.65)){pullActive=false;hideIndicator();return;}
+    if(dy<8||!pageAtTop())return;
+    e.preventDefault();
+    pullDistance=dy;
+    indicator.textContent=(dy>=82?'↻ ':'↓ ')+t('refresh');
+    indicator.style.transform='translate(-50%,'+Math.min(18,Math.max(-42,dy-62))+'px)';
+   },{capture:true,passive:false});
+   document.addEventListener('touchend',function(){
+    if(!pullActive)return;
+    pullActive=false;
+    var shouldRefresh=pullDistance>=82;
+    pullDistance=0;
+    if(shouldRefresh){
+     indicator.textContent='↻ '+t('refresh');
+     indicator.style.transform='translate(-50%,0)';
+     refreshDiaryBtn.click();
+     window.setTimeout(hideIndicator,1100);
+    }else hideIndicator();
+   },{capture:true,passive:true});
+   document.addEventListener('touchcancel',function(){pullActive=false;pullDistance=0;hideIndicator();},{capture:true,passive:true});
+  })();
   diaryPinBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();configureDiaryPin(true);});
   unlockDiaryBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();turnDiaryLockOff();});
   diaryLockSettingsBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();openDiaryLockSettings();});
