@@ -262,8 +262,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 #diaryMyNotesEditor.diary-read-mode #diaryMyNotesDraftClearX{display:none!important}
 #diaryMyNotesEditor.diary-read-mode #diaryMyNotesTitle,
 #diaryMyNotesEditor.diary-read-mode #diaryMyNotesText{cursor:text;background:#fff!important}
-/* Purple raised 3D styling applies only to the note-name/title box when a saved note is opened. */
-#diaryMyNotesEditor.diary-read-mode #diaryMyNotesTitle{
+/* Purple raised 3D styling applies to the title box whenever an existing saved note is opened, including edit mode. */
+#diaryMyNotesEditor.diary-saved-note-opened #diaryMyNotesTitle{
   border:2px solid #7540b8!important;
   border-radius:10px!important;
   background:linear-gradient(145deg,#f7edff,#e5d2ff)!important;
@@ -4007,6 +4007,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   clearX.hidden=!hasDraft;
  }
  function newNote(){
+  var noteEditor=document.getElementById('diaryMyNotesEditor');if(noteEditor)noteEditor.classList.remove('diary-saved-note-opened');
   setDiaryNoteReadMode(false);
   clearDiaryFingerAdjust();activeId=null;activePhotoData=null;activeCoverPhotoData=null;activeCoverText='';activeDetailPhotoData=null;activeDetailText='';activeCoverColour=cleanDiaryColour({mode:'none'});activeDetailColour=cleanDiaryColour({mode:'none'});activePhotoColour=cleanDiaryColour({mode:'none'});diaryFingerAdjustKind=null;activeCoverTextFormat={size:18,family:'Arial, sans-serif',bold:true,italic:false,underline:false,color:'#172033',colorCustom:false};activeDetailTextFormat={size:18,family:'Arial, sans-serif',bold:true,italic:false,underline:false,color:'#172033',colorCustom:false};renderDiaryPhotoPreview();renderDiaryImagePreview('Cover');renderDiaryImagePreview('Detail');
   var title=document.getElementById('diaryMyNotesTitle'),body=document.getElementById('diaryMyNotesText'),status=document.getElementById('diaryMyNotesStatus');
@@ -4070,6 +4071,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   document.getElementById('diaryMyNotesDelete').style.display='';
   updateDiaryDraftClearXVisibility();
   setDiaryNoteReadMode(!!readOnly||!!showingFavouriteNotes);
+  document.getElementById('diaryMyNotesEditor').classList.add('diary-saved-note-opened');
   document.getElementById('diaryMyNotesEditor').scrollIntoView({behavior:'smooth',block:'start'});
  }
  function pinDigest(pin,salt){
