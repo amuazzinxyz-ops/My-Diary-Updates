@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 397,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "e0a5e8ff51033b4a617dbea3c4b2a314118769d00f975a3dc9c1f7351b351d74",
+  "webSha256": "550d12dce4fce3f90c1cfd6d74168d10374e81978db9cc15523d6739bb739fc6",
   "webReleaseNotes": "Private Locker header PIN label shifted slightly left and button widened so the full label fits. Existing PIN action, lock/security behavior, recovery, encryption, and saved entries are unchanged."
 }
