@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 412,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "2c9e0787874435f0f516ea8f45ed1b230f0310105d2c7868e2e84846f96f8e11",
+  "webSha256": "190e8eab1e3807a5c2739d71b5f246613da8f0f705db5ebdb34d30d4a0a61c49",
   "webReleaseNotes": "Web Update 412: Diary PIN recovery × close control is shown on the screen that opens immediately after the temporary Recovery PIN is accepted (Favourite Name verification step). It is removed from the new-PIN entry and confirmation screens. Tapping × closes only the recovery overlay; recovery verification and saved data are preserved."
 }
