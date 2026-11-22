@@ -503,7 +503,7 @@ jobs:
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
           if code != 212 or name != "1.0.213":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.213/211, found {name}/{code}")
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.213/212, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
           if feed_version not in ((211, "1.0.212"), (212, "1.0.213")):
               raise SystemExit(f"BLOCKED: update feed is neither the installed baseline nor the approved target release: {feed_version}")
