@@ -7,8 +7,8 @@
   "sha256": "9567f9696eca9cc9fd5f875cb88b6cd2e49c041bf97a94064fcb007b32fa163a",
   "releaseNotes": "My Diary 1.0.214: App Share now attaches the original My Diary logo image with the formatted invitation and existing direct APK download link. Existing share chooser, app identity, notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 415,
+  "webVersion": 416,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "1ef109685868c650023f0dd327b9257ecdbc929be5344221d3768031e93a9aff",
-  "webReleaseNotes": "Web Update 415: Removed the × close control from the copied temporary Recovery PIN entry screen. Existing Diary PIN recovery, Favourite Name verification, PINs, notes, photos, and saved data are preserved."
+  "webReleaseNotes": "Web Update 416: Replaced the WRITE • SAVE • REMEMBER tagline beneath the My Notes heading with a live 12-hour digital clock (AM/PM) and India Standard Time date. Existing notes, photos, saving, PINs, locks, and other Diary features are preserved."
 }
