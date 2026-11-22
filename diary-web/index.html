@@ -3759,7 +3759,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var recoveryStatus=el('div',{id:'diaryDiaryUnlockFingerprintStatus'});recoveryStatus.style.cssText='display:block;min-height:28px;margin:8px 0;padding:8px 10px;border-radius:8px;background:#fff;color:#8b1717;font-size:16px;line-height:1.45;font-weight:900;overflow-wrap:anywhere;text-align:left;';
   var recoveryClose=el('button',{type:'button','aria-label':t('closeLabel')},'×');recoveryClose.style.cssText='position:absolute;top:7px;right:9px;width:34px;height:34px;padding:0;border:1px solid #bda7d7;border-radius:50%;background:#eee5ff;color:#4b287e;font-size:26px;line-height:1;font-weight:900;box-shadow:0 2px 0 #c9b5df;';recoveryClose.hidden=true;
   recoveryClose.addEventListener('click',function(){if(shade.parentNode)shade.parentNode.removeChild(shade);});
-  function syncRecoveryClose(){recoveryClose.hidden=!(recoveryStage==='new'||recoveryStage==='confirm');}
+  function syncRecoveryClose(){recoveryClose.hidden=!(recoveryStage==='recoveryName');}
   function focusPin(){input.value='';input.focus();}
   function submitPinStage(){
    if(recoveryStage==='recoveryName'){
@@ -3779,7 +3779,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     if(value!==current||!current){recoveryStatus.textContent=t('diaryPinWrong');focusPin();return;}
     if(diaryRecoveryPending()){
      if(!diaryHasFavouriteName()){recoveryStatus.textContent=t('favouriteNameRequired');focusPin();return;}
-     recoveryStage='recoveryName';heading.textContent=t('favouriteNameTitle');input.type='text';input.inputMode='text';input.maxLength=80;input.style.letterSpacing='normal';input.style.textAlign='left';input.style.fontSize='19px';input.style.padding='15px 13px';input.placeholder=t('favouriteNamePrompt');recoveryNameSubmit.hidden=false;recoveryStatus.textContent='';focusPin();return;
+     recoveryStage='recoveryName';syncRecoveryClose();heading.textContent=t('favouriteNameTitle');input.type='text';input.inputMode='text';input.maxLength=80;input.style.letterSpacing='normal';input.style.textAlign='left';input.style.fontSize='19px';input.style.padding='15px 13px';input.placeholder=t('favouriteNamePrompt');recoveryNameSubmit.hidden=false;recoveryStatus.textContent='';focusPin();return;
     }
     if(shade.parentNode)shade.parentNode.removeChild(shade);openDiaryPanel();diaryFinishPendingWidgetTarget();return;
    }
