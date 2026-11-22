@@ -7,8 +7,8 @@
   "sha256": "1e1010b1a51433de21e55125396d2b1f2ae4c6a6202a5128a7adac0181318a85",
   "releaseNotes": "My Diary 1.0.214: App Share now attaches the original My Diary logo image with the formatted invitation and existing direct APK download link. Existing share chooser, app identity, notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 420,
+  "webVersion": 421,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "b9ba08a1d620a8c3dfc907b5bace9d2a3589377512e426815e97cd9318365d8c",
-  "webReleaseNotes": "Web Update 420: Added one Theme Mode button inside Me with Light Mode, Dark Mode, and Default Mode (the original Diary appearance). No Auto Mode. The selected theme is saved separately; notes, photos, PINs, locks, and APK code are unchanged."
+  "webSha256": "25958e297e12787dbb1a603167c0baa76f79015656f4a2910fb7fc6db1664a53",
+  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
