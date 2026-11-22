@@ -10,5 +10,5 @@
   "webVersion": 418,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "551a28de9240ef9b15213306d5a5bb0a582485d9ac462a4f7ba9d43f60be4cf9",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "Web Update 418: Added a subtle gold-toned 3D raised text effect to the live time and date beneath My Notes. The 12-hour clock with AM/PM and seconds, IST time zone, one-line date, font sizes, saved notes, photos, PINs, and locks remain unchanged."
 }
