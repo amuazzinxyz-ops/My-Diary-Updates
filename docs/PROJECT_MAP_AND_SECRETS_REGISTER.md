@@ -1,3 +1,14 @@
+# Saved Note uniform four-side purple/gold borders — Web Update 406 LIVE; phone test PASS (user-confirmed, 2026-11-22)
+
+- User explicitly confirmed: **“Phone Test Pass”** for Web Update 406.
+- This confirms the user tested the installed update on their Android phone and the saved Note title/name purple border and writing/body gold border appear evenly thick on all four sides.
+- Web Update 406 remains live in `latest.json`; the source and published mirror were previously verified byte-identical, and publisher workflow run #532 completed successfully.
+- The change is presentation-only. Editor fields, note content, save/read logic, photos, PINs, locks, storage, and native Android source were not changed by Web Update 406.
+- Device-side status: **PASS (user-confirmed)**. This closes the phone-test item for Web Update 406.
+- Safety backup branch for this documentation-only update: `backup/before-web406-phone-pass-register-2026-11-22`. No HTML, APK, feed, user data, or MUAZZIN files are changed.
+
+---
+
 # Saved Note uniform four-side purple/gold borders — Web Update 406 LIVE; phone test pending (2026-11-22)
 
 - User reported that the bottom edge of both Web 405 borders looked thicker than the top and side edges. Root cause: the old 3D shadows used downward offsets (0 3px, 0 6px, 0 10px), which visually accumulated below the border.
