@@ -10,5 +10,5 @@
   "webVersion": 417,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "7abfd7bb65d85ef0e05d3b264ccad98f2610d00c316e927056cee20cbe4ae93f",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "Web Update 417: The full date beneath the My Notes digital clock (weekday, day, month, and year) now stays on one line, including 2026. The 12-hour clock, AM/PM, IST time zone, saved notes, photos, PINs, and locks are unchanged."
 }
