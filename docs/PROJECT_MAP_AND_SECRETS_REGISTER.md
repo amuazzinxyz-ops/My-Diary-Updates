@@ -1,4 +1,15 @@
-# Diary PIN recovery new-PIN screen close button — Web Update 411 LIVE; phone test pending (2026-11-22)
+# Diary PIN recovery × button moved to post-Recovery-PIN screen — Web Update 412 LIVE; phone test pending (2026-11-22)
+
+- User clarified the required location: remove × from the new-PIN and confirm-PIN screens; show it on the next recovery screen that opens immediately after the temporary Recovery PIN is entered successfully (Favourite Name verification step).
+- Updated both `web-source/index.html` and `diary-web/index.html`: × appears only during the Favourite Name verification stage after the temporary Recovery PIN is accepted, and is hidden again after that verification succeeds. Tapping × closes only the recovery overlay. Existing recovery checks and stored PIN/note/photo data are not intentionally changed.
+- Previous misplaced × on new-PIN/confirm-PIN stage is corrected. Code PR **#410** merged as `25c4ab6782d55a62b83d24f06da64b312db5e5aa`.
+- Safety backup branch: `backup/before-move-diary-recovery-close-2026-11-22`; feed/register safety backup branch: `backup/before-web412-recovery-close-feed-2026-11-22`.
+- Publisher workflow run **45026526002** (run #545) completed **success**. Published HTML SHA-256: `2c9e0787874435f0f516ea8f45ed1b230f0310105d2c7868e2e84846f96f8e11`.
+- Feed advanced to **Web Update 412**. APK remains **1.0.214 / versionCode 213**; current APK checksum retained in `latest.json` is `21c79dec69afe95772d8c9be8bd353b97913f083f2fd158750ca11f215d771e2`. No APK feature/source change was made in this correction.
+- **Phone test pending**: install Web Update 412 using **Me → Check for Updates**. Open Diary PIN Lock → **❓ PIN Bhool Gaye?** → enter the temporary Recovery PIN. Confirm × appears on the very next Favourite Name verification box (not on New PIN / Confirm PIN), and that tapping × closes it. Do not mark phone PASS until user confirms.
+- MUAZZIN project was not touched.
+
+---
 
 - User requested a simple **×** close control in **Diary PIN Lock → ❓ PIN Bhool Gaye?** after the temporary PIN and recovery Favourite Name have been verified and the new-PIN entry box appears.
 - Added a small round × at the top-right of the Diary unlock/recovery card. It is hidden during ordinary unlock and earlier recovery steps; it appears only for new-PIN entry and PIN confirmation. Tapping it closes only the overlay. It does not change or clear the temporary PIN, recovery-pending flag, Favourite Name recovery record, saved PIN, or PIN verification flow. Reopening the Diary prompts the user to continue through the existing recovery verification again.
