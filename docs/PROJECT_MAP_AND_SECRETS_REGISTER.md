@@ -1,11 +1,11 @@
-# Theme Mode button removed — Web Update 421 published; phone test pending (2026-11-23)
+# Theme Mode button removed — Web Update 421 phone test PASS (user-confirmed, 2026-11-23)
 
 - User requested removal of the newly added **🎨 Theme Mode** button inside **Me**. Removed the button, Light/Dark/Default chooser, modal handlers, and all three Theme Mode CSS blocks. The original Diary appearance is restored; the old `diaryThemeMode` preference and `data-diary-theme` attribute are cleared when the Diary overlay is created.
 - Existing Me button/panel and language selector are preserved. Notes, photos, PINs, locks, user data, unrelated Diary features, and APK/native source were not intentionally changed.
 - Source backup branch: `backup/before-remove-theme-mode-2026-11-23`. Register backup branch: `backup/before-remove-theme-mode-register-2026-11-23`. Code PR **#438** merged as `01fbc0feef98c5a5b8bf5a385e5ba55101114959`.
 - Web publisher workflow run **45060779302** completed **success**. Published as **Web Update 421**. Live `latest.json` advertises web SHA-256 `25958e297e12787dbb1a603167c0baa76f79015656f4a2910fb7fc6db1664a53`. Re-fetched `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `4ea2ef8c9c727952886f3f384fca2722716eb461` (616,670 characters); both are free of the Theme Mode button and its theme CSS.
 - APK remains **My Diary 1.0.214 / versionCode 213**, SHA-256 `1e1010b1a51433de21e55125396d2b1f2ae4c6a6202a5128a7adac0181318a85`. The automatically triggered APK workflow run **45060779410** stopped at the pre-build source/mirror equality guard while the web publisher was synchronizing the mirror; Gradle build/sign/publish steps were skipped. No new APK was produced or published.
-- **Phone test pending**: install Web Update 421 using **Me → Check for Updates**, then confirm the Theme Mode button is gone and the Diary has returned to its original appearance. Do not mark phone PASS until user confirms.
+- **Phone test PASS (user-confirmed, 2026-11-23)**: user confirmed **“Good Phone Test Pass”** after testing Web Update 421 on the Android phone. This closes the pending check: the removed Theme Mode button is gone and the original Diary appearance is restored. This confirmation applies to the user's tested phone only; no other devices/browsers are claimed.
 - MUAZZIN project was not touched.
 
 
