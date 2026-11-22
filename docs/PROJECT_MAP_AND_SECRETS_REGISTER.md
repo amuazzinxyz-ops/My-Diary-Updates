@@ -1,3 +1,18 @@
+# Royal purple name box + cream/gold writing box — Web Update 407 LIVE; phone test pending (2026-11-22)
+
+- User approved the combined visual direction: royal purple title/name box (idea 1), light cream/parchment writing box (idea 2), and subtle gold corner ornaments (idea 4). User explicitly requested that the new design be removable if they dislike it.
+- Implemented a CSS-only style block `web407-royal-note-box-design`, scoped only to the expanded, unlocked saved-note display class `.diary-note-saved-3d`. The title/name display receives a royal purple gradient and raised gold border; the writing/body display receives a light cream parchment gradient and raised gold border. Both receive small gold corner ornaments.
+- Photo-backed title/body display elements are excluded from the new background fills, preserving their existing image backgrounds and placement. No editor input styling, note content/schema, save/read logic, photo data, PINs, locks, storage, or native Android source was intentionally changed.
+- The design is reversible: remove only the appended `web407-royal-note-box-design` style block to restore the previous Web 406 appearance.
+- Safety backup branch before the code change: `backup/before-royal-note-box-design-2026-11-22`. Code PR **#392** merged as `f8a043b9490c419d73c0141fadfb596ca540ab34`.
+- `web-source/index.html` and `diary-web/index.html` were re-fetched from main and verified byte-identical at Git blob SHA `e5e86a1ea67ece71c1c2f3153c09042b1dbb7559` (614,038 characters). Web publisher run **45017993042** (run #533) completed **success** and repaired the exact web SHA-256 to `e1ad5419d52f3de2ce98dd6f70dbefb974ed471735f6c46e0054f027aa8fd826`.
+- Delivery feed PR **#393** merged as `6ea05c0ee603be8aa5de6e7832becdc945610b41`; live `latest.json` was re-fetched and confirms **Web Update 407**, the matching web SHA-256, and release notes for the new royal/cream/gold design. Feed publisher run **45018204693** (run #534) completed **success**.
+- The automatic APK workflow run **45017993157** (run #479) also completed **success**. It rebuilt the same My Diary **1.0.214 / versionCode 213** release and updated the APK checksum in the feed; no native source change was requested or made by this CSS-only task.
+- **Phone test pending**: user should use **Me → Check for Updates**, receive Web Update 407, open an expanded unlocked saved note, and inspect the purple/gold title box, cream/gold writing box, and all four corner decorations. Existing photo-backed notes should retain their images. Do not mark phone-side PASS until user confirms.
+- MUAZZIN project was not touched.
+
+---
+
 # Saved Note uniform four-side purple/gold borders — Web Update 406 LIVE; phone test PASS (user-confirmed, 2026-11-22)
 
 - User explicitly confirmed: **“Phone Test Pass”** for Web Update 406.
