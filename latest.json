@@ -7,8 +7,8 @@
   "sha256": "5f85411e47219f4e4eaa63f3ac46847631a1de90da176ed07978b87a5d450dc9",
   "releaseNotes": "My Diary 1.0.214: App Share now attaches the original My Diary logo image with the formatted invitation and existing direct APK download link. Existing share chooser, app identity, notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 407,
+  "webVersion": 408,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "e64b8c283f97a20fc613ef61bae443d0b07afd78e229d19a88a2b4450d366ab7",
-  "webReleaseNotes": "Web Update 407: On an expanded, unlocked saved Note, the title/name box now has a royal purple finish with a raised gold border, and the writing/body box has a light cream parchment finish with a raised gold border. Both boxes include subtle gold corner ornaments. Existing photo-backed fields retain their images. Editor fields and saved content remain unchanged."
+  "webReleaseNotes": "Web Update 408: Removed the optional Web Update 407 royal-purple title fill, cream/parchment writing fill, and gold corner ornaments. Restores the previous Web Update 406 saved-note appearance. Existing Web 406 borders, editor fields, saved notes, photos, PINs, locks, and stored data remain unchanged."
 }
