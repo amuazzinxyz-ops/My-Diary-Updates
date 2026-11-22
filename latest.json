@@ -7,8 +7,8 @@
   "sha256": "c80df48ae489a0391d0b1372977b5a0a95a8f982139e5dcdf206931cced5f9db",
   "releaseNotes": "My Diary 1.0.214: App Share now attaches the original My Diary logo image with the formatted invitation and existing direct APK download link. Existing share chooser, app identity, notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 400,
+  "webVersion": 401,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "2ef47e57c4c9d6279b69640f4cf8de416da83bca04a0125321714b33c8ca67ab",
-  "webReleaseNotes": "Web Update 400: The purple raised 3D border now appears on the note-name/title box whenever an existing saved Diary note is opened, including its normal editable view. New-note editor and note text box remain unchanged; all saved notes, photos, PINs, locks, and data are preserved."
+  "webReleaseNotes": "Web Update 401: Purple raised 3D border is applied to the note-name/title box after a note is successfully saved and whenever any saved note is opened, including older notes. The note text box remains unchanged; saved notes, photos, PINs, locks, and data are preserved."
 }
