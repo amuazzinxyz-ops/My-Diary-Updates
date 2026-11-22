@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 413,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "190e8eab1e3807a5c2739d71b5f246852e8ab1f0f705db5ebdb34d30d4a0a61c49",
+  "webSha256": "190e8eab1e3807a5c2739d71b5f246613da8f0f705db5ebdb34d30d4a0a61c49",
   "webReleaseNotes": "Web Update 413: Removed the × close control from Diary PIN recovery, including the Favourite Name verification screen after the temporary Recovery PIN is accepted. Existing recovery verification, PINs, notes, photos, and saved data are preserved."
 }
