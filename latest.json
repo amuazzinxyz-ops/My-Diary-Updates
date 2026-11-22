@@ -10,5 +10,5 @@
   "webVersion": 420,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "b9ba08a1d620a8c3dfc907b5bace9d2a3589377512e426815e97cd9318365d8c",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "Web Update 420: Added one Theme Mode button inside Me with Light Mode, Dark Mode, and Default Mode (the original Diary appearance). No Auto Mode. The selected theme is saved separately; notes, photos, PINs, locks, and APK code are unchanged."
 }
