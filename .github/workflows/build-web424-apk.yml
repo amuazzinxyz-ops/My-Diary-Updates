@@ -8,7 +8,7 @@ on:
     paths:
       - "Diary-Android-Project-v13 (6).zip"
       - "web-source/index.html"
-      - ".github/workflows/build-diary-from-zip.yml"
+      - ".github/workflows/build-web424-apk.yml"
       - "scripts/**"
       - "assets/my-diary-icon.jpg"
   workflow_dispatch:
