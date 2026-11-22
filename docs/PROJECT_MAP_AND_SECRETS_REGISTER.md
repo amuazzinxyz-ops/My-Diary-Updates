@@ -1,3 +1,14 @@
+# Diary PIN recovery × removal — Web Update 413 phone test PASS (user-confirmed, 2026-11-22)
+
+- User confirmed: **“Hat gaya alhamdulillah phone Test Pass”**. This confirms the × close control is absent from the Favourite Name verification screen that appears after the temporary Recovery PIN is accepted.
+- Device-side status: **PASS (user-confirmed)**. This closes the pending phone test recorded in the Web Update 413 feed-correction entry below.
+- The tested release remains **Web Update 413**. Live `latest.json` was previously verified to advertise webVersion 413 and SHA-256 `190e8eab1e3807a5c2739d71b5f246613da8f0f705db5ebdb34d30d4a0a61c49`; source and published mirror were byte-identical and the removed recovery-close code was absent.
+- APK remains **My Diary 1.0.214 / versionCode 213**; no APK change or rebuild is associated with this phone-test confirmation.
+- No new HTML, feed, APK, or user-data change was made for this documentation-only status update. Backup branch: `backup/before-web413-phone-pass-register-2026-11-22`.
+- MUAZZIN project was not touched.
+
+---
+
 # Diary PIN recovery × removed from Favourite Name verification — Web Update 413 feed correction (2026-11-22)
 
 - User clarified that the × close control must be removed, not shown, on the recovery screen that appears immediately after the temporary Recovery PIN is accepted (Favourite Name verification step).
