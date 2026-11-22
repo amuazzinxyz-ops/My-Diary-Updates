@@ -1,3 +1,12 @@
+# Home Screen Widget Settings label shifted slightly left — awaiting web publish and phone test (2026-11-23)
+
+- User reported the one-line **🏠 Home Screen Widget Settings** label extends slightly beyond the button on the right. Changed only the button's left padding from 10px to 5px in its CSS and matching inline style, moving the label 5px left. Kept 13px text, one-line wrapping, button height, colors, borders, weight, and click behavior unchanged.
+- Safety backup branch: `backup/before-widget-label-left-shift-2026-11-23` (snapshot from Web Update 426 before edits).
+- Clean working branch: `fix/widget-settings-label-left-clean-2026-11-23`. Code PR is being prepared from current main to avoid the earlier PR #453 merge conflict. Web publisher has not run yet; verify source/mirror/checksum and latest.json after publisher completes. Phone test remains pending.
+- No APK/native source, notes, photos, PINs, locks, or MUAZZIN project was intentionally changed.
+
+---
+
 # Home Screen Widget Settings button label kept on one line — Web Update 426 published; phone test pending (2026-11-23)
 
 - User clarified that the button label was wrapping as **“🏠 Home Screen Widget”** on the first line and **“Settings”** on the second. The requested result is the full label on one line, without making the text tiny.
