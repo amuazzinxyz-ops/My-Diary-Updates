@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 401,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "2ef47e57c4c9d6279b69640f4cf8de416da83bca04a0125321714b33c8ca67ab",
+  "webSha256": "7c5500e27ae65b6d0549cb00cf8e737e806e07e249841a02474c982e4e046163",
   "webReleaseNotes": "Web Update 401: Purple raised 3D border is applied to the note-name/title box after a note is successfully saved and whenever any saved note is opened, including older notes. The note text box remains unchanged; saved notes, photos, PINs, locks, and data are preserved."
 }
