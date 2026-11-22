@@ -1,3 +1,15 @@
+# Diary pull-down refresh added — Web Update 398 LIVE; phone test pending (2026-11-22)
+
+- User approved a pull-down refresh gesture at the top of the opened Diary notes panel. Pulling down at the top of the scroll area and releasing (70px threshold) now refreshes the existing saved-note list in place. It does not reload the page, rewrite storage, or disturb the current unsaved draft.
+- Only the Diary web bundle was changed: added the small refresh hint/gesture handler to `web-source/index.html`; `diary-web/index.html` is byte-identical. No Android native source, note schema, local storage, notes, photos, PINs, locks, or user data were changed.
+- Safety backup branch: `backup/before-diary-pull-to-refresh-2026-11-22`. Working branch: `fix/diary-pull-to-refresh-2026-11-22`. PR **#366** merged as `b628248f43f10c7c3415ee1c8ef46f1e8f7bb0ce`.
+- Live feed advertises **Web Update 398**, web SHA-256 `550d12dce4fce3f90c1cfd6d74168d10374e81978db9cc15523d6739bb739fc6`. Source and mirror are byte-identical at Git blob SHA `6c71f2a6f2884efef581504c7afd55d7264a2451`.
+- Web publish workflow run **#44999717867** completed with **success**. APK build workflow run **#44999596934** also completed with **success**; debug build, published-HTML validation (including JavaScript syntax check), signed release, and APK upload passed. APK remains **My Diary 1.0.214 / versionCode 213**; current APK SHA-256 in feed is `183011a38a25c183f39a1033bb2d169776adeafe61b1e199385e39834626f83a`.
+- **Phone test pending**: install/receive Web Update 398 through **Me → Check for Updates**, open Diary notes, pull down from the very top and release, and confirm the list refreshes while any open draft remains unchanged. Do not mark phone-test PASS until the user explicitly confirms.
+- MUAZZIN project was not touched.
+
+---
+
 # Original Diary logo added to App Share — My Diary 1.0.214 LIVE; phone test PASS (user-confirmed, 2026-11-22)
 
 - User asked to include the original Diary logo in the **📤 App Share Karein** message. Verified the exact original image `assets/my-diary-icon.jpg`, Git blob SHA `8ea3faa116fe583e0cbba3b5c80996596a3c95ed` (brown diary-cover artwork).
