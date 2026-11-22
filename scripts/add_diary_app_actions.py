@@ -1,9 +1,24 @@
 from pathlib import Path
 # Camera safe-area repair: transparent Android status bar is applied below.
 import re
+import hashlib
+import shutil
 import xml.etree.ElementTree as ET
 
 base=Path("diary-project/app")
+# Embed the exact original Diary logo in the APK so native App Share can attach it.
+logo_source = Path("assets/my-diary-icon.jpg")
+logo_target = base / "src/main/assets/my-diary-icon.jpg"
+if not logo_source.is_file():
+    raise SystemExit("Original Diary logo asset is missing; refusing to build a logo-less share update")
+logo_bytes = logo_source.read_bytes()
+logo_git_blob_sha = hashlib.sha1(b"blob " + str(len(logo_bytes)).encode("ascii") + b"\0" + logo_bytes).hexdigest()
+if logo_git_blob_sha != "8ea3faa116fe583e0cbba3b5c80996596a3c95ed":
+    raise SystemExit("Original Diary logo asset hash mismatch; refusing to substitute another image")
+logo_target.parent.mkdir(parents=True, exist_ok=True)
+shutil.copyfile(logo_source, logo_target)
+if hashlib.sha256(logo_target.read_bytes()).digest() != hashlib.sha256(logo_bytes).digest():
+    raise SystemExit("Original Diary logo copy verification failed")
 kt=base/"src/main/java/com/muazzin/diary/MainActivity.kt"
 s=kt.read_text(encoding="utf-8")
 # Make the Android status bar/camera safe area transparent so the Diary page
@@ -514,12 +529,37 @@ native = r"""
                 "📚 Keep your notes together\n\n" +
                 "⬇️ *DOWNLOAD MY DIARY*\n" +
                 downloadUrl
-            val share = Intent(Intent.ACTION_SEND).apply {
-                type = "text/plain"
-                putExtra(Intent.EXTRA_SUBJECT, "My Diary — Personal Notes")
-                putExtra(Intent.EXTRA_TEXT, shareMessage)
+            try {
+                val shareDirectory = File(cacheDir, "diary-share").apply { mkdirs() }
+                val logoFile = File(shareDirectory, "my-diary-share-logo.jpg")
+                assets.open("my-diary-icon.jpg").use { input ->
+                    logoFile.outputStream().use { output -> input.copyTo(output) }
+                }
+                val logoUri = FileProvider.getUriForFile(
+                    this@MainActivity, "$packageName.fileprovider", logoFile
+                )
+                val share = Intent(Intent.ACTION_SEND).apply {
+                    type = "image/jpeg"
+                    putExtra(Intent.EXTRA_SUBJECT, "My Diary — Personal Notes")
+                    putExtra(Intent.EXTRA_TEXT, shareMessage)
+                    putExtra(Intent.EXTRA_STREAM, logoUri)
+                    clipData = android.content.ClipData.newUri(contentResolver, "My Diary logo", logoUri)
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                }
+                val chooser = Intent.createChooser(share, "Share My Diary").apply {
+                    clipData = share.clipData
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                }
+                startActivity(chooser)
+            } catch (error: Exception) {
+                android.util.Log.e("MyDiaryShare", "Unable to share Diary logo", error)
+                val fallback = Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_SUBJECT, "My Diary — Personal Notes")
+                    putExtra(Intent.EXTRA_TEXT, shareMessage)
+                }
+                startActivity(Intent.createChooser(fallback, "Share My Diary"))
             }
-            startActivity(Intent.createChooser(share, "Share My Diary"))
         }
         @JavascriptInterface fun checkForUpdates() {
             Thread {
