@@ -1,3 +1,15 @@
+# Home Screen Widget Settings heading increased to 15px — code merged; publish and phone test pending (2026-11-23)
+
+- User requested the **🏠 Home Screen Widget Settings** modal heading increase from 13px to **15px**.
+- Changed only the existing title CSS font-size from 13px to 15px. The one-line no-wrap layout, bold weight, flex sizing, and close button layout remain in place. No other widget settings or Diary data were intentionally changed.
+- Safety backup branch: `backup/before-widget-title-15px-2026-11-23`. Code PR **#444** merged as `fd090278ccc6607cced15fdb17dd42a3946affa7`; source commit `957d7f22e5f036b338428645a130ef24bbf78e3d`.
+- Main-branch source verification: `web-source/index.html` has the 15px no-wrap title style; old 13px style is absent. The source file Git blob SHA is `18f4e5d7208e0595ed0d8db18162cb577a2bc184`.
+- **Web publish pending:** `diary-web/index.html` is not yet byte-identical to `web-source/index.html`, and `latest.json` still advertises Web Update 422. No publisher workflow run was found for the merge commit. Do not tell the user Update 423 is live until mirror synchronization and published latest metadata are verified.
+- **Phone test pending.** Do not mark PASS until the user tests the published update on Android and confirms.
+- APK/native source was not changed. MUAZZIN project was not touched.
+
+---
+
 # Home Screen Widget Settings heading and Smart Search option — Web Update 422 published; phone test pending (2026-11-23)
 
 - User requested the modal heading **🏠 Home Screen Widget Settings** stay on one line and the **🔍 Smart Search kholen** option be removed from inside the settings.
