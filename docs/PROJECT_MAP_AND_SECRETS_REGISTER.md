@@ -1,9 +1,10 @@
-# Home Screen Widget Settings label shifted slightly left — awaiting web publish and phone test (2026-11-23)
+# Home Screen Widget Settings label shifted slightly left — Web Update 427 published; phone test pending (2026-11-23)
 
 - User reported the one-line **🏠 Home Screen Widget Settings** label extends slightly beyond the button on the right. Changed only the button's left padding from 10px to 5px in its CSS and matching inline style, moving the label 5px left. Kept 13px text, one-line wrapping, button height, colors, borders, weight, and click behavior unchanged.
-- Safety backup branch: `backup/before-widget-label-left-shift-2026-11-23` (snapshot from Web Update 426 before edits).
-- Clean working branch: `fix/widget-settings-label-left-clean-2026-11-23`. Code PR is being prepared from current main to avoid the earlier PR #453 merge conflict. Web publisher has not run yet; verify source/mirror/checksum and latest.json after publisher completes. Phone test remains pending.
-- No APK/native source, notes, photos, PINs, locks, or MUAZZIN project was intentionally changed.
+- Safety backup branch: `backup/before-widget-label-left-shift-2026-11-23` (snapshot from Web Update 426 before edits). Working branch: `fix/widget-settings-label-left-clean-2026-11-23`. Code PR **#455** merged to main as `3802cf2a6cc7f4402d150bccdc8533b4c83de227`.
+- Web publisher workflow run **45065943349** completed **success**. Published as **Web Update 427**. Re-fetched `web-source/index.html` and `diary-web/index.html` are byte-identical (Git blob SHA `83ba0d3bc56b6136be717adabad9f33dc7fa0eef`; 616,745 characters). Both contain the 13px no-wrap label and 5px left-padding override. Live `latest.json` advertises webVersion **427** and web SHA-256 `27dcda6199f16bef585c358f9b8bb93f84df57b70e413466b35693d5c9e7f3c4`.
+- APK remains **My Diary 1.0.214 / versionCode 213**; no APK rebuild is required for this web-only styling change. Notes, photos, PINs, locks, and MUAZZIN were not intentionally changed.
+- **Phone test pending**: use **Me → Check for Updates**, install Web Update 427, and confirm the label stays on one line, fits within the button, and remains comfortably readable. Do not mark phone PASS until the user confirms.
 
 ---
 
