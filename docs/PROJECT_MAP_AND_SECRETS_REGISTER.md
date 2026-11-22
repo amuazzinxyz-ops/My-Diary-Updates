@@ -1,3 +1,17 @@
+# Both Diary note boxes receive purple raised 3D styling — Web Update 403 LIVE; phone test pending (2026-11-22)
+
+- User clarified that the 3D effect must apply to **both** existing note editor fields: the note-name/title box and the note-writing/body box. The earlier Web Update 402 changed only the title field, which did not fulfill the request.
+- Minimal web-only correction: the final high-specificity saved-note CSS selector now targets both `#diaryMyNotesTitle` and `#diaryMyNotesText` while the existing `diary-saved-note-opened` state is active. Both boxes receive the purple raised 3D border, rounded corners, light-purple gradient background, and raised shadow when an older saved note is opened and immediately after a new note saves successfully. The existing new-note flow clears the saved-note state, so unsaved notes remain unstyled.
+- No note content, note schema, save/read logic, photo attachment, PIN, lock, storage, or user data was changed. No Android native source or APK content was intentionally changed; APK identity remains **My Diary 1.0.214 / versionCode 213**.
+- Safety backup branch before HTML edit: `backup/before-note-both-boxes-3d-2026-11-22`. Working branch: `fix/note-both-boxes-3d-2026-11-22`. Code PR **#378** merged as `df33267acba28c4e1f9f2ed8c917adf6b3156b83`.
+- Source and published mirror were re-fetched from `main` and verified byte-identical: Git blob SHA `6bad43a0a4d66f84d587f2b5c94c1f4e7f7ba52f`, 610,613 characters. Web publish workflow run **45014423510** (run #525) completed **success**.
+- The publisher updated the bundle checksum but retained webVersion 402, so a separate delivery-feed update was required. Backup branch: `backup/before-note-boxes-web403-feed-2026-11-22`; feed PR **#379** merged as `a13bab056553dd2f8d5935a91863a098a3e1d208`. Web Update **403** is now live in `latest.json`, with web SHA-256 `453a4cc9eefd2b592f4954792b196852e561ce1a0b2be55997c403e0c72f9e8a` and release notes explicitly describing both boxes.
+- Web Update 403 publisher workflow run **45014492966** (run #526) completed **success**. Live `latest.json` was re-fetched and confirms webVersion 403, matching SHA-256, and the correct release notes.
+- **Phone test pending**: user must run **Me → Check for Updates**, receive Web Update 403, open an older saved note and confirm both boxes show the purple raised 3D design, then create and save a new note and confirm both boxes show the design after saving. Do not mark phone-side PASS until user confirms.
+- MUAZZIN project was not touched.
+
+---
+
 # Diary note-name purple 3D border — Web Update 402 LIVE; phone test pending (2026-11-22)
 
 - User reported that the purple border still did not appear after Web Update 401. Root cause confirmed in the actual source: the title input has later global Diary CSS rules with `!important` declarations that overrode the purple class-based border/shadow.
