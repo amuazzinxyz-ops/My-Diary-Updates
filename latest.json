@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 408,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "e64b8c283f97a20fc613ef61bae443d0b07afd78e229d19a88a2b4450d366ab7",
+  "webSha256": "45dd76ad8260c60ecc8ca1ffcf77867779081a58184178fd3a87c15a8fbc92f0",
   "webReleaseNotes": "Web Update 408: Removed the optional Web Update 407 royal-purple title fill, cream/parchment writing fill, and gold corner ornaments. Restores the previous Web Update 406 saved-note appearance. Existing Web 406 borders, editor fields, saved notes, photos, PINs, locks, and stored data remain unchanged."
 }
