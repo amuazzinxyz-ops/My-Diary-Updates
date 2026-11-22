@@ -1,11 +1,26 @@
-# Saved Note text stays in place after Save/reopen — Web Update 410 LIVE; phone test pending (2026-11-22)
+# Diary PIN recovery new-PIN screen close button — Web Update 411 LIVE; phone test pending (2026-11-22)
+
+- User requested a simple **×** close control in **Diary PIN Lock → ❓ PIN Bhool Gaye?** after the temporary PIN and recovery Favourite Name have been verified and the new-PIN entry box appears.
+- Added a small round × at the top-right of the Diary unlock/recovery card. It is hidden during ordinary unlock and earlier recovery steps; it appears only for new-PIN entry and PIN confirmation. Tapping it closes only the overlay. It does not change or clear the temporary PIN, recovery-pending flag, Favourite Name recovery record, saved PIN, or PIN verification flow. Reopening the Diary prompts the user to continue through the existing recovery verification again.
+- No note data, photos, note locks, Private Locker, storage keys, recovery algorithms, or native Android source was intentionally changed. Only the Diary PIN recovery screen in the web HTML was changed.
+- Safety backup branch: `backup/before-diary-pin-reset-close-2026-11-22`. Code PR **#408** merged as `6d020a2831e1b2686fe4546207d13538224aabc5`.
+- `web-source/index.html` and `diary-web/index.html` re-fetched from main and verified byte-identical: Git blob SHA `64349ae6a0a97ce4920e6eb1b34404aabb7dceb3`, 615,812 characters.
+- Web publisher workflow run **45025665549** (run #543) completed **success**. Published HTML SHA-256: `905799c95fbedac28c85c53b2eb9506eca6dba2c18cb96bf43dbfb86a4d0b951`.
+- The automatically triggered APK workflow run **45025665545** (run #485) also completed **success**. APK remains **1.0.214 / versionCode 213**; the workflow regenerated the same approved release version. Live APK SHA-256 is `21d4d705a767a96ffa63f1496c4040e3c55b8e62816e6ce1ee9940891826bde6`.
+- Feed/register safety backup branch: `backup/before-web411-pin-close-feed-register-2026-11-22`. This PR advances the web feed to **Web Update 411** with the published HTML SHA above; APK version fields and checksum are retained.
+- **Phone test pending**: user should install Web Update 411 via **Me → Check for Updates**, open Diary PIN Lock, tap **❓ PIN Bhool Gaye?**, follow the existing temporary-PIN and recovery-name steps, confirm × appears on the new-PIN box, and tap it to verify that the box closes. Do not mark phone PASS until user confirms.
+- MUAZZIN project was not touched.
+
+---
+
+# Saved Note text stays in place after Save/reopen — Web Update 410 LIVE; small residual shift accepted by user (2026-11-22)
 
 - User reported that any typed text shifted slightly after saving and reopening a Note. Root cause: the saved-note title/body display elements already have their own CSS padding, but the saved editor textarea padding was also copied onto those display elements, changing the text inset.
 - Fixed only saved-note display layout: the Cover/title and Detail/body display now retain their own box padding instead of inheriting the editor textarea padding. Saved letter spacing, word spacing, indentation, tab size, line height, alignment, direction, whitespace/line breaks, overflow wrapping and font formatting remain applied. Reopening the editor still restores its saved layout. No image code, note data, IDs, PINs, locks, storage keys or native Android source was changed.
 - Safety backup before the code fix: `backup/before-text-position-stability-fix-2026-11-22`. Code PR **#406** merged as `2f64599f7799bf8b3ab0a585e76abcf54b98688c`. Feed/register safety backup: `backup/before-web410-feed-register-2026-11-22`.
 - `web-source/index.html` and `diary-web/index.html` re-fetched from main and verified byte-identical: Git blob SHA `d5113920108bac557e5f4380a04dfeae1383cca2`, 615,108 characters. Exact HTML SHA-256 independently verified: `4249307540ab37f73a51a572a3e7e20f67d57916df70bcd663ebf3e9f6b8d323`.
 - Web Update **410** feed prepared with that exact SHA-256. APK version remains 1.0.214 / versionCode 213; no APK change.
-- **Phone test pending**: use **Me → Check for Updates**, receive Web Update 410, open an existing Note or create one, type text in the name and body boxes (including multiple spaces/indentation and line breaks), Save, reopen and verify that the text has not shifted. Do not mark phone PASS until user confirms.
+- **Phone test accepted (not a zero-shift PASS)**: user installed/tested Web Update 410 and reported a remaining 19–20 px difference, then explicitly said that amount is acceptable. No further adjustment requested; do not describe this as a perfect zero-shift result.
 - MUAZZIN project was not touched.
 
 ---

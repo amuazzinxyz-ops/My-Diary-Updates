@@ -7,8 +7,8 @@
   "sha256": "21d4d705a767a96ffa63f1496c4040e3c55b8e62816e6ce1ee9940891826bde6",
   "releaseNotes": "My Diary 1.0.214: App Share now attaches the original My Diary logo image with the formatted invitation and existing direct APK download link. Existing share chooser, app identity, notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 410,
+  "webVersion": 411,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "905799c95fbedac28c85c53b2eb9506eca6dba2c18cb96bf43dbfb86a4d0b951",
-  "webReleaseNotes": "Web Update 410: Saved Note Cover/title and Detail/body text no longer inherit the editor textarea's padding in the saved-note display, preventing the slight text shift after Save and reopening. Text spacing, indentation, line breaks, alignment, direction, font formatting, and the editor's saved layout remain preserved. Image placement, note data, PINs, locks, and native Android files are unchanged."
+  "webReleaseNotes": "Web Update 411: Diary PIN recovery now shows a small × close control only on the new-PIN entry and confirmation screens, after the temporary PIN and recovery name are verified. Tapping × closes the recovery screen; existing PIN verification, recovery state, saved notes, PIN data, locks, and normal unlock flow are preserved."
 }
