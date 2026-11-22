@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 409,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "45dd76ad8260c60ecc8ca1ffcf77867779081a58184178fd3a87c15a8fbc92f0",
+  "webSha256": "3bfceb18b6ba27ce9506f5bed441186099eb77fad61ba43115c5304d0e404d26",
   "webReleaseNotes": "Web Update 409: Note images now retain their exact saved crop, finger position, and zoom in Cover, Detail, and Photo areas. Saved Note text also retains the editor's spacing, line breaks, alignment, direction, and text-box layout. Existing notes remain readable; notes without saved layout metadata use the previous display fallback. No note content, PINs, locks, or native Android source changed."
 }
