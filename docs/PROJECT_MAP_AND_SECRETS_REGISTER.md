@@ -1,3 +1,15 @@
+# Home Screen Widget Settings button label kept on one line — Web Update 426 published; phone test pending (2026-11-23)
+
+- User clarified that the button label was wrapping as **“🏠 Home Screen Widget”** on the first line and **“Settings”** on the second. The requested result is the full label on one line, without making the text tiny.
+- Changed only the **🏠 Home Screen Widget Settings** button presentation: restored text to **13px** and applied `white-space:nowrap` and `flex-wrap:nowrap`. Existing label, button height, colors, borders, weight, and click behavior are preserved. The modal heading remains 15px. No user notes, photos, PINs, locks, or APK/native source were intentionally changed.
+- Safety backup branch: `backup/before-widget-button-one-line-2026-11-23`. Code PR **#451** merged as `418d7c63e65f158688fee74478137b20f6b745fc`.
+- Publisher workflow run **45065018319** completed **success**. Published as **Web Update 426**. Re-fetched `web-source/index.html` and `diary-web/index.html` are byte-identical (Git blob SHA `19b07f8c0da0063e655e1373422a794741d789da`). Both contain the 13px font and no-wrap rules, including the inline override. Live `latest.json` advertises webVersion **426** and web SHA-256 `26bbca8c264caea25c90f6638d6d4de0172af19e6f7685030f5056effc91bc6d`.
+- Register backup branch: `backup/before-widget-one-line-register-2026-11-23`.
+- **Phone test pending**: install Web Update 426 using **Me → Check for Updates** and confirm the full label stays on one line at a comfortable size. Do not mark phone PASS until the user confirms.
+- MUAZZIN project was not touched.
+
+---
+
 # Home Screen Widget Settings button text reduced to 11px — Web Update 425 published; phone test pending (2026-11-23)
 
 - User requested the **🏠 Home Screen Widget Settings** button text be reduced from 13px to **11px**. Changed only the button's CSS font-size and its inline important override. The modal heading remains **15px**; button dimensions, colors, borders, weight, and behavior are unchanged.
