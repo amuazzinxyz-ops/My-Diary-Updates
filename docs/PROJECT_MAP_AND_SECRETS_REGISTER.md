@@ -1,3 +1,14 @@
+# My Notes clock and date subtle 3D raised text effect — code merged; web publication pending (2026-11-23)
+
+- User approved applying a 3D raised effect to the existing live 12-hour clock and date beneath My Notes, with the explicit preference that they can ask to restore the previous appearance if they do not like it.
+- Added a restrained gold-toned multi-layer text shadow to the existing clock and date only. Existing font sizes, clock format (12-hour with AM/PM and seconds), Asia/Kolkata time zone, date format, and the date's `white-space:nowrap;` one-line behavior are preserved. No layout dimensions, note data, photos, PINs, locks, storage, or APK code were changed.
+- Code PR **#429** merged as `bc5578f3eb183288c0e50302fbd3ad726801ceff`. Source blob SHA is `33cc5278d631b6598adbb763b9f7767717830031`; the 3D text-shadow declarations were verified in the merged source.
+- Safety backup branch: `backup/before-clock-date-3d-effect-2026-11-23`. Register backup branch: `backup/before-clock-date-3d-register-2026-11-23`.
+- **Publication is not yet verified**: `diary-web/index.html` still has the previous source content and `latest.json` still advertises Web Update 417 with the previous SHA-256. Do not ask the user to install an update until the published mirror and feed are updated and verified.
+- APK remains **My Diary 1.0.214 / versionCode 213**; no APK change is intended. MUAZZIN project was not touched.
+
+---
+
 # My Notes clock date forced onto one line — Web Update 417 published; phone test pending (2026-11-22)
 
 - User asked that the year **2026** remain on the same line as the rest of the date beneath the My Notes digital clock.
