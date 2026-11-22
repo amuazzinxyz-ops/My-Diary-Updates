@@ -1,4 +1,4 @@
-# Approved release build: publish signed Diary 1.0.213/211 with Diary Lock Cancel and Note Favourite actions embedded from Web Update 381.
+# Approved release build: publish signed Diary 1.0.213/212 with Diary Lock Cancel and Note Favourite actions embedded from Web Update 381.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -81,33 +81,6 @@ jobs:
           if-no-files-found: error
           retention-days: 3
 
-
-      - name: Verify formatted My Diary share message in native bridge
-        working-directory: diary-project
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          source = Path("app/src/main/java/com/muazzin/diary/MainActivity.kt").read_text(encoding="utf-8")
-          start = source.find("@JavascriptInterface fun shareApp()")
-          end = source.find("@JavascriptInterface fun checkForUpdates()", start)
-          if start < 0 or end < 0:
-              raise SystemExit("BLOCKED: native Share App method missing")
-          share = source[start:end]
-          required = (
-              '📒 *MY DIARY*',
-              'A simple space for your thoughts and notes.',
-              '✍️ Write your thoughts',
-              '🔎 Find saved notes quickly',
-              '📚 Keep your notes together',
-              '⬇️ *DOWNLOAD MY DIARY*',
-              'https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk',
-              'Intent.createChooser(share, "Share My Diary")',
-          )
-          missing = [item for item in required if item not in share]
-          if missing:
-              raise SystemExit("BLOCKED: formatted share message is incomplete: " + ", ".join(missing))
-          print("PASS: native share invitation contains formatted title, description, features, original APK link and chooser")
-          PY
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -222,6 +195,29 @@ jobs:
           print("PASS: optional Pattern Lock setup, 3x3 grid, PIN fallback and recovery preservation markers verified")
           PY
           python3 scripts/add_diary_app_actions.py
+          python3 - <<'PY'
+          from pathlib import Path
+          source = Path("diary-project/app/src/main/java/com/muazzin/diary/MainActivity.kt").read_text(encoding="utf-8")
+          start = source.find("@JavascriptInterface fun shareApp()")
+          end = source.find("@JavascriptInterface fun checkForUpdates()", start)
+          if start < 0 or end < 0:
+              raise SystemExit("BLOCKED: native Share App method missing")
+          share = source[start:end]
+          required = (
+              '📒 *MY DIARY*',
+              'A simple space for your thoughts and notes.',
+              '✍️ Write your thoughts',
+              '🔎 Find saved notes quickly',
+              '📚 Keep your notes together',
+              '⬇️ *DOWNLOAD MY DIARY*',
+              'https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk',
+              'Intent.createChooser(share, "Share My Diary")',
+          )
+          missing = [item for item in required if item not in share]
+          if missing:
+              raise SystemExit("BLOCKED: formatted share message is incomplete: " + ", ".join(missing))
+          print("PASS: native share invitation contains formatted title, description, features, original APK link and chooser")
+          PY
           python3 -m py_compile scripts/add_diary_home_widget.py scripts/polish_diary_home_widget.py
           python3 scripts/add_diary_home_widget.py
           python3 scripts/polish_diary_home_widget.py
