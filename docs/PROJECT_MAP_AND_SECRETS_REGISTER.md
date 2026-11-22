@@ -1,3 +1,14 @@
+# My Notes clock and date text changed to Pearl White — Web Update 419 published; phone test pending (2026-11-23)
+
+- User approved changing both the live time and date text beneath My Notes to the same **Pearl White (#FFFFFF)**.
+- Changed only the existing shared `diaryClockWrap` text color from `#f4df9e` to `#FFFFFF` in `web-source/index.html`. The time and date inherit the same white color. Existing 3D raised text shadows, font sizes, 12-hour clock with AM/PM and seconds, `Asia/Kolkata` timezone, date format, and `white-space:nowrap;` one-line date behavior are preserved.
+- Code PR **#433** merged as `f7d60dfd87b4cbf51160c945cb4fc7e0f2a179c1`. Safety backup branch: `backup/before-clock-date-pearl-white-2026-11-23`.
+- Web publisher workflow run **45057520329** completed **success**. Re-fetched `web-source/index.html` and `diary-web/index.html` are byte-identical (Git blob SHA `38a7c1b08f1bc427ab42295c810bc73bc031fe69`, 616,543 characters). Both contain `color:#FFFFFF;`, retain the 3D text-shadow and one-line date style, and no longer contain the previous gold wrapper color.
+- `latest.json` advertises **Web Update 419** with web SHA-256 `6192fed47d957301e9a6469c7a0ecc699632f13c69c850f9f59837942498ac2c`. The release note is being corrected to describe the exact Pearl White change. APK remains **My Diary 1.0.214 / versionCode 213**; no APK source change was made. The automatic APK workflow run **45057520396** failed at its “Use the exact latest published Diary HTML” validation step before any APK build or publish steps; no APK was produced or changed by this run.
+- **Phone test pending**: user should use **Me → Check for Updates**, install Web Update 419, and confirm both time and date are the same Pearl White while the 3D effect and one-line date remain intact. Do not mark phone PASS until the user confirms.
+
+---
+
 # My Notes clock and date subtle 3D raised text effect — Web Update 418 published; phone test pending (2026-11-23)
 
 - User approved applying a 3D raised effect to the existing live 12-hour clock and date beneath My Notes, with the explicit preference that they can ask to restore the previous appearance if they do not like it.

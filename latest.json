@@ -10,5 +10,5 @@
   "webVersion": 419,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "6192fed47d957301e9a6469c7a0ecc699632f13c69c850f9f59837942498ac2c",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "Web Update 419: Changed both the live time and date text beneath My Notes to the same Pearl White (#FFFFFF). Preserved the existing 3D raised text effect, 12-hour clock with AM/PM and seconds, IST timezone, font sizes, and one-line date. No note data, photos, PINs, locks, or APK source changed."
 }
