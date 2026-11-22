@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 398,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "550d12dce4fce3f90c1cfd6d74168d10374e81978db9cc15523d6739bb739fc6",
+  "webSha256": "353a4c855d89f4506f84c1a77fab1d046c61d7f66eaf1d3110a07978336b774e",
   "webReleaseNotes": "Pull down from the top of the opened Diary notes panel and release to refresh the saved notes list. Refresh preserves the open draft and does not reload the page or change notes, photos, PINs, locks, or saved data."
 }
