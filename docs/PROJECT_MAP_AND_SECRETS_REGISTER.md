@@ -1,3 +1,14 @@
+# My Diary Theme Mode added inside Me — Web Update 420 published; phone test pending (2026-11-23)
+
+- User requested one **🎨 Theme Mode** button inside the existing **Me** menu. It opens exactly three choices: **Light Mode**, **Dark Mode**, and **Default Mode** (restores the original Diary appearance). No Auto Mode is included.
+- The selected theme is saved separately in the browser under `diaryThemeMode` and restored when the Diary opens again. Default Mode removes the theme override and returns to the original existing appearance.
+- Code PR **#436** merged as `9b40c877d44a928e7d24e9e51db0f547b5452c28`. Source backup branch: `backup/before-theme-mode-me-menu-2026-11-23`. Register/release-note backup branch: `backup/before-theme-mode-register-2026-11-23`.
+- Web Update **420** is published. `web-source/index.html` and `diary-web/index.html` are byte-identical (Git blob SHA `e9c57c0b9368f715b151345c65d2e1538277b128`). `latest.json` advertises Web Update 420 with web SHA-256 `b9ba08a1d620a8c3dfc907b5bace9d2a3589377512e426815e97cd9318365d8c`; release notes describe all three modes.
+- Only the theme preference key and Theme Mode UI/styles were added. Existing notes, photos, PINs, locks, storage, and APK source were not changed. APK remains **My Diary 1.0.214 / versionCode 213**.
+- **Phone test pending**: install Web Update 420 using **Me → Check for Updates**. Test Light Mode, Dark Mode, Default Mode, and confirm the selected mode remains after closing/reopening the Diary. Do not mark phone PASS until the user confirms.
+
+---
+
 # My Notes clock and date text changed to Pearl White — Web Update 419 published; phone test PASS (2026-11-23)
 
 - User approved changing both the live time and date text beneath My Notes to the same **Pearl White (#FFFFFF)**.
