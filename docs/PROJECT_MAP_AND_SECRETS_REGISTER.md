@@ -1,10 +1,10 @@
-# My Notes clock and date subtle 3D raised text effect — code merged; web publication pending (2026-11-23)
+# My Notes clock and date subtle 3D raised text effect — Web Update 418 published; phone test pending (2026-11-23)
 
 - User approved applying a 3D raised effect to the existing live 12-hour clock and date beneath My Notes, with the explicit preference that they can ask to restore the previous appearance if they do not like it.
 - Added a restrained gold-toned multi-layer text shadow to the existing clock and date only. Existing font sizes, clock format (12-hour with AM/PM and seconds), Asia/Kolkata time zone, date format, and the date's `white-space:nowrap;` one-line behavior are preserved. No layout dimensions, note data, photos, PINs, locks, storage, or APK code were changed.
 - Code PR **#429** merged as `bc5578f3eb183288c0e50302fbd3ad726801ceff`. Source blob SHA is `33cc5278d631b6598adbb763b9f7767717830031`; the 3D text-shadow declarations were verified in the merged source.
 - Safety backup branch: `backup/before-clock-date-3d-effect-2026-11-23`. Register backup branch: `backup/before-clock-date-3d-register-2026-11-23`.
-- **Publication is not yet verified**: `diary-web/index.html` still has the previous source content and `latest.json` still advertises Web Update 417 with the previous SHA-256. Do not ask the user to install an update until the published mirror and feed are updated and verified.
+- Publisher has now synchronized `diary-web/index.html` with `web-source/index.html`; both were re-fetched and are byte-identical (Git blob SHA `33cc5278d631b6598adbb763b9f7767717830031`, 616,543 characters), and both contain the 3D text-shadow declarations and the date's one-line `white-space:nowrap;` style. `latest.json` now advertises **Web Update 418**, web SHA-256 `551a28de9240ef9b15213306d5a5bb0a582485d9ac462a4f7ba9d43f60be4cf9`, and the exact 3D-effect release note. The feed's advertised SHA is recorded as published metadata; no independent local SHA-256 recomputation was performed.
 - APK remains **My Diary 1.0.214 / versionCode 213**; no APK change is intended. MUAZZIN project was not touched.
 
 ---
