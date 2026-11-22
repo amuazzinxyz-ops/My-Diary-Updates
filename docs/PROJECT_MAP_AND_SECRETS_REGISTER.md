@@ -1,3 +1,16 @@
+# Diary note-name purple 3D border after save — Web Update 401 LIVE; phone test pending (2026-11-22)
+
+- User clarified that the purple raised 3D border must appear on the note-name/title box for **both previously saved notes and newly created notes immediately after a successful save**. The note text/body box must remain unchanged.
+- Root cause of the failed attempt: the earlier rule depended on the opened-saved-note class and did not add that class after a new note was successfully saved. In addition, the CSS rule needed higher specificity and to be placed after the other Diary styles.
+- Corrected both `web-source/index.html` and `diary-web/index.html`: after `write(all)` succeeds, add the saved-note styling class to the editor; opening an older saved note continues to add the same class. Added a final high-specificity title-only purple 3D border rule. New unsaved notes do not get the border; after saving, they do. Note body remains untouched.
+- Source and mirror verified byte-identical: 609,659 characters; Git blob SHA `72ab9e33c9245b54c209593374f2a7ce1cc74f8d`. Independently computed HTML SHA-256: `7c5500e27ae65b6d0549cb00cf8e737e806e07e249841a02474c982e4e046163`.
+- Backup branch: `backup/before-purple-title-after-save-2026-11-22`. Code PR **#373** merged as `cc8eed45f5b71eeead08574bf3d71964fbc8227f`.
+- Live `latest.json` verified with **webVersion 401** and matching `webSha256` `7c5500e27ae65b6d0549cb00cf8e737e806e07e249841a02474c982e4e046163`; release notes specify old and newly saved notes. APK remains My Diary 1.0.214 / versionCode 213; no APK/native code or data schema changed.
+- **Phone test pending**: user must run Me → Check for Updates, receive Web Update 401, open an older saved note and save a new note, and confirm the purple 3D border appears on the name box for both while the body box stays unchanged. Do not mark PASS until user confirms.
+- Notes, photos, PINs, locks, storage, and MUAZZIN project were not touched.
+ 
+---
+
 # Diary saved-note title purple 3D styling — Web Update 400 LIVE; phone test pending (2026-11-22)
 
 - User reported that **“Diary pehle se update hai”** appeared after checking for updates and the purple border was still not visible. Root cause: the earlier CSS targeted only `#diaryMyNotesEditor.diary-read-mode`, while normal saved-note opening uses editable mode. The styling therefore did not apply to the normal opened-note view.
