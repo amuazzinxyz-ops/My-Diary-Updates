@@ -1,3 +1,17 @@
+# Diary copied Recovery PIN entry × — Web Update 414; phone test pending (2026-11-22)
+
+- User clarified the exact intended location: show a small **× glyph only** in the PIN-entry box that opens after the temporary Recovery PIN has been copied and the user returns to enter that PIN. Do not show × on Favourite Name verification, New PIN, or Confirm New PIN boxes.
+- Code PR **#415** merged as `74013b76221dd40ae9484ef73eb0339a6de3855e`. Added the × only when `diaryRecoveryPending()` is true in `showDiaryUnlock()`; tapping it closes only that recovery overlay. Existing PIN/recovery verification and saved data logic are unchanged.
+- Source and published mirror were byte-identical after merge: `web-source/index.html` and `diary-web/index.html`, Git blob SHA `291ace9d4c6505bae37f9fde943510b91df4793d`, 615,611 characters.
+- Safety backup branch: `backup/before-recovery-pin-copy-box-x-2026-11-22`. Documentation backup branch for this register update: `backup/before-recovery-pin-x-register-2026-11-22`.
+- Web publisher workflow run **45028845009** completed success and repaired the feed checksum to match the new source. It did not increment the advertised webVersion; feed correction to Web Update 414 is still pending. Do not tell the user to expect the update checker to offer this change until the feed is advanced and verified.
+- APK build workflow run **45028845059** was automatically triggered by the HTML push and is still running at the time of this entry. APK remains advertised as **1.0.214 / versionCode 213** in the last verified feed; verify the workflow outcome and APK metadata before claiming no APK change.
+- **Phone test pending**: install Web Update 414 once published, then copy the temporary Recovery PIN and confirm the × appears on that PIN-entry box and closes it. Do not mark phone PASS until user confirms.
+- Earlier × removal from Favourite Name screen was confirmed PASS by the user, but the user later clarified that removal was requested only because × had been placed in the wrong location; this does not mean the user no longer wanted ×. The correct requested location is the copied Recovery PIN entry box described above.
+- MUAZZIN project was not touched.
+
+---
+
 # Diary PIN recovery × removal — Web Update 413 phone test PASS (user-confirmed, 2026-11-22)
 
 - User confirmed: **“Hat gaya alhamdulillah phone Test Pass”**. This confirms the × close control is absent from the Favourite Name verification screen that appears after the temporary Recovery PIN is accepted.
