@@ -1,3 +1,13 @@
+# Home Screen Widget Settings button text reduced to 11px — Web Update 425 published; phone test pending (2026-11-23)
+
+- User requested the **🏠 Home Screen Widget Settings** button text be reduced from 13px to **11px**. Changed only the button's CSS font-size and its inline important override. The modal heading remains **15px**; button dimensions, colors, borders, weight, and behavior are unchanged.
+- Safety backup branch: `backup/before-widget-button-11px-2026-11-23`. Code PR **#449** merged as `cbe9076e3ce8c043c9b4d8a40ce0722f0e9d1ddd`.
+- Published as **Web Update 425**. Publisher workflow run **45064233405** completed **success**. Re-fetched `web-source/index.html` and `diary-web/index.html` are byte-identical (Git blob SHA `9130a29b5f2087b263bd22e427aa1c6c2d449b05`). Both contain the 11px CSS rule and 11px inline override. Live `latest.json` advertises webVersion 425 and web SHA-256 `0dcb41f47524dc92da48236a812562b8d01c212fac6c6e9c228430f366a63ab1`.
+- APK/native source was not intentionally changed; the automatic APK workflow is separate. MUAZZIN project was not touched.
+- **Phone test pending**: use **Me → Check for Updates**, install Web Update 425, and confirm the button text is 11px. Do not mark phone PASS until the user confirms.
+
+---
+
 # Home Screen Widget Settings button text reduced to 13px — Web Update 424 published; phone test pending (2026-11-23)
 
 - User requested the **🏠 Home Screen Widget Settings** button text above the button be reduced from 14px to **13px**. Changed only the button's CSS font-size and its inline important override from 14px to 13px. The modal heading remains **15px**; button dimensions, colors, borders, weight, and other behavior are unchanged.
