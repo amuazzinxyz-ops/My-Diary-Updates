@@ -1,3 +1,14 @@
+# Web 425–428 reverted; exact Web 424 HTML restored as Web Update 429 — phone test pending (2026-11-23)
+
+- User requested removing all work from Web Updates 425, 426, 427, and 428. Created safety snapshot branch `backup/before-remove-web425-428-2026-11-23` from the pre-revert main head.
+- Reverted `web-source/index.html` to the exact Web 424 source from commit `98f191d48ea48f2a55faaa2568699873658b98ed`, blob SHA `aa571ee65d7920b07f44732f3c1c96cc32d45f4c`. This restores the original 14px CSS / 13px inline button style from Web 424 and removes the 425–428 font/no-wrap/padding changes plus the Web 428 isolated selector insertion. It also restores the original report-export HTML string that was accidentally split by the Web 428 insertion.
+- PR #457 merged as `8a92fad49c3e6eae2025e957311ecab6b2026e9b`. Web publisher run **45069878930** completed **success** and published the restored bundle as **Web Update 429**, so devices currently on 428 can receive the rollback without a version downgrade.
+- Re-fetched `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `aa571ee65d7920b07f44732f3c1c96cc32d45f4c`. Live `latest.json` advertises webVersion **429** and Web 424's exact web SHA-256 `4d35502646b2ea74afe321ea542f0fb132fbd74871b030224e420c8539b972cf`.
+- APK remains **My Diary 1.0.214 / versionCode 213**; no APK rebuild or native source change was made. No user notes, photos, PINs, locks, or other Diary data were changed. MUAZZIN was not touched.
+- **Phone test pending**: user should install Web Update 429 using **Me → Check for Updates** and confirm the Home Screen Widget Settings button has returned to the earlier Web 424 appearance. Do not claim phone PASS until user confirms.
+
+---
+
 # Isolated My Diary APK built with Web Update 424 — signed artifact ready; phone test pending (2026-11-23)
 
 - User requested a standalone APK containing **Web Update 424** after the latest update caused trouble. Built on isolated branch `build/isolated-web424-apk-2026-11-23`; safety backup branch: `backup/before-isolated-web424-apk-2026-11-23`.
