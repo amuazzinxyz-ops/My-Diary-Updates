@@ -1,3 +1,16 @@
+# Saved Note name purple + body gold 3D borders — Web Update 405 candidate; publishing/device test pending (2026-11-22)
+
+- User approved the distinction: the saved Note's displayed name/title gets a purple raised 3D border on all four sides; its displayed writing/body gets a gold raised 3D border on all four sides.
+- Inspected the actual current Web Update 404 source. The existing `diary-note-saved-3d` class is added only when an expanded saved note is unlocked; new rules are scoped to that card's direct title and `.diary-note-full` body surface. Dark-mode equivalents are included.
+- The note editor inputs are not targeted. No note content/schema, save/read logic, photos, PINs, locks, storage, or native Android source was changed.
+- Safety backup branch: `backup/before-web405-register-2026-11-22`. Code PR **#385** merged as `dd7b9fd328e9d1c2c80e93fd987aeeb8ae5aaf6a`.
+- `web-source/index.html` and `diary-web/index.html` were re-fetched after merge and verified byte-identical: Git blob SHA `14e50a8de7542b2ce9be61f90b6b3905058a49ea`, 611,539 characters.
+- **Delivery pending**: `latest.json` still advertises Web Update 404 at the last check. Do not tell the user Web Update 405 is live until the publisher updates the feed and the live feed/hash are re-fetched and verified.
+- **Phone test pending**: after Web Update 405 becomes available, user must check for updates, open an unlocked saved note, and confirm purple around the title and gold around the body; confirm the editor remains unchanged. Do not mark device PASS before user confirmation.
+- MUAZZIN project was not touched.
+
+---
+
 # Corrected Diary 3D target: saved-note display only — Web Update 404 LIVE; phone test pending (2026-11-22)
 
 - User corrected the previous misunderstanding: the purple 3D effect was **not** wanted on the note editor's title/name or body/text input fields. Those editor fields must return to their previous appearance. The requested 3D styling belongs on the **saved note display card** when the saved note is expanded/opened in the notes list.
