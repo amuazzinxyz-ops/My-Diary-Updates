@@ -1,14 +1,15 @@
-# Remove optional Web Update 407 note-box design — code prepared; publishing pending (2026-11-22)
+# Remove optional Web Update 407 note-box design — code merged; Web Update 408 feed PR pending (2026-11-22)
 
 - User asked to remove the previously added combined design (1 + 2 + 4): royal-purple title fill, cream/parchment body fill, and gold corner ornaments.
 - Removed only the appended `web407-royal-note-box-design` CSS block from both `web-source/index.html` and `diary-web/index.html`. This restores the pre-407 Web 406 appearance; it does not remove the earlier Web 406 four-side purple/gold border treatment.
 - No editor styling, note text, saved data, photo attachments, PINs, locks, storage, or native Android source was changed.
-- Safety backup branch: `backup/before-remove-web407-design-2026-11-22`. Working branch: `revert/remove-web407-design-2026-11-22`.
-- Both HTML copies were edited by removing the exact Web 407 style block only. Publishing and live-feed/checksum verification are still pending; do not tell the user to expect the rollback on phone until a new web update is live.
-- Phone test pending after publishing: check for updates, open an expanded unlocked saved note, and confirm the Web 407 purple/cream fills and gold corner ornaments are gone while the prior Web 406 borders and existing note/photo content remain.
+- Safety backup branch: `backup/before-remove-web407-design-2026-11-22`. Code PR **#395** merged as `acdc8773244b7963316b59c7c76106d0f8f16d41`.
+- Source and mirror re-fetched from main and verified byte-identical: Git blob SHA `136abccb7798342166a186de176f67ed0e468cfe`, 611,441 characters. The Web 407 style block is absent; the earlier Web 406 saved-note styling remains.
+- Independently computed SHA-256 for the exact merged HTML bytes: `e64b8c283f97a20fc613ef61bae443d0b07afd78e229d19a88a2b4450d366ab7`. The same SHA method was validated against the previous live Web 407 checksum.
+- Delivery feed branch `release/web408-remove-note-design-2026-11-22` updates `latest.json` to **Web Update 408** with that exact checksum and rollback release notes. Feed PR and live verification are pending; do not ask the user to phone-test until the feed is merged and re-fetched.
+- Phone test pending after Web Update 408 is live: use **Me → Check for Updates**, open an expanded unlocked saved note, and confirm the Web 407 purple/cream fills and gold corner ornaments are gone while the prior Web 406 borders and existing note/photo content remain.
 - MUAZZIN project was not touched.
 
----
 
 # Royal purple name box + cream/gold writing box — Web Update 407 LIVE; phone test pending (2026-11-22)
 
