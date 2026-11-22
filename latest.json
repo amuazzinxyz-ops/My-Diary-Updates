@@ -10,5 +10,5 @@
   "webVersion": 402,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "7494c67e3c5366a1f669a1098bc46ea35b070fb90a417d614d9baa2eb691f7cc",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "Web Update 402: The purple raised 3D border is now applied directly to the note-name/title box whenever an existing saved note is opened and immediately after a note saves successfully. Starting a new unsaved note clears the styling. The note text/body box remains unchanged; saved notes, photos, PINs, locks, and user data are preserved."
 }
