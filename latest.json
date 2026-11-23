@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 441,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "d6fedd38b5ae6a13f770f1aa87f27a87751b93599e5f083915a4d82236c6f0e0",
+  "webSha256": "46508696edc4bc4bf6dfa575de9dd0a94ad0195f5fc75b8a2a58eaf290eb376b",
   "webReleaseNotes": "My Diary Web Update 441: Removed only the extra explanatory sentence below “Favourite Name se PIN recover karein”. The heading remains, and the existing old Favourite Name verification, new PIN confirmation, new Favourite Name entry, validation, secure saving, and all other features are unchanged."
 }
