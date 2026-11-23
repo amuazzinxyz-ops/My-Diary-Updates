@@ -6288,3 +6288,12 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Safety backup branch: `backup/before-private-locker-pin-center-2026-11-22`. Working branch: `fix/private-locker-pin-label-center-2026-11-22`.
 - Updated `web-source/index.html` and `diary-web/index.html` identically; both files are 606,289 characters and share blob SHA `358b339b9b1865419f104b0b07bf44e4c939e708` on the working branch.
 - Candidate web update: **397** after publication workflow updates the manifest. Phone test pending; do not mark PASS until the user confirms the PIN label is centered and the button still works.
+
+
+# World Clock modal open fixed — Web Update 437 (2026-11-23)
+
+- User reported that the World Clock button stopped opening after Web Update 436. Root cause: the Close (×) control was removed, but `renderWorldClock()` still called `worldClockClose.setAttribute(...)`; the now-undefined variable threw a ReferenceError before the modal could display.
+- Minimal correction: removed only that obsolete call. The existing World Clock button click handler, modal display, timer, left-side Wapas button, centered heading, city list, favourites, and search remain unchanged.
+- Safety backup branch: `backup/before-world-clock-open-fix-2026-11-23`. Fix PR #475 merged as `848b3aad87b086c12f100eacc1bfab2c6834b985`. Only `web-source/index.html` and `diary-web/index.html` changed; both are byte-identical at blob SHA `41df1edf59baaea03fcbdc41cd6e55be696c35f1`. The removed `worldClockClose` reference is confirmed absent.
+- Live update feed manually advanced to Web Update **437** in commit `1893299062015600dab5d84116534b8cee46003a`. The manifest advertises SHA-256 `2033d3bddafa461fb550e6939fa0edd3ae969dcee92470439cad7d56c07a7f7d`, matching the fixed source bundle. Existing APK remains My Diary **1.0.215 / versionCode 214**; no native APK changes are required.
+- Device installation and phone-side opening/Wapas tests are **pending**. User must use Me → Check for Updates and install Web Update 437, then confirm World Clock opens and Wapas closes it. Do not mark phone test PASS until the user confirms. MUAZZIN was not touched.
