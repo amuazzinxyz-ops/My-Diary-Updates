@@ -1,9 +1,9 @@
-# Personal Calendar inline heading reduced to 11px — Web Update 432 preparation (2026-11-23)
+# Personal Calendar inline heading reduced to 11px — Web Update 432 published (2026-11-23)
 
 - User requested reducing only the 📅 Personal Calendar heading from 13px to **11px**. It remains in its original inline position between Back/Wapas and PIN; the flex-row placement, one-line nowrap behavior, alignment, and controls are unchanged.
 - Safety backup branch: `backup/before-calendar-title-11px-2026-11-23`. Working branch: `fix/calendar-heading-11px-2026-11-23`.
 - Changed only the scoped `#diaryMeFeatureTitle` font-size in both `web-source/index.html` and `diary-web/index.html`. No Calendar data, reminders, PIN/recovery data, other controls, or unrelated Diary features were changed.
-- Source/mirror parity, PR merge, Web Update 432 publication, and live checksum verification are pending. Phone test is pending; do not claim device PASS until the user confirms.
+- Source and mirror are byte-identical at Git blob SHA `dba71c76dd85ef770a7256e92fcbd705a8ccc2cd`; the scoped title rule is verified at 11px. The change is on `main` via PR #469 (merge commit `0f95216eba9362aa927055761b89f7f13632bb88`). Publisher run `45119407530` completed success; its log confirms the published mirror and advertised checksum match the source. Live `latest.json` advertises Web Update **432** with SHA-256 `6e53ce34ed7acb6431010fa5760dce3c29e54d23a6fa6f4b2761d0bfe967892b`. APK remains My Diary 1.0.215 / versionCode 214; no APK rebuild is required for this CSS-only change. Phone test is pending; do not claim device PASS until the user confirms.
 
 ---
 
