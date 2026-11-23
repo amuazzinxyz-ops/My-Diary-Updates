@@ -1,3 +1,14 @@
+# World Clock font sizes corrected — Web Update 439 (2026-11-23)
+
+- User requested the World Clock heading font size change from **19px to 16px**, and the **← Wapas** button text change from **13px to 12px**.
+- Applied only these two CSS font-size changes in `web-source/index.html` and mirrored `diary-web/index.html`. The existing 1px position adjustments remain unchanged; button dimensions, World Clock behavior, and other app features were not changed.
+- Safety backup branch: `backup/before-world-clock-font-16-12-2026-11-23`. Fix PR #479 merged as `787b33e8e936d8a8850f5817a8e3727b09d6cbba`.
+- Source and mirror are byte-identical at blob SHA `51292a378d9a521de2dbf85dcb9f0fd6011692fc`; web bundle SHA-256 is `9179715ea58788a82756441fbda19e683cd56ff9e8e6bccac89ea50aee863bf9`.
+- The publisher workflow completed but, because source and mirror had already been synchronized in the fix PR, its checksum-repair path did not increment the web version. Corrected `latest.json` to **Web Update 439** with the verified matching SHA in commit `29f5a32f9c40b6e7ad624e51860230527fc38042`.
+- **Phone Check for Updates and visual test pending**. User should check for Web Update 439, install it, and confirm heading/button sizes. Do not mark phone test PASS until confirmed. APK remains **1.0.216 / versionCode 215**; this is a web-only CSS update. MUAZZIN was not touched.
+
+---
+
 # My Diary APK 1.0.216 published with Web Update 438 — phone test pending (2026-11-23)
 
 - User reported that Web Update 438 was not arriving in the installed APK. The web-only rebuild had kept APK version **1.0.215 / versionCode 214**, so an already-installed 1.0.215 APK could not receive it as a newer native APK.
