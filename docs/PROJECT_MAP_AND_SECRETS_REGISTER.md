@@ -1,3 +1,12 @@
+# Personal Calendar heading increased to 12px — Web Update 434 pending publication (2026-11-23)
+
+- User requested changing only the 📅 Personal Calendar heading from 11px to **12px**. The title remains centered in its original inline position between Back and PIN, on one line. Back/PIN button dimensions and 12px button text, spacing, and all other layout rules remain unchanged.
+- Safety backup branch: `backup/before-calendar-heading-12px-2026-11-23`. Working branch: `fix/calendar-heading-12px-2026-11-23`.
+- Changed only the scoped Calendar title font-size rule in `web-source/index.html` and `diary-web/index.html`; source and mirror were identical before editing. No Calendar entries/reminders, PIN/recovery logic, saved data, or other Diary features were changed.
+- Publication and live checksum verification are pending. APK remains My Diary 1.0.215 / versionCode 214; this is a web-only CSS change and does not require an APK rebuild. Phone test is pending; do not claim device PASS until the user confirms.
+
+---
+
 # Personal Calendar Back and PIN buttons made compact — Web Update 433 published (2026-11-23)
 
 - User approved making both controls smaller while keeping their complete labels visible in the same inline header row.
