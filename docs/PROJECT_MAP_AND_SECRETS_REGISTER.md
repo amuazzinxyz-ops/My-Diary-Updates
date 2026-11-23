@@ -1,3 +1,14 @@
+# My Diary APK 1.0.216 published with Web Update 438 — phone test pending (2026-11-23)
+
+- User reported that Web Update 438 was not arriving in the installed APK. The web-only rebuild had kept APK version **1.0.215 / versionCode 214**, so an already-installed 1.0.215 APK could not receive it as a newer native APK.
+- Corrective release: incremented the signed Android APK to **My Diary 1.0.216 / versionCode 215**, retaining the existing package identity `com.personal.diaryapp` and signing configuration. The APK embeds the exact live Web Update **438** bundle.
+- Safety backup branch: `backup/before-1.0.216-web438-release-2026-11-23`. Release workflow PR #478 merged as `d43dd0bcec18d6b9d63477a50b26923ccd31cd4c`.
+- APK build workflow run **45142022066** completed **success**. Debug APK, signed Release APK, and translation audit artifacts uploaded. The signed Release APK artifact is `My-Diary-1.0.216-signed-APK` (artifact ID `14801993977`). Live `latest.json` now advertises versionName **1.0.216**, versionCode **215**, APK SHA-256 `3aa6859d768851be7d6e1468100c8c05da74b9acde0f63bffefda448eab8f82b`, Web Update **438**, and web SHA-256 `aa69e1b1d73a85673f669df0dca7ff3043f085a1c8d7de0b30eaeb3ee2c055f6`.
+- `web-source/index.html` and `diary-web/index.html` remain byte-identical at blob SHA `bacac53ddd4eb8ac370ba06137be84a6a99f10d4`. No Diary UI/source change was made for this native version bump; existing app identity, notes, photos, PINs, locks, Calendar data, reminders, widgets, and saved app data are intended to remain intact.
+- **Phone installation/test pending**: install the signed 1.0.216 APK, open My Diary → Me → Check for Updates, and confirm Web Update 438 is available/installed. Then check World Clock opens and the Wapas button/title have the requested barely noticeable 1px shift. Do not mark device-side PASS until the user confirms.
+
+---
+
 # World Clock Close (×) replaced with left-side Wapas button — Web Update 436 (2026-11-23)
 
 - User requested removing the World Clock modal's **×** button and adding **← Wapas** on the left, matching the Personal Calendar Back control, while keeping the World Clock heading centered.
