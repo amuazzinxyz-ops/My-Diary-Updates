@@ -10,5 +10,5 @@
   "webVersion": 451,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "d90a6c4c8ac9be7271f2b20028f66b6652e415e1b2cf5844e85015e6162d933b",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "My Diary Web Update 451: Personal Calendar and Smart Reminder new forms now default to today's local date. Smart Reminder keeps its existing +15-minute time default; saved records and APK remain unchanged."
 }
