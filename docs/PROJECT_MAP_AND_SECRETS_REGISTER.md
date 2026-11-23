@@ -1,3 +1,14 @@
+# My Documents modal heading kept on one line — Web Update 429 verified; phone test pending (2026-11-23)
+
+- User asked that the top heading **📁 My Documents** inside the opened My Documents modal stay on one line without making it smaller. The heading remains **17px**. Added a narrowly scoped rule to keep the modal header from wrapping and allow horizontal scrolling on very narrow screens.
+- Removed the earlier mistaken saved-document-name styling; saved document names/cards are unchanged. No Diary notes, photos, documents, PINs, locks, or MUAZZIN files were intentionally changed.
+- Updated `web-source/index.html` and `diary-web/index.html`; both are byte-identical at Git blob SHA `411548943b7ddb2054c2c0870ea284051422140b`. The correct `my-documents-heading-one-line` style is present and the erroneous `my-documents-entry-name-one-line` style is absent.
+- Web publisher run **45114708928** completed **success**. It verified the existing mirror and repaired the advertised checksum for the already-numbered **Web Update 429** (no webVersion increment was needed). Live `latest.json` advertises webVersion **429** and web SHA-256 `d8410a80224502ad63d75c6e03aa5290517a346e17b4cc6bcd024640fe39737d`.
+- The automatic APK workflow run **45114708802** also completed **success**, including signed Release build and publication. Live feed remains **My Diary 1.0.214 / versionCode 213**, APK SHA-256 `4275437d3463d4cf2bca8d0fb18d92f0645e13220ff9afa988e2b0531329c170`. This is the same app version; the web-only heading styling does not require a native feature change.
+- **Phone test pending**: install/check the update through **Me → Check for Updates**, open **📁 My Documents**, and confirm the heading stays on one line at its existing size. Do not mark device PASS until the user confirms.
+
+---
+
 # Web 425–428 reverted; exact Web 424 HTML restored as Web Update 429 — phone test pending (2026-11-23)
 
 - User requested removing all work from Web Updates 425, 426, 427, and 428. Created safety snapshot branch `backup/before-remove-web425-428-2026-11-23` from the pre-revert main head.
