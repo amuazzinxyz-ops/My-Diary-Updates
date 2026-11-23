@@ -1763,7 +1763,6 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    var localeMap={roman:'en-IN',english:'en',hindi:'hi-IN',urdu:'ur-PK',arabic:'ar',bengali:'bn-BD',gujarati:'gu-IN',marathi:'mr-IN',tamil:'ta-IN',telugu:'te-IN'};
    var activeLocale=localeMap[language()]||'en-IN',now=new Date();
    worldClockTitle.textContent=worldClockText('title');
-   worldClockClose.setAttribute('aria-label',worldClockText('close'));
    worldClockRows.replaceChildren();
    worldClockCities.slice().sort(function(a,b){return Number(worldClockFavouriteZones.has(b.zone))-Number(worldClockFavouriteZones.has(a.zone));}).forEach(function(city){
     var row=el('div',{class:'diary-world-clock-row'});
