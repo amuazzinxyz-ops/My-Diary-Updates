@@ -1,3 +1,13 @@
+# My Diary 1.0.215 made live with Web Update 430 — signed APK verified (2026-11-23)
+
+- User reminded that they had already confirmed a 1.0.215 test APK passed the phone test and explicitly asked for **1.0.215 to be made live**, so the update popup would show 1.0.215 rather than 1.0.214. The earlier workflow incorrectly left the live feed at 1.0.214; this release correction fixes that.
+- Created safety backup branch backup/before-live-1.0.215-release-2026-11-23 before changing the release workflow. PR #462 was merged as commit 4101f2cdb1f9d4a8e1866d423c89b19fad7f4922. Only .github/workflows/build-diary-from-zip.yml was changed: approved target is now versionName 1.0.215 / versionCode 214, live 1.0.214 is accepted as the upgrade baseline, and signed APK publication uses the 1.0.215 filename and metadata.
+- Release workflow run 45116509366 completed success, including exact latest published Diary HTML injection (Web Update 430), translation audit, version guards, debug build, signed Release build, certificate verification, publication, and APK artifact uploads.
+- Live latest.json is verified as My Diary **1.0.215 / versionCode 214**, Web Update **430**, APK SHA-256 4ab605afb7352acbd1a8a9b80b9644a57487653fc61df2773bdd3fab8924e443, and web SHA-256 6ec797be41104b3489a12be42aef1690ebdb4c7957b999c3bd089b72c50ac3b7. Canonical update APK URL remains https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk.
+- Release notes state Web Update 430 is included: My Documents Back button fully visible and 📁 My Documents heading stays one line at 17px. Existing app identity, notes, photos, PINs, locks, widgets, and saved data are preserved.
+- Safety backup branch for the register edit: backup/before-register-live-1.0.215-2026-11-23. Current release is live; ask user to refresh/check the update popup and confirm it now shows 1.0.215. Do not claim the new live APK was re-tested on-device unless the user confirms.
+
+---
 # My Documents back button clipping fixed — Web Update 430 published; signed APK verified (2026-11-23)
 
 - User reported the Back button at the top of the My Documents modal was clipped after the one-line heading change. Root cause was the heading CSS setting overflow-x:auto and overflow-y:hidden on the entire header row, which could clip the Back/Close controls.
