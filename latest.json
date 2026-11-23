@@ -7,8 +7,8 @@
   "sha256": "ffd07fea12814e9d5243f28435a919a9d34674ffb390a71fdce7068b4223f766",
   "releaseNotes": "My Diary 1.0.216: Includes Web Update 438 with the My Documents Back button fully visible and the 📁 My Documents heading kept on one line at 17px. Existing app identity, notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 449,
+  "webVersion": 450,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "806fdeaaa11bbff11e770f37a72737832b887da1bb5daa7eb2b8fe93c15b44d4",
-  "webReleaseNotes": "My Diary Web Update 449: The Diary editor's Likhai ka size slider now expands inside the same rounded control box. The 12–36px range and existing live text formatting controls are preserved. No APK rebuild required."
+  "webSha256": "d5840f53024e76b2657ecfed79eeda05ccb9c259b8535026963490904a7f3a74",
+  "webReleaseNotes": "My Diary Web Update 450: Rollback of the Diary editor Likhai ka size control to the previously verified Web Update 448 source. Restores the earlier tested behavior; APK remains unchanged."
 }
