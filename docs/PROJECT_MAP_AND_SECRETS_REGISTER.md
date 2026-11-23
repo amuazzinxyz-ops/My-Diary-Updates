@@ -3,7 +3,7 @@
 - User requested removing the World Clock modal's **×** button and adding **← Wapas** on the left, matching the Personal Calendar Back control, while keeping the World Clock heading centered.
 - Replaced only the World Clock header control with a left-aligned, compact gold Back button. The centered title remains in the middle; the right-side × control is removed. Tapping **← Wapas** closes the World Clock, stops its refresh timer, and returns to the Me panel. Roman, English, and Hindi labels are localized.
 - Safety backup branch: `backup/before-world-clock-back-button-2026-11-23`. Updated only `web-source/index.html`, its identical mirror `diary-web/index.html`, `latest.json`, and this register. Existing clock cities, favourites, search, saved data, notes, photos, PINs, locks, Calendar data, and MUAZZIN remain untouched.
-- Source/mirror are byte-identical. Web Update **436** advertises web SHA-256 `687c410244a35698c0af156d353014a76c0ac61ab188b1fff34e6731b8d64e07`; publisher workflow and live-feed verification are pending. APK remains My Diary **1.0.215 / versionCode 214** unless the automated HTML-input workflow reports otherwise. Phone test is pending; do not claim device PASS until the user confirms.
+- Source/mirror are byte-identical (blob SHA `b40d0a86aca7b45563a314e061e917b32b8dd151`). Publisher workflow run `45137986036` completed successfully; live `latest.json` confirms Web Update **436** and advertises SHA-256 `5f332b33b990b8e46c063cfbf9595dfc36c01aad61c5d1bf05a2be7ee53efc0d`. APK workflow run `45137986101` is still in progress; previous APK remains My Diary **1.0.215 / versionCode 214** until confirmed. Phone test is pending; do not claim device PASS until the user confirms.
 
 ---
 
