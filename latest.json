@@ -7,8 +7,8 @@
   "sha256": "19cf4ff97ec61f0cee477cfc1b96ddf62195a43dca7ec37248a3bbcc05c2ad40",
   "releaseNotes": "My Diary 1.0.216: Includes Web Update 438 with the My Documents Back button fully visible and the 📁 My Documents heading kept on one line at 17px. Existing app identity, notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 451,
+  "webVersion": 452,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "d90a6c4c8ac9be7271f2b20028f66b6652e415e1b2cf5844e85015e6162d933b",
-  "webReleaseNotes": "My Diary Web Update 451: Personal Calendar and Smart Reminder new forms now default to today's local date. Smart Reminder keeps its existing +15-minute time default; saved records and APK remain unchanged."
+  "webSha256": "7a1fea4163ee3f6ab2d87efb0d9d03e15cc13cf7e2222512f7a440d45ec24332",
+  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
