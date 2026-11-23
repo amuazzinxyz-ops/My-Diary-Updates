@@ -4,7 +4,7 @@
   "versionCode": 214,
   "versionName": "1.0.215",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
-  "sha256": "da41ef3a4df5f0e09327ac17d184b5dccc58e016669d7be9ee6e8d59ad937f2c",
+  "sha256": "a92b7bd6101e1f1e0fc9687b4de5774d8577365936a38ffc6f03141acb0c408d",
   "releaseNotes": "My Diary 1.0.215: Includes Web Update 430 with the My Documents Back button fully visible and the 📁 My Documents heading kept on one line at 17px. Existing app identity, notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 437,
