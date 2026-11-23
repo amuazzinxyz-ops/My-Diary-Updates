@@ -1,9 +1,10 @@
-# Personal Calendar Back and PIN buttons made compact — labels preserved (2026-11-23)
+# Personal Calendar Back and PIN buttons made compact — Web Update 433 published (2026-11-23)
 
-- User approved making both controls a little smaller while keeping their complete labels visible and in the same inline header row.
-- Created safety backup branch: `backup/before-calendar-buttons-compact-2026-11-23`. Working branch: `fix/calendar-buttons-compact-2026-11-23`.
-- Changed only the Calendar-scoped header button CSS in `web-source/index.html`: Back minimum size reduced from 42×40px to 34×32px; PIN minimum size reduced from 70×38px to 50×32px. Both use 12px text, compact padding, no text-indent, and nowrap so the labels are not clipped. The 11px Calendar heading and its position between Back and PIN are unchanged.
-- No PIN/recovery logic, Calendar entries/reminders, saved data, or other Diary buttons/features were changed. Publication and mirror parity verification are pending; phone test remains pending until user confirms.
+- User approved making both controls smaller while keeping their complete labels visible in the same inline header row.
+- Safety backup branch: `backup/before-calendar-buttons-compact-2026-11-23`.
+- Changed only Calendar-scoped header button CSS in `web-source/index.html` and its mirror `diary-web/index.html`: Back minimum size is now 34×32px (was 42×40px); PIN minimum size is now 50×32px (was 70×38px). Both use 12px text, compact padding, no text-indent, and nowrap to keep labels uncut. The Calendar heading remains 11px in its original position between Back and PIN.
+- Source and mirror are byte-identical at blob SHA `6029ea24f341b800315d55d8950ebe9b7d618e1c`. Publisher run `45120117333` completed successfully. Live `latest.json` advertises Web Update **433**, SHA-256 `414b586f4a2983c0ab0f652bb965fc37b8f1d189f25375399e93dbd856aebaca`; release notes identify the compact button change.
+- No PIN/recovery logic, Calendar entries/reminders, saved data, or other Diary buttons/features were changed. APK remains 1.0.215 / versionCode 214; this was a web-only CSS update. Phone test is pending until user confirms.
 
 ---
 
