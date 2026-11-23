@@ -1,5 +1,14 @@
-# My Documents modal heading kept on one line — Web Update 429 verified; phone test pending (2026-11-23)
+# My Documents back button clipping fixed — Web Update 429 published; APK build pending (2026-11-23)
 
+- User reported the Back button at the top of the My Documents modal was clipped after the one-line heading change. Root cause was the heading CSS setting overflow-x:auto and overflow-y:hidden on the entire header row, which could clip the Back/Close controls.
+- Created safety backup branch backup/before-my-documents-back-button-fix-2026-11-23 before editing.
+- Updated only the scoped my-documents-heading-one-line CSS in web-source/index.html and diary-web/index.html: header overflow is now visible; title uses flex:1 1 auto and min-width:0, while retaining white-space:nowrap and 17px font size. No saved document names/cards or user data were changed.
+- PR #460 merged to main as ec49e52159a5d1ab234e9ad7067ee7b03c03810b. Source and mirror are byte-identical at Git blob SHA ba85666df6bde1d500f4bdbe76490a3a75025c4b; fix and 17px title rule are present.
+- Web publisher run 45115448578 completed success. Live latest.json still advertises Web Update 429, with web SHA-256 6ec797be41104b3489a12be42aef1690ebdb4c7957b999c3bd089b72c50ac3b7.
+- APK workflow run 45115448573 is still in progress at the signed Release configuration step when this register entry was prepared. Do not report APK completion until the workflow finishes and the published APK/checksum are verified.
+- Phone test pending: user should use Me → Check for Updates, open 📁 My Documents, and verify the Back button is fully visible and the heading remains one line at 17px. Do not mark device PASS until user confirms.
+
+---
 - User asked that the top heading **📁 My Documents** inside the opened My Documents modal stay on one line without making it smaller. The heading remains **17px**. Added a narrowly scoped rule to keep the modal header from wrapping and allow horizontal scrolling on very narrow screens.
 - Removed the earlier mistaken saved-document-name styling; saved document names/cards are unchanged. No Diary notes, photos, documents, PINs, locks, or MUAZZIN files were intentionally changed.
 - Updated `web-source/index.html` and `diary-web/index.html`; both are byte-identical at Git blob SHA `411548943b7ddb2054c2c0870ea284051422140b`. The correct `my-documents-heading-one-line` style is present and the erroneous `my-documents-entry-name-one-line` style is absent.
