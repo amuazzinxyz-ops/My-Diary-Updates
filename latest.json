@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 430,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "6ec797be41104b3489a12be42aef1690ebdb4c7957b999c3bd089b72c50ac3b7",
+  "webSha256": "b8d0ded440856dbb10bbe6ce4dd54dccea1e249f9943e92978659c7104f32e27",
   "webReleaseNotes": "My Diary Web Update 430: Fixed the My Documents modal header so the Back button is fully visible. The 📁 My Documents heading stays on one line at 17px. Existing saved documents and user data are preserved."
 }
