@@ -7,8 +7,8 @@
   "sha256": "da41ef3a4df5f0e09327ac17d184b5dccc58e016669d7be9ee6e8d59ad937f2c",
   "releaseNotes": "My Diary 1.0.215: Includes Web Update 430 with the My Documents Back button fully visible and the 📁 My Documents heading kept on one line at 17px. Existing app identity, notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 436,
+  "webVersion": 437,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "5f332b33b990b8e46c063cfbf9595dfc36c01aad61c5d1bf05a2be7ee53efc0d",
-  "webReleaseNotes": "My Diary Web Update 436: In World Clock, the × control is replaced with a left-side ← Wapas button matching Personal Calendar's Back control; the World Clock heading remains centered. The button closes World Clock and returns to the Me panel. Existing clock cities, favourites, search, saved data, notes, photos, PINs, locks, and Calendar data are preserved."
+  "webSha256": "2033d3bddafa461fb550e6939fa0edd3ae969dcee92470439cad7d56c07a7f7d",
+  "webReleaseNotes": "My Diary Web Update 437: Fixed World Clock not opening by removing the stale reference to the removed × control. The left-side ← Wapas button and centered World Clock heading remain. Existing cities, favourites, search, notes, photos, PINs, locks, Calendar data, and MUAZZIN are unchanged."
 }
