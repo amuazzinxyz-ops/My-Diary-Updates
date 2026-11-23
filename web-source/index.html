@@ -283,22 +283,18 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 }
 </style>
 
-<style id="my-documents-entry-name-one-line">
-/* My Documents only: keep saved entry names on one line without reducing their text size. Long names can be scrolled horizontally. */
-#diaryMeFeatureModal .diary-me-feature-document-card .diary-calendar-name-badge{
-  display:block!important;
-  width:100%!important;
-  max-width:100%!important;
-  min-width:0!important;
-  box-sizing:border-box!important;
-  white-space:nowrap!important;
+<style id="my-documents-heading-one-line">
+/* Keep the My Documents modal heading on one line at its existing 17px size. */
+#diaryMeFeatureModal .diary-me-feature-head{
+  flex-wrap:nowrap!important;
   overflow-x:auto!important;
   overflow-y:hidden!important;
-  overflow-wrap:normal!important;
-  text-overflow:clip!important;
-  justify-content:flex-start!important;
-  text-align:left!important;
   -webkit-overflow-scrolling:touch!important;
+}
+#diaryMeFeatureModal #diaryMeFeatureTitle{
+  flex:0 0 auto!important;
+  white-space:nowrap!important;
+  font-size:17px!important;
 }
 </style>
 </head>
@@ -2888,7 +2884,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     if(kind==='documents'&&query){records.sort(function(a,b){function rank(x){var title=String(x.title||'').toLowerCase(),file=String(x.fileName||'').toLowerCase();if(queryWords.every(function(w){return title.indexOf(w)>=0;}))return 0;if(queryWords.every(function(w){return file.indexOf(w)>=0;}))return 1;if(queryWords.every(function(w){return (title+' '+file).indexOf(w)>=0;}))return 2;return 3;}return rank(a)-rank(b);});}
     if(!records.length)meFeatureList.appendChild(mfEl('p',{class:'diary-me-feature-empty'},mf('empty')));
     records.forEach(function(record){
-     var card=mfEl('article',{class:'diary-me-feature-card'+(kind==='documents'?' diary-me-feature-document-card':'')});
+     var card=mfEl('article',{class:'diary-me-feature-card'});
      var recordEditButton=null;
      if(meFeatureBulkEdit&&(kind==='calendar'||kind==='reminders')){
       var selectLabel=mfEl('label',{class:'diary-me-feature-select'});
