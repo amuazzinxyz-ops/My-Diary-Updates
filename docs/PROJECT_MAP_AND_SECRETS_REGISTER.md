@@ -4,7 +4,7 @@
 - The title now has its own visible first grid row (minimum 36px, 17px type, centered, elevated stacking order); Back/PIN/menu controls remain in the second row with dedicated 42px height and added row gap. No PIN logic, saved calendar entries, reminders, or other Diary features were changed.
 - Safety backup branch: `backup/before-calendar-heading-spacing-2026-11-23`. Working branch: `fix/personal-calendar-heading-spacing-2026-11-23`.
 - Source/mirror parity check: PASS — identical Git blob SHA 4a17196deed0cd0a09f20c0ae18726ca65b3e48a.
-- Change is staged in PR review; do not claim Web Update published or phone test passed until publisher workflow succeeds and user confirms device appearance.
+- PR #467 merged to main as `cdc97b3de1d06ae8accdbdf7649069d2a0d89711`. Live `latest.json` is verified as My Diary **1.0.215 / versionCode 214**, Web Update **431**, with web SHA-256 `b8d0ded440856dbb10bbe6ce4dd54dccea1e249f9943e92978659c7104f32e27`. Publisher feed confirms the updated 17px Personal Calendar heading above the Back/PIN/menu row. Source and mirror remain byte-identical at Git blob SHA `4a17196deed0cd0a09f20c0ae18726ca65b3e48a`. APK remains 1.0.215; no APK rebuild required for this web-only CSS fix. Phone test is pending; user should use Me → Check for Updates and confirm title is fully visible.
 
 ---
 
