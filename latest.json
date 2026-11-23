@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 434,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "fc193c0864a04b4965a850ae77dfe124cddad55b96741821aacdff3f3ec3cb02",
+  "webSha256": "0bfed9ec25dda0bc42389aab4e2ce9b3ec374ddd1c734a01fbaa5550cb5cab22",
   "webReleaseNotes": "My Diary Web Update 434: Increased the 📅 Personal Calendar heading from 11px to 12px. It remains centered on one line between Back and PIN. Back/PIN buttons, Calendar entries and reminders, PIN/recovery logic, and saved data are unchanged."
 }
