@@ -1,4 +1,4 @@
-# Approved release build: publish signed Diary 1.0.216/214 with the latest published Web Update 438 bundle.
+# Approved release build: publish signed Diary 1.0.216/215 with the latest published Web Update 438 bundle.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -533,7 +533,7 @@ jobs:
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
           if code != 215 or name != "1.0.216":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.216/214, found {name}/{code}")
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.216/215, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
           if feed_version not in ((214, "1.0.215"), (215, "1.0.216")):
               raise SystemExit(f"BLOCKED: update feed is neither the installed baseline nor the approved target release: {feed_version}")
