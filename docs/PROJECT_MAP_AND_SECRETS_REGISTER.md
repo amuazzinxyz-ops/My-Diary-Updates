@@ -1,3 +1,11 @@
+# Private Locker PIN recovery automatic steps — Web Update 443 (phone test pending, 2026-11-23)
+
+- Private Locker → **PIN Bhool Gaye**: old Favourite Name auto-verifies after 800 ms without typing; each complete 4-digit new PIN step advances automatically; mismatch stays on confirmation and prompts for retry. Removed **Aage** and **Wapas** from these steps. Final save action remains.
+- Existing verification, PIN-match validation, secure wrapping/saving, and other Locker flows remain unchanged. No APK or unrelated feature changed.
+- Fix branch: `fix/private-locker-recovery-auto-steps-2026-11-23b`. Web Update **443**; phone test pending until user confirms.
+
+---
+
 # Private Locker automatic PIN setup — Web Update 442 phone test PASS (2026-11-23)
 
 - User confirmed **Phone Test Pass** for Web Update 442.
