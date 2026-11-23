@@ -1393,12 +1393,18 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  function makeDiaryTextFormatControls(kind,targetId){
   var wrap=el('div',{class:'diary-diary-format-tools','data-format-kind':kind});wrap.appendChild(el('strong',{class:'diary-diary-format-heading'},kind==='cover'?t('formatCoverHeading'):t('formatTextHeading')));
   var size=el('input',{type:'range',min:'12',max:'36',step:'1','aria-label':t('fontSizeLabel')}),sizeValue=el('span',{class:'diary-diary-format-size'},'18 px');
+  var sizeToggle=el('button',{type:'button',class:'diary-diary-format-size-toggle','aria-expanded':'false'},t('fontSizeLabel'));
+  sizeToggle.style.cssText='min-height:32px;padding:6px 11px;border:1px solid #bda7d5;border-radius:8px;background:linear-gradient(145deg,#fff,#eee5fb);color:#432b66;font-size:12px;font-weight:900;';
+  var sizePanel=el('div',{class:'diary-diary-format-size-panel'});
+  sizePanel.style.cssText='display:none;align-items:center;gap:7px;flex:1 0 100%;padding:5px 7px;border:1px solid #d8c8e8;border-radius:8px;background:rgba(255,255,255,.72);';
+  sizePanel.append(size,sizeValue);
+  sizeToggle.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var opening=sizePanel.style.display==='none';sizePanel.style.display=opening?'flex':'none';sizeToggle.setAttribute('aria-expanded',opening?'true':'false');});
   var family=el('select',{'aria-label':t('fontFamilyLabel')});
   DIARY_TEXT_FONT_OPTIONS.forEach(function(v){family.appendChild(el('option',{value:v[0]},v[1]));});
   var bold=el('button',{type:'button','aria-pressed':'true','aria-label':t('boldLabel')},'B'),italic=el('button',{type:'button','aria-pressed':'false','aria-label':t('italicLabel')},'I'),underline=el('button',{type:'button','aria-pressed':'false','aria-label':t('underlineLabel')},'U'),color=el('input',{type:'color','aria-label':t('textColourLabel'),value:'#172033'});
   var emphasis=el('span',{class:'diary-format-emphasis-buttons'});emphasis.appendChild(bold);emphasis.appendChild(italic);emphasis.appendChild(underline);
 
-  wrap.appendChild(size);wrap.appendChild(sizeValue);wrap.appendChild(family);wrap.appendChild(emphasis);wrap.appendChild(color);
+  wrap.appendChild(sizeToggle);wrap.appendChild(sizePanel);wrap.appendChild(family);wrap.appendChild(emphasis);wrap.appendChild(color);
   function sync(){var f=getDiaryTextFormat(kind),field=document.getElementById(targetId);size.value=String(f.size);sizeValue.textContent=f.size+' px';family.value=f.family;color.value=f.color;[[bold,'bold'],[italic,'italic'],[underline,'underline']].forEach(function(x){x[0].setAttribute('aria-pressed',f[x[1]]?'true':'false');x[0].classList.toggle('is-active',!!f[x[1]]);});applyDiaryTextFormat(field,f);}
   size.addEventListener('input',function(){var f=getDiaryTextFormat(kind);f.size=parseInt(size.value,10)||18;setDiaryTextFormat(kind,f);sync();});
   family.addEventListener('change',function(){var f=getDiaryTextFormat(kind);f.family=family.value;setDiaryTextFormat(kind,f);sync();});
@@ -1624,11 +1630,11 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   worldClockModal.style.cssText='position:fixed;inset:0;z-index:2147483647;display:none;align-items:center;justify-content:center;box-sizing:border-box;padding:calc(14px + env(safe-area-inset-top,0px)) 12px calc(14px + env(safe-area-inset-bottom,0px));background:rgba(20,12,32,.62);overflow:auto;';
   var worldClockCard=el('div',{id:'diaryWorldClockCard'});
   worldClockCard.style.cssText='width:min(100%,460px);max-height:100%;overflow:auto;box-sizing:border-box;padding:15px;border:3px solid #d4af37;border-radius:18px;background:linear-gradient(145deg,#fffdf7,#f1e8ff);color:#35145f;box-shadow:inset 0 2px 0 #fff,0 4px 0 #7540b8,0 10px 24px #0005;';
-  var worldClockHead=el('div',{style:'display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;'});
+  var worldClockHead=el('div',{style:'display:grid;grid-template-columns:minmax(40px,1fr) auto minmax(40px,1fr);align-items:center;gap:8px;margin-bottom:12px;'});
   var worldClockTitle=el('strong',{id:'diaryWorldClockTitle'},worldClockText('title'));
-  worldClockTitle.style.cssText='font-size:19px;font-weight:1000;';
+  worldClockTitle.style.cssText='grid-column:2;justify-self:center;text-align:center;font-size:19px;font-weight:1000;';
   var worldClockClose=el('button',{type:'button',id:'diaryWorldClockClose'},'×');
-  worldClockClose.style.cssText='min-width:40px;min-height:40px;border:2px solid #d4af37;border-radius:10px;background:linear-gradient(145deg,#fff,#eadcff);color:#35145f;font-size:25px;font-weight:1000;box-shadow:0 3px 0 #7540b8;';
+  worldClockClose.style.cssText='grid-column:3;justify-self:end;min-width:40px;min-height:40px;border:2px solid #d4af37;border-radius:10px;background:linear-gradient(145deg,#fff,#eadcff);color:#35145f;font-size:25px;font-weight:1000;box-shadow:0 3px 0 #7540b8;';
   worldClockHead.append(worldClockTitle,worldClockClose);
   var worldClockRows=el('div',{id:'diaryWorldClockRows'});
   worldClockRows.style.cssText='display:flex;flex-direction:column;gap:8px;';
