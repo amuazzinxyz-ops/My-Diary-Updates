@@ -1,3 +1,13 @@
+# Personal Calendar heading separated from PIN controls — spacing fix (2026-11-23)
+
+- User reported the 📅 Personal Calendar heading was getting clipped/covered near the PIN button. Updated only the scoped Personal Calendar header CSS in `web-source/index.html` and `diary-web/index.html`.
+- The title now has its own visible first grid row (minimum 36px, 17px type, centered, elevated stacking order); Back/PIN/menu controls remain in the second row with dedicated 42px height and added row gap. No PIN logic, saved calendar entries, reminders, or other Diary features were changed.
+- Safety backup branch: `backup/before-calendar-heading-spacing-2026-11-23`. Working branch: `fix/personal-calendar-heading-spacing-2026-11-23`.
+- Source/mirror parity check: PASS — identical Git blob SHA 4a17196deed0cd0a09f20c0ae18726ca65b3e48a.
+- Change is staged in PR review; do not claim Web Update published or phone test passed until publisher workflow succeeds and user confirms device appearance.
+
+---
+
 # My Diary 1.0.215 made live with Web Update 430 — signed APK verified (2026-11-23)
 
 - User reminded that they had already confirmed a 1.0.215 test APK passed the phone test and explicitly asked for **1.0.215 to be made live**, so the update popup would show 1.0.215 rather than 1.0.214. The earlier workflow incorrectly left the live feed at 1.0.214; this release correction fixes that.
