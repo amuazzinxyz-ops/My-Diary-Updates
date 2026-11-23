@@ -1,3 +1,12 @@
+# Private Locker recovery heading-only — Web Update 441 published (phone test pending, 2026-11-23)
+
+- User requested that tapping **PIN Bhool Gaye** show only the heading **“Favourite Name se PIN recover karein”**, removing the extra explanatory sentence below it. The heading remains; the extra helper sentence was removed.
+- No recovery logic was changed: old Favourite Name verification, staged new 4-digit PIN entry and confirmation, new Favourite Name entry, validation, secure wrapping/saving, and back/cancel behavior remain intact.
+- Safety backup branch: `backup/before-private-locker-recovery-heading-only-2026-11-23`. Fix PR #481 merged as `211e6093c1e5250977a66a146b668088620a7a54`.
+- Only `web-source/index.html` and `diary-web/index.html` were edited; they are byte-identical at blob SHA `85242d037b8c107f8d21ed203102a21f27ca47bc`. Static checks confirm the helper sentence is absent, the requested heading is present, and recovery verification/save calls remain.
+- Live `latest.json` advertises Web Update **441** with web SHA-256 `d6fedd38b5ae6a13f770f1aa87f27a87751b93599e5f083915a4d82236c6f0e0`. Feed update commit: `3506d49b57d0aceddacfeeb7b0ce4dbf29149712`. APK remains My Diary **1.0.216 / versionCode 215**; this is a web-only update.
+- **Phone test pending**: use My Diary → Me → Check for Updates, install Web Update 441, tap Private Locker → PIN Bhool Gaye, and confirm only the requested heading appears while the recovery steps still work. Do not mark device-side PASS until user confirms. Existing PINs, saved Locker data, and MUAZZIN were not intentionally changed.
+
 # Private Locker PIN dialog — Web Update 440 phone test PASS (2026-11-23)
 
 - User confirmed: **“Phone Test Pass”** after installing/testing Web Update **440** on their Android phone.
