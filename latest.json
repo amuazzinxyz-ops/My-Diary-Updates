@@ -7,8 +7,8 @@
   "sha256": "4ab605afb7352acbd1a8a9b80b9644a57487653fc61df2773bdd3fab8924e443",
   "releaseNotes": "My Diary 1.0.215: Includes Web Update 430 with the My Documents Back button fully visible and the 📁 My Documents heading kept on one line at 17px. Existing app identity, notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 430,
+  "webVersion": 431,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "b8d0ded440856dbb10bbe6ce4dd54dccea1e249f9943e92978659c7104f32e27",
-  "webReleaseNotes": "My Diary Web Update 430: Fixed the My Documents modal header so the Back button is fully visible. The 📁 My Documents heading stays on one line at 17px. Existing saved documents and user data are preserved."
+  "webReleaseNotes": "My Diary Web Update 431: Fixed the Personal Calendar heading so the full 17px title stays on its own line above the Back, PIN and menu buttons. Existing Calendar entries, reminders, PIN/recovery data and other Diary data are preserved."
 }
