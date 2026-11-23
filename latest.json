@@ -7,8 +7,8 @@
   "sha256": "bc3f8d646fdf2d1880c2187f85bacdcf04153707359ca825d3994a4c1cc41c49",
   "releaseNotes": "My Diary 1.0.216: Includes Web Update 438 with the My Documents Back button fully visible and the 📁 My Documents heading kept on one line at 17px. Existing app identity, notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 439,
+  "webVersion": 440,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "ef1d31f360f14c40096a3331d1a8441b86743cdcc44a4971a15f8db386c88c11",
-  "webReleaseNotes": "My Diary Web Update 439: World Clock heading font size reduced from 19px to 16px and the ← Wapas button text reduced from 13px to 12px. The 1px left/right position adjustments remain unchanged. Button dimensions, World Clock behavior, cities, favourites, search, saved notes, photos, PINs, locks, Calendar, reminders, widgets, and MUAZZIN are unchanged."
+  "webReleaseNotes": "My Diary Web Update 440: Removed only the extra explanatory sentence below “🔐 Private Locker ka naya PIN banayein”. The heading remains, and the existing three-step PIN confirmation and Favourite Name flow, fields, validation, saving, and all other features are unchanged."
 }
