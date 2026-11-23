@@ -1,3 +1,15 @@
+# Note font-size slider opens inline; World Clock heading centered — Web Update 435 (2026-11-23)
+
+- User requested that tapping **Likhai ka size** open the existing size adjustment inside the same formatting panel rather than showing the slider separately. Added a localized toggle button to both existing note-format areas: Cover/Name and Text. The existing 12–36px slider is collapsed by default, opens inline on tap, and closes on a second tap. Existing size values, stored formatting, font family, bold/italic/underline, and colour controls are preserved.
+- User also requested the heading name be centered after opening **🌍 World Clock**. The title is now centered in the modal header; the Close (×) button remains aligned at the right.
+- Safety backup branch: `backup/before-inline-font-size-world-clock-center-2026-11-23`. Register backup branch: `backup/before-inline-font-size-world-clock-register-2026-11-23`. Code PR #473 merged to main as `f44997f5f17fb503e283b3fcbf1a07a08115f0ce`.
+- Updated only `web-source/index.html` and `diary-web/index.html`; both are byte-identical at Git blob SHA `ae3003f2cabb98931492535c29a5dd279454c0d8`. Live `latest.json` advertises **Web Update 435** with web SHA-256 `0bfed9ec25dda0bc42389aab4e2ce9b3ec374ddd1c734a01fbaa5550cb5cab22`. Publisher run `45136035292` completed success; initial source/mirror checksum verification run `45135769191` also completed success.
+- The automatic APK workflow also ran because the HTML source is a watched input. Run `45135769466` completed success; live feed remains My Diary **1.0.215 / versionCode 214** with APK SHA-256 `dc35b0c60d8634522ab1392c51d82904bb310fa61db8f504c67d81acd34f78a7`. No version bump or native feature change was made.
+- No note content, photos, PINs, locks, Calendar data, reminders, or other saved data were intentionally changed. MUAZZIN was not touched.
+- **Phone test pending**: use My Diary → Me → Check for Updates, install Web Update **435**, then test both Note size buttons (Cover/Name and Text) and confirm the slider opens/closes inside the panel; open World Clock and confirm its heading is centered. Do not mark device PASS until the user confirms.
+
+---
+
 # Personal Calendar heading 12px — Web Update 434 phone test PASS (2026-11-23)
 
 - User confirmed: **“Phone Test Pass”** for Web Update **434**. The 📅 Personal Calendar heading at 12px is verified on the user's Android phone.
