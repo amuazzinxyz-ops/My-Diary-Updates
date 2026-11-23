@@ -1,3 +1,12 @@
+# Private Locker automatic PIN setup — Web Update 442 published (phone test pending, 2026-11-23)
+
+- User requested only the Private Locker Lock-ON PIN setup to advance automatically: entering the first complete 4-digit PIN opens PIN confirmation; entering the matching PIN opens the Favourite Name step. The **Aage** and **✖ Radd Karein** controls were removed from these setup stages. The final **🔐 Lock ON Karein** save button remains.
+- Existing PIN validation, mismatch handling, secure key wrapping, save behavior, and all other Private Locker flows/features were preserved. No recovery flow, saved Locker data, APK, or MUAZZIN changes were made.
+- Safety backup branch: `backup/before-private-locker-auto-pin-steps-2026-11-23`. Fix PR #482 merged as `c2e8feecec35bcd85930510df76e3d3f4b8d7189`.
+- Only `web-source/index.html` and `diary-web/index.html` were edited; they are byte-identical at blob SHA `d301eb82b0b7aff65048a5c791342e21e59749a0`. Static checks confirmed auto-advance on each complete 4-digit entry, hidden Aage/Radd controls, and the final Favourite Name save action.
+- Live `latest.json` advertises Web Update **442**, web SHA-256 `46508696edc4bc4bf6dfa575de9dd0a94ad0195f5fc75b8a2a58eaf290eb376b`. Feed update commit: `54cb55f77654e7ca203370dced252ed76383b308`.
+- APK remains My Diary **1.0.216 / versionCode 215**; this is a web-only update. **Phone test pending**: user should install Web Update 442 and verify the two PIN steps advance automatically and Favourite Name still saves. Do not mark device-side PASS until user confirms.
+
 # Private Locker recovery heading-only — Web Update 441 phone test PASS (2026-11-23)
 
 - User confirmed: **“Phone Test Pass”** after installing/testing Web Update **441** on their Android phone.
