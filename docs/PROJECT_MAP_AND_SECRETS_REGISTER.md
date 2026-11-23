@@ -1,3 +1,15 @@
+# Personal Calendar + Smart Reminder — current local time defaults (Web Update 452, phone test pending, 2026-11-24)
+
+- User clarified that the **time-selection option itself** in both 📅 Personal Calendar and ⏰ Smart Reminder should initially show the device's current local time, not a fixed 09:00 or a time 15 minutes ahead.
+- Added one shared `meFeatureCurrentTime()` helper using the device's local hours and minutes (HH:MM). Both new forms now use it when opened, and both forms reset to the then-current local time after saving.
+- Removed only the Calendar's fixed 09:00 new-form default and Smart Reminder's +15-minute new-form/reset default. The time inputs remain editable. Existing saved record times, the existing 09:00 fallback for older Calendar records, date defaults, reminder scheduling/validation, repeat settings, snooze/ringtone settings, and other form fields are preserved. No saved records are rewritten.
+- Safety backup branch: `backup/before-current-time-default-calendar-reminder-2026-11-24`. Implementation PR **#498** merged as `3563972e9f9359864102b04ef1985761d9788972`. Web publisher synchronized source/mirror and advanced the live feed to **Web Update 452**.
+- Static verification: both form-open assignments and both post-save resets call the shared local-time helper; old fixed 09:00 and +15-minute defaults are absent; existing saved Calendar fallback remains. `web-source/index.html` and `diary-web/index.html` are byte-identical at blob SHA `b034e3a14ad717fbcf474f313b8ef4746de5e6be` (618337 characters). Live `latest.json` confirms webVersion **452** and web SHA-256 `7a1fea4163ee3f6ab2d87efb0d9d03e15cc13cf7e2222512f7a440d45ec24332`.
+- Web-only update. APK remains **My Diary 1.0.216 / versionCode 215**, APK SHA-256 unchanged at `19cf4ff97ec61f0cee477cfc1b96ddf62195a43dca7ec37248a3bbcc05c2ad40`. No PINs, notes, photos, saved records, or MUAZZIN project changes.
+- **Phone test pending**: user should install/check Web Update 452 and confirm both time pickers initially show the current phone-local time, and after saving each form resets to the current time. Do not mark phone-test PASS until the user confirms.
+
+---
+
 # Personal Calendar + Smart Reminder — new forms default to today's date (Web Update 451, phone test pending, 2026-11-24)
 
 - User requested that both **📅 Personal Calendar** and **⏰ Smart Reminder** show today's local date whenever a new form opens, with the date naturally becoming the new day after local midnight.
