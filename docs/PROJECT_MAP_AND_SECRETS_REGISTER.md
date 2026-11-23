@@ -1,3 +1,11 @@
+# World Clock font sizes — Web Update 439 (2026-11-23)
+
+- User-requested exact text-size changes: World Clock heading **19px → 16px** and **← Wapas** button text **13px → 12px**. The earlier subtle 1px left/right positioning adjustments remain in place; no button dimensions or unrelated features were changed.
+- Safety backup branch: `backup/before-world-clock-font-16-12-2026-11-23`. Fix PR #479 merged as `787b33e8e936d8a8850f5817a8e3727b09d6cbba`.
+- Only `web-source/index.html` and `diary-web/index.html` were edited for the CSS change; both are byte-identical at blob SHA `51292a378d9a521de2dbf85dcb9f0fd6011692fc`. Both exact CSS declarations were verified in the merged source.
+- Publisher workflow run `45144918812` completed successfully. Live `latest.json` now advertises Web Update **439**, with web SHA-256 `9179715ea58788a82756441fbda19e683cd56ff9e8e6bccac89ea50aee863bf9`. The live feed and release notes were re-fetched and verified.
+- App remains My Diary **1.0.216 / versionCode 215**; this is a web-only CSS update, not a new app-version release. Phone-side Check for Updates/install and visual confirmation are **pending**. Do not mark phone test PASS until the user confirms. MUAZZIN and all saved diary data/features were not intentionally changed.
+
 # World Clock font sizes corrected — Web Update 439 (2026-11-23)
 
 - User requested the World Clock heading font size change from **19px to 16px**, and the **← Wapas** button text change from **13px to 12px**.
