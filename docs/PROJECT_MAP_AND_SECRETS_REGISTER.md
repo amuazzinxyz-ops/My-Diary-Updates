@@ -1,3 +1,12 @@
+# Personal Calendar heading restored between Back and PIN — inline one-line fix (2026-11-23)
+
+- User clarified that the 📅 Personal Calendar heading must remain in its original inline header position, between the Back/Wapas and PIN controls; it must not move to a separate row.
+- Replaced only the scoped Personal Calendar header layout override: restored the original flex row and reduced only the title font from 17px to 13px so the full heading can fit on one line. Back, PIN, menu controls, their dimensions/behavior, Calendar entries, reminders, PIN/recovery data, and all other features remain untouched.
+- Safety backup branch: `backup/before-calendar-title-inline-2026-11-23`. Working branch: `fix/calendar-heading-inline-between-controls-2026-11-23`.
+- Source and mirror were updated identically; publication and live checksum verification are pending. Do not claim phone testing until the user confirms.
+
+---
+
 # Personal Calendar heading separated from PIN controls — spacing fix (2026-11-23)
 
 - User reported the 📅 Personal Calendar heading was getting clipped/covered near the PIN button. Updated only the scoped Personal Calendar header CSS in `web-source/index.html` and `diary-web/index.html`.
