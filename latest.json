@@ -10,5 +10,5 @@
   "webVersion": 433,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "414b586f4a2983c0ab0f652bb965fc37b8f1d189f25375399e93dbd856aebaca",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "My Diary Web Update 433: Made the Personal Calendar Back and PIN buttons more compact while keeping both labels fully visible on one line. The 11px Calendar heading, PIN/recovery logic, calendar entries, reminders, and saved data are unchanged."
 }
