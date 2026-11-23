@@ -1,3 +1,12 @@
+# Personal Calendar Back and PIN buttons made compact — labels preserved (2026-11-23)
+
+- User approved making both controls a little smaller while keeping their complete labels visible and in the same inline header row.
+- Created safety backup branch: `backup/before-calendar-buttons-compact-2026-11-23`. Working branch: `fix/calendar-buttons-compact-2026-11-23`.
+- Changed only the Calendar-scoped header button CSS in `web-source/index.html`: Back minimum size reduced from 42×40px to 34×32px; PIN minimum size reduced from 70×38px to 50×32px. Both use 12px text, compact padding, no text-indent, and nowrap so the labels are not clipped. The 11px Calendar heading and its position between Back and PIN are unchanged.
+- No PIN/recovery logic, Calendar entries/reminders, saved data, or other Diary buttons/features were changed. Publication and mirror parity verification are pending; phone test remains pending until user confirms.
+
+---
+
 # Personal Calendar inline heading reduced to 11px — Web Update 432 published (2026-11-23)
 
 - User requested reducing only the 📅 Personal Calendar heading from 13px to **11px**. It remains in its original inline position between Back/Wapas and PIN; the flex-row placement, one-line nowrap behavior, alignment, and controls are unchanged.
