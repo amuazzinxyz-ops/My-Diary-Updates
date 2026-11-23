@@ -1,3 +1,12 @@
+# World Clock Close (×) replaced with left-side Wapas button — Web Update 436 (2026-11-23)
+
+- User requested removing the World Clock modal's **×** button and adding **← Wapas** on the left, matching the Personal Calendar Back control, while keeping the World Clock heading centered.
+- Replaced only the World Clock header control with a left-aligned, compact gold Back button. The centered title remains in the middle; the right-side × control is removed. Tapping **← Wapas** closes the World Clock, stops its refresh timer, and returns to the Me panel. Roman, English, and Hindi labels are localized.
+- Safety backup branch: `backup/before-world-clock-back-button-2026-11-23`. Updated only `web-source/index.html`, its identical mirror `diary-web/index.html`, `latest.json`, and this register. Existing clock cities, favourites, search, saved data, notes, photos, PINs, locks, Calendar data, and MUAZZIN remain untouched.
+- Source/mirror are byte-identical. Web Update **436** advertises web SHA-256 `687c410244a35698c0af156d353014a76c0ac61ab188b1fff34e6731b8d64e07`; publisher workflow and live-feed verification are pending. APK remains My Diary **1.0.215 / versionCode 214** unless the automated HTML-input workflow reports otherwise. Phone test is pending; do not claim device PASS until the user confirms.
+
+---
+
 # Note font-size slider opens inline; World Clock heading centered — Web Update 435 (2026-11-23)
 
 - User requested that tapping **Likhai ka size** open the existing size adjustment inside the same formatting panel rather than showing the slider separately. Added a localized toggle button to both existing note-format areas: Cover/Name and Text. The existing 12–36px slider is collapsed by default, opens inline on tap, and closes on a second tap. Existing size values, stored formatting, font family, bold/italic/underline, and colour controls are preserved.
