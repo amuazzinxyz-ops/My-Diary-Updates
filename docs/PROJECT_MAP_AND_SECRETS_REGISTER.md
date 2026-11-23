@@ -1,9 +1,9 @@
-# Private Locker recovery name-entry time — Web Update 445 candidate (phone test pending, 2026-11-23)
+# Private Locker recovery name-entry time — Web Update 445 published (phone test pending, 2026-11-23)
 
 - User reported that the old Favourite Name recovery step still advanced before there was enough time to finish typing. Increased only the idle pause before automatic verification from **2500 ms to 5000 ms**. The field remains open while typing; automatic verification starts only after a non-empty value has been left untouched for five seconds. No Aage/Wapas buttons were restored.
 - New PIN and confirmation still auto-advance on complete 4-digit entries; the final **Naya PIN aur Favourite Name Save Karein** button, validation, secure recovery and saved data remain unchanged.
 - Safety backup branch: `backup/before-private-locker-recovery-name-entry-delay-2026-11-23`. Working branch: `fix/private-locker-recovery-name-entry-five-seconds-2026-11-23`.
-- Only `web-source/index.html` is changed in this candidate; the publisher workflow will synchronize `diary-web/index.html` and advance the web update feed. APK remains unchanged; this is a web-only adjustment.
+- Updated only the old Favourite Name recovery idle timer in `web-source/index.html`; the publisher synchronized `diary-web/index.html` identically and advanced the live feed to Web Update **445**. Source/mirror blob SHA: `6463182a232aa7a3c7c13aecfc25a40e3938d29c`. Live web SHA-256: `6313d456517dcd90391e6bddffac896f763dba2c15c1acfdb451893872310e09`. APK remains unchanged; this is a web-only adjustment.
 - **Phone test pending**. Do not mark PASS until the user confirms the old Favourite Name can be typed comfortably and the automatic recovery steps still work.
 
 ---
