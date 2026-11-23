@@ -1,3 +1,15 @@
+# Four Me sections — PIN button opens PIN box directly (Web Update 448, phone test pending, 2026-11-23)
+
+- User reported that after Web Update 447, tapping the PIN button in **My Memories**, **My Documents**, **Personal Calendar**, and **My Kharcha** still showed the intermediate **“Naya 4 ankon ka PIN banayein”** button.
+- Root cause: Web Update 447 changed the first-time protected-section open path (`showMeFeaturePin`) but missed the separate top-right PIN manager path (`showMeFeaturePinManager`). When no PIN existed, that manager still rendered an intermediate enable button.
+- Corrected only the no-existing-PIN branch in `showMeFeaturePinManager`: tapping the section PIN button now opens the existing 4-digit PIN-entry dialog immediately; cancelling returns to the section page. Existing PIN change/remove controls, confirmation, 4-digit validation, PBKDF2 hashing/storage, and protected-section access behavior remain unchanged.
+- Safety backup branch: `backup/before-pin-manager-direct-entry-2026-11-23`. Working branch: `fix/pin-manager-direct-entry-2026-11-23`. PR #492 merged as `0f69478285b45d51f398b03f9a0e5c06dd34d8f8`; diff changed only `web-source/index.html` (2 additions, 3 deletions).
+- Static checks confirm the PIN manager calls the existing PIN dialog directly, no intermediate PIN setup button remains in that manager, and existing PIN change/remove controls remain present. Web publisher run **45185792336** completed successfully. `web-source/index.html` and `diary-web/index.html` are byte-identical at blob SHA `6e83133c5d9df5d5f22be1fcae29aff761fb8bfc`.
+- Live `latest.json` advertises **Web Update 448**, web SHA-256 `d5840f53024e76b2657ecfed79eeda05ccb9c259b8535026963490904a7f3a74`. APK feed remains **My Diary 1.0.216 / versionCode 215**; this is a web-only update.
+- **Phone test pending**: install Web Update 448 via My Diary → Me → Check for Updates. Test the PIN button in all four sections and confirm the PIN entry box opens immediately with no intermediate button. Do not mark device-side PASS until the user confirms.
+
+---
+
 # Four Me sections — direct PIN-entry box (Web Update 447, phone test pending, 2026-11-23)
 
 - User requested that tapping the PIN control in **My Memories**, **My Documents**, **Personal Calendar**, and **My Kharcha** open the existing 4-digit PIN entry box directly, without first showing the intermediate **“Naya 4 ankon ka PIN banayein”** button/screen.
