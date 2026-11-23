@@ -1,3 +1,12 @@
+# Private Locker PIN dialog heading-only change — Web Update 440 (2026-11-23)
+
+- User requested the Private Locker PIN button dialog to show only the existing heading **“🔐 Private Locker ka naya PIN banayein”**, removing the extra explanatory sentence beneath it. No other UI or behavior changes were requested.
+- Removed only the helper paragraph and its layout reference. The original heading remains; the three-stage PIN entry, PIN confirmation, Favourite Name step, input fields, validation, secure wrapping/saving, and cancel behavior remain unchanged.
+- Safety backup branch: `backup/before-private-locker-pin-heading-only-2026-11-23`. Fix PR #480 merged as `9b610bddd5438765440384a8e3663be65f475ebe`.
+- Only `web-source/index.html` and `diary-web/index.html` were changed for the dialog edit; both are byte-identical at blob SHA `c75d3bff7f303e9f96bc8578149cb10efdcf353c`. Exact heading presence, removal of the helper sentence, and preservation of the three-stage flow were verified.
+- Live update feed advertises Web Update **440**, web SHA-256 `ef1d31f360f14c40096a3331d1a8441b86743cdcc44a4971a15f8db386c88c11`. Web-only publisher run `45147369092` completed successfully; feed version was then advanced to 440 and publisher verification is running for that feed commit (`45147453094`).
+- App identity and saved data were not intentionally changed. Phone-side Check for Updates/install and visual confirmation are **pending**; do not mark phone test PASS until the user confirms. MUAZZIN was not touched.
+
 # World Clock font sizes — Web Update 439 (2026-11-23)
 
 - User-requested exact text-size changes: World Clock heading **19px → 16px** and **← Wapas** button text **13px → 12px**. The earlier subtle 1px left/right positioning adjustments remain in place; no button dimensions or unrelated features were changed.
