@@ -1,3 +1,15 @@
+# Personal Calendar heading separated from PIN controls — Web Update 431 and APK 1.0.215 verified (2026-11-23)
+
+- User reported that the **📅 Personal Calendar** heading was clipped/covered beneath the PIN button. Root cause: the feature header placed Back, a 17px title, PIN management, and the menu control in one flex row, leaving insufficient width for the full title on mobile.
+- Created safety backup branch `backup/before-calendar-heading-pin-overlap-2026-11-23` before the source edit. PR **#463** merged as `846af364870eea15c023767946d2ec9e2ca859be`.
+- Changed only the two mirrored HTML files with a Personal Calendar-only two-row header: full title remains **17px** on its own row; Back, PIN, and menu controls are on the next row. Scoped class is applied on the Calendar PIN screen, Calendar page and PIN manager, and removed when Calendar closes.
+- Verified `web-source/index.html` and `diary-web/index.html` are byte-identical at Git blob SHA `decd9340c34bf6e88946d6d554c4a538a81808da`. The scoped CSS and class toggles are present. No Calendar records, reminders, PIN/recovery data, notes, photos, or other user data were changed.
+- Web publisher workflow run **45117516144** completed **success**. Feed-only PR **#464** advanced `latest.json` from webVersion **430** to **431** (merge `6f917102623d20a36e9265f104ae957fdbcf9dd2`). Live web SHA-256 is `b8d0ded440856dbb10bbe6ce4dd54dccea1e249f9943e92978659c7104f32e27`.
+- Automatic APK workflow run **45117516125** also completed **success**, including exact published HTML injection, translation audit, version guard, debug build, signed Release build, release verification and APK upload. Live feed remains **My Diary 1.0.215 / versionCode 214**, now with Web Update **431** included. APK SHA-256: `1cdcaec00412fb5c7ee06834cfc83853d0c6f68b309809a9d2bd0325cab757b7`. No native Android feature code was changed.
+- **Phone test pending**: user should use **Me → Check for Updates**, install Web Update **431**, open Personal Calendar (including its PIN screen if applicable), and confirm the full 17px heading is visible above the controls. Do not mark phone PASS until the user confirms.
+
+---
+
 # My Diary 1.0.215 made live with Web Update 430 — signed APK verified (2026-11-23)
 
 - User reminded that they had already confirmed a 1.0.215 test APK passed the phone test and explicitly asked for **1.0.215 to be made live**, so the update popup would show 1.0.215 rather than 1.0.214. The earlier workflow incorrectly left the live feed at 1.0.214; this release correction fixes that.
