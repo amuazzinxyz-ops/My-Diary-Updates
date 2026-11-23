@@ -2803,9 +2803,9 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    function finish(){if(shade.parentNode)shade.parentNode.removeChild(shade);if(typeof onClose==='function')onClose();}
    close.addEventListener('click',finish);box.appendChild(messageText);box.appendChild(close);shade.appendChild(box);document.body.appendChild(shade);
   }
-  function meFeatureAskNewPin(kind,after){
-   meFeaturePinDialog(mf('pinSet')).then(function(pin){if(pin===null)return;if(!/^\d{4}$/.test(pin)){meFeatureStatus.textContent=mf('pinNeed');return;}
-    meFeaturePinDialog(mf('pinConfirm')).then(function(again){if(again===null)return;if(pin!==again){meFeatureStatus.textContent=mf('pinMismatch');return;}
+  function meFeatureAskNewPin(kind,after,onCancel){
+   meFeaturePinDialog(mf('pinSet')).then(function(pin){if(pin===null){if(typeof onCancel==='function')onCancel();return;}if(!/^\d{4}$/.test(pin)){meFeatureStatus.textContent=mf('pinNeed');return;}
+    meFeaturePinDialog(mf('pinConfirm')).then(function(again){if(again===null){if(typeof onCancel==='function')onCancel();return;}if(pin!==again){meFeatureStatus.textContent=mf('pinMismatch');return;}
      meFeatureStorePin(kind,pin).then(function(){meFeatureStatus.textContent=mf('pinSaved');if(typeof after==='function')after();}).catch(function(){meFeatureStatus.textContent=mf('failed');});
     });
    });
@@ -2832,9 +2832,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    meFeatureBulkEdit=false;meFeatureSelectedIds.clear();meFeatureMenu.hidden=true;meFeatureMenuButton.hidden=true;meFeatureBulkBar.hidden=true;
    meFeatureTitle.textContent=mf(meFeatureTypes.filter(function(x){return x.id===kind;})[0].key);meFeatureManage.hidden=true;meFeatureLock.hidden=true;meFeatureContent.replaceChildren();meFeatureStatus.textContent='';
    if(!config){
-    form.appendChild(mfEl('strong',{},mf('pinSet')));
-    var create=mfEl('button',{type:'button',class:'diary-me-feature-save'},mf('save'));create.addEventListener('click',function(){meFeatureAskNewPin(kind,function(){showMeFeaturePage(kind);});});
-    form.appendChild(create);form.appendChild(mfEl('p',{class:'diary-me-feature-pin-note'},mf('pinNote')));
+    meFeatureAskNewPin(kind,function(){showMeFeaturePage(kind);},function(){showMeFeaturePage(kind);});
    }else{
     form.appendChild(mfEl('strong',{},mf('pinPrompt')));
     var pin=mfField(form,mf('pinPrompt'),'password','pin',true);pin.inputMode='numeric';pin.maxLength=config.digits===4?4:8;pin.placeholder=mf('pinPlaceholder');
