@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 436,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "687c410244a35698c0af156d353014a76c0ac61ab188b1fff34e6731b8d64e07",
+  "webSha256": "5f332b33b990b8e46c063cfbf9595dfc36c01aad61c5d1bf05a2be7ee53efc0d",
   "webReleaseNotes": "My Diary Web Update 436: In World Clock, the × control is replaced with a left-side ← Wapas button matching Personal Calendar's Back control; the World Clock heading remains centered. The button closes World Clock and returns to the Me panel. Existing clock cities, favourites, search, saved data, notes, photos, PINs, locks, and Calendar data are preserved."
 }
