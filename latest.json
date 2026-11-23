@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 448,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "d5840f53024e76b2657ecfed79eeda05ccb9c259b8535026963490904a7f3a74",
+  "webSha256": "806fdeaaa11bbff11e770f37a72737832b887da1bb5daa7eb2b8fe93c15b44d4",
   "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
