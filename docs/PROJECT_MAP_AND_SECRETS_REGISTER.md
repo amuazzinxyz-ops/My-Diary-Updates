@@ -1,3 +1,14 @@
+# Private Locker recovery Favourite Name manual Aage button — source merged, publication pending (2026-11-23)
+
+- User requested replacing automatic progression after entering the old Favourite Name in Private Locker → PIN Bhool Gaye with a manual **Aage** button. The user must type the old Favourite Name and tap Aage; only then is the existing Favourite Name verification performed and, if valid, the next PIN stage opens.
+- Removed the 5-second idle timer from this first recovery step. The Aage button is visible only at stage 0. New 4-digit PIN and confirmation still auto-advance; final **Naya PIN aur Favourite Name Save Karein** button, validation, secure key wrapping, and save behavior are unchanged.
+- Safety backup branch: `backup/before-private-locker-recovery-manual-next-button-2026-11-23`. Working branch: `fix/private-locker-recovery-manual-next-button-2026-11-23`. PR #490 merged as `2586b177532a78e109efe1273845bf2186e8e094`.
+- PR diff verified: only `web-source/index.html` changed (12 additions, 12 deletions). Static checks confirm the Aage button, manual verification handler, absence of the automatic timer, preservation of automatic PIN stages and final save action.
+- **Publication is not yet verified**: main `web-source/index.html` contains the change, but `diary-web/index.html` is still on the previous blob and live `latest.json` still advertises Web Update 445. Do not tell the user to install/check for this change until the publisher synchronizes source/mirror and the live feed checksum/version are verified.
+- **Phone test pending**. Do not mark PASS until the user confirms that the old Favourite Name stays on screen until Aage is tapped, a correct name opens the next step, and a wrong name is rejected. No APK/native code, other features, saved data, or MUAZZIN project were changed.
+
+---
+
 # Private Locker recovery name-entry time — Web Update 445 published (phone test pending, 2026-11-23)
 
 - User reported that the old Favourite Name recovery step still advanced before there was enough time to finish typing. Increased only the idle pause before automatic verification from **2500 ms to 5000 ms**. The field remains open while typing; automatic verification starts only after a non-empty value has been left untouched for five seconds. No Aage/Wapas buttons were restored.
