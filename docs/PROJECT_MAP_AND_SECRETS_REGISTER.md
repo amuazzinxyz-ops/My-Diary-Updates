@@ -1,3 +1,14 @@
+# Diary editor — Likhai ka size slider same button-box ke andar (Web Update candidate, phone test pending, 2026-11-23)
+
+- User requested that tapping **Likhai ka size** reveal its size slider inside the same button-like control rather than as a separate panel below the button.
+- Updated only `makeDiaryTextFormatControls` in the Diary editor: the size label button and its slider/value panel now sit inside one shared rounded bordered container. The slider remains a separate accessible input (not invalidly nested inside a native button); tapping the label expands/collapses the slider within that same visual control.
+- Preserved the 12–36px range, current size value display, live text-size update handler, and all existing font-family, bold, italic, underline, and colour handlers. No note data, image layout, save/share, PIN/lock, other sections, or APK files were intentionally changed.
+- Safety backup branch: `backup/before-font-size-control-inside-button-2026-11-23`. Working branch: `fix/font-size-slider-inside-button-2026-11-23`.
+- Source and mirror are byte-identical at blob SHA `7c1016cb97f6c68f6bf11b0b85fbf769c2ff71b7` (618,947 characters). Static checks passed: size button and panel share the container; old sibling append is absent; slider and formatting handlers remain intact.
+- Publication and phone test are pending. Do not claim Web Update published or phone-test PASS until the publisher/feed checks succeed and the user confirms on-device behavior.
+
+---
+
 # Four Me sections — PIN button direct-entry phone test PASS (Web Update 448, 2026-11-23)
 
 - User confirmed **“Very good 👍👍👍 phone test pass”** after installing/testing Web Update **448**.
