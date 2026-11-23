@@ -1,3 +1,12 @@
+# Personal Calendar heading 12px — Web Update 434 phone test PASS (2026-11-23)
+
+- User confirmed: **“Phone Test Pass”** for Web Update **434**. The 📅 Personal Calendar heading at 12px is verified on the user's Android phone.
+- This closes the device-test item recorded in the previous entry. Web Update 434 remains published; APK remains My Diary **1.0.215 / versionCode 214**.
+- No further source, web bundle, APK, PIN, Calendar data, or saved-data changes were made for this confirmation. MUAZZIN was not touched.
+- Register safety backup branch: `backup/before-calendar-434-phone-pass-register-2026-11-23`.
+
+---
+
 # Personal Calendar heading increased to 12px — Web Update 434 pending publication (2026-11-23)
 
 - User requested changing only the 📅 Personal Calendar heading from 11px to **12px**. The title remains centered in its original inline position between Back and PIN, on one line. Back/PIN button dimensions and 12px button text, spacing, and all other layout rules remain unchanged.
