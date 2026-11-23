@@ -4,7 +4,7 @@
 - Restored the exact pre-449 safety backup from `backup/before-font-size-control-inside-button-2026-11-23`. Main-branch `web-source/index.html` and `diary-web/index.html` are byte-identical at blob SHA `6e83133c5d9df5d5f22be1fcae29aff761fb8bfc` (618,591 characters); this is the verified Web Update 448 bundle and includes the phone-tested four-section PIN-button fix.
 - Rollback merged through PR **#494** as commit `7f871a4778b44a8e263c950b2056b5b1348249ce`. Live `latest.json` now advertises **Web Update 450** with restored Web Update 448 bundle SHA-256 `d5840f53024e76b2657ecfed79eeda05ccb9c259b8535026963490904a7f3a74`. Version 450 is intentionally used so devices already on 449 can receive the rollback; the actual web source is the exact 448 backup.
 - APK feed fields remain unchanged: My Diary **1.0.216 / versionCode 215**. No APK, PIN, note, photo, saved data, or MUAZZIN project changes were made intentionally.
-- **Phone test pending**: install Web Update 450 through My Diary → Me → Check for Updates and verify the reported 449 issue is gone and the previously working controls still work. Do not mark device-side PASS until the user confirms.
+- **Phone test PASS (user-confirmed, 2026-11-23)**: user confirmed Web Update 450 passed on the phone. This completes the rollback verification; no further device-side test is pending for this update.
 
 ---
 
