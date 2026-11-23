@@ -1,3 +1,12 @@
+# Personal Calendar inline heading reduced to 11px — Web Update 432 preparation (2026-11-23)
+
+- User requested reducing only the 📅 Personal Calendar heading from 13px to **11px**. It remains in its original inline position between Back/Wapas and PIN; the flex-row placement, one-line nowrap behavior, alignment, and controls are unchanged.
+- Safety backup branch: `backup/before-calendar-title-11px-2026-11-23`. Working branch: `fix/calendar-heading-11px-2026-11-23`.
+- Changed only the scoped `#diaryMeFeatureTitle` font-size in both `web-source/index.html` and `diary-web/index.html`. No Calendar data, reminders, PIN/recovery data, other controls, or unrelated Diary features were changed.
+- Source/mirror parity, PR merge, Web Update 432 publication, and live checksum verification are pending. Phone test is pending; do not claim device PASS until the user confirms.
+
+---
+
 # Personal Calendar heading restored between Back and PIN — inline one-line fix (2026-11-23)
 
 - User clarified that the 📅 Personal Calendar heading must remain in its original inline header position, between the Back/Wapas and PIN controls; it must not move to a separate row.
