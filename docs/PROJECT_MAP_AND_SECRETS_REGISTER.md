@@ -1,3 +1,13 @@
+# Private Locker recovery name-entry time — Web Update 444 (phone test pending, 2026-11-23)
+
+- User reported that the old Favourite Name recovery step advanced too quickly, leaving too little time to type. Increased only the idle debounce before automatic verification from **800 ms to 2500 ms**. It still advances automatically after a non-empty name has been typed and typing pauses; blank input does not trigger verification. No Aage/Wapas buttons were restored.
+- New PIN and confirmation still auto-advance on complete 4-digit entries; the final **Naya PIN aur Favourite Name Save Karein** button and all existing validation/secure-save behavior remain unchanged.
+- Safety backup branch: `backup/before-private-locker-recovery-name-entry-delay-2026-11-23`. Working branch: `fix/private-locker-recovery-name-entry-delay-2026-11-23`.
+- Updated only the recovery debounce in `web-source/index.html` and its identical mirror `diary-web/index.html`, plus this register and `latest.json`. Web Update **444** advertises SHA-256 `50f0c6ab121d24f07b1c67e8d3ec91dc8a84354926bfbd8461bdee8b4abf6b18`. APK remains unchanged; this is a web-only adjustment.
+- **Phone test pending**. Do not mark PASS until the user confirms the Favourite Name can be entered comfortably and the automatic recovery steps still work.
+
+---
+
 # Private Locker PIN recovery automatic steps — Web Update 443 published (phone test pending, 2026-11-23)
 
 - User requested automatic progression in Private Locker → **PIN Bhool Gaye** recovery: remove the first screen's **Aage** and **Wapas** buttons and the next PIN screen's **Aage** button.
