@@ -283,15 +283,14 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 }
 </style>
 <style id="my-documents-heading-one-line">
-/* Keep the My Documents modal heading on one line at its existing 17px size. */
+/* Keep the My Documents heading on one line without clipping the back/close controls. */
 #diaryMeFeatureModal .diary-me-feature-head{
   flex-wrap:nowrap!important;
-  overflow-x:auto!important;
-  overflow-y:hidden!important;
-  -webkit-overflow-scrolling:touch!important;
+  overflow:visible!important;
 }
 #diaryMeFeatureModal #diaryMeFeatureTitle{
-  flex:0 0 auto!important;
+  flex:1 1 auto!important;
+  min-width:0!important;
   white-space:nowrap!important;
   font-size:17px!important;
 }
