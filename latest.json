@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 443,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "d9b09d32910db357db1a4ef6773319611d48e741f746d56bdb488217c90c8238",
+  "webSha256": "1581050cc047f873f636fa5ca7e0419008b01408df1eb85340a1220e7eb378ed",
   "webReleaseNotes": "My Diary Web Update 443: In Private Locker → PIN Bhool Gaye recovery only, the old Favourite Name is automatically verified after typing pauses; the new 4-digit PIN and matching confirmation automatically advance without Aage buttons. Removed Aage and Wapas from the recovery steps. The final save action and existing recovery verification, secure saving, and all other features remain unchanged."
 }
