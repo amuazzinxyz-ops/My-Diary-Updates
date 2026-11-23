@@ -1,11 +1,12 @@
-# Private Locker recovery Favourite Name manual Aage button — Web Update 446 published (phone test pending, 2026-11-23)
+# Private Locker recovery Favourite Name manual Aage button — Web Update 446 phone test PASS (2026-11-23)
 
 - User requested replacing automatic progression after entering the old Favourite Name in Private Locker → PIN Bhool Gaye with a manual **Aage** button. The user types the old Favourite Name and taps Aage; only then does the existing Favourite Name verification run and, if valid, open the next PIN stage.
 - Removed the 5-second idle timer from this first recovery step. Aage is visible only at stage 0. New 4-digit PIN and confirmation still auto-advance; final **Naya PIN aur Favourite Name Save Karein** button, validation, secure key wrapping, and save behavior are unchanged.
 - Safety backup branch: `backup/before-private-locker-recovery-manual-next-button-2026-11-23`. Working branch: `fix/private-locker-recovery-manual-next-button-2026-11-23`. PR #490 merged as `2586b177532a78e109efe1273845bf2186e8e094`.
 - PR diff verified: only `web-source/index.html` changed (12 additions, 12 deletions). Static checks confirm the Aage button, manual verification handler, absence of the automatic timer, preservation of automatic PIN stages and final save action.
 - Web publisher synchronized `web-source/index.html` and `diary-web/index.html`; both are byte-identical at blob SHA `297dc7b4942543eafd164ae35e2a80cd24cbda0d`. Live `latest.json` now advertises **Web Update 446** with web SHA-256 `952412d2fec4105d1b778d5adee9fdb6ee6fbfb6d3b4be17b5de370030ca1137`. APK remains **1.0.216 / versionCode 215** and its SHA-256 is unchanged; this is web-only.
-- **Phone test pending**. Do not mark PASS until the user confirms that the old Favourite Name stays on screen until Aage is tapped, a correct name opens the next step, and a wrong name is rejected. No APK/native code, other features, saved data, or MUAZZIN project were changed.
+- User confirmed **Phone Test PASS** on 2026-11-23 for Web Update 446: the old Favourite Name remains on screen until Aage is tapped, verification proceeds correctly, and the recovery flow works on the phone.
+- **Device-side status: PASS (user-confirmed).** This is a register-only confirmation; no app source, web bundle, APK, or saved data changed. No APK/native code, other features, saved data, or MUAZZIN project were changed.
 
 ---
 
