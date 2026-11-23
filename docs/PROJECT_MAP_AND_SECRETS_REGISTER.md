@@ -1,3 +1,14 @@
+# Four Me sections — direct PIN-entry box (Web Update 447, phone test pending, 2026-11-23)
+
+- User requested that tapping the PIN control in **My Memories**, **My Documents**, **Personal Calendar**, and **My Kharcha** open the existing 4-digit PIN entry box directly, without first showing the intermediate **“Naya 4 ankon ka PIN banayein”** button/screen.
+- Updated only the shared first-time PIN setup branch in `web-source/index.html`: it now opens the existing PIN-entry dialog immediately. The PIN confirmation dialog, 4-digit validation, PBKDF2 hashing, secure local storage, save flow, and protected-section access logic remain unchanged. Closing the PIN dialog returns to the section page. The change is shared by the four requested sections only; no saved data or unrelated features were intentionally changed.
+- Safety backup branch: `backup/before-four-me-sections-direct-pin-box-2026-11-23`. Working branch: `fix/four-me-sections-direct-pin-box-2026-11-23`. PR #491 merged as `ecdf71a61a68d40f24b2e577a0d3ff5ecf970900`; PR diff changed only `web-source/index.html` (4 additions, 6 deletions).
+- Static checks confirm the direct PIN dialog call is present and the intermediate PIN heading/button markup is absent. Web publisher run **45184916127** completed successfully. `web-source/index.html` and `diary-web/index.html` are byte-identical at blob SHA `ae2d82a6918e1e6c2a6b0a312de2c5eec670ea41`.
+- Live `latest.json` advertises **Web Update 447**, web SHA-256 `dab26c88348432c0f0e39a7675ab7afdd8ca1767540712c027a82e154f0ea43c`. APK feed remains **My Diary 1.0.216 / versionCode 215**; this is a web-only update and no APK rebuild is required for the feature.
+- **Phone test pending**: user should install Web Update 447 through My Diary → Me → Check for Updates and confirm all four sections open the PIN-entry box immediately, PIN confirmation/save still work, and existing section access remains correct. Do not mark device-side PASS until the user confirms.
+
+---
+
 # Private Locker recovery Favourite Name manual Aage button — Web Update 446 phone test PASS (2026-11-23)
 
 - User requested replacing automatic progression after entering the old Favourite Name in Private Locker → PIN Bhool Gaye with a manual **Aage** button. The user types the old Favourite Name and taps Aage; only then does the existing Favourite Name verification run and, if valid, open the next PIN stage.
