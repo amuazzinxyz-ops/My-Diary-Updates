@@ -7,8 +7,8 @@
   "sha256": "1f5eaeca9b6c990d3d254ece4de22e1b48efe8c652e82091219459aadf65140d",
   "releaseNotes": "My Diary 1.0.216: Includes Web Update 438 with the My Documents Back button fully visible and the 📁 My Documents heading kept on one line at 17px. Existing app identity, notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 440,
+  "webVersion": 441,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "d6fedd38b5ae6a13f770f1aa87f27a87751b93599e5f083915a4d82236c6f0e0",
-  "webReleaseNotes": "My Diary Web Update 440: Removed only the extra explanatory sentence below “🔐 Private Locker ka naya PIN banayein”. The heading remains, and the existing three-step PIN confirmation and Favourite Name flow, fields, validation, saving, and all other features are unchanged."
+  "webReleaseNotes": "My Diary Web Update 441: Removed only the extra explanatory sentence below “Favourite Name se PIN recover karein”. The heading remains, and the existing old Favourite Name verification, new PIN confirmation, new Favourite Name entry, validation, secure saving, and all other features are unchanged."
 }
