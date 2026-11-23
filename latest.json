@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 440,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "ef1d31f360f14c40096a3331d1a8441b86743cdcc44a4971a15f8db386c88c11",
+  "webSha256": "d6fedd38b5ae6a13f770f1aa87f27a87751b93599e5f083915a4d82236c6f0e0",
   "webReleaseNotes": "My Diary Web Update 440: Removed only the extra explanatory sentence below “🔐 Private Locker ka naya PIN banayein”. The heading remains, and the existing three-step PIN confirmation and Favourite Name flow, fields, validation, saving, and all other features are unchanged."
 }
