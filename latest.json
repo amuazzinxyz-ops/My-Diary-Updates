@@ -7,8 +7,8 @@
   "sha256": "dc35b0c60d8634522ab1392c51d82904bb310fa61db8f504c67d81acd34f78a7",
   "releaseNotes": "My Diary 1.0.215: Includes Web Update 430 with the My Documents Back button fully visible and the 📁 My Documents heading kept on one line at 17px. Existing app identity, notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 435,
+  "webVersion": 436,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "0bfed9ec25dda0bc42389aab4e2ce9b3ec374ddd1c734a01fbaa5550cb5cab22",
-  "webReleaseNotes": "My Diary Web Update 435: The note Cover/Name and Text sections now show the Likhai ka size control as a button; tapping it opens the existing 12–36px slider inline and tapping again closes it. The opened World Clock heading is centered, with Close remaining on the right. Existing note formatting, saved notes/photos, PINs, locks, Calendar data, and other features are preserved."
+  "webSha256": "687c410244a35698c0af156d353014a76c0ac61ab188b1fff34e6731b8d64e07",
+  "webReleaseNotes": "My Diary Web Update 436: In World Clock, the × control is replaced with a left-side ← Wapas button matching Personal Calendar's Back control; the World Clock heading remains centered. The button closes World Clock and returns to the Me panel. Existing clock cities, favourites, search, saved data, notes, photos, PINs, locks, and Calendar data are preserved."
 }
