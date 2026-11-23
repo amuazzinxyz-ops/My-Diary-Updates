@@ -1,3 +1,10 @@
+# Private Locker recovery heading-only — Web Update 441 phone test PASS (2026-11-23)
+
+- User confirmed: **“Phone Test Pass”** after installing/testing Web Update **441** on their Android phone.
+- Device-side result: the Private Locker **PIN Bhool Gaye** dialog displays only the heading **“Favourite Name se PIN recover karein”**; the extra explanatory sentence is removed as requested.
+- Existing recovery flow remains as previously verified: old Favourite Name verification, new PIN entry and confirmation, new Favourite Name entry, validation, secure saving, and cancel/back behavior.
+- Web Update 441 remains the published live web version. No source, mirror, APK, or update-feed changes were needed for this register-only confirmation.
+
 # Private Locker recovery heading-only — Web Update 441 published (phone test pending, 2026-11-23)
 
 - User requested that tapping **PIN Bhool Gaye** show only the heading **“Favourite Name se PIN recover karein”**, removing the extra explanatory sentence below it. The heading remains; the extra helper sentence was removed.
