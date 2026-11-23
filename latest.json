@@ -7,8 +7,8 @@
   "sha256": "7d35909ed46a340f35e311bd4db1589fa5c7c60c351998bc8d866529ea900aac",
   "releaseNotes": "My Diary 1.0.216: Includes Web Update 438 with the My Documents Back button fully visible and the 📁 My Documents heading kept on one line at 17px. Existing app identity, notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 442,
+  "webVersion": 443,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "46508696edc4bc4bf6dfa575de9dd0a94ad0195f5fc75b8a2a58eaf290eb376b",
-  "webReleaseNotes": "My Diary Web Update 442: In the Private Locker Lock-ON PIN setup only, entering the first complete 4-digit PIN automatically opens PIN confirmation; entering the matching PIN automatically opens Favourite Name. Removed the Aage and ✖ Radd Karein buttons from these setup steps. The final 🔐 Lock ON Karein save button, existing validation, secure saving, and all other features remain unchanged."
+  "webSha256": "1ae9d111b6bf326acea01e31dd7f0afc2a3fa31ac62e5c45c22dc6196dd8b3e9",
+  "webReleaseNotes": "My Diary Web Update 443: In Private Locker → PIN Bhool Gaye recovery only, the old Favourite Name is automatically verified after typing pauses; the new 4-digit PIN and matching confirmation automatically advance without Aage buttons. Removed Aage and Wapas from the recovery steps. The final save action and existing recovery verification, secure saving, and all other features remain unchanged."
 }
