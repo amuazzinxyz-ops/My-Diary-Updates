@@ -2140,19 +2140,27 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    var heading=el('strong',{},'Favourite Name se PIN recover karein');
    var entry=el('input',{type:'text',maxlength:'80',autocomplete:'off',placeholder:'Apna purana Favourite Name likhein',style:'width:100%;height:48px;box-sizing:border-box;border:2px solid #c8b2df;border-radius:12px;padding:10px;font-size:17px;font-weight:800;'});
    var status=el('div',{style:'min-height:22px;font-weight:800;color:#a11;'});
-   var go=el('button',{type:'button',style:'min-height:44px;border:2px solid #b18b32;border-radius:10px;background:linear-gradient(145deg,#fff4bd,#e5c76e);font-weight:900;'},'Aage');
-   var back=el('button',{type:'button',style:'min-height:40px;border:1px solid #b9a4d0;border-radius:10px;background:#f2eafb;font-weight:800;'},'Wapas');
-   var stage=0,raw=null,pinValue='',busy=false;
+   var go=el('button',{type:'button',style:'min-height:44px;border:2px solid #b18b32;border-radius:10px;background:linear-gradient(145deg,#fff4bd,#e5c76e);font-weight:900;'},'Naya PIN aur Favourite Name Save Karein');
+   var stage=0,raw=null,pinValue='',busy=false,recoveryTimer=null;
    function showStage(next){
     stage=next;entry.value='';status.textContent='';status.style.color='#a11';
-    if(stage===0){heading.textContent='Favourite Name se PIN recover karein';entry.type='text';entry.inputMode='text';entry.maxLength=80;entry.placeholder='Apna purana Favourite Name likhein';entry.style.textAlign='left';entry.style.letterSpacing='normal';go.textContent='Aage';}
-    else if(stage===1){heading.textContent='Pehla kaam: Naya 4 digit PIN';entry.type='password';entry.inputMode='numeric';entry.maxLength=4;entry.placeholder='Naya 4 digit PIN';entry.style.textAlign='center';entry.style.letterSpacing='6px';go.textContent='Aage';}
-    else if(stage===2){heading.textContent='Doosra kaam: PIN dobara';entry.type='password';entry.inputMode='numeric';entry.maxLength=4;entry.placeholder='Wahi PIN dobara daalein';entry.style.textAlign='center';entry.style.letterSpacing='6px';go.textContent='Aage';}
+    if(recoveryTimer){clearTimeout(recoveryTimer);recoveryTimer=null;}
+    go.hidden=stage!==3;
+    if(stage===0){heading.textContent='Favourite Name se PIN recover karein';entry.type='text';entry.inputMode='text';entry.maxLength=80;entry.placeholder='Apna purana Favourite Name likhein';entry.style.textAlign='left';entry.style.letterSpacing='normal';}
+    else if(stage===1){heading.textContent='Pehla kaam: Naya 4 digit PIN';entry.type='password';entry.inputMode='numeric';entry.maxLength=4;entry.placeholder='Naya 4 digit PIN';entry.style.textAlign='center';entry.style.letterSpacing='6px';}
+    else if(stage===2){heading.textContent='Doosra kaam: PIN dobara';entry.type='password';entry.inputMode='numeric';entry.maxLength=4;entry.placeholder='Wahi PIN dobara daalein';entry.style.textAlign='center';entry.style.letterSpacing='6px';}
     else{heading.textContent='Teesra kaam: Naya Favourite Name';entry.type='text';entry.inputMode='text';entry.maxLength=80;entry.placeholder='Apna naya Favourite Name likhein';entry.style.textAlign='left';entry.style.letterSpacing='normal';go.textContent='Naya PIN aur Favourite Name Save Karein';}
     entry.focus();
    }
-   entry.addEventListener('input',function(){if(stage===1||stage===2)entry.value=String(entry.value||'').replace(/[^0-9]/g,'').slice(0,4);});
-   back.addEventListener('click',function(){privateLockerGate.replaceChildren(privateLockerPinForm(config));});
+   entry.addEventListener('input',function(){
+    if(recoveryTimer){clearTimeout(recoveryTimer);recoveryTimer=null;}
+    if(stage===0){recoveryTimer=setTimeout(function(){if(!busy&&stage===0&&entry.value.trim())go.click();},800);return;}
+    if(stage===1||stage===2){entry.value=String(entry.value||'').replace(/[^0-9]/g,'').slice(0,4);if(entry.value.length!==4)return;
+     if(stage===1){pinValue=entry.value;showStage(2);return;}
+     if(entry.value!==pinValue){status.style.color='#a11';status.textContent='Dono PIN ek jaise nahi hain. Dobara PIN likhein.';entry.value='';entry.focus();return;}
+     showStage(3);
+    }
+   });
    go.addEventListener('click',function(){
     if(busy)return;
     if(stage===0){
@@ -2161,17 +2169,15 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      privateLockerUnwrapMaster(recovery,config.recovery).then(function(unwrapped){raw=unwrapped;showStage(1);}).catch(function(){status.style.color='#a11';status.textContent='Favourite Name galat hai. Dobara likhein.';entry.value='';entry.focus();}).finally(function(){busy=false;go.disabled=false;});
      return;
     }
-    if(stage===1){if(!/^[0-9]{4}$/.test(entry.value)){status.textContent='Naya 4 digit PIN zaroori hai.';entry.focus();return;}pinValue=entry.value;showStage(2);return;}
-    if(stage===2){if(entry.value!==pinValue){status.textContent='Dono PIN ek jaise nahi hain. Dobara PIN likhein.';entry.value='';entry.focus();return;}showStage(3);return;}
     var newRecovery=privateLockerNormalizeRecovery(entry.value);
     if(!newRecovery){status.textContent='Naya Favourite Name likhein.';entry.focus();return;}
-    busy=true;go.disabled=true;back.disabled=true;status.style.color='#17633c';status.textContent='Naya PIN aur Favourite Name mehfooz kiya ja raha hai…';
+    busy=true;go.disabled=true;status.style.color='#17633c';status.textContent='Naya PIN aur Favourite Name mehfooz kiya ja raha hai…';
     Promise.all([privateLockerWrapMaster(raw,pinValue),privateLockerWrapMaster(raw,newRecovery)]).then(function(wrapped){
      var next=Object.assign({},config,{pin:wrapped[0],recovery:wrapped[1],pinDigits:4,updated:Date.now()});
      return privateLockerPut('meta',next).then(function(){return privateLockerFinishUnlock(raw);});
-    }).catch(function(e){status.style.color='#a11';status.textContent=e&&e.message?e.message:'Naya PIN aur Favourite Name save nahi hua. Purana data surakshit hai.';busy=false;go.disabled=false;back.disabled=false;});
+    }).catch(function(e){status.style.color='#a11';status.textContent=e&&e.message?e.message:'Naya PIN aur Favourite Name save nahi hua. Purana data surakshit hai.';busy=false;go.disabled=false;});
    });
-   wrap.append(heading,entry,status,go,back);privateLockerGate.appendChild(wrap);entry.focus();
+   wrap.append(heading,entry,status,go);privateLockerGate.appendChild(wrap);entry.focus();
   }
   function privateLockerSetupPattern(){
    if(!privateLockerRawKey){privateLockerMessage('PIN verify dobara karein.',true);return;}
