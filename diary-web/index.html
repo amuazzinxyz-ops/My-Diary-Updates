@@ -1393,21 +1393,18 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  function makeDiaryTextFormatControls(kind,targetId){
   var wrap=el('div',{class:'diary-diary-format-tools','data-format-kind':kind});wrap.appendChild(el('strong',{class:'diary-diary-format-heading'},kind==='cover'?t('formatCoverHeading'):t('formatTextHeading')));
   var size=el('input',{type:'range',min:'12',max:'36',step:'1','aria-label':t('fontSizeLabel')}),sizeValue=el('span',{class:'diary-diary-format-size'},'18 px');
-  var sizeControl=el('div',{class:'diary-diary-format-size-control'});
-  sizeControl.style.cssText='display:flex;flex-wrap:wrap;align-items:center;gap:4px;flex:1 0 100%;min-width:0;box-sizing:border-box;padding:4px;border:1px solid #bda7d5;border-radius:9px;background:linear-gradient(145deg,#fff,#f3ecfb);';
   var sizeToggle=el('button',{type:'button',class:'diary-diary-format-size-toggle','aria-expanded':'false'},t('fontSizeLabel'));
-  sizeToggle.style.cssText='display:block;width:100%;min-height:30px;padding:5px 7px;border:0;border-radius:6px;background:transparent;color:#432b66;font-size:12px;font-weight:900;text-align:left;';
+  sizeToggle.style.cssText='min-height:32px;padding:6px 11px;border:1px solid #bda7d5;border-radius:8px;background:linear-gradient(145deg,#fff,#eee5fb);color:#432b66;font-size:12px;font-weight:900;';
   var sizePanel=el('div',{class:'diary-diary-format-size-panel'});
-  sizePanel.style.cssText='display:none;align-items:center;gap:7px;flex:1 0 100%;width:100%;min-width:0;box-sizing:border-box;padding:5px 7px;border-top:1px solid #d8c8e8;background:rgba(255,255,255,.72);';
+  sizePanel.style.cssText='display:none;align-items:center;gap:7px;flex:1 0 100%;padding:5px 7px;border:1px solid #d8c8e8;border-radius:8px;background:rgba(255,255,255,.72);';
   sizePanel.append(size,sizeValue);
-  sizeControl.append(sizeToggle,sizePanel);
   sizeToggle.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var opening=sizePanel.style.display==='none';sizePanel.style.display=opening?'flex':'none';sizeToggle.setAttribute('aria-expanded',opening?'true':'false');});
   var family=el('select',{'aria-label':t('fontFamilyLabel')});
   DIARY_TEXT_FONT_OPTIONS.forEach(function(v){family.appendChild(el('option',{value:v[0]},v[1]));});
   var bold=el('button',{type:'button','aria-pressed':'true','aria-label':t('boldLabel')},'B'),italic=el('button',{type:'button','aria-pressed':'false','aria-label':t('italicLabel')},'I'),underline=el('button',{type:'button','aria-pressed':'false','aria-label':t('underlineLabel')},'U'),color=el('input',{type:'color','aria-label':t('textColourLabel'),value:'#172033'});
   var emphasis=el('span',{class:'diary-format-emphasis-buttons'});emphasis.appendChild(bold);emphasis.appendChild(italic);emphasis.appendChild(underline);
 
-  wrap.appendChild(sizeControl);wrap.appendChild(family);wrap.appendChild(emphasis);wrap.appendChild(color);
+  wrap.appendChild(sizeToggle);wrap.appendChild(sizePanel);wrap.appendChild(family);wrap.appendChild(emphasis);wrap.appendChild(color);
   function sync(){var f=getDiaryTextFormat(kind),field=document.getElementById(targetId);size.value=String(f.size);sizeValue.textContent=f.size+' px';family.value=f.family;color.value=f.color;[[bold,'bold'],[italic,'italic'],[underline,'underline']].forEach(function(x){x[0].setAttribute('aria-pressed',f[x[1]]?'true':'false');x[0].classList.toggle('is-active',!!f[x[1]]);});applyDiaryTextFormat(field,f);}
   size.addEventListener('input',function(){var f=getDiaryTextFormat(kind);f.size=parseInt(size.value,10)||18;setDiaryTextFormat(kind,f);sync();});
   family.addEventListener('change',function(){var f=getDiaryTextFormat(kind);f.family=family.value;setDiaryTextFormat(kind,f);sync();});
