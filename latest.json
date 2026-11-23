@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 439,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "9179715ea58788a82756441fbda19e683cd56ff9e8e6bccac89ea50aee863bf9",
+  "webSha256": "ef1d31f360f14c40096a3331d1a8441b86743cdcc44a4971a15f8db386c88c11",
   "webReleaseNotes": "My Diary Web Update 439: World Clock heading font size reduced from 19px to 16px and the ← Wapas button text reduced from 13px to 12px. The 1px left/right position adjustments remain unchanged. Button dimensions, World Clock behavior, cities, favourites, search, saved notes, photos, PINs, locks, Calendar, reminders, widgets, and MUAZZIN are unchanged."
 }
