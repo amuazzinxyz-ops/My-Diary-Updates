@@ -1,4 +1,14 @@
-# Diary editor — Likhai ka size slider same button-box ke andar (Web Update candidate, phone test pending, 2026-11-23)
+# Diary editor — Likhai ka size slider same button-box ke andar (merged, Web Update publication pending, phone test pending, 2026-11-23)
+
+- User requested that tapping **Likhai ka size** reveal its size slider inside the same button-like control rather than as a separate panel below the button.
+- Updated only `makeDiaryTextFormatControls` in the Diary editor: the size label button and its slider/value panel now sit inside one shared rounded bordered container. The slider remains a separate accessible input (not invalidly nested inside a native button); tapping the label expands/collapses the slider within that same visual control.
+- Preserved the 12–36px range, current size value display, live text-size update handler, and all existing font-family, bold, italic, underline, and colour handlers. No note data, image layout, save/share, PIN/lock, other sections, or APK files were intentionally changed.
+- Safety backup branch: `backup/before-font-size-control-inside-button-2026-11-23`. Working branch: `fix/font-size-slider-inside-button-2026-11-23`. PR #493 merged successfully as `eb40b09b5a0e7d787c1047c57d97bbb6f88f1910`.
+- Source and mirror are byte-identical at blob SHA `7c1016cb97f6c68f6bf11b0b85fbf769c2ff71b7` (618,947 characters). Static checks passed: size button and panel share the container; old sibling append is absent; slider and formatting handlers remain intact.
+- **Publication not yet confirmed:** live `latest.json` still advertises Web Update **448** and its old web SHA. APK remains My Diary **1.0.216 / versionCode 215**. Do not ask the user to install or claim this change is published until the web publisher advances the feed and the live checksum matches the source bundle.
+- **Phone test pending** after a new web update is published. Do not mark device-side PASS until the user confirms.
+
+---
 
 - User requested that tapping **Likhai ka size** reveal its size slider inside the same button-like control rather than as a separate panel below the button.
 - Updated only `makeDiaryTextFormatControls` in the Diary editor: the size label button and its slider/value panel now sit inside one shared rounded bordered container. The slider remains a separate accessible input (not invalidly nested inside a native button); tapping the label expands/collapses the slider within that same visual control.
