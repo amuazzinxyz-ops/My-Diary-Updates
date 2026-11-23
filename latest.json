@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 450,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "d5840f53024e76b2657ecfed79eeda05ccb9c259b8535026963490904a7f3a74",
+  "webSha256": "6e1bb446047b78285b7763f299520b21cecac9c63650a2e2a0e4deb09fecf986",
   "webReleaseNotes": "My Diary Web Update 450: Rollback of the Diary editor Likhai ka size control to the previously verified Web Update 448 source. Restores the earlier tested behavior; APK remains unchanged."
 }
