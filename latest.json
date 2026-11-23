@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 431,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "b8d0ded440856dbb10bbe6ce4dd54dccea1e249f9943e92978659c7104f32e27",
+  "webSha256": "15691534bd1f8f47619a8dff360893e1af9a70d224f5a59288c887cae567c4ff",
   "webReleaseNotes": "My Diary Web Update 431: Fixed the Personal Calendar heading so the full 17px title stays on its own line above the Back, PIN and menu buttons. Existing Calendar entries, reminders, PIN/recovery data and other Diary data are preserved."
 }
