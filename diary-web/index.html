@@ -2230,7 +2230,6 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    privateLockerGate.replaceChildren();privateLockerContent.replaceChildren();
    var wrap=el('div',{style:'display:grid;gap:10px;margin-top:12px;padding:14px;border:1px solid #d8c6eb;border-radius:14px;background:linear-gradient(145deg,#fff,#faf7ff);'});
    var heading=el('strong',{},'🔐 Private Locker ka naya PIN banayein');
-   var help=el('p',{style:'margin:0;color:#604b78;font-weight:700;'},'Ek hi box mein pehle PIN, phir wahi PIN dobara, aur aakhir mein Favourite Name likhein.');
    var entry=el('input',{type:'password',inputmode:'numeric',maxlength:'4',autocomplete:'off',placeholder:'Naya 4 digit PIN',style:'width:100%;height:50px;box-sizing:border-box;border:2px solid #c8b2df;border-radius:12px;padding:8px;text-align:center;font-size:22px;font-weight:900;letter-spacing:6px;'});
    var status=el('div',{style:'min-height:22px;font-weight:800;color:#a11;'});
    var save=el('button',{type:'button',style:'min-height:46px;border:2px solid #b18b32;border-radius:12px;background:linear-gradient(145deg,#fff4bd,#e5c76c);font-weight:900;color:#3d2b08;'},'Aage');
@@ -2261,7 +2260,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      });
     }).catch(function(e){status.style.color='#a11';status.textContent=e&&e.message?e.message:'Naya PIN save nahi ho saka. Purana Locker data surakshit hai.';busy=false;save.disabled=false;cancel.disabled=false;});
    });
-   wrap.append(heading,help,entry,status,save,cancel);privateLockerGate.appendChild(wrap);entry.focus();
+   wrap.append(heading,entry,status,save,cancel);privateLockerGate.appendChild(wrap);entry.focus();
    return Promise.resolve(true);
   }
   function privateLockerShowEntries(){
