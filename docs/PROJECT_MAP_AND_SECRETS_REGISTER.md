@@ -1,10 +1,10 @@
-# Web Update 449 rollback — restore verified Web Update 448 Diary editor source (2026-11-23)
+# Web Update 449 rollback — verified Web Update 448 bundle restored as Web Update 450 (2026-11-23)
 
 - User reported a problem in Web Update 449 and requested returning to the previously phone-tested Web Update 448 behavior.
-- Verified the safety branch `backup/before-font-size-control-inside-button-2026-11-23`: both `web-source/index.html` and `diary-web/index.html` are byte-identical at blob SHA `6e83133c5d9df5d5f22be1fcae29aff761fb8bfc` (618,591 characters). This is the source/mirror state immediately before the Web Update 449 inline size-control change; it includes the Web Update 448 PIN-button fix.
-- Rollback must be delivered as a new monotonic feed version **450** while restoring the exact Web Update 448 web bundle. Publishing feed version 448 would not reliably update devices already on 449. Web bundle SHA-256 for the restored 448 source: `d5840f53024e76b2657ecfed79eeda05ccb9c259b8535026963490904a7f3a74`.
-- APK remains My Diary **1.0.216 / versionCode 215**; no APK, PIN, note, photo, saved data, or MUAZZIN project changes are intended. Phone test of rollback is pending; do not mark PASS until user confirms.
-- Rollback publication status: pending PR merge and publisher/feed verification.
+- Restored the exact pre-449 safety backup from `backup/before-font-size-control-inside-button-2026-11-23`. Main-branch `web-source/index.html` and `diary-web/index.html` are byte-identical at blob SHA `6e83133c5d9df5d5f22be1fcae29aff761fb8bfc` (618,591 characters); this is the verified Web Update 448 bundle and includes the phone-tested four-section PIN-button fix.
+- Rollback merged through PR **#494** as commit `7f871a4778b44a8e263c950b2056b5b1348249ce`. Live `latest.json` now advertises **Web Update 450** with restored Web Update 448 bundle SHA-256 `d5840f53024e76b2657ecfed79eeda05ccb9c259b8535026963490904a7f3a74`. Version 450 is intentionally used so devices already on 449 can receive the rollback; the actual web source is the exact 448 backup.
+- APK feed fields remain unchanged: My Diary **1.0.216 / versionCode 215**. No APK, PIN, note, photo, saved data, or MUAZZIN project changes were made intentionally.
+- **Phone test pending**: install Web Update 450 through My Diary → Me → Check for Updates and verify the reported 449 issue is gone and the previously working controls still work. Do not mark device-side PASS until the user confirms.
 
 ---
 
