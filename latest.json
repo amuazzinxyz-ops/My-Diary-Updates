@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 438,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "9bdc4ccce1a2a56763d7a14e19fc8fc74e7f1f32d301f4e671a425efff7de387",
+  "webSha256": "aa69e1b1d73a85673f669df0dca7ff3043f085a1c8d7de0b30eaeb3ee2c055f6",
   "webReleaseNotes": "My Diary Web Update 438: Made a very slight 1px position adjustment: the World Clock ← Wapas button shifts left and the centered World Clock heading shifts right. Button size, heading text, World Clock behavior, cities, favourites, search, notes, photos, PINs, locks, Calendar data, and MUAZZIN are unchanged."
 }
