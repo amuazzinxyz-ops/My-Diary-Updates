@@ -7,8 +7,8 @@
   "sha256": "412ff4fc59d918115111621ce85cbae68d61544b0dc1b3e2273ef2ee2e18b3ef",
   "releaseNotes": "My Diary 1.0.216: Includes Web Update 438 with the My Documents Back button fully visible and the 📁 My Documents heading kept on one line at 17px. Existing app identity, notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 447,
+  "webVersion": 448,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "dab26c88348432c0f0e39a7675ab7afdd8ca1767540712c027a82e154f0ea43c",
+  "webSha256": "d5840f53024e76b2657ecfed79eeda05ccb9c259b8535026963490904a7f3a74",
   "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }

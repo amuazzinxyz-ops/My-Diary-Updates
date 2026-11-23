@@ -2856,9 +2856,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    meFeatureTitle.textContent=mf('pinManage');meFeatureContent.replaceChildren();meFeatureStatus.textContent='';
    var config=meFeaturePinConfig(kind);
    if(!config){
-    var enable=mfEl('button',{type:'button',class:'diary-me-feature-save'},mf('pinSet'));
-    enable.addEventListener('click',function(){meFeatureAskNewPin(kind,function(){showMeFeaturePage(kind);});});
-    wrap.appendChild(enable);
+    meFeatureAskNewPin(kind,function(){showMeFeaturePage(kind);},function(){showMeFeaturePage(kind);});
+    return;
    }else{
     var change=mfEl('button',{type:'button',class:'diary-me-feature-save'},mf('pinChange'));
     var remove=mfEl('button',{type:'button',class:'diary-me-feature-delete'},mf('pinRemove'));
