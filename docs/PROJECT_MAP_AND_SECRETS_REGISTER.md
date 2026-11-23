@@ -1,3 +1,13 @@
+# Private Locker PIN recovery automatic steps — Web Update 443 published (phone test pending, 2026-11-23)
+
+- User requested automatic progression in Private Locker → **PIN Bhool Gaye** recovery: remove the first screen's **Aage** and **Wapas** buttons and the next PIN screen's **Aage** button.
+- Old Favourite Name verification now starts automatically after 800 ms without typing; a valid name advances to the new PIN step. Entering all 4 digits of the new PIN advances to confirmation; entering the matching 4 digits advances to the new Favourite Name step. The final **Naya PIN aur Favourite Name Save Karein** action remains.
+- Existing Favourite Name verification, PIN-match validation, secure wrapping/saving, and remaining recovery steps are preserved. No Lock-ON setup, Locker data, APK, or unrelated feature was changed.
+- Safety backup branch: `backup/before-private-locker-recovery-auto-steps-2026-11-23`. Fix branch: `fix/private-locker-recovery-auto-steps-2026-11-23`.
+- Source and mirror were identical before the edit; both are updated identically. Live web feed advances to Web Update **443**. Phone test is pending; do not mark PASS until the user confirms.
+
+---
+
 # Private Locker automatic PIN setup — Web Update 442 phone test PASS (2026-11-23)
 
 - User confirmed **Phone Test Pass** for Web Update 442.
