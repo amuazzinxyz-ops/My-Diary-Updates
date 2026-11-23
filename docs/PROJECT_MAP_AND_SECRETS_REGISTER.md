@@ -5,7 +5,7 @@
 - Preserved the 12–36px range, current size value display, live text-size update handler, and all existing font-family, bold, italic, underline, and colour handlers. No note data, image layout, save/share, PIN/lock, other sections, or APK files were intentionally changed.
 - Safety backup branch: `backup/before-font-size-control-inside-button-2026-11-23`. Working branch: `fix/font-size-slider-inside-button-2026-11-23`. PR #493 merged successfully as `eb40b09b5a0e7d787c1047c57d97bbb6f88f1910`.
 - Source and mirror are byte-identical at blob SHA `7c1016cb97f6c68f6bf11b0b85fbf769c2ff71b7` (618,947 characters). Static checks passed: size button and panel share the container; old sibling append is absent; slider and formatting handlers remain intact.
-- **Publication not yet confirmed:** live `latest.json` still advertises Web Update **448** and its old web SHA. APK remains My Diary **1.0.216 / versionCode 215**. Do not ask the user to install or claim this change is published until the web publisher advances the feed and the live checksum matches the source bundle.
+- **Web Update 449 feed metadata committed:** `latest.json` now advertises Web Update **449**, release notes describe this exact Diary font-size control change, and its SHA-256 is `806fdeaaa11bbff11e770f37a72737832b887da1bb5daa7eb2b8fe93c15b44d4`, matching the publisher-computed checksum for the byte-identical source/mirror bundle. Feed commit: `6fa38aedfdb7a048f968f09e38803053d3cbd846`. Publisher workflow run **45196769072** (run #608) is still in progress at this register update; do not claim publication until it completes successfully and the live feed is re-fetched.
 - **Phone test pending** after a new web update is published. Do not mark device-side PASS until the user confirms.
 
 ---
