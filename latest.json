@@ -10,5 +10,5 @@
   "webVersion": 445,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "6313d456517dcd90391e6bddffac896f763dba2c15c1acfdb451893872310e09",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "My Diary Web Update 445: In Private Locker → PIN Bhool Gaye recovery, the old Favourite Name step now waits 5 seconds after typing stops before automatic verification, giving enough time to enter the complete name. Auto-advance remains; blank input does not advance. New PIN and confirmation still auto-advance, and the final save button, secure recovery, and all other features remain unchanged."
 }
