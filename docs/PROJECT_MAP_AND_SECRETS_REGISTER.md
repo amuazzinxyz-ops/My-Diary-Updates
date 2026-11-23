@@ -6,7 +6,7 @@
 - Safety backup branch: `backup/before-calendar-reminder-date-today-2026-11-24`. Implementation PR #495 merged; publication-sync PR #496 merged. Publisher workflow commit: `098a1d1579d43b6c2eda7b4048fa5313bdec2196`.
 - Static verification: Smart Reminder initial form date and post-save reset both call `meFeatureToday()`; Personal Calendar continues to use the same local-date helper. `web-source/index.html` and `diary-web/index.html` are byte-identical at blob SHA `377ebbfa8c2e94ecdd32b4dd9720fd8f89bf7938` (618,458 characters).
 - Live `latest.json` confirms **Web Update 451**, web SHA-256 `d90a6c4c8ac9be7271f2b20028f66b6652e415e1b2cf5844e85015e6162d933b`. This is a web-only update; APK remains **My Diary 1.0.216 / versionCode 215**, APK SHA-256 unchanged at `19cf4ff97ec61f0cee477cfc1b96ddf62195a43dca7ec37248a3bbcc05c2ad40`.
-- **Phone test pending**: user should install Web Update 451 and verify both new forms show today's date, and that opening them after midnight shows the new local date. Do not mark device-side PASS until user confirms.
+- **Phone test PASS (user-confirmed, 2026-11-24)**: user confirmed Web Update 451 passed on the phone. Both Personal Calendar and Smart Reminder new forms show today's date. Device-side verification is complete.
 
 ---
 
