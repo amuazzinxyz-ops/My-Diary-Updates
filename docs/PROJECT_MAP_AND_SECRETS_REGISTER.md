@@ -1,10 +1,10 @@
-# My Documents back button clipping fixed — Web Update 429 published; APK build pending (2026-11-23)
+# My Documents back button clipping fixed — Web Update 430 published; signed APK verified (2026-11-23)
 
 - User reported the Back button at the top of the My Documents modal was clipped after the one-line heading change. Root cause was the heading CSS setting overflow-x:auto and overflow-y:hidden on the entire header row, which could clip the Back/Close controls.
 - Created safety backup branch backup/before-my-documents-back-button-fix-2026-11-23 before editing.
 - Updated only the scoped my-documents-heading-one-line CSS in web-source/index.html and diary-web/index.html: header overflow is now visible; title uses flex:1 1 auto and min-width:0, while retaining white-space:nowrap and 17px font size. No saved document names/cards or user data were changed.
 - PR #460 merged to main as ec49e52159a5d1ab234e9ad7067ee7b03c03810b. Source and mirror are byte-identical at Git blob SHA ba85666df6bde1d500f4bdbe76490a3a75025c4b; fix and 17px title rule are present.
-- Web publisher run 45115448578 completed success. Live latest.json still advertises Web Update 429, with web SHA-256 6ec797be41104b3489a12be42aef1690ebdb4c7957b999c3bd089b72c50ac3b7.
+- Web publisher run 45115448578 completed success and published the corrected HTML checksum. Because that run retained the old feed number, created backup branch backup/before-web430-feed-bump-2026-11-23 and merged feed-only PR #461 as 32b2f7de78da29ee06b5361160c1586b04671350 to advance the webVersion to **430**. Live latest.json advertises webVersion 430 and web SHA-256 6ec797be41104b3489a12be42aef1690ebdb4c7957b999c3bd089b72c50ac3b7.
 - APK workflow run 45115448573 completed success, including signed Release build, release verification, APK upload, and publication. Live latest.json advertises My Diary 1.0.214 / versionCode 213 with APK SHA-256 d98a322f9e93705e5416a5c6a97568a09eb294091ece3db60a32bf495420fdad. No version increment was needed for this layout-only correction.
 - Phone test pending: user should use Me → Check for Updates, open 📁 My Documents, and verify the Back button is fully visible and the heading remains one line at 17px. Do not mark device PASS until user confirms.
 
