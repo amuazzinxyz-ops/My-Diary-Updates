@@ -2090,7 +2090,10 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    wrap.append(a,b,status,save);privateLockerGate.appendChild(wrap);a.focus();
   }
   function privateLockerPinForm(config){
-   var wrap=el('div',{style:'display:grid;gap:10px;margin-top:12px;'});
+   var wrap=el('div',{style:'position:relative;display:grid;gap:10px;margin-top:12px;padding-top:34px;'});
+   var close=el('button',{type:'button','aria-label':'Private Locker band karein',style:'position:absolute;top:0;right:0;width:32px;height:32px;border:1px solid #b9a4d0;border-radius:50%;background:#f2eafb;color:#43245f;font-size:24px;font-weight:900;line-height:1;display:flex;align-items:center;justify-content:center;padding:0;'},'×');
+   close.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();privateLockerCloseNow();});
+   wrap.appendChild(close);
    var label=el('label',{},'Apna 4 digit Private Locker PIN daalein');
    var pin=el('input',{type:'password',inputmode:'numeric',maxlength:'6',autocomplete:'off',placeholder:'4 digit PIN (purana 6 digit PIN bhi chalega)',style:'width:100%;height:50px;box-sizing:border-box;border:2px solid #c8b2df;border-radius:12px;padding:8px;text-align:center;font-size:22px;font-weight:900;letter-spacing:6px;'});
    label.appendChild(pin);wrap.appendChild(label);
