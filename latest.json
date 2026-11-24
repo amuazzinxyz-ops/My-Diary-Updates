@@ -7,8 +7,8 @@
   "sha256": "5a778efa0d4fd9a7b033057007f17e346e0fba164842771056fa3abf7dc36f39",
   "releaseNotes": "My Diary 1.0.217: Signed APK includes the latest published Diary Web Update 457 bundle. Existing app identity, notes, photos, PINs, locks, widgets, reminders, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 457,
+  "webVersion": 458,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "5ae85305bade79aa2c9930e454054c20a0be6af3aaf63cee6c7a93494de56a5f",
-  "webReleaseNotes": "Web Update 457: Personal Calendar saved entries now display the translated Repeat: Custom label correctly. Roman English shows Repeat: Custom instead of Dobara: repeatCustom. Smart Reminder labels and recurrence/alarm scheduling are unchanged."
+  "webSha256": "f1179ddf33707ec5864538afeb47ed07e7856484ad2eb0f07f7ee5324dcabe3d",
+  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
