@@ -2234,8 +2234,11 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    try{raw=config&&config.unlockedKey?privateLockerUnB64(config.unlockedKey):privateLockerRawKey;if(!raw||raw.length!==32)throw new Error('Locker ki secure key nahi mili. Data surakshit hai; Locker dobara kholein.');}
    catch(e){privateLockerMessage(e.message||'Locker ki secure key nahi mili.',true);return Promise.resolve(false);}
    privateLockerGate.replaceChildren();privateLockerContent.replaceChildren();
-   var wrap=el('div',{style:'display:grid;gap:10px;margin-top:12px;padding:14px;border:1px solid #d8c6eb;border-radius:14px;background:linear-gradient(145deg,#fff,#faf7ff);'});
-   var heading=el('strong',{},'🔐 Private Locker ka naya PIN banayein');
+   var wrap=el('div',{style:'position:relative;display:grid;gap:10px;margin-top:12px;padding:14px;border:1px solid #d8c6eb;border-radius:14px;background:linear-gradient(145deg,#fff,#faf7ff);'});
+   var close=el('button',{type:'button','aria-label':'PIN setup band karein',style:'position:absolute;top:6px;right:6px;width:32px;height:32px;border:1px solid #b9a4d0;border-radius:50%;background:#f2eafb;color:#43245f;font-size:24px;font-weight:900;line-height:1;display:flex;align-items:center;justify-content:center;padding:0;'},'×');
+   close.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();privateLockerFinishUnlock(raw).catch(function(err){privateLockerMessage(err.message||'Locker wapas nahi khul saka.',true);});});
+   wrap.appendChild(close);
+   var heading=el('strong',{style:'display:block;padding-right:38px;'},'🔐 Private Locker ka naya PIN banayein');
    var entry=el('input',{type:'password',inputmode:'numeric',maxlength:'4',autocomplete:'off',placeholder:'Naya 4 digit PIN',style:'width:100%;height:50px;box-sizing:border-box;border:2px solid #c8b2df;border-radius:12px;padding:8px;text-align:center;font-size:22px;font-weight:900;letter-spacing:6px;'});
    var status=el('div',{style:'min-height:22px;font-weight:800;color:#a11;'});
    var save=el('button',{type:'button',style:'min-height:46px;border:2px solid #b18b32;border-radius:12px;background:linear-gradient(145deg,#fff4bd,#e5c76e);font-weight:900;color:#3d2b08;'},'🔐 Lock ON Karein');save.hidden=true;
