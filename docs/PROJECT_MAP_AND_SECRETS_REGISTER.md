@@ -1,4 +1,4 @@
-# Diary opening Date/Time text clarity — dark shadow blur reduced (Web Update 455, phone test pending, 2026-11-24)
+# Diary opening Date/Time text clarity — dark shadow blur reduced (Web Update 455, PHONE TEST PASS, 2026-11-24)
 
 - User reported that letters in the opening heading date (example: “Tuesday, 24 November 2026”) were not clear and suspected the dark shadow blur.
 - Changed only the dark shadow blur radius in the two opening Date/Time declarations from **5px to 1px**. Preserved the white highlight `0 1px 0 #FFFFFF`, gold shadow `0 2px 0 #b38a3b`, dark shadow offset `0 3px`, opacity `.28`, font styling, layout, date/time formatting, and 1-second refresh. No other features or data were changed.
