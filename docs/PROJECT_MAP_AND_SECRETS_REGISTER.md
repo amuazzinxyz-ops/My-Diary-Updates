@@ -1,3 +1,14 @@
+# Signed APK rebuilt with Web Update 457 — artifact and live checksum verified (2026-11-24)
+
+- The repository's APK workflow run **45401891545** (run #538), triggered by the Web Update 457 source commit `25dd2083d27fb0a5736af1c2c9c2a777c073aecf`, completed **success**.
+- The workflow completed its signing-keystore validation, package/version guard, debug build, signed Release build, certificate fingerprint check, publication, and signed APK artifact upload successfully.
+- Signed artifact: **My-Diary-1.0.216-signed-APK** (artifact ID `14923811837`; 2,104,466-byte ZIP). Extracted APK: 2,101,969 bytes.
+- Verified APK SHA-256: `8e9f9c38a209f24dfd5573e5e299d44848e7b0dc0680187645086d7d56664fed`. This exactly matches the live `latest.json` `sha256` field. The register's earlier `e85e706e...` value was the preceding APK build's checksum, not the current published binary.
+- Current published package/version remains **com.personal.diaryapp — My Diary 1.0.216 / versionCode 215**; current web bundle remains **Web Update 457** with SHA-256 `5ae85305bade79aa2c9930e454054c20a0be6af3aaf63cee6c7a93494de56a5f`. This is a fresh signed rebuild at the same app version, not a versionCode increase.
+- No Android source, app behavior, PINs, notes, photos, saved records, or MUAZZIN files were changed for this rebuild. **APK phone installation/testing has not been confirmed by the user; do not mark phone test PASS until the user confirms.**
+
+---
+
 # Personal Calendar — Repeat: Custom phone test PASS (Web Update 457, 2026-11-24)
 
 - User confirmed **“Phone Test Pass”** after the Personal Calendar custom-repeat label fix in Web Update **457**.
