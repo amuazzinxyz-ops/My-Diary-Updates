@@ -1,3 +1,13 @@
+# Next signed APK release approved — My Diary 1.0.217 / versionCode 216 (2026-11-24)
+
+- User directed that the correct next APK release be made rather than rebuilding and sending the existing **My Diary 1.0.216 / versionCode 215** again. Live `latest.json` was checked and confirms the current baseline is **1.0.216 / 215**; live web bundle is **Web Update 457**.
+- The correct next monotonically increasing Android release is **My Diary 1.0.217 / versionCode 216**. This target is now explicitly recorded and the release workflow's version gate has been updated to accept only the exact target, while allowing the current live baseline or the exact target feed state.
+- Safety backup branch: `backup/before-apk-1-0-217-version-bump-2026-11-24`. Work branch: `release/diary-1-0-217-version-bump-2026-11-24`.
+- Only the APK release workflow is being changed for this version correction. It continues to inject the exact latest published `web-source/index.html` into the Android APK and checks source/mirror parity. Corrected the web SHA guard so it compares the computed HTML hash against the existing `latest.json` hash **before** writing metadata; the previous order overwrote the expected hash before comparing.
+- Signing keystore, alias, passwords, certificate identity, package name `com.personal.diaryapp`, Android feature code, user data (PINs, notes, photos, reminders, saved records), and MUAZZIN project are not being changed. No phone test is claimed.
+- **Build and publication pending**: require workflow success, exact APK version/package, unchanged approved signing-certificate fingerprint, signed artifact SHA-256 matching live `latest.json`, and verified APK file delivery. Phone installation test remains pending until the user confirms.
+
+---
 # Signed APK rebuilt with Web Update 457 — artifact and live checksum verified (2026-11-24)
 
 - The repository's APK workflow run **45401891545** (run #538), triggered by the Web Update 457 source commit `25dd2083d27fb0a5736af1c2c9c2a777c073aecf`, completed **success**.
