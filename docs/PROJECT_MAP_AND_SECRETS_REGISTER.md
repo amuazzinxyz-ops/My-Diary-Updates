@@ -1,3 +1,15 @@
+# User-requested rollback — Private Locker PIN box × button (Web Update 459, 2026-11-25)
+
+- User asked to restore the previous appearance and remove the work from Web Update 458. Reverted the × Close button from the Private Locker PIN-entry box exactly as requested.
+- Restored `web-source/index.html` byte-for-byte to its pre-Web-458 content, blob SHA `d57bbe18b297f6d6664d30a6952734e687ab0e33` (619,445 characters). The new close-button label occurs **0** times. No other source code or feature was changed.
+- Rollback PR **#509** merged successfully as commit `06a608c2f12c39d3a7c25d37ddcb7c4d8d0cffce`. Backup branch: `backup/before-revert-private-locker-close-2026-11-25`.
+- Web publisher workflow **45462512086** completed successfully. It restored the published `diary-web/index.html` mirror byte-for-byte to the same pre-Web-458 source. Source and mirror are identical at blob SHA `d57bbe18b297f6d6664d30a6952734e687ab0e33`.
+- Published **Web Update 459** so devices already on 458 can receive the rollback. Live web SHA-256 is `5ae85305bade79aa2c9930e454054c20a0be6af3aaf63cee6c7a93494de56a5f`. Feed release notes state that Web Update 458's Private Locker × button has been reverted and the previous PIN-entry appearance restored.
+- APK feed remains My Diary **1.0.217 / versionCode 216**, APK SHA-256 `5a778efa0d4fd9a7b033057007f17e346e0fba164842771056fa3abf7dc36f39`; no native APK code, app identity, signing, PIN/recovery/security logic, or saved data was changed.
+- **Phone Test: PENDING.** On the phone, run **Me → Check for Updates** to install Web Update 459 and confirm Private Locker's PIN-entry box looks as it did before Web Update 458. Do not mark PASS until user confirms.
+
+---
+
 # Private Locker PIN entry box — × Close button (Web Update 458, 2026-11-24)
 
 - User requested one × Close control only inside the **Private Locker PIN-entry box**, matching the close control in the Personal Calendar PIN prompt. The user explicitly said not to add × to any other line, heading, name, or location.
