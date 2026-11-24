@@ -1,3 +1,13 @@
+# Personal Calendar — Repeat: Custom phone test PASS (Web Update 457, 2026-11-24)
+
+- User confirmed **“Phone Test Pass”** after the Personal Calendar custom-repeat label fix in Web Update **457**.
+- Device-side status: **PASS (user-confirmed)**. The reported issue was the Roman English saved-entry label showing `Dobara : repeatCustom`; the intended corrected display is `Repeat: Custom`.
+- This is a **register-only update** recording the user's phone-test confirmation. No application source, web bundle, APK, saved diary data, PINs, notes, photos, or MUAZZIN project files were changed in this step.
+- Web Update remains **457**; APK remains **My Diary 1.0.216 / versionCode 215**.
+- **Phone Test: PASS — user-confirmed (2026-11-24).**
+
+---
+
 # Diary opening Date/Time text clarity — dark shadow blur reduced (Web Update 455, PHONE TEST PASS, 2026-11-24)
 
 - User reported that letters in the opening heading date (example: “Tuesday, 24 November 2026”) were not clear and suspected the dark shadow blur.
