@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 456,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "f23b691af9064b7712879a1c2bf8ebe7364f3bdc4712fb1bf4eb675946438e10",
+  "webSha256": "5ae85305bade79aa2c9930e454054c20a0be6af3aaf63cee6c7a93494de56a5f",
   "webReleaseNotes": "Web Update 456: Saved Smart Reminder entries now show Repeat: Custom when custom repeat days are selected. Daily repeat display and reminder scheduling are unchanged."
 }
