@@ -1,3 +1,14 @@
+# Diary opening Date/Time text clarity — dark shadow blur reduced (Web Update 455, phone test pending, 2026-11-24)
+
+- User reported that letters in the opening heading date (example: “Tuesday, 24 November 2026”) were not clear and suspected the dark shadow blur.
+- Changed only the dark shadow blur radius in the two opening Date/Time declarations from **5px to 1px**. Preserved the white highlight `0 1px 0 #FFFFFF`, gold shadow `0 2px 0 #b38a3b`, dark shadow offset `0 3px`, opacity `.28`, font styling, layout, date/time formatting, and 1-second refresh. No other features or data were changed.
+- Safety backup branch: `backup/before-date-time-shadow-blur-reduction-2026-11-24`. Implementation PR **#501** merged as `4df581032fbd7a44aa81f8b5426360b621ed525d`.
+- Static verification: exactly two intended declarations use the 1px blur; no old 5px blur remains in the opening Date/Time styles. `web-source/index.html` and `diary-web/index.html` are byte-identical at blob SHA `9c8736c1989ad117415b0044ab10f69883e61bfe` (618,337 characters). Live feed SHA-256 verified as `b59153d9cd0840bfd0c696cd27714d0040dfebe1d136ff066e2fc2706a68bf78`.
+- Web-only update. APK remains **My Diary 1.0.216 / versionCode 215**. No APK/native code, PINs, notes, photos, saved records, or MUAZZIN project changes.
+- Web Update **455** is being published with the verified bundle. **Phone test pending**; do not mark device-side PASS until the user checks the letters on the phone and confirms.
+
+---
+
 # Diary opening heading — only cream highlight changed to pure white (Web Update 454, PHONE TEST PASS, 2026-11-24)
 
 - User clarified the exact request: keep the previous Date/Time 3D text-shadow treatment, including its gold and dark layers, and change **only** the cream highlight to pure white.
