@@ -10,5 +10,5 @@
   "webVersion": 460,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "29c141441bf7f8b0a8d722a885d24de5308df13c341b6e822c3983fb24dae4b9",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "Web Update 460: Added × Close inside the new-PIN setup box opened by the Private Locker header PIN button. Closing returns to the existing unlocked Locker entries without changing the PIN, recovery, encryption, or saved data."
 }
