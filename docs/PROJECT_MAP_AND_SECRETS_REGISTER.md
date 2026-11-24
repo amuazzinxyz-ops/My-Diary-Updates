@@ -1,11 +1,11 @@
-# Diary opening heading — only cream highlight changed to pure white (Web Update 454, phone test pending, 2026-11-24)
+# Diary opening heading — only cream highlight changed to pure white (Web Update 454, PHONE TEST PASS, 2026-11-24)
 
 - User clarified the exact request: keep the previous Date/Time 3D text-shadow treatment, including its gold and dark layers, and change **only** the cream highlight to pure white.
 - Checked the pre-453 safety backup to recover the original declarations: `0 1px 0 #fff2c4` (cream highlight), `0 2px 0 #b38a3b` (gold shadow), and `0 3px 5px rgba(0,0,0,.28)` (dark shadow). In both opening-heading clock declarations, changed only the first colour to `#FFFFFF`. The gold and dark values, font styling, layout, clock/date formatting, and 1-second refresh remain unchanged.
 - Safety backup branch: `backup/before-cream-highlight-only-white-2026-11-24`. Fix PR **#500** merged as `70ec2e6997782428f46495398bdd83ff26df48e4`.
 - Static verification: exactly the two intended Date/Time shadow declarations now read `#FFFFFF` + original `#b38a3b` + original `rgba(0,0,0,.28)`. `web-source/index.html` and `diary-web/index.html` are byte-identical at blob SHA `5b47e8d6a7e0ca650e66e2c02c3de373dd1f676a` (618,349 characters). Live `latest.json` advertises **Web Update 454** and web SHA-256 `3e6c1e23630135927edd5fa3f2d0d929f3e2e230cbcada852d788c09d5e2bf8d`; independently recomputed checksum matches.
 - Web-only update. APK feed fields remain **My Diary 1.0.216 / versionCode 215**; no APK, PINs, notes, photos, saved records, or MUAZZIN project changes.
-- **Phone test pending**: user should install/check Web Update 454 and confirm the Date/Time cream highlight is pure white while the gold and dark shadows remain as before. Do not mark device-side PASS until the user confirms.
+- **Phone test PASS — user confirmed on 2026-11-24**: user reported “Phone Test Pass” after checking Web Update 454 on their phone. Date/Time cream highlight change is accepted; original gold and dark shadows and the 3D effect remain as requested.
 
 ---
 
