@@ -7,8 +7,8 @@
   "sha256": "e85e706e9b8d92f5fc366459d4f5a6318d5c3557589e6ea6554ca01d83d0b319",
   "releaseNotes": "My Diary 1.0.216: Includes Web Update 438 with the My Documents Back button fully visible and the 📁 My Documents heading kept on one line at 17px. Existing app identity, notes, photos, PINs, locks, widgets, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 456,
+  "webVersion": 457,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "5ae85305bade79aa2c9930e454054c20a0be6af3aaf63cee6c7a93494de56a5f",
-  "webReleaseNotes": "Web Update 456: Saved Smart Reminder entries now show Repeat: Custom when custom repeat days are selected. Daily repeat display and reminder scheduling are unchanged."
+  "webReleaseNotes": "Web Update 457: Personal Calendar saved entries now display the translated Repeat: Custom label correctly. Roman English shows Repeat: Custom instead of Dobara: repeatCustom. Smart Reminder labels and recurrence/alarm scheduling are unchanged."
 }
