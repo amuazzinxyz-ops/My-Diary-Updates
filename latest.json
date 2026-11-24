@@ -10,5 +10,5 @@
   "webVersion": 459,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "5ae85305bade79aa2c9930e454054c20a0be6af3aaf63cee6c7a93494de56a5f",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "Web Update 459: Reverted the Private Locker PIN-box × button from Web Update 458 at the user's request. Private Locker is restored to its previous PIN-entry appearance. All other features and saved data are unchanged."
 }
