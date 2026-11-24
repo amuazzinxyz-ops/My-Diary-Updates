@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 455,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "b59153d9cd0840bfd0c696cd27714d0040dfebe1d136ff066e2fc2706a68bf78",
+  "webSha256": "f23b691af9064b7712879a1c2bf8ebe7364f3bdc4712fb1bf4eb675946438e10",
   "webReleaseNotes": "Web Update 455: Opening Date/Time dark shadow blur reduced from 5px to 1px for clearer letters. White highlight, gold shadow, dark shadow offset/opacity, and 3D effect are retained."
 }
