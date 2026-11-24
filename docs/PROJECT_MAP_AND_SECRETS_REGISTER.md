@@ -1,3 +1,14 @@
+# Diary opening heading — white-only date/time with 3D effect (Web Update 453, phone test pending, 2026-11-24)
+
+- User requested that the date and time shown in the My Diary opening heading use **white only**, while retaining the existing 3D appearance.
+- Changed only the two opening-heading clock text-shadow declarations: the previous cream, gold, and dark shadow colours were replaced with layered white-only shadows. The white text colour, font sizes, weight, spacing, live clock/date formatting, heading layout, and 1-second clock refresh are unchanged.
+- Safety backup branch: `backup/before-white-only-diary-header-clock-2026-11-24`. Implementation PR **#499** merged as `6823704e29a5e44f56b3f76bb5a7f4aad6c2076d`.
+- Static verification: exactly the two intended heading shadow rules changed; old cream/gold/dark shadow declaration is absent. `web-source/index.html` and `diary-web/index.html` are byte-identical at blob SHA `2e45efe3fd991fc6d8246e13e917e0e97195536b` (618,349 characters). Live `latest.json` advanced to **Web Update 453** and advertises matching web SHA-256 `70c9b4743999680e9817e3f72cd3685a24d95d2df97655260b186a3d1de8c874`.
+- Web-only update. APK remains **My Diary 1.0.216 / versionCode 215**, APK SHA-256 unchanged at `19cf4ff97ec61f0cee477cfc1b96ddf62195a43dca7ec37248a3bbcc05c2ad40`. No PINs, notes, photos, saved records, or MUAZZIN project changes.
+- **Phone test pending**: user should install/check Web Update 453 and confirm the opening heading shows white-only date/time with the 3D effect retained. Do not mark device-side PASS until user confirms.
+
+---
+
 # Personal Calendar + Smart Reminder — current local time defaults (Web Update 452, phone test pending, 2026-11-24)
 
 - User clarified that the **time-selection option itself** in both 📅 Personal Calendar and ⏰ Smart Reminder should initially show the device's current local time, not a fixed 09:00 or a time 15 minutes ahead.
