@@ -5,7 +5,7 @@
 - Safety backup branch: `backup/before-date-time-shadow-blur-reduction-2026-11-24`. Implementation PR **#501** merged as `4df581032fbd7a44aa81f8b5426360b621ed525d`.
 - Static verification: exactly two intended declarations use the 1px blur; no old 5px blur remains in the opening Date/Time styles. `web-source/index.html` and `diary-web/index.html` are byte-identical at blob SHA `9c8736c1989ad117415b0044ab10f69883e61bfe` (618,337 characters). Live feed SHA-256 verified as `b59153d9cd0840bfd0c696cd27714d0040dfebe1d136ff066e2fc2706a68bf78`.
 - Web-only update. APK remains **My Diary 1.0.216 / versionCode 215**. No APK/native code, PINs, notes, photos, saved records, or MUAZZIN project changes.
-- Web Update **455** is being published with the verified bundle. **Phone test pending**; do not mark device-side PASS until the user checks the letters on the phone and confirms.
+- Web Update **455** is published with the verified bundle. **Phone test PASS — user-confirmed (2026-11-24):** user confirmed “Phone Test Pass”. Device-side verification is complete.
 
 ---
 
