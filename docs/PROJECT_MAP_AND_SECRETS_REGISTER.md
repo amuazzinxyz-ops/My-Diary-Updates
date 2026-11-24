@@ -1,3 +1,16 @@
+# Private Locker PIN entry box — × Close button (Web Update 458, 2026-11-24)
+
+- User requested one × Close control only inside the **Private Locker PIN-entry box**, matching the close control in the Personal Calendar PIN prompt. The user explicitly said not to add × to any other line, heading, name, or location.
+- Added a single close button inside `privateLockerPinForm(config)`. It calls the existing `privateLockerCloseNow()` routine and returns to the Me menu. The button is confined to the PIN-entry form; no other Private Locker form or heading was changed.
+- Preserved PIN verification, legacy PIN support, pattern/fingerprint options, recovery, encryption/key handling, database records, saved entries, and all other Locker behavior. Personal Calendar, Smart Reminder, other screens, native Android code, APK identity/signing, and MUAZZIN were not edited.
+- Safety backup branches: `backup/before-private-locker-pin-dialog-close-2026-11-24` (before source edit) and `backup/before-private-locker-close-register-2026-11-24` (before this Register update). PR **#508** merged successfully as commit `ef4a8dd33e38834c19b5653cdca76ec1ae33d441`.
+- Only `web-source/index.html` was changed in the feature PR. Static comparison confirmed the branch differed from its base only by the intended 515-character insertion inside `privateLockerPinForm(config)`; the close label occurs exactly once. The publisher synchronized `diary-web/index.html`; source and mirror are byte-identical at blob SHA `be61c3af13adbd72311a7da2f827f784596c4cc0` (619,960 characters).
+- Web publisher workflow run **45454164575** completed successfully. Live `latest.json` advertises **Web Update 458** with web SHA-256 `f1179ddf33707ec5864538afeb47ed07e7856484ad2eb0f07f7ee5324dcabe3d`. Release note identifies the Private Locker PIN-box close control and confirms PIN/recovery/encryption/data are unchanged.
+- Live APK feed at the time of this Register update remains **My Diary 1.0.217 / versionCode 216**, APK SHA-256 `5a778efa0d4fd9a7b033057007f17e346e0fba164842771056fa3abf7dc36f39`. This is a web-only feature; no native APK code or signing material was edited. An automatic APK workflow triggered by the source push initially stopped at its source/mirror parity guard because it ran before the web publisher had finished syncing the mirror; a retry was started after parity was restored and its final status must be checked before claiming any APK rebuild.
+- **Phone Test: PENDING.** User must install Web Update 458 through **My Diary → Me → Check for Updates**, then confirm the × appears only inside the Private Locker PIN-entry box and closes Locker back to Me. PIN unlock and existing Locker access should remain functional. Do not mark Phone Test PASS until the user confirms.
+
+---
+
 # My Diary 1.0.217 — update from previously installed APK and phone test PASS (2026-11-24)
 
 - User confirmed the update was successfully received on the previously installed/older My Diary APK through the app's **Check for Updates** flow.
