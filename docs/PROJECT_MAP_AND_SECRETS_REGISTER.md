@@ -1,3 +1,14 @@
+# My Diary 1.0.217 — update from previously installed APK and phone test PASS (2026-11-24)
+
+- User confirmed the update was successfully received on the previously installed/older My Diary APK through the app's **Check for Updates** flow.
+- User explicitly confirmed **Phone Test: PASS** after the update.
+- Current live release remains **My Diary 1.0.217 / versionCode 216**, with **Web Update 457** as advertised by live `latest.json`. This entry records the user's device-side confirmation; it does not claim a separately performed independent device inspection.
+- This is a **register-only update**. No app source, web bundle, APK, release metadata, user data, PINs, notes, photos, reminders, or MUAZZIN project files were changed.
+- Safety backup branch: `backup/before-phone-test-pass-register-1-0-217-2026-11-24`.
+- **Phone Test: PASS — user-confirmed (2026-11-24).**
+
+---
+
 # Next signed APK release approved — My Diary 1.0.217 / versionCode 216 (2026-11-24)
 
 - User directed that the correct next APK release be made rather than rebuilding and sending the existing **My Diary 1.0.216 / versionCode 215** again. Live `latest.json` was checked and confirms the current baseline is **1.0.216 / 215**; live web bundle is **Web Update 457**.
