@@ -7,8 +7,8 @@
   "sha256": "5a778efa0d4fd9a7b033057007f17e346e0fba164842771056fa3abf7dc36f39",
   "releaseNotes": "My Diary 1.0.217: Signed APK includes the latest published Diary Web Update 457 bundle. Existing app identity, notes, photos, PINs, locks, widgets, reminders, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 459,
+  "webVersion": 460,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "5ae85305bade79aa2c9930e454054c20a0be6af3aaf63cee6c7a93494de56a5f",
-  "webReleaseNotes": "Web Update 459: Reverted the Private Locker PIN-box × button from Web Update 458 at the user's request. Private Locker is restored to its previous PIN-entry appearance. All other features and saved data are unchanged."
+  "webSha256": "29c141441bf7f8b0a8d722a885d24de5308df13c341b6e822c3983fb24dae4b9",
+  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
