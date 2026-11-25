@@ -1269,10 +1269,18 @@ private object DiaryReminderScheduler {
         }
         val builder = if (Build.VERSION.SDK_INT >= 26) Notification.Builder(context, channelId) else Notification.Builder(context)
         val body = details.ifBlank { "My Diary reminder" }
+        val boldBody = android.text.SpannableString(body).apply {
+            setSpan(
+                android.text.style.StyleSpan(android.graphics.Typeface.BOLD),
+                0,
+                length,
+                android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        }
         builder.setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
             .setContentTitle(title)
-            .setContentText(body)
-            .setStyle(Notification.BigTextStyle().bigText(body))
+            .setContentText(boldBody)
+            .setStyle(Notification.BigTextStyle().bigText(boldBody))
             .setSound(null, alarmAttributes)
             .setContentIntent(content)
             .setFullScreenIntent(wakePending, true)
