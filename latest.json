@@ -10,5 +10,5 @@
   "webVersion": 461,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "cbd341c95865ce03877962aed0903c4c6ddb5e5f4b4e586c0ee01467c45ccf94",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "Web Update 461: Added a pre-share App Share preview showing the exact APK link with a paper Copy icon. Copy copies the link; Share opens the existing logo and formatted-message Android share flow. Existing share content and saved data are preserved."
 }
