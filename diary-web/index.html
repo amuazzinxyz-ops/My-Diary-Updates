@@ -2100,7 +2100,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    function submitPin(){
     if(busy||(pin.value.length!==4&&pin.value.length!==6))return;
     busy=true;var value=pin.value;pin.disabled=true;verifyAction.disabled=true;
-    var pinInvalid=false;privateLockerUnwrapMaster(value,config.pin).then(function(raw){return privateLockerFinishUnlock(raw);},function(){pinInvalid=true;status.textContent='PIN galat hai.';pin.value='';}).catch(function(e){status.textContent=e&&e.message?e.message:'Locker nahi khul saka.';}).finally(function(){busy=false;pin.disabled=false;verifyAction.disabled=false;if(pinInvalid)pin.focus();});
+    var pinInvalid=false;privateLockerUnwrapMaster(value,config.pin).then(function(raw){return privateLockerFinishUnlock(raw);},function(){pinInvalid=true;status.textContent='';pin.value='';showDiaryErrorMessage('PIN galat hai.');}).catch(function(e){status.textContent=e&&e.message?e.message:'Locker nahi khul saka.';}).finally(function(){busy=false;pin.disabled=false;verifyAction.disabled=false;if(pinInvalid)pin.focus();});
    }
    verifyAction.addEventListener('click',submitPin);
    pin.addEventListener('input',function(){pin.value=String(pin.value||'').replace(/[^0-9]/g,'').slice(0,6);var expectedDigits=Number(config.pinDigits)===6?6:4;if(pin.value.length===expectedDigits&&!explicitPinConfirmation)submitPin();});wrap.appendChild(status);
@@ -2846,7 +2846,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     forgot.addEventListener('click',function(){var bytes=new Uint8Array(4);crypto.getRandomValues(bytes);var temp=String(((bytes[0]<<24)|(bytes[1]<<16)|(bytes[2]<<8)|bytes[3])>>>0).slice(-4).padStart(4,'0');function verifyTemporaryPin(){meFeaturePinDialog(mf('pinRecoveryPinPrompt')).then(function(entered){if(entered===null)return;if(entered!==temp){meFeatureShowRecoveryError(mf('pinWrong'),verifyTemporaryPin);return;}meFeatureStatus.textContent='';meFeatureAskNewPin(kind,function(){showMeFeaturePage(kind);});});}meFeatureShowTemporaryPin(temp,verifyTemporaryPin);});
     form.appendChild(forgot);
     form.addEventListener('submit',function(e){e.preventDefault();var value=String(pin.value||'').trim();if(!/^\d{4,8}$/.test(value)){meFeatureStatus.textContent=mf('pinNeed');return;}
-     submit.disabled=true;meFeatureVerifyValue(kind,value).then(function(ok){if(!ok){meFeatureStatus.textContent=mf('pinWrong');submit.disabled=false;submit.dataset.autoSubmitted='0';pin.value='';pin.focus();return;}
+     submit.disabled=true;meFeatureVerifyValue(kind,value).then(function(ok){if(!ok){showDiaryErrorMessage(mf('pinWrong'),function(){submit.disabled=false;submit.dataset.autoSubmitted='0';pin.value='';pin.focus();});return;}
       if(value.length===4){var latest=meFeaturePinConfig(kind);if(latest&&latest.digits!==4){latest.digits=4;localStorage.setItem('diary_me_section_pin_v1_'+kind,JSON.stringify(latest));}showMeFeaturePage(kind);}
       else{meFeatureStatus.textContent=mf('pinLegacy');meFeatureAskNewPin(kind,function(){showMeFeaturePage(kind);});}
      }).catch(function(){meFeatureStatus.textContent=mf('failed');submit.disabled=false;submit.dataset.autoSubmitted='0';});
