@@ -1,3 +1,14 @@
+# Private Locker header PIN setup × — phone test PASS (Web Update 460, 2026-11-25)
+
+- User explicitly confirmed **Phone Test: PASS** after installing/testing Web Update 460.
+- This confirms the × control in the new-PIN setup box opened by the Private Locker header **🔑 PIN** button behaves as intended: it is in the correct setup box and can be used to cancel setup and return to the already-unlocked Locker entries without saving a new PIN.
+- This is a **register-only update** recording the user's device-side confirmation. No app source, web bundle, APK, release metadata, PIN/recovery/encryption logic, saved data, or MUAZZIN project files were changed.
+- Web Update remains **460**; APK remains **My Diary 1.0.217 / versionCode 216**. No APK rebuild or new web release was made.
+- Safety backup branch: `backup/before-phone-test-pass-web460-2026-11-25`.
+- **Phone Test: PASS — user-confirmed (2026-11-25).**
+
+---
+
 # Private Locker header PIN button — × added to the correct new-PIN setup box (Web Update 460, 2026-11-25)
 
 - User clarified that the × belongs in the box opened by tapping the Private Locker header **🔑 PIN** button, not in the ordinary PIN-verification form. Source inspection confirmed that, when Lock is OFF, this button calls `privateLockerTurnLockOn(config)` and opens the three-stage **new PIN + confirm PIN + Favourite Name** setup card. The prior Web Update 458 attempt targeted `privateLockerPinForm(config)`, which is the separate PIN-verification screen; that earlier attempt had already been reverted in Web Update 459.
