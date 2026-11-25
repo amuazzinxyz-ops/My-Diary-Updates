@@ -7,8 +7,8 @@
   "sha256": "5a778efa0d4fd9a7b033057007f17e346e0fba164842771056fa3abf7dc36f39",
   "releaseNotes": "My Diary 1.0.217: Signed APK includes the latest published Diary Web Update 457 bundle. Existing app identity, notes, photos, PINs, locks, widgets, reminders, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 461,
+  "webVersion": 462,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "cbd341c95865ce03877962aed0903c4c6ddb5e5f4b4e586c0ee01467c45ccf94",
-  "webReleaseNotes": "Web Update 461: Added a pre-share App Share preview showing the exact APK link with a paper Copy icon. Copy copies the link; Share opens the existing logo and formatted-message Android share flow. Existing share content and saved data are preserved."
+  "webSha256": "c6216a46f9b7726d0257979aa2c2e648cd6e7d0096233597cc0d7de0a219f260",
+  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
