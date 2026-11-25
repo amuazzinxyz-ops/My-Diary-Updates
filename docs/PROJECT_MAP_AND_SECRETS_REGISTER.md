@@ -1,3 +1,16 @@
+# App Share — Copy Link copies the existing Direct Share formatted message (Web Update 463, 2026-11-25)
+
+- User requested that **Copy Link** copy the same formatted message shown by the existing native **📤 Direct Share**, even if the logo/image itself is not copied. The APK link must remain included.
+- Updated only the clipboard payload in `web-source/index.html`: it now copies the exact native Direct Share text — **📒 MY DIARY**, “A simple space for your thoughts and notes.”, the three feature lines (write thoughts, find saved notes quickly, keep notes together), **⬇️ DOWNLOAD MY DIARY**, and the original APK URL. Both the Clipboard API and fallback-copy path use this same formatted message. The visible APK URL and Copy Link label/icon remain unchanged.
+- The existing 📤 Direct Share action still calls `DiaryAppActions.shareApp()` unchanged. Native logo image attachment, formatted caption, chooser, and APK URL were not modified. No Android/Kotlin code or APK was changed.
+- Safety backup branch from before the feature edit: `backup/before-copy-direct-share-format-2026-11-25`. Register backup branch before this register update: `backup/before-copy-direct-share-format-register-2026-11-25`. Feature branch: `fix/copy-direct-share-format-2026-11-25`. PR **#513** merged successfully; merge commit `7e2e3e228fa3ea2768ec8325dc3503f78d963599`.
+- Final `web-source/index.html` and `diary-web/index.html` are byte-identical at blob SHA `813e5904ef4259637b4d2baaa986a91df72e40ef` (624,488 characters). Publisher workflow **45578416939** completed successfully.
+- Live `latest.json` advertises **Web Update 463** with web SHA-256 `f1209221b356a014f12700e1525fa6b003ed4427555dcc5d31bc323640d7e2e1`. APK remains **My Diary 1.0.217 / versionCode 216**, SHA-256 `5a778efa0d4fd9a7b033057007f17e346e0fba164842771056fa3abf7dc36f39`; no APK rebuild, native Android code, app identity/signing, saved data, PINs, locks, reminders, or MUAZZIN files were changed.
+- Targeted source checks passed: Clipboard API and fallback both copy `shareMessage`; the visible URL still uses `apkLink`; the native Direct Share call remains present exactly once. This is source/publisher verification, not a phone test.
+- **Phone Test: PENDING.** User must install Web Update 463 through **My Diary → Me → Check for Updates**, tap **Copy Link**, paste into WhatsApp (or another message app), and confirm the formatted text and APK URL appear. Also confirm the existing 📤 Direct Share still opens and shares the original logo/preview as before. Do not mark PASS until the user confirms.
+- MUAZZIN was not touched.
+---
+
 # App Share — Copy Link label above paper icon (Web Update 462, 2026-11-25)
 
 - User requested only the words **Copy Link** above the existing paper copy icon in the App Share preview.
