@@ -1,3 +1,16 @@
+# App Share — Copy Link label above paper icon (Web Update 462 candidate, 2026-11-25)
+
+- User requested only the words **Copy Link** above the existing paper copy icon in the App Share preview.
+- Added a small centered **Copy Link** label directly above the existing 📋 icon. The APK URL, clipboard copy handler, fallback copy behavior, success/failure status, modal layout outside the icon area, and copy action remain unchanged.
+- The existing 📤 Share button and native `DiaryAppActions.shareApp()` call were not modified. The original Direct Share logo, formatted message, chooser, and APK URL remain untouched.
+- Only `web-source/index.html` is changed in this candidate. Source branch: `fix-copy-link-label-20261125`; safety backup branch from the exact pre-edit main commit: `backup-before-copy-link-label-20261125`. Starting main commit: `50d9832ddf9bbe472a6d468dc6c2a13048761e23`. Source edit commit: `35a19c67f7642b93789aadc9b63d0db04e845ed6`; updated source blob: `4896b9508f10f0dfdac66e50cba421cf186ca61e`.
+- Static checks on the candidate source: the new label is present exactly once; its wrapper is attached once beside the URL; the existing clipboard URL write remains present; the existing native share call remains present exactly once.
+- This is intended as **Web Update 462** after PR merge and successful publisher workflow. The publisher must synchronize `diary-web/index.html` and update the live `latest.json` feed/checksum. No APK rebuild, APK metadata/version, native Android code, user data, PINs, locks, reminders, or MUAZZIN files are changed.
+- **Phone Test: PENDING.** Do not mark PASS until the user installs the published web update and confirms the Copy Link label appears above 📋 and both copy and the existing Direct Share still work.
+- MUAZZIN was not touched.
+
+---
+
 # Private Locker header PIN setup × — phone test PASS (Web Update 460, 2026-11-25)
 
 - User explicitly confirmed **Phone Test: PASS** after installing/testing Web Update 460.
