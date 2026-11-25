@@ -1,3 +1,17 @@
+# Four Me sections — Unlock buttons hidden; phone test PASS (Web Update 466, 2026-11-25)
+
+- User requested only the visible **Unlock** buttons be removed from **Personal Calendar**, **My Documents**, **My Kharcha**, and **My Memories**. No other feature or behavior was to be changed.
+- Inspected the shared PIN-management verification function `meFeatureVerifyCurrent(kind, callback)`. The normal PIN field already supports automatic verification; the submit control was the visible Unlock button.
+- Minimal source change in `web-source/index.html`: hid that submit button and made auto-submit trigger at `current.maxLength`, preserving both the configured 4-digit PIN flow and legacy 8-digit PIN compatibility. Change PIN and Remove PIN handlers, PIN verification, PIN storage, recovery, saved data, and all unrelated features remain unchanged.
+- Safety backup of the pre-edit source: `backups/2026-11-25-before-unlock-button-removal-index.html`. Backup commit: `c7130853b682339b46cdfd1fc3d31b5fc401abe9`.
+- Source update commit: `663b926727de5def05d1cdaa0e3f744a5d942ec4`. Published source blob SHA: `02e74ee471e1a91784da4f039cf988869e1006d0`; SHA-256: `2790b1e59d9443238c5467be7174d868f1e1b83db7f3284035844d592542bccd`.
+- Exact source comparison against the backup confirmed only the two intended substitutions. Live `latest.json` advertises **Web Update 466** with the matching SHA-256; feed update commit: `d230ea9605853a75bd9aabcb85c20d57b314ef19`. Delivery is through **My Diary → Me → Check for Updates**. APK remains **My Diary 1.0.219 / versionCode 218**; no APK rebuild was needed for this web-only change.
+- **Phone Test: PASS — user-confirmed (2026-11-25).** The user explicitly confirmed the phone test passed after installing/testing this change. This is the user's device-side confirmation; no additional device inspection is claimed.
+- Supporting dated test record: [PHONE_TEST_PASS_2026-11-25.md](PHONE_TEST_PASS_2026-11-25.md).
+- **Preservation:** only the requested Unlock-button visibility and auto-submit trigger were changed. MUAZZIN was not touched.
+
+---
+
 # Wrong-PIN Note-style popup consistency — Web Update 465 published (2026-11-25)
 
 - User requested the Note-style wrong-PIN popup for **Personal Calendar, My Documents, My Kharcha, My Memories, and Private Locker**, with no unrelated function changes.
