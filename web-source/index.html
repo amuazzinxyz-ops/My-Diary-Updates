@@ -3174,6 +3174,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     var heading=document.createElement('strong');heading.textContent='📤 My Diary — Share App';heading.style.cssText='display:block;font-size:18px;font-weight:900;margin:0 0 14px;';
     var linkRow=document.createElement('div');linkRow.style.cssText='display:flex;align-items:center;gap:8px;width:100%;box-sizing:border-box;padding:9px;border:1px solid #b8c9ba;border-radius:10px;background:#fff;';
     var link=document.createElement('div');link.textContent=apkLink;link.style.cssText='flex:1;min-width:0;overflow-wrap:anywhere;font-size:13px;line-height:1.4;color:#174a30;user-select:text;';
+    var copyWrap=document.createElement('div');copyWrap.style.cssText='display:flex;flex-direction:column;align-items:center;justify-content:center;flex:0 0 66px;gap:3px;';
+    var copyLabel=document.createElement('span');copyLabel.textContent='Copy Link';copyLabel.style.cssText='font-size:11px;line-height:1.1;font-weight:800;color:#174a30;white-space:nowrap;';
     var copy=document.createElement('button');copy.type='button';copy.textContent='📋';copy.setAttribute('aria-label','Copy app link');copy.title='Copy link';copy.style.cssText='flex:0 0 42px;width:42px;height:42px;border:1px solid #b99a42;border-radius:9px;background:linear-gradient(145deg,#fff8dc,#f0d98b);font-size:22px;cursor:pointer;';
     var status=document.createElement('div');status.setAttribute('aria-live','polite');status.style.cssText='min-height:19px;margin:8px 0 12px;font-size:12px;font-weight:700;color:#17633c;';
     function fallbackCopy(){var temp=document.createElement('textarea');temp.value=apkLink;temp.setAttribute('readonly','');temp.style.cssText='position:fixed;left:-9999px;top:0;opacity:0;';document.body.appendChild(temp);temp.select();var ok=false;try{ok=!!document.execCommand('copy');}catch(err){}if(temp.parentNode)temp.parentNode.removeChild(temp);status.textContent=ok?'✓ Link copied':'Copy nahi ho saka';}
@@ -3183,7 +3185,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     close.addEventListener('click',function(){shade.remove();});
     var share=document.createElement('button');share.type='button';share.textContent='📤 Share';share.style.cssText='padding:10px 19px;border:0;border-radius:9px;background:#17633c;color:#fff;font-weight:900;font-size:15px;';
     share.addEventListener('click',function(){shade.remove();if(window.DiaryAppActions&&DiaryAppActions.shareApp){DiaryAppActions.shareApp();}});
-    linkRow.appendChild(link);linkRow.appendChild(copy);actions.appendChild(close);actions.appendChild(share);
+    copyWrap.appendChild(copyLabel);copyWrap.appendChild(copy);linkRow.appendChild(link);linkRow.appendChild(copyWrap);actions.appendChild(close);actions.appendChild(share);
     panel.appendChild(heading);panel.appendChild(linkRow);panel.appendChild(status);panel.appendChild(actions);shade.appendChild(panel);shade.addEventListener('click',function(ev){if(ev.target===shade)shade.remove();});document.body.appendChild(shade);
   });
 
