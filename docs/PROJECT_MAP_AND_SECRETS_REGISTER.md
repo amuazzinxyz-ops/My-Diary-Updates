@@ -1,3 +1,18 @@
+# Note-style wrong-PIN popup — Personal Calendar, My Documents, My Kharcha, My Memories, and Private Locker (Web Update 464, 2026-11-25)
+
+- User requested the existing Note Lock wrong-PIN popup appearance for **Personal Calendar**, **My Documents**, **My Kharcha**, **My Memories**, and **Private Locker**, without changing any other functions.
+- Source inspection confirmed that the four Me sections share one PIN-entry handler and Private Locker uses a separate handler. Changed only those two wrong-PIN presentation handlers in `web-source/index.html`: the four shared sections now call the existing `showDiaryErrorMessage(...)` popup with the localized message; Private Locker calls the same popup with its existing `PIN galat hai.` wording.
+- The popup reuses the existing Note Lock design: dark translucent overlay, rounded purple/gold-tinted panel, bold message, and purple Close button. No new style system or PIN UI was added.
+- PIN verification, hashing/decryption, recovery, Pattern/Fingerprint, successful unlock, saved data, and all unrelated features were not changed. The `meFeatureVerifyValue` and `privateLockerUnwrapMaster` paths remain in place.
+- Safety backup branch before source edit: `backup/before-note-style-wrong-pin-popup-2026-11-25`. Working branch: `fix/note-style-wrong-pin-popup-2026-11-25`. PR **#521** merged as `48d3ae1038938cc536b371118b0d816cb093d60c`.
+- Static verification: JavaScript syntax check **PASS**. The reviewed PR diff changed exactly two lines (2 additions, 2 deletions) in one file. Pre-edit source and mirror were byte-identical.
+- Web publisher workflow **45627293249** completed **successfully**. Live source and mirror are byte-identical at Git blob SHA `19b6523eda652e5fb6ccce3fa1d8c631f8879180` (624,522 characters). Live `latest.json` advertises **Web Update 464** with web SHA-256 `df8adceae74d6bfc25179cbb431d1a46134077fff1f54c42c7514a5fd50df67d`. APK remains **My Diary 1.0.219 / versionCode 218**; no native APK change was part of this task.
+- The repository's automatic APK workflow also started concurrently and stopped at its early source/mirror parity guard before the web publisher had finished syncing the mirror. It did not reach APK build or upload. The web-only publisher completed successfully afterward, and source/mirror parity was independently rechecked. Do not treat this as an APK build or release.
+- **Phone Test: PENDING.** User must install Web Update 464 through **My Diary → Me → Check for Updates** and test a deliberately wrong PIN in all five named sections. Confirm the Note-style popup appears and that entering the correct PIN still unlocks normally. Do not mark PASS until the user confirms.
+- MUAZZIN was not touched.
+
+---
+
 # Reminder wake-screen Details bold — My Diary 1.0.219 published; phone test PASS — user-confirmed (2026-11-25)
 
 - User installed **My Diary 1.0.218** through **Me → Check for Updates** and tested an alarm. User confirmed reminder **Details** still appeared normal-weight; 1.0.218 therefore failed the requested phone test. Do not mark Phone Test PASS for 1.0.218.
