@@ -1,3 +1,14 @@
+# Reminder notification — Details bold (My Diary 1.0.217 / Web Update 463, 2026-11-25)
+
+- User requested only the notification **Details/body** to be bold; the existing **Title** must remain unchanged and all other behavior must be preserved.
+- Changed only the generated native Android notification block in `scripts/add_diary_app_actions.py`: Details are wrapped in an Android `SpannableString` with a bold `StyleSpan`, used for both the collapsed notification text and expanded `BigTextStyle`. The existing `.setContentTitle(title)` line remains unchanged. No notification scheduling, reminder logic, title text, ringtone, channel, saved data, or unrelated features were changed.
+- Safety backup branch: `backup/before-bold-reminder-details-2026-11-25`. Register backup branch: `backup/before-bold-reminder-details-register-2026-11-25`. Working branch: `fix/bold-reminder-details-2026-11-25`. PR **#514** merged successfully; merge commit `dbf2a25a03f057a64386869f4a4d798c4563f5e4`. PR patch was verified to contain only the intended notification-body change in the generator script.
+- Android build workflow **45591301123** (run 546) completed with **success**. Debug build, signed Release APK upload, APK upload, and the verified update-feed publish step all completed successfully. Signed APK artifact is available as workflow artifact `My-Diary-1.0.217-signed-APK` (artifact ID `15011871006`); APK upload artifact `My-Diary-1.0.217-debug-APK` is also present. This is build/publish verification, not a phone test.
+- Live `latest.json` was re-fetched and advertises **My Diary 1.0.217 / versionCode 216**, **Web Update 463**, and signed APK URL `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk`. Published APK SHA-256: `97bd3e90962389fb664dd25e142c8e0bccf990bf100d810449106a1fed2b7e1`. Web bundle SHA-256 remains `f1209221b356a014f12700e1525fa6b003ed4427555dcc5d31bc323640d7e2e1`.
+- Delivery: on the phone, use **My Diary → Me → Check for Updates**. Then test notification Details in both **Personal Calendar** and **Smart Reminder**. **Phone Test: PENDING** — do not mark PASS until the user confirms on-device that Details are bold and the Title remains as before.
+- MUAZZIN was not touched.
+---
+
 # App Share — Copy Link copies the existing Direct Share formatted message (Web Update 463, 2026-11-25)
 
 - User requested that **Copy Link** copy the same formatted message shown by the existing native **📤 Direct Share**, even if the logo/image itself is not copied. The APK link must remain included.
