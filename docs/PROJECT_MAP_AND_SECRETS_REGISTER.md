@@ -7,7 +7,7 @@
 - Web publisher workflow **45628898010** (run 636) completed with **success**. It published **Web Update 465** and synchronized `diary-web/index.html` with `web-source/index.html`.
 - Verified after publication: source and mirror are byte-identical (624,530 characters; Git blob SHA `64d0db8fcd6f6bb150e1da6cfc5cdd0c85bd2000`). Live `latest.json` advertises Web Update **465** and web SHA-256 `6ec1be54543a634cd7ac804c848ea904d7df99c2badc870c25594f22363bfd9a`. APK remains **My Diary 1.0.219 / versionCode 218**; no APK rebuild or native Android change was made.
 - Static source checks confirm all five primary wrong-PIN prompts use the Note-style popup; the four Me-feature PIN-management wrong-PIN path now uses it too. The popup is the existing Note popup; no new popup design was introduced.
-- **Phone Test: PENDING** — user must install Web Update 465 through **Me → Check for Updates** and confirm wrong PIN in the five named sections shows the Note-style popup. Do not mark PASS until user confirms.
+- **Phone Test: PASS — user-confirmed (2026-11-25).** User confirmed the Note-style wrong-PIN popup test passed for all five requested sections: Personal Calendar, My Documents, My Kharcha, My Memories, and Private Locker.
 - MUAZZIN was not touched.
 
 ---
