@@ -1,3 +1,16 @@
+# Reminder wake-screen Details bold — correction merged; APK build running (2026-11-25)
+
+- User installed **My Diary 1.0.218** through **Me → Check for Updates** and tested an alarm. User confirmed that reminder **Details** still appeared normal-weight; the previous release therefore did not pass the requested phone test. Do not mark Phone Test PASS for 1.0.218.
+- Root cause: the native full-screen `DiaryReminderWakeActivity` rendered Details with the existing `addLine(...)` helper but omitted its `bold=true` argument. The earlier bold `SpannableString` affected the system notification only, not the full-screen wake card.
+- Minimal source correction: in `scripts/add_diary_app_actions.py`, changed only the wake-screen Details call to pass `true` to the existing bold parameter. The Title call was already bold and remains unchanged. Reminder scheduling, ringtone, snooze/Done actions, notification channels, saved data, app identity/signing, and Web Update 463 are unchanged.
+- Safety backup branch before source correction: `backup/before-reminder-wake-details-bold-fix-2026-11-25`. Source fix PR **#518** merged as `b099742f53a5e51fe07b03248e7ec6ef17e3f74b`.
+- Added a fail-closed build assertion and advanced the signed APK release target to **My Diary 1.0.219 / versionCode 218**, so installed 1.0.218 devices can receive the native fix through Check for Updates. Workflow PR **#519** merged as `ed546407ed38c103c4095e3ff382350c1574b929`. Safety backup branch before workflow edit: `backup/before-reminder-wake-details-release-1-0-219-2026-11-25`.
+- Android workflow run **45604513380** (run **549**) is currently in progress. Signing readiness, keystore/alias validation, source extraction, exact published HTML verification, translation audit, identity setup, release-version gate, and JVM target checks have passed; the debug APK build is running. The live feed still advertises **1.0.218 / versionCode 217** until the signed build and verified publish step complete.
+- **Phone Test: PENDING.** After 1.0.219 is published, install it using **Me → Check for Updates** and test the full-screen alarm display. Confirm Details are bold and Title remains unchanged before marking PASS. Do not mark PASS based only on source/build verification.
+- MUAZZIN was not touched.
+
+---
+
 # Check for Updates — native reminder Details bold delivered as My Diary 1.0.218 (2026-11-25)
 
 - Rechecked the actual native **Check for Updates** path after noticing that the earlier **1.0.217 / versionCode 216** build reused the installed app's same versionCode. The updater installs a new APK only when feed `versionCode > currentVersion()`; otherwise it only checks/downloads the Web bundle. Therefore, an already-installed 1.0.217 app would **not** install the native notification change from the 1.0.217 build. The earlier assumption that that build would deliver the native change through Check for Updates was incorrect.
