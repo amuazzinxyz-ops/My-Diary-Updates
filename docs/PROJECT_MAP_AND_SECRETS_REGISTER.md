@@ -1,4 +1,4 @@
-# Reminder wake-screen Details bold — My Diary 1.0.219 published; phone test pending (2026-11-25)
+# Reminder wake-screen Details bold — My Diary 1.0.219 published; phone test PASS — user-confirmed (2026-11-25)
 
 - User installed **My Diary 1.0.218** through **Me → Check for Updates** and tested an alarm. User confirmed reminder **Details** still appeared normal-weight; 1.0.218 therefore failed the requested phone test. Do not mark Phone Test PASS for 1.0.218.
 - Root cause: native full-screen `DiaryReminderWakeActivity` rendered Details through the existing `addLine(...)` helper without its `bold=true` argument. Earlier bold `SpannableString` formatting affected only the system notification, not the full-screen wake card.
@@ -8,7 +8,7 @@
 - Signed APK artifact: **My-Diary-1.0.219-signed-APK**, artifact ID **15017297129** (artifact SHA-256 digest `d546d99bfb6200421ff04197153d67ddc233240bab6548ed8f103eb7dbf363c5`). The workflow also uploaded `My-Diary-1.0.219-debug-APK` (artifact ID `15017650600`).
 - Re-fetched live `latest.json`: **My Diary 1.0.219 / versionCode 218**, Web Update **463**. Signed APK URL: `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk`. Published APK SHA-256: `8da5bc56db262950cab6a5579b6d3a928f2bfce71c441267c1b1f3538b401e38`. Web bundle SHA-256 remains `f1209221b356a014f12700e1525fa6b003ed4427555dcc5d31bc323640d7e2e1`. Release notes confirm wake-screen Details bold, notification Details bold, and Title unchanged.
 - Delivery path: **My Diary → Me → Check for Updates**. The published versionCode 218 is greater than installed 1.0.218's versionCode 217, so the existing updater's native APK update condition is satisfied. Install 1.0.219 and test the full-screen alarm display: Details should be bold and Title unchanged.
-- **Phone Test: PENDING.** Build and publication verification do not establish device-side success. Mark PASS only after the user confirms the 1.0.219 alarm wake-screen test on the phone.
+- **Phone Test: PASS — user-confirmed (2026-11-25).** User confirmed the phone test passed for the published 1.0.219 reminder Details-bold fix. This records the user's device-side confirmation only; no additional device inspection is claimed.
 - A daily release monitor was created to notify on first verified live publication; it should stop after that first match. MUAZZIN was not touched.
 
 ---
