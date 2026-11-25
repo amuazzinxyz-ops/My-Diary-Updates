@@ -1,4 +1,4 @@
-# Approved release build: publish signed Diary 1.0.218/217 with bold reminder notification Details.
+# Approved release build: publish signed Diary 1.0.219/218 with bold reminder Details on the wake screen.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -377,6 +377,8 @@ jobs:
           if "setShowWhenLocked(true)" not in kotlin or "setTurnScreenOn(true)" not in kotlin or "FLAG_KEEP_SCREEN_ON" not in kotlin:
               raise SystemExit("BLOCKED: wake activity cannot reliably turn on and hold the display for the selected duration")
           for visible in ("MY DIARY REMINDER", "diary_reminder_title", "diary_reminder_details", "sendReminderAction(action)", "ACTION_SNOOZE", "ACTION_DONE", "NotificationManager"):
+          if "if (details.isNotBlank()) addLine(card, details, 17f, android.graphics.Color.rgb(55, 65, 81), true)" not in kotlin:
+            raise SystemExit("BLOCKED: reminder wake-screen Details must be explicitly bold")
               if visible not in kotlin:
                   raise SystemExit("BLOCKED: immediate full-screen reminder display/action missing: " + visible)
           if ".setVisibility(Notification.VISIBILITY_PUBLIC)" not in kotlin:
@@ -497,7 +499,7 @@ jobs:
       - name: Apply independent Diary Android identity
         run: python3 scripts/apply_diary_identity.py
 
-      - name: Set approved Diary release version 1.0.218 (versionCode 217)
+      - name: Set approved Diary release version 1.0.219 (versionCode 218)
         working-directory: diary-project
         run: |
           python3 - <<'PY'
@@ -505,12 +507,12 @@ jobs:
           from pathlib import Path
           p = Path("app/build.gradle.kts")
           s = p.read_text(encoding="utf-8")
-          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 217', s, count=1)
-          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.218"', s, count=1)
+          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 218', s, count=1)
+          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.219"', s, count=1)
           if code_count != 1 or name_count != 1:
               raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
           p.write_text(s, encoding="utf-8")
-          print("Set Diary release versionName=1.0.218, versionCode=217")
+          print("Set Diary release versionName=1.0.219, versionCode=218")
           PY
 
       - name: Fail closed unless source version matches the approved next Diary release
@@ -532,10 +534,10 @@ jobs:
           name = one(r'versionName\s*=\s*"([^"]+)"', "versionName")
           if package != "com.personal.diaryapp" or meta.get("packageName") != package:
               raise SystemExit("BLOCKED: APK package and update metadata do not match")
-          if code != 217 or name != "1.0.218":
-              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.218/217, found {name}/{code}")
+          if code != 218 or name != "1.0.219":
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.219/218, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if feed_version not in ((216, "1.0.217"), (217, "1.0.218")):
+          if feed_version not in ((217, "1.0.218"), (218, "1.0.219")):
               raise SystemExit(f"BLOCKED: update feed is neither the installed baseline nor the approved target release: {feed_version}")
           print(f"PASS: package={package}, release={name}/{code}; feed state is approved: {feed_version}")
           PY
@@ -661,7 +663,7 @@ jobs:
           echo "Release APK certificate matches the previously supplied SHA-256 fingerprint."
           rm -f app/diary-release.jks
 
-      - name: Publish verified Diary update 1.0.218 after release verification PASS
+      - name: Publish verified Diary update 1.0.219 after release verification PASS
         if: env.DIARY_RELEASE_READY == 'true'
         shell: bash
         run: |
@@ -670,7 +672,7 @@ jobs:
           test -s "$APK"
           SHA256="$(sha256sum "$APK" | awk '{print $1}')"
           cp "$APK" /tmp/My-Diary-verified.apk
-          printf '1.0.218\n217\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          printf '1.0.219\n218\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
           git fetch origin main
           git checkout -f -B diary-publish-main origin/main
           python3 - <<'PY'
@@ -678,7 +680,7 @@ jobs:
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in ((215, "1.0.216"), (216, "1.0.217")):
+          if meta.get("packageName") != "com.personal.diaryapp" or feed_version not in ((216, "1.0.217"), (217, "1.0.218")):
               raise SystemExit(f"BLOCKED: live main feed is neither the installed baseline nor the approved target release: {feed_version}")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
@@ -687,17 +689,17 @@ jobs:
           meta["versionCode"] = int(lines[1])
           meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk"
           meta["sha256"] = lines[2]
-          meta["releaseNotes"] = "My Diary 1.0.218: Bold reminder notification Details; signed APK includes the latest published Diary Web Update " + str(meta.get("webVersion", "")) + " bundle. Existing app identity, notes, photos, PINs, locks, widgets, reminders, and saved data are preserved."
+          meta["releaseNotes"] = "My Diary 1.0.219: Reminder wake-screen Details are bold; notification Details are bold; Title remains unchanged. signed APK includes the latest published Diary Web Update " + str(meta.get("webVersion", "")) + " bundle. Existing app identity, notes, photos, PINs, locks, widgets, reminders, and saved data are preserved."
           meta["webSha256"] = hashlib.sha256(Path("web-source/index.html").read_bytes()).hexdigest()
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           cp /tmp/My-Diary-verified.apk My-Diary.apk
-          cp /tmp/My-Diary-verified.apk My-Diary-1.0.218.apk
+          cp /tmp/My-Diary-verified.apk My-Diary-1.0.219.apk
           python3 -m json.tool latest.json >/dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add My-Diary.apk My-Diary-1.0.218.apk latest.json
-          git commit -m "Publish My Diary update 1.0.218"
+          git add My-Diary.apk My-Diary-1.0.219.apk latest.json
+          git commit -m "Publish My Diary update 1.0.219"
           git push origin HEAD:main
       - name: Upload unsigned Release APK for private owner-side signing
         if: env.DIARY_RELEASE_READY != 'true'
@@ -712,7 +714,7 @@ jobs:
         if: env.DIARY_RELEASE_READY == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: My-Diary-1.0.218-signed-APK
+          name: My-Diary-1.0.219-signed-APK
           path: diary-project/app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
           retention-days: 30
@@ -728,7 +730,7 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: My-Diary-1.0.218-debug-APK
+          name: My-Diary-1.0.219-debug-APK
           path: diary-project/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
