@@ -1,3 +1,15 @@
+# Check for Updates — native reminder Details bold delivered as My Diary 1.0.218 (2026-11-25)
+
+- Rechecked the actual native **Check for Updates** path after noticing that the earlier **1.0.217 / versionCode 216** build reused the installed app's same versionCode. The updater installs a new APK only when feed `versionCode > currentVersion()`; otherwise it only checks/downloads the Web bundle. Therefore, an already-installed 1.0.217 app would **not** install the native notification change from the 1.0.217 build. The earlier assumption that that build would deliver the native change through Check for Updates was incorrect.
+- Corrected this by advancing the native release to **My Diary 1.0.218 / versionCode 217**, so an installed 1.0.217 / versionCode 216 app meets the updater's `latest > currentVersion()` condition and enters the existing verified APK download/install path. No updater logic was changed.
+- Updated only the APK workflow release target, fail-closed gate, artifact names, and publish metadata to 1.0.218/217. It accepts only the currently published 1.0.217/216 baseline or the exact new 1.0.218/217 target. PR **#516** merged successfully as `47565200ca7036bbf19cd82c988e79a57cb87002`. Safety backup branch: `backup/before-native-reminder-details-1-0-218-2026-11-25`; working branch: `release/native-reminder-details-1-0-218-2026-11-25`.
+- Android workflow **45592549532** (run 547) completed with **success**. The debug build, signed Release APK, APK artifact upload, and verified update-feed publish step all passed. Signed APK artifact: `My-Diary-1.0.218-signed-APK` (artifact ID `15011273780`).
+- Live `latest.json` was independently re-fetched and now advertises **versionName 1.0.218**, **versionCode 217**, Web Update **463**, and APK URL `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk`. Published APK SHA-256: `56736e8e84736afc32395e9aa6fc5092548c58daacb19fb9dea3018c15a2213c`. Web bundle SHA-256 remains `f1209221b356a014f12700e1525fa6b003ed4427555dcc5d31bc323640d7e2e1`.
+- The APK contains the previously merged native change from PR **#514**: notification **Details/body** are bold in collapsed and expanded notification text; the existing `.setContentTitle(title)` line is unchanged. No reminder scheduling, title, ringtone, channel, saved data, or unrelated feature was changed.
+- Delivery path is now correctly versioned: **My Diary → Me → Check for Updates** should detect 217 > installed 216, download and verify the signed APK SHA-256, then open Android's installer. This logic is source-verified and the feed is published; **actual phone installation and notification display are still pending user confirmation**. After installation, test both Personal Calendar and Smart Reminder notifications: Details bold, Title unchanged. Do not mark Phone Test PASS until the user confirms.
+- MUAZZIN was not touched.
+---
+
 # Reminder notification — Details bold (My Diary 1.0.217 / Web Update 463, 2026-11-25)
 
 - User requested only the notification **Details/body** to be bold; the existing **Title** must remain unchanged and all other behavior must be preserved.
