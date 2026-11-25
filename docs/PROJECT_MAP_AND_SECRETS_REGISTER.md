@@ -6670,4 +6670,5 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Safety backup branch: `backup-before-app-share-copy-20261125`.
 - Updated `web-source/index.html`; the web publisher completed successfully as workflow run **45530888200**. Published mirror `diary-web/index.html` is byte-identical to the source (both blob SHA `6f526b414a12bd839c656d62a5ec6546cbd808d2`). Live feed advertises Web Update **461**, SHA-256 `cbd341c95865ce03877962aed0903c4c6ddb5e5f4b4e586c0ee01467c45ccf94`.
 - **Phone Test: pending.** User must install Web Update 461 through My Diary → Me → Check for Updates and verify that 📋 copies the link and 📤 Share still opens the original logo/message chooser. Do not mark Phone Test PASS until the user confirms.
+- The APK build workflow run **45530888263** failed at the early exact-published-HTML checksum gate because it started from the source-update commit before the web publisher refreshed `latest.json`. No APK was built or published by that run; the successful web-only publisher is the delivery path for this change.
 - MUAZZIN was not touched.
