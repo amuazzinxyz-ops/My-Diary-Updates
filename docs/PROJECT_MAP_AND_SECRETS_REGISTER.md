@@ -7,7 +7,7 @@
 - Final `web-source/index.html` and `diary-web/index.html` are byte-identical at blob SHA `4896b9508f10f0dfdac66e50cba421cf186ca61e` (624,275 characters). Independently recomputed UTF-8 SHA-256 is `c6216a46f9b7726d0257979aa2c2e648cd6e7d0096233597cc0d7de0a219f260`, matching live `latest.json`.
 - Live feed advertises **Web Update 462** with the matching HTML SHA-256. APK remains **My Diary 1.0.217 / versionCode 216**, SHA-256 `5a778efa0d4fd9a7b033057007f17e346e0fba164842771056fa3abf7dc36f39`; no APK rebuild, native Android code, app identity/signing, saved data, PINs, locks, reminders, or MUAZZIN files were changed.
 - Targeted static checks confirm the Copy Link label appears exactly once above the existing 📋 icon, the clipboard still copies the existing APK URL, and the original native Direct Share call remains unchanged.
-- **Phone Test: PENDING.** User must install Web Update 462 through **My Diary → Me → Check for Updates**, then confirm the Copy Link label appears above 📋 and both Copy and the existing Direct Share still work. Do not mark PASS until the user confirms.
+- **Phone Test: PASS — user-confirmed (2026-11-25).** User confirmed the Copy Link label appears above the existing 📋 paper icon and the copy action works; the existing 📤 Direct Share flow remains as before. This records the user's phone-side confirmation only; no additional device inspection is claimed.
 - MUAZZIN was not touched.
 ---
 
