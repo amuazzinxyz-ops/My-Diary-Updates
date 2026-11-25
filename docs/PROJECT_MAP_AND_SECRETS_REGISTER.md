@@ -6660,3 +6660,14 @@ The user can simply say what they want in Roman Hindi. No special template, file
 - Only `web-source/index.html` and `diary-web/index.html` changed for the code fix; source and mirror are byte-identical at blob SHA `d57bbe18b297f6d6664d30a6952734e687ab0e33`. Main-branch verification confirmed all 10 languages contain both new keys and the Personal Calendar renderer uses the dedicated label.
 - Published feed now advertises **Web Update 457** with web SHA-256 `5ae85305bade79aa2c9930e454054c20a0be6af3aaf63cee6c7a93494de56a5f`. APK remains **1.0.216 / versionCode 215**, SHA-256 `e85e706e9b8d92f5fc366459d4f5a6318d5c3557589e6ea6554ca01d83d0b319`; no native code or APK version was changed. Delivery is through **My Diary → Me → Check for Updates**.
 - **Phone-side verification is pending**. User must install Web Update 457 and confirm a Personal Calendar custom-repeat entry shows `Repeat: Custom` in Roman English. Do not mark phone test PASS until the user confirms. MUAZZIN was not touched.
+
+
+# App Share — copy APK link before sharing (Web Update 461, 2026-11-25)
+
+- User requested a paper-style copy icon beside the APK link before opening Android sharing. The icon is **📋 only** (no Copy text label).
+- Added a pre-share preview to the existing `📤 App Share Karein` button. It displays the exact existing APK download URL and a 📋 icon beside it. Tapping 📋 copies that URL to the clipboard, using the Clipboard API with a legacy copy fallback. The separate `📤 Share` action then invokes the existing native `DiaryNativeActions.shareApp()` flow.
+- Preserved the existing native share message, original Diary logo attachment, FileProvider URI permission, chooser title, and APK URL. The existing native share method was not changed.
+- Safety backup branch: `backup-before-app-share-copy-20261125`.
+- Updated `web-source/index.html`; the web publisher completed successfully as workflow run **45530888200**. Published mirror `diary-web/index.html` is byte-identical to the source (both blob SHA `6f526b414a12bd839c656d62a5ec6546cbd808d2`). Live feed advertises Web Update **461**, SHA-256 `cbd341c95865ce03877962aed0903c4c6ddb5e5f4b4e586c0ee01467c45ccf94`.
+- **Phone Test: pending.** User must install Web Update 461 through My Diary → Me → Check for Updates and verify that 📋 copies the link and 📤 Share still opens the original logo/message chooser. Do not mark Phone Test PASS until the user confirms.
+- MUAZZIN was not touched.
