@@ -377,10 +377,10 @@ jobs:
           if "setShowWhenLocked(true)" not in kotlin or "setTurnScreenOn(true)" not in kotlin or "FLAG_KEEP_SCREEN_ON" not in kotlin:
               raise SystemExit("BLOCKED: wake activity cannot reliably turn on and hold the display for the selected duration")
           for visible in ("MY DIARY REMINDER", "diary_reminder_title", "diary_reminder_details", "sendReminderAction(action)", "ACTION_SNOOZE", "ACTION_DONE", "NotificationManager"):
-          if "if (details.isNotBlank()) addLine(card, details, 17f, android.graphics.Color.rgb(55, 65, 81), true)" not in kotlin:
-            raise SystemExit("BLOCKED: reminder wake-screen Details must be explicitly bold")
               if visible not in kotlin:
                   raise SystemExit("BLOCKED: immediate full-screen reminder display/action missing: " + visible)
+          if "if (details.isNotBlank()) addLine(card, details, 17f, android.graphics.Color.rgb(55, 65, 81), true)" not in kotlin:
+              raise SystemExit("BLOCKED: reminder wake-screen Details must be explicitly bold")
           if ".setVisibility(Notification.VISIBILITY_PUBLIC)" not in kotlin:
               raise SystemExit("BLOCKED: reminder notification is not explicitly visible on the lock screen")
           if "SCREEN_BRIGHT_WAKE_LOCK" not in kotlin or "ACQUIRE_CAUSES_WAKEUP" not in kotlin or "acquire(seconds * 1000L)" not in kotlin:
