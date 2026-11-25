@@ -7,7 +7,7 @@
 - Final `web-source/index.html` and `diary-web/index.html` are byte-identical at blob SHA `813e5904ef4259637b4d2baaa986a91df72e40ef` (624,488 characters). Publisher workflow **45578416939** completed successfully.
 - Live `latest.json` advertises **Web Update 463** with web SHA-256 `f1209221b356a014f12700e1525fa6b003ed4427555dcc5d31bc323640d7e2e1`. APK remains **My Diary 1.0.217 / versionCode 216**, SHA-256 `5a778efa0d4fd9a7b033057007f17e346e0fba164842771056fa3abf7dc36f39`; no APK rebuild, native Android code, app identity/signing, saved data, PINs, locks, reminders, or MUAZZIN files were changed.
 - Targeted source checks passed: Clipboard API and fallback both copy `shareMessage`; the visible URL still uses `apkLink`; the native Direct Share call remains present exactly once. This is source/publisher verification, not a phone test.
-- **Phone Test: PENDING.** User must install Web Update 463 through **My Diary → Me → Check for Updates**, tap **Copy Link**, paste into WhatsApp (or another message app), and confirm the formatted text and APK URL appear. Also confirm the existing 📤 Direct Share still opens and shares the original logo/preview as before. Do not mark PASS until the user confirms.
+- **Phone Test: PASS — user-confirmed (2026-11-25).** User confirmed after testing Web Update 463 that Copy Link successfully copies the Direct Share-style formatted message together with the APK link. The existing 📤 Direct Share flow remains unchanged. This records the user's phone-side confirmation only; no additional device inspection is claimed.
 - MUAZZIN was not touched.
 ---
 
