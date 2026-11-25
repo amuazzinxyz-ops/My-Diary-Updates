@@ -7,8 +7,8 @@
   "sha256": "8da5bc56db262950cab6a5579b6d3a928f2bfce71c441267c1b1f3538b401e38",
   "releaseNotes": "My Diary 1.0.219: Reminder wake-screen Details are bold; notification Details are bold; Title remains unchanged. signed APK includes the latest published Diary Web Update 463 bundle. Existing app identity, notes, photos, PINs, locks, widgets, reminders, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 465,
+  "webVersion": 466,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "6ec1be54543a634cd7ac804c848ea904d7df99c2badc870c25594f22363bfd9a",
+  "webSha256": "2790b1e59d9443238c5467be7174d868f1e1b83db7f3284035844d592542bccd",
   "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
