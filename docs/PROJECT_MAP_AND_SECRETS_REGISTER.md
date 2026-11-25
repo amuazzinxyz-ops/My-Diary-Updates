@@ -1,3 +1,15 @@
+# My Diary 1.0.220 — Phone Test PASS; old-APK update PASS; Check for Updates PASS (2026-11-26)
+
+- User explicitly confirmed all three device-side checks: **New APK 1.0.220 updated over the previously installed APK — PASS**; **Phone Test — PASS**; **Check for Updates — PASS**. These are user-confirmed phone results, not inferred from CI.
+- Release identity verified against the live `latest.json`: **My Diary 1.0.220**, `versionCode 219`, **Web Update 466**, package `com.personal.diaryapp`.
+- Live APK SHA-256: `7515fee36d815d2238797eab3ecac830f8eee969eaf37ded85d23abe40730f30`. Live Web bundle SHA-256: `2790b1e59d9443238c5467be7174d868f1e1b83db7f3284035844d592542bccd`.
+- Published APK URL: `https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk`. Normal delivery path remains **My Diary → Me → Check for Updates**; no APK was sent separately in this task.
+- Build/publication evidence remains recorded above: Android workflow run `45675911511`, build preparation commit `50350002ad195b2f0c15d68c034b2163dab0ef57`, publication commit `f8e59e4501ef6743b82c4cde6407270dfac8772c`. The successful workflow confirms build/signing/publication; the three PASS items above separately record the user's device confirmation.
+- **Final status: APK update PASS; Phone Test PASS; Check for Updates PASS.** No further phone test is pending for this 1.0.220 release.
+- Register update only. No app source, APK, Web Update, saved diary data, PIN/lock logic, or MUAZZIN files were changed.
+
+---
+
 # Four Me sections — Unlock buttons hidden; phone test PASS (Web Update 466, 2026-11-25)
 
 - User requested only the visible **Unlock** buttons be removed from **Personal Calendar**, **My Documents**, **My Kharcha**, and **My Memories**. No other feature or behavior was to be changed.
