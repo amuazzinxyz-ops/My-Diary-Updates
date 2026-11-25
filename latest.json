@@ -10,5 +10,5 @@
   "webVersion": 466,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "2790b1e59d9443238c5467be7174d868f1e1b83db7f3284035844d592542bccd",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "My Diary web update 466: Unlock buttons hidden in Personal Calendar, My Documents, My Kharcha, and My Memories. PIN verification and all other features remain unchanged."
 }
