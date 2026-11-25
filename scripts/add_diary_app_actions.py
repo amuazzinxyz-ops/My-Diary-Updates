@@ -1560,7 +1560,7 @@ class DiaryReminderWakeActivity : android.app.Activity() {
         }
         addLine(card, "⏰  MY DIARY REMINDER", 15f, android.graphics.Color.rgb(139, 98, 24), true)
         addLine(card, title, 25f, android.graphics.Color.rgb(20, 35, 52), true)
-        if (details.isNotBlank()) addLine(card, details, 17f, android.graphics.Color.rgb(55, 65, 81))
+        if (details.isNotBlank()) addLine(card, details, 17f, android.graphics.Color.rgb(55, 65, 81), true)
         addLine(card, "Reminder is ringing", 14f, android.graphics.Color.rgb(100, 116, 139))
         if (snoozeUsed < snoozeLimit) actionButton(card, "Snooze  •  ${snoozeMinutes} min", android.graphics.Color.rgb(35, 105, 83), DiaryReminderScheduler.ACTION_SNOOZE)
         actionButton(card, "Done  ✓", android.graphics.Color.rgb(155, 45, 52), DiaryReminderScheduler.ACTION_DONE)
