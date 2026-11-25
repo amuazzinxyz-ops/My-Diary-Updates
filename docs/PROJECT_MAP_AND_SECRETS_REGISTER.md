@@ -1,3 +1,17 @@
+# Wrong-PIN Note-style popup consistency — Web Update 465 published (2026-11-25)
+
+- User requested the Note-style wrong-PIN popup for **Personal Calendar, My Documents, My Kharcha, My Memories, and Private Locker**, with no unrelated function changes.
+- Inspection found that the four Me-feature entry PIN prompts and the Private Locker PIN prompt already called the existing Note-style `showDiaryErrorMessage` popup (purple border/gradient, bold centered message, Close button). The remaining inconsistency was the current-PIN verification form used by the four Me-feature PIN management actions (change/remove PIN), which showed the wrong-PIN text inline.
+- Changed only that one wrong-PIN branch in `web-source/index.html` to call the existing `showDiaryErrorMessage(mf('pinWrong'), ...)`. Closing the popup preserves the previous retry behavior: re-enable submit, reset auto-submit state, clear the PIN field, and refocus it. No PIN hashing/comparison, PIN storage, recovery, unlock, Locker encryption, Pattern/Fingerprint, or saved data logic was changed.
+- Safety backup branch from the pre-edit main commit: `backup/before-me-section-pin-popup-2026-11-25`. Working branch: `fix/me-section-pin-popup-2026-11-25`. PR **#522** merged successfully as `e0d308e4bfd6e6b5f243e56bb21f1e1bdffed1ae`; the PR changed only `web-source/index.html` (1 line added, 1 removed).
+- Web publisher workflow **45628898010** (run 636) completed with **success**. It published **Web Update 465** and synchronized `diary-web/index.html` with `web-source/index.html`.
+- Verified after publication: source and mirror are byte-identical (624,530 characters; Git blob SHA `64d0db8fcd6f6bb150e1da6cfc5cdd0c85bd2000`). Live `latest.json` advertises Web Update **465** and web SHA-256 `6ec1be54543a634cd7ac804c848ea904d7df99c2badc870c25594f22363bfd9a`. APK remains **My Diary 1.0.219 / versionCode 218**; no APK rebuild or native Android change was made.
+- Static source checks confirm all five primary wrong-PIN prompts use the Note-style popup; the four Me-feature PIN-management wrong-PIN path now uses it too. The popup is the existing Note popup; no new popup design was introduced.
+- **Phone Test: PENDING** — user must install Web Update 465 through **Me → Check for Updates** and confirm wrong PIN in the five named sections shows the Note-style popup. Do not mark PASS until user confirms.
+- MUAZZIN was not touched.
+
+---
+
 # Note-style wrong-PIN popup — Personal Calendar, My Documents, My Kharcha, My Memories, and Private Locker (Web Update 464, 2026-11-25)
 
 - User requested the existing Note Lock wrong-PIN popup appearance for **Personal Calendar**, **My Documents**, **My Kharcha**, **My Memories**, and **Private Locker**, without changing any other functions.
