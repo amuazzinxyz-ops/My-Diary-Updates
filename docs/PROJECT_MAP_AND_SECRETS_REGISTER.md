@@ -2,14 +2,18 @@
 
 Last reviewed: 2026-11-26
 
-## Current verified release state — 2026-11-26
+## Current release state — 2026-11-26
 
-- User-confirmed device result: **Check for Updates PASS** and **Phone Test PASS** for Web Update 467 (confirmation received 2026-11-26).
-- Active published web version: **467**.
-- Web 467 source: `web-source/index.html` and `diary-web/index.html` are synchronized; both currently have Git blob SHA `76a3b1e536685aea78aeaeec9ebd20bcc458c7a3` (624,883 characters).
-- Update metadata: `latest.json` currently declares `webVersion: 467` and `webSha256: ffe90a553f7ca993bf2cb867d473452628bc195de2e46df8a27e199ad4ef9884`.
-- Rollback: Web Updates **468–470 are not active/published**; their commits remain in Git history as recovery backups and are not offered by the current update pointer.
-- APK was not changed by this rollback: `versionName: 1.0.220`, `versionCode: 219`, SHA-256 `7515fee36d815d2238797eab3ecac830f8eee969eaf37ded85d23abe40730f30`.
+- Latest published web version: **468**. GitHub Actions web-only publish workflow completed successfully for the new header-button settings update.
+- Web 468 adds **Button Set Karein** inside the existing Me menu. Me and × header buttons can be selected separately, dragged to a new position within the Diary heading, resized independently, saved on the phone, or reset.
+- Recently Deleted fullscreen layout is kept separate from the saved header-button positions.
+- Static verification: the complete main Diary JavaScript block parses successfully; source and mirror are byte-identical.
+- Web source: `web-source/index.html` and `diary-web/index.html` both have Git blob SHA `f8694f67ee75323f8e15ab6d45387b2743196bbb` (632,762 characters).
+- Update metadata: `latest.json` declares `webVersion: 468` and `webSha256: e720d4a7ab28b2efcc9153082016a4b9dc06993b7fb8b9e3822bff9f1075a7cc`.
+- **Phone Test for Web 468 is pending.** Do not mark Phone Test PASS until the user confirms on their device.
+- APK remains unchanged: `versionName: 1.0.220`, `versionCode: 219`, SHA-256 `7515fee36d815d2238797eab3ecac830f8eee969eaf37ded85d23abe40730f30`. No APK was published for this task.
+- Previous user-confirmed device result: **Check for Updates PASS** and **Phone Test PASS** for Web Update 467 (2026-11-26).
+- Rollback history: Web 468–470 had previously been rolled back. The new Web 468 is a fresh release created after that rollback; Web 469–470 remain inactive.
 - Register recovery: the current main-branch register file was empty. This document was restored from its last non-empty committed copy (`803cf475f6fb38cd350575696534d1de550ddd81`) and this current state was added. Historical dated notes below are retained for context; re-check live repository/workflow settings before acting on them.
 
 ## Project boundary — IMPORTANT
