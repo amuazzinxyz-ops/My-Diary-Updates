@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 486,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "964ade81bf4d864ef480c052591c5b842b66a28d68d9b4bc9eb9cf842cc8fbf5",
+  "webSha256": "99200a1baaea4241e2231c62650b0a85108006e11c26fe2cf24a9d45bc89885d",
   "webReleaseNotes": "My Diary Web Update 486: corrected the Me button size slider to resize the actual button box (36×36px at 100%, scaled from 75% to 160%) while keeping the Me text at its original 13px size. The button's original design is retained at 100%. No other controls or functions changed. Phone test pending."
 }
