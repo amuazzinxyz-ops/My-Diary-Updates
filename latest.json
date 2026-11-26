@@ -7,8 +7,8 @@
   "sha256": "7515fee36d815d2238797eab3ecac830f8eee969eaf37ded85d23abe40730f30",
   "releaseNotes": "My Diary 1.0.220 APK remains unchanged. The current web update is Web 468; it adds separate position and size controls for the Diary heading Me and × buttons through the Me menu. Phone test for Web 468 is pending.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 468,
+  "webVersion": 469,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "e720d4a7ab28b2efcc9153082016a4b9dc06993b7fb8b9e3822bff9f1075a7cc",
-  "webReleaseNotes": "My Diary Web Update 468: adds Button Set Karein inside the Me menu. Me and × header buttons can be selected separately, dragged to a new position, resized, saved on the phone, or reset. Recently Deleted fullscreen layout remains separate. APK 1.0.220 is unchanged."
+  "webSha256": "bda53ae30bbc8edbbd04e6c7ea54d9658864875a261a0315db582e8917664a58",
+  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
