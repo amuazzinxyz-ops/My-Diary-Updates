@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 477,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "8923b0ab372b959ccf69e8d1e2a461ef60fc3f3d22a191c8d1d88123e5b67c33",
+  "webSha256": "957c55ca475fbdc6e6ffabce1ddb659c211269ba6eaefddbe586575919620754",
   "webReleaseNotes": "My Diary Web Update 477: vertically centers only the Button Set Karein label. Its 16px size, bold weight, and left alignment remain unchanged. Phone test pending."
 }
