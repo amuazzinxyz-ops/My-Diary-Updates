@@ -2507,6 +2507,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   function meFeatureToday(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
   function meFeatureCurrentTime(){var d=new Date();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
   function meFeatureDisplayDate(value){var raw=String(value||'');var match=raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);return match?match[3]+'-'+match[2]+'-'+match[1]:raw;}
+  function meFeatureDisplayTime(value){var raw=String(value||'');var match=raw.match(/^(\d{1,2}):(\d{2})$/);if(!match)return raw;var hour=Number(match[1]),minute=Number(match[2]);if(hour<0||hour>23||minute<0||minute>59)return raw;return String(hour%12||12).padStart(2,'0')+':'+match[2]+' '+(hour>=12?'PM':'AM');}
   function calendarReminderOccurrences(record){
    var start=String(record.date||'').split('-').map(Number),clock=String(record.time||'09:00').split(':').map(Number);
    if(start.length!==3||!start[0]||!start[1]||!start[2])return [];
@@ -2939,7 +2940,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
      if(kind==='reminders'){
       var reminderDateTimeBadges=mfEl('div',{class:'diary-calendar-badge-row'});
       reminderDateTimeBadges.appendChild(mfEl('span',{class:'diary-calendar-badge'},'📅 '+displayDate));
-      if(record.time)reminderDateTimeBadges.appendChild(mfEl('span',{class:'diary-calendar-badge diary-calendar-time-badge'},'⏰ '+String(record.time)));
+      if(record.time)reminderDateTimeBadges.appendChild(mfEl('span',{class:'diary-calendar-badge diary-calendar-time-badge'},'⏰ '+meFeatureDisplayTime(record.time)));
       card.appendChild(reminderDateTimeBadges);
      }else if(kind!=='calendar')card.appendChild(mfEl('small',{},displayDate));
      if(kind==='reminders'&&record.details)card.appendChild(mfEl('p',{},record.details));if(kind==='reminders'&&record.repeatDaily)card.appendChild(mfEl('small',{},t('calendarRepeat')+': '+t('repeatDaily')));if(kind==='reminders'&&!record.repeatDaily&&record.repeatCustomDays&&record.repeatCustomDays.length)card.appendChild(mfEl('small',{},t('calendarRepeat')+': Custom'));if(kind==='reminders'&&record.soundUri)card.appendChild(mfEl('small',{},'🔔 '+(record.soundLabel||mf('reminderSound'))));if(kind==='reminders')card.appendChild(mfEl('small',{},mf('snoozeInterval')+': '+(record.snoozeMinutes||10)+' min • '+mf('snoozeLimit')+': '+(record.snoozeLimit===undefined?3:record.snoozeLimit)+' • '+mf('ringDuration')+': '+((record.ringDurationSeconds||30)>=60?((record.ringDurationSeconds||30)/60)+' min':(record.ringDurationSeconds||30)+' sec')+' • '+mf('ringVolume')+': '+(record.ringVolumePercent===undefined?80:record.ringVolumePercent)+'%'));
@@ -2954,7 +2955,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
       var calendarTypeClass=record.type==='birthday'?' diary-calendar-type-birthday':(record.type==='anniversary'?' diary-calendar-type-anniversary':' diary-calendar-type-event');
       calendarBadges.appendChild(mfEl('span',{class:'diary-calendar-badge diary-calendar-type-badge'+calendarTypeClass},mf(record.type||'event')));
       calendarBadges.appendChild(mfEl('span',{class:'diary-calendar-badge diary-calendar-date-badge'},'📅 '+displayDate));
-      if(record.time)calendarBadges.appendChild(mfEl('span',{class:'diary-calendar-badge diary-calendar-time-badge'},'⏰ '+record.time));
+      if(record.time)calendarBadges.appendChild(mfEl('span',{class:'diary-calendar-badge diary-calendar-time-badge'},'⏰ '+meFeatureDisplayTime(record.time)));
       card.appendChild(calendarBadges);
       if(record.details)card.appendChild(mfEl('p',{},record.details));
       if(record.repeat&&record.repeat!=='none')card.appendChild(mfEl('small',{},t('calendarRepeatLabel')+': '+t('repeat'+record.repeat.charAt(0).toUpperCase()+record.repeat.slice(1))));
