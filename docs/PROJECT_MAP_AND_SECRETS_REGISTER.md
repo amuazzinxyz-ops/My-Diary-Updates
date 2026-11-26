@@ -17,6 +17,14 @@ Last reviewed: 2026-11-26
 - Recently Deleted fullscreen layout remains isolated: its × button retains the original top-right position and default 36px size even when a custom heading-button layout is saved.
 - APK remains unchanged: `versionName: 1.0.220`, `versionCode: 219`, SHA-256 `7515fee36d815d2238797eab3ecac830f8eee969eaf37ded85d23abe40730f30`. No APK was requested or published.
 
+## APK 1.0.220 to 1.0.221 included-work audit — 2026-11-26
+
+- Compared the exact 1.0.220 publication commit `f8e59e4501` (baseline metadata: Web 466) against the 1.0.221 build/publication. The 1.0.221 workflow embeds the exact current `web-source/index.html` advertised by live `latest.json`: Web 478, not the older Web 466 bundle.
+- Therefore the cumulative, retained Web changes after the 1.0.220 baseline are present in 1.0.221: Web 467 Calendar/Smart Reminder saved-entry AM/PM display; Web 468 header-button position/size controls; Web 469 Button Set Karein integration and independent Recently Deleted close-button behavior; Web 470 move-label wording; Web 472's verified rollback to Web 470 behavior; Web 473 move-hint/close-label cleanup; Web 474–477 Button Set Karein label sizing, boldness, alignment and vertical centering; and Web 478 resetting Move Mode OFF when the Me menu closes while preserving saved positions/sizes.
+- Important exclusions: the Web 471 saved-position auto-restore behavior was explicitly rolled back by Web 472 and is not included. The temporary My Documents back-arrow alignment experiments before the rollback to Web 467 were also not retained in the final Web 478 source. These are not silently counted as included features.
+- Native updater comparison: the only post-1.0.220 Android updater code change in this release is the Web downloader's explicit `Accept-Encoding: identity` header to prevent compressed-transfer bytes from causing SHA-256 mismatch. The existing native updater behavior, including keeping the Me menu open after Update Check refresh, was already present before the 1.0.220 baseline.
+- Result: **all retained/published Check for Updates work after APK 1.0.220 is included in APK 1.0.221's Web 478 bundle**, plus the native SHA transport fix. Rolled-back experiments are excluded. This is a source/build audit, not a user phone-test PASS.
+
 ## Web 478 SHA mismatch investigation — 2026-11-26
 
 - User reported that Web Update 478 repeatedly fails in Check for Updates with a SHA-256 mismatch. Do not mark Web 478 phone-test PASS until the user confirms successful installation and behavior.
