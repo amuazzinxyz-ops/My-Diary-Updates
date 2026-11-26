@@ -4,8 +4,9 @@ Last reviewed: 2026-11-26
 
 ## Current release state — 2026-11-26
 
-- Latest published web version: **479**. Personal Calendar now offers **✍️ Apni Kism (Custom)**; selecting it shows a required category-name field, and saved entries display and restore the custom category when edited. Birthday, Anniversary, and Zaroori Din remain unchanged. **Phone Test pending.**
-- Web 479 source and mirror are byte-identical. SHA-256: `4c3c41e8876c3915210d315fb97b4fef18c19ed81245789e00bb6fb55c34e472`; `latest.json` declares `webVersion: 479` with the same SHA-256.
+- Latest published web version: **480**. Personal Calendar entry category buttons now fit their label width and move wholly to the next line only when the current line has insufficient room. Existing Calendar categories, entries, and reminder functions are unchanged. **Phone Test pending.**
+- Web 480 source and mirror are byte-identical. SHA-256: `876419a6c19ed734663b3c8b9bf651669bb320c73aee9f0a5c5f03b04c5a9355`; `latest.json` declares `webVersion: 480` with the same SHA-256.
+- Web 479 remains the previous known-good release. Its custom category option, save, and edit behavior are **Phone Test PASS — user confirmed on 2026-11-26**.
 - Web 478 remains the previous known-good release. It resets header-button Move Mode to OFF whenever the Me menu closes while preserving saved button positions and sizes. **Phone Test PASS — user confirmed on 2026-11-26 after installing APK 1.0.221 over APK 1.0.220 and confirming Check for Updates PASS.**
 - Web 477 remains the previous known-good release and rollback target. **Phone Test PASS — Web Update 477 confirmed by the user on 2026-11-26.** The “Button Set Karein” label is now vertically centered; 16px bold size and left alignment remain correct.
 - Web 476 history: increased the label from 15px to 16px, retaining bold weight 950 and left alignment. Phone test pending.
@@ -32,6 +33,14 @@ Last reviewed: 2026-11-26
 - **Native updater SHA-256 fix:** Web bundle downloader requests `Accept-Encoding: identity` so the downloaded bytes match the published SHA-256. **Phone Test PASS** through successful Check for Updates.
 - **APK 1.0.221 / versionCode 220:** installed over APK 1.0.220; Check for Updates PASS; both fixes above are included. **Phone Test PASS — user confirmed 2026-11-26.**
 - Next task must be added below this completed release history; do not reopen or alter these PASS items unless a new issue is reported.
+
+## Web Update 480 — Personal Calendar category badge wrapping — 2026-11-26
+
+- Changed only the Personal Calendar saved-entry category badge layout: its width follows the category label; when the current line has insufficient room, the whole badge wraps to the next line. If enough room exists, it stays on the same line.
+- Existing Birthday, Anniversary, Zaroori Din, and Custom labels, date/time badges, saved entries, editing, and reminder behavior are unchanged. No APK was created; this is delivered through Check for Updates.
+- Web source and mirror are byte-identical. Published Web Update metadata: **480**; SHA-256: `876419a6c19ed734663b3c8b9bf651669bb320c73aee9f0a5c5f03b04c5a9355`.
+- Backup before editing: `backups/web-source-index-before-calendar-badge-wrap-2026-11-26.html`.
+- **Phone Test pending — awaiting user confirmation.**
 
 ## Web Update 479 — Personal Calendar custom category — 2026-11-26
 
