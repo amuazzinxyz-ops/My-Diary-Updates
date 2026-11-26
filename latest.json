@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 482,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "75e56d89debf1423ee7e5e5df30619b8b57f983d7baa65befca0e3bfa6d22def",
+  "webSha256": "fa46ca5d31ac99632c5da07ebbc884915e86e816be94a12c5d4641aaffdb8453",
   "webReleaseNotes": "My Diary Web Update 482: the Diary heading Me button now has the same 36×36px outer size as the × button. The Me label remains 13px and centered; its colour, 3D appearance, position controls, click action, and all other functions are unchanged. Phone test pending."
 }
