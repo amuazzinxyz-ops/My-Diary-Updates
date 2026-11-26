@@ -82,6 +82,7 @@ web_method = r"""
                     connection.useCaches = false
                     connection.instanceFollowRedirects = true
                     connection.setRequestProperty("Cache-Control", "no-cache, no-store")
+                    connection.setRequestProperty("Accept-Encoding", "identity")
                     connection.setRequestProperty("User-Agent", "MyDiaryWebUpdater/1.0")
                     val digest = java.security.MessageDigest.getInstance("SHA-256")
                     var total = 0L
