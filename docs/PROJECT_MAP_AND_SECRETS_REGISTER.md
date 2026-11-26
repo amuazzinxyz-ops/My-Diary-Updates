@@ -1,3 +1,16 @@
+# My Diary — Personal Calendar and Smart Reminder AM/PM display fix (2026-11-26)
+
+- **Scope:** Display-only correction in the two saved-entry cards. Personal Calendar and Smart Reminder now format stored HH:mm values as 12-hour time with AM/PM (examples: 02:30 PM, 09:30 AM).
+- **Implementation:** Added one shared display formatter and used it only where the two saved-entry cards render their time labels. The stored record.time, alarm timestamps/scheduling, ringtone, repeat/custom days, snooze, and edit-form time input remain unchanged.
+- **Source:** Updated web-source/index.html; the web publisher synchronized diary-web/index.html. Both source and mirror resolve to blob 76a3b1e536685aea78aeaeec9ebd20bcc458c7a3.
+- **Published web update: PASS.** GitHub Actions web-only publisher run https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/45736020455 completed successfully. Live feed is Web Update 467, app remains 1.0.220 / versionCode 219, web SHA-256: ffe90a553f7ca993bf2cb867d473452628bc195de2e46df8a27e199ad4ef9884.
+- **Safety backup:** backups/diary-web-index-before-calendar-reminder-am-pm-2026-11-26.html preserves the complete pre-change web source.
+- **APK:** No APK was requested or published. The automatic APK workflow run https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/45736020586 stopped at its exact-source/mirror preflight because it checked out the web-source commit before the web-only publisher had synchronized the mirror; APK build, release publication, and APK upload steps were all skipped. The web-only publisher then completed and source/mirror were verified identical. No new APK was produced by that run.
+- **Phone test:** PENDING — user has not yet confirmed testing Web Update 467 on the phone. Do not mark Phone Test PASS until explicit confirmation.
+- **Master Register safety backup:** backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-calendar-reminder-am-pm-2026-11-26.md.
+
+---
+
 # My Diary 1.0.220 — Build and signed-publication verification PASS (2026-11-26)
 
 - **Build verification: PASS.** GitHub Actions run [45675911511](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/45675911511), workflow run #553, completed on 2026-11-25 at 18:34:44 UTC with conclusion **success**. Source/preparation commit: `50350002ad195b2f0c15d68c034b2163dab0ef57`.
