@@ -5,10 +5,10 @@
   "versionName": "1.0.220",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
   "sha256": "7515fee36d815d2238797eab3ecac830f8eee969eaf37ded85d23abe40730f30",
-  "releaseNotes": "My Diary 1.0.220 APK is unchanged. Web Update 470 only shortens the Button Set Karein move-button text to “Position badalne ke liye”. No other behavior or design changes. Phone test for Web 470 is pending.",
+  "releaseNotes": "My Diary 1.0.220 APK is unchanged. Web Update 471 fixes the saved Me and × header-button positions being reapplied whenever Diary opens. No other functions or design changes. Phone test for Web 471 is pending.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 471,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "a7f2d78bce423fd578a06d178c8ee3d7e0c89936a7a2e7bd46bbcc627ea1b19e",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "My Diary Web Update 471: when Diary opens, reload and apply the saved Me and × header-button positions and sizes from phone storage. This addresses the buttons returning to their original positions after closing and reopening Diary. No other functions or design changes. APK 1.0.220 remains unchanged."
 }
