@@ -4,9 +4,11 @@ Last reviewed: 2026-11-26
 
 ## Current release state — 2026-11-26
 
-- Latest published web version: **476**. Web 476 changes only the “↔ Button Set Karein” label from **15px to 16px**, keeping left alignment and bold weight 950. No other button, function, or layout was changed.
-- Web 476 source and mirror are byte-identical. Published Web 476 SHA-256: `ef234ad7e8b1182bf2368c332e506b3e87c89571e2d92c5010f0261b7900938e`; `latest.json` declares `webVersion: 476` with the same SHA-256.
-- Web 476 publication metadata is live on `main`. User phone test: **PENDING**.
+- Latest published web version: **477**. Web 477 vertically centers only the “↔ Button Set Karein” label using flex alignment. Its **16px** size, bold weight 950, and left alignment remain unchanged; no other control or function was changed.
+- Web 477 source and mirror are byte-identical. Published Web 477 SHA-256: `8923b0ab372b959ccf69e8d1e2a461ef60fc3f3d22a191c8d1d88123e5b67c33`; `latest.json` declares `webVersion: 477` with the same SHA-256.
+- Web 477 publication metadata is live on `main`. User phone test: **PENDING**.
+- Web 476 history: increased the label from 15px to 16px, retaining bold weight 950 and left alignment. Phone test pending.
+- Web 476 source and mirror were byte-identical. SHA-256: `ef234ad7e8b1182bf2368c332e506b3e87c89571e2d92c5010f0261b7900938e`.
 - Web 475 history: the label was 15px, left-aligned, with bold weight 950; phone test pending.
 - Web 475 source and mirror were byte-identical. Published Web 475 SHA-256: `070d762968501ae0f3a2fd8a57ef0cd7bee7eedb0fbfc3192e8018b1314a4fb0`; its release metadata was published before Web 476.
 - **Phone Test PASS — Web Update 473 confirmed by the user on 2026-11-26.** Web 473 removed only the Move Mode instruction text inside Button Set Karein and changed its inner close button label from “Band Karein” to “Band”.
