@@ -3453,10 +3453,10 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    var sizeLabel=el('label',{},'Size: '),sizeValue=el('strong',{},'100%');
    var size=el('input',{type:'range',min:'75',max:'160',step:'5',value:'100','aria-label':'Button size'});sizeLabel.appendChild(sizeValue);
    var move=el('button',{type:'button'},'Position badalne ke liye');
-   var hint=el('div',{},'Move mode ON karke heading mein selected button ko ungli se kheench kar jagah badlein. Phir Save dabayein.');
-   var saveBtn=el('button',{type:'button'},'Save'),reset=el('button',{type:'button'},'Reset'),cancel=el('button',{type:'button'},'Band Karein');
+
+   var saveBtn=el('button',{type:'button'},'Save'),reset=el('button',{type:'button'},'Reset'),cancel=el('button',{type:'button'},'Band');
    var actions=el('div',{id:'diaryHeaderButtonLayoutActions'});actions.appendChild(saveBtn);actions.appendChild(reset);actions.appendChild(cancel);
-   editor.appendChild(targetLabel);editor.appendChild(sizeLabel);editor.appendChild(size);editor.appendChild(move);editor.appendChild(hint);editor.appendChild(actions);
+   editor.appendChild(targetLabel);editor.appendChild(sizeLabel);editor.appendChild(size);editor.appendChild(move);editor.appendChild(actions);
    mePanel.insertBefore(openBtn,checkUpdatesBtn);mePanel.insertBefore(editor,checkUpdatesBtn);
    function refresh(){size.value=String(Math.round(layout[selected].size*100));sizeValue.textContent=size.value+'%';move.textContent=editMode?'Position badalna band karein':'Position badalne ke liye';}
    function setMode(on){editMode=!!on;panel.classList.toggle('diary-header-buttons-editing',editMode);meBtn.style.touchAction=editMode&&selected==='me'?'none':'';close.style.touchAction=editMode&&selected==='close'?'none':'';refresh();}
