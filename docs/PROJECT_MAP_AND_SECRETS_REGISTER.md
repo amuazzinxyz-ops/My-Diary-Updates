@@ -4,7 +4,7 @@ Last reviewed: 2026-11-26
 
 ## Current release state — 2026-11-26
 
-- Latest published web version: **482**. The Diary heading **Me** button now uses a fixed **36 × 36 px** outer box to match the × button; its 13 px label remains centered and unchanged, and its existing colour, 3D appearance, position controls, and click behavior are preserved. **Phone Test pending.** Personal Calendar category, date, and time badges now use compact spacing so short labels such as “Dawat” plus date and time stay together on one line whenever they fit; if the row genuinely lacks room, badges wrap naturally. Existing Calendar data and reminder behavior are unchanged. **Phone Test PASS — user confirmed on 2026-11-26.**
+- Latest published web version: **482**. The Diary heading **Me** button now uses a fixed **36 × 36 px** outer box to match the × button; its 13 px label remains centered and unchanged, and its existing colour, 3D appearance, position controls, and click behavior are preserved. **Phone Test PASS — user confirmed on 2026-11-26.** Personal Calendar category, date, and time badges now use compact spacing so short labels such as “Dawat” plus date and time stay together on one line whenever they fit; if the row genuinely lacks room, badges wrap naturally. Existing Calendar data and reminder behavior are unchanged. **Phone Test PASS — user confirmed on 2026-11-26.**
 - Web 481 source and mirror are byte-identical. SHA-256: `a6dc79b385696dd24cd42767db10cffef7bfd733dfd87a9d0a6f92ddeec443c8`; `latest.json` declares `webVersion: 481` with the same SHA-256.
 - Web 479 remains the previous known-good release. Its custom category option, save, and edit behavior are **Phone Test PASS — user confirmed on 2026-11-26**.
 - Web 478 remains the previous known-good release. It resets header-button Move Mode to OFF whenever the Me menu closes while preserving saved button positions and sizes. **Phone Test PASS — user confirmed on 2026-11-26 after installing APK 1.0.221 over APK 1.0.220 and confirming Check for Updates PASS.**
@@ -34,6 +34,21 @@ Last reviewed: 2026-11-26
 - **APK 1.0.221 / versionCode 220:** installed over APK 1.0.220; Check for Updates PASS; both fixes above are included. **Phone Test PASS — user confirmed 2026-11-26.**
 - Next task must be added below this completed release history; do not reopen or alter these PASS items unless a new issue is reported.
 
+## Permanent release safety rule — SHA-256 verification (effective 2026-11-26)
+
+For every future Web Update, complete these checks before publishing. Never type or reuse a guessed or stale checksum:
+
+1. Read the current Master Register, live `latest.json`, actual source HTML, mirror HTML, and latest successful release before editing.
+2. Make only the requested change and create a dated backup before risky edits.
+3. Calculate SHA-256 directly from the exact final UTF-8 file bytes using a trusted SHA-256 implementation.
+4. Confirm source HTML and mirror HTML are byte-identical, then independently calculate and compare both SHA-256 values.
+5. Set `latest.json` `webVersion` and `webSha256` to the verified version and exact calculated hash. The metadata hash must equal both source and mirror hashes.
+6. After committing, re-fetch the published source, mirror, and `latest.json` from `main`; recalculate/compare hashes and confirm live metadata matches the published files.
+7. If any comparison fails, stop. Do not publish or report the update as ready; correct the mismatch first.
+8. Record the verified version, hashes, backup, and commit in this register. Keep repository verification and phone testing separate; mark Phone Test PASS only after the user confirms the update on their device.
+
+This is a mandatory release gate for every future web update. APK creation is not required for a web-only update unless the user explicitly asks.
+
 ## Web Update 482 — Diary Me button 36 × 36 px — 2026-11-26
 
 - Set only `#diaryDiaryMeBtn` to a fixed 36 × 36 px border-box, matching the Diary heading × button's 36 × 36 px outer dimensions.
@@ -41,9 +56,9 @@ Last reviewed: 2026-11-26
 - No other UI, data, or app behavior changed. No APK created; delivery is through Check for Updates.
 - Source and mirror are byte-identical. Web 482 SHA-256: `fa46ca5d31ac99632c5da07ebbc884915e86e816be94a12c5d4641aaffdb8453`; `latest.json` declares `webVersion: 482` with the same SHA-256.
 - Backup: `backups/web-source-index-before-me-button-36px-2026-11-26.html`.
-- **Phone Test pending — awaiting user confirmation.**
+- **Phone Test PASS — user confirmed on 2026-11-26.**
 
-- **Web 482 SHA-256 correction — 2026-11-26:** Repeated phone SHA mismatch was traced to stale/wrong `latest.json` checksum, not the APK downloader. Independently hashed the exact UTF-8 bytes from `web-source/index.html`; SHA-256 is `fa46ca5d31ac99632c5da07ebbc884915e86e816be94a12c5d4641aaffdb8453`. Confirmed `diary-web/index.html` is byte-identical and has the same hash. The calculated Git blob SHA also matches GitHub's blob SHA, confirming the bytes used for the hash. Updated only `latest.json` `webSha256` to the verified value; APK was not built. **Phone Test pending — user must retry Check for Updates.**
+- **Web 482 SHA-256 correction — 2026-11-26:** Repeated phone SHA mismatch was traced to stale/wrong `latest.json` checksum, not the APK downloader. Independently hashed the exact UTF-8 bytes from `web-source/index.html`; SHA-256 is `fa46ca5d31ac99632c5da07ebbc884915e86e816be94a12c5d4641aaffdb8453`. Confirmed `diary-web/index.html` is byte-identical and has the same hash. The calculated Git blob SHA also matches GitHub's blob SHA, confirming the bytes used for the hash. Updated only `latest.json` `webSha256` to the verified value; APK was not built. **Phone Test PASS — user confirmed on 2026-11-26 after the SHA-256 metadata correction.**
 
 ## Web Update 481 — Personal Calendar date/time badges inline fit — 2026-11-26
 
