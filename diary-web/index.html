@@ -3445,6 +3445,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    function applyAll(){apply('me');apply('close');}
    function save(){try{localStorage.setItem(key,JSON.stringify(layout));return true;}catch(err){return false;}}
    load();applyAll();
+   /* Re-read the saved layout whenever Diary opens, so a close/reopen cannot leave stale default positions on the header buttons. */
+   window.__diaryReloadHeaderButtonLayout=function(){load();applyAll();};
    var openBtn=el('button',{id:'diaryHeaderButtonLayoutOpen',type:'button'},'↔ Button Set Karein');
    var editor=el('div',{id:'diaryHeaderButtonLayoutEditor',hidden:'hidden'});
    var targetLabel=el('label',{},'Button chunein');
@@ -4878,7 +4880,7 @@ if(patternPanel)box.appendChild(patternPanel);
   }catch(error){try{openOverlay();}catch(ignore){}}
  };
  function openDiaryPanel(){
-  makeOverlay();var ov=document.getElementById('diaryMyNotesOverlay');
+  makeOverlay();if(typeof window.__diaryReloadHeaderButtonLayout==='function')window.__diaryReloadHeaderButtonLayout();var ov=document.getElementById('diaryMyNotesOverlay');
   ov.classList.add('open');ov.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';
   if(!diaryOverlayHistoryOpen){try{history.pushState({diaryOverlay:true},'',location.pathname+location.search+'#diary');diaryOverlayHistoryOpen=true;}catch(e){}}
   showingTrash=false;showingFavouriteNotes=false;var allBtn=document.getElementById('diaryMyNotesAllNotes');if(allBtn)allBtn.style.display='';var trashBtn=document.getElementById('diaryMyNotesTrash');if(trashBtn)trashBtn.setAttribute('aria-expanded','false');refreshLabels();newNote();renderList();
