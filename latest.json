@@ -7,8 +7,8 @@
   "sha256": "20b3529674dc4a3375c480ca454b06113d67314f48f404d30bc6e7747591cf35",
   "releaseNotes": "My Diary 1.0.221: fixes Web Update SHA verification transport by requesting identity-encoded download bytes; includes published Web Update 478 (Me-menu close resets Move Mode OFF while preserving saved positions and sizes). Existing Reminder details formatting and all other app functions remain unchanged. Signed APK includes the latest published Diary Web Update 478 bundle. Existing app identity, notes, photos, PINs, locks, widgets, reminders, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 484,
+  "webVersion": 485,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "4d0eb125e0e1314c571fba2949278574f496855939fc9bed86081cd2f99afafc",
-  "webReleaseNotes": "My Diary Web Update 484: restored the existing Me button size slider in Button Set Karein. The fixed 36px width, height, padding and font-size CSS constraints were removed only for the Diary Me button so the existing 75%-160% size slider can resize it again. The × button, Position badalne ke liye control, saved positions, and all other functions remain unchanged. Phone test pending."
+  "webSha256": "b0a83f776187d4d58a6f0aecc40d093f633da3d3f5307e48770c7eaf6b6a3c36",
+  "webReleaseNotes": "My Diary Web Update 485: restore the Me button's original fixed 36×36px outer box at its default 100% size, while keeping those dimensions non-important so the existing 75%–160% size slider can resize the button text and padding. No other UI or controls changed. Phone test pending."
 }
