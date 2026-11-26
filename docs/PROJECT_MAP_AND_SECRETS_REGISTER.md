@@ -36,7 +36,7 @@ Last reviewed: 2026-11-26
 
 - Added **✍️ Apni Kism (Custom)** as a fourth Personal Calendar type. Selecting it reveals a required category-name field; the saved Calendar badge displays the user's own category and editing restores it.
 - Existing Birthday, Anniversary, and Zaroori Din options and previously saved Calendar records remain unchanged. Custom category is stored separately as `customType`; existing reminder, repeat, alarm, date, and details fields are preserved.
-- Web source and mirror are kept byte-identical. Published Web Update metadata: **479**; SHA-256: `656e17c6ead4ac720aa73e251f0c1f7ed40c8409211c20695ab6d880ac6e98d6`.
+- Web source and mirror are kept byte-identical. Published Web Update metadata: **479**; SHA-256: `4c3c41e8876c3915210d315fb97b4fef18c19ed81245789e00bb6fb55c34e472`.
 - Backup before editing: `backups/web-source-index-before-calendar-custom-category-2026-11-26.html`.
 - **Phone Test pending** — do not mark PASS until the user confirms the new option, save/edit behavior, and existing Calendar entries on the phone.
 
