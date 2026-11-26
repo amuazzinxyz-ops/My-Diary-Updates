@@ -4,7 +4,7 @@ Last reviewed: 2026-11-26
 
 ## Current release state — 2026-11-26
 
-- Latest published web version: **481**. Personal Calendar category, date, and time badges now use compact spacing so short labels such as “Dawat” plus date and time stay together on one line whenever they fit; if the row genuinely lacks room, badges wrap naturally. Existing Calendar data and reminder behavior are unchanged. **Phone Test PASS — user confirmed on 2026-11-26.**
+- Latest published web version: **482**. The Diary heading **Me** button now uses a fixed **36 × 36 px** outer box to match the × button; its 13 px label remains centered and unchanged, and its existing colour, 3D appearance, position controls, and click behavior are preserved. **Phone Test pending.** Personal Calendar category, date, and time badges now use compact spacing so short labels such as “Dawat” plus date and time stay together on one line whenever they fit; if the row genuinely lacks room, badges wrap naturally. Existing Calendar data and reminder behavior are unchanged. **Phone Test PASS — user confirmed on 2026-11-26.**
 - Web 481 source and mirror are byte-identical. SHA-256: `a6dc79b385696dd24cd42767db10cffef7bfd733dfd87a9d0a6f92ddeec443c8`; `latest.json` declares `webVersion: 481` with the same SHA-256.
 - Web 479 remains the previous known-good release. Its custom category option, save, and edit behavior are **Phone Test PASS — user confirmed on 2026-11-26**.
 - Web 478 remains the previous known-good release. It resets header-button Move Mode to OFF whenever the Me menu closes while preserving saved button positions and sizes. **Phone Test PASS — user confirmed on 2026-11-26 after installing APK 1.0.221 over APK 1.0.220 and confirming Check for Updates PASS.**
@@ -33,6 +33,15 @@ Last reviewed: 2026-11-26
 - **Native updater SHA-256 fix:** Web bundle downloader requests `Accept-Encoding: identity` so the downloaded bytes match the published SHA-256. **Phone Test PASS** through successful Check for Updates.
 - **APK 1.0.221 / versionCode 220:** installed over APK 1.0.220; Check for Updates PASS; both fixes above are included. **Phone Test PASS — user confirmed 2026-11-26.**
 - Next task must be added below this completed release history; do not reopen or alter these PASS items unless a new issue is reported.
+
+## Web Update 482 — Diary Me button 36 × 36 px — 2026-11-26
+
+- Set only `#diaryDiaryMeBtn` to a fixed 36 × 36 px border-box, matching the Diary heading × button's 36 × 36 px outer dimensions.
+- Kept the “Me” label at 13 px, centered with no internal padding; its text is not reduced or hidden. Existing gold/purple 3D styling, position/move controls, and click behavior remain unchanged.
+- No other UI, data, or app behavior changed. No APK created; delivery is through Check for Updates.
+- Source and mirror are byte-identical. Web 482 SHA-256: `75e56d89debf1423ee7e5e5df30619b8b57f983d7baa65befca0e3bfa6d22def`; `latest.json` declares `webVersion: 482` with the same SHA-256.
+- Backup: `backups/web-source-index-before-me-button-36px-2026-11-26.html`.
+- **Phone Test pending — awaiting user confirmation.**
 
 ## Web Update 481 — Personal Calendar date/time badges inline fit — 2026-11-26
 
