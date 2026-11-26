@@ -1885,7 +1885,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     selectedNotes.sort(function(a,b){return (b.created||b.updated||0)-(a.created||a.updated||0);});
     selectedNotes.forEach(function(note){
      var item=el('button',{type:'button',class:'diary-calendar-note'},(note.title||t('untitled')).trim()||t('untitled'));
-     item.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();calendarPanel.hidden=true;calendarBtn.setAttribute('aria-expanded','false');mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');openNote(note.id);});
+     item.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();calendarPanel.hidden=true;calendarBtn.setAttribute('aria-expanded','false');if(panel.__diaryResetHeaderButtonMoveMode)panel.__diaryResetHeaderButtonMoveMode();mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');openNote(note.id);});
      calendarNotes.appendChild(item);
     });
     if(!selectedNotes.length&&!selectedEvents.length)calendarNotes.appendChild(el('p',{class:'diary-calendar-no-notes'},t('calendarNoNotes')));
@@ -2051,7 +2051,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    privateLockerMessage('Lock OFF hai. Yahan se Lock On karein ya Locker kholein.',false);
   }
   function privateLockerOpen(){
-   mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');
+   if(panel.__diaryResetHeaderButtonMoveMode)panel.__diaryResetHeaderButtonMoveMode();mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');
    privateLockerModal.hidden=false;window.__privateLockerFingerprintPending=false;privateLockerContent.replaceChildren();privateLockerGate.replaceChildren();privateLockerKey=null;privateLockerRawKey=null;privateLockerRecords=[];
    privateLockerStatus.textContent='Aapki private likhai alag encrypted storage mein rahegi.';
    Promise.all([privateLockerGet('meta','config'),privateLockerAll()]).then(function(result){
@@ -2871,7 +2871,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     });
     form.appendChild(mfEl('p',{class:'diary-me-feature-pin-note'},mf('pinNote')));
    }
-   meFeatureContent.append(form,meFeatureStatus);meFeatureModal.hidden=false;mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');
+   meFeatureContent.append(form,meFeatureStatus);meFeatureModal.hidden=false;if(panel.__diaryResetHeaderButtonMoveMode)panel.__diaryResetHeaderButtonMoveMode();mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');
   }
   function showMeFeaturePinManager(kind){
    var wrap=mfEl('div',{class:'diary-me-feature-form diary-me-feature-pin-form'});
@@ -3101,7 +3101,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    meFeatureBack.textContent=mf('back');meFeatureLock.hidden=true;meFeatureManage.hidden=!meFeatureProtected(kind);meFeatureContent.replaceChildren();meFeatureStatus.textContent='';
    meFeatureSearchInput=null;meFeatureCategoryFilter=null;meFeatureSearchPanel=null;
    if(kind==='memories'||kind==='documents'){meFeatureContent.appendChild(meFeatureTools(kind));meFeatureContent.appendChild(meFeatureForm(kind));}else if(kind==='calendar'||kind==='reminders'){var featureForm=meFeatureForm(kind),featureTools=meFeatureTools(kind),searchPanel=mfEl('div',{class:'diary-me-feature-tools'});if(meFeatureSearchInput){searchPanel.appendChild(meFeatureSearchInput);featureForm.insertBefore(searchPanel,featureForm.firstChild);meFeatureSearchPanel=searchPanel;}meFeatureContent.appendChild(featureForm);}else{meFeatureContent.appendChild(meFeatureForm(kind));meFeatureContent.appendChild(meFeatureTools(kind));}meFeatureContent.append(meFeatureStatus,meFeatureList);updateMeFeatureBulkUI();
-   meFeatureModal.hidden=false;meFeatureModal.scrollTop=0;meFeatureContent.scrollTop=0;mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');window.requestAnimationFrame(function(){meFeatureModal.scrollTop=0;meFeatureContent.scrollTop=0;});
+   meFeatureModal.hidden=false;meFeatureModal.scrollTop=0;meFeatureContent.scrollTop=0;if(panel.__diaryResetHeaderButtonMoveMode)panel.__diaryResetHeaderButtonMoveMode();mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');window.requestAnimationFrame(function(){meFeatureModal.scrollTop=0;meFeatureContent.scrollTop=0;});
    renderMeFeatureList(kind);
   }
   function closeMeFeature(){
@@ -3461,6 +3461,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    mePanel.insertBefore(openBtn,checkUpdatesBtn);mePanel.insertBefore(editor,checkUpdatesBtn);
    function refresh(){size.value=String(Math.round(layout[selected].size*100));sizeValue.textContent=size.value+'%';move.textContent=editMode?'Position badalna band karein':'Position badalne ke liye';}
    function setMode(on){editMode=!!on;panel.classList.toggle('diary-header-buttons-editing',editMode);meBtn.style.touchAction=editMode&&selected==='me'?'none':'';close.style.touchAction=editMode&&selected==='close'?'none':'';refresh();}
+   panel.__diaryResetHeaderButtonMoveMode=function(){drag=null;setMode(false);};
    openBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();editor.hidden=!editor.hidden;if(!editor.hidden){target.value=selected;refresh();}else setMode(false);});
    target.addEventListener('change',function(){selected=target.value==='close'?'close':'me';setMode(false);refresh();});
    size.addEventListener('input',function(){layout[selected].size=clamp((parseInt(size.value,10)||100)/100,.75,1.6);apply(selected);sizeValue.textContent=size.value+'%';});
@@ -3586,7 +3587,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   panel.appendChild(head);panel.appendChild(body);ov.appendChild(panel);document.body.appendChild(ov);setupDiaryStatusPopup(status,ov);
   applyDiaryFont();
   close.addEventListener('click',closeOverlay);
-  ov.addEventListener('click',function(e){if(e.target===ov)closeOverlay();if(!meWrap.contains(e.target)&&!worldClockModal.contains(e.target)&&!widgetSettingsModal.contains(e.target)&&!mePanel.hidden){mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');}});
+  ov.addEventListener('click',function(e){if(e.target===ov)closeOverlay();if(!meWrap.contains(e.target)&&!worldClockModal.contains(e.target)&&!widgetSettingsModal.contains(e.target)&&!mePanel.hidden){if(panel.__diaryResetHeaderButtonMoveMode)panel.__diaryResetHeaderButtonMoveMode();mePanel.hidden=true;meBtn.setAttribute('aria-expanded','false');panel.classList.remove('diary-me-menu-open');}});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&ov.classList.contains('open'))closeOverlay()});
   search.addEventListener('input',renderList);
   document.getElementById('diaryMyNotesSave').addEventListener('click',saveNote);
