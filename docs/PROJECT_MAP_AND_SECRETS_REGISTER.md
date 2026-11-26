@@ -4,7 +4,7 @@ Last reviewed: 2026-11-26
 
 ## Current release state — 2026-11-26
 
-- Latest published web version: **478**. Web 478 resets header-button Move Mode to OFF whenever the Me menu closes, including outside taps and navigation into Calendar notes, Private Locker, and feature pages. It preserves saved button positions and sizes. Phone test pending.
+- Latest published web version: **478**. Web 478 resets header-button Move Mode to OFF whenever the Me menu closes, including outside taps and navigation into Calendar notes, Private Locker, and feature pages. It preserves saved button positions and sizes. **Phone Test PASS — user confirmed on 2026-11-26 after installing APK 1.0.221 over APK 1.0.220 and confirming Check for Updates PASS.**
 - Web 478 source and mirror are byte-identical. SHA-256: `04374ed939422483b0b832f95e442ddba530b90aa5bc7501460c515d11dd7530`; `latest.json` declares `webVersion: 478` with the same SHA-256.
 - Web 477 remains the previous known-good release and rollback target. **Phone Test PASS — Web Update 477 confirmed by the user on 2026-11-26.** The “Button Set Karein” label is now vertically centered; 16px bold size and left alignment remain correct.
 - Web 476 history: increased the label from 15px to 16px, retaining bold weight 950 and left alignment. Phone test pending.
@@ -15,7 +15,7 @@ Last reviewed: 2026-11-26
 - Web 472 rollback and its user-confirmed Phone Test PASS remain in release history. Web 472 rolled back the Web 471 saved-position reload change and restored the exact Web 470 source content.
 - Web 469 added **Button Set Karein** inside the existing Me menu. Web 470 only shortened its move-button label to “Position badalne ke liye”. Web 471's saved-position reload change was rolled back in Web 472; Web 472 used the exact Web 470 source content.
 - Recently Deleted fullscreen layout remains isolated: its × button retains the original top-right position and default 36px size even when a custom heading-button layout is saved.
-- APK remains unchanged: `versionName: 1.0.220`, `versionCode: 219`, SHA-256 `7515fee36d815d2238797eab3ecac830f8eee969eaf37ded85d23abe40730f30`. No APK was requested or published.
+- Latest APK: **versionName 1.0.221**, **versionCode 220**, SHA-256 `20b3529674dc4a3375c480ca454b06113d67314f48f404d30bc6e7747591cf35`. **Phone Test PASS — installed successfully as an update over APK 1.0.220; app Check for Updates also PASS, user-confirmed 2026-11-26.**
 
 ## APK 1.0.220 to 1.0.221 included-work audit — 2026-11-26
 
@@ -27,7 +27,7 @@ Last reviewed: 2026-11-26
 
 ## Web 478 SHA mismatch investigation — 2026-11-26
 
-- User reported that Web Update 478 repeatedly fails in Check for Updates with a SHA-256 mismatch. Do not mark Web 478 phone-test PASS until the user confirms successful installation and behavior.
+- User reported that Web Update 478 repeatedly fails in Check for Updates with a SHA-256 mismatch. **Resolved and Phone Test PASS on 2026-11-26:** user confirmed APK 1.0.221 installed over 1.0.220 and Check for Updates passed.
 - Verified current `web-source/index.html` and `diary-web/index.html` are now byte-identical; latest.json advertises Web 478 and the same source SHA-256.
 - Found the prior Android build workflow was stale: it still required Web Update 466 and the old APK baseline, and a previous build attempt failed because the source/mirror were temporarily out of sync.
 - Backups created before the updater/release-workflow change:
@@ -36,7 +36,7 @@ Last reviewed: 2026-11-26
   - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-web-identity-1.0.221-2026-11-26.md`
 - Commit `e3b3e13dc82e795ad20896276c5426a155c7df0f` adds an explicit `Accept-Encoding: identity` request header to the Web bundle downloader and updates the guarded signed build pipeline for My Diary 1.0.221 / versionCode 220, based on installed 1.0.220 / code 219 and Web 478.
 - GitHub Actions build run **45814673042** completed with **SUCCESS**. Signing keystore/alias validation, debug build, signed Release build, release verification/publication, signed APK upload, and APK upload all passed. The run published My Diary **1.0.221 / versionCode 220** to live latest.json with Web Update **478**. APK SHA-256: `20b3529674dc4a3375c480ca454b06113d67314f48f404d30bc6e7747591cf35`; Web HTML SHA-256: `04374ed939422483b0b832f95e442ddba530b90aa5bc7501460c515d11dd7530`. Update is available through the app's **Check for Updates**; no separate APK delivery. User phone test is still pending; do not mark Web 478 or APK 1.0.221 Phone Test PASS until user confirms.
-- Delivery preference unchanged: publish only through the app's Check for Updates; do not send a separate APK file. Phone test remains pending.
+- Delivery preference unchanged: publish only through the app's Check for Updates; do not send a separate APK file. **Phone Test PASS confirmed by user on 2026-11-26.**
 
 ## Project boundary — IMPORTANT
 
