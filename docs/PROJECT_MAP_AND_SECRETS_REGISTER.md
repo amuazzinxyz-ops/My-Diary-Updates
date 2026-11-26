@@ -4,14 +4,14 @@ Last reviewed: 2026-11-26
 
 ## Current release state — 2026-11-26
 
-- Latest published web version: **473**. Web 473 removes only the Move Mode instruction text inside Button Set Karein and changes its inner close button label from “Band Karein” to “Band”. The move-mode button, Save/Reset actions, layout behavior, and unrelated “Band Karein” labels remain unchanged.
-- Web 473 source and mirror were updated from the identical Web 472 baseline. Published web SHA-256 metadata: `70d1ae68b77fba1d1d1428807dffea2bfe017d589a55a23e109b2f71cd35547a`.
-- **Phone Test PASS — Web Update 473 confirmed by the user on 2026-11-26.**
-- Web 473 source and mirror are byte-identical at the current published revision; both files were verified to have the same Git blob SHA before this phone-test confirmation.
+- Latest published web version: **474**. Web 474 changes only the “↔ Button Set Karein” label to **14px** and slightly increases its bold weight from 900 to 950. The change is isolated to `#diaryHeaderButtonLayoutOpen`; editor controls and all other buttons retain their previous sizing.
+- Web 474 source and mirror are byte-identical: `web-source/index.html` and `diary-web/index.html` both have Git blob SHA `4e3d9405f585e8cd088c1b79567a2e04d0e42cb0` (632,712 characters).
+- Published Web 474 SHA-256: `a23c79d9351057211b0d91bfc3159bbdbe34bc2ac5f708f2a68b750c1ec9465d`; `latest.json` declares `webVersion: 474` with the same SHA-256.
+- Web 474 publication metadata is live on `main`. User phone test: **PENDING**.
+- **Phone Test PASS — Web Update 473 confirmed by the user on 2026-11-26.** Web 473 removed only the Move Mode instruction text inside Button Set Karein and changed its inner close button label from “Band Karein” to “Band”.
 - Web 472 rollback and its user-confirmed Phone Test PASS remain in release history. Web 472 rolled back the Web 471 saved-position reload change and restored the exact Web 470 source content.
 - Web 469 added **Button Set Karein** inside the existing Me menu. Web 470 only shortened its move-button label to “Position badalne ke liye”. Web 471's saved-position reload change was rolled back in Web 472; Web 472 used the exact Web 470 source content.
 - Recently Deleted fullscreen layout remains isolated: its × button retains the original top-right position and default 36px size even when a custom heading-button layout is saved.
-- Update metadata: `latest.json` declares `webVersion: 473` and `webSha256: 70d1ae68b77fba1d1d1428807dffea2bfe017d589a55a23e109b2f71cd35547a`.
 - APK remains unchanged: `versionName: 1.0.220`, `versionCode: 219`, SHA-256 `7515fee36d815d2238797eab3ecac830f8eee969eaf37ded85d23abe40730f30`. No APK was requested or published.
 
 ## Project boundary — IMPORTANT
