@@ -1,0 +1,14 @@
+{
+  "appName": "My Diary",
+  "packageName": "com.personal.diaryapp",
+  "versionCode": 220,
+  "versionName": "1.0.221",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
+  "sha256": "20b3529674dc4a3375c480ca454b06113d67314f48f404d30bc6e7747591cf35",
+  "releaseNotes": "My Diary 1.0.221: fixes Web Update SHA verification transport by requesting identity-encoded download bytes; includes published Web Update 478 (Me-menu close resets Move Mode OFF while preserving saved positions and sizes). Existing Reminder details formatting and all other app functions remain unchanged. Signed APK includes the latest published Diary Web Update 478 bundle. Existing app identity, notes, photos, PINs, locks, widgets, reminders, and saved data are preserved.",
+  "minimumSupportedVersionCode": 1,
+  "webVersion": 483,
+  "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
+  "webSha256": "ff59e34c068dc0481b594813c39a68a3ef4f0db157e1b9f04d09105126e387ec",
+  "webReleaseNotes": "My Diary Web Update 483: removed the 🌈 Do Rang (Gradient) option only from the 🖼️ Photo Lagayein chooser. Gradient choices in Note Cover Photo and Details Image remain unchanged. All other Photo Lagayein options and app functions remain unchanged. Phone test pending."
+}
