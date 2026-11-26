@@ -5,19 +5,14 @@ Last reviewed: 2026-11-26
 ## Current release state — 2026-11-26
 
 - Latest published web version: **473**. Web 473 removes only the Move Mode instruction text inside Button Set Karein and changes its inner close button label from “Band Karein” to “Band”. The move-mode button, Save/Reset actions, layout behavior, and unrelated “Band Karein” labels remain unchanged.
-- Web 473 source and mirror were updated from the identical Web 472 baseline; published web SHA-256: `70d1ae68b77fba1d1d1428807dffea2bfe017d589a55a23e109b2f71cd35547a`. User phone test: **PENDING**.
-- Previous Web 472 rollback and user-confirmed Phone Test PASS remain recorded below as history.
-- Previous latest published web version: **472**. Web 472 rolls back the Web 471 saved-position reload change and restores the exact Web 470 source content. The Me and × button positions behavior is therefore back to the Web 470 state.
-- Web 469 added **Button Set Karein** inside the existing Me menu. Web 470 only shortens its move-button label to “Position badalne ke liye”. Web 471's saved-position reload change was rolled back in Web 472; Web 472 uses the exact Web 470 source content.
+- Web 473 source and mirror were updated from the identical Web 472 baseline. Published web SHA-256 metadata: `70d1ae68b77fba1d1d1428807dffea2bfe017d589a55a23e109b2f71cd35547a`.
+- **Phone Test PASS — Web Update 473 confirmed by the user on 2026-11-26.**
+- Web 473 source and mirror are byte-identical at the current published revision; both files were verified to have the same Git blob SHA before this phone-test confirmation.
+- Web 472 rollback and its user-confirmed Phone Test PASS remain in release history. Web 472 rolled back the Web 471 saved-position reload change and restored the exact Web 470 source content.
+- Web 469 added **Button Set Karein** inside the existing Me menu. Web 470 only shortened its move-button label to “Position badalne ke liye”. Web 471's saved-position reload change was rolled back in Web 472; Web 472 used the exact Web 470 source content.
 - Recently Deleted fullscreen layout remains isolated: its × button retains the original top-right position and default 36px size even when a custom heading-button layout is saved.
-- Web 472 rollback source and mirror are byte-identical: `web-source/index.html` and `diary-web/index.html` both have Git blob SHA `d248d3efcb6da2e555576900836332cb09dbdea1` (632,817 characters), matching the Web 470 source.
-- Update metadata: `latest.json` declares `webVersion: 472` and `webSha256: 5e3cbf51866dc932a24e46b7205911371d90bda6d5a378a753b953cded8325c8`.
-- Web 472 rollback publication metadata is live. The APK remains unchanged; no APK was requested or published.
-- **Phone Test PASS — Web Update 472 rollback confirmed by the user on 2026-11-26.** User reports the phone test passed.
-- APK remains unchanged: `versionName: 1.0.220`, `versionCode: 219`, SHA-256 `7515fee36d815d2238797eab3ecac830f8eee969eaf37ded85d23abe40730f30`.
-- Previous user-confirmed device result: **Check for Updates PASS** and **Phone Test PASS** for Web Update 467 (2026-11-26).
-- Rollback history: Web 468–470 had previously been rolled back. The new Web 468, 469, and 470 are fresh releases created after that rollback.
-- Register recovery: the current main-branch register file was empty. This document was restored from its last non-empty committed copy (`803cf475f6fb38cd350575696534d1de550ddd81`) and this current state was added. Historical dated notes below are retained for context; re-check live repository/workflow settings before acting on them.
+- Update metadata: `latest.json` declares `webVersion: 473` and `webSha256: 70d1ae68b77fba1d1d1428807dffea2bfe017d589a55a23e109b2f71cd35547a`.
+- APK remains unchanged: `versionName: 1.0.220`, `versionCode: 219`, SHA-256 `7515fee36d815d2238797eab3ecac830f8eee969eaf37ded85d23abe40730f30`. No APK was requested or published.
 
 ## Project boundary — IMPORTANT
 
