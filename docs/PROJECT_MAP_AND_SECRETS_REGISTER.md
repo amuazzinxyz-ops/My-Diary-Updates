@@ -19,6 +19,15 @@ Last reviewed: 2026-11-26
 - Recently Deleted fullscreen layout remains isolated: its × button retains the original top-right position and default 36px size even when a custom heading-button layout is saved.
 - Latest APK: **versionName 1.0.221**, **versionCode 220**, SHA-256 `20b3529674dc4a3375c480ca454b06113d67314f48f404d30bc6e7747591cf35`. **Phone Test PASS — installed successfully as an update over APK 1.0.220; app Check for Updates also PASS, user-confirmed 2026-11-26.**
 
+## Web Update 486 — resize the Me button itself, not its text — 2026-11-26
+
+- Corrected the previous interpretation: the size slider must change the **actual Me button box**, not the text size. The Me label stays at its original 13px; the button width, height, min-width, max-width, min-height, and max-height now scale together from 75% to 160%.
+- At 100%, the button remains the original 36×36px. Its existing appearance, label, colour, 3D styling, and action are retained. The × button, position behavior, and all other controls/functions were not changed.
+- Updated `web-source/index.html` and `diary-web/index.html`; both are byte-identical with Git blob SHA `b1674e673f6ee9a5bb25028a197031a3ed82f6c8`.
+- `latest.json` declares **webVersion 486** and Web SHA-256 `964ade81bf4d864ef480c052591c5b842b66a28d68d9b4bc9eb9cf842cc8fbf5`. APK remains **1.0.221 / versionCode 220**; no APK was built.
+- Commits: source `7c455981ddf1fda5d71702f12252561f628d179f`; mirror `2b90462da541c25cc04f1c32e81dad6a238445ca`; metadata `7a4348ee858ec94a70083aa9d4c7e450d963b981`.
+- Delivery is through Check for Updates. **Phone Test pending** until user confirmation.
+
 ## Web Update 485 — preserve Me button's original size and restore slider — 2026-11-26
 
 - Corrected the Web 484 visual regression: the Diary Me button keeps its original **36×36px outer box at 100%**. The six 36px width/height declarations are restored as normal CSS declarations (not `!important`), so they preserve the default box without blocking the existing JavaScript size control.
