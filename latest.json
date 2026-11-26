@@ -5,10 +5,10 @@
   "versionName": "1.0.220",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
   "sha256": "7515fee36d815d2238797eab3ecac830f8eee969eaf37ded85d23abe40730f30",
-  "releaseNotes": "My Diary 1.0.220 APK is unchanged. Web Update 471 fixes the saved Me and × header-button positions being reapplied whenever Diary opens. No other functions or design changes. Phone test for Web 471 is pending.",
+  "releaseNotes": "My Diary 1.0.220 APK is unchanged. Web Update 472 restores the exact Web 470 source content, rolling back the Web 471 saved-position reload change. Phone test for Web 472 is pending.",
   "minimumSupportedVersionCode": 1,
   "webVersion": 472,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
   "webSha256": "5e3cbf51866dc932a24e46b7205911371d90bda6d5a378a753b953cded8325c8",
-  "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
+  "webReleaseNotes": "My Diary Web Update 472: rollback of Web 471. Restores the exact Web 470 source content and behavior. APK 1.0.220 remains unchanged."
 }
