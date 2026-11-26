@@ -1,3 +1,16 @@
+# My Documents back-arrow alignment correction — Web Update 469 (2026-11-26)
+
+- **Correction:** User reported that Web Update 468 did not appear in Check for Updates. Investigation found the Documents-only class toggle had mistakenly been placed in `showMeFeaturePin(kind)` instead of the normal `showMeFeaturePage(kind)`. The class was moved to the correct page-opening function, removed from the PIN screen, and added to cleanup on close.
+- **Scope:** Only the My Documents back-arrow glyph position is adjusted (2px down) to match My Memories. Button dimensions, shape, label, text, behavior, My Memories, other features, and saved data remain unchanged.
+- **Corrected source commit:** `c7d2e314e9c4414ccd6076439cbbb510f5e00f5c`; corrected source blob `d7f5ed13222616c0eeeb55bdb4b97d187cfc8b30`.
+- **Published:** Web Update **469**; publish commit `783845c20ce8544282bab84be3d8d4e10cd19869`. Live `web-source/index.html` and `diary-web/index.html` are byte-identical at blob `d7f5ed13222616c0eeeb55bdb4b97d187cfc8b30`. Live `latest.json`: app version **1.0.220 / versionCode 219**, webVersion **469**, web SHA-256 `66646e3a71faed49fc828c3b66508c2c85636cfc95b0ec10dd1ccd9649d312e5`.
+- **APK:** None requested or published. Delivery remains **My Diary → Me → Check for Updates**.
+- **Phone Test:** PENDING — wait for user's explicit phone confirmation. Do not mark PASS yet.
+- **Safety backup:** `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-documents-arrow-update-469-correction-2026-11-26.md`; backup commit `f71dd35bd38bfb9960ecb5206182e3f656e82e28`.
+- **Previous Web Update 468 note:** Superseded for this task; the initial class placement did not affect the normal Documents page. Use corrected Web Update 469 for phone testing.
+
+---
+
 # My Documents back-arrow alignment — Web Update 468 (2026-11-26)
 
 - **User request:** In 📁 My Documents, only the back-arrow mark appeared higher than the title. User asked for the arrow mark to align like 📒 My Memories. The back button itself, its size, shape, label, and behavior must remain unchanged.
