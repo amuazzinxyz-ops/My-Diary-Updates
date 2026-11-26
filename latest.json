@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 473,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "dc47eeb5a2f6d4f1ed93964cf2b86ca49c4ef8353c25297db6a5faec0a456b7d",
-  "webReleaseNotes": "My Diary Web Update 473: removed the Move Mode instruction text from Button Set Karein and shortened only its inner close button label from “Band Karein” to “Band”. No other behavior changed. Phone test pending."
+  "webSha256": "70d1ae68b77fba1d1d1428807dffea2bfe017d589a55a23e109b2f71cd35547a",
+  "webReleaseNotes": "My Diary Web Update 473: removed the Move Mode instruction text from Button Set Karein and shortened only its inner close button label from “Band Karein” to “Band”. SHA-256 metadata corrected after verification. Phone test pending."
 }
