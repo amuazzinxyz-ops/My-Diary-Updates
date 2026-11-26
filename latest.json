@@ -7,8 +7,8 @@
   "sha256": "7515fee36d815d2238797eab3ecac830f8eee969eaf37ded85d23abe40730f30",
   "releaseNotes": "My Diary 1.0.220: includes Web Updates 464, 465, and 466 (Note-style wrong-PIN popup, Copy Link for the formatted share message, and automatic PIN verification without visible Unlock buttons). Reminder wake-screen Details and notification Details remain bold; Title remains unchanged. Signed APK includes the latest published Diary Web Update 466 bundle. Existing app identity, notes, photos, PINs, locks, widgets, reminders, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 469,
+  "webVersion": 470,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "66646e3a71faed49fc828c3b66508c2c85636cfc95b0ec10dd1ccd9649d312e5",
+  "webSha256": "ef115dc6e3a72c7718a05c78601f540aa82c133c8b19349d71c5faeb0ad1c66b",
   "webReleaseNotes": "My Diary web bundle update. Existing saved data and app identity are preserved."
 }
