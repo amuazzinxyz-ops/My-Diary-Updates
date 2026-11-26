@@ -4,9 +4,11 @@ Last reviewed: 2026-11-26
 
 ## Current release state — 2026-11-26
 
-- Latest published web version: **475**. Web 475 changes only the “↔ Button Set Karein” label to **15px**, left-aligns its text, and retains the slightly stronger bold weight (950). The change is isolated to `#diaryHeaderButtonLayoutOpen`; editor controls and all other buttons retain their previous sizing and alignment.
-- Web 475 source and mirror were updated from the identical Web 474 baseline and are intended to be byte-identical. Published Web 475 SHA-256: `070d762968501ae0f3a2fd8a57ef0cd7bee7eedb0fbfc3192e8018b1314a4fb0`; `latest.json` declares `webVersion: 475` with the same SHA-256.
-- Web 475 publication metadata is live on `main`. User phone test: **PENDING**.
+- Latest published web version: **476**. Web 476 changes only the “↔ Button Set Karein” label from **15px to 16px**, keeping left alignment and bold weight 950. No other button, function, or layout was changed.
+- Web 476 source and mirror are byte-identical. Published Web 476 SHA-256: `ef234ad7e8b1182bf2368c332e506b3e87c89571e2d92c5010f0261b7900938e`; `latest.json` declares `webVersion: 476` with the same SHA-256.
+- Web 476 publication metadata is live on `main`. User phone test: **PENDING**.
+- Web 475 history: the label was 15px, left-aligned, with bold weight 950; phone test pending.
+- Web 475 source and mirror were byte-identical. Published Web 475 SHA-256: `070d762968501ae0f3a2fd8a57ef0cd7bee7eedb0fbfc3192e8018b1314a4fb0`; its release metadata was published before Web 476.
 - **Phone Test PASS — Web Update 473 confirmed by the user on 2026-11-26.** Web 473 removed only the Move Mode instruction text inside Button Set Karein and changed its inner close button label from “Band Karein” to “Band”.
 - Web 472 rollback and its user-confirmed Phone Test PASS remain in release history. Web 472 rolled back the Web 471 saved-position reload change and restored the exact Web 470 source content.
 - Web 469 added **Button Set Karein** inside the existing Me menu. Web 470 only shortened its move-button label to “Position badalne ke liye”. Web 471's saved-position reload change was rolled back in Web 472; Web 472 used the exact Web 470 source content.

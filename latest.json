@@ -7,8 +7,8 @@
   "sha256": "7515fee36d815d2238797eab3ecac830f8eee969eaf37ded85d23abe40730f30",
   "releaseNotes": "My Diary 1.0.220 APK is unchanged. Web Update 475 changes only the Button Set Karein label to 15px and left-aligns it; phone test pending.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 475,
+  "webVersion": 476,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "070d762968501ae0f3a2fd8a57ef0cd7bee7eedb0fbfc3192e8018b1314a4fb0",
-  "webReleaseNotes": "My Diary Web Update 475: changed only the “↔ Button Set Karein” label to 15px and left-aligned its text, retaining the slightly stronger bold weight. Phone test pending."
+  "webSha256": "ef234ad7e8b1182bf2368c332e506b3e87c89571e2d92c5010f0261b7900938e",
+  "webReleaseNotes": "My Diary Web Update 476: increased only the “↔ Button Set Karein” label from 15px to 16px. Left alignment and bold weight remain unchanged. Phone test pending."
 }
