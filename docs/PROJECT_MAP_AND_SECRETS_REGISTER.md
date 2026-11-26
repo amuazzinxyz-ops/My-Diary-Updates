@@ -4,7 +4,10 @@ Last reviewed: 2026-11-26
 
 ## Current release state — 2026-11-26
 
-- Latest published web version: **472**. Web 472 rolls back the Web 471 saved-position reload change and restores the exact Web 470 source content. The Me and × button positions behavior is therefore back to the Web 470 state.
+- Latest published web version: **473**. Web 473 removes only the Move Mode instruction text inside Button Set Karein and changes its inner close button label from “Band Karein” to “Band”. The move-mode button, Save/Reset actions, layout behavior, and unrelated “Band Karein” labels remain unchanged.
+- Web 473 source and mirror were updated from the identical Web 472 baseline; published web SHA-256: `dc47eeb5a2f6d4f1ed93964cf2b86ca49c4ef8353c25297db6a5faec0a456b7d`. User phone test: **PENDING**.
+- Previous Web 472 rollback and user-confirmed Phone Test PASS remain recorded below as history.
+- Previous latest published web version: **472**. Web 472 rolls back the Web 471 saved-position reload change and restores the exact Web 470 source content. The Me and × button positions behavior is therefore back to the Web 470 state.
 - Web 469 added **Button Set Karein** inside the existing Me menu. Web 470 only shortens its move-button label to “Position badalne ke liye”. Web 471's saved-position reload change was rolled back in Web 472; Web 472 uses the exact Web 470 source content.
 - Recently Deleted fullscreen layout remains isolated: its × button retains the original top-right position and default 36px size even when a custom heading-button layout is saved.
 - Web 472 rollback source and mirror are byte-identical: `web-source/index.html` and `diary-web/index.html` both have Git blob SHA `d248d3efcb6da2e555576900836332cb09dbdea1` (632,817 characters), matching the Web 470 source.
