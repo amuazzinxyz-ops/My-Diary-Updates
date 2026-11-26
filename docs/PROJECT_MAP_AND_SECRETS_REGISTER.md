@@ -4,7 +4,7 @@ Last reviewed: 2026-11-26
 
 ## Current release state — 2026-11-26
 
-- Latest published web version: **482**. The Diary heading **Me** button now uses a fixed **36 × 36 px** outer box to match the × button; its 13 px label remains centered and unchanged, and its existing colour, 3D appearance, position controls, and click behavior are preserved. **Phone Test PASS — user confirmed on 2026-11-26.** Personal Calendar category, date, and time badges now use compact spacing so short labels such as “Dawat” plus date and time stay together on one line whenever they fit; if the row genuinely lacks room, badges wrap naturally. Existing Calendar data and reminder behavior are unchanged. **Phone Test PASS — user confirmed on 2026-11-26.**
+- Latest published web version: **483**. Web 483 removes the **🌈 Do Rang (Gradient)** choice only from the **🖼️ Photo Lagayein** chooser; gradient choices in Note Cover Photo and Details Image remain available and unchanged. The other Photo Lagayein option(s), saved data, and all unrelated functions remain unchanged. **Phone Test pending — awaiting user confirmation.** Web 482 Diary heading **Me** button remains 36 × 36 px with its 13 px centered label, original colour, 3D appearance, position controls, and click behavior unchanged. **Phone Test PASS — user confirmed on 2026-11-26.** Personal Calendar category, date, and time badges retain compact spacing so short labels such as “Dawat” plus date and time stay together on one line whenever they fit; if the row genuinely lacks room, badges wrap naturally. Existing Calendar data and reminder behavior are unchanged. **Phone Test PASS — user confirmed on 2026-11-26.**
 - Web 481 source and mirror are byte-identical. SHA-256: `a6dc79b385696dd24cd42767db10cffef7bfd733dfd87a9d0a6f92ddeec443c8`; `latest.json` declares `webVersion: 481` with the same SHA-256.
 - Web 479 remains the previous known-good release. Its custom category option, save, and edit behavior are **Phone Test PASS — user confirmed on 2026-11-26**.
 - Web 478 remains the previous known-good release. It resets header-button Move Mode to OFF whenever the Me menu closes while preserving saved button positions and sizes. **Phone Test PASS — user confirmed on 2026-11-26 after installing APK 1.0.221 over APK 1.0.220 and confirming Check for Updates PASS.**
@@ -18,6 +18,15 @@ Last reviewed: 2026-11-26
 - Web 469 added **Button Set Karein** inside the existing Me menu. Web 470 only shortened its move-button label to “Position badalne ke liye”. Web 471's saved-position reload change was rolled back in Web 472; Web 472 used the exact Web 470 source content.
 - Recently Deleted fullscreen layout remains isolated: its × button retains the original top-right position and default 36px size even when a custom heading-button layout is saved.
 - Latest APK: **versionName 1.0.221**, **versionCode 220**, SHA-256 `20b3529674dc4a3375c480ca454b06113d67314f48f404d30bc6e7747591cf35`. **Phone Test PASS — installed successfully as an update over APK 1.0.220; app Check for Updates also PASS, user-confirmed 2026-11-26.**
+
+## Web Update 483 — remove Gradient option only from Photo Lagayein — 2026-11-26
+
+- In `attachDiaryColourChooser`, the 🌈 Do Rang (Gradient) button is now appended only when `kind !== 'Photo'`. Therefore it is hidden only in the 🖼️ Photo Lagayein chooser.
+- The Note Cover Photo and Details Image chooser paths still show the existing Gradient option. The Photo chooser's image-selection behavior and all other existing options/behavior are unchanged. No other screens, settings, saved data, or app functions were changed.
+- Source and mirror are byte-identical; both Git blob SHA values: `cc979a16999f836ca66d54a27a80818c6b43bae5`. Verified Web 483 SHA-256: `ff59e34c068dc0481b594813c39a68a3ef4f0db157e1b9f04d09105126e387ec`. Live `latest.json` now declares `webVersion: 483` and the same SHA-256.
+- Backups made before editing: `backups/web-source-before-photo-gradient-removal-2026-11-26.html` and `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-photo-gradient-removal-2026-11-26.md`.
+- Source commit: `038f9ff5beb585e9c6d3b0bf95878ea5a4a59651`; mirror commit: `40eca9660de6e66dc2761f3f12acdc49b5141f17`; metadata commit: `bb3162f7f1f2d13a38109309b4b6e74c2a8af312`.
+- No APK created. Delivery is through the app's Check for Updates. **Phone Test pending — do not mark PASS until the user confirms on the phone.**
 
 ## APK 1.0.220 to 1.0.221 included-work audit — 2026-11-26
 
