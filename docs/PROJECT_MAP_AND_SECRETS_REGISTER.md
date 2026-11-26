@@ -32,6 +32,14 @@ Last reviewed: 2026-11-26
 - **APK 1.0.221 / versionCode 220:** installed over APK 1.0.220; Check for Updates PASS; both fixes above are included. **Phone Test PASS — user confirmed 2026-11-26.**
 - Next task must be added below this completed release history; do not reopen or alter these PASS items unless a new issue is reported.
 
+## Web Update 479 — Personal Calendar custom category — 2026-11-26
+
+- Added **✍️ Apni Kism (Custom)** as a fourth Personal Calendar type. Selecting it reveals a required category-name field; the saved Calendar badge displays the user's own category and editing restores it.
+- Existing Birthday, Anniversary, and Zaroori Din options and previously saved Calendar records remain unchanged. Custom category is stored separately as `customType`; existing reminder, repeat, alarm, date, and details fields are preserved.
+- Web source and mirror are kept byte-identical. Published Web Update metadata: **479**; SHA-256: `4240e20ed5ba2b35eb4ca486a7320cd1004e7dbb213c7758cd1a8780241e3f0e`.
+- Backup before editing: `backups/web-source-index-before-calendar-custom-category-2026-11-26.html`.
+- **Phone Test pending** — do not mark PASS until the user confirms the new option, save/edit behavior, and existing Calendar entries on the phone.
+
 ## Web 478 SHA mismatch investigation — 2026-11-26
 
 - User reported that Web Update 478 repeatedly fails in Check for Updates with a SHA-256 mismatch. **Resolved and Phone Test PASS on 2026-11-26:** user confirmed APK 1.0.221 installed over 1.0.220 and Check for Updates passed.

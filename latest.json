@@ -7,8 +7,8 @@
   "sha256": "20b3529674dc4a3375c480ca454b06113d67314f48f404d30bc6e7747591cf35",
   "releaseNotes": "My Diary 1.0.221: fixes Web Update SHA verification transport by requesting identity-encoded download bytes; includes published Web Update 478 (Me-menu close resets Move Mode OFF while preserving saved positions and sizes). Existing Reminder details formatting and all other app functions remain unchanged. Signed APK includes the latest published Diary Web Update 478 bundle. Existing app identity, notes, photos, PINs, locks, widgets, reminders, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 478,
+  "webVersion": 479,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "04374ed939422483b0b832f95e442ddba530b90aa5bc7501460c515d11dd7530",
-  "webReleaseNotes": "My Diary Web Update 478: reset header-button Move Mode to OFF whenever the Me menu closes (outside tap, Calendar note, Private Locker, Documents/Memories/feature navigation). Saved button positions and sizes are unchanged. Phone test pending."
+  "webSha256": "4240e20ed5ba2b35eb4ca486a7320cd1004e7dbb213c7758cd1a8780241e3f0e",
+  "webReleaseNotes": "My Diary Web Update 479: add ✍️ Apni Kism (Custom) to Personal Calendar. Selecting it shows a required custom category-name field; the saved entry displays that category and restores it when edited. Birthday, Anniversary, and Zaroori Din remain unchanged. Existing entries and reminder settings are preserved. Phone test pending."
 }
