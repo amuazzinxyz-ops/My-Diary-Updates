@@ -7,8 +7,8 @@
   "sha256": "20b3529674dc4a3375c480ca454b06113d67314f48f404d30bc6e7747591cf35",
   "releaseNotes": "My Diary 1.0.221: fixes Web Update SHA verification transport by requesting identity-encoded download bytes; includes published Web Update 478 (Me-menu close resets Move Mode OFF while preserving saved positions and sizes). Existing Reminder details formatting and all other app functions remain unchanged. Signed APK includes the latest published Diary Web Update 478 bundle. Existing app identity, notes, photos, PINs, locks, widgets, reminders, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 480,
+  "webVersion": 481,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "876419a6c19ed734663b3c8b9bf651669bb320c73aee9f0a5c5f03b04c5a9355",
-  "webReleaseNotes": "My Diary Web Update 480: Personal Calendar entry category button now fits its label width. If there is not enough room on the current line, the whole button moves to the next line; when room is available it stays on the same line. Existing category names, date/time badges, entries, and reminder functions are unchanged. Phone test pending."
+  "webSha256": "a6dc79b385696dd24cd42767db10cffef7bfd733dfd87a9d0a6f92ddeec443c8",
+  "webReleaseNotes": "My Diary Web Update 481: Calendar category, date and time badges use compact spacing and padding so short labels such as Dawat, date, and time stay together on one line whenever they fit. If the row genuinely has insufficient width, badges wrap naturally. No saved data, category choices, or reminder behavior changed. Phone test pending."
 }
