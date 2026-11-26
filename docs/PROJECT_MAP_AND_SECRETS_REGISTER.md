@@ -1,3 +1,15 @@
+# My Documents back-arrow alignment — Web Update 468 (2026-11-26)
+
+- **User request:** In 📁 My Documents, only the back-arrow mark appeared higher than the title. User asked for the arrow mark to align like 📒 My Memories. The back button itself, its size, shape, label, and behavior must remain unchanged.
+- **Implementation:** Added a My Documents-only modal class and a narrowly scoped `::first-letter` rule to move the arrow glyph down by 2px. The “Wapas” text and the button styling are unchanged. No My Memories styling, saved files/data, PIN/lock behavior, or other feature was changed.
+- **Safety backup:** Complete pre-change web source saved as `backups/diary-web-index-before-documents-back-arrow-alignment-2026-11-26.html`; backup commit `902dbd232cc6f384b382a12a084b2aa4e6c53938`.
+- **Source commit:** `ff1609b5e6d02ec90fbabc8126aa346ecd82c625`; source blob `47ef0526bcc47f70a5958e213cb13c232239212e`.
+- **Publish verification:** Live `web-source/index.html` and `diary-web/index.html` are byte-identical (same Git blob SHA `47ef0526bcc47f70a5958e213cb13c232239212e`). Live `latest.json` advertises Web Update **468**, app version **1.0.220 / versionCode 219**, web SHA-256 `8005ee8c33ecde06c86051884c8692322439e3a9cf856652e4bab754fea17bb2`.
+- **APK:** No APK was requested or published. Delivery is through **My Diary → Me → Check for Updates**.
+- **Phone Test:** **PENDING** — do not mark PASS until the user explicitly confirms testing Web Update 468 on the phone.
+
+---
+
 # Personal Calendar + Smart Reminder AM/PM display — Phone Test PASS (Web Update 467, 2026-11-26)
 
 - User explicitly confirmed **Phone Test PASS** after installing/testing Web Update **467**. This records the user's device-side confirmation that saved Personal Calendar and Smart Reminder entries now display AM/PM correctly.
