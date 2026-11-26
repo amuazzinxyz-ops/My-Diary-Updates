@@ -4,8 +4,8 @@ Last reviewed: 2026-11-26
 
 ## Current release state — 2026-11-26
 
-- Latest published web version: **481**. Personal Calendar category, date, and time badges now use compact spacing so short labels such as “Dawat” plus date and time stay together on one line whenever they fit; if the row genuinely lacks room, badges wrap naturally. Existing Calendar data and reminder behavior are unchanged. **Phone Test pending.**
-- Web 480 source and mirror are byte-identical. SHA-256: `876419a6c19ed734663b3c8b9bf651669bb320c73aee9f0a5c5f03b04c5a9355`; `latest.json` declares `webVersion: 480` with the same SHA-256.
+- Latest published web version: **481**. Personal Calendar category, date, and time badges now use compact spacing so short labels such as “Dawat” plus date and time stay together on one line whenever they fit; if the row genuinely lacks room, badges wrap naturally. Existing Calendar data and reminder behavior are unchanged. **Phone Test PASS — user confirmed on 2026-11-26.**
+- Web 481 source and mirror are byte-identical. SHA-256: `a6dc79b385696dd24cd42767db10cffef7bfd733dfd87a9d0a6f92ddeec443c8`; `latest.json` declares `webVersion: 481` with the same SHA-256.
 - Web 479 remains the previous known-good release. Its custom category option, save, and edit behavior are **Phone Test PASS — user confirmed on 2026-11-26**.
 - Web 478 remains the previous known-good release. It resets header-button Move Mode to OFF whenever the Me menu closes while preserving saved button positions and sizes. **Phone Test PASS — user confirmed on 2026-11-26 after installing APK 1.0.221 over APK 1.0.220 and confirming Check for Updates PASS.**
 - Web 477 remains the previous known-good release and rollback target. **Phone Test PASS — Web Update 477 confirmed by the user on 2026-11-26.** The “Button Set Karein” label is now vertically centered; 16px bold size and left alignment remain correct.
@@ -40,7 +40,7 @@ Last reviewed: 2026-11-26
 - No changes to saved entries, category values, date/time data, editing, or reminder behavior. No APK created; delivery is through Check for Updates.
 - Source and mirror are byte-identical. Web 481 SHA-256: `a6dc79b385696dd24cd42767db10cffef7bfd733dfd87a9d0a6f92ddeec443c8`.
 - Backup: `backups/web-source-index-before-calendar-badge-inline-2026-11-26.html`.
-- **Phone Test pending — awaiting user confirmation.**
+- **Phone Test PASS — user confirmed on 2026-11-26.** The user verified that the compact category/date/time badges now stay together when there is room and wrap when needed.
 
 ## Web Update 480 — Personal Calendar category badge wrapping — 2026-11-26
 
