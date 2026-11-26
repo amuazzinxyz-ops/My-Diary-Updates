@@ -294,7 +294,6 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   white-space:nowrap!important;
   font-size:17px!important;
 }
-/* My Documents uses the same untouched back-arrow rendering as My Memories. */
 </style>
 <style id="personal-calendar-heading-clear-of-pin">
 /* Keep Personal Calendar in its original inline position between Back and PIN; reduce only its text size to fit one line. */
@@ -3076,7 +3075,6 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   function showMeFeaturePage(kind){
    currentMeFeatureKind=kind;
    meFeatureModal.classList.toggle('diary-me-feature-calendar',kind==='calendar');
-   meFeatureModal.classList.toggle('diary-me-feature-documents',kind==='documents');
    meFeatureModal.classList.toggle('diary-me-feature-kharcha',kind==='kharcha');
    meFeatureModal.classList.toggle('diary-me-feature-bold-text',kind==='calendar'||kind==='reminders');
    if(kind==='calendar')meFeatureAll('calendar').then(function(records){records.forEach(function(record){if(record.remind&&record.repeat&&record.repeat!=='none'&&calendarScheduleAlarms(record))meFeaturePut(record);});});
@@ -3090,7 +3088,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
    renderMeFeatureList(kind);
   }
   function closeMeFeature(){
-   meFeatureModal.classList.remove('diary-me-feature-bold-text','diary-me-feature-kharcha','diary-me-feature-calendar','diary-me-feature-documents');
+   meFeatureModal.classList.remove('diary-me-feature-bold-text','diary-me-feature-kharcha','diary-me-feature-calendar');
    currentMeFeatureKind=null;meFeatureBulkEdit=false;meFeatureSelectedIds.clear();meFeatureMenu.hidden=true;meFeatureMenuButton.hidden=true;meFeatureBulkBar.hidden=true;++meFeatureRenderToken;clearMeFeatureUrls();meFeatureLock.hidden=true;meFeatureModal.hidden=true;meFeatureContent.replaceChildren();mePanel.hidden=false;mePanel.scrollTop=0;meBtn.setAttribute('aria-expanded','true');panel.classList.add('diary-me-menu-open');
   }
   meFeatureManage.addEventListener('click',function(){if(currentMeFeatureKind)showMeFeaturePinManager(currentMeFeatureKind);});
