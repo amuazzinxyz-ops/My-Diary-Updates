@@ -1,3 +1,14 @@
+# Personal Calendar + Smart Reminder AM/PM display — Phone Test PASS (Web Update 467, 2026-11-26)
+
+- User explicitly confirmed **Phone Test PASS** after installing/testing Web Update **467**. This records the user's device-side confirmation that saved Personal Calendar and Smart Reminder entries now display AM/PM correctly.
+- The change is display-only: stored 24-hour `HH:mm` values are formatted for display as 12-hour time with AM/PM (for example, `14:30` → `02:30 PM`, `09:30` → `09:30 AM`). Alarm storage, timestamps/scheduling, ringtone, repeat/custom days, snooze, and edit-form time input remain unchanged.
+- Published delivery remains **My Diary → Me → Check for Updates**, Web Update **467**; app version remains **1.0.220 / versionCode 219**. No APK was requested or published.
+- Source and mirror were verified byte-identical at blob SHA `76a3b1e536685aea78aeaeec9ebd20bcc458c7a3`. Successful web-only publisher run: [45736020455](https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/45736020455). Live web SHA-256: `ffe90a553f7ca993bf2cb867d473452628bc195de2e46df8a27e199ad4ef9884`.
+- The earlier automatic APK workflow preflight stopped before build/publication due to a source/mirror sequencing race; no APK was produced. This does not change the successful Web Update 467 publication.
+- **Final status: Web Update 467 published PASS; Phone Test PASS — user-confirmed.** Register-only update; no app source, APK, saved data, PIN/lock behavior, or unrelated feature was changed.
+
+---
+
 # My Diary — Personal Calendar and Smart Reminder AM/PM display fix (2026-11-26)
 
 - **Scope:** Display-only correction in the two saved-entry cards. Personal Calendar and Smart Reminder now format stored HH:mm values as 12-hour time with AM/PM (examples: 02:30 PM, 09:30 AM).
