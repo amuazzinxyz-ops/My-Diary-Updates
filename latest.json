@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 480,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "b0d2fddbbb2e52d76c25c3dba7ad4181d489c794e6c21a9541bc7264f6fb80f3",
+  "webSha256": "876419a6c19ed734663b3c8b9bf651669bb320c73aee9f0a5c5f03b04c5a9355",
   "webReleaseNotes": "My Diary Web Update 480: Personal Calendar entry category button now fits its label width. If there is not enough room on the current line, the whole button moves to the next line; when room is available it stays on the same line. Existing category names, date/time badges, entries, and reminder functions are unchanged. Phone test pending."
 }
