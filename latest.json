@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 479,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "656e17c6ead4ac720aa73e251f0c1f7ed40c8409211c20695ab6d880ac6e98d6",
+  "webSha256": "4c3c41e8876c3915210d315fb97b4fef18c19ed81245789e00bb6fb55c34e472",
   "webReleaseNotes": "My Diary Web Update 479: add ✍️ Apni Kism (Custom) to Personal Calendar. Selecting it shows a required category-name field; the saved entry displays that category and restores it when edited. Birthday, Anniversary, and Zaroori Din remain unchanged. Existing entries and reminder settings are preserved. Phone test pending."
 }
