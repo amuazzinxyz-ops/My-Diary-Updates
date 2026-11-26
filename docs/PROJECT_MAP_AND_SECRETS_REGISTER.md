@@ -4,16 +4,16 @@ Last reviewed: 2026-11-26
 
 ## Current release state — 2026-11-26
 
-- Latest published web version: **469**. The GitHub Actions web-only publish workflow completed successfully.
-- Web 469 adds **Button Set Karein** inside the existing Me menu. Me and × heading buttons can be selected separately, dragged to a new position within the Diary heading, resized independently, saved on the phone, or reset.
+- Latest published web version: **470**. The wording-only Web 470 update is published in the update channel.
+- Web 469 added **Button Set Karein** inside the existing Me menu. Web 470 only changes the move-button label to “Position badalne ke liye”; no function or design behavior changed. Me and × heading buttons can be selected separately, dragged to a new position within the Diary heading, resized independently, saved on the phone, or reset.
 - Recently Deleted fullscreen layout is isolated: its × button retains the original top-right position and default 36px size even when the user has saved a custom heading-button layout.
 - Static verification: the complete main Diary JavaScript block parses successfully; source and published mirror are byte-identical.
-- Web source: `web-source/index.html` and `diary-web/index.html` both have Git blob SHA `7f90ea0283b99ec72526fd77a4d8429105a5f871` (632,853 characters).
-- Update metadata: `latest.json` declares `webVersion: 469` and `webSha256: bda53ae30bbc8edbbd04e6c7ea54d9658864875a261a0315db582e8917664a58`.
-- **Phone Test for Web 469 is pending.** Do not mark Phone Test PASS until the user confirms on their device.
+- Web source: `web-source/index.html` and `diary-web/index.html` both have Git blob SHA `d248d3efcb6da2e555576900836332cb09dbdea1` (632,853 characters).
+- Update metadata: `latest.json` declares `webVersion: 470` and `webSha256: 5e3cbf51866dc932a24e46b7205911371d90bda6d5a378a753b953cded8325c8`.
+- **Phone Test for Web 470 is pending.** Do not mark Phone Test PASS until the user confirms on their device.
 - APK remains unchanged: `versionName: 1.0.220`, `versionCode: 219`, SHA-256 `7515fee36d815d2238797eab3ecac830f8eee969eaf37ded85d23abe40730f30`. No APK was published for this task.
 - Previous user-confirmed device result: **Check for Updates PASS** and **Phone Test PASS** for Web Update 467 (2026-11-26).
-- Rollback history: Web 468–470 had previously been rolled back. The new Web 468 and 469 are fresh releases created after that rollback; Web 470 remains inactive.
+- Rollback history: Web 468–470 had previously been rolled back. The new Web 468, 469, and 470 are fresh releases created after that rollback.
 - Register recovery: the current main-branch register file was empty. This document was restored from its last non-empty committed copy (`803cf475f6fb38cd350575696534d1de550ddd81`) and this current state was added. Historical dated notes below are retained for context; re-check live repository/workflow settings before acting on them.
 
 ## Project boundary — IMPORTANT
