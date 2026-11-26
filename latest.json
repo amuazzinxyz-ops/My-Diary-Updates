@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 478,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "e7981e2ffa7dd29aa4b8cdfcc32be5ad0bdf830509ad52e4812d8d0eaf8ad0ad",
+  "webSha256": "04374ed939422483b0b832f95e442ddba530b90aa5bc7501460c515d11dd7530",
   "webReleaseNotes": "My Diary Web Update 478: reset header-button Move Mode to OFF whenever the Me menu closes (outside tap, Calendar note, Private Locker, Documents/Memories/feature navigation). Saved button positions and sizes are unchanged. Phone test pending."
 }
