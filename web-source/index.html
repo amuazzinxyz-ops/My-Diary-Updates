@@ -305,6 +305,22 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 #diaryMeFeatureModal.diary-me-feature-calendar .diary-me-feature-back{box-sizing:border-box!important;flex:0 0 auto!important;min-width:34px!important;min-height:32px!important;padding:4px 6px!important;font-size:12px!important;line-height:1.1!important;white-space:nowrap!important}
 #diaryMeFeatureModal.diary-me-feature-calendar .diary-me-feature-lock{box-sizing:border-box!important;flex:0 0 auto!important;min-width:50px!important;min-height:32px!important;padding:4px 7px!important;text-indent:0!important;font-size:12px!important;line-height:1.1!important;white-space:nowrap!important}
 </style>
+
+<style id="diary-header-button-layout">
+#diaryHeaderButtonLayoutOpen,#diaryHeaderButtonLayoutEditor button,#diaryHeaderButtonLayoutEditor select{box-sizing:border-box;width:100%;min-height:36px;padding:8px 10px;border:1px solid #b99a4b;border-radius:9px;background:linear-gradient(145deg,#fffdf4,#f4ecd2);color:#49350b;font-size:12px;font-weight:900}
+#diaryHeaderButtonLayoutEditor{width:100%;box-sizing:border-box;padding:9px;border:1px solid #d4af37;border-radius:10px;background:#fffaf0;color:#382700}
+#diaryHeaderButtonLayoutEditor[hidden]{display:none!important}
+#diaryHeaderButtonLayoutEditor label{display:block;margin:5px 0;font-size:12px;font-weight:900}
+#diaryHeaderButtonLayoutEditor select{margin:4px 0 8px}
+#diaryHeaderButtonLayoutEditor input[type=range]{display:block;width:100%;margin:5px 0 10px;accent-color:#087653}
+#diaryHeaderButtonLayoutEditor>div:not(#diaryHeaderButtonLayoutActions){font-size:11px;line-height:1.4;margin:7px 0}
+#diaryHeaderButtonLayoutActions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+#diaryHeaderButtonLayoutActions button{min-width:0;padding:7px 3px;font-size:11px}
+#diaryMyNotesPanel.diary-header-buttons-editing #diaryMyNotesHead{overflow:visible!important}
+#diaryMyNotesPanel.diary-header-buttons-editing #diaryDiaryMeBtn,#diaryMyNotesPanel.diary-header-buttons-editing #diaryMyNotesClose{outline:2px dashed #ffcf40;outline-offset:3px;touch-action:none;cursor:move}
+.dark #diaryHeaderButtonLayoutEditor{background:#263a2b;color:#f5e9c4;border-color:#a98b3f}
+.dark #diaryHeaderButtonLayoutOpen,#diaryHeaderButtonLayoutEditor button,#diaryHeaderButtonLayoutEditor select{background:linear-gradient(145deg,#314b39,#243c2d);color:#fff0c4;border-color:#927638}
+</style>
 </head>
 <body>
 
@@ -3409,6 +3425,68 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var diaryHeaderClockTimer=window.setInterval(updateDiaryHeaderClock,1000);
   var close=el('button',{id:'diaryMyNotesClose',type:'button','aria-label':t('closeLabel')},'×');
   head.appendChild(close);
+  /* User-adjustable Diary header buttons; Recently Deleted fullscreen keeps its own layout. */
+  (function setupDiaryHeaderButtonLayout(){
+   var key='diaryHeaderButtonLayoutV1',layout={me:{x:null,y:null,size:1},close:{x:null,y:null,size:1}};
+   var editMode=false,selected='me',drag=null;
+   function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+   function load(){
+    try{var s=JSON.parse(localStorage.getItem(key)||'null');['me','close'].forEach(function(k){
+     if(s&&s[k]){layout[k].x=Number.isFinite(s[k].x)?clamp(s[k].x,0,100):null;layout[k].y=Number.isFinite(s[k].y)?clamp(s[k].y,0,100):null;layout[k].size=Number.isFinite(s[k].size)?clamp(s[k].size,.75,1.6):1;}
+    });}catch(err){}
+   }
+   function apply(k){
+    var v=layout[k],n=k==='me'?meWrap:close;
+    if(v.x!==null&&v.y!==null){n.style.left=v.x+'%';n.style.top=v.y+'%';if(k==='me')n.style.transform='none';else n.style.right='auto';}
+    else{n.style.removeProperty('left');n.style.removeProperty('top');if(k==='me')n.style.removeProperty('transform');else n.style.removeProperty('right');}
+    if(k==='me'){meBtn.style.fontSize=(13*v.size)+'px';meBtn.style.padding=(5*v.size)+'px '+(9*v.size)+'px';}
+    else{close.style.width=(36*v.size)+'px';close.style.height=(36*v.size)+'px';close.style.fontSize=(25*v.size)+'px';}
+   }
+   function applyAll(){apply('me');apply('close');}
+   function save(){try{localStorage.setItem(key,JSON.stringify(layout));return true;}catch(err){return false;}}
+   load();applyAll();
+   var openBtn=el('button',{id:'diaryHeaderButtonLayoutOpen',type:'button'},'↔ Button Set Karein');
+   var editor=el('div',{id:'diaryHeaderButtonLayoutEditor',hidden:'hidden'});
+   var targetLabel=el('label',{},'Button chunein');
+   var target=el('select',{id:'diaryHeaderButtonLayoutTarget','aria-label':'Button chunein'});
+   target.appendChild(el('option',{value:'me'},'Me button'));target.appendChild(el('option',{value:'close'},'× button'));targetLabel.appendChild(target);
+   var sizeLabel=el('label',{},'Size: '),sizeValue=el('strong',{},'100%');
+   var size=el('input',{type:'range',min:'75',max:'160',step:'5',value:'100','aria-label':'Button size'});sizeLabel.appendChild(sizeValue);
+   var move=el('button',{type:'button'},'Position badalne ke liye drag shuru karein');
+   var hint=el('div',{},'Move mode ON karke heading mein selected button ko ungli se kheench kar jagah badlein. Phir Save dabayein.');
+   var saveBtn=el('button',{type:'button'},'Save'),reset=el('button',{type:'button'},'Reset'),cancel=el('button',{type:'button'},'Band Karein');
+   var actions=el('div',{id:'diaryHeaderButtonLayoutActions'});actions.appendChild(saveBtn);actions.appendChild(reset);actions.appendChild(cancel);
+   editor.appendChild(targetLabel);editor.appendChild(sizeLabel);editor.appendChild(size);editor.appendChild(move);editor.appendChild(hint);editor.appendChild(actions);
+   mePanel.insertBefore(openBtn,checkUpdatesBtn);mePanel.insertBefore(editor,checkUpdatesBtn);
+   function refresh(){size.value=String(Math.round(layout[selected].size*100));sizeValue.textContent=size.value+'%';move.textContent=editMode?'Position badalna band karein':'Position badalne ke liye drag shuru karein';}
+   function setMode(on){editMode=!!on;panel.classList.toggle('diary-header-buttons-editing',editMode);meBtn.style.touchAction=editMode&&selected==='me'?'none':'';close.style.touchAction=editMode&&selected==='close'?'none':'';refresh();}
+   openBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();editor.hidden=!editor.hidden;if(!editor.hidden){target.value=selected;refresh();}else setMode(false);});
+   target.addEventListener('change',function(){selected=target.value==='close'?'close':'me';setMode(false);refresh();});
+   size.addEventListener('input',function(){layout[selected].size=clamp((parseInt(size.value,10)||100)/100,.75,1.6);apply(selected);sizeValue.textContent=size.value+'%';});
+   move.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();setMode(!editMode);});
+   saveBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(save()){setMode(false);hint.textContent='Button ki position aur size save ho gayi.';}else hint.textContent='Phone storage mein save nahi ho saka.';});
+   reset.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();layout[selected]={x:null,y:null,size:1};apply(selected);save();setMode(false);refresh();});
+   cancel.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();load();applyAll();setMode(false);editor.hidden=true;});
+   function start(node,k,e){
+    if(!editMode||selected!==k|| (e.button!==undefined&&e.button!==0)||panel.classList.contains('diary-trash-fullscreen'))return;
+    var h=head.getBoundingClientRect(),b=node.getBoundingClientRect();
+    drag={key:k,id:e.pointerId,x:e.clientX,y:e.clientY,left:b.left-h.left,top:b.top-h.top,moved:false};
+    try{node.setPointerCapture(e.pointerId);}catch(err){}e.preventDefault();e.stopPropagation();
+   }
+   function moving(node,e){
+    if(!drag||drag.id!==e.pointerId)return;
+    var h=head.getBoundingClientRect(),b=node.getBoundingClientRect(),dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+    if(Math.abs(dx)+Math.abs(dy)>3)drag.moved=true;if(!drag.moved)return;
+    var x=clamp(drag.left+dx,0,Math.max(0,h.width-b.width)),y=clamp(drag.top+dy,0,Math.max(0,h.height-b.height));
+    layout[drag.key].x=h.width?x/h.width*100:0;layout[drag.key].y=h.height?y/h.height*100:0;apply(drag.key);e.preventDefault();e.stopPropagation();
+   }
+   function end(e){if(drag&&drag.id===e.pointerId){drag=null;e.preventDefault();e.stopPropagation();}}
+   [[meBtn,'me'],[close,'close']].forEach(function(pair){var n=pair[0],k=pair[1];
+    n.addEventListener('pointerdown',function(e){start(n,k,e);});n.addEventListener('pointermove',function(e){moving(n,e);});n.addEventListener('pointerup',end);n.addEventListener('pointercancel',end);
+    n.addEventListener('click',function(e){if(editMode){e.preventDefault();e.stopImmediatePropagation();}},true);
+   });
+   meBtn.addEventListener('click',function(){if(editMode&&selected!=='me')setMode(false);},true);
+  })();
   var body=el('div',{id:'diaryMyNotesBody'});
   var pullRefreshHint=el('div',{id:'diaryPullRefreshHint','aria-live':'polite'},'↓ Neeche kheench kar refresh karein');
   pullRefreshHint.style.cssText='height:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#176044;transition:height .16s ease;pointer-events:none;';
