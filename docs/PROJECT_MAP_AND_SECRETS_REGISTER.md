@@ -17,6 +17,19 @@ Last reviewed: 2026-11-26
 - Recently Deleted fullscreen layout remains isolated: its × button retains the original top-right position and default 36px size even when a custom heading-button layout is saved.
 - APK remains unchanged: `versionName: 1.0.220`, `versionCode: 219`, SHA-256 `7515fee36d815d2238797eab3ecac830f8eee969eaf37ded85d23abe40730f30`. No APK was requested or published.
 
+## Web 478 SHA mismatch investigation — 2026-11-26
+
+- User reported that Web Update 478 repeatedly fails in Check for Updates with a SHA-256 mismatch. Do not mark Web 478 phone-test PASS until the user confirms successful installation and behavior.
+- Verified current `web-source/index.html` and `diary-web/index.html` are now byte-identical; latest.json advertises Web 478 and the same source SHA-256.
+- Found the prior Android build workflow was stale: it still required Web Update 466 and the old APK baseline, and a previous build attempt failed because the source/mirror were temporarily out of sync.
+- Backups created before the updater/release-workflow change:
+  - `backups/add_online_diary_updates-before-web-identity-1.0.221-2026-11-26.py`
+  - `backups/build-diary-from-zip-before-web-identity-1.0.221-2026-11-26.yml`
+  - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-web-identity-1.0.221-2026-11-26.md`
+- Commit `e3b3e13dc82e795ad20896276c5426a155c7df0f` adds an explicit `Accept-Encoding: identity` request header to the Web bundle downloader and updates the guarded signed build pipeline for My Diary 1.0.221 / versionCode 220, based on installed 1.0.220 / code 219 and Web 478.
+- GitHub Actions build run **45814673042** is in progress. The signed keystore/alias validation and exact HTML/mirror verification steps passed; debug APK build is currently running. Await signed release, trusted certificate fingerprint, APK SHA-256, and latest.json publication before calling the update available.
+- Delivery preference unchanged: publish only through the app's Check for Updates; do not send a separate APK file. Phone test remains pending.
+
 ## Project boundary — IMPORTANT
 
 - This repository is the single home for **My Diary** project files, release automation, update metadata, and Diary documentation.
