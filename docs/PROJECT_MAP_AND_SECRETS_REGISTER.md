@@ -4,8 +4,9 @@ Last reviewed: 2026-11-26
 
 ## Current release state — 2026-11-26
 
-- Latest published web version: **478**. Web 478 resets header-button Move Mode to OFF whenever the Me menu closes, including outside taps and navigation into Calendar notes, Private Locker, and feature pages. It preserves saved button positions and sizes. **Phone Test PASS — user confirmed on 2026-11-26 after installing APK 1.0.221 over APK 1.0.220 and confirming Check for Updates PASS.**
-- Web 478 source and mirror are byte-identical. SHA-256: `04374ed939422483b0b832f95e442ddba530b90aa5bc7501460c515d11dd7530`; `latest.json` declares `webVersion: 478` with the same SHA-256.
+- Latest published web version: **479**. Personal Calendar now offers **✍️ Apni Kism (Custom)**; selecting it shows a required category-name field, and saved entries display and restore the custom category when edited. Birthday, Anniversary, and Zaroori Din remain unchanged. **Phone Test pending.**
+- Web 479 source and mirror are byte-identical. SHA-256: `4c3c41e8876c3915210d315fb97b4fef18c19ed81245789e00bb6fb55c34e472`; `latest.json` declares `webVersion: 479` with the same SHA-256.
+- Web 478 remains the previous known-good release. It resets header-button Move Mode to OFF whenever the Me menu closes while preserving saved button positions and sizes. **Phone Test PASS — user confirmed on 2026-11-26 after installing APK 1.0.221 over APK 1.0.220 and confirming Check for Updates PASS.**
 - Web 477 remains the previous known-good release and rollback target. **Phone Test PASS — Web Update 477 confirmed by the user on 2026-11-26.** The “Button Set Karein” label is now vertically centered; 16px bold size and left alignment remain correct.
 - Web 476 history: increased the label from 15px to 16px, retaining bold weight 950 and left alignment. Phone test pending.
 - Web 476 source and mirror were byte-identical. SHA-256: `ef234ad7e8b1182bf2368c332e506b3e87c89571e2d92c5010f0261b7900938e`.
