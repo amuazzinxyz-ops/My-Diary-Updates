@@ -39,9 +39,11 @@ Last reviewed: 2026-11-26
 - Set only `#diaryDiaryMeBtn` to a fixed 36 × 36 px border-box, matching the Diary heading × button's 36 × 36 px outer dimensions.
 - Kept the “Me” label at 13 px, centered with no internal padding; its text is not reduced or hidden. Existing gold/purple 3D styling, position/move controls, and click behavior remain unchanged.
 - No other UI, data, or app behavior changed. No APK created; delivery is through Check for Updates.
-- Source and mirror are byte-identical. Web 482 SHA-256: `75e56d89debf1423ee7e5e5df30619b8b57f983d7baa65befca0e3bfa6d22def`; `latest.json` declares `webVersion: 482` with the same SHA-256.
+- Source and mirror are byte-identical. Web 482 SHA-256: `fa46ca5d31ac99632c5da07ebbc884915e86e816be94a12c5d4641aaffdb8453`; `latest.json` declares `webVersion: 482` with the same SHA-256.
 - Backup: `backups/web-source-index-before-me-button-36px-2026-11-26.html`.
 - **Phone Test pending — awaiting user confirmation.**
+
+- **Web 482 SHA-256 correction — 2026-11-26:** Repeated phone SHA mismatch was traced to stale/wrong `latest.json` checksum, not the APK downloader. Independently hashed the exact UTF-8 bytes from `web-source/index.html`; SHA-256 is `fa46ca5d31ac99632c5da07ebbc884915e86e816be94a12c5d4641aaffdb8453`. Confirmed `diary-web/index.html` is byte-identical and has the same hash. The calculated Git blob SHA also matches GitHub's blob SHA, confirming the bytes used for the hash. Updated only `latest.json` `webSha256` to the verified value; APK was not built. **Phone Test pending — user must retry Check for Updates.**
 
 ## Web Update 481 — Personal Calendar date/time badges inline fit — 2026-11-26
 
