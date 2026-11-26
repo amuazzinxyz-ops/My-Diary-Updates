@@ -5,10 +5,10 @@
   "versionName": "1.0.220",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
   "sha256": "7515fee36d815d2238797eab3ecac830f8eee969eaf37ded85d23abe40730f30",
-  "releaseNotes": "My Diary 1.0.220 APK is unchanged. Web Update 472 restores the exact Web 470 source content, rolling back the Web 471 saved-position reload change. Phone test for Web 472: PASS (user-confirmed 2026-11-26).",
+  "releaseNotes": "My Diary 1.0.220 APK is unchanged. Web Update 472 restores the exact Web 470 source content, rolling back the Web 471 saved-position reload change. Phone test for Web 472: PASS (user-confirmed 2026-11-26). Web Update 473 contains only the Button Set Karein text cleanup; phone test pending.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 472,
+  "webVersion": 473,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "5e3cbf51866dc932a24e46b7205911371d90bda6d5a378a753b953cded8325c8",
-  "webReleaseNotes": "My Diary Web Update 472: rollback of Web 471. Restores the exact Web 470 source content and behavior. APK 1.0.220 remains unchanged."
+  "webSha256": "dc47eeb5a2f6d4f1ed93964cf2b86ca49c4ef8353c25297db6a5faec0a456b7d",
+  "webReleaseNotes": "My Diary Web Update 473: removed the Move Mode instruction text from Button Set Karein and shortened only its inner close button label from “Band Karein” to “Band”. No other behavior changed. Phone test pending."
 }
