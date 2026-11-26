@@ -10,7 +10,7 @@ Last reviewed: 2026-11-26
 - Web 472 rollback source and mirror are byte-identical: `web-source/index.html` and `diary-web/index.html` both have Git blob SHA `d248d3efcb6da2e555576900836332cb09dbdea1` (632,817 characters), matching the Web 470 source.
 - Update metadata: `latest.json` declares `webVersion: 472` and `webSha256: 5e3cbf51866dc932a24e46b7205911371d90bda6d5a378a753b953cded8325c8`.
 - Web 472 rollback publication metadata is live. The APK remains unchanged; no APK was requested or published.
-- **Phone Test for Web 472 rollback is pending.** Do not mark Phone Test PASS until the user confirms on their device.
+- **Phone Test PASS — Web Update 472 rollback confirmed by the user on 2026-11-26.** User reports the phone test passed.
 - APK remains unchanged: `versionName: 1.0.220`, `versionCode: 219`, SHA-256 `7515fee36d815d2238797eab3ecac830f8eee969eaf37ded85d23abe40730f30`.
 - Previous user-confirmed device result: **Check for Updates PASS** and **Phone Test PASS** for Web Update 467 (2026-11-26).
 - Rollback history: Web 468–470 had previously been rolled back. The new Web 468, 469, and 470 are fresh releases created after that rollback.
