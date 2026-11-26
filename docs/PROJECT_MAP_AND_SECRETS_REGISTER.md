@@ -4,7 +4,7 @@ Last reviewed: 2026-11-26
 
 ## Current release state — 2026-11-26
 
-- Latest published web version: **480**. Personal Calendar entry category buttons now fit their label width and move wholly to the next line only when the current line has insufficient room. Existing Calendar categories, entries, and reminder functions are unchanged. **Phone Test pending.**
+- Latest published web version: **481**. Personal Calendar category, date, and time badges now use compact spacing so short labels such as “Dawat” plus date and time stay together on one line whenever they fit; if the row genuinely lacks room, badges wrap naturally. Existing Calendar data and reminder behavior are unchanged. **Phone Test pending.**
 - Web 480 source and mirror are byte-identical. SHA-256: `876419a6c19ed734663b3c8b9bf651669bb320c73aee9f0a5c5f03b04c5a9355`; `latest.json` declares `webVersion: 480` with the same SHA-256.
 - Web 479 remains the previous known-good release. Its custom category option, save, and edit behavior are **Phone Test PASS — user confirmed on 2026-11-26**.
 - Web 478 remains the previous known-good release. It resets header-button Move Mode to OFF whenever the Me menu closes while preserving saved button positions and sizes. **Phone Test PASS — user confirmed on 2026-11-26 after installing APK 1.0.221 over APK 1.0.220 and confirming Check for Updates PASS.**
@@ -33,6 +33,14 @@ Last reviewed: 2026-11-26
 - **Native updater SHA-256 fix:** Web bundle downloader requests `Accept-Encoding: identity` so the downloaded bytes match the published SHA-256. **Phone Test PASS** through successful Check for Updates.
 - **APK 1.0.221 / versionCode 220:** installed over APK 1.0.220; Check for Updates PASS; both fixes above are included. **Phone Test PASS — user confirmed 2026-11-26.**
 - Next task must be added below this completed release history; do not reopen or alter these PASS items unless a new issue is reported.
+
+## Web Update 481 — Personal Calendar date/time badges inline fit — 2026-11-26
+
+- Adjusted only the Calendar saved-entry badge spacing: compact padding, font size, and gaps allow a short custom category such as “Dawat”, date, and time to remain together on the same line whenever they fit. Wrapping remains available when the row genuinely has insufficient width.
+- No changes to saved entries, category values, date/time data, editing, or reminder behavior. No APK created; delivery is through Check for Updates.
+- Source and mirror are byte-identical. Web 481 SHA-256: `a6dc79b385696dd24cd42767db10cffef7bfd733dfd87a9d0a6f92ddeec443c8`.
+- Backup: `backups/web-source-index-before-calendar-badge-inline-2026-11-26.html`.
+- **Phone Test pending — awaiting user confirmation.**
 
 ## Web Update 480 — Personal Calendar category badge wrapping — 2026-11-26
 
