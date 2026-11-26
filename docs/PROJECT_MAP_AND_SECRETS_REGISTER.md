@@ -26,7 +26,7 @@ Last reviewed: 2026-11-26
 - Source and mirror are byte-identical; both Git blob SHA values: `cc979a16999f836ca66d54a27a80818c6b43bae5`. Verified Web 483 SHA-256: `ff59e34c068dc0481b594813c39a68a3ef4f0db157e1b9f04d09105126e387ec`. Live `latest.json` now declares `webVersion: 483` and the same SHA-256.
 - Backups made before editing: `backups/web-source-before-photo-gradient-removal-2026-11-26.html` and `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-photo-gradient-removal-2026-11-26.md`.
 - Source commit: `038f9ff5beb585e9c6d3b0bf95878ea5a4a59651`; mirror commit: `40eca9660de6e66dc2761f3f12acdc49b5141f17`; metadata commit: `bb3162f7f1f2d13a38109309b4b6e74c2a8af312`.
-- No APK created. Delivery is through the app's Check for Updates. **Phone Test pending — do not mark PASS until the user confirms on the phone.**
+- No APK created. Delivery is through the app's Check for Updates. **Phone Test PASS — user confirmed on 2026-11-26.**
 
 ## APK 1.0.220 to 1.0.221 included-work audit — 2026-11-26
 
