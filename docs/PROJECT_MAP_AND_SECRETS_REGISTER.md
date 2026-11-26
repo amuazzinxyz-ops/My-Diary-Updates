@@ -27,7 +27,7 @@ Last reviewed: 2026-11-26
   - `backups/build-diary-from-zip-before-web-identity-1.0.221-2026-11-26.yml`
   - `backups/PROJECT_MAP_AND_SECRETS_REGISTER-before-web-identity-1.0.221-2026-11-26.md`
 - Commit `e3b3e13dc82e795ad20896276c5426a155c7df0f` adds an explicit `Accept-Encoding: identity` request header to the Web bundle downloader and updates the guarded signed build pipeline for My Diary 1.0.221 / versionCode 220, based on installed 1.0.220 / code 219 and Web 478.
-- GitHub Actions build run **45814673042** is in progress. The signed keystore/alias validation and exact HTML/mirror verification steps passed; debug APK build is currently running. Await signed release, trusted certificate fingerprint, APK SHA-256, and latest.json publication before calling the update available.
+- GitHub Actions build run **45814673042** completed with **SUCCESS**. Signing keystore/alias validation, debug build, signed Release build, release verification/publication, signed APK upload, and APK upload all passed. The run published My Diary **1.0.221 / versionCode 220** to live latest.json with Web Update **478**. APK SHA-256: `20b3529674dc4a3375c480ca454b06113d67314f48f404d30bc6e7747591cf35`; Web HTML SHA-256: `04374ed939422483b0b832f95e442ddba530b90aa5bc7501460c515d11dd7530`. Update is available through the app's **Check for Updates**; no separate APK delivery. User phone test is still pending; do not mark Web 478 or APK 1.0.221 Phone Test PASS until user confirms.
 - Delivery preference unchanged: publish only through the app's Check for Updates; do not send a separate APK file. Phone test remains pending.
 
 ## Project boundary — IMPORTANT
