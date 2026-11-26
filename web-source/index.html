@@ -2675,8 +2675,8 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     details=mfField(form,mf('details'),'text','details',false);
     var typeWrap=mfEl('label',{class:'diary-me-feature-field'});typeWrap.appendChild(mfEl('span',{},mf('type')));
     type=mfEl('select',{name:'type'});[['birthday','birthday'],['anniversary','anniversary'],['event','event'],['custom','customType']].forEach(function(x){type.appendChild(mfEl('option',{value:x[0]},mf(x[1])));});typeWrap.appendChild(type);form.appendChild(typeWrap);
-    customTypeInput=mfField(form,mf('customType'),'text','customType',false);customTypeInput.parentNode.hidden=true;
-    type.addEventListener('change',function(){var showCustom=type.value==='custom';customTypeInput.parentNode.hidden=!showCustom;customTypeInput.required=showCustom;if(!showCustom)customTypeInput.value='';});
+    customTypeInput=mfField(form,mf('customType'),'text','customType',false);customTypeInput.parentNode.hidden=true;customTypeInput.parentNode.style.setProperty('display','none','important');
+    type.addEventListener('change',function(){var showCustom=type.value==='custom';customTypeInput.parentNode.hidden=!showCustom;customTypeInput.parentNode.style.setProperty('display',showCustom?'':'none','important');customTypeInput.required=showCustom;if(!showCustom)customTypeInput.value='';});
     var repeatWrap=mfEl('label',{class:'diary-me-feature-field'});repeatWrap.appendChild(mfEl('span',{},t('calendarRepeat')));
     repeatSelect=mfEl('select',{name:'repeat'});[['none','repeatNone'],['daily','repeatDaily'],['weekly','repeatWeekly'],['monthly','repeatMonthly'],['yearly','repeatYearly']].forEach(function(x){repeatSelect.appendChild(mfEl('option',{value:x[0]},t(x[1])));});if(window.DiaryAppActions&&typeof window.DiaryAppActions.scheduleReminderCustom==='function')repeatSelect.appendChild(mfEl('option',{value:'custom'},'Custom'));repeatWrap.appendChild(repeatSelect);form.appendChild(repeatWrap);
     var calendarRepeatDays=mfRepeatDaysControl(form);repeatSelect.addEventListener('change',function(){calendarRepeatDays.show(repeatSelect.value==='custom',repeatSelect.value==='custom');});
