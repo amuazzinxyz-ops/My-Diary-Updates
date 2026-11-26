@@ -4,13 +4,13 @@ Last reviewed: 2026-11-26
 
 ## Current release state — 2026-11-26
 
-- Latest published web version: **471**. Web 471 restores the saved Me and × heading-button positions and sizes from phone storage whenever Diary opens, addressing the reported return to original positions after closing and reopening Diary.
-- Web 469 added **Button Set Karein** inside the existing Me menu. Web 470 only shortens its move-button label to “Position badalne ke liye”. Web 471 only adds a reload/apply of the already-saved header-button layout on each Diary open; no other functions or design changes were made.
+- Latest published web version: **472**. Web 472 rolls back the Web 471 saved-position reload change and restores the exact Web 470 source content. The Me and × button positions behavior is therefore back to the Web 470 state.
+- Web 469 added **Button Set Karein** inside the existing Me menu. Web 470 only shortens its move-button label to “Position badalne ke liye”. Web 471's saved-position reload change was rolled back in Web 472; Web 472 uses the exact Web 470 source content.
 - Recently Deleted fullscreen layout remains isolated: its × button retains the original top-right position and default 36px size even when a custom heading-button layout is saved.
-- Web 471 source and mirror are byte-identical: `web-source/index.html` and `diary-web/index.html` both have Git blob SHA `acc1472deaf11309162ab2b631268d66ce625556` (633,128 characters).
-- Update metadata: `latest.json` declares `webVersion: 471` and `webSha256: a7f2d78bce423fd578a06d178c8ee3d7e0c89936a7a2e7bd46bbcc627ea1b19e`.
-- Web-only publishing workflow completed successfully. The separate Android build workflow was also triggered by the source change but stopped at its explicit approved-version check; APK build/publish steps were skipped. No APK was published or changed.
-- **Phone Test for Web 471 is pending.** Do not mark Phone Test PASS until the user confirms on their device.
+- Web 472 rollback source and mirror are byte-identical: `web-source/index.html` and `diary-web/index.html` both have Git blob SHA `d248d3efcb6da2e555576900836332cb09dbdea1` (632,817 characters), matching the Web 470 source.
+- Update metadata: `latest.json` declares `webVersion: 472` and `webSha256: 5e3cbf51866dc932a24e46b7205911371d90bda6d5a378a753b953cded8325c8`.
+- Web 472 rollback publication metadata is live. The APK remains unchanged; no APK was requested or published.
+- **Phone Test for Web 472 rollback is pending.** Do not mark Phone Test PASS until the user confirms on their device.
 - APK remains unchanged: `versionName: 1.0.220`, `versionCode: 219`, SHA-256 `7515fee36d815d2238797eab3ecac830f8eee969eaf37ded85d23abe40730f30`.
 - Previous user-confirmed device result: **Check for Updates PASS** and **Phone Test PASS** for Web Update 467 (2026-11-26).
 - Rollback history: Web 468–470 had previously been rolled back. The new Web 468, 469, and 470 are fresh releases created after that rollback.
