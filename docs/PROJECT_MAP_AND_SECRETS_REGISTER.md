@@ -19,6 +19,15 @@ Last reviewed: 2026-11-26
 - Recently Deleted fullscreen layout remains isolated: its × button retains the original top-right position and default 36px size even when a custom heading-button layout is saved.
 - Latest APK: **versionName 1.0.221**, **versionCode 220**, SHA-256 `20b3529674dc4a3375c480ca454b06113d67314f48f404d30bc6e7747591cf35`. **Phone Test PASS — installed successfully as an update over APK 1.0.220; app Check for Updates also PASS, user-confirmed 2026-11-26.**
 
+## Web Update 485 — preserve Me button's original size and restore slider — 2026-11-26
+
+- Corrected the Web 484 visual regression: the Diary Me button keeps its original **36×36px outer box at 100%**. The six 36px width/height declarations are restored as normal CSS declarations (not `!important`), so they preserve the default box without blocking the existing JavaScript size control.
+- The existing Me-button slider code remains unchanged: it still adjusts the Me button's font size and padding from 75% to 160%. No change was made to any other button, control, position behavior, or feature.
+- Updated `web-source/index.html` and `diary-web/index.html`; both now have identical Git blob SHA `baedd8d22fb0632866b5c21b78afed080943d8d9` (byte-identical).
+- `latest.json` now declares **webVersion 485** and Web SHA-256 `b0a83f776187d4d58a6f0aecc40d093f633da3d3f5307e48770c7eaf6b6a3c36`. APK remains **1.0.221 / versionCode 220**; no APK was built or changed.
+- Commits: source `12c82cf8e92f05aeb4b71e8dd69175a700d75326`; mirror `278c6e2a0f122088aab12bbee0ff936533629054`; metadata `406f92a7a222afb8d93701eb06c24ffa0479a079`.
+- Repository and metadata updated for Check for Updates. **Phone Test pending**; do not mark PASS until the user confirms.
+
 ## Web Update 484 — restore Diary Me button size slider — 2026-11-26
 
 - Confirmed the exact regression in live source: `diary-me-button-36px` CSS applied fixed `width`, `min/max-width`, `height`, `min/max-height`, `padding`, and `font-size` with `!important`. This overrode the existing `setupDiaryHeaderButtonLayout()` JavaScript that scales the Me button's font size and padding when the size slider changes.
