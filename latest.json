@@ -7,8 +7,8 @@
   "sha256": "20b3529674dc4a3375c480ca454b06113d67314f48f404d30bc6e7747591cf35",
   "releaseNotes": "My Diary 1.0.221: fixes Web Update SHA verification transport by requesting identity-encoded download bytes; includes published Web Update 478 (Me-menu close resets Move Mode OFF while preserving saved positions and sizes). Existing Reminder details formatting and all other app functions remain unchanged. Signed APK includes the latest published Diary Web Update 478 bundle. Existing app identity, notes, photos, PINs, locks, widgets, reminders, and saved data are preserved.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 479,
+  "webVersion": 480,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "4c3c41e8876c3915210d315fb97b4fef18c19ed81245789e00bb6fb55c34e472",
-  "webReleaseNotes": "My Diary Web Update 479: add ✍️ Apni Kism (Custom) to Personal Calendar. Selecting it shows a required category-name field; the saved entry displays that category and restores it when edited. Birthday, Anniversary, and Zaroori Din remain unchanged. Existing entries and reminder settings are preserved. Phone test pending."
+  "webSha256": "b0d2fddbbb2e52d76c25c3dba7ad4181d489c794e6c21a9541bc7264f6fb80f3",
+  "webReleaseNotes": "My Diary Web Update 480: Personal Calendar entry category button now fits its label width. If there is not enough room on the current line, the whole button moves to the next line; when room is available it stays on the same line. Existing category names, date/time badges, entries, and reminder functions are unchanged. Phone test pending."
 }
