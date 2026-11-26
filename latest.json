@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 476,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "ef234ad7e8b1182bf2368c332e506b3e87c89571e2d92c5010f0261b7900938e",
+  "webSha256": "6d2edd80d79827f1457b051eee45a0842ff3433c63e2eb7cf8497b2e5bbd5d3b",
   "webReleaseNotes": "My Diary Web Update 476: increased only the “↔ Button Set Karein” label from 15px to 16px. Left alignment and bold weight remain unchanged. Phone test pending."
 }
