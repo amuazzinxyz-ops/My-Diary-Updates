@@ -5,10 +5,10 @@
   "versionName": "1.0.220",
   "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
   "sha256": "7515fee36d815d2238797eab3ecac830f8eee969eaf37ded85d23abe40730f30",
-  "releaseNotes": "My Diary 1.0.220 APK is unchanged. Web Update 472 rollback: Phone Test PASS (user-confirmed 2026-11-26). Web Update 473 Button Set Karein text cleanup: Phone Test PASS (user-confirmed 2026-11-26).",
+  "releaseNotes": "My Diary 1.0.220 APK is unchanged. Web Update 474 changes only the Button Set Karein label to 14px with slightly stronger bold; phone test pending.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 473,
+  "webVersion": 474,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "70d1ae68b77fba1d1d1428807dffea2bfe017d589a55a23e109b2f71cd35547a",
-  "webReleaseNotes": "My Diary Web Update 473: removed the Move Mode instruction text from Button Set Karein and shortened only its inner close button label from “Band Karein” to “Band”. Phone Test PASS (user-confirmed 2026-11-26)."
+  "webSha256": "a23c79d9351057211b0d91bfc3159bbdbe34bc2ac5f708f2a68b750c1ec9465d",
+  "webReleaseNotes": "My Diary Web Update 474: changed only the “↔ Button Set Karein” label to 14px with a slightly stronger bold weight (950). Phone test pending."
 }
