@@ -3442,7 +3442,12 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     var v=layout[k],n=k==='me'?meWrap:close;
     if(v.x!==null&&v.y!==null){n.style.left=v.x+'%';n.style.top=v.y+'%';if(k==='me')n.style.transform='none';else n.style.right='auto';}
     else{n.style.removeProperty('left');n.style.removeProperty('top');if(k==='me')n.style.removeProperty('transform');else n.style.removeProperty('right');}
-    if(k==='me'){meBtn.style.fontSize=(13*v.size)+'px';meBtn.style.padding=(5*v.size)+'px '+(9*v.size)+'px';}
+    if(k==='me'){
+     var meSize=36*v.size;
+     meBtn.style.width=meSize+'px';meBtn.style.minWidth=meSize+'px';meBtn.style.maxWidth=meSize+'px';
+     meBtn.style.height=meSize+'px';meBtn.style.minHeight=meSize+'px';meBtn.style.maxHeight=meSize+'px';
+     meBtn.style.fontSize='13px';meBtn.style.padding='0px';
+    }
     else{close.style.width=(36*v.size)+'px';close.style.height=(36*v.size)+'px';close.style.fontSize=(25*v.size)+'px';}
    }
    function applyAll(){apply('me');apply('close');}
