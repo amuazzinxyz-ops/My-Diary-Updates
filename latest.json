@@ -7,8 +7,8 @@
   "sha256": "df2a558ce528d51ae93277fd09d90f9772f53787a364b8c36cd40faec7bdc174",
   "releaseNotes": "My Diary 1.0.222: signed in-place upgrade build (versionCode 221) containing the exact published Web Update 486 bundle, including all retained Web Updates 479–486 since APK 1.0.221. Preserves app identity, notes, photos, PINs, locks, widgets, reminders, and saved data. Uses the previously approved signing certificate. Web Update 486 Phone Test PASS — user confirmed 2026-11-27; APK installation test is pending.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 486,
+  "webVersion": 487,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "99200a1baaea4241e2231c62650b0a85108006e11c26fe2cf24a9d45bc89885d",
-  "webReleaseNotes": "My Diary Web Update 486: corrected the Me button size slider to resize the actual button box (36×36px at 100%, scaled from 75% to 160%) while keeping the Me text at its original 13px size. The button's original design is retained at 100%. No other controls or functions changed. Phone Test PASS — user confirmed on 2026-11-27."
+  "webSha256": "77778f8a69fcf47cc05c65f42b8c5c4beb1821c332336c5feb9aafa69f9861e1",
+  "webReleaseNotes": "My Diary Web Update 487: gives only Meri Diary, the live time, and the date a subtle white-and-gold digital/LED-inspired monospaced look. The existing header background, positions, sizes, clock/date content and timing, and all other controls/functions remain unchanged. Phone Test pending."
 }
