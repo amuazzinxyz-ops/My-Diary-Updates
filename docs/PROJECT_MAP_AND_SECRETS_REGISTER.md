@@ -40,6 +40,15 @@ Last reviewed: 2026-11-27
 - Result: all three user-reported checks passed. The previously pending phone verification for APK 1.0.222 is now closed. Preserve the existing build/source/signing audit details in the release section above; no app source or APK was changed as part of this Register-only update.
 - Register safety backup created before editing: `backups/2026-11-27-before-apk-1.0.222-phone-test-pass-register-update.md`.
 
+
+## Web Update 487 — subtle LED-style Diary header text — 2026-11-27
+
+- Applied a restrained digital/LED-inspired monospaced font and subtle white glow to exactly three header text elements: **Meri Diary**, the live time, and the date.
+- Preserved the existing white text, gold raised shadow, purple header background, text content, sizes, alignment, clock refresh/date logic, and all buttons/features. No background, layout, or other screen was changed.
+- Source and mirror were byte-identical before editing. Both were updated with the same CSS-only style block; SHA-256: `77778f8a69fcf47cc05c65f42b8c5c4beb1821c332336c5feb9aafa69f9861e1`.
+- Safety backup branch: `backup/web487-before-led-header-2026-11-27`. Backups: `backups/2026-11-27-before-web487-led-header-docs-PROJECT_MAP_AND_SECRETS_REGISTER.md`, `backups/2026-11-27-before-web487-led-header-latest.json`, `backups/2026-11-27-before-web487-led-header-web-source-index.html`, and `backups/2026-11-27-before-web487-led-header-diary-web-index.html`.
+- `latest.json` declares **webVersion 487** and the exact verified SHA-256 above. Delivery is through **Check for Updates**; no APK was created. Repository verification and phone testing are separate; **Phone Test pending user confirmation**.
+
 ## Web Update 486 — resize the Me button itself, not its text — 2026-11-26
 
 - Corrected the previous interpretation: the size slider must change the **actual Me button box**, not the text size. The Me label stays at its original 13px; the button width, height, min-width, max-width, min-height, and max-height now scale together from 75% to 160%.
