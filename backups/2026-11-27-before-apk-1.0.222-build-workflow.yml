@@ -1,0 +1,750 @@
+# Approved release build: publish signed Diary 1.0.221/220 including Web Update 478 and the Web updater SHA transport fix.
+name: Build Diary APK from uploaded project ZIP
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "Diary-Android-Project-v13 (6).zip"
+      - "web-source/index.html"
+      - ".github/workflows/build-diary-from-zip.yml"
+      - "scripts/**"
+      - "assets/my-diary-icon.jpg"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: my-diary-release-main
+  # A newer verified build may replace a stalled pre-publication build.
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      DIARY_RELEASE_READY: ${{ secrets.DIARY_KEYSTORE_BASE64 != '' && secrets.DIARY_KEY_ALIAS != '' && secrets.DIARY_KEY_PASSWORD != '' && secrets.DIARY_STORE_PASSWORD != '' }}
+    timeout-minutes: 20
+    steps:
+      - name: Checkout standalone Diary repository
+        uses: actions/checkout@v4
+
+      - name: Check Diary signing readiness (never print secret values)
+        env:
+          HAS_KEYSTORE: ${{ secrets.DIARY_KEYSTORE_BASE64 != '' }}
+          HAS_ALIAS: ${{ secrets.DIARY_KEY_ALIAS != '' }}
+          HAS_KEY_PASSWORD: ${{ secrets.DIARY_KEY_PASSWORD != '' }}
+          HAS_STORE_PASSWORD: ${{ secrets.DIARY_STORE_PASSWORD != '' }}
+        run: |
+          echo "DIARY_KEYSTORE_BASE64 present: $HAS_KEYSTORE"
+          echo "DIARY_KEY_ALIAS present: $HAS_ALIAS"
+          echo "DIARY_KEY_PASSWORD present: $HAS_KEY_PASSWORD"
+          echo "DIARY_STORE_PASSWORD present: $HAS_STORE_PASSWORD"
+
+      - name: Validate supplied Diary signing keystore and alias
+        if: env.DIARY_RELEASE_READY == 'true'
+        env:
+          DIARY_KEYSTORE_BASE64: ${{ secrets.DIARY_KEYSTORE_BASE64 }}
+          DIARY_KEY_ALIAS: ${{ secrets.DIARY_KEY_ALIAS }}
+          DIARY_STORE_PASSWORD: ${{ secrets.DIARY_STORE_PASSWORD }}
+        run: |
+          python3 - <<'PY'
+          import base64, os
+          from pathlib import Path
+          try:
+              data = base64.b64decode(os.environ["DIARY_KEYSTORE_BASE64"], validate=True)
+          except Exception:
+              raise SystemExit("Signing check failed: keystore secret is not valid base64")
+          if not data:
+              raise SystemExit("Signing check failed: decoded keystore is empty")
+          Path("/tmp/diary-signing-check.jks").write_bytes(data)
+          PY
+          keytool -list -keystore /tmp/diary-signing-check.jks -storepass "$DIARY_STORE_PASSWORD" -alias "$DIARY_KEY_ALIAS" >/dev/null
+          rm -f /tmp/diary-signing-check.jks
+          echo "Signing keystore and key alias are readable."
+
+      - name: Extract Diary Android project
+        run: |
+          test -f 'Diary-Android-Project-v13 (6).zip'
+          mkdir -p diary-project
+          unzip -q 'Diary-Android-Project-v13 (6).zip' -d diary-project
+          test -f diary-project/app/build.gradle.kts
+          test -f diary-project/app/src/main/assets/index.html
+
+      - name: Preserve extracted original Android source for safe inspection
+        uses: actions/upload-artifact@v4
+        with:
+          name: Diary-original-Android-source
+          path: diary-project/
+          if-no-files-found: error
+          retention-days: 3
+
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install Android SDK packages
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+
+      - name: Verify project
+        working-directory: diary-project
+        run: python3 scripts/verify_project.py
+
+      - name: Use the exact latest published Diary HTML in Android APK
+        run: |
+          set -euo pipefail
+          test -s web-source/index.html
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          meta=json.loads(Path("latest.json").read_text(encoding="utf-8"))
+          source=Path("web-source/index.html")
+          mirror=Path("diary-web/index.html")
+          if not mirror.is_file() or mirror.read_bytes()!=source.read_bytes():
+              raise SystemExit("BLOCKED: web-source and diary-web mirror are not byte-identical")
+          actual=hashlib.sha256(source.read_bytes()).hexdigest()
+          expected=meta.get("webSha256","").lower()
+          if len(expected)!=64 or actual!=expected:
+              raise SystemExit(f"BLOCKED: published Diary HTML hash mismatch: expected {expected}, got {actual}")
+          meta["webSha256"]=actual
+          Path("latest.json").write_text(json.dumps(meta,indent=2)+"\n",encoding="utf-8")
+          if int(meta.get("webVersion", 0)) != 478:
+              raise SystemExit("BLOCKED: APK must include published Web Update 478")
+          html=source.read_text(encoding="utf-8")
+          required_464_466=(
+              "var copyLabel=document.createElement('span');copyLabel.textContent='Copy Link';",
+              "navigator.clipboard.writeText(shareMessage)",
+              "showDiaryErrorMessage(mf('pinWrong')",
+              "submit.hidden=true;form.appendChild(submit);",
+              "current.addEventListener('input',function(){if(current.value.length===current.maxLength",
+          )
+          missing_464_466=[marker for marker in required_464_466 if marker not in html]
+          if missing_464_466:
+              raise SystemExit("BLOCKED: Web Updates 464-466 source markers missing: "+", ".join(missing_464_466))
+          required=("diaryMyNotesOverlay","diaryMyNotesPanel","diary_personal_notes_v1","diaryCheckUpdatesBtn","diaryDiaryRefreshBtn","diaryInterfaceColoursBtn","diaryShareAppBtn","diaryLockSettingsBtn","diaryFingerprintSettingToggle","DIARY_FINGERPRINT_ENABLED_KEY","function privateLockerSetupForm()","function privateLockerRecoveryForm(config)","function privateLockerSetupPattern()","window.__privateLockerFingerprintResult","privateLockerWrapMaster","privateLockerUnwrapMaster","Private Locker — Search","PIN Bhool Gaye?")
+          missing=[x for x in required if x not in html]
+          if missing: raise SystemExit("BLOCKED: published Diary HTML missing required features: "+", ".join(missing))
+          if "diaryPinBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();configureDiaryPin(true);});" not in html:
+              raise SystemExit("BLOCKED: Diary PIN Tala must open the shared lock settings after PIN setup")
+          if "function configureDiaryPin(showSettingsAfterSave)" not in html or "if(showSettingsAfterSave)openDiaryLockSettings();" not in html:
+              raise SystemExit("BLOCKED: Diary PIN Tala does not route to shared Pattern/PIN/Fingerprint settings")
+          recovery_start=html.find("function forgotDiaryPin(onDone){")
+          recovery_end=html.find("\n }", recovery_start)
+          recovery=html[recovery_start:recovery_end if recovery_end!=-1 else recovery_start+1000]
+          if recovery_start<0 or "localStorage.removeItem(DIARY_MASTER_PATTERN_KEY)" in recovery or "localStorage.setItem(DIARY_MASTER_PIN_KEY,pin)" not in recovery:
+              raise SystemExit("BLOCKED: Forgot PIN recovery must replace only the PIN and preserve the saved Pattern")
+          for required in ("function diaryRecoveryPending()", "function diaryHasFavouriteName()", "function saveDiaryFavouriteName(value)", "function verifyDiaryFavouriteName(value)", "DIARY_RECOVERY_NAME_SALT_KEY", "DIARY_RECOVERY_NAME_HASH_KEY", "if(diaryRecoveryPending())", "favouriteNameWrong", "localStorage.setItem('diaryDiaryMustChooseNewPinAfterRecovery','1')"):
+              if required not in html:
+                  raise SystemExit("BLOCKED: Diary Favourite Name recovery protection missing: " + required)
+          if "function recoverNotePin(n)" not in html or "function pinDigest(pin,salt)" not in html:
+              raise SystemExit("BLOCKED: existing Note Lock recovery code or shared PBKDF2 helper is missing")
+          if "name:'ringVolumePercent'" not in html or "type:'range'" not in html:
+              raise SystemExit("BLOCKED: Calendar/Smart Reminder ringtone-volume slider is missing")
+          if html.count("record.ringVolumePercent=Number(snoozeControls.volume.value)") != 2:
+              raise SystemExit("BLOCKED: ringtone volume is not saved by both reminder forms")
+          if html.count("ringVolume:") != 10:
+              raise SystemExit("BLOCKED: ringtone-volume label is missing from one or more language dictionaries")
+          if "name:'repeatDaily'" not in html or "record.repeatDaily=repeatDailySelect.value==='daily'" not in html or "scheduleReminderDaily" not in html or "record.repeatCustomDays" not in html or "scheduleReminderCustom" not in html or "diary-me-repeat-days-wrap" not in html:
+              raise SystemExit("BLOCKED: Smart Reminder repeat UI/native bridge is incomplete")
+          target=Path("diary-project/app/src/main/assets/index.html")
+          target.write_text(html,encoding="utf-8")
+          print(f"PASS: Android APK source is the exact published Diary HTML ({len(html)} chars; SHA-256 {actual})")
+          PY
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          html = Path("diary-project/app/src/main/assets/index.html").read_text(encoding="utf-8")
+          scripts = re.findall(r"<script[^>]*>(.*?)</script>", html, re.I | re.S)
+          module = next((s for s in scripts if "function openDiaryPanel" in s), None)
+          if module is None:
+              raise SystemExit("Diary module missing from published app source")
+          Path("/tmp/diary-module.js").write_text(module, encoding="utf-8")
+          PY
+          node --check /tmp/diary-module.js
+          python3 - <<'PY'
+          from pathlib import Path
+          source=Path("scripts/add_diary_app_actions.py").read_text(encoding="utf-8")
+          required=("scheduleReminderDaily","repeatDaily: Boolean = false","dailyAnchorAt: Long = atMillis","nextDailyAt","diary_reminder_repeat_daily","if (!repeatDaily && customDaysCsv.isBlank()) DiaryReminderScheduler.cancel(context, id)","snoozeUsed < snoozeLimit","snoozeUsed + 1, repeatDaily, dailyAnchorAt, customDaysCsv","val nextSnoozeUsed = (snoozeUsed + 1).coerceAtMost(snoozeLimit)","DiaryReminderSoundService.start(context, soundUri, ringDurationSeconds, ringVolumePercent)","DiaryReminderScheduler.scheduleAutoSnooze(","System.currentTimeMillis() + snoozeMinutes.toLong() * 60L * 1000L","if (restoreAt > 0L && snoozeUsed < snoozeLimit)","privateLockerBiometricAlias","BiometricPrompt.CryptoObject(cipher)","enablePrivateLockerFingerprint","authenticatePrivateLockerFingerprint","privateLockerBiometricKey","notifyPrivateLockerFingerprintResult")
+          required += ("scheduleReminderCustom", "customDaysCsv: String = \"\")", "nextCustomAt", "diary_reminder_custom_days_csv", "if (!repeatDaily && customDaysCsv.isBlank()) DiaryReminderScheduler.cancel(context, id)", "nextCustomAt(dailyAnchorAt, customDaysCsv)")
+          missing=[x for x in required if x not in source]
+          if missing: raise SystemExit("BLOCKED: native Smart Reminder repeat implementation guard incomplete: "+", ".join(missing))
+          print("PASS: native Smart Reminder repeat implementation guard")
+          PY
+          python3 - <<'PY'
+          from pathlib import Path
+          html = Path("diary-project/app/src/main/assets/index.html").read_text(encoding="utf-8")
+          required = (
+              "var DIARY_MASTER_PATTERN_KEY='diary_diary_master_pattern_v1';",
+              "function validDiaryPattern(value)",
+              "function makeDiaryPatternGrid(onComplete,onShort)",
+              "function configureDiaryPattern()",
+              "var patternRow=makeRow(t('patternSwitch'),t('patternSwitchHint'),'diaryPatternSettingToggle');",
+              "patternPanel.appendChild(patternGrid);patternPanel.appendChild(patternStatus);",
+              "pinArea.appendChild(el('div',{class:'diary-pattern-hint'},t('diaryPinEnter')));",
+              "if(patternPanel)box.appendChild(patternPanel);",
+              "box.appendChild(pinArea);box.appendChild(recoveryNameSubmit);box.appendChild(recoveryStatus);if(fingerprintBtn)box.appendChild(fingerprintBtn);",
+              "localStorage.removeItem(DIARY_MASTER_PATTERN_KEY);",
+          )
+          missing = [item for item in required if item not in html]
+          if missing:
+              raise SystemExit("BLOCKED: Diary Pattern Lock implementation is incomplete: " + ", ".join(missing))
+          for required_translation in ("patternSwitch:", "patternWrong:", "patternUsePin:"):
+              if html.count(required_translation) < 3:
+                  raise SystemExit("BLOCKED: Pattern Lock translations are incomplete: " + required_translation)
+          print("PASS: optional Pattern Lock setup, 3x3 grid, PIN fallback and recovery preservation markers verified")
+          PY
+          python3 scripts/add_diary_app_actions.py
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib
+          asset = Path("diary-project/app/src/main/assets/my-diary-icon.jpg")
+          data = asset.read_bytes()
+          blob = hashlib.sha1(b"blob " + str(len(data)).encode("ascii") + b"\0" + data).hexdigest()
+          if blob != "8ea3faa116fe583e0cbba3b5c80996596a3c95ed":
+              raise SystemExit("BLOCKED: original Diary logo missing or changed")
+          source = Path("diary-project/app/src/main/java/com/muazzin/diary/MainActivity.kt").read_text(encoding="utf-8")
+          start = source.find("@JavascriptInterface fun shareApp()")
+          end = source.find("@JavascriptInterface fun checkForUpdates()", start)
+          if start < 0 or end < 0:
+              raise SystemExit("BLOCKED: native Share App method missing")
+          share = source[start:end]
+          required = (
+              '📒 *MY DIARY*',
+              'A simple space for your thoughts and notes.',
+              '⬇️ *DOWNLOAD MY DIARY*',
+              'https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk',
+              'assets.open("my-diary-icon.jpg")',
+              'type = "image/jpeg"',
+              'putExtra(Intent.EXTRA_STREAM, logoUri)',
+              'Intent.FLAG_GRANT_READ_URI_PERMISSION',
+              'Intent.createChooser(share, "Share My Diary")',
+          )
+          missing = [item for item in required if item not in share]
+          if missing:
+              raise SystemExit("BLOCKED: logo image share implementation incomplete: " + ", ".join(missing))
+          print("PASS: exact original Diary logo, image attachment, formatted caption, original APK link, FileProvider grant and chooser verified")
+          PY
+          python3 - <<'PY'
+          from pathlib import Path
+          source = Path("diary-project/app/src/main/java/com/muazzin/diary/MainActivity.kt").read_text(encoding="utf-8")
+          start = source.find("@JavascriptInterface fun shareApp()")
+          end = source.find("@JavascriptInterface fun checkForUpdates()", start)
+          if start < 0 or end < 0:
+              raise SystemExit("BLOCKED: native Share App method missing")
+          share = source[start:end]
+          required = (
+              '📒 *MY DIARY*',
+              'A simple space for your thoughts and notes.',
+              '✍️ Write your thoughts',
+              '🔎 Find saved notes quickly',
+              '📚 Keep your notes together',
+              '⬇️ *DOWNLOAD MY DIARY*',
+              'https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk',
+              'Intent.createChooser(share, "Share My Diary")',
+          )
+          missing = [item for item in required if item not in share]
+          if missing:
+              raise SystemExit("BLOCKED: formatted share message is incomplete: " + ", ".join(missing))
+          print("PASS: native share invitation contains formatted title, description, features, original APK link and chooser")
+          PY
+          python3 -m py_compile scripts/add_diary_home_widget.py scripts/polish_diary_home_widget.py
+          python3 scripts/add_diary_home_widget.py
+          python3 scripts/polish_diary_home_widget.py
+          python3 - <<'PY'
+          from pathlib import Path
+          html = Path("diary-project/app/src/main/assets/index.html").read_text(encoding="utf-8")
+          kotlin = Path("diary-project/app/src/main/java/com/muazzin/diary/MainActivity.kt").read_text(encoding="utf-8")
+          required_html = ("diary_widget_launch=1(?:&|$)",)
+          required_kotlin = (
+              'url.startsWith("https://appassets.androidplatform.net/assets/index.html")',
+              'pendingWidgetTarget != null) "?diary_widget_launch=1"',
+              "savedInstanceState != null && pendingWidgetTarget == null",
+          )
+          missing = [item for item in required_html if item not in html] + [item for item in required_kotlin if item not in kotlin]
+          if missing:
+              raise SystemExit("BLOCKED: cold widget launch must preserve the requested destination: " + ", ".join(missing))
+          print("PASS: cold widget launch marker prevents Diary startup auto-open from replacing widget destination")
+          PY
+          python3 - <<'PY'
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+          info=ET.parse("diary-project/app/src/main/res/xml/diary_home_widget_info.xml").getroot()
+          ns="{http://schemas.android.com/apk/res/android}"
+          if info.get(ns+"minResizeWidth")!="150dp" or info.get(ns+"minResizeHeight")!="260dp" or info.get(ns+"resizeMode")!="horizontal|vertical":
+              raise SystemExit("FAIL: widget must support horizontal and vertical resizing")
+          provider=Path("diary-project/app/src/main/java/com/muazzin/diary/DiaryHomeWidgetProvider.kt").read_text(encoding="utf-8")
+          for marker in ("onAppWidgetOptionsChanged","OPTION_APPWIDGET_MIN_WIDTH","OPTION_APPWIDGET_MIN_HEIGHT","responsiveBodySize"):
+              if marker not in provider: raise SystemExit("FAIL: responsive widget source missing "+marker)
+          layout=Path("diary-project/app/src/main/res/layout/diary_home_widget.xml").read_text(encoding="utf-8")
+          import re
+          root=re.search(r'<LinearLayout\b(?=[^>]*android:id="@\+id/widgetRoot")[^>]*>', layout)
+          if not root or 'android:layout_height="wrap_content"' not in root.group(0):
+              raise SystemExit("FAIL: widget visible background must wrap only the selected buttons")
+          print("PASS: two-axis user resize bounds and responsive widget sizing guards")
+          PY
+          python3 - <<'PY'
+          from pathlib import Path
+          kotlin = Path("diary-project/app/src/main/java/com/muazzin/diary/MainActivity.kt").read_text(encoding="utf-8")
+          manifest = Path("diary-project/app/src/main/AndroidManifest.xml").read_text(encoding="utf-8")
+          required = ("fun canUseFingerprint(): Boolean", "fun authenticateFingerprint()", "BiometricPrompt.Builder", "FingerprintManager")
+          missing = [item for item in required if item not in kotlin]
+          if missing:
+              raise SystemExit("BLOCKED: native fingerprint bridge is incomplete: " + ", ".join(missing))
+          for permission in ("android.permission.USE_BIOMETRIC", "android.permission.USE_FINGERPRINT"):
+              if permission not in manifest:
+                  raise SystemExit("BLOCKED: fingerprint permission missing: " + permission)
+          print("PASS: Android native fingerprint sensor detection and BiometricPrompt bridge present")
+          PY
+          python3 - <<'PY'
+          import xml.etree.ElementTree as ET
+          from pathlib import Path
+          manifest = Path("diary-project/app/src/main/AndroidManifest.xml")
+          root = ET.parse(manifest).getroot()
+          ns = "{http://schemas.android.com/apk/res/android}"
+          permissions = {x.get(ns + "name") for x in root.findall("uses-permission")}
+          required = {
+              "android.permission.POST_NOTIFICATIONS",
+              "android.permission.RECEIVE_BOOT_COMPLETED",
+              "android.permission.SCHEDULE_EXACT_ALARM",
+              "android.permission.WAKE_LOCK",
+          }
+          missing = sorted(required - permissions)
+          if missing:
+              raise SystemExit("BLOCKED: missing Android permissions: " + ", ".join(missing))
+          app = root.find("application")
+          receivers = {x.get(ns + "name"): x for x in app.findall("receiver")}
+          for name in (".DiaryReminderReceiver", ".DiaryReminderBootReceiver"):
+              if name not in receivers:
+                  raise SystemExit("BLOCKED: missing manifest receiver " + name)
+          boot_actions = {
+              a.get(ns + "name")
+              for f in receivers[".DiaryReminderBootReceiver"].findall("intent-filter")
+              for a in f.findall("action")
+          }
+          if not {"android.intent.action.BOOT_COMPLETED", "android.intent.action.MY_PACKAGE_REPLACED"} <= boot_actions:
+              raise SystemExit("BLOCKED: reminder restore receiver lacks boot/update actions")
+          kotlin = Path("diary-project/app/src/main/java/com/muazzin/diary/MainActivity.kt").read_text(encoding="utf-8")
+          generated_html = Path("diary-project/app/src/main/assets/index.html").read_text(encoding="utf-8")
+          if "function askFourDigitPinAutomatically(title,validator)" not in generated_html:
+              raise SystemExit("BLOCKED: Note Lock PIN modal must support inline PIN validation")
+          if "function showInlineError(message)" not in generated_html or "showInlineError(t('codeWrong'))" not in generated_html:
+              raise SystemExit("BLOCKED: wrong Note Lock PIN must show the nearby styled popup")
+          if "box.appendChild(errorPopup)" not in generated_html:
+              raise SystemExit("BLOCKED: Note Lock error popup must be attached beside the PIN input")
+          if "askFourDigitPinAutomatically(t('pinPrompt'),matchesPin)" not in generated_html:
+              raise SystemExit("BLOCKED: Turn Off Lock must validate the PIN inside the same PIN box")
+          lock_off = generated_html.split("function turnLockOff(n){", 1)[1].split("function requestUnlock(n)", 1)[0]
+          if "window.alert(t('codeWrong'))" in lock_off:
+              raise SystemExit("BLOCKED: wrong Note Lock PIN must not use a separate browser alert")
+          if "inner class DiaryNativeActions" not in kotlin or "private inner class DiaryNativeActions" in kotlin:
+              raise SystemExit("BLOCKED: JavaScript bridge class must be publicly accessible to Android WebView")
+          if 'webView.addJavascriptInterface(DiaryNativeActions(), "DiaryAppActions")' not in kotlin:
+              raise SystemExit("BLOCKED: Android WebView DiaryAppActions bridge registration is missing")
+          if "fun openDocument(base64: String, fileName: String, mimeType: String)" not in kotlin or "androidx.core.content.FileProvider.getUriForFile" not in kotlin or "Intent.ACTION_VIEW" not in kotlin or "ClipData.newUri(contentResolver, safeName, contentUri)" not in kotlin:
+              raise SystemExit("BLOCKED: native My Documents FileProvider viewer handoff is missing")
+          if "fun saveMemoryImage(base64: String, fileName: String, mimeType: String)" not in kotlin or "android.provider.MediaStore.Downloads.EXTERNAL_CONTENT_URI" not in kotlin or "MediaStore.MediaColumns.RELATIVE_PATH" not in kotlin:
+              raise SystemExit("BLOCKED: My Memories native Downloads-folder save bridge is missing")
+          if "bridge.saveMemoryImage(base64" not in generated_html or "kind==='memories'" not in generated_html or "reader.readAsDataURL(record.fileBlob)" not in generated_html:
+              raise SystemExit("BLOCKED: My Memories Download button is not connected to the native Downloads save bridge")
+          if "meFeatureContent.appendChild(meFeatureTools(kind));meFeatureContent.appendChild(meFeatureForm(kind))" not in generated_html:
+              raise SystemExit("BLOCKED: My Memories search bar must appear before the entry form")
+          if "diary-memories-search-download-repair" not in generated_html or "My Memories — Search Saved Images" not in generated_html or "diary-memory-download-status" not in generated_html:
+              raise SystemExit("BLOCKED: My Memories search visibility and per-image download feedback repair is missing")
+          if "val chooser = Intent.createChooser(viewIntent, \"Open document\")" not in kotlin or kotlin.count("clipData = grantClip") < 2 or "val extensionType = android.webkit.MimeTypeMap.getSingleton()" not in kotlin:
+              raise SystemExit("BLOCKED: PDF/Office viewer chooser must carry its own read grant and extension-based MIME type")
+          if "android.graphics.BitmapFactory.decodeFile" not in kotlin or "android.widget.ImageView.ScaleType.FIT_CENTER" not in kotlin or 'resolvedType.startsWith("image/")' not in kotlin:
+              raise SystemExit("BLOCKED: My Documents photo files must open in the in-app image viewer")
+          if "android.graphics.pdf.PdfRenderer(descriptor)" not in kotlin or "renderPdfPage(0)" not in kotlin or 'text = "‹ Previous"' not in kotlin or 'text = "Next ›"' not in kotlin:
+              raise SystemExit("BLOCKED: PDF files must open in the in-app paginated PDF viewer")
+          if "bridge.openDocument(base64" not in generated_html or "kind==='documents'" not in generated_html:
+              raise SystemExit("BLOCKED: My Documents Open button is not connected to the native viewer")
+          if "messageBridge.postMessage(JSON.stringify" not in generated_html or "DiaryNativeDocuments" not in kotlin or "DiaryNativeActions().openDocument(encoded, name, type)" not in kotlin:
+              raise SystemExit("BLOCKED: My Documents Open must use the origin-restricted WebMessageListener channel with native viewer dispatch")
+          if "alarm.setAlarmClock(alarmClock, pending)" not in kotlin or "AlarmManager.AlarmClockInfo" not in kotlin:
+              raise SystemExit("BLOCKED: AlarmClock scheduling code is missing")
+          if "setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP" in kotlin or "setAndAllowWhileIdle(" in kotlin:
+              raise SystemExit("BLOCKED: old non-alarm-clock scheduler remains")
+          if "Notification.CATEGORY_ALARM" not in kotlin:
+              raise SystemExit("BLOCKED: reminder notification is not categorized as an alarm")
+          if kotlin.count(".setFullScreenIntent(wakePending, true)") != 1:
+              raise SystemExit("BLOCKED: reminder must use exactly one full-screen wake handoff")
+          if "val wakeIntent = Intent(context, DiaryReminderWakeActivity::class.java)" not in kotlin or 'getIntExtra("diary_reminder_ring_duration_seconds", 30)' not in kotlin or "postDelayed({" not in kotlin or "durationSeconds * 1000L" not in kotlin:
+              raise SystemExit("BLOCKED: wake activity must hold the display for the selected ringtone duration")
+          wake_activity = kotlin.split("class DiaryReminderWakeActivity", 1)[1].split("\n}", 1)[0]
+          if "NotificationManager).cancel(" in wake_activity:
+              raise SystemExit("BLOCKED: wake-screen timeout must not cancel the user's reminder notification")
+          if "setShowWhenLocked(true)" not in kotlin or "setTurnScreenOn(true)" not in kotlin or "FLAG_KEEP_SCREEN_ON" not in kotlin:
+              raise SystemExit("BLOCKED: wake activity cannot reliably turn on and hold the display for the selected duration")
+          for visible in ("MY DIARY REMINDER", "diary_reminder_title", "diary_reminder_details", "sendReminderAction(action)", "ACTION_SNOOZE", "ACTION_DONE", "NotificationManager"):
+              if visible not in kotlin:
+                  raise SystemExit("BLOCKED: immediate full-screen reminder display/action missing: " + visible)
+          if "if (details.isNotBlank()) addLine(card, details, 17f, android.graphics.Color.rgb(55, 65, 81), true)" not in kotlin:
+              raise SystemExit("BLOCKED: reminder wake-screen Details must be explicitly bold")
+          if ".setVisibility(Notification.VISIBILITY_PUBLIC)" not in kotlin:
+              raise SystemExit("BLOCKED: reminder notification is not explicitly visible on the lock screen")
+          if "SCREEN_BRIGHT_WAKE_LOCK" not in kotlin or "ACQUIRE_CAUSES_WAKEUP" not in kotlin or "acquire(seconds * 1000L)" not in kotlin:
+              raise SystemExit("BLOCKED: timed screen-wake lock for the selected ringtone duration is missing")
+          if "android.permission.USE_FULL_SCREEN_INTENT" not in permissions:
+              raise SystemExit("BLOCKED: Android full-screen alarm intent permission is missing")
+          if not {"android.permission.FOREGROUND_SERVICE", "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"} <= permissions:
+              raise SystemExit("BLOCKED: media playback foreground-service permissions are missing")
+          services = {x.get(ns + "name"): x for x in app.findall("service")}
+          sound_service = services.get(".DiaryReminderSoundService")
+          if sound_service is None or sound_service.get(ns + "exported") != "false" or sound_service.get(ns + "foregroundServiceType") != "mediaPlayback":
+              raise SystemExit("BLOCKED: timed ringtone foreground service manifest is missing or misconfigured")
+          if "DiaryReminderSoundService.start(context, soundUri, ringDurationSeconds, ringVolumePercent)" not in kotlin or "ringDurationSeconds" not in kotlin or "ringVolumePercent" not in kotlin:
+              raise SystemExit("BLOCKED: selected ringtone duration is not connected to native playback")
+          if "setSound(null, null)" not in kotlin or "setSound(null, alarmAttributes)" not in kotlin:
+              raise SystemExit("BLOCKED: reminder notification must be silent while timed ringtone playback runs")
+          if "setOf(2, 5, 10, 15, 20, 30)" not in kotlin or "setOf(10, 20, 30, 60, 120, 300)" not in kotlin or "SCREEN_BRIGHT_WAKE_LOCK" not in kotlin or "player.volume = volumePercent / 100f" not in kotlin:
+              raise SystemExit("BLOCKED: approved Snooze and ringtone-duration choices are missing")
+          wake_activities = [x for x in app.findall("activity") if x.get(ns + "name") == ".DiaryReminderWakeActivity"]
+          if len(wake_activities) != 1 or wake_activities[0].get(ns + "exported") != "false" or wake_activities[0].get(ns + "excludeFromRecents") != "true":
+              raise SystemExit("BLOCKED: wake-only activity manifest configuration is invalid")
+          if kotlin.count(".setContentIntent(content)") != 1:
+              raise SystemExit("BLOCKED: expected exactly one standard reminder notification tap action")
+          for required in ("RingtoneManager.ACTION_RINGTONE_PICKER", "Intent.ACTION_OPEN_DOCUMENT", "setSound(null, alarmAttributes)", "diary_reminder_sound_uri", "diary_reminder_snooze_minutes", "diary_reminder_snooze_limit", "diary_reminder_ring_duration_seconds", "diary_reminder_ring_volume_percent", "ringDurationSeconds", "ringVolumePercent", "snoozeUsed", 'put("soundUri", soundUri)', 'put("snoozeMinutes", snoozeMinutes)', 'put("snoozeLimit", snoozeLimit)'):
+              if required not in kotlin:
+                  raise SystemExit("BLOCKED: custom reminder sound support is missing: " + required)
+          if "pickReminderSound(currentUri: String)" not in kotlin:
+              raise SystemExit("BLOCKED: reminder sound picker bridge is missing")
+          for required in ("const val ACTION_AUTO_SNOOZE", "AUTO_ITEMS = \"auto_items\"", "fun scheduleAutoSnooze(", "fun cancelAutoSnooze(", "fun readAutoItems(", "val autoItems = readAutoItems(context)", "DiaryReminderScheduler.scheduleAutoSnooze(", "DiaryReminderScheduler.ACTION_AUTO_SNOOZE ->", "DiaryReminderScheduler.cancelAutoSnooze(context, id)"):
+              if required not in kotlin:
+                  raise SystemExit("BLOCKED: unanswered-alarm automatic repeat is incomplete: " + required)
+          print("PASS: AlarmClock scheduler, unanswered-alarm auto-repeat, standard notification tap, wake-only activity, per-reminder ringtone/file selection, sound persistence, manifest receivers and permissions verified")
+          PY
+          python3 scripts/add_online_diary_updates.py
+          python3 - <<'PY'
+          from pathlib import Path
+          html = Path("diary-project/app/src/main/assets/index.html").read_text(encoding="utf-8")
+          kotlin = Path("diary-project/app/src/main/java/com/muazzin/diary/MainActivity.kt").read_text(encoding="utf-8")
+          if "diaryKeepMeOpenAfterUpdate" not in html:
+              raise SystemExit("BLOCKED: Diary HTML cannot restore the Me menu after update refresh")
+          if kotlin.count("diaryKeepMeOpenAfterUpdate") != 2 or kotlin.count("evaluateJavascript") < 2:
+              raise SystemExit("BLOCKED: native updater must save Me-menu state before both verified refresh paths")
+          print("PASS: Me menu state is saved before both native verified web refresh paths and restored by Diary HTML")
+          PY
+          echo "---- Android app identity (before branding adjustment) ----"
+          grep -RInE 'applicationId|namespace|android:label|app_name' diary-project/app/build.gradle.kts diary-project/app/src/main/AndroidManifest.xml diary-project/app/src/main/res/values* 2>/dev/null || true
+
+      - name: Audit generated Diary interface text for translation coverage
+        run: |
+          python3 - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          import re
+          src = Path("diary-project/app/src/main/assets/index.html").read_text(encoding="utf-8")
+          class Audit(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.skip = 0
+                  self.items = set()
+              def handle_starttag(self, tag, attrs):
+                  attrs = dict(attrs)
+                  if tag in ("script", "style"):
+                      self.skip += 1
+                  for key in ("placeholder", "aria-label", "title", "alt", "value"):
+                      value = attrs.get(key, "").strip()
+                      if value and not re.fullmatch(r"[{}$\w.-]+", value):
+                          self.items.add(f"[{key}] {value}")
+              def handle_endtag(self, tag):
+                  if tag in ("script", "style") and self.skip:
+                      self.skip -= 1
+              def handle_data(self, data):
+                  if not self.skip:
+                      value = " ".join(data.split())
+                      if value and re.search(r"[A-Za-z\u0900-\u0D7F\u0600-\u06FF]", value):
+                          self.items.add(value)
+          parser = Audit()
+          parser.feed(src)
+          out = sorted(parser.items, key=str.casefold)
+          # Also inspect JS translation dictionaries, which the HTML parser skips.
+          scripts = "\n".join(re.findall(r"<script[^>]*>(.*?)</script>", src, re.I | re.S))
+          dicts = {}
+          for lang in ("roman", "english", "hindi", "urdu", "arabic", "bengali", "gujarati", "marathi", "tamil", "telugu"):
+              pattern = r"words\s*(?:\.\s*" + lang + r"|\[\s*\"" + lang + r"\"\s*\])\s*=\s*(?:Object\.assign\(\{\},\s*words\.english,\s*)?\{(.*?)\}\)?\s*;"
+              m = re.search(pattern, scripts, re.S)
+              if m:
+                  dicts[lang] = set(re.findall(r"([A-Za-z_$][\w$]*)\s*:", m.group(1)))
+          english = dicts.get("english", set())
+          lines = [
+              "Generated Diary interface static text candidates: " + str(len(out)),
+              "JavaScript language dictionaries detected: " + ", ".join(sorted(dicts)),
+              "English dictionary keys detected: " + str(len(english)),
+              "",
+              "Dictionary key coverage (matched keys / English keys):"
+          ]
+          for lang in ("roman", "english", "hindi", "urdu", "arabic", "bengali", "gujarati", "marathi", "tamil", "telugu"):
+              if lang in dicts:
+                  covered = len(english & dicts[lang])
+                  missing = sorted(english - dicts[lang])
+                  lines.append(f"{lang}: {covered}/{len(english)}; missing: " + ", ".join(missing[:80]))
+              else:
+                  lines.append(f"{lang}: dictionary not detected")
+          lines += ["", "Static candidates:", *out]
+          Path("diary-interface-text-audit.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
+          print("\n".join(lines[:16]))
+          PY
+      - name: Inspect original Diary image assets
+        run: |
+          echo "---- Image files in original uploaded project ----"
+          find diary-project -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' -o -iname '*.bmp' -o -iname '*.gif' \) | head -100
+          echo "---- Image references in original Diary HTML ----"
+          grep -Eoi 'src="[^"]+\.(png|jpg|jpeg|webp|bmp|gif)[^"]*"' diary-project/app/src/main/assets/index.html | head -100 || true
+
+      - name: Validate Diary identity script
+        run: python3 -m py_compile scripts/apply_diary_identity.py
+
+      - name: Apply independent Diary Android identity
+        run: python3 scripts/apply_diary_identity.py
+
+      - name: Set approved Diary release version 1.0.221 (versionCode 220)
+        working-directory: diary-project
+        run: |
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          p = Path("app/build.gradle.kts")
+          s = p.read_text(encoding="utf-8")
+          s, code_count = re.subn(r'versionCode\s*=\s*\d+', 'versionCode = 220', s, count=1)
+          s, name_count = re.subn(r'versionName\s*=\s*"[^"]+"', 'versionName = "1.0.221"', s, count=1)
+          if code_count != 1 or name_count != 1:
+              raise SystemExit("Could not safely set exactly one Android versionCode/versionName")
+          p.write_text(s, encoding="utf-8")
+          print("Set Diary release versionName=1.0.221, versionCode=220")
+          PY
+
+      - name: Fail closed unless source version matches the approved next Diary release
+        if: env.DIARY_RELEASE_READY == 'true'
+        working-directory: diary-project
+        run: |
+          python3 - <<'PY'
+          import json, re
+          from pathlib import Path
+          gradle = Path("app/build.gradle.kts").read_text(encoding="utf-8")
+          meta = json.loads(Path("../latest.json").read_text(encoding="utf-8"))
+          def one(pattern, label):
+              m = re.search(pattern, gradle)
+              if not m:
+                  raise SystemExit(f"BLOCKED: Gradle {label} declaration not found")
+              return m.group(1)
+          package = one(r'applicationId\s*=\s*"([^"]+)"', "applicationId")
+          code = int(one(r'versionCode\s*=\s*(\d+)', "versionCode"))
+          name = one(r'versionName\s*=\s*"([^"]+)"', "versionName")
+          if package != "com.personal.diaryapp" or meta.get("packageName") != package:
+              raise SystemExit("BLOCKED: APK package and update metadata do not match")
+          if code != 220 or name != "1.0.221":
+              raise SystemExit(f"BLOCKED: expected approved APK version 1.0.221/220, found {name}/{code}")
+          feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
+          if feed_version != (219, "1.0.220") or int(meta.get("webVersion", 0)) != 478:
+              raise SystemExit(f"BLOCKED: update feed must be My Diary 1.0.220/219 with Web Update 478 before building: {feed_version}")
+          print(f"PASS: package={package}, release={name}/{code}; feed state is approved: {feed_version}")
+          PY
+
+      - name: Align Java and Kotlin JVM targets
+        working-directory: diary-project
+        run: |
+          cat >> app/build.gradle.kts <<'GRADLE'
+
+          android {
+              compileOptions {
+                  sourceCompatibility = JavaVersion.VERSION_17
+                  targetCompatibility = JavaVersion.VERSION_17
+              }
+          }
+          tasks.withType<JavaCompile>().configureEach {
+              sourceCompatibility = JavaVersion.VERSION_17.toString()
+              targetCompatibility = JavaVersion.VERSION_17.toString()
+          }
+          tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+              kotlinOptions.jvmTarget = "17"
+          }
+          GRADLE
+
+      - name: Build debug APK
+        working-directory: diary-project
+        run: |
+          gradle_with_retry() {
+            local attempt=1
+            until gradle --no-daemon "$@"; do
+              if [ "$attempt" -ge 3 ]; then
+                echo "Gradle failed after 3 attempts."
+                return 1
+              fi
+              attempt=$((attempt + 1))
+              echo "Gradle dependency/build attempt failed; retrying ($attempt/3) after a short wait."
+              sleep $((attempt * 20))
+            done
+          }
+          gradle_with_retry :app:assembleDebug
+
+      - name: Build unsigned Release APK for private owner-side signing
+        if: env.DIARY_RELEASE_READY != 'true'
+        working-directory: diary-project
+        run: |
+          gradle_with_retry() {
+            local attempt=1
+            until gradle --no-daemon "$@"; do
+              if [ "$attempt" -ge 3 ]; then
+                echo "Gradle failed after 3 attempts."
+                return 1
+              fi
+              attempt=$((attempt + 1))
+              echo "Gradle dependency/build attempt failed; retrying ($attempt/3) after a short wait."
+              sleep $((attempt * 20))
+            done
+          }
+          gradle_with_retry :app:assembleRelease
+          test -s app/build/outputs/apk/release/app-release-unsigned.apk
+
+      - name: Configure signed Release build
+        if: env.DIARY_RELEASE_READY == 'true'
+        working-directory: diary-project
+        env:
+          DIARY_KEYSTORE_BASE64: ${{ secrets.DIARY_KEYSTORE_BASE64 }}
+          DIARY_KEY_ALIAS: ${{ secrets.DIARY_KEY_ALIAS }}
+          DIARY_KEY_PASSWORD: ${{ secrets.DIARY_KEY_PASSWORD }}
+          DIARY_STORE_PASSWORD: ${{ secrets.DIARY_STORE_PASSWORD }}
+        run: |
+          python3 - <<'PY'
+          import base64, os
+          from pathlib import Path
+          raw = base64.b64decode(os.environ["DIARY_KEYSTORE_BASE64"])
+          Path("app/diary-release.jks").write_bytes(raw)
+          if not raw:
+              raise SystemExit("Release keystore is empty")
+          p = Path("app/build.gradle.kts")
+          s = p.read_text(encoding="utf-8")
+          s += """
+          
+          android {
+              signingConfigs {
+                  create("diaryRelease") {
+                      storeFile = file("diary-release.jks")
+                      storePassword = System.getenv("DIARY_STORE_PASSWORD")
+                      keyAlias = System.getenv("DIARY_KEY_ALIAS")
+                      keyPassword = System.getenv("DIARY_KEY_PASSWORD")
+                  }
+              }
+              buildTypes {
+                  getByName("release") {
+                      signingConfig = signingConfigs.getByName("diaryRelease")
+                  }
+              }
+          }
+          """
+          p.write_text(s, encoding="utf-8")
+          PY
+          gradle_with_retry() {
+            local attempt=1
+            until gradle --no-daemon "$@"; do
+              if [ "$attempt" -ge 3 ]; then
+                echo "Signed Release Gradle build failed after 3 attempts."
+                return 1
+              fi
+              attempt=$((attempt + 1))
+              echo "Signed Release Gradle dependency/build attempt failed; retrying ($attempt/3) after a short wait."
+              sleep $((attempt * 20))
+            done
+          }
+          gradle_with_retry :app:assembleRelease
+          jarsigner -verify -verbose -certs app/build/outputs/apk/release/app-release.apk
+          APK_SIGNER="$(find "$ANDROID_HOME/build-tools" -name apksigner -type f | sort -V | tail -1)"
+          test -n "$APK_SIGNER"
+          SIGNER_OUTPUT="$("$APK_SIGNER" verify --verbose --print-certs app/build/outputs/apk/release/app-release.apk)"
+          echo "$SIGNER_OUTPUT"
+          ACTUAL_FINGERPRINT="$(echo "$SIGNER_OUTPUT" | sed -nE 's/.*certificate SHA-256 digest: ([0-9a-fA-F]{64}).*/\1/p' | head -n1 | tr '[:lower:]' '[:upper:]')"
+          EXPECTED_FINGERPRINT="23A4E93F3C7911DCE18389EA583548700C6AD6A3759707F1CD222D07E2408B5A"
+          if [ "$ACTUAL_FINGERPRINT" != "$EXPECTED_FINGERPRINT" ]; then
+            echo "Signing certificate mismatch. Expected $EXPECTED_FINGERPRINT, got $ACTUAL_FINGERPRINT"
+            exit 1
+          fi
+          echo "Release APK certificate matches the previously supplied SHA-256 fingerprint."
+          rm -f app/diary-release.jks
+
+      - name: Publish verified Diary update 1.0.221 after release verification PASS
+        if: env.DIARY_RELEASE_READY == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          APK="diary-project/app/build/outputs/apk/release/app-release.apk"
+          test -s "$APK"
+          SHA256="$(sha256sum "$APK" | awk '{print $1}')"
+          cp "$APK" /tmp/My-Diary-verified.apk
+          printf '1.0.221\n220\n%s\n' "$SHA256" > /tmp/diary-release-version.txt
+          git fetch origin main
+          git checkout -f -B diary-publish-main origin/main
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
+          feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
+          if meta.get("packageName") != "com.personal.diaryapp" or feed_version != (219, "1.0.220") or int(meta.get("webVersion", 0)) != 478:
+              raise SystemExit(f"BLOCKED: live main feed is neither the installed baseline nor the approved target release: {feed_version}")
+          lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
+          meta["appName"] = "My Diary"
+          meta["packageName"] = "com.personal.diaryapp"
+          meta["versionName"] = lines[0]
+          meta["versionCode"] = int(lines[1])
+          meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk"
+          meta["sha256"] = lines[2]
+          meta["releaseNotes"] = "My Diary 1.0.221: fixes Web Update SHA verification transport by requesting identity-encoded download bytes; includes published Web Update 478 (Me-menu close resets Move Mode OFF while preserving saved positions and sizes). Existing Reminder details formatting and all other app functions remain unchanged. Signed APK includes the latest published Diary Web Update " + str(meta.get("webVersion", "")) + " bundle. Existing app identity, notes, photos, PINs, locks, widgets, reminders, and saved data are preserved."
+          meta["webSha256"] = hashlib.sha256(Path("web-source/index.html").read_bytes()).hexdigest()
+          Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          PY
+          cp /tmp/My-Diary-verified.apk My-Diary.apk
+          cp /tmp/My-Diary-verified.apk My-Diary-1.0.221.apk
+          python3 -m json.tool latest.json >/dev/null
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add My-Diary.apk My-Diary-1.0.220.apk latest.json
+          git commit -m "Publish My Diary update 1.0.221"
+          git push origin HEAD:main
+      - name: Upload unsigned Release APK for private owner-side signing
+        if: env.DIARY_RELEASE_READY != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: My-Diary-unsigned-Release-APK
+          path: diary-project/app/build/outputs/apk/release/app-release-unsigned.apk
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload signed Release APK
+        if: env.DIARY_RELEASE_READY == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: My-Diary-1.0.221-signed-APK
+          path: diary-project/app/build/outputs/apk/release/app-release.apk
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload translation audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: Diary-interface-text-audit
+          path: diary-interface-text-audit.txt
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: My-Diary-1.0.221-debug-APK
+          path: diary-project/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
+
+# User-approved rebuild trigger: Smart Reminder must notify and ring without launching the Diary activity.
