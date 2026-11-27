@@ -4,12 +4,13 @@ Last reviewed: 2026-11-27
 
 ## Current release state — 2026-11-27
 
+- **Pending phone-test closure — 2026-11-27:** User confirmed that every remaining Phone Test item previously marked pending in this Register is also **PASS**. The pending entries for Web Updates 475, 476, 480, 484, and 485 have been changed to PASS; no app source, release metadata, or APK was changed.
 - Latest published web version: **486**. Web 486 corrects the Me button size slider so it resizes the actual button box (36×36px at 100%, scaling from 75% to 160%) while keeping the Me text at its original 13px size. The original button design is retained at 100%; the × button, position behavior, and other controls/functions are unchanged. **Phone Test PASS — user confirmed on 2026-11-27.** Web 483 removes the **🌈 Do Rang (Gradient)** choice only from the **🖼️ Photo Lagayein** chooser; gradient choices in Note Cover Photo and Details Image remain available and unchanged. **Phone Test PASS — user confirmed on 2026-11-26.** Personal Calendar category/date/time badges remain compact and wrap only when needed. **Phone Test PASS — user confirmed on 2026-11-26.**
 - Web 481 source and mirror are byte-identical. SHA-256: `a6dc79b385696dd24cd42767db10cffef7bfd733dfd87a9d0a6f92ddeec443c8`; `latest.json` declares `webVersion: 481` with the same SHA-256.
 - Web 479 remains the previous known-good release. Its custom category option, save, and edit behavior are **Phone Test PASS — user confirmed on 2026-11-26**.
 - Web 478 remains the previous known-good release. It resets header-button Move Mode to OFF whenever the Me menu closes while preserving saved button positions and sizes. **Phone Test PASS — user confirmed on 2026-11-26 after installing APK 1.0.221 over APK 1.0.220 and confirming Check for Updates PASS.**
 - Web 477 remains the previous known-good release and rollback target. **Phone Test PASS — Web Update 477 confirmed by the user on 2026-11-26.** The “Button Set Karein” label is now vertically centered; 16px bold size and left alignment remain correct.
-- Web 476 history: increased the label from 15px to 16px, retaining bold weight 950 and left alignment. Phone test pending.
+- Web 476 history: increased the label from 15px to 16px, retaining bold weight 950 and left alignment. Phone Test PASS — user confirmed on 2026-11-27.
 - Web 476 source and mirror were byte-identical. SHA-256: `ef234ad7e8b1182bf2368c332e506b3e87c89571e2d92c5010f0261b7900938e`.
 - Web 475 history: the label was 15px, left-aligned, with bold weight 950; phone test pending.
 - Web 475 source and mirror were byte-identical. Published Web 475 SHA-256: `070d762968501ae0f3a2fd8a57ef0cd7bee7eedb0fbfc3192e8018b1314a4fb0`; its release metadata was published before Web 476.
@@ -55,7 +56,7 @@ Last reviewed: 2026-11-27
 - Updated `web-source/index.html` and `diary-web/index.html`; both now have identical Git blob SHA `baedd8d22fb0632866b5c21b78afed080943d8d9` (byte-identical).
 - `latest.json` now declares **webVersion 485** and Web SHA-256 `b0a83f776187d4d58a6f0aecc40d093f633da3d3f5307e48770c7eaf6b6a3c36`. APK remains **1.0.221 / versionCode 220**; no APK was built or changed.
 - Commits: source `12c82cf8e92f05aeb4b71e8dd69175a700d75326`; mirror `278c6e2a0f122088aab12bbee0ff936533629054`; metadata `406f92a7a222afb8d93701eb06c24ffa0479a079`.
-- Repository and metadata updated for Check for Updates. **Phone Test pending**; do not mark PASS until the user confirms.
+- Repository and metadata updated for Check for Updates. **Phone Test PASS — user confirmed on 2026-11-27.**
 
 ## Web Update 484 — restore Diary Me button size slider — 2026-11-26
 
@@ -64,7 +65,7 @@ Last reviewed: 2026-11-27
 - Source and mirror are byte-identical. Git blob SHA: `6da54f114619082b21ec0a905c849d204837848e`. Verified UTF-8 SHA-256: `4d0eb125e0e1314c571fba2949278574f496855939fc9bed86081cd2f99afafc`. `latest.json` declares `webVersion: 484` with the same SHA-256; APK metadata remains version 1.0.221 / versionCode 220, unchanged.
 - Backups: `backups/2026-11-26-before-me-size-slider-fix-web-source-index.html`, `backups/2026-11-26-before-me-size-slider-fix-diary-web-index.html`, `backups/2026-11-26-before-me-size-slider-fix-docs-PROJECT_MAP_AND_SECRETS_REGISTER.md`, and `backups/2026-11-26-before-me-size-slider-fix-latest.json`.
 - Source commit: `562e67d53de78f15388e5ec843b84bd8f15f925c`; mirror commit: `60346b206d112782b2d3957f6553a0c426a19112` (the source/mirror update is byte-identical); metadata commit: `a5a5a69acc98451fddb5611f37b34e2497ca51f3`.
-- No APK created. Delivery is through the app's **Check for Updates**. Repository/metadata verification PASS; **Phone Test pending** until user confirms.
+- No APK created. Delivery is through the app's **Check for Updates**. Repository/metadata verification PASS; **Phone Test PASS — user confirmed on 2026-11-27.**
 
 ## Web Update 483 — remove Gradient option only from Photo Lagayein — 2026-11-26
 
@@ -130,7 +131,7 @@ This is a mandatory release gate for every future web update. APK creation is no
 - Existing Birthday, Anniversary, Zaroori Din, and Custom labels, date/time badges, saved entries, editing, and reminder behavior are unchanged. No APK was created; this is delivered through Check for Updates.
 - Web source and mirror are byte-identical. Published Web Update metadata: **480**; SHA-256: `876419a6c19ed734663b3c8b9bf651669bb320c73aee9f0a5c5f03b04c5a9355`.
 - Backup before editing: `backups/web-source-index-before-calendar-badge-wrap-2026-11-26.html`.
-- **Phone Test pending — awaiting user confirmation.**
+- **Phone Test PASS — user confirmed on 2026-11-27.**
 
 ## Web Update 479 — Personal Calendar custom category — 2026-11-26
 
