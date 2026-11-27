@@ -153,7 +153,21 @@ handler = r"""
         override fun handle(path: String): WebResourceResponse? {
             return try {
                 val updated = File(filesDir, "diary-web/index.html")
-                val stream = if (path == "index.html" && updated.isFile) updated.inputStream() else assets.open(path)
+                val prefs = getSharedPreferences("diary_web_updates", MODE_PRIVATE)
+                val stream = if (path == "index.html" && prefs.getInt("webVersion", 0) == 487) {
+                    // Web 487 is the known failed release. Serve the APK's verified Web 486 asset,
+                    // remove only the failed cached HTML, and keep retrying fallback if deletion fails.
+                    val removed = !updated.exists() || updated.delete()
+                    if (removed) {
+                        File(filesDir, "diary-web/index.html.part").delete()
+                        prefs.edit().putInt("webVersion", 486).apply()
+                    }
+                    assets.open(path)
+                } else if (path == "index.html" && updated.isFile) {
+                    updated.inputStream()
+                } else {
+                    assets.open(path)
+                }
                 val mime = if (path.endsWith(".html", true)) "text/html" else android.webkit.MimeTypeMap.getSingleton().getMimeTypeFromExtension(path.substringAfterLast('.', "")) ?: "application/octet-stream"
                 val noCacheHeaders = mapOf(
                     "Cache-Control" to "no-store, no-cache, must-revalidate, max-age=0",

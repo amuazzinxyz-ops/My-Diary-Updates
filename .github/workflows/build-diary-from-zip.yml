@@ -1,4 +1,4 @@
-# Approved release build: publish signed Diary 1.0.222/221 with the exact published Web Update 486 bundle.
+# Same-version recovery rebuild: signed Diary 1.0.222/221, embedded Web 486, APK-only LED header styling, and one-time Web 487 cache rollback.
 name: Build Diary APK from uploaded project ZIP
 
 on:
@@ -168,8 +168,33 @@ jobs:
           if "name:'repeatDaily'" not in html or "record.repeatDaily=repeatDailySelect.value==='daily'" not in html or "scheduleReminderDaily" not in html or "record.repeatCustomDays" not in html or "scheduleReminderCustom" not in html or "diary-me-repeat-days-wrap" not in html:
               raise SystemExit("BLOCKED: Smart Reminder repeat UI/native bridge is incomplete")
           target=Path("diary-project/app/src/main/assets/index.html")
+          led_style = """<style id="diary-header-led-display-style">
+          /* APK-only LED-inspired styling for the three Diary header texts. */
+          #diaryMyNotesPanel #diaryMyNotesHead #diaryMyNotesHeading,
+          #diaryMyNotesPanel #diaryMyNotesHead #diaryMyNotesClockTime,
+          #diaryMyNotesPanel #diaryMyNotesHead #diaryMyNotesClockDate {
+            color:#fff!important;
+            font-family:"Courier New","Lucida Console",monospace!important;
+            font-weight:900!important;
+            text-shadow:0 0 2px rgba(255,255,255,.55),0 1px 0 #fff,0 2px 0 #b38a3b,0 3px 1px rgba(0,0,0,.28)!important;
+          }
+          #diaryMyNotesPanel #diaryMyNotesHead #diaryMyNotesHeading { letter-spacing:1.1px!important; }
+          #diaryMyNotesPanel #diaryMyNotesHead #diaryMyNotesClockTime { letter-spacing:1.8px!important;font-variant-numeric:tabular-nums!important; }
+          #diaryMyNotesPanel #diaryMyNotesHead #diaryMyNotesClockDate { letter-spacing:.45px!important;font-variant-numeric:tabular-nums!important; }
+          </style>
+          """
+          if html.count('id="diaryMyNotesHeading"') < 1 or html.count("id:'diaryMyNotesClockTime'") < 1 or html.count("id:'diaryMyNotesClockDate'") < 1:
+              raise SystemExit("BLOCKED: all three Diary header text elements must exist before LED styling")
+          if 'id="diary-header-led-display-style"' in html:
+              raise SystemExit("BLOCKED: duplicate APK-only LED header style")
+          head_end=html.find("</head>")
+          if head_end < 0:
+              raise SystemExit("BLOCKED: main Diary HTML head closing tag missing")
+          html=html[:head_end]+led_style+"\\n"+html[head_end:]
           target.write_text(html,encoding="utf-8")
-          print(f"PASS: Android APK source is the exact published Diary HTML ({len(html)} chars; SHA-256 {actual})")
+          if html.count('id="diary-header-led-display-style"') != 1 or html.index('id="diary-header-led-display-style"') > html.index("<body"):
+              raise SystemExit("BLOCKED: LED styling was not inserted into the main Diary document head")
+          print(f"PASS: embedded Web Update 486 plus APK-only LED styling for heading, live time and date ({len(html)} chars; published source hash remains {actual})")
           PY
           python3 - <<'PY'
           from pathlib import Path
@@ -557,8 +582,8 @@ jobs:
           if code != 221 or name != "1.0.222":
               raise SystemExit(f"BLOCKED: expected approved APK version 1.0.222/221, found {name}/{code}")
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if feed_version != (220, "1.0.221") or int(meta.get("webVersion", 0)) != 486:
-              raise SystemExit(f"BLOCKED: update feed must be My Diary 1.0.221/220 with Web Update 486 before building: {feed_version}")
+          if feed_version != (221, "1.0.222") or int(meta.get("webVersion", 0)) != 486:
+              raise SystemExit(f"BLOCKED: update feed must be current My Diary 1.0.222/221 with Web Update 486 before same-version recovery rebuild: {feed_version}")
           print(f"PASS: package={package}, release={name}/{code}; feed state is approved: {feed_version}")
           PY
 
@@ -700,8 +725,8 @@ jobs:
           from pathlib import Path
           meta = json.loads(Path("latest.json").read_text(encoding="utf-8"))
           feed_version = (int(meta.get("versionCode", 0)), meta.get("versionName"))
-          if meta.get("packageName") != "com.personal.diaryapp" or feed_version != (220, "1.0.221") or int(meta.get("webVersion", 0)) != 486:
-              raise SystemExit(f"BLOCKED: live main feed is neither the installed baseline nor the approved target release: {feed_version}")
+          if meta.get("packageName") != "com.personal.diaryapp" or feed_version != (221, "1.0.222") or int(meta.get("webVersion", 0)) != 486:
+              raise SystemExit(f"BLOCKED: live main feed must remain My Diary 1.0.222/221 with Web Update 486 before the same-version recovery rebuild: {feed_version}")
           lines = Path("/tmp/diary-release-version.txt").read_text(encoding="utf-8").splitlines()
           meta["appName"] = "My Diary"
           meta["packageName"] = "com.personal.diaryapp"
@@ -709,7 +734,7 @@ jobs:
           meta["versionCode"] = int(lines[1])
           meta["apkUrl"] = "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk"
           meta["sha256"] = lines[2]
-          meta["releaseNotes"] = "My Diary 1.0.222: includes the exact published Web Update 486 bundle, including all retained Web Updates 479–486 since APK 1.0.221. Existing native app functions, updater SHA-256 verification, app identity, notes, photos, PINs, locks, widgets, reminders, and saved data are preserved. Signed APK includes the latest published Diary Web Update " + str(meta.get("webVersion", "")) + " bundle. Existing app identity, notes, photos, PINs, locks, widgets, reminders, and saved data are preserved."
+          meta["releaseNotes"] = "My Diary 1.0.222 recovery rebuild (same versionCode 221 and previously approved signing certificate): includes the exact published Web Update 486 bundle, APK-only LED styling for Meri Diary/live time/date, and a one-time first-load cleanup of only cached Web Update 487 so the embedded Web 486 opens. Existing app identity, native functions, notes, photos, PINs, locks, widgets, reminders, and saved data are preserved."
           meta["webSha256"] = hashlib.sha256(Path("web-source/index.html").read_bytes()).hexdigest()
           Path("latest.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
