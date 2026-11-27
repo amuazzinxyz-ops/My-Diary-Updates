@@ -12,7 +12,7 @@ Last reviewed: 2026-11-27
 - Web 477 remains the previous known-good release and rollback target. **Phone Test PASS — Web Update 477 confirmed by the user on 2026-11-26.** The “Button Set Karein” label is now vertically centered; 16px bold size and left alignment remain correct.
 - Web 476 history: increased the label from 15px to 16px, retaining bold weight 950 and left alignment. Phone Test PASS — user confirmed on 2026-11-27.
 - Web 476 source and mirror were byte-identical. SHA-256: `ef234ad7e8b1182bf2368c332e506b3e87c89571e2d92c5010f0261b7900938e`.
-- Web 475 history: the label was 15px, left-aligned, with bold weight 950; phone test pending.
+- Web 475 history: the label was 15px, left-aligned, with bold weight 950; **Phone Test PASS — user confirmed on 2026-11-27.**
 - Web 475 source and mirror were byte-identical. Published Web 475 SHA-256: `070d762968501ae0f3a2fd8a57ef0cd7bee7eedb0fbfc3192e8018b1314a4fb0`; its release metadata was published before Web 476.
 - **Phone Test PASS — Web Update 473 confirmed by the user on 2026-11-26.** Web 473 removed only the Move Mode instruction text inside Button Set Karein and changed its inner close button label from “Band Karein” to “Band”.
 - Web 472 rollback and its user-confirmed Phone Test PASS remain in release history. Web 472 rolled back the Web 471 saved-position reload change and restored the exact Web 470 source content.
