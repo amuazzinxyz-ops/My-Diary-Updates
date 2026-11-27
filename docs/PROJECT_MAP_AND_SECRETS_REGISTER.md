@@ -19,6 +19,14 @@ Last reviewed: 2026-11-27
 - Recently Deleted fullscreen layout remains isolated: its × button retains the original top-right position and default 36px size even when a custom heading-button layout is saved.
 - Latest APK: **versionName 1.0.222**, **versionCode 221**, SHA-256 `df2a558ce528d51ae93277fd09d90f9772f53787a364b8c36cd40faec7bdc174`. It contains the exact published Web Update **486** bundle. **APK 1.0.221 → 1.0.222 in-place upgrade PASS; Check for Update PASS; Phone Test PASS — user confirmed on 2026-11-27.** APK 1.0.222 is now the latest phone-tested release.
 
+
+## Restored APK 1.0.222 / Web Update 486 — post-restore phone test — 2026-11-27
+
+- After restoring the previously user-confirmed PASS release state (APK **1.0.222**, versionCode **221**, Web Update **486**), the user performed a fresh device check and confirmed: **Phone Test PASS — user confirmed on 2026-11-27**.
+- This confirmation applies to the restored APK 1.0.222 + Web 486 state. Web Update 487 and the later recovery-build changes remain excluded from the active release. The safety backup branch and historical commits are retained.
+- No app source, APK, release metadata, or Web bundle was changed for this confirmation; this is a Register-only record.
+- Register backup created before editing: `backups/2026-11-27-before-restored-1.0.222-phone-test-pass-register-update.md`.
+
 ## APK 1.0.222 — cumulative Web Update 486 bundle — 2026-11-27
 
 - Built **My Diary 1.0.222**, **versionCode 221**, package `com.personal.diaryapp`, as an in-place upgrade target for the phone-tested 1.0.221 / versionCode 220 release.
