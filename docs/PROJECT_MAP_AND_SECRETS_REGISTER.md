@@ -1,3 +1,16 @@
+# My Diary 1.0.222 same-version recovery rebuild — 2026-11-27
+
+- User requested that the already latest APK be used as the base; do not advance the app version. Rebuilt **My Diary 1.0.222 / versionCode 221** (same package `com.personal.diaryapp`) with the same previously approved signing certificate.
+- Embedded the exact published **Web Update 486** source (Web SHA-256 `99200a1baaea4241e2231c62650b0a85108006e11c26fe2cf24a9d45bc89885d`).
+- Added LED-inspired styling only to the main Diary header's **Meri Diary**, **live time**, and **date** elements. White text, gold shadow, purple header background, layout, and clock logic remain preserved. The style is inserted into the main HTML document head inside the APK; it is not part of the published Web 486 source.
+- Added a one-time recovery path in the Android WebView asset handler: when the saved web bundle is exactly Web 487, it removes only the failed cached `diary-web/index.html` (and its partial download if present), sets the local bundle marker to 486 after successful deletion, and serves the APK's embedded Web 486 asset. If deletion fails, the APK asset still serves for that launch and the failed cache is retried on the next launch. No Diary notes, photos, PINs, locks, or user data are deleted.
+- Build workflow was guarded to accept only the existing 1.0.222/221 baseline with Web 486, and the version was not incremented. APK version/package/feed guard PASS; original project verification PASS; embedded Web 486 guard PASS; header element guard PASS; debug build PASS; signed Release build PASS; signing certificate matched the previously approved fingerprint `23:A4:E9:3F:3C:79:11:DC:E1:83:89:EA:58:35:48:70:0C:6A:D6:A3:75:97:07:F1:CD:22:2D:07:E2:40:8B:5A`; publication and artifact upload PASS.
+- New signed APK SHA-256: `36ac5b08d95b433d4aeddf03af80f2fb49a825b5c5f9ffba5d45cd52ce312fa3`. Published as `My-Diary.apk` and `My-Diary-1.0.222.apk`; `latest.json` still declares versionName 1.0.222, versionCode 221, and webVersion 486.
+- GitHub Actions build run **46032535621** completed **success**: https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/46032535621. Build preparation commit: `fd7ddc879d73a2900fd0bfa147e84dae9916bbd0`. APK artifact: `My-Diary-1.0.222-signed-APK.zip` (artifact ID `15215616163`). Safety branch before recovery preparation: `backup/pre-led-recovery-rebuild-1.0.222-2026-11-27`.
+- **Phone testing is pending user confirmation.** Do not mark install-over-existing, Diary launch, LED appearance, Check for Update, or general Phone Test PASS until the user confirms. This is a same-version recovery APK build; it does not establish phone-side success by itself.
+
+---
+
 # Web Update 487 rollback — 2026-11-27
 
 - User reported that My Diary would not open after applying Web Update 487 and asked to remove Web 487 immediately.
