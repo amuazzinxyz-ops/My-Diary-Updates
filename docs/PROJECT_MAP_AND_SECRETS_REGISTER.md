@@ -2,7 +2,7 @@
 
 Last reviewed: 2026-11-27
 
-## Current release state — 2026-11-26
+## Current release state — 2026-11-27
 
 - Latest published web version: **486**. Web 486 corrects the Me button size slider so it resizes the actual button box (36×36px at 100%, scaling from 75% to 160%) while keeping the Me text at its original 13px size. The original button design is retained at 100%; the × button, position behavior, and other controls/functions are unchanged. **Phone Test PASS — user confirmed on 2026-11-27.** Web 483 removes the **🌈 Do Rang (Gradient)** choice only from the **🖼️ Photo Lagayein** chooser; gradient choices in Note Cover Photo and Details Image remain available and unchanged. **Phone Test PASS — user confirmed on 2026-11-26.** Personal Calendar category/date/time badges remain compact and wrap only when needed. **Phone Test PASS — user confirmed on 2026-11-26.**
 - Web 481 source and mirror are byte-identical. SHA-256: `a6dc79b385696dd24cd42767db10cffef7bfd733dfd87a9d0a6f92ddeec443c8`; `latest.json` declares `webVersion: 481` with the same SHA-256.
@@ -17,14 +17,25 @@ Last reviewed: 2026-11-27
 - Web 472 rollback and its user-confirmed Phone Test PASS remain in release history. Web 472 rolled back the Web 471 saved-position reload change and restored the exact Web 470 source content.
 - Web 469 added **Button Set Karein** inside the existing Me menu. Web 470 only shortened its move-button label to “Position badalne ke liye”. Web 471's saved-position reload change was rolled back in Web 472; Web 472 used the exact Web 470 source content.
 - Recently Deleted fullscreen layout remains isolated: its × button retains the original top-right position and default 36px size even when a custom heading-button layout is saved.
-- Latest APK: **versionName 1.0.221**, **versionCode 220**, SHA-256 `20b3529674dc4a3375c480ca454b06113d67314f48f404d30bc6e7747591cf35`. **Phone Test PASS — installed successfully as an update over APK 1.0.220; app Check for Updates also PASS, user-confirmed 2026-11-26.**
+- Latest APK: **versionName 1.0.222**, **versionCode 221**, SHA-256 `df2a558ce528d51ae93277fd09d90f9772f53787a364b8c36cd40faec7bdc174`. It contains the exact published Web Update **486** bundle. **Build, signing-certificate, publication, and artifact checks PASS; phone installation test is pending user confirmation.** APK 1.0.221 remains the previous phone-tested baseline.
+
+## APK 1.0.222 — cumulative Web Update 486 bundle — 2026-11-27
+
+- Built **My Diary 1.0.222**, **versionCode 221**, package `com.personal.diaryapp`, as an in-place upgrade target for the phone-tested 1.0.221 / versionCode 220 release.
+- The APK embeds the exact currently published `web-source/index.html` for **Web Update 486**, not the older Web 478 bundle. Therefore it includes all retained published Web Updates **479–486** on top of the 1.0.221 baseline. Rolled-back Web 471 behavior remains excluded.
+- Exact embedded Web source and mirror are byte-identical: Git blob SHA `b1674e673f6ee9a5bb25028a197031a3ed82f6c8`; verified Web SHA-256 `99200a1baaea4241e2231c62650b0a85108006e11c26fe2cf24a9d45bc89885d`. Build guards specifically verified Web 483's Photo-only Gradient removal and Web 486's Me-button box-size slider implementation.
+- APK SHA-256: `df2a558ce528d51ae93277fd09d90f9772f53787a364b8c36cd40faec7bdc174`. Published as both `My-Diary.apk` and `My-Diary-1.0.222.apk` (same Git blob SHA `b66486f2579fe6b8d8607f44d19e7031c91b39f1`; 2,105,922 bytes).
+- Signing readiness and keystore validation PASS. The signed APK passed the workflow's exact previously approved signing-certificate SHA-256 fingerprint check: `23:A4:E9:3F:3C:79:11:DC:E1:83:89:EA:58:35:48:70:0C:6A:D6:A3:75:97:07:F1:CD:22:2D:07:E2:40:8B:5A`. This preserves the same signing identity as APK 1.0.221.
+- Verification: original Android project verification PASS; exact Web 486 source/hash/mirror guard PASS; version/package/feed guard PASS; debug build PASS; signed Release build PASS; signing fingerprint check PASS; publication PASS; signed APK artifact upload PASS; translation audit upload PASS.
+- GitHub Actions build run 582: https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/45968165096 — completed **success**. APK publication commit: `cd984f1b6485b024c1a8687a9468cdb020dcc6cc`. Build workflow preparation commit: `8ed85b8173eafd5603542c936de1c1b55380f5e5`. Safety backup branch: `backup/pre-apk-1.0.222-2026-11-27`.
+- **Phone installation / upgrade test is pending.** Do not mark Phone Test PASS until the user installs 1.0.222 over 1.0.221 and confirms the app opens, existing notes/photos/PINs/locks/data remain intact, and Check for Updates works.
 
 ## Web Update 486 — resize the Me button itself, not its text — 2026-11-26
 
 - Corrected the previous interpretation: the size slider must change the **actual Me button box**, not the text size. The Me label stays at its original 13px; the button width, height, min-width, max-width, min-height, and max-height now scale together from 75% to 160%.
 - At 100%, the button remains the original 36×36px. Its existing appearance, label, colour, 3D styling, and action are retained. The × button, position behavior, and all other controls/functions were not changed.
 - Updated `web-source/index.html` and `diary-web/index.html`; both are byte-identical with Git blob SHA `b1674e673f6ee9a5bb25028a197031a3ed82f6c8`.
-- `latest.json` declares **webVersion 486** and verified Web SHA-256 `99200a1baaea4241e2231c62650b0a85108006e11c26fe2cf24a9d45bc89885d`. This matches the current source and mirror (both Git blob SHA `b1674e673f6ee9a5bb25028a197031a3ed82f6c8`). The earlier Register SHA `964ade81...` was stale and is corrected here. APK remains **1.0.221 / versionCode 220**; no APK was built.
+- `latest.json` declares **webVersion 486** and verified Web SHA-256 `99200a1baaea4241e2231c62650b0a85108006e11c26fe2cf24a9d45bc89885d`. This matches the current source and mirror (both Git blob SHA `b1674e673f6ee9a5bb25028a197031a3ed82f6c8`). The earlier Register SHA `964ade81...` was stale and is corrected here. At Web 486 publication, APK was still **1.0.221 / versionCode 220**; APK 1.0.222 subsequently bundled this exact Web 486 source (see the APK 1.0.222 section below).
 - Commits: source `7c455981ddf1fda5d71702f12252561f628d179f`; mirror `2b90462da541c25cc04f1c32e81dad6a238445ca`; metadata `7a4348ee858ec94a70083aa9d4c7e450d963b981`.
 - Delivery is through Check for Updates. **Phone Test PASS — user confirmed on 2026-11-27.**
 
