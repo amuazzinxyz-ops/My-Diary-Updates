@@ -17,7 +17,7 @@ Last reviewed: 2026-11-27
 - Web 472 rollback and its user-confirmed Phone Test PASS remain in release history. Web 472 rolled back the Web 471 saved-position reload change and restored the exact Web 470 source content.
 - Web 469 added **Button Set Karein** inside the existing Me menu. Web 470 only shortened its move-button label to “Position badalne ke liye”. Web 471's saved-position reload change was rolled back in Web 472; Web 472 used the exact Web 470 source content.
 - Recently Deleted fullscreen layout remains isolated: its × button retains the original top-right position and default 36px size even when a custom heading-button layout is saved.
-- Latest APK: **versionName 1.0.222**, **versionCode 221**, SHA-256 `df2a558ce528d51ae93277fd09d90f9772f53787a364b8c36cd40faec7bdc174`. It contains the exact published Web Update **486** bundle. **Build, signing-certificate, publication, and artifact checks PASS; phone installation test is pending user confirmation.** APK 1.0.221 remains the previous phone-tested baseline.
+- Latest APK: **versionName 1.0.222**, **versionCode 221**, SHA-256 `df2a558ce528d51ae93277fd09d90f9772f53787a364b8c36cd40faec7bdc174`. It contains the exact published Web Update **486** bundle. **APK 1.0.221 → 1.0.222 in-place upgrade PASS; Check for Update PASS; Phone Test PASS — user confirmed on 2026-11-27.** APK 1.0.222 is now the latest phone-tested release.
 
 ## APK 1.0.222 — cumulative Web Update 486 bundle — 2026-11-27
 
@@ -28,7 +28,16 @@ Last reviewed: 2026-11-27
 - Signing readiness and keystore validation PASS. The signed APK passed the workflow's exact previously approved signing-certificate SHA-256 fingerprint check: `23:A4:E9:3F:3C:79:11:DC:E1:83:89:EA:58:35:48:70:0C:6A:D6:A3:75:97:07:F1:CD:22:2D:07:E2:40:8B:5A`. This preserves the same signing identity as APK 1.0.221.
 - Verification: original Android project verification PASS; exact Web 486 source/hash/mirror guard PASS; version/package/feed guard PASS; debug build PASS; signed Release build PASS; signing fingerprint check PASS; publication PASS; signed APK artifact upload PASS; translation audit upload PASS.
 - GitHub Actions build run 582: https://github.com/amuazzinxyz-ops/My-Diary-Updates/actions/runs/45968165096 — completed **success**. APK publication commit: `cd984f1b6485b024c1a8687a9468cdb020dcc6cc`. Build workflow preparation commit: `8ed85b8173eafd5603542c936de1c1b55380f5e5`. Safety backup branch: `backup/pre-apk-1.0.222-2026-11-27`.
-- **Phone installation / upgrade test is pending.** Do not mark Phone Test PASS until the user installs 1.0.222 over 1.0.221 and confirms the app opens, existing notes/photos/PINs/locks/data remain intact, and Check for Updates works.
+- **Phone installation / upgrade test: PASS — user confirmed on 2026-11-27.** The user installed APK 1.0.222 over APK 1.0.221; in-place upgrade PASS, Check for Update PASS, and Phone Test PASS. This confirms the user's requested three checks. APK 1.0.222 is now the latest phone-tested release.
+
+
+## APK 1.0.222 — user phone-test confirmation — 2026-11-27
+
+- **In-place upgrade:** APK **1.0.222 installed over APK 1.0.221 — PASS**.
+- **Check for Update:** **PASS**.
+- **Phone Test:** **PASS — user confirmed on 2026-11-27**.
+- Result: all three user-reported checks passed. The previously pending phone verification for APK 1.0.222 is now closed. Preserve the existing build/source/signing audit details in the release section above; no app source or APK was changed as part of this Register-only update.
+- Register safety backup created before editing: `backups/2026-11-27-before-apk-1.0.222-phone-test-pass-register-update.md`.
 
 ## Web Update 486 — resize the Me button itself, not its text — 2026-11-26
 
