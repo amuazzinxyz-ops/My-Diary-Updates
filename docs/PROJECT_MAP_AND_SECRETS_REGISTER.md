@@ -1,10 +1,10 @@
 # My Diary Project Register (Permanent Handover)
 
-Last reviewed: 2026-11-26
+Last reviewed: 2026-11-27
 
 ## Current release state — 2026-11-26
 
-- Latest published web version: **484**. Web 484 restores the Diary heading **Me** button's existing size slider in **Button Set Karein**. The fixed 36px width, height, padding, and font-size constraints are removed only from the Me button so its original 75%–160% slider can resize it; existing slider JavaScript is unchanged. The × button, **Position badalne ke liye** control, saved positions, and all other functions are unchanged. **Phone Test pending.** Web 483 removes the **🌈 Do Rang (Gradient)** choice only from the **🖼️ Photo Lagayein** chooser; gradient choices in Note Cover Photo and Details Image remain available and unchanged. **Phone Test PASS — user confirmed on 2026-11-26.** Personal Calendar category/date/time badges remain compact and wrap only when needed. **Phone Test PASS — user confirmed on 2026-11-26.**
+- Latest published web version: **486**. Web 486 corrects the Me button size slider so it resizes the actual button box (36×36px at 100%, scaling from 75% to 160%) while keeping the Me text at its original 13px size. The original button design is retained at 100%; the × button, position behavior, and other controls/functions are unchanged. **Phone Test PASS — user confirmed on 2026-11-27.** Web 483 removes the **🌈 Do Rang (Gradient)** choice only from the **🖼️ Photo Lagayein** chooser; gradient choices in Note Cover Photo and Details Image remain available and unchanged. **Phone Test PASS — user confirmed on 2026-11-26.** Personal Calendar category/date/time badges remain compact and wrap only when needed. **Phone Test PASS — user confirmed on 2026-11-26.**
 - Web 481 source and mirror are byte-identical. SHA-256: `a6dc79b385696dd24cd42767db10cffef7bfd733dfd87a9d0a6f92ddeec443c8`; `latest.json` declares `webVersion: 481` with the same SHA-256.
 - Web 479 remains the previous known-good release. Its custom category option, save, and edit behavior are **Phone Test PASS — user confirmed on 2026-11-26**.
 - Web 478 remains the previous known-good release. It resets header-button Move Mode to OFF whenever the Me menu closes while preserving saved button positions and sizes. **Phone Test PASS — user confirmed on 2026-11-26 after installing APK 1.0.221 over APK 1.0.220 and confirming Check for Updates PASS.**
@@ -24,9 +24,9 @@ Last reviewed: 2026-11-26
 - Corrected the previous interpretation: the size slider must change the **actual Me button box**, not the text size. The Me label stays at its original 13px; the button width, height, min-width, max-width, min-height, and max-height now scale together from 75% to 160%.
 - At 100%, the button remains the original 36×36px. Its existing appearance, label, colour, 3D styling, and action are retained. The × button, position behavior, and all other controls/functions were not changed.
 - Updated `web-source/index.html` and `diary-web/index.html`; both are byte-identical with Git blob SHA `b1674e673f6ee9a5bb25028a197031a3ed82f6c8`.
-- `latest.json` declares **webVersion 486** and Web SHA-256 `964ade81bf4d864ef480c052591c5b842b66a28d68d9b4bc9eb9cf842cc8fbf5`. APK remains **1.0.221 / versionCode 220**; no APK was built.
+- `latest.json` declares **webVersion 486** and verified Web SHA-256 `99200a1baaea4241e2231c62650b0a85108006e11c26fe2cf24a9d45bc89885d`. This matches the current source and mirror (both Git blob SHA `b1674e673f6ee9a5bb25028a197031a3ed82f6c8`). The earlier Register SHA `964ade81...` was stale and is corrected here. APK remains **1.0.221 / versionCode 220**; no APK was built.
 - Commits: source `7c455981ddf1fda5d71702f12252561f628d179f`; mirror `2b90462da541c25cc04f1c32e81dad6a238445ca`; metadata `7a4348ee858ec94a70083aa9d4c7e450d963b981`.
-- Delivery is through Check for Updates. **Phone Test pending** until user confirmation.
+- Delivery is through Check for Updates. **Phone Test PASS — user confirmed on 2026-11-27.**
 
 ## Web Update 485 — preserve Me button's original size and restore slider — 2026-11-26
 
