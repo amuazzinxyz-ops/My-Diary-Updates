@@ -183,14 +183,14 @@ jobs:
           #diaryMyNotesPanel #diaryMyNotesHead #diaryMyNotesClockDate { letter-spacing:.45px!important;font-variant-numeric:tabular-nums!important; }
           </style>
           """
-          if html.count('id="diaryMyNotesHeading"') < 1 or html.count("id:'diaryMyNotesClockTime'") < 1 or html.count("id:'diaryMyNotesClockDate'") < 1:
+          if html.count("id:'diaryMyNotesHeading'") < 1 or html.count("id:'diaryMyNotesClockTime'") < 1 or html.count("id:'diaryMyNotesClockDate'") < 1:
               raise SystemExit("BLOCKED: all three Diary header text elements must exist before LED styling")
           if 'id="diary-header-led-display-style"' in html:
               raise SystemExit("BLOCKED: duplicate APK-only LED header style")
           head_end=html.find("</head>")
           if head_end < 0:
               raise SystemExit("BLOCKED: main Diary HTML head closing tag missing")
-          html=html[:head_end]+led_style+"\\n"+html[head_end:]
+          html=html[:head_end]+led_style+"\n"+html[head_end:]
           target.write_text(html,encoding="utf-8")
           if html.count('id="diary-header-led-display-style"') != 1 or html.index('id="diary-header-led-display-style"') > html.index("<body"):
               raise SystemExit("BLOCKED: LED styling was not inserted into the main Diary document head")
