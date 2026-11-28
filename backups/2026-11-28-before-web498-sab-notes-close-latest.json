@@ -1,0 +1,14 @@
+{
+  "appName": "My Diary",
+  "packageName": "com.personal.diaryapp",
+  "versionCode": 221,
+  "versionName": "1.0.222",
+  "apkUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/My-Diary.apk",
+  "sha256": "df2a558ce528d51ae93277fd09d90f9772f53787a364b8c36cd40faec7bdc174",
+  "releaseNotes": "My Diary 1.0.222: signed in-place upgrade build (versionCode 221) containing the exact published Web Update 486 bundle, including all retained Web Updates 479–486 since APK 1.0.221. Preserves app identity, notes, photos, PINs, locks, widgets, reminders, and saved data. Uses the previously approved signing certificate. Web Update 486 Phone Test PASS — user confirmed 2026-11-27; APK installation test is pending.",
+  "minimumSupportedVersionCode": 1,
+  "webVersion": 497,
+  "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
+  "webSha256": "2672e86c0be026d332cfa2abbbe499c3e7514203d0b9a942615e78be23834e0d",
+  "webReleaseNotes": "My Diary Web Update 497: fixes Sab Notes opening position. When All Notes opens, the existing notes list is placed immediately below the existing search field at the top of the full-screen Diary panel, instead of remaining after the editor and other controls lower in the scrollable body. The existing note cards, search, ordering, controls, and visual styling are preserved; closing restores the original list position. No APK change. Phone Test pending."
+}
