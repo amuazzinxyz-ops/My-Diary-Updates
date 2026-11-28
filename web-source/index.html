@@ -3486,7 +3486,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var diaryClockDate=el('div',{id:'diaryMyNotesClockDate'});
   diaryClockWrap.style.cssText='display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;margin:7px auto 0;padding:4px 12px 2px;max-width:230px;color:#FFFFFF;';
   diaryClockTime.style.cssText='font-size:clamp(17px,4.8vw,21px);font-weight:900;letter-spacing:1.4px;line-height:1.2;font-variant-numeric:tabular-nums;text-shadow:0 1px 0 #FFFFFF,0 2px 0 #b38a3b,0 3px 1px rgba(0,0,0,.28);';
-  diaryClockDate.style.cssText='font-size:11px;font-weight:800;letter-spacing:.7px;line-height:1.25;white-space:nowrap;text-shadow:0 1px 0 #FFFFFF,0 2px 0 #b38a3b,0 3px 1px rgba(0,0,0,.28);';
+  diaryClockDate.style.cssText='font-size:12px;font-weight:800;letter-spacing:.7px;line-height:1.25;white-space:nowrap;text-shadow:0 1px 0 #FFFFFF,0 2px 0 #b38a3b,0 3px 1px rgba(0,0,0,.28);';
   diaryClockWrap.appendChild(diaryClockTime);diaryClockWrap.appendChild(diaryClockDate);head.appendChild(diaryClockWrap);
   function updateDiaryHeaderClock(){
    if(!document.body.contains(diaryClockWrap)){window.clearInterval(diaryHeaderClockTimer);return;}
