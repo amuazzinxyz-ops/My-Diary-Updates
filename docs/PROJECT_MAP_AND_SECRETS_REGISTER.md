@@ -4,7 +4,7 @@ Last reviewed: 2026-11-28
 
 ## Current release state — 2026-11-28
 
-- Latest published web version: **500** — note-save data protection is live. **Phone Test pending**; user must confirm older notes remain after saving additional notes. APK remains My Diary 1.0.222 / versionCode 221 and is unchanged. — Restores the original Web 497 Sab Notes opening flow: the original Sab Notes trigger stays in its original position and is hidden (not moved) while the list is open. A separate **✕ Band Karein** button appears at the top, styled like Delete Ki Huwi Notes. Tapping it closes the full-screen list. Source and mirror SHA-256 match. **Web 499 Phone Test PASS — user confirmed on 2026-11-28.** APK remains My Diary 1.0.222 / versionCode 221 and is unchanged.
+- Latest published web version: **500** — note-save data protection is live. User reported the same missing-note symptom after saving note 16; Web 500 is therefore NOT confirmed fixed. Web Update 501 is being prepared to ensure a successful save clears stale search/category/favourite-only filters before the list refresh. Phone Test pending. APK remains My Diary 1.0.222 / versionCode 221 and is unchanged. — Restores the original Web 497 Sab Notes opening flow: the original Sab Notes trigger stays in its original position and is hidden (not moved) while the list is open. A separate **✕ Band Karein** button appears at the top, styled like Delete Ki Huwi Notes. Tapping it closes the full-screen list. Source and mirror SHA-256 match. **Web 499 Phone Test PASS — user confirmed on 2026-11-28.** APK remains My Diary 1.0.222 / versionCode 221 and is unchanged.
 - Web 494 source and mirror are byte-identical. SHA-256: `4b10341190d61606c81c3aecba97d0d346652cdc4beab2ec1461c88ebe37da1c`; `latest.json` declares `webVersion: 494` with the same SHA-256. Phone Test pending.
 - Web 481 source and mirror are byte-identical. SHA-256: `a6dc79b385696dd24cd42767db10cffef7bfd733dfd87a9d0a6f92ddeec443c8`; `latest.json` declares `webVersion: 481` with the same SHA-256.
 - Web 479 remains the previous known-good release. Its custom category option, save, and edit behavior are **Phone Test PASS — user confirmed on 2026-11-26**.
@@ -20,6 +20,18 @@ Last reviewed: 2026-11-28
 - Recently Deleted fullscreen layout remains isolated: its × button retains the original top-right position and default 36px size even when a custom heading-button layout is saved.
 - Latest APK: **versionName 1.0.222**, **versionCode 221**, SHA-256 `df2a558ce528d51ae93277fd09d90f9772f53787a364b8c36cd40faec7bdc174`. It contains the exact published Web Update **486** bundle. **APK 1.0.221 → 1.0.222 in-place upgrade PASS; Check for Update PASS; Phone Test PASS — user confirmed on 2026-11-27.** APK 1.0.222 is now the latest phone-tested release.
 
+
+
+## Web Update 501 — show the complete saved-note list after Save — 2026-11-28
+
+- User reported that after saving the 16th note, one earlier note again appeared to be missing; the same symptom had been reported at 8, 10, and 15 notes. Web Update 500 did not resolve the user's phone-reported symptom and is not marked PASS.
+- Re-inspection found that the note-list renderer applies the current search query and category filter on every refresh. The Save flow previously retained those filters, so a successful save could refresh the list while older notes remained hidden by a stale filter. The renderer also supports a favourites-only view. This is a confirmed way for saved notes to appear missing from the visible list; it does not by itself prove that every previously reported missing note was physically deleted from storage.
+- Web 501 changes only the successful Save path: after storage write succeeds, it clears the search query, resets the category filter to “all”, and exits favourites-only mode before the list is rendered. The saved category on each note is unchanged. No note records are deleted or rewritten by this view reset. No other modules or APK files are changed.
+- Regression checks: exact single save-flow replacement; syntax check of the edited JavaScript block; test that search/category/favourites filters are reset only after a successful write; test that a failed write leaves the current filters untouched. Source and mirror must be byte-identical and manifest SHA-256 must match before publication.
+- Safety backup branch: `backup/pre-web501-note-list-visibility-2026-11-28`. Backups: `backups/2026-11-28-before-web501-web-source.html`, `backups/2026-11-28-before-web501-diary-web.html`, `backups/2026-11-28-before-web501-latest.json`, and `backups/2026-11-28-before-web501-register.md`.
+- Working branch: `fix/web501-note-list-visibility-2026-11-28`.
+- **Phone Test pending. Do not mark PASS unless the user confirms all earlier notes remain visible after saving further notes.**
+- APK remains My Diary **1.0.222 / versionCode 221**; no APK was built or modified.
 
 ## Web Update 495 — Sab Notes full-screen sizing correction — 2026-11-28
 
