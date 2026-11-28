@@ -26,13 +26,13 @@ Last reviewed: 2026-11-28
 - User reported that Web 494 was received by Check for Updates but Sab Notes still opened in its previous non-full-screen presentation on the phone.
 - Corrected only the opening/closing presentation of the existing Sab Notes list: the same Diary panel now receives direct full-viewport inline sizing when Sab Notes opens on mobile, so the result does not depend on the `:has()` selector or a late-appended CSS block in Android WebView. Closing Sab Notes, opening Recently Deleted, or closing the Diary clears only these temporary full-screen sizing properties.
 - Existing panel/header/list design, saved-note list and order, search, categories, note actions, Recently Deleted behavior, note storage/data, photos, PINs, locks, widgets, reminders, and all other modules are unchanged. No APK was built or modified.
-- Source and mirror are byte-identical (Git blob SHA `f1eb59ea8ca462c17f75bc107f2e98e99c98b064`). Independently verified UTF-8 SHA-256: `646e6b3ec8e42a078d1acdc6dc8d3e023c4f0157b8cae9abc458bb7c620a0ce5`; `latest.json` declares Web Update **495** with the same hash.
+- Source and mirror are byte-identical (Git blob SHA `f1eb59ea8ca462c17f75bc107f2e98e99c98b064`). Independently verified UTF-8 SHA-256: `bce1180a734ffed02fb9c01e877cfb2ecb023feba159ea031f4097133ac71d7a`; `latest.json` declares Web Update **495** with the same hash.
 - Safety backup branch: `backup/pre-web495-sab-notes-fullscreen-fix-2026-11-28`. Backups:
   - `backups/2026-11-28-before-web495-sab-notes-fullscreen-web-source.html`
   - `backups/2026-11-28-before-web495-sab-notes-fullscreen-diary-web.html`
   - `backups/2026-11-28-before-web495-sab-notes-fullscreen-latest.json`
   - `backups/2026-11-28-before-web495-sab-notes-fullscreen-register.md`
-- Working branch: `fix/web495-sab-notes-fullscreen-2026-11-28`. Source commit: `d40eebc2d861dcacad5cbfbcf2e9dc8bb3ffa4eb`; mirror commit: `551834fd289aeb22a6b6d91519a6938441e4c820`; metadata commit: `4758347b398133ccbf1d8720f746d21bf2ef9523`.
+- Working branch: `fix/web495-sab-notes-fullscreen-2026-11-28`. Source commit: `e6c5d79dcfa4a0d952fab14aca9c06ba14c448a6`; mirror commit: `c23b856856e6734ae1b1456b50545cf1ee22c6e1`; metadata commit: `01c8cee44b9bbf7dfa15ec229d49ffe79feaf5be`.
 - **Phone Test pending — do not mark PASS until the user confirms Sab Notes opens edge-to-edge on the phone and the existing design/list/actions remain correct.**
 - APK remains **My Diary 1.0.222 / versionCode 221**. No APK was built or modified.
 
