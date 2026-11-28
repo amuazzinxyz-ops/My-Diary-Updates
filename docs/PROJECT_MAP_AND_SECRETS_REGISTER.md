@@ -33,6 +33,7 @@ Last reviewed: 2026-11-28
   - `backups/2026-11-28-before-web492-latest.json`
   - `backups/2026-11-28-before-web492-register.md`
 - Working branch: `fix/web492-sab-notes-popup-correction-2026-11-28`. Source blob: `d22708190406376770a0532a4a95aa7415c8f892`; mirror commit: `dd566a3c0e36f00eba06677bcf4ceb5edd35bdfe`; metadata commit: `fae29bb04321f55cfff165922dbf99bd8058467b`.
+- Merged to `main` through PR #527; squash merge commit: `56632485856cbdf05dbf0be7fe5c1cb90c978bcb`. Source, mirror, and `latest.json` were re-fetched and verified after merge.
 - **Phone Test pending — do not mark PASS until the user confirms that Sab Notes shows all normal saved-note names, opens notes as before, hides the Recently Deleted button, and closes correctly.**
 
 ## Web Update 491 — Sab Notes opens the Recently Deleted-style full-screen panel — 2026-11-28
