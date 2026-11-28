@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 496,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "0fdcabbbaa95454873937659ca79a0ad085ff201eb27c9cb2ced638dc47b2fa5",
+  "webSha256": "0eb762526cee19ba6895ab2b63ab993875931d20f88d81a55829d70deee9e127",
   "webReleaseNotes": "My Diary Web Update 496: corrects Sab Notes mobile full-screen sizing using the measured device viewport in pixels, so the existing Sab Notes panel reaches the screen edges from top to bottom like Recently Deleted. Keeps Sab Notes' existing header, list, order, search, categories, note actions, and all other features unchanged. No APK change. Phone Test pending."
 }
