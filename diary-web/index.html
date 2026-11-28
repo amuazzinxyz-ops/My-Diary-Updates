@@ -1593,6 +1593,10 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   var overlay=document.getElementById('diaryMyNotesOverlay');
   if(!panel)return;
   if(active){
+   var isMobile=window.matchMedia?window.matchMedia('(max-width:760px)').matches:document.documentElement.clientWidth<=760;
+   if(!isMobile)active=false;
+  }
+  if(active){
    panel.classList.add('diary-all-notes-fullscreen');
    if(overlay)overlay.classList.add('diary-all-notes-overlay-fullscreen');
    [['position','fixed'],['top','0'],['right','0'],['bottom','0'],['left','0'],['width','100vw'],['max-width','none'],['height','100vh'],['height','100dvh'],['max-height','100vh'],['max-height','100dvh'],['min-height','0'],['margin','0'],['transform','none'],['border','0'],['border-radius','0'],['display','flex'],['flex-direction','column'],['overflow','hidden'],['box-sizing','border-box']].forEach(function(x){panel.style.setProperty(x[0],x[1],'important');});
