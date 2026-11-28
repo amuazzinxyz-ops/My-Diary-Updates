@@ -7,8 +7,8 @@
   "sha256": "df2a558ce528d51ae93277fd09d90f9772f53787a364b8c36cd40faec7bdc174",
   "releaseNotes": "My Diary 1.0.222: signed in-place upgrade build (versionCode 221) containing the exact published Web Update 486 bundle, including all retained Web Updates 479–486 since APK 1.0.221. Preserves app identity, notes, photos, PINs, locks, widgets, reminders, and saved data. Uses the previously approved signing certificate. Web Update 486 Phone Test PASS — user confirmed 2026-11-27; APK installation test is pending.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 488,
+  "webVersion": 489,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "1547b3344fa3f26b3382b0b3811ba994873f7b365f693f248b28dc449f8b4ec0",
-  "webReleaseNotes": "My Diary Web Update 488: the saved New Note list now has its own vertical scroll area on mobile, so entries beyond the first visible group can be reached by swiping within the list. This is a CSS-only layout change; note saving, deleting, storage, PINs, and other features are unchanged. Phone Test pending."
+  "webSha256": "acc1e98874913f134a2cec7f1695794639978934fce9e95d574fe64b617e39de",
+  "webReleaseNotes": "My Diary Web Update 489: fixes the saved New Note list's mobile scrolling by giving it a definite bounded scroll height and making vertical overflow explicitly scrollable. Touches that begin inside the saved-note list are no longer treated as Diary pull-to-refresh gestures. The saved-note reader still loads every matching saved note; no note data, save/delete logic, storage keys, PINs, photos, or other modules are changed. Phone Test pending."
 }
