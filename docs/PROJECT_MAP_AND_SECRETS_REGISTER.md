@@ -4,7 +4,7 @@ Last reviewed: 2026-11-27
 
 ## Current release state — 2026-11-27
 
-- Latest published web version: **486**. Web 486 corrects the Me button size slider so it resizes the actual button box (36×36px at 100%, scaling from 75% to 160%) while keeping the Me text at its original 13px size. The original button design is retained at 100%; the × button, position behavior, and other controls/functions are unchanged. **Phone Test PASS — user confirmed on 2026-11-27.** Web 483 removes the **🌈 Do Rang (Gradient)** choice only from the **🖼️ Photo Lagayein** chooser; gradient choices in Note Cover Photo and Details Image remain available and unchanged. **Phone Test PASS — user confirmed on 2026-11-26.** Personal Calendar category/date/time badges remain compact and wrap only when needed. **Phone Test PASS — user confirmed on 2026-11-26.**
+- Latest published web version: **487**. Web 487 fixes scrolling in the saved New Note list by allowing the Diary content area to shrink within its height-limited panel and scroll; saved-note data and save/delete logic are unchanged. Source and mirror are byte-identical; SHA-256: `dabba9033041e6eb78876e388986da7833076bdc5034c0f68da41f3af45b4514`. **Phone Test pending — awaiting user confirmation.** Web 486 corrects the Me button size slider so it resizes the actual button box (36×36px at 100%, scaling from 75% to 160%) while keeping the Me text at its original 13px size. The original button design is retained at 100%; the × button, position behavior, and other controls/functions are unchanged. **Phone Test PASS — user confirmed on 2026-11-27.** Web 483 removes the **🌈 Do Rang (Gradient)** choice only from the **🖼️ Photo Lagayein** chooser; gradient choices in Note Cover Photo and Details Image remain available and unchanged. **Phone Test PASS — user confirmed on 2026-11-26.** Personal Calendar category/date/time badges remain compact and wrap only when needed. **Phone Test PASS — user confirmed on 2026-11-26.**
 - Web 481 source and mirror are byte-identical. SHA-256: `a6dc79b385696dd24cd42767db10cffef7bfd733dfd87a9d0a6f92ddeec443c8`; `latest.json` declares `webVersion: 481` with the same SHA-256.
 - Web 479 remains the previous known-good release. Its custom category option, save, and edit behavior are **Phone Test PASS — user confirmed on 2026-11-26**.
 - Web 478 remains the previous known-good release. It resets header-button Move Mode to OFF whenever the Me menu closes while preserving saved button positions and sizes. **Phone Test PASS — user confirmed on 2026-11-26 after installing APK 1.0.221 over APK 1.0.220 and confirming Check for Updates PASS.**
@@ -19,6 +19,15 @@ Last reviewed: 2026-11-27
 - Recently Deleted fullscreen layout remains isolated: its × button retains the original top-right position and default 36px size even when a custom heading-button layout is saved.
 - Latest APK: **versionName 1.0.222**, **versionCode 221**, SHA-256 `df2a558ce528d51ae93277fd09d90f9772f53787a364b8c36cd40faec7bdc174`. It contains the exact published Web Update **486** bundle. **APK 1.0.221 → 1.0.222 in-place upgrade PASS; Check for Update PASS; Phone Test PASS — user confirmed on 2026-11-27.** APK 1.0.222 is now the latest phone-tested release.
 
+
+## Web Update 487 — saved New Note list scrolling — 2026-11-28
+
+- Fixed only the saved-notes scroll area in My Diary. The scroll body is a flex child inside the height-limited Diary panel; it now has `flex:1 1 auto` and `min-height:0`, allowing it to shrink and scroll instead of being clipped after the first visible notes.
+- No JavaScript, note-saving/deleting logic, local-storage keys, note data, PIN/lock logic, photos, buttons, or other modules were changed. No notes are deleted or capped by this fix.
+- `web-source/index.html` and `diary-web/index.html` are byte-identical; Git blob SHA: `be6dca993f157a24eabde30226fee26cb4582838`. Independently verified UTF-8 SHA-256: `dabba9033041e6eb78876e388986da7833076bdc5034c0f68da41f3af45b4514`; `latest.json` advertises Web Update **487** with the same hash.
+- Safety backup branch: `backup/pre-web487-note-scroll-2026-11-28`. Pre-edit backups: `backups/2026-11-28-before-note-scroll-web-source-index.html`, `backups/2026-11-28-before-note-scroll-diary-web-index.html`, `backups/2026-11-28-before-note-scroll-latest.json`, and `backups/2026-11-28-before-note-scroll-PROJECT_MAP_AND_SECRETS_REGISTER.md`.
+- Work branch: `fix/web487-note-scroll-2026-11-28`. Source commit: `fe5bb6fe0f27954c58b939ccad16c9378e8b2909`; mirror commit: `281ec033d9c0ac41592697f3dee630dcf15f82df`. Metadata and Register commits are recorded in the branch history.
+- Web-only update; no APK was built or changed. Delivery is through the app's **Check for Updates**. **Phone Test pending** until the user confirms scrolling works on the phone.
 
 ## Restored APK 1.0.222 / Web Update 486 — post-restore phone test — 2026-11-27
 
