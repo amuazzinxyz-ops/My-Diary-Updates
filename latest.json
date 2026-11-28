@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 494,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "f04a03a20f1dfca297805cb17fe8dbd91e006f447a33b5523163397409aaaf69",
+  "webSha256": "4b10341190d61606c81c3aecba97d0d346652cdc4beab2ec1461c88ebe37da1c",
   "webReleaseNotes": "My Diary Web Update 494: the existing Sab Notes list now opens in a full-screen Diary panel on mobile. The same notes list remains directly below the Sab Notes button with its existing appearance, ordering, search, categories, note actions, and data behavior unchanged. Recently Deleted and all other Diary features/data are unchanged. Phone Test pending."
 }
