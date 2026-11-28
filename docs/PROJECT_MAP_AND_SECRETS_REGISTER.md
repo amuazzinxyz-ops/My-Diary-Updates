@@ -4,7 +4,7 @@ Last reviewed: 2026-11-28
 
 ## Current release state — 2026-11-28
 
-- Latest published web version: **499** — Restores the original Web 497 Sab Notes opening flow: the original Sab Notes trigger stays in its original position and is hidden (not moved) while the list is open. A separate **✕ Band Karein** button appears at the top, styled like Delete Ki Huwi Notes. Tapping it closes the full-screen list. Source and mirror SHA-256 match. **Web 499 Phone Test PASS — user confirmed on 2026-11-28.** APK remains My Diary 1.0.222 / versionCode 221 and is unchanged.
+- Latest published web version: **499**. Candidate Web Update **500** is prepared on `fix/note-save-preserve-all-notes-2026-11-28`; it is not published and phone testing is pending. — Restores the original Web 497 Sab Notes opening flow: the original Sab Notes trigger stays in its original position and is hidden (not moved) while the list is open. A separate **✕ Band Karein** button appears at the top, styled like Delete Ki Huwi Notes. Tapping it closes the full-screen list. Source and mirror SHA-256 match. **Web 499 Phone Test PASS — user confirmed on 2026-11-28.** APK remains My Diary 1.0.222 / versionCode 221 and is unchanged.
 - Web 494 source and mirror are byte-identical. SHA-256: `4b10341190d61606c81c3aecba97d0d346652cdc4beab2ec1461c88ebe37da1c`; `latest.json` declares `webVersion: 494` with the same SHA-256. Phone Test pending.
 - Web 481 source and mirror are byte-identical. SHA-256: `a6dc79b385696dd24cd42767db10cffef7bfd733dfd87a9d0a6f92ddeec443c8`; `latest.json` declares `webVersion: 481` with the same SHA-256.
 - Web 479 remains the previous known-good release. Its custom category option, save, and edit behavior are **Phone Test PASS — user confirmed on 2026-11-26**.
@@ -379,3 +379,20 @@ The user has repeatedly requested strict separation: **MUAZZIN path separate; My
 - Source/mirror SHA-256: `c4b60cbddfac78620864ebbadf6abdcb4538db26971068e48eda07480391f125`; `latest.json` Web version 499 uses the same hash.
 - **Phone Test PASS — user confirmed on 2026-11-28:** Sab Notes opens in the intended full-screen presentation and the separate top **✕ Band Karein** button closes it.
 - APK remains My Diary 1.0.222 / versionCode 221; no APK built or modified.
+
+
+## Web Update 500 — My Diary note-save data protection — 2026-11-28
+
+- User reported a repeated data-loss symptom: when increasing the note count (7→8, 9→10, and 14→15), one older note disappeared and was not found in Recently Deleted.
+- Investigation of live Web Update 499 source found that `read()` silently filtered out every note record that was not an object with a string `id`. A later save rewrote the filtered array, which is a confirmed data-loss path for any legacy/malformed-ID note. The user’s actual missing record has not been available for direct inspection, so this is a concrete code defect addressed, not a proven identification of the exact lost record.
+- Updated only the Diary note storage/save path:
+  - Keep every array entry when reading. Existing object notes without a valid string ID (or with duplicate IDs) receive deterministic legacy IDs rather than being silently dropped; unusual non-object legacy entries are retained as a recoverable note record.
+  - Before saving from the note editor, require every ID from the pre-save note list to remain present.
+  - Re-read the latest stored list before writing; if a concurrent/stale save would omit a note added by another writer, reject the write rather than overwrite that note.
+  - Validate unique IDs and the serialized/persisted list before reporting a successful save; if verification fails, restore the previous stored value where possible.
+- Regression checks passed against the actual extracted storage functions: 14→15 keeps all 14 prior notes including legacy IDs; a write omitting an old ID is rejected without changing storage; a concurrent note addition is not overwritten; duplicate IDs are rejected.
+- Source and mirror are byte-identical. UTF-8 SHA-256: `607f53f87560c97a918e6b9067098247b34685dce1a2ab23c3bede313d87f09c`. Candidate `latest.json` on the working branch declares Web Update **500** with the same hash.
+- Safety backup branch: `backup/pre-note-save-safety-2026-11-28`. Pre-change copies: `backups/2026-11-28-before-note-save-safety-index.html` (web-source), `backups/2026-11-28-before-note-save-safety-diary-web-index.html`, `backups/2026-11-28-before-note-save-safety-latest.json`, and `backups/2026-11-28-before-note-save-safety-PROJECT_MAP_AND_SECRETS_REGISTER.md`.
+- Working branch: `fix/note-save-preserve-all-notes-2026-11-28`.
+- **Phone Test pending.** Do not mark PASS until the user confirms old notes remain after saving additional notes and existing note edit/delete/photo behavior remains correct.
+- APK remains My Diary 1.0.222 / versionCode 221. No APK built or modified.
