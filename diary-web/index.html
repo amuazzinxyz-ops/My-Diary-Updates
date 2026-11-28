@@ -1383,10 +1383,49 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  }
  function t(k){return words[language()][k]||words.roman[k]||k;}
  function read(){
-  try{var a=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(a)?a.filter(function(n){return n&&typeof n==='object'&&typeof n.id==='string'}):[]}
-  catch(e){return []}
+  try{
+   var a=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(a))return [];
+   var used=Object.create(null);
+   return a.map(function(n,index){
+    var item=n&&typeof n==='object'&&!Array.isArray(n)?n:{title:'Recovered note',body:n===null?'':(typeof n==='string'?n:JSON.stringify(n)),legacyRecord:n};
+    var id=typeof item.id==='string'&&item.id.trim()?item.id:'';
+    if(!id||used[id]){
+     var raw='';try{raw=JSON.stringify(item)}catch(e){raw=String(index)}
+     var hash=2166136261;for(var i=0;i<raw.length;i++)hash=Math.imul(hash^raw.charCodeAt(i),16777619);
+     var base='legacy-'+(hash>>>0).toString(36)+'-'+index;id=base;var suffix=1;while(used[id])id=base+'-'+(suffix++);
+     item.id=id;
+    }
+    used[id]=true;return item;
+   });
+  }catch(e){return []}
  }
- function write(a){try{localStorage.setItem(KEY,JSON.stringify(a));saveDiarySafetyCopy();return true}catch(e){return false}}
+ function write(a,requiredIds){
+  var previousRaw=null;
+  try{
+   if(!Array.isArray(a))return false;
+   previousRaw=localStorage.getItem(KEY);
+   if(previousRaw!==null&&!Array.isArray(JSON.parse(previousRaw)))return false;
+   var ids=Object.create(null);
+   for(var i=0;i<a.length;i++){
+    var n=a[i];if(!n||typeof n!=='object'||typeof n.id!=='string'||!n.id||ids[n.id])return false;
+    ids[n.id]=true;
+   }
+   if(Array.isArray(requiredIds)&&requiredIds.some(function(id){return !ids[id]}))return false;
+   var raw=JSON.stringify(a),check=JSON.parse(raw);
+   if(!Array.isArray(check)||check.length!==a.length)return false;
+   for(var j=0;j<check.length;j++)if(!check[j]||check[j].id!==a[j].id)return false;
+   localStorage.setItem(KEY,raw);
+   var saved=JSON.parse(localStorage.getItem(KEY)||'null');
+   if(!Array.isArray(saved)||saved.length!==a.length||saved.some(function(n,index){return !n||n.id!==a[index].id})){
+    if(previousRaw===null)localStorage.removeItem(KEY);else localStorage.setItem(KEY,previousRaw);
+    return false;
+   }
+   saveDiarySafetyCopy();return true;
+  }catch(e){
+   try{if(previousRaw!==null&&localStorage.getItem(KEY)!==previousRaw)localStorage.setItem(KEY,previousRaw);}catch(restoreError){}
+   return false;
+  }
+ }
  function readTrash(){try{var a=JSON.parse(localStorage.getItem(TRASH_KEY)||'[]');if(!Array.isArray(a))return [];var now=Date.now(),kept=a.filter(function(n){return n&&typeof n==='object'&&typeof n.id==='string'&&now-(Number(n.deletedAt)||now)<TRASH_AGE});if(kept.length!==a.length){localStorage.setItem(TRASH_KEY,JSON.stringify(kept));saveDiarySafetyCopy();}return kept}catch(e){return []}}
  function writeTrash(a){try{localStorage.setItem(TRASH_KEY,JSON.stringify(a));saveDiarySafetyCopy();return true}catch(e){return false}}
  function el(tag,attrs,txt){var n=document.createElement(tag);if(attrs)Object.keys(attrs).forEach(function(k){if(k==='class')n.className=attrs[k];else n.setAttribute(k,attrs[k])});if(txt!==undefined)n.textContent=txt;return n}
@@ -4250,13 +4289,13 @@ if(patternPanel)box.appendChild(patternPanel);
   var title=document.getElementById('diaryMyNotesTitle').value;
   var body=document.getElementById('diaryMyNotesText').value;
   if(!title&&!body.trim()&&!activePhotoData&&!activeCoverPhotoData&&!activeDetailPhotoData){document.getElementById('diaryMyNotesStatus').textContent=t('needText');return}
-  var all=read(),now=Date.now(),found=all.find(function(n){return n.id===activeId});
+  var all=read(),requiredNoteIds=all.map(function(n){return n.id}),now=Date.now(),found=all.find(function(n){return n.id===activeId});
   var category=document.getElementById('diaryMyNotesCategory').value;
   var coverTextLayout=readDiaryTextLayout(document.getElementById('diaryMyNotesTitle'));
   var detailTextLayout=readDiaryTextLayout(document.getElementById('diaryMyNotesText'));
   if(found){found.title=title;found.body=body;found.coverTextFormat=cleanDiaryTextFormat(activeCoverTextFormat);found.detailTextFormat=cleanDiaryTextFormat(activeDetailTextFormat);found.coverTextLayout=coverTextLayout;found.detailTextLayout=detailTextLayout;found.category=category;found.photoData=activePhotoData||null;found.coverPhotoData=activeCoverPhotoData||null;found.coverColour=cleanDiaryColour(activeCoverColour);found.detailColour=cleanDiaryColour(activeDetailColour);found.photoColour=cleanDiaryColour(activePhotoColour);found.coverText=activeCoverText||'';found.detailPhotoData=activeDetailPhotoData||null;found.detailText=activeDetailText||'';found.updated=now}
   else{var id='note-'+now+'-'+Math.random().toString(36).slice(2,9);all.unshift({id:id,title:title,body:body,coverTextFormat:cleanDiaryTextFormat(activeCoverTextFormat),detailTextFormat:cleanDiaryTextFormat(activeDetailTextFormat),coverTextLayout:coverTextLayout,detailTextLayout:detailTextLayout,category:category,photoData:activePhotoData||null,coverPhotoData:activeCoverPhotoData||null,coverColour:cleanDiaryColour(activeCoverColour),detailColour:cleanDiaryColour(activeDetailColour),photoColour:cleanDiaryColour(activePhotoColour),coverText:activeCoverText||'',detailPhotoData:activeDetailPhotoData||null,detailText:activeDetailText||'',created:now,updated:now});activeId=id}
-  var ok=write(all);if(ok)expandedNoteId=activeId;
+  var ok=write(all,requiredNoteIds);if(ok)expandedNoteId=activeId;
   document.getElementById('diaryMyNotesDelete').style.display=activeId?'':'none';
   document.getElementById('diaryMyNotesStatus').textContent=ok?t('saved'):t('storageSaveError');
   showingTrash=false;var allNotesList=document.getElementById('diaryMyNotesList'),allNotesButton=document.getElementById('diaryMyNotesAllNotes');var trashButton=document.getElementById('diaryMyNotesTrash');if(allNotesButton)allNotesButton.style.display='';if(trashButton)trashButton.setAttribute('aria-expanded','false');
