@@ -7,8 +7,8 @@
   "sha256": "df2a558ce528d51ae93277fd09d90f9772f53787a364b8c36cd40faec7bdc174",
   "releaseNotes": "My Diary 1.0.222: signed in-place upgrade build (versionCode 221) containing the exact published Web Update 486 bundle, including all retained Web Updates 479–486 since APK 1.0.221. Preserves app identity, notes, photos, PINs, locks, widgets, reminders, and saved data. Uses the previously approved signing certificate. Web Update 486 Phone Test PASS — user confirmed 2026-11-27; APK installation test is pending.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 492,
+  "webVersion": 493,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "6ee8043d781ebcd83cb5c7734d6b75452b9b40afd3464c8df3fbb473a116537c",
-  "webReleaseNotes": "My Diary Web Update 492: correction to Sab Notes popup. Sab Notes keeps the same normal saved-note list and note-opening behavior; only the mobile full-screen popup presentation changes. The Delete Ki Huwi Note button is hidden inside the Sab Notes popup. Recently Deleted actions and all note data remain unchanged. Phone Test pending."
+  "webSha256": "99200a1baaea4241e2231c62650b0a85108006e11c26fe2cf24a9d45bc89885d",
+  "webReleaseNotes": "My Diary Web Update 493: restore the exact Web Update 490 phone-tested bundle (the same Web 486 HTML). Web Updates 491–492 are removed from the active bundle. This is published as a new monotonic update number so devices already on 491/492 can receive the known-good content through Check for Update. No APK or saved Diary data is changed. Phone Test pending."
 }
