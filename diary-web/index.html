@@ -4245,10 +4245,11 @@ if(patternPanel)box.appendChild(patternPanel);
   if(title)title.focus();
  }
  function clearEditedNoteDraft(){
-  var editingId=activeId,category=document.getElementById('diaryMyNotesCategory');var savedCategory=category?category.value:'general';
-  newNote();activeId=editingId;
+  var category=document.getElementById('diaryMyNotesCategory');var savedCategory=category?category.value:'general';
+  /* Clear means start a genuinely new note: newNote() resets activeId to null.
+     Do not restore the edited note's ID, or the next Save overwrites that old note. */
+  newNote();
   if(category)category.value=savedCategory;
-  var del=document.getElementById('diaryMyNotesDelete');if(del)del.style.display='';
   updateDiaryDraftClearXVisibility();
  }
  function readDiaryTextLayout(field){
