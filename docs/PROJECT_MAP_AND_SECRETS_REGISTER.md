@@ -26,7 +26,7 @@ Last reviewed: 2026-11-28
 - User reported that Web 494 was received by Check for Updates but Sab Notes still opened in its previous non-full-screen presentation on the phone.
 - Corrected only the opening/closing presentation of the existing Sab Notes list: the same Diary panel now receives direct full-viewport inline sizing when Sab Notes opens on mobile, so the result does not depend on the `:has()` selector or a late-appended CSS block in Android WebView. Closing Sab Notes, opening Recently Deleted, or closing the Diary clears only these temporary full-screen sizing properties.
 - Existing panel/header/list design, saved-note list and order, search, categories, note actions, Recently Deleted behavior, note storage/data, photos, PINs, locks, widgets, reminders, and all other modules are unchanged. No APK was built or modified.
-- Source and mirror are byte-identical (Git blob SHA `467c276daa92feeb388c1fa7b88adf9a4d4f506a`). Independently verified UTF-8 SHA-256: `bce1180a734ffed02fb9c01e877cfb2ecb023feba159ea031f4097133ac71d7a`; `latest.json` declares Web Update **495** with the same hash.
+- Source and mirror are byte-identical (Git blob SHA `467c276daa92feeb388c1fa7b88adf9a4d4f506a`). Independently verified UTF-8 SHA-256: `93ebd9e02ed15dbe8f97ea107a106ca699f7bb8a4ce2042f9b52ad5836b31c9f`; `latest.json` declares Web Update **495** with the same hash.
 - Safety backup branch: `backup/pre-web495-sab-notes-fullscreen-fix-2026-11-28`. Backups:
   - `backups/2026-11-28-before-web495-sab-notes-fullscreen-web-source.html`
   - `backups/2026-11-28-before-web495-sab-notes-fullscreen-diary-web.html`
