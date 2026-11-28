@@ -7,8 +7,8 @@
   "sha256": "df2a558ce528d51ae93277fd09d90f9772f53787a364b8c36cd40faec7bdc174",
   "releaseNotes": "My Diary 1.0.222: signed in-place upgrade build (versionCode 221) containing the exact published Web Update 486 bundle, including all retained Web Updates 479–486 since APK 1.0.221. Preserves app identity, notes, photos, PINs, locks, widgets, reminders, and saved data. Uses the previously approved signing certificate. Web Update 486 Phone Test PASS — user confirmed 2026-11-27; APK installation test is pending.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 495,
+  "webVersion": 496,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "bce1180a734ffed02fb9c01e877cfb2ecb023feba159ea031f4097133ac71d7a",
-  "webReleaseNotes": "My Diary Web Update 495: fixes Sab Notes mobile full-screen sizing by applying full-viewport dimensions directly to the existing Diary panel when the existing Sab Notes list opens. The existing panel design, note list, ordering, search, categories, note actions, Recently Deleted, note data, and all other Diary features remain unchanged. No APK change. Phone Test pending."
+  "webSha256": "0fdcabbbaa95454873937659ca79a0ad085ff201eb27c9cb2ced638dc47b2fa5",
+  "webReleaseNotes": "My Diary Web Update 496: corrects Sab Notes mobile full-screen sizing using the measured device viewport in pixels, so the existing Sab Notes panel reaches the screen edges from top to bottom like Recently Deleted. Keeps Sab Notes' existing header, list, order, search, categories, note actions, and all other features unchanged. No APK change. Phone Test pending."
 }
