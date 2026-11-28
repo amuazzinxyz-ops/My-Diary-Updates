@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 500,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "607f53f87560c97a918e6b9067098247b34685dce1a2ab23c3bede313d87f09c",
+  "webSha256": "813a63c9e938d74125c5753f606f1277751781370d1ca2fa0a37201ddf71e51a",
   "webReleaseNotes": "My Diary Web Update 500: Protects saved notes during Save. Legacy note records without a valid string ID are retained and assigned stable IDs instead of being silently filtered out. A save now verifies that every previously read note ID remains in the proposed list, checks the latest stored list to reject stale/concurrent overwrites, validates unique IDs, and verifies the persisted list after writing. No APK change. Phone Test pending."
 }
