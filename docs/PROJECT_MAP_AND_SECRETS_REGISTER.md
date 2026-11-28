@@ -32,6 +32,7 @@ Last reviewed: 2026-11-28
   - `backups/2026-11-28-before-web488-note-list-scroll-latest.json`
   - `backups/2026-11-28-before-web488-note-list-scroll-register.md`
 - Working branch: `fix/web488-note-list-scroll-2026-11-28`. Source commit `444e6564703b3ec88b0d3ee873787cac9a29a853`; mirror commit `1d54a1089f06eceed6b084037fb3c925be43e633`.
+- Published to `main` through PR #523; squash merge commit `18b78eea3c8b5d7e8bc4d14e196927fc330b4774`. Live source, mirror, metadata SHA-256, Web 488 version, and Master Register were re-fetched and verified after merge.
 - **Phone Test pending — do not mark PASS until the user confirms that notes beyond the first seven can be reached by swiping inside the saved-note list.**
 - Existing APK metadata remains unchanged: My Diary 1.0.222 / versionCode 221. No APK was built or modified.
 
