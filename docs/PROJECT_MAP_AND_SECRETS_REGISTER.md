@@ -4,7 +4,7 @@ Last reviewed: 2026-11-28
 
 ## Current release state — 2026-11-28
 
-- Latest published web version: **495** — Sab Notes now applies full-viewport sizing directly to the existing Diary panel when the existing list opens on mobile. The existing panel design, normal saved-note list, order, search, categories, note actions, Recently Deleted, and note data remain unchanged. Source and mirror are byte-identical. **Phone Test pending.** Web 490 remains the last user-confirmed rollback Phone Test PASS; Web 493 was also previously user-confirmed PASS. APK remains My Diary 1.0.222 / versionCode 221 and is unchanged.
+- Latest published web version: **496** — Sab Notes now uses measured device-viewport pixel dimensions for edge-to-edge mobile display, retaining its existing inner design. The existing panel design, normal saved-note list, order, search, categories, note actions, Recently Deleted, and note data remain unchanged. Source and mirror are byte-identical. **Phone Test pending.** Web 490 remains the last user-confirmed rollback Phone Test PASS; Web 493 was also previously user-confirmed PASS. APK remains My Diary 1.0.222 / versionCode 221 and is unchanged.
 - Web 494 source and mirror are byte-identical. SHA-256: `4b10341190d61606c81c3aecba97d0d346652cdc4beab2ec1461c88ebe37da1c`; `latest.json` declares `webVersion: 494` with the same SHA-256. Phone Test pending.
 - Web 481 source and mirror are byte-identical. SHA-256: `a6dc79b385696dd24cd42767db10cffef7bfd733dfd87a9d0a6f92ddeec443c8`; `latest.json` declares `webVersion: 481` with the same SHA-256.
 - Web 479 remains the previous known-good release. Its custom category option, save, and edit behavior are **Phone Test PASS — user confirmed on 2026-11-26**.
@@ -26,7 +26,7 @@ Last reviewed: 2026-11-28
 - User reported that Web 494 was received by Check for Updates but Sab Notes still opened in its previous non-full-screen presentation on the phone.
 - Corrected only the opening/closing presentation of the existing Sab Notes list: the same Diary panel now receives direct full-viewport inline sizing when Sab Notes opens on mobile, so the result does not depend on the `:has()` selector or a late-appended CSS block in Android WebView. Closing Sab Notes, opening Recently Deleted, or closing the Diary clears only these temporary full-screen sizing properties.
 - Existing panel/header/list design, saved-note list and order, search, categories, note actions, Recently Deleted behavior, note storage/data, photos, PINs, locks, widgets, reminders, and all other modules are unchanged. No APK was built or modified.
-- Source and mirror are byte-identical (Git blob SHA `467c276daa92feeb388c1fa7b88adf9a4d4f506a`). Independently verified UTF-8 SHA-256: `bce1180a734ffed02fb9c01e877cfb2ecb023feba159ea031f4097133ac71d7a`; `latest.json` declares Web Update **495** with the same hash.
+- Source and mirror are byte-identical (Git blob SHA `467c276daa92feeb388c1fa7b88adf9a4d4f506a`). Independently verified UTF-8 SHA-256: `93ebd9e02ed15dbe8f97ea107a106ca699f7bb8a4ce2042f9b52ad5836b31c9f`; `latest.json` declares Web Update **495** with the same hash.
 - Safety backup branch: `backup/pre-web495-sab-notes-fullscreen-fix-2026-11-28`. Backups:
   - `backups/2026-11-28-before-web495-sab-notes-fullscreen-web-source.html`
   - `backups/2026-11-28-before-web495-sab-notes-fullscreen-diary-web.html`
@@ -332,3 +332,15 @@ At the last inspection, `latest.json` pointed to `My-Diary.apk.apk` for version 
 ## Rule for future assistants
 
 The user has repeatedly requested strict separation: **MUAZZIN path separate; My Diary path separate.** Start by reading this register and inspecting the existing Diary repository. Reuse what is already here. Do not ask the user to re-upload or recreate something that already exists. Do not claim an action was completed unless the repository/workflow/device evidence confirms it.
+
+
+## Web Update 496 — Sab Notes measured mobile viewport sizing — 2026-11-28
+
+- Follow-up to Web 495 after the user confirmed the Sab Notes panel still did not visually reach the top and bottom edges on the phone.
+- Changed only the outer sizing helper for the existing Sab Notes view. It now measures the actual device viewport and applies pixel-based width/height to the existing panel and overlay, with mobile detection that also recognizes touch devices and Android WebView. This avoids relying on inconsistent CSS viewport-unit handling.
+- Sab Notes keeps its own existing header, list placement, note order, search, categories, note actions, and close behavior. It does not borrow the Recently Deleted inner layout. No note data, photos, PINs, locks, widgets, reminders, other modules, or APK files were changed.
+- Source and mirror are byte-identical (verify after merge). UTF-8 SHA-256: `0eb762526cee19ba6895ab2b63ab993875931d20f88d81a55829d70deee9e127`; `latest.json` declares Web Update **496** with the same hash.
+- Safety backup branch: `backup/pre-web496-sab-notes-viewport-fix-2026-11-28`. Backups: `backups/2026-11-28-before-web496-sab-notes-viewport-web-source.html`, `backups/2026-11-28-before-web496-sab-notes-viewport-diary-web.html`, `backups/2026-11-28-before-web496-sab-notes-viewport-latest.json`, and `backups/2026-11-28-before-web496-sab-notes-viewport-register.md`.
+- Working branch: `fix/web496-sab-notes-viewport-fix-2026-11-28`.
+- **Phone Test pending — do not mark PASS until the user confirms Sab Notes fills the phone screen from top to bottom and the existing design/list/actions remain correct.**
+- APK remains **My Diary 1.0.222 / versionCode 221**. No APK was built or modified.

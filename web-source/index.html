@@ -1587,25 +1587,31 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  }
  function renderDiaryImagePreview(prefix){var cover=prefix==='Cover',data=cover?activeCoverPhotoData:activeDetailPhotoData,field=document.getElementById(cover?'diaryMyNotesTitle':'diaryMyNotesText'),pickerButton=document.getElementById(cover?'diaryDiaryCoverBtn':'diaryDiaryDetailBtn');if(pickerButton)pickerButton.textContent=data?t('changeImage'):t(cover?'coverImage':'detailImage');applyDiaryFieldImage(field,data,cover?'title':'body',cover?activeCoverColour:activeDetailColour);applyDiaryTextFormat(field,cover?activeCoverTextFormat:activeDetailTextFormat);updateDiaryDraftClearXVisibility();}
 
- /* Apply the existing Sab Notes full-screen geometry directly so older Android WebViews do not depend on :has() or late-loaded CSS. */
+ /* Web 496: use measured Android viewport pixels so Sab Notes reaches the same edge-to-edge bounds as Recently Deleted, even on WebViews with inconsistent CSS viewport units. Only outer sizing changes; Sab Notes inner layout stays intact. */
  function setDiaryAllNotesFullscreen(active){
   var panel=document.getElementById('diaryMyNotesPanel');
   var overlay=document.getElementById('diaryMyNotesOverlay');
   if(!panel)return;
   if(active){
-   var isMobile=window.matchMedia?window.matchMedia('(max-width:760px)').matches:document.documentElement.clientWidth<=760;
-   if(!isMobile)active=false;
+   var coarsePointer=!!(window.matchMedia&&window.matchMedia('(pointer: coarse)').matches);
+   var narrowViewport=!!(window.matchMedia&&window.matchMedia('(max-width:760px)').matches);
+   var androidDevice=/Android|iPhone|iPad|iPod/i.test((navigator&&navigator.userAgent)||'');
+   if(!(coarsePointer||narrowViewport||androidDevice))active=false;
   }
   if(active){
+   var viewport=window.visualViewport;
+   var viewportWidth=Math.max(1,Math.round((viewport&&viewport.width)||window.innerWidth||document.documentElement.clientWidth));
+   var viewportHeight=Math.max(1,Math.round((viewport&&viewport.height)||window.innerHeight||document.documentElement.clientHeight));
+   var widthPx=viewportWidth+'px',heightPx=viewportHeight+'px';
    panel.classList.add('diary-all-notes-fullscreen');
    if(overlay)overlay.classList.add('diary-all-notes-overlay-fullscreen');
-   [['position','fixed'],['top','0'],['right','0'],['bottom','0'],['left','0'],['width','100vw'],['max-width','none'],['height','100vh'],['height','100dvh'],['max-height','100vh'],['max-height','100dvh'],['min-height','0'],['margin','0'],['transform','none'],['border','0'],['border-radius','0'],['display','flex'],['flex-direction','column'],['overflow','hidden'],['box-sizing','border-box']].forEach(function(x){panel.style.setProperty(x[0],x[1],'important');});
-   if(overlay)[['position','fixed'],['top','0'],['right','0'],['bottom','0'],['left','0'],['padding','0'],['align-items','stretch'],['justify-content','stretch'],['overflow','hidden']].forEach(function(x){overlay.style.setProperty(x[0],x[1],'important');});
+   [['position','fixed'],['top','0'],['right','0'],['bottom','0'],['left','0'],['width',widthPx],['min-width',widthPx],['max-width','none'],['height',heightPx],['min-height',heightPx],['max-height',heightPx],['flex','none'],['margin','0'],['transform','none'],['border','0'],['border-radius','0'],['display','flex'],['flex-direction','column'],['overflow','hidden'],['box-sizing','border-box'],['z-index','2147483647']].forEach(function(x){panel.style.setProperty(x[0],x[1],'important');});
+   if(overlay)[['position','fixed'],['top','0'],['right','0'],['bottom','0'],['left','0'],['width',widthPx],['height',heightPx],['padding','0'],['align-items','stretch'],['justify-content','stretch'],['overflow','hidden'],['box-sizing','border-box']].forEach(function(x){overlay.style.setProperty(x[0],x[1],'important');});
   }else{
    panel.classList.remove('diary-all-notes-fullscreen');
    if(overlay)overlay.classList.remove('diary-all-notes-overlay-fullscreen');
-   ['position','top','right','bottom','left','width','max-width','height','max-height','min-height','margin','transform','border','border-radius','display','flex-direction','overflow','box-sizing'].forEach(function(k){panel.style.removeProperty(k);});
-   if(overlay)['position','top','right','bottom','left','padding','align-items','justify-content','overflow'].forEach(function(k){overlay.style.removeProperty(k);});
+   ['position','top','right','bottom','left','width','min-width','max-width','height','min-height','max-height','flex','margin','transform','border','border-radius','display','flex-direction','overflow','box-sizing','z-index'].forEach(function(k){panel.style.removeProperty(k);});
+   if(overlay)['position','top','right','bottom','left','width','height','padding','align-items','justify-content','overflow','box-sizing'].forEach(function(k){overlay.style.removeProperty(k);});
   }
  }
  var diaryMeFeatureAllForBackup=null,diaryOpenMeFeatureDbForBackup=null;
