@@ -6,9 +6,9 @@
 - Added temporary diagnostics only: capture the note IDs present immediately before Save; read the raw active-note IDs from localStorage after Save; collect IDs attached to the note cards rendered after the list refresh; save these ID-only arrays and timestamp under separate key `diary_note_save_diagnostic_v1`. No note titles, bodies, photos, PINs, or other private content is copied into diagnostics.
 - After each Save, the status line shows counts for pre-save notes, storage records, and rendered cards. A **Jaanch Report Copy** control copies the ID-only report (or opens a copy prompt when clipboard access is unavailable).
 - Each rendered note card receives a diagnostic-only `data-diary-note-id` attribute. No existing note storage, save/delete behavior, filtering, ordering, UI feature, or APK logic is intentionally changed.
-- Source and mirror are byte-identical on this branch (Git blob SHA `dd8ded8ffd63f9f77fd1208bf141bacc3e7eedfd`). Live `main` remains Web 501 with its original source/mirror and manifest SHA-256. This branch is not published and must not be merged or advertised as a Web Update until syntax/regression/device checks are complete.
+- Source and mirror are byte-identical on this branch (Git blob SHA `dd8ded8ffd63f9f77fd1208bf141bacc3e7eedfd`). Live `main` remains Web 501 with its original source/mirror and manifest SHA-256. Prepared as diagnostic Web Update 502 candidate on this isolated branch; branch `latest.json` records its manifest SHA-256. Source/mirror identity and JavaScript syntax have passed static checks. The branch is not yet live on `main`; Phone Test is pending.
 - Automated validation and exact device reproduction remain pending. This diagnostic build is not Phone Test PASS and does not claim the underlying cause is fixed.
-- User can test only after a later explicitly approved diagnostic Web Update; for now, no Check for Update release is available from this branch. Do not ask the user to clear app data, uninstall, or rebuild the APK.
+- After Web 502 is merged to `main`, the user can use Check for Update to run the diagnostic. No APK is needed. Do not ask the user to clear app data, uninstall, or rebuild the APK.
 
 
 Date: 2026-11-28
