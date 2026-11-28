@@ -365,6 +365,6 @@ The user has repeatedly requested strict separation: **MUAZZIN path separate; My
 - The Sab Notes list remains immediately below the search field while open. Existing note cards, order, search, categories, editor, save/delete logic, data, photos, PINs, locks, widgets, reminders, Recently Deleted behavior, and other modules are unchanged.
 - Safety backup branch: `backup/pre-web498-sab-notes-close-button-2026-11-28`. Backups: `backups/2026-11-28-before-web498-sab-notes-close-web-source.html`, `backups/2026-11-28-before-web498-sab-notes-close-diary-web.html`, `backups/2026-11-28-before-web498-sab-notes-close-latest.json`, and `backups/2026-11-28-before-web498-sab-notes-close-register.md`.
 - Working branch: `fix/web498-sab-notes-close-button-2026-11-28`.
-- Source and mirror are byte-identical. UTF-8 SHA-256: `9890a4e34690dea92388583d260fcd48409641f6bc1c3e6a26ee829c70648cb1`; `latest.json` declares Web Update **498** with the same hash.
+- Source and mirror are byte-identical. UTF-8 SHA-256: `f5dadfc51a368991fe9953dee3455379930ea9531792e8eb921fb77b07bce4ca`; `latest.json` declares Web Update **498** with the same hash.
 - **Phone Test pending** — do not mark PASS until the user confirms the Sab Notes close button appears at the top, closes the list, and restores the original button position while the list still opens correctly.
 - APK remains **My Diary 1.0.222 / versionCode 221**. No APK was built or modified.
