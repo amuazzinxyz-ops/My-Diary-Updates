@@ -20,6 +20,21 @@ Last reviewed: 2026-11-28
 - Latest APK: **versionName 1.0.222**, **versionCode 221**, SHA-256 `df2a558ce528d51ae93277fd09d90f9772f53787a364b8c36cd40faec7bdc174`. It contains the exact published Web Update **486** bundle. **APK 1.0.221 → 1.0.222 in-place upgrade PASS; Check for Update PASS; Phone Test PASS — user confirmed on 2026-11-27.** APK 1.0.222 is now the latest phone-tested release.
 
 
+## Web Update 488 — New Note saved-list independent scrolling — 2026-11-28
+
+- User reported that Web Update 487 did not resolve the phone issue: only seven saved notes appeared and the list would not scroll. Re-inspection confirmed that `renderList()` iterates over all matching saved notes and contains no seven-note cap or truncation.
+- Web 487's body-scroll rule was present in the live source, but did not solve the user's actual phone behavior. This update gives `#diaryMyNotesList` its own bounded vertical scroll area with `overflow-y:auto`, touch vertical panning, momentum scrolling, and contained overscroll. The user can swipe directly within the saved-note list.
+- CSS-only change to the saved-note list rule in `web-source/index.html` and `diary-web/index.html`. No JavaScript, save/delete logic, local-storage keys, note data, photos, PIN/lock behavior, or other modules changed. No APK created.
+- Source and mirror are byte-identical (Git blob SHA `3d4f888bb29f06d7f772ce91026c5bc53191f813`). Independently calculated UTF-8 SHA-256: `1547b3344fa3f26b3382b0b3811ba994873f7b365f693f248b28dc449f8b4ec0`; `latest.json` declares Web 488 with this exact hash. SHA implementation verified against the standard `abc` test vector.
+- Backups on `backup/pre-web488-note-list-scroll-2026-11-28`:
+  - `backups/2026-11-28-before-web488-note-list-scroll-web-source.html`
+  - `backups/2026-11-28-before-web488-note-list-scroll-diary-web.html`
+  - `backups/2026-11-28-before-web488-note-list-scroll-latest.json`
+  - `backups/2026-11-28-before-web488-note-list-scroll-register.md`
+- Working branch: `fix/web488-note-list-scroll-2026-11-28`. Source commit `444e6564703b3ec88b0d3ee873787cac9a29a853`; mirror commit `1d54a1089f06eceed6b084037fb3c925be43e633`.
+- **Phone Test pending — do not mark PASS until the user confirms that notes beyond the first seven can be reached by swiping inside the saved-note list.**
+- Existing APK metadata remains unchanged: My Diary 1.0.222 / versionCode 221. No APK was built or modified.
+
 ## Web Update 487 — saved New Note list scrolling — 2026-11-28
 
 - Fixed only the saved-notes scroll area in My Diary. The scroll body is a flex child inside the height-limited Diary panel; it now has `flex:1 1 auto` and `min-height:0`, allowing it to shrink and scroll instead of being clipped after the first visible notes.
