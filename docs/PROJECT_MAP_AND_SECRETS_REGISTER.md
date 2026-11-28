@@ -27,6 +27,7 @@ Last reviewed: 2026-11-27
 - `web-source/index.html` and `diary-web/index.html` are byte-identical; Git blob SHA: `be6dca993f157a24eabde30226fee26cb4582838`. Independently verified UTF-8 SHA-256: `dabba9033041e6eb78876e388986da7833076bdc5034c0f68da41f3af45b4514`; `latest.json` advertises Web Update **487** with the same hash.
 - Safety backup branch: `backup/pre-web487-note-scroll-2026-11-28`. Pre-edit backups: `backups/2026-11-28-before-note-scroll-web-source-index.html`, `backups/2026-11-28-before-note-scroll-diary-web-index.html`, `backups/2026-11-28-before-note-scroll-latest.json`, and `backups/2026-11-28-before-note-scroll-PROJECT_MAP_AND_SECRETS_REGISTER.md`.
 - Work branch: `fix/web487-note-scroll-2026-11-28`. Source commit: `fe5bb6fe0f27954c58b939ccad16c9378e8b2909`; mirror commit: `281ec033d9c0ac41592697f3dee630dcf15f82df`. Metadata and Register commits are recorded in the branch history.
+- Main publication commits: source `4f85ed44e09a19cfb673e4896a8945ba3e2c30f9`; mirror `94c6c556afba158a3d9933e7df3335ee8c01571f`; `latest.json` `485e8af37dc61958101c8a37e01392fda080bcf6`.
 - Web-only update; no APK was built or changed. Delivery is through the app's **Check for Updates**. **Phone Test pending** until the user confirms scrolling works on the phone.
 
 ## Restored APK 1.0.222 / Web Update 486 — post-restore phone test — 2026-11-27
