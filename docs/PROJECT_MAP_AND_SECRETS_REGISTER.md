@@ -2,6 +2,18 @@
 
 Last reviewed: 2026-11-28
 
+## Web 501 — user-reported note loss continues; investigation reopened — 2026-11-28
+
+- User confirmed that the same problem continues after Web Update 501: after saving the 17th note, the previously saved 16th note again appeared missing. This follows the user's earlier reports at 8, 10, 15, and 16 notes. **Web 501 is not Phone Test PASS and must not be described as resolved.**
+- Re-read the live Master Register, `latest.json`, `web-source/index.html`, and `diary-web/index.html`. Web 501 remains live; source and mirror are byte-identical; APK remains 1.0.222 / versionCode 221 and unchanged.
+- Confirmed in the live source: `prepareDiaryStorage()` restores the IndexedDB safety snapshot only when the localStorage note value is invalid. If localStorage contains a valid JSON array that is nevertheless incomplete, the current startup path trusts it and replaces the single `latest` safety snapshot with that incomplete array. This is a confirmed recovery gap, but **not yet proven to be the cause of every missing-note incident**.
+- Also confirmed: `write(a, requiredIds)` checks that all notes returned by the current in-memory `read()` remain in the proposed save. It does not compare those IDs against an independent durable baseline. Therefore, if a note has already disappeared from both the current read and the single latest backup, this guard cannot detect it.
+- No speculative code change or new Web Update has been published in this investigation. Do not ask the user to create more notes for testing; do not clear app data or uninstall the app. Preserve the current live release while designing and testing a recovery-safe storage change. Do not claim that a missing note has been recovered without evidence.
+- Safety backup branch: `backup/pre-web501-note-loss-investigation-2026-11-28`. Documentation work branch: `docs/web501-note-loss-investigation-2026-11-28`.
+- Next engineering step: design a durable multi-snapshot / integrity-check strategy that distinguishes intentional deletions from unexplained missing records, then test save, edit, delete, restore, startup recovery, and rapid consecutive saves before any release.
+- APK remains **My Diary 1.0.222 / versionCode 221**; no APK was built or changed.
+
+
 ## Current release state — 2026-11-28
 
 - Latest published web version: **501** — after a successful note save, the search and category filters are reset and favourites-only mode is exited so the complete saved-note list is shown. **Phone Test pending**; user must confirm older notes remain visible after further saves. Web Update 500 did not resolve the reported symptom and is not marked PASS. APK remains My Diary 1.0.222 / versionCode 221 and is unchanged. — Restores the original Web 497 Sab Notes opening flow: the original Sab Notes trigger stays in its original position and is hidden (not moved) while the list is open. A separate **✕ Band Karein** button appears at the top, styled like Delete Ki Huwi Notes. Tapping it closes the full-screen list. Source and mirror SHA-256 match. **Web 499 Phone Test PASS — user confirmed on 2026-11-28.** APK remains My Diary 1.0.222 / versionCode 221 and is unchanged.
