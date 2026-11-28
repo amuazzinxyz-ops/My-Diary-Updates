@@ -32,6 +32,7 @@ Last reviewed: 2026-11-28
   - `backups/2026-11-28-before-web491-all-notes-popup-latest.json`
   - `backups/2026-11-28-before-web491-all-notes-popup-register.md`
 - Working branch: `fix/web491-all-notes-popup-2026-11-28`. Source commit: `fd26703e5f5b5cba892b7b211652afd73ec06b16`; mirror commit: `8753027916840c62d1625a408aee88dce7902dc8`; metadata commit: `9b930279078e31accde4f72782c4253a1a2b1b12`.
+- Merged to `main` through PR #526; squash merge commit: `9044ff493e3fc377bf7aa995f8cbec326aa72fe9`. Live source, mirror, `latest.json`, and Register were re-fetched and verified after merge.
 - Existing APK metadata remains **My Diary 1.0.222 / versionCode 221**, APK SHA-256 `df2a558ce528d51ae93277fd09d90f9772f53787a364b8c36cd40faec7bdc174`. No APK build or signing change.
 - **Phone Test pending — do not mark PASS until the user confirms that Sab Notes opens and closes correctly on the phone and still shows normal saved notes.**
 
