@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 498,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "9890a4e34690dea92388583d260fcd48409641f6bc1c3e6a26ee829c70648cb1",
+  "webSha256": "f5dadfc51a368991fe9953dee3455379930ea9531792e8eb921fb77b07bce4ca",
   "webReleaseNotes": "My Diary Web Update 498: Sab Notes now has a top-positioned “✕ Band Karein” button styled and placed like the existing Delete Ki Huwi Notes close control. Tapping it closes the Sab Notes list and restores the original Sab Notes button position and label. The list remains immediately below search when open. No APK change. Phone Test pending."
 }
