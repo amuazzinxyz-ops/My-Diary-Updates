@@ -2,9 +2,9 @@
 
 Last reviewed: 2026-11-28
 
-## Current release state — 2026-11-27
+## Current release state — 2026-11-28
 
-- Latest published web version: **487**. Web 487 fixes scrolling in the saved New Note list by allowing the Diary content area to shrink within its height-limited panel and scroll; saved-note data and save/delete logic are unchanged. Source and mirror are byte-identical; SHA-256: `dabba9033041e6eb78876e388986da7833076bdc5034c0f68da41f3af45b4514`. **Phone Test pending — awaiting user confirmation.** Web 486 corrects the Me button size slider so it resizes the actual button box (36×36px at 100%, scaling from 75% to 160%) while keeping the Me text at its original 13px size. The original button design is retained at 100%; the × button, position behavior, and other controls/functions are unchanged. **Phone Test PASS — user confirmed on 2026-11-27.** Web 483 removes the **🌈 Do Rang (Gradient)** choice only from the **🖼️ Photo Lagayein** chooser; gradient choices in Note Cover Photo and Details Image remain available and unchanged. **Phone Test PASS — user confirmed on 2026-11-26.** Personal Calendar category/date/time badges remain compact and wrap only when needed. **Phone Test PASS — user confirmed on 2026-11-26.**
+- Latest prepared web version: **489** (PR #524; pending main publication). Web 489 is the latest targeted correction for the New Note saved-list scrolling issue: the list now has a definite bounded height with explicit vertical scrolling, and swipes that begin inside the list are excluded from the Diary pull-to-refresh handler. **Phone Test pending — awaiting user confirmation.** Web 488 only changed the list's maximum height/overflow and did not fully solve the user's phone issue (the user then saw 8 notes rather than 7, but still could not reach the remaining notes). Web 487's body-scroll adjustment also did not fully solve it. Web 486 corrects the Me button size slider so it resizes the actual button box (36×36px at 100%, scaling from 75% to 160%) while keeping the Me text at its original 13px size. The original button design is retained at 100%; the × button, position behavior, and other controls/functions are unchanged. **Phone Test PASS — user confirmed on 2026-11-27.** Web 483 removes the **🌈 Do Rang (Gradient)** choice only from the **🖼️ Photo Lagayein** chooser; gradient choices in Note Cover Photo and Details Image remain available and unchanged. **Phone Test PASS — user confirmed on 2026-11-26.** Personal Calendar category/date/time badges remain compact and wrap only when needed. **Phone Test PASS — user confirmed on 2026-11-26.**
 - Web 481 source and mirror are byte-identical. SHA-256: `a6dc79b385696dd24cd42767db10cffef7bfd733dfd87a9d0a6f92ddeec443c8`; `latest.json` declares `webVersion: 481` with the same SHA-256.
 - Web 479 remains the previous known-good release. Its custom category option, save, and edit behavior are **Phone Test PASS — user confirmed on 2026-11-26**.
 - Web 478 remains the previous known-good release. It resets header-button Move Mode to OFF whenever the Me menu closes while preserving saved button positions and sizes. **Phone Test PASS — user confirmed on 2026-11-26 after installing APK 1.0.221 over APK 1.0.220 and confirming Check for Updates PASS.**
@@ -19,6 +19,22 @@ Last reviewed: 2026-11-28
 - Recently Deleted fullscreen layout remains isolated: its × button retains the original top-right position and default 36px size even when a custom heading-button layout is saved.
 - Latest APK: **versionName 1.0.222**, **versionCode 221**, SHA-256 `df2a558ce528d51ae93277fd09d90f9772f53787a364b8c36cd40faec7bdc174`. It contains the exact published Web Update **486** bundle. **APK 1.0.221 → 1.0.222 in-place upgrade PASS; Check for Update PASS; Phone Test PASS — user confirmed on 2026-11-27.** APK 1.0.222 is now the latest phone-tested release.
 
+
+## Web Update 489 — New Note saved-list touch scrolling correction — 2026-11-28
+
+- Re-checked the live source and Master Register after the user reported that Web 488 changed the visible count from seven to eight, but the remaining saved notes still could not be reached.
+- Confirmed that `read()` returns all valid saved-note records and `renderList()` iterates every matching note; there is no seven- or eight-note cap, slice, or deletion in the saved-list rendering path.
+- Corrected the actual mobile scrolling setup: `#diaryMyNotesList` now has a definite bounded height (`45dvh`), `min-height:0`, and explicit `overflow-y:scroll` / `overflow-x:hidden`. The Diary body's pull-to-refresh touch-start handler now ignores gestures that begin inside the saved-note list, so the list owns its swipe gesture.
+- Scoped changes only to the saved New Note list's scroll CSS and the Diary body's pull-to-refresh touch-start guard. No note data, save/delete logic, local-storage keys, photos, PIN/lock behavior, or other modules changed. No APK was built or modified.
+- `web-source/index.html` and `diary-web/index.html` are byte-identical (Git blob SHA `f45cc720b71310d7855127f9fd2994bb4fac1263`). Independently verified UTF-8 SHA-256: `acc1e98874913f134a2cec7f1695794639978934fce9e95d574fe64b617e39de`; `latest.json` declares Web Update **489** with the same hash. SHA implementation checked against the standard `abc` vector and the Web 488 backup hash.
+- Safety backup branch: `backup/pre-web489-note-scroll-touch-2026-11-28`. Backups:
+  - `backups/2026-11-28-before-web489-note-scroll-touch-web-source.html`
+  - `backups/2026-11-28-before-web489-note-scroll-touch-diary-web.html`
+  - `backups/2026-11-28-before-web489-note-scroll-touch-latest.json`
+  - `backups/2026-11-28-before-web489-note-scroll-touch-register.md`
+- Working branch: `fix/web489-note-scroll-touch-2026-11-28`. Source commit: `b909f1f23f2f9fc4e7ad97dfb433c059b3d50131`; mirror commit: `d7683a190dbbc4d635a2ba8ddddd6a1ff5702c8f`.
+- **Phone Test pending — do not mark PASS until the user confirms that saved notes beyond the first eight can be reached by swiping inside the saved-note list.**
+- APK metadata remains **My Diary 1.0.222 / versionCode 221**; no APK was built or changed.
 
 ## Web Update 488 — New Note saved-list independent scrolling — 2026-11-28
 
