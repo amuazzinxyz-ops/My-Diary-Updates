@@ -442,3 +442,16 @@ The user has repeatedly requested strict separation: **MUAZZIN path separate; My
 - Working branch: `fix/note-save-preserve-all-notes-2026-11-28`.
 - **Phone Test pending.** Do not mark PASS until the user confirms old notes remain after saving additional notes and existing note edit/delete/photo behavior remains correct.
 - APK remains My Diary 1.0.222 / versionCode 221. No APK built or modified.
+
+
+## Web Update 503 — Clear button starts a genuinely new note — 2026-11-28
+
+- User isolated the repeatable trigger: after saving a note, using the editor's **× Clear** control and then saving again leaves the total note count unchanged; using **Sab Notes → ✕ Band Karein → Naya Note** does not reproduce it.
+- Live Web 502 source confirmed the cause in `clearEditedNoteDraft()`: it called `newNote()` (which correctly resets `activeId=null`) and then restored the previous `editingId`. The next Save therefore found and updated the previous note instead of inserting a new one. This matches the user's two diagnostic counts (19→20, then 20→20).
+- Minimal fix: keep the `newNote()` reset and preserve the selected category, but do not restore the previous note ID or re-show the Delete button. The cleared editor is now a genuinely new draft; its next Save inserts a new note.
+- No changes to storage format, existing saved-note data, photo data, PINs, locks, other modules, or APK. Existing Web 502 ID-only diagnostics remain temporarily available for phone verification.
+- Safety backup branch: `backup/pre-web503-clear-x-new-note-2026-11-28` (pre-change main commit `bd9063b9185aa1cc828a539547892c3de9ae71c3`).
+- Working branch: `fix/web503-clear-x-starts-new-note-2026-11-28`.
+- Source and mirror updated identically. UTF-8 SHA-256: `6c05039bfa6ea463f3931e726d89b87d677e4f596cfbfff32b44114b223ed84e`; `latest.json` declares Web Update **503** with the same hash.
+- **Phone Test pending.** Verify: after a saved note, tap **× Clear**, write a different note, Save; the count must increase by one and the previous note must remain. Also verify ordinary **Naya Note** and editing an existing note still work.
+- APK remains My Diary 1.0.222 / versionCode 221. No APK built or modified.
