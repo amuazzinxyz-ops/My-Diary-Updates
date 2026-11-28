@@ -7,8 +7,8 @@
   "sha256": "df2a558ce528d51ae93277fd09d90f9772f53787a364b8c36cd40faec7bdc174",
   "releaseNotes": "My Diary 1.0.222: signed in-place upgrade build (versionCode 221) containing the exact published Web Update 486 bundle, including all retained Web Updates 479–486 since APK 1.0.221. Preserves app identity, notes, photos, PINs, locks, widgets, reminders, and saved data. Uses the previously approved signing certificate. Web Update 486 Phone Test PASS — user confirmed 2026-11-27; APK installation test is pending.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 502,
+  "webVersion": 503,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "a15102227b46697c3162832bdcf17ef0379838d68868bba0662a52eae5a93901",
-  "webReleaseNotes": "My Diary Web Update 502: Temporary diagnostic for reported missing notes. After each Save, compares note IDs before Save, stored note IDs, and rendered note-card IDs; stores ID-only diagnostic report separately and offers copy. Does not change note content or delete/restore behavior. Phone Test pending."
+  "webSha256": "8490a16c7192c6533c00535ac296df26d9b5dcfc8a725fefb41e8ae684834bab",
+  "webReleaseNotes": "My Diary Web Update 503: Fix the Diary editor × Clear action so clearing an existing draft truly starts a new note (activeId remains null) instead of restoring the previous note ID and overwriting that note on Save. Preserves category; no changes to note storage format, saved notes, photos, PINs, locks, other modules, or APK. Phone Test pending."
 }
