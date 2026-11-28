@@ -1,5 +1,16 @@
 # My Diary Project Register (Permanent Handover)
 
+## Note storage integrity design and full mutation-path audit — 2026-11-28
+
+- Re-read live `latest.json`, `web-source/index.html`, `diary-web/index.html`, and this Register before work. Web 501 remains live; source and mirror are byte-identical; APK remains 1.0.222 / versionCode 221.
+- Audited all note-storage mutation call sites. Confirmed that the current `write(a, requiredIds)` protection is conditional: several note metadata paths (including PIN/favourite changes) call it without a durable expected-ID baseline, while delete, bulk-delete, restore, and import flows intentionally add/remove IDs and must be handled explicitly.
+- Confirmed that `saveDiarySafetyCopy()` keeps only one IndexedDB record (`latest`), is generally not awaited by callers, and startup can overwrite it from a syntactically valid but incomplete localStorage array. This is a confirmed recovery weakness, not proof of the exact cause of every user-reported missing note.
+- Created design-only document: `docs/NOTE_STORAGE_INTEGRITY_DESIGN.md`. It specifies an IndexedDB transaction-backed commit journal, explicit operation types/tombstones, startup conflict preservation, multi-generation retention, quota/failure handling, migration compatibility, and a comprehensive save/edit/delete/restore/import/startup/concurrency/failure-injection test matrix.
+- Safety backup branch: `backup/pre-note-storage-design-2026-11-28`. Documentation branch: `docs/note-storage-integrity-design-2026-11-28`.
+- **No app source, mirror, `latest.json`, Web Update, or APK was changed.** Web 501 is still not Phone Test PASS and the reported issue is not resolved. Do not ask the user to create more test notes, clear app data, or uninstall.
+- Next step: implement only after the design is reviewed against every mutation path, then run automated tests and failure injection before any release. User phone confirmation is still required after an eventual release.
+- APK remains My Diary 1.0.222 / versionCode 221; no APK was built or changed.
+
 Last reviewed: 2026-11-28
 
 ## Web 501 — user-reported note loss continues; investigation reopened — 2026-11-28
