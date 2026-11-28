@@ -1,3 +1,13 @@
+## Web Update 504 — Diary header date font size 12px — 2026-11-28
+
+- User requested increasing only the Diary header date text from 11px to 12px after a source-level safety check.
+- Changed exactly one CSS value in `diaryClockDate.style.cssText`: `font-size:11px` → `font-size:12px`. The time style (responsive 17–21px), date formatter, one-line nowrap behavior, clock timer, Diary opening flow, and all app functions remain unchanged.
+- No changes to notes/data/photos, PINs, locks, buttons, widgets, reminders, other modules, or APK.
+- Safety backup branch: `backup/pre-web504-clock-date-12px-2026-11-28` (pre-change main commit `51b97b76a1df5268381684ef8347d3cf67bfcfc3`).
+- Working branch: `fix/web504-clock-date-12px-2026-11-28`.
+- Source and mirror are updated identically. UTF-8 SHA-256: `c0fbb44c9dd415950d7ded7e1413a0ebdc008898e7d7d0fc933a0c998516236c`; `latest.json` declares Web Update **504** with the same hash.
+- Phone Test: **PENDING user confirmation**. APK remains My Diary 1.0.222 / versionCode 221; no APK built or modified.
+
 # My Diary Project Register (Permanent Handover)
 
 ## Temporary note-save diagnostics — isolated investigation branch — 2026-11-28
