@@ -7,8 +7,8 @@
   "sha256": "df2a558ce528d51ae93277fd09d90f9772f53787a364b8c36cd40faec7bdc174",
   "releaseNotes": "My Diary 1.0.222: signed in-place upgrade build (versionCode 221) containing the exact published Web Update 486 bundle, including all retained Web Updates 479–486 since APK 1.0.221. Preserves app identity, notes, photos, PINs, locks, widgets, reminders, and saved data. Uses the previously approved signing certificate. Web Update 486 Phone Test PASS — user confirmed 2026-11-27; APK installation test is pending.",
   "minimumSupportedVersionCode": 1,
-  "webVersion": 500,
+  "webVersion": 501,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "813a63c9e938d74125c5753f606f1277751781370d1ca2fa0a37201ddf71e51a",
-  "webReleaseNotes": "My Diary Web Update 500: Protects saved notes during Save. Legacy note records without a valid string ID are retained and assigned stable IDs instead of being silently filtered out. A save now verifies that every previously read note ID remains in the proposed list, checks the latest stored list to reject stale/concurrent overwrites, validates unique IDs, and verifies the persisted list after writing. No APK change. Phone Test pending."
+  "webSha256": "7ba24af6dbe46ba159c1983b480a710486edd9376f8ecf8b38a3a65c80f7797e",
+  "webReleaseNotes": "My Diary Web Update 501: After a successful note save, clears stale note-search and category filters and exits favourite-only view before refreshing the saved-note list, so the complete saved-note list is shown and older notes are not hidden by leftover filters. No note data or APK change. Phone Test pending."
 }
