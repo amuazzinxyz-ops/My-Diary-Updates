@@ -6,7 +6,7 @@
 - Safety backup branch: `backup/pre-web504-clock-date-12px-2026-11-28` (pre-change main commit `51b97b76a1df5268381684ef8347d3cf67bfcfc3`).
 - Working branch: `fix/web504-clock-date-12px-2026-11-28`.
 - Source and mirror are updated identically. UTF-8 SHA-256: `c0fbb44c9dd415950d7ded7e1413a0ebdc008898e7d7d0fc933a0c998516236c`; `latest.json` declares Web Update **504** with the same hash.
-- Phone Test: **PENDING user confirmation**. APK remains My Diary 1.0.222 / versionCode 221; no APK built or modified.
+- Phone Test: **PASS — user confirmed on 2026-11-28**. APK remains My Diary 1.0.222 / versionCode 221; no APK built or modified.
 
 # My Diary Project Register (Permanent Handover)
 
