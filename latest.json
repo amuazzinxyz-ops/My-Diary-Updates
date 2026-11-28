@@ -9,6 +9,6 @@
   "minimumSupportedVersionCode": 1,
   "webVersion": 503,
   "webUrl": "https://raw.githubusercontent.com/amuazzinxyz-ops/My-Diary-Updates/main/web-source/index.html",
-  "webSha256": "6c05039bfa6ea463f3931e726d89b87d677e4f596cfbfff32b44114b223ed84e",
+  "webSha256": "8490a16c7192c6533c00535ac296df26d9b5dcfc8a725fefb41e8ae684834bab",
   "webReleaseNotes": "My Diary Web Update 503: Fix the Diary editor × Clear action so clearing an existing draft truly starts a new note (activeId remains null) instead of restoring the previous note ID and overwriting that note on Save. Preserves category; no changes to note storage format, saved notes, photos, PINs, locks, other modules, or APK. Phone Test pending."
 }
