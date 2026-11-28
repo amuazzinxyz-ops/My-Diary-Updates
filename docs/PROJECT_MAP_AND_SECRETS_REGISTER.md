@@ -4,7 +4,7 @@ Last reviewed: 2026-11-28
 
 ## Current release state — 2026-11-28
 
-- Latest published web version: **496** — Sab Notes now uses measured device-viewport pixel dimensions for edge-to-edge mobile display, retaining its existing inner design. The existing panel design, normal saved-note list, order, search, categories, note actions, Recently Deleted, and note data remain unchanged. Source and mirror are byte-identical. **Phone Test pending.** Web 490 remains the last user-confirmed rollback Phone Test PASS; Web 493 was also previously user-confirmed PASS. APK remains My Diary 1.0.222 / versionCode 221 and is unchanged.
+- Latest published web version: **498** — Sab Notes now has a top-positioned **✕ Band Karein** button matching the existing Delete Ki Huwi Notes close control. Tapping it closes Sab Notes and restores the original Sab Notes button position and label. The normal saved-note list remains immediately below search while open. Source and mirror are byte-identical; Web 498 Phone Test pending. Web 490 remains the last user-confirmed rollback Phone Test PASS; Web 493 was also previously user-confirmed PASS. APK remains My Diary 1.0.222 / versionCode 221 and is unchanged.
 - Web 494 source and mirror are byte-identical. SHA-256: `4b10341190d61606c81c3aecba97d0d346652cdc4beab2ec1461c88ebe37da1c`; `latest.json` declares `webVersion: 494` with the same SHA-256. Phone Test pending.
 - Web 481 source and mirror are byte-identical. SHA-256: `a6dc79b385696dd24cd42767db10cffef7bfd733dfd87a9d0a6f92ddeec443c8`; `latest.json` declares `webVersion: 481` with the same SHA-256.
 - Web 479 remains the previous known-good release. Its custom category option, save, and edit behavior are **Phone Test PASS — user confirmed on 2026-11-26**.
@@ -355,4 +355,16 @@ The user has repeatedly requested strict separation: **MUAZZIN path separate; My
 - Safety backup branch: `backup/pre-web497-sab-notes-list-position-2026-11-28`. Backups: `backups/2026-11-28-before-web497-sab-notes-list-web-source.html`, `backups/2026-11-28-before-web497-sab-notes-list-diary-web.html`, `backups/2026-11-28-before-web497-sab-notes-list-latest.json`, and `backups/2026-11-28-before-web497-sab-notes-list-register.md`.
 - Working branch: `fix/web497-sab-notes-list-position-2026-11-28`.
 - **Phone Test pending — do not mark PASS until the user confirms Sab Notes opens from the top and fills the screen, with the existing design and controls intact.**
+- APK remains **My Diary 1.0.222 / versionCode 221**. No APK was built or modified.
+
+
+## Web Update 498 — Sab Notes close button matches Delete Ki Huwi Notes — 2026-11-28
+
+- Added the same top-positioned **✕ Band Karein** control used by the existing Delete Ki Huwi Notes full-screen view to Sab Notes.
+- When Sab Notes opens, its existing button moves to the top of the full-screen body, changes to **✕ Band Karein**, and uses the same gold raised-button styling as the Recently Deleted close control. Tapping it closes the list, restores the original localized Sab Notes label, and returns the button to its original position after the backup controls.
+- The Sab Notes list remains immediately below the search field while open. Existing note cards, order, search, categories, editor, save/delete logic, data, photos, PINs, locks, widgets, reminders, Recently Deleted behavior, and other modules are unchanged.
+- Safety backup branch: `backup/pre-web498-sab-notes-close-button-2026-11-28`. Backups: `backups/2026-11-28-before-web498-sab-notes-close-web-source.html`, `backups/2026-11-28-before-web498-sab-notes-close-diary-web.html`, `backups/2026-11-28-before-web498-sab-notes-close-latest.json`, and `backups/2026-11-28-before-web498-sab-notes-close-register.md`.
+- Working branch: `fix/web498-sab-notes-close-button-2026-11-28`.
+- Source and mirror are byte-identical. UTF-8 SHA-256: `f5dadfc51a368991fe9953dee3455379930ea9531792e8eb921fb77b07bce4ca`; `latest.json` declares Web Update **498** with the same hash.
+- **Phone Test pending** — do not mark PASS until the user confirms the Sab Notes close button appears at the top, closes the list, and restores the original button position while the list still opens correctly.
 - APK remains **My Diary 1.0.222 / versionCode 221**. No APK was built or modified.
