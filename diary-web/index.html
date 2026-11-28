@@ -1587,6 +1587,23 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
  }
  function renderDiaryImagePreview(prefix){var cover=prefix==='Cover',data=cover?activeCoverPhotoData:activeDetailPhotoData,field=document.getElementById(cover?'diaryMyNotesTitle':'diaryMyNotesText'),pickerButton=document.getElementById(cover?'diaryDiaryCoverBtn':'diaryDiaryDetailBtn');if(pickerButton)pickerButton.textContent=data?t('changeImage'):t(cover?'coverImage':'detailImage');applyDiaryFieldImage(field,data,cover?'title':'body',cover?activeCoverColour:activeDetailColour);applyDiaryTextFormat(field,cover?activeCoverTextFormat:activeDetailTextFormat);updateDiaryDraftClearXVisibility();}
 
+ /* Apply the existing Sab Notes full-screen geometry directly so older Android WebViews do not depend on :has() or late-loaded CSS. */
+ function setDiaryAllNotesFullscreen(active){
+  var panel=document.getElementById('diaryMyNotesPanel');
+  var overlay=document.getElementById('diaryMyNotesOverlay');
+  if(!panel)return;
+  if(active){
+   panel.classList.add('diary-all-notes-fullscreen');
+   if(overlay)overlay.classList.add('diary-all-notes-overlay-fullscreen');
+   [['position','fixed'],['top','0'],['right','0'],['bottom','0'],['left','0'],['width','100vw'],['max-width','none'],['height','100vh'],['height','100dvh'],['max-height','100vh'],['max-height','100dvh'],['min-height','0'],['margin','0'],['transform','none'],['border','0'],['border-radius','0'],['display','flex'],['flex-direction','column'],['overflow','hidden'],['box-sizing','border-box']].forEach(function(x){panel.style.setProperty(x[0],x[1],'important');});
+   if(overlay)[['position','fixed'],['top','0'],['right','0'],['bottom','0'],['left','0'],['padding','0'],['align-items','stretch'],['justify-content','stretch'],['overflow','hidden']].forEach(function(x){overlay.style.setProperty(x[0],x[1],'important');});
+  }else{
+   panel.classList.remove('diary-all-notes-fullscreen');
+   if(overlay)overlay.classList.remove('diary-all-notes-overlay-fullscreen');
+   ['position','top','right','bottom','left','width','max-width','height','max-height','min-height','margin','transform','border','border-radius','display','flex-direction','overflow','box-sizing'].forEach(function(k){panel.style.removeProperty(k);});
+   if(overlay)['position','top','right','bottom','left','padding','align-items','justify-content','overflow'].forEach(function(k){overlay.style.removeProperty(k);});
+  }
+ }
  var diaryMeFeatureAllForBackup=null,diaryOpenMeFeatureDbForBackup=null;
  function makeOverlay(){
   if(document.getElementById('diaryMyNotesOverlay'))return;
@@ -3585,11 +3602,11 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   backup.appendChild(exportBtn);backup.appendChild(importBtn);backup.appendChild(importFile);
   var allNotesBtn=el('button',{id:'diaryMyNotesAllNotes',type:'button','aria-expanded':'false','aria-controls':'diaryMyNotesList'},t('allNotes'));
   var trashBtn=el('button',{id:'diaryMyNotesTrash',type:'button',class:'secondary','aria-expanded':'false'},t('recentlyDeleted'));
-  trashBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();panel.classList.remove('diary-all-notes-fullscreen');showingTrash=!showingTrash;allNotesBtn.style.display=showingTrash?'none':'';trashBtn.setAttribute('aria-expanded',showingTrash?'true':'false');list.style.display=showingTrash?'':'none';if(showingTrash){mePanel.appendChild(list);mePanel.scrollTop=0;var diaryOverlay=document.getElementById('diaryMyNotesOverlay');if(diaryOverlay){diaryOverlay.classList.add('open');diaryOverlay.setAttribute('aria-hidden','false');}mePanel.hidden=false;meBtn.setAttribute('aria-expanded','true');panel.classList.add('diary-me-menu-open','diary-trash-fullscreen');trashBtn.textContent='✕ Band Karein';renderList();}else{panel.classList.remove('diary-trash-fullscreen');trashBtn.textContent=t('recentlyDeleted');body.appendChild(list);renderList();}});
+  trashBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();setDiaryAllNotesFullscreen(false);showingTrash=!showingTrash;allNotesBtn.style.display=showingTrash?'none':'';trashBtn.setAttribute('aria-expanded',showingTrash?'true':'false');list.style.display=showingTrash?'':'none';if(showingTrash){mePanel.appendChild(list);mePanel.scrollTop=0;var diaryOverlay=document.getElementById('diaryMyNotesOverlay');if(diaryOverlay){diaryOverlay.classList.add('open');diaryOverlay.setAttribute('aria-hidden','false');}mePanel.hidden=false;meBtn.setAttribute('aria-expanded','true');panel.classList.add('diary-me-menu-open','diary-trash-fullscreen');trashBtn.textContent='✕ Band Karein';renderList();}else{panel.classList.remove('diary-trash-fullscreen');trashBtn.textContent=t('recentlyDeleted');body.appendChild(list);renderList();}});
   /* Recently Deleted list opens directly below its button inside the Me menu. */
   mePanel.appendChild(trashBtn);
   list.style.display='none';
-  allNotesBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();showingTrash=false;showingFavouriteNotes=false;if(list.parentNode!==body)body.appendChild(list);allNotesBtn.style.display='';trashBtn.setAttribute('aria-expanded','false');var opening=list.style.display==='none';list.style.display=opening?'':'none';allNotesBtn.setAttribute('aria-expanded',opening?'true':'false');if(opening){panel.classList.add('diary-all-notes-fullscreen');renderList();}else{panel.classList.remove('diary-all-notes-fullscreen');}});
+  allNotesBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();showingTrash=false;showingFavouriteNotes=false;if(list.parentNode!==body)body.appendChild(list);allNotesBtn.style.display='';trashBtn.setAttribute('aria-expanded','false');var opening=list.style.display==='none';list.style.display=opening?'':'none';allNotesBtn.setAttribute('aria-expanded',opening?'true':'false');if(opening){setDiaryAllNotesFullscreen(true);renderList();}else{setDiaryAllNotesFullscreen(false);}});
   body.appendChild(search);body.appendChild(tools);body.appendChild(editor);coverFormatControls.refresh();detailFormatControls.refresh();body.appendChild(status);body.appendChild(backup);body.appendChild(allNotesBtn);body.appendChild(list);
   panel.appendChild(head);panel.appendChild(body);ov.appendChild(panel);document.body.appendChild(ov);setupDiaryStatusPopup(status,ov);
   applyDiaryFont();
@@ -4925,7 +4942,7 @@ if(patternPanel)box.appendChild(patternPanel);
  function closeOverlay(fromPop){
   Object.keys(unlockTimers).forEach(clearUnlockTimer);unlockedNotes={};expandedNoteId=null;showingTrash=false;showingFavouriteNotes=false;
   var ov=document.getElementById('diaryMyNotesOverlay');if(ov){ov.classList.remove('open');ov.setAttribute('aria-hidden','true')}
-  var diaryPanel=document.getElementById('diaryMyNotesPanel');if(diaryPanel)diaryPanel.classList.remove('diary-me-menu-open','diary-trash-fullscreen','diary-all-notes-fullscreen');var diaryMePanel=document.getElementById('diaryDiaryMePanel');if(diaryMePanel)diaryMePanel.hidden=true;var diaryMeButton=document.getElementById('diaryDiaryMeBtn');if(diaryMeButton)diaryMeButton.setAttribute('aria-expanded','false');var trashButton=document.getElementById('diaryMyNotesTrash');if(trashButton){trashButton.textContent=t('recentlyDeleted');trashButton.setAttribute('aria-expanded','false');}var trashList=document.getElementById('diaryMyNotesList'),diaryBody=document.getElementById('diaryMyNotesBody');if(trashList){if(diaryBody&&trashList.parentNode!==diaryBody)diaryBody.appendChild(trashList);trashList.style.display='none';}var allNotesButton=document.getElementById('diaryMyNotesAllNotes');if(allNotesButton)allNotesButton.style.display='';
+  setDiaryAllNotesFullscreen(false);var diaryPanel=document.getElementById('diaryMyNotesPanel');if(diaryPanel)diaryPanel.classList.remove('diary-me-menu-open','diary-trash-fullscreen');var diaryMePanel=document.getElementById('diaryDiaryMePanel');if(diaryMePanel)diaryMePanel.hidden=true;var diaryMeButton=document.getElementById('diaryDiaryMeBtn');if(diaryMeButton)diaryMeButton.setAttribute('aria-expanded','false');var trashButton=document.getElementById('diaryMyNotesTrash');if(trashButton){trashButton.textContent=t('recentlyDeleted');trashButton.setAttribute('aria-expanded','false');}var trashList=document.getElementById('diaryMyNotesList'),diaryBody=document.getElementById('diaryMyNotesBody');if(trashList){if(diaryBody&&trashList.parentNode!==diaryBody)diaryBody.appendChild(trashList);trashList.style.display='none';}var allNotesButton=document.getElementById('diaryMyNotesAllNotes');if(allNotesButton)allNotesButton.style.display='';
   document.body.style.overflow='';
   if(diaryOverlayHistoryOpen){diaryOverlayHistoryOpen=false;if(!fromPop){try{history.back()}catch(e){}}}
  }
