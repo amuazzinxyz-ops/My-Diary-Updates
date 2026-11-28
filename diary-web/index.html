@@ -531,7 +531,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 #diaryMyNotesHead{position:relative;padding:14px 52px 12px 14px;text-align:center;color:#fff;background:linear-gradient(125deg,#075e3b,#183f70)}
 #diaryMyNotesHead h2{margin:0;font-size:clamp(20px,5vw,26px);line-height:1.25}
 #diaryMyNotesClose{position:absolute;right:10px;top:9px;width:36px;height:36px;border:1px solid #ffffff77;border-radius:50%;background:#ffffff20;color:#fff;font-size:25px;cursor:pointer}
-#diaryMyNotesBody{flex:1 1 auto;min-height:0;overflow:auto;padding:12px;overscroll-behavior:contain}
+#diaryMyNotesBody{overflow:auto;padding:12px;overscroll-behavior:contain}
 #diaryMyNotesSearch,#diaryMyNotesTitle,#diaryMyNotesText{display:block;width:100%;box-sizing:border-box;border:1.5px solid #c9d8ce;border-radius:11px;background:#fff;color:#172033;padding:11px 12px;font:inherit;font-size:15px;outline-offset:2px}
 #diaryMyNotesText{min-height:150px;resize:vertical;line-height:1.55;white-space:pre-wrap}
 #diaryMyNotesEditor{padding:12px;margin:10px 0;border:1px solid #dbe7dc;border-radius:14px;background:linear-gradient(145deg,#fff,#f4f9f4)}
@@ -539,7 +539,7 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
 #diaryMyNotesActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 #diaryMyNotesActions button{min-height:42px;padding:9px 14px;border:0;border-radius:10px;background:#0b6847;color:#fff;font-size:14px;font-weight:850;cursor:pointer}
 #diaryMyNotesActions button.secondary{background:#e8f0e8;color:#174532;border:1px solid #c8d8ca}
-#diaryMyNotesList{display:grid;gap:8px;margin-top:10px;height:45dvh;max-height:45dvh;min-height:0;overflow-y:scroll;overflow-x:hidden;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y}
+#diaryMyNotesList{display:grid;gap:8px;margin-top:10px}
 .diary-my-note{padding:11px;border:1px solid #dbe4d8;border-radius:12px;background:#fff;cursor:pointer}
 .diary-my-note strong{display:block;overflow-wrap:anywhere;color:#174532;font-size:14px}
 .diary-my-note p{margin:5px 0 0;color:#43564b;font-size:12px;line-height:1.4;white-space:pre-wrap;overflow-wrap:anywhere}
@@ -3507,8 +3507,6 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
     pullRefreshHint.style.height='0px';
    }
    body.addEventListener('touchstart',function(e){
-    /* A swipe that starts on the saved-note list belongs to that list, not pull-to-refresh. */
-    if(e.target&&e.target.closest&&e.target.closest('#diaryMyNotesList')){pullTracking=false;return;}
     if(pullRefreshing||body.scrollTop>2||!e.touches||e.touches.length!==1)return;
     pullStartY=e.touches[0].clientY;pullDistance=0;pullTracking=true;
    },{passive:true});
