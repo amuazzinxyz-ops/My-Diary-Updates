@@ -453,5 +453,5 @@ The user has repeatedly requested strict separation: **MUAZZIN path separate; My
 - Safety backup branch: `backup/pre-web503-clear-x-new-note-2026-11-28` (pre-change main commit `bd9063b9185aa1cc828a539547892c3de9ae71c3`).
 - Working branch: `fix/web503-clear-x-starts-new-note-2026-11-28`.
 - Source and mirror updated identically. UTF-8 SHA-256: `8490a16c7192c6533c00535ac296df26d9b5dcfc8a725fefb41e8ae684834bab`; `latest.json` declares Web Update **503** with the same hash.
-- **Phone Test pending.** Verify: after a saved note, tap **× Clear**, write a different note, Save; the count must increase by one and the previous note must remain. Also verify ordinary **Naya Note** and editing an existing note still work.
+- **Phone Test PASS — user confirmed on 2026-11-28.** Web Update 503 is confirmed by the user as passing the phone test. APK remains My Diary 1.0.222 / versionCode 221; no APK built or modified.
 - APK remains My Diary 1.0.222 / versionCode 221. No APK built or modified.
