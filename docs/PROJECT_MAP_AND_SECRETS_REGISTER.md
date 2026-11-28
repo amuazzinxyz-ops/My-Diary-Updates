@@ -339,8 +339,20 @@ The user has repeatedly requested strict separation: **MUAZZIN path separate; My
 - Follow-up to Web 495 after the user confirmed the Sab Notes panel still did not visually reach the top and bottom edges on the phone.
 - Changed only the outer sizing helper for the existing Sab Notes view. It now measures the actual device viewport and applies pixel-based width/height to the existing panel and overlay, with mobile detection that also recognizes touch devices and Android WebView. This avoids relying on inconsistent CSS viewport-unit handling.
 - Sab Notes keeps its own existing header, list placement, note order, search, categories, note actions, and close behavior. It does not borrow the Recently Deleted inner layout. No note data, photos, PINs, locks, widgets, reminders, other modules, or APK files were changed.
-- Source and mirror are byte-identical (verify after merge). UTF-8 SHA-256: `0eb762526cee19ba6895ab2b63ab993875931d20f88d81a55829d70deee9e127`; `latest.json` declares Web Update **496** with the same hash.
+- Source and mirror are byte-identical (verify after merge). UTF-8 SHA-256: `93ebd9e02ed15dbe8f97ea107a106ca699f7bb8a4ce2042f9b52ad5836b31c9f`; `latest.json` declares Web Update **496** with the same hash.
 - Safety backup branch: `backup/pre-web496-sab-notes-viewport-fix-2026-11-28`. Backups: `backups/2026-11-28-before-web496-sab-notes-viewport-web-source.html`, `backups/2026-11-28-before-web496-sab-notes-viewport-diary-web.html`, `backups/2026-11-28-before-web496-sab-notes-viewport-latest.json`, and `backups/2026-11-28-before-web496-sab-notes-viewport-register.md`.
 - Working branch: `fix/web496-sab-notes-viewport-fix-2026-11-28`.
 - **Phone Test pending — do not mark PASS until the user confirms Sab Notes fills the phone screen from top to bottom and the existing design/list/actions remain correct.**
+- APK remains **My Diary 1.0.222 / versionCode 221**. No APK was built or modified.
+
+
+## Web Update 497 — Sab Notes list opens from top — 2026-11-28
+
+- Root cause found after Web 496 phone test failed: the All Notes button was revealing the list at the end of the scrollable Diary body, after the editor, backup controls, and button. Changing only the outer panel dimensions could not move the list upward.
+- Corrected only the Sab Notes All Notes open/close flow: on opening, the existing list is moved immediately after the existing search field at the top of the body; the body fills the remaining full-screen panel height. On closing, the list returns to its original position after the All Notes button. The render/search logic now preserves the top position while All Notes is open.
+- Existing note card design, note order, search, categories, editor controls, saved data, and other modules are unchanged. No changes to Recently Deleted behaviour, PINs, locks, photos, reminders, widgets, or APK.
+- Source and mirror are byte-identical. UTF-8 SHA-256: `2672e86c0be026d332cfa2abbbe499c3e7514203d0b9a942615e78be23834e0d`; `latest.json` declares Web Update **497** with the same hash.
+- Safety backup branch: `backup/pre-web497-sab-notes-list-position-2026-11-28`. Backups: `backups/2026-11-28-before-web497-sab-notes-list-web-source.html`, `backups/2026-11-28-before-web497-sab-notes-list-diary-web.html`, `backups/2026-11-28-before-web497-sab-notes-list-latest.json`, and `backups/2026-11-28-before-web497-sab-notes-list-register.md`.
+- Working branch: `fix/web497-sab-notes-list-position-2026-11-28`.
+- **Phone Test pending — do not mark PASS until the user confirms Sab Notes opens from the top and fills the screen, with the existing design and controls intact.**
 - APK remains **My Diary 1.0.222 / versionCode 221**. No APK was built or modified.
