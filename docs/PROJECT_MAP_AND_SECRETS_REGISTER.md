@@ -452,6 +452,6 @@ The user has repeatedly requested strict separation: **MUAZZIN path separate; My
 - No changes to storage format, existing saved-note data, photo data, PINs, locks, other modules, or APK. Existing Web 502 ID-only diagnostics remain temporarily available for phone verification.
 - Safety backup branch: `backup/pre-web503-clear-x-new-note-2026-11-28` (pre-change main commit `bd9063b9185aa1cc828a539547892c3de9ae71c3`).
 - Working branch: `fix/web503-clear-x-starts-new-note-2026-11-28`.
-- Source and mirror updated identically. UTF-8 SHA-256: `6c05039bfa6ea463f3931e726d89b87d677e4f596cfbfff32b44114b223ed84e`; `latest.json` declares Web Update **503** with the same hash.
+- Source and mirror updated identically. UTF-8 SHA-256: `8490a16c7192c6533c00535ac296df26d9b5dcfc8a725fefb41e8ae684834bab`; `latest.json` declares Web Update **503** with the same hash.
 - **Phone Test pending.** Verify: after a saved note, tap **× Clear**, write a different note, Save; the count must increase by one and the previous note must remain. Also verify ordinary **Naya Note** and editing an existing note still work.
 - APK remains My Diary 1.0.222 / versionCode 221. No APK built or modified.
