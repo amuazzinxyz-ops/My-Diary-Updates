@@ -391,7 +391,7 @@ The user has repeatedly requested strict separation: **MUAZZIN path separate; My
   - Re-read the latest stored list before writing; if a concurrent/stale save would omit a note added by another writer, reject the write rather than overwrite that note.
   - Validate unique IDs and the serialized/persisted list before reporting a successful save; if verification fails, restore the previous stored value where possible.
 - Regression checks passed against the actual extracted storage functions: 14→15 keeps all 14 prior notes including legacy IDs; a write omitting an old ID is rejected without changing storage; a concurrent note addition is not overwritten; duplicate IDs are rejected.
-- Source and mirror are byte-identical. UTF-8 SHA-256: `607f53f87560c97a918e6b9067098247b34685dce1a2ab23c3bede313d87f09c`. Candidate `latest.json` on the working branch declares Web Update **500** with the same hash.
+- Source and mirror are byte-identical. UTF-8 SHA-256: `813a63c9e938d74125c5753f606f1277751781370d1ca2fa0a37201ddf71e51a`. Candidate `latest.json` on the working branch declares Web Update **500** with the same hash.
 - Safety backup branch: `backup/pre-note-save-safety-2026-11-28`. Pre-change copies: `backups/2026-11-28-before-note-save-safety-index.html` (web-source), `backups/2026-11-28-before-note-save-safety-diary-web-index.html`, `backups/2026-11-28-before-note-save-safety-latest.json`, and `backups/2026-11-28-before-note-save-safety-PROJECT_MAP_AND_SECRETS_REGISTER.md`.
 - Working branch: `fix/note-save-preserve-all-notes-2026-11-28`.
 - **Phone Test pending.** Do not mark PASS until the user confirms old notes remain after saving additional notes and existing note edit/delete/photo behavior remains correct.
