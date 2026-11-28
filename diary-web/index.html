@@ -3585,11 +3585,11 @@ body{margin:0;min-height:100vh;background:linear-gradient(145deg,#fbf8ff,#eee4ff
   backup.appendChild(exportBtn);backup.appendChild(importBtn);backup.appendChild(importFile);
   var allNotesBtn=el('button',{id:'diaryMyNotesAllNotes',type:'button','aria-expanded':'false','aria-controls':'diaryMyNotesList'},t('allNotes'));
   var trashBtn=el('button',{id:'diaryMyNotesTrash',type:'button',class:'secondary','aria-expanded':'false'},t('recentlyDeleted'));
-  trashBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();showingTrash=!showingTrash;allNotesBtn.style.display=showingTrash?'none':'';trashBtn.setAttribute('aria-expanded',showingTrash?'true':'false');list.style.display=showingTrash?'':'none';if(showingTrash){mePanel.appendChild(list);mePanel.scrollTop=0;var diaryOverlay=document.getElementById('diaryMyNotesOverlay');if(diaryOverlay){diaryOverlay.classList.add('open');diaryOverlay.setAttribute('aria-hidden','false');}mePanel.hidden=false;meBtn.setAttribute('aria-expanded','true');panel.classList.add('diary-me-menu-open','diary-trash-fullscreen');trashBtn.textContent='✕ Band Karein';renderList();}else{panel.classList.remove('diary-trash-fullscreen');trashBtn.textContent=t('recentlyDeleted');body.appendChild(list);renderList();}});
+  trashBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();panel.classList.remove('diary-all-notes-fullscreen');showingTrash=!showingTrash;allNotesBtn.style.display=showingTrash?'none':'';trashBtn.setAttribute('aria-expanded',showingTrash?'true':'false');list.style.display=showingTrash?'':'none';if(showingTrash){mePanel.appendChild(list);mePanel.scrollTop=0;var diaryOverlay=document.getElementById('diaryMyNotesOverlay');if(diaryOverlay){diaryOverlay.classList.add('open');diaryOverlay.setAttribute('aria-hidden','false');}mePanel.hidden=false;meBtn.setAttribute('aria-expanded','true');panel.classList.add('diary-me-menu-open','diary-trash-fullscreen');trashBtn.textContent='✕ Band Karein';renderList();}else{panel.classList.remove('diary-trash-fullscreen');trashBtn.textContent=t('recentlyDeleted');body.appendChild(list);renderList();}});
   /* Recently Deleted list opens directly below its button inside the Me menu. */
   mePanel.appendChild(trashBtn);
   list.style.display='none';
-  allNotesBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();showingTrash=false;showingFavouriteNotes=false;if(list.parentNode!==body)body.appendChild(list);allNotesBtn.style.display='';trashBtn.setAttribute('aria-expanded','false');var opening=list.style.display==='none';list.style.display=opening?'':'none';allNotesBtn.setAttribute('aria-expanded',opening?'true':'false');if(opening)renderList();});
+  allNotesBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();showingTrash=false;showingFavouriteNotes=false;if(list.parentNode!==body)body.appendChild(list);allNotesBtn.style.display='';trashBtn.setAttribute('aria-expanded','false');var opening=list.style.display==='none';list.style.display=opening?'':'none';allNotesBtn.setAttribute('aria-expanded',opening?'true':'false');if(opening){panel.classList.add('diary-all-notes-fullscreen');renderList();}else{panel.classList.remove('diary-all-notes-fullscreen');}});
   body.appendChild(search);body.appendChild(tools);body.appendChild(editor);coverFormatControls.refresh();detailFormatControls.refresh();body.appendChild(status);body.appendChild(backup);body.appendChild(allNotesBtn);body.appendChild(list);
   panel.appendChild(head);panel.appendChild(body);ov.appendChild(panel);document.body.appendChild(ov);setupDiaryStatusPopup(status,ov);
   applyDiaryFont();
@@ -4925,7 +4925,7 @@ if(patternPanel)box.appendChild(patternPanel);
  function closeOverlay(fromPop){
   Object.keys(unlockTimers).forEach(clearUnlockTimer);unlockedNotes={};expandedNoteId=null;showingTrash=false;showingFavouriteNotes=false;
   var ov=document.getElementById('diaryMyNotesOverlay');if(ov){ov.classList.remove('open');ov.setAttribute('aria-hidden','true')}
-  var diaryPanel=document.getElementById('diaryMyNotesPanel');if(diaryPanel)diaryPanel.classList.remove('diary-me-menu-open','diary-trash-fullscreen');var diaryMePanel=document.getElementById('diaryDiaryMePanel');if(diaryMePanel)diaryMePanel.hidden=true;var diaryMeButton=document.getElementById('diaryDiaryMeBtn');if(diaryMeButton)diaryMeButton.setAttribute('aria-expanded','false');var trashButton=document.getElementById('diaryMyNotesTrash');if(trashButton){trashButton.textContent=t('recentlyDeleted');trashButton.setAttribute('aria-expanded','false');}var trashList=document.getElementById('diaryMyNotesList'),diaryBody=document.getElementById('diaryMyNotesBody');if(trashList){if(diaryBody&&trashList.parentNode!==diaryBody)diaryBody.appendChild(trashList);trashList.style.display='none';}var allNotesButton=document.getElementById('diaryMyNotesAllNotes');if(allNotesButton)allNotesButton.style.display='';
+  var diaryPanel=document.getElementById('diaryMyNotesPanel');if(diaryPanel)diaryPanel.classList.remove('diary-me-menu-open','diary-trash-fullscreen','diary-all-notes-fullscreen');var diaryMePanel=document.getElementById('diaryDiaryMePanel');if(diaryMePanel)diaryMePanel.hidden=true;var diaryMeButton=document.getElementById('diaryDiaryMeBtn');if(diaryMeButton)diaryMeButton.setAttribute('aria-expanded','false');var trashButton=document.getElementById('diaryMyNotesTrash');if(trashButton){trashButton.textContent=t('recentlyDeleted');trashButton.setAttribute('aria-expanded','false');}var trashList=document.getElementById('diaryMyNotesList'),diaryBody=document.getElementById('diaryMyNotesBody');if(trashList){if(diaryBody&&trashList.parentNode!==diaryBody)diaryBody.appendChild(trashList);trashList.style.display='none';}var allNotesButton=document.getElementById('diaryMyNotesAllNotes');if(allNotesButton)allNotesButton.style.display='';
   document.body.style.overflow='';
   if(diaryOverlayHistoryOpen){diaryOverlayHistoryOpen=false;if(!fromPop){try{history.back()}catch(e){}}}
  }
@@ -5683,6 +5683,38 @@ body{background:radial-gradient(ellipse at 50% 12%,#fff 0%,#f5edff 42%,#e8dcf8 1
 .dark .diary-my-note.diary-note-saved-3d > strong,
 .dark .diary-my-note.diary-note-saved-3d > .diary-note-full{border-color:#a47ad4!important;box-shadow:inset 0 2px 0 #ffffff22,0 3px 0 #513477,0 5px 8px #0005!important;}
 </style>
+<style id="diary-all-notes-fullscreen-mobile">
+/* Full-screen only for the existing Sab Notes list view; retain its current order and controls. */
+@media(max-width:760px){
+ #diaryMyNotesOverlay:has(#diaryMyNotesPanel.diary-all-notes-fullscreen){
+  position:fixed!important;inset:0!important;padding:0!important;
+  align-items:stretch!important;justify-content:stretch!important;overflow:hidden!important;
+ }
+ #diaryMyNotesPanel.diary-all-notes-fullscreen{
+  position:fixed!important;inset:0!important;top:0!important;left:0!important;
+  width:100vw!important;max-width:none!important;height:100vh!important;height:100dvh!important;
+  max-height:100vh!important;max-height:100dvh!important;margin:0!important;transform:none!important;
+  border:0!important;border-radius:0!important;display:flex!important;flex-direction:column!important;
+  overflow:hidden!important;box-sizing:border-box!important;
+ }
+ #diaryMyNotesPanel.diary-all-notes-fullscreen #diaryMyNotesHead{
+  flex:0 0 auto!important;position:relative!important;padding:14px 52px 12px 14px!important;
+  border-radius:0!important;
+ }
+ #diaryMyNotesPanel.diary-all-notes-fullscreen #diaryMyNotesBody{
+  display:block!important;flex:1 1 auto!important;
+  min-width:0!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;
+  overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;
+  padding:12px 12px calc(12px + env(safe-area-inset-bottom,0px))!important;
+  box-sizing:border-box!important;
+ }
+ #diaryMyNotesPanel.diary-all-notes-fullscreen #diaryMyNotesList{
+  display:grid!important;align-content:start!important;
+  min-width:0!important;width:100%!important;box-sizing:border-box!important;
+ }
+}
+</style>
+
 
 <style id="web405-saved-note-name-purple-body-gold">
 /* Web 406: uniform four-side 3D rings on the unlocked saved-note display only. */
